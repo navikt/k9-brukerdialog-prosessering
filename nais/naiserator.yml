@@ -1,0 +1,49 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: {{app}}
+  namespace: {{namespace}}
+  labels:
+    team: {{team}}
+spec:
+  image: {{ image }}
+  port: 8080
+  azure:
+    application:
+      enabled: true
+  accessPolicy:
+    outbound:
+      rules:
+        - application: k9-mellomlagring
+        - application: k9-joark
+  liveness:
+    path: /health/liveness
+    initialDelay: 60
+    timeout: 1
+    periodSeconds: 5
+    failureThreshold: 10
+  readiness:
+    path: /health/readiness
+    initialDelay: 60
+    timeout: 1
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 3072Mi
+    requests:
+      cpu: 80m
+      memory: 1536Mi
+  replicas:
+    min: {{minReplicas}}
+    max: {{maxReplicas}}
+    cpuThresholdPercentage: 90
+  prometheus:
+    enabled: true
+    path: /metrics
+  env:
+  {{#each env}}
+   - name: {{@key}}
+     value: "{{this}}"
+  {{/each}}
+  kafka:
+    pool: {{kafkaPool}}

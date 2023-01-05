@@ -1,0 +1,42 @@
+no.nav:
+  gateways:
+    k9-selvbetjening-oppslag: http://localhost:${wiremock.server.port}/k9-selvbetjening-oppslag-mock
+    saf-base-url: http://localhost:${wiremock.server.port}/saf-api-mock
+    saf-selvbetjening-base-url: http://localhost:${wiremock.server.port}/saf-selvbetjening-graphql-mock
+  security:
+    jwt:
+      client:
+        registration:
+          azure-k9-joark:
+            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+            grant-type: client_credentials
+            scope: api://dev-gcp.k9-joark/.default
+            authentication:
+              client-auth-method: private_key_jwt
+              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+              client-jwk: src/test/resources/private-jwk.json
+          azure-k9-mellomlagring:
+            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+            grant-type: client_credentials
+            scope: api://dev-gcp.k9-mellomlagring/.default
+            authentication:
+              client-auth-method: private_key_jwt
+              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+              client-jwk: src/test/resources/private-jwk.json
+
+spring:
+  kafka:
+    bootstrap-servers: ${kafka-servers}
+    client-id: k9-brukerdialog-prosessering
+    consumer:
+      group-id: k9-brukerdialog-prosessering
+    properties:
+      schema:
+        registry:
+          url: mock://localhost
+          basic:
+            auth:
+              credentials:
+                source: USER_INFO
+              username: user
+              password: password

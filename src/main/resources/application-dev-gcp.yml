@@ -1,0 +1,23 @@
+spring:
+  kafka:
+    ssl:
+      key-password: ${KAFKA_CREDSTORE_PASSWORD}
+      trust-store-type: JKS
+      trust-store-location: ${KAFKA_TRUSTSTORE_PATH}
+      trust-store-password: ${KAFKA_CREDSTORE_PASSWORD}
+      key-store-location: ${KAFKA_KEYSTORE_PATH}
+      key-store-password: ${KAFKA_KEYSTORE_PASSWORD}
+      key-store-type: PKCS12
+
+    properties:
+      security:
+        protocol: SSL
+      schema:
+        registry:
+          url: ${SCHEMA_REGISTRY_URL}
+          basic:
+            auth:
+              credentials:
+                source: USER_INFO
+              username: ${KAFKA_SCHEMA_REGISTRY_USER}
+              password: ${KAFKA_SCHEMA_REGISTRY_PASSWORD}
