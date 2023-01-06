@@ -3,6 +3,8 @@ package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.SpykBean
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
+import no.nav.k9brukerdialogprosessering.common.Metadata
+import no.nav.k9brukerdialogprosessering.common.TopicEntry
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.utils.PSBSøknadUtils
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
@@ -12,6 +14,7 @@ import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
+import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
@@ -19,6 +22,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.skyscreamer.jsonassert.JSONAssert
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.kafka.test.EmbeddedKafkaBroker
@@ -33,9 +37,9 @@ import java.util.*
     partitions = 3,
     bootstrapServersProperty = "kafka-servers", // Setter bootstrap-servers for consumer og producer.
     topics = [
-        PleiepengerSyktBarnSøknadKonsument.MOTTATT,
-        PleiepengerSyktBarnSøknadKonsument.PREPROSESSERT,
-        PleiepengerSyktBarnSøknadKonsument.CLEANUP
+        PleiepengerSyktBarnSøknadKonsument.PSB_MOTTATT_TOPIC,
+        PleiepengerSyktBarnSøknadKonsument.PSB_PREPROSESSERT_TOPIC,
+        PleiepengerSyktBarnSøknadKonsument.PSB_CLEANUP_TOPIC
     ]
 )
 @DirtiesContext // Sørger for at context blir re-instantiert mellom hver test.
@@ -67,11 +71,9 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         consumer = embeddedKafkaBroker.opprettKafkaConsumer(
             groupPrefix = "pleiepenger-sykt-barn",
             topics = listOf(
-                PleiepengerSyktBarnSøknadKonsument.MOTTATT,
-                PleiepengerSyktBarnSøknadKonsument.MOTTATT_RETRY,
-                PleiepengerSyktBarnSøknadKonsument.MOTTATT_DLT,
-                PleiepengerSyktBarnSøknadKonsument.PREPROSESSERT,
-                PleiepengerSyktBarnSøknadKonsument.CLEANUP
+                PleiepengerSyktBarnSøknadKonsument.PSB_MOTTATT_TOPIC,
+                PleiepengerSyktBarnSøknadKonsument.PSB_PREPROSESSERT_TOPIC,
+                PleiepengerSyktBarnSøknadKonsument.PSB_CLEANUP_TOPIC
             )
         )
     }
@@ -87,42 +89,19 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val søknadId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15.000Z"
         val mottatt = ZonedDateTime.parse(mottattString)
-        val søknadMottatt = mapper.writeValueAsString(
-            PSBSøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
+        val søknadMottatt = PSBSøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
+        val metadata = Metadata(version = 1, correlationId = UUID.randomUUID().toString())
+        val topicEntry = TopicEntry(metadata, søknadMottatt)
+        val topicEntryJson = mapper.writeValueAsString(topicEntry)
+        producer.leggPåTopic(
+            key = søknadId,
+            value = topicEntryJson,
+            topic = PleiepengerSyktBarnSøknadKonsument.PSB_MOTTATT_TOPIC,
         )
-        producer.leggPåTopic(value = søknadMottatt, topic = PleiepengerSyktBarnSøknadKonsument.MOTTATT)
-
-        val preprosessertSøknad = consumer.lesMelding(PleiepengerSyktBarnSøknadKonsument.PREPROSESSERT).value()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknad, true)
-    }
-
-    @Test
-    fun `gitt deserialiseringsfeil, forvent at feilende melding ikke blokkerer for andre meldinger og blir sendt til retry og dlt topics`() {
-        val feilendeMelding = """
-            {
-                "søknadId": "123",
-                "mottatt": "2020-01-01T10:30:15.000Z"
-            }
-        """.trimIndent()
-        producer.leggPåTopic(value = feilendeMelding, topic = PleiepengerSyktBarnSøknadKonsument.MOTTATT)
-
-        val søknadId = UUID.randomUUID().toString()
-        val mottattString = "2020-01-01T10:30:15.000Z"
-        val mottatt = ZonedDateTime.parse(mottattString)
-        val søknadMottatt = mapper.writeValueAsString(
-            PSBSøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
-        )
-        producer.leggPåTopic(value = søknadMottatt, topic = PleiepengerSyktBarnSøknadKonsument.MOTTATT)
-
-        val retryMelding = consumer.lesMelding(PleiepengerSyktBarnSøknadKonsument.MOTTATT_RETRY).value()
-        JSONAssert.assertEquals(feilendeMelding, retryMelding, true)
-
-        val dltMelding = consumer.lesMelding(PleiepengerSyktBarnSøknadKonsument.MOTTATT_DLT).value()
-        JSONAssert.assertEquals(feilendeMelding, dltMelding, true)
-
-        io.mockk.verify(exactly = 1) { psbPreprosesseringsService.preprosesser(any()) }
-        val preprosessertSøknad = consumer.lesMelding(PleiepengerSyktBarnSøknadKonsument.PREPROSESSERT).value()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknad, true)
+        val lesMelding = consumer.lesMelding(key = søknadId, topic = PleiepengerSyktBarnSøknadKonsument.PSB_PREPROSESSERT_TOPIC).value()
+        LoggerFactory.getLogger(PleiepengerSyktBarnSøknadKonsumentTest::class.java).info("---> {}", lesMelding)
+        val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
+        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }
 
     @Language("JSON")

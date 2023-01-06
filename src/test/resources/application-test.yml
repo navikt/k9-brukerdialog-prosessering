@@ -27,9 +27,8 @@ no.nav:
 spring:
   kafka:
     bootstrap-servers: ${kafka-servers}
-    client-id: k9-brukerdialog-prosessering
-    consumer:
-      group-id: k9-brukerdialog-prosessering
+    streams:
+      application-id: k9-brukerdialog-prosessering
     properties:
       schema:
         registry:

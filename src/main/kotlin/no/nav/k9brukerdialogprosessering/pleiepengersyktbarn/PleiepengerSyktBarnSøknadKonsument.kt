@@ -1,57 +1,75 @@
 package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import no.nav.k9brukerdialogprosessering.common.TopicEntry
+import no.nav.k9brukerdialogprosessering.common.TypeReferanseHelper
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBMottattSøknad
-import org.springframework.kafka.annotation.KafkaListener
-import org.springframework.messaging.handler.annotation.SendTo
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBPreprosessertSøknad
+import org.apache.kafka.common.serialization.Serdes
+import org.apache.kafka.streams.StreamsBuilder
+import org.apache.kafka.streams.kstream.Consumed
+import org.apache.kafka.streams.kstream.KStream
+import org.apache.kafka.streams.kstream.Produced
+import org.springframework.context.annotation.Bean
+import org.springframework.kafka.support.serializer.JsonSerde
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 
 @Service
-//@Transactional(transactionManager = "kafkaTransactionManager")
 class PleiepengerSyktBarnSøknadKonsument(
     private val mapper: ObjectMapper,
     private val preprosesseringsService: PSBPreprosesseringsService,
 ) {
     companion object {
         private val logger = org.slf4j.LoggerFactory.getLogger(PleiepengerSyktBarnSøknadKonsument::class.java)
-
-        const val MOTTATT = "dusseldorf.privat-pleiepengesoknad-mottatt-v2"
-        const val MOTTATT_RETRY = "dusseldorf.privat-pleiepengesoknad-mottatt-v2-retry"
-        const val MOTTATT_DLT = "dusseldorf.privat-pleiepengesoknad-mottatt-v2-dlt"
-        const val PREPROSESSERT = "dusseldorf.privat-pleiepengesoknad-preprosessert"
-        const val CLEANUP = "dusseldorf.privat-pleiepengesoknad-cleanup"
+        const val PSB_MOTTATT_TOPIC = "dusseldorf.privat-pleiepengesoknad-mottatt-v2"
+        const val PSB_PREPROSESSERT_TOPIC = "dusseldorf.privat-pleiepengesoknad-preprosessert"
+        const val PSB_CLEANUP_TOPIC = "dusseldorf.privat-pleiepengesoknad-cleanup"
     }
 
-    /**
-     * Lytter etter innkommende meldinger på MOTTATT Kafka-topicen, preprosesserer meldingen,
-     * og sender den behandlede meldingen til den PREPROSESSERT topic.
-     *
-     * @param søknad den mottatte pleiepengesøknaden som skal preprosesseres.
-     * @return den preprosesseres pleiepengesøknaden.
-     */
-    @KafkaListener(topics=[MOTTATT], errorHandler = "errorHandler", id = "pleiepenger-sykt-barn-mottak-listener")
-    @SendTo(PREPROSESSERT)
-    fun preprosesser(søknad: String): String {
-        logger.info("Mottatt søknad: $søknad")
-        val psbMottattSøknad = mapper.readValue(søknad, PSBMottattSøknad::class.java)
-        val psbPreprosessertSøknad = preprosesseringsService.preprosesser(psbMottattSøknad)
-        return mapper.writeValueAsString(psbPreprosessertSøknad)
+    @Bean
+    fun pleiepengerSyktBarnPreprosesseringsStream(streamsBuilder: StreamsBuilder): KStream<String, TopicEntry<PSBMottattSøknad>> {
+        val stream: KStream<String, TopicEntry<PSBMottattSøknad>> = streamsBuilder.stream(
+            PSB_MOTTATT_TOPIC,
+            Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper))
+        )
+        stream
+            .mapValues { key: String, value: TopicEntry<PSBMottattSøknad> ->
+                logger.info("Mottatt søknad med key: $key -> $value")
+                val preprosesser = preprosesseringsService.preprosesser(value.data)
+                TopicEntry(value.metadata, preprosesser)
+            }.to(PSB_PREPROSESSERT_TOPIC, Produced.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper)))
+
+        return stream
     }
 
-    @KafkaListener(topics=[PREPROSESSERT], errorHandler = "errorHandler", id = "pleiepenger-sykt-barn-preprosessering-listener")
-    @SendTo(CLEANUP)
-    fun journalfør(søknad: String): String {
-        logger.info("Journalfører søknad: $søknad")
-        return søknad
+
+    @Bean
+    fun pleiepengerSyktBarnJournalføringsStream(streamsBuilder: StreamsBuilder): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
+        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> = streamsBuilder.stream(
+            PSB_PREPROSESSERT_TOPIC,
+            Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper))
+        )
+        stream.foreach { key: String, value: TopicEntry<PSBPreprosessertSøknad> ->
+            logger.info("Journalfører søknad med key: $key -> $value")
+            TopicEntry(value.metadata, null)
+        }
+        //.to(PSB_CLEANUP_TOPIC, Produced.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper)))
+
+        return stream
     }
 
-    @KafkaListener(topics=[CLEANUP], errorHandler = "errorHandler", id = "pleiepenger-sykt-barn-cleanup-listener")
-    @SendTo(CLEANUP)
-    fun cleanup(søknad: String): String {
-        logger.info("Cleanup søknad: $søknad")
-        return søknad
-    }
+    @Bean
+    fun pleiepengerSyktBarnCleanupStream(streamsBuilder: StreamsBuilder): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
+        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> =
+            streamsBuilder.stream(
+                PSB_CLEANUP_TOPIC,
+                Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper))
+            )
+        stream.mapValues { key: String, value: TopicEntry<PSBPreprosessertSøknad> ->
+            logger.info("Cleanup søknad med key: $key -> $value")
+        }
 
+        return stream
+    }
 }

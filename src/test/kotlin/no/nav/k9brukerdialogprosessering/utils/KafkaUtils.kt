@@ -26,12 +26,12 @@ object KafkaUtils {
         return DefaultKafkaProducerFactory<String, Any>(producerProps).createProducer()
     }
 
-    fun Producer<String, Any>.leggPåTopic(value: String, topic: String): RecordMetadata {
-        return send(ProducerRecord(topic, value)).get()
+    fun Producer<String, Any>.leggPåTopic(key: String, value: String, topic: String): RecordMetadata {
+        return send(ProducerRecord(topic, key, value)).get()
     }
 
     fun EmbeddedKafkaBroker.opprettKafkaConsumer(
-        groupPrefix: String, topics: List<String>
+        groupPrefix: String, topics: List<String>,
     ): Consumer<String, String> {
         val consumerProps =
             KafkaTestUtils.consumerProps("$groupPrefix-test-consumer-${UUID.randomUUID()}", "true", this)
@@ -45,7 +45,7 @@ object KafkaUtils {
         return consumer
     }
 
-    fun Consumer<String, String>.lesMelding(topic: String, maxWaitInSeconds: Long = 20): ConsumerRecord<String, String> {
+    fun Consumer<String, String>.lesMelding(key: String, topic: String, maxWaitInSeconds: Long = 20): ConsumerRecord<String, String> {
 
         val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
         seekToBeginning(assignment())
@@ -53,7 +53,7 @@ object KafkaUtils {
 
             val entries: List<ConsumerRecord<String, String>> = poll(Duration.ofSeconds(10))
                 .records(topic)
-                .toList()
+                .filter { it.key() == key }
 
             if (entries.isNotEmpty()) {
                 Assertions.assertEquals(1, entries.size)
