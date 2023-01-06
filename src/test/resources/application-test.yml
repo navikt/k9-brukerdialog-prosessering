@@ -24,6 +24,8 @@ no.nav:
               client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
               client-jwk: src/test/resources/private-jwk.json
 
+kafka-servers: localhost:9092 # placeholder
+
 spring:
   kafka:
     bootstrap-servers: ${kafka-servers}
