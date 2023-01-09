@@ -1,10 +1,7 @@
+KAFKA_BOOTSTRAP_SERVERS: localhost:9092 # placeholder
+
 no.nav:
-  gateways:
-    k9-selvbetjening-oppslag: http://localhost:${wiremock.server.port}/k9-selvbetjening-oppslag-mock
-    saf-base-url: http://localhost:${wiremock.server.port}/saf-api-mock
-    saf-selvbetjening-base-url: http://localhost:${wiremock.server.port}/saf-selvbetjening-graphql-mock
-  security:
-    jwt:
+  security.jwt:
       client:
         registration:
           azure-k9-joark:
@@ -24,20 +21,14 @@ no.nav:
               client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
               client-jwk: src/test/resources/private-jwk.json
 
-kafka-servers: localhost:9092 # placeholder
-
-spring:
   kafka:
-    bootstrap-servers: ${kafka-servers}
+    application-id: k9-brukerdialog-prosessering
     streams:
-      application-id: k9-brukerdialog-prosessering
-    properties:
-      schema:
-        registry:
-          url: mock://localhost
-          basic:
-            auth:
-              credentials:
-                source: USER_INFO
-              username: user
-              password: password
+      psb:
+        auto-offset-reset: earliest
+      omp:
+        auto-offset-reset: earliest
+    schema-registry:
+      url: mock://localhost
+      user: username
+      password: password

@@ -1,10 +1,12 @@
 package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.ninjasquad.springmockk.SpykBean
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.verify
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
 import no.nav.k9brukerdialogprosessering.common.Metadata
 import no.nav.k9brukerdialogprosessering.common.TopicEntry
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBPreprosessertSøknad
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.utils.PSBSøknadUtils
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
@@ -22,7 +24,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.skyscreamer.jsonassert.JSONAssert
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.kafka.test.EmbeddedKafkaBroker
@@ -34,8 +35,9 @@ import java.time.ZonedDateTime
 import java.util.*
 
 @EmbeddedKafka( // Setter opp og tilgjengligjør embeded kafka broker
-    partitions = 3,
-    bootstrapServersProperty = "kafka-servers", // Setter bootstrap-servers for consumer og producer.
+    partitions = 1,
+    count = 3,
+    bootstrapServersProperty = "KAFKA_BOOTSTRAP_SERVERS", // Setter bootstrap-servers for consumer og producer.
     topics = [
         PleiepengerSyktBarnSøknadKonsument.PSB_MOTTATT_TOPIC,
         PleiepengerSyktBarnSøknadKonsument.PSB_PREPROSESSERT_TOPIC,
@@ -59,7 +61,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
     @Autowired
     private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
 
-    @SpykBean
+    @MockkBean(relaxed = true)
     private lateinit var psbPreprosesseringsService: PSBPreprosesseringsService
 
     lateinit var producer: Producer<String, Any> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
@@ -93,13 +95,55 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val metadata = Metadata(version = 1, correlationId = UUID.randomUUID().toString())
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
+
+        io.mockk.every { psbPreprosesseringsService.preprosesser(any()) } returns PSBPreprosessertSøknad(
+            søknadMottatt, listOf(listOf("123456789", "987654321"))
+        )
+
         producer.leggPåTopic(
             key = søknadId,
             value = topicEntryJson,
             topic = PleiepengerSyktBarnSøknadKonsument.PSB_MOTTATT_TOPIC,
         )
-        val lesMelding = consumer.lesMelding(key = søknadId, topic = PleiepengerSyktBarnSøknadKonsument.PSB_PREPROSESSERT_TOPIC).value()
-        LoggerFactory.getLogger(PleiepengerSyktBarnSøknadKonsumentTest::class.java).info("---> {}", lesMelding)
+        val lesMelding =
+            consumer.lesMelding(
+                key = søknadId,
+                topic = PleiepengerSyktBarnSøknadKonsument.PSB_PREPROSESSERT_TOPIC
+            ).value()
+
+        val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
+        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+    }
+
+    @Test
+    fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
+        val søknadId = UUID.randomUUID().toString()
+        val mottattString = "2020-01-01T10:30:15.000Z"
+        val mottatt = ZonedDateTime.parse(mottattString)
+        val søknadMottatt = PSBSøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
+        val metadata = Metadata(version = 1, correlationId = UUID.randomUUID().toString())
+        val topicEntry = TopicEntry(metadata, søknadMottatt)
+        val topicEntryJson = mapper.writeValueAsString(topicEntry)
+
+        io.mockk.every { psbPreprosesseringsService.preprosesser(any()) }
+            .throws(IllegalStateException("Feil i prosessering..."))
+            .andThenThrows(IllegalStateException("Feil i prosessering..."))
+            .andThenThrows(IllegalStateException("Feil i prosessering..."))
+            .andThenThrows(IllegalStateException("Feil i prosessering..."))
+            .andThen(PSBPreprosessertSøknad(søknadMottatt, listOf(listOf("123456789", "987654321"))))
+
+        producer.leggPåTopic(
+            key = søknadId,
+            value = topicEntryJson,
+            topic = PleiepengerSyktBarnSøknadKonsument.PSB_MOTTATT_TOPIC,
+        )
+        val lesMelding = consumer.lesMelding(
+            key = søknadId,
+            topic = PleiepengerSyktBarnSøknadKonsument.PSB_PREPROSESSERT_TOPIC,
+            maxWaitInSeconds = 40
+        ).value()
+
+        verify(exactly = 5) { psbPreprosesseringsService.preprosesser(any()) }
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }

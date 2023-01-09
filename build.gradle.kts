@@ -27,12 +27,18 @@ repositories {
 			password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
 		}
 	}
+
+	maven {
+		name = "confluent"
+		url = uri("https://packages.confluent.io/maven/")
+	}
 }
 
 val tokenSupportVersion by extra("3.0.0")
 val jsonassertVersion = "1.5.1"
 val k9FormatVersion = "8.0.0"
 val springMockkVersion by extra("3.1.2")
+val confluentVersion by extra("7.3.0")
 
 dependencies {
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
@@ -42,11 +48,15 @@ dependencies {
 
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("org.springframework.kafka:spring-kafka")
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
+
+	// kafka
+	implementation("org.springframework.kafka:spring-kafka")
+	implementation("io.confluent:kafka-connect-avro-converter:$confluentVersion")
+	implementation("io.confluent:kafka-avro-serializer:$confluentVersion")
 
 	// kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

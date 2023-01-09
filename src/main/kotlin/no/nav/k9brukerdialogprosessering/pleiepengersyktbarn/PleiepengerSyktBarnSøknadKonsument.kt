@@ -3,6 +3,7 @@ package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.k9brukerdialogprosessering.common.TopicEntry
 import no.nav.k9brukerdialogprosessering.common.TypeReferanseHelper
+import no.nav.k9brukerdialogprosessering.config.kafka.KafkaStreamsConfig
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBPreprosessertSøknad
 import org.apache.kafka.common.serialization.Serdes
@@ -10,6 +11,7 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.kstream.Produced
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.kafka.support.serializer.JsonSerde
 import org.springframework.stereotype.Service
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service
 class PleiepengerSyktBarnSøknadKonsument(
     private val mapper: ObjectMapper,
     private val preprosesseringsService: PSBPreprosesseringsService,
+    @Qualifier(KafkaStreamsConfig.PSB_STREAMS_BUILDER_BEAN_NAME) private val psbKStreamBuilder: StreamsBuilder,
 ) {
     companion object {
         private val logger = org.slf4j.LoggerFactory.getLogger(PleiepengerSyktBarnSøknadKonsument::class.java)
@@ -28,11 +31,12 @@ class PleiepengerSyktBarnSøknadKonsument(
     }
 
     @Bean
-    fun pleiepengerSyktBarnPreprosesseringsStream(streamsBuilder: StreamsBuilder): KStream<String, TopicEntry<PSBMottattSøknad>> {
-        val stream: KStream<String, TopicEntry<PSBMottattSøknad>> = streamsBuilder.stream(
+    fun pleiepengerSyktBarnPreprosesseringsStream(): KStream<String, TopicEntry<PSBMottattSøknad>> {
+        val stream: KStream<String, TopicEntry<PSBMottattSøknad>> = psbKStreamBuilder.stream(
             PSB_MOTTATT_TOPIC,
             Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper))
         )
+
         stream
             .mapValues { key: String, value: TopicEntry<PSBMottattSøknad> ->
                 logger.info("Mottatt søknad med key: $key -> $value")
@@ -45,8 +49,8 @@ class PleiepengerSyktBarnSøknadKonsument(
 
 
     @Bean
-    fun pleiepengerSyktBarnJournalføringsStream(streamsBuilder: StreamsBuilder): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
-        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> = streamsBuilder.stream(
+    fun pleiepengerSyktBarnJournalføringsStream(): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
+        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> = psbKStreamBuilder.stream(
             PSB_PREPROSESSERT_TOPIC,
             Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper))
         )
@@ -60,12 +64,9 @@ class PleiepengerSyktBarnSøknadKonsument(
     }
 
     @Bean
-    fun pleiepengerSyktBarnCleanupStream(streamsBuilder: StreamsBuilder): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
+    fun pleiepengerSyktBarnCleanupStream(): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
         val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> =
-            streamsBuilder.stream(
-                PSB_CLEANUP_TOPIC,
-                Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper))
-            )
+            psbKStreamBuilder.stream(PSB_CLEANUP_TOPIC, Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper)))
         stream.mapValues { key: String, value: TopicEntry<PSBPreprosessertSøknad> ->
             logger.info("Cleanup søknad med key: $key -> $value")
         }
