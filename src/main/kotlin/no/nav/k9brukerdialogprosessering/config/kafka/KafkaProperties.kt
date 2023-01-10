@@ -10,6 +10,7 @@ data class KafkaProperties(
     val bootstrapServers: String,
     val applicationId: String,
     val retries: Int,
+    val retryBackoffMs: Int,
     val replicationFactor: Int,
     val streams: Map<String, KafkaStreamsProperties>,
     val schemaRegistry: KafkaSchemaRegistryProperties,

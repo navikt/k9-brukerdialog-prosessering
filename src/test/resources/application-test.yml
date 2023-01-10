@@ -23,6 +23,8 @@ no.nav:
 
   kafka:
     application-id: k9-brukerdialog-prosessering
+    retries: 5
+    retry-backoff-ms: 100 # 100 ms
     streams:
       psb:
         auto-offset-reset: earliest
