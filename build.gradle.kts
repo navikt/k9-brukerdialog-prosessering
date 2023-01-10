@@ -39,6 +39,7 @@ val jsonassertVersion = "1.5.1"
 val k9FormatVersion = "8.0.0"
 val springMockkVersion by extra("3.1.2")
 val confluentVersion by extra("7.3.0")
+val logstashLogbackEncoderVersion by extra("7.2")
 
 dependencies {
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
@@ -57,6 +58,7 @@ dependencies {
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("io.confluent:kafka-connect-avro-converter:$confluentVersion")
 	implementation("io.confluent:kafka-avro-serializer:$confluentVersion")
+	implementation("org.apache.kafka:kafka-streams")
 
 	// kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -64,7 +66,9 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
-	implementation("org.apache.kafka:kafka-streams")
+
+	// Logging
+	implementation("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
 
 	// Jackson
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
