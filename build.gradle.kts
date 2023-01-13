@@ -52,13 +52,13 @@ dependencies {
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.kafka:spring-kafka-test")
 
 	// kafka
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("io.confluent:kafka-connect-avro-converter:$confluentVersion")
 	implementation("io.confluent:kafka-avro-serializer:$confluentVersion")
 	implementation("org.apache.kafka:kafka-streams")
+	testImplementation("org.springframework.kafka:spring-kafka-test")
 
 	// kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

@@ -15,7 +15,10 @@ import no.nav.helse.felles.Søker
 import no.nav.helse.felles.UtenlandskNæring
 import no.nav.helse.felles.UtenlandsoppholdIPerioden
 import no.nav.k9.søknad.Søknad
+import no.nav.k9brukerdialogprosessering.common.Ytelse
+import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsgiver
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Navn
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -48,11 +51,11 @@ data class PSBPreprosessertSøknad(
     val harForstattRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,
     val harVærtEllerErVernepliktig: Boolean? = null,
-    val k9FormatSøknad: Søknad
-) {
+    val k9FormatSøknad: Søknad,
+) : Preprosessert {
     internal constructor(
         melding: PSBMottattSøknad,
-        dokumentId: List<List<String>>
+        dokumentId: List<List<String>>,
     ) : this(
         språk = melding.språk,
         søknadId = melding.søknadId,
@@ -82,4 +85,17 @@ data class PSBPreprosessertSøknad(
         harVærtEllerErVernepliktig = melding.harVærtEllerErVernepliktig,
         k9FormatSøknad = melding.k9FormatSøknad
     )
+
+    override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
+
+    override fun mottattDato(): ZonedDateTime = mottatt
+
+    override fun søkerNavn(): Navn =
+        Navn(fornavn = søker.fornavn, mellomnavn = søker.mellomnavn, etternavn = søker.etternavn)
+
+    override fun søkerFødselsnummer(): String = søker.fødselsnummer
+
+    override fun k9FormatSøknad(): Søknad = k9FormatSøknad
+
+    override fun dokumenter(): List<List<String>> = dokumentId
 }

@@ -15,6 +15,9 @@ import no.nav.helse.felles.Søker
 import no.nav.helse.felles.UtenlandskNæring
 import no.nav.helse.felles.UtenlandsoppholdIPerioden
 import no.nav.k9.søknad.Søknad
+import no.nav.k9brukerdialogprosessering.common.Ytelse
+import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
+import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -50,4 +53,29 @@ data class PSBMottattSøknad(
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val k9FormatSøknad: Søknad
-)
+): MottattMelding {
+    override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
+
+    override fun søkerFødselsnummer(): String = søker.fødselsnummer
+
+    override fun k9FormatSøknad(): Søknad = k9FormatSøknad
+
+    override fun vedleggId(): List<String> = vedleggId
+
+    override fun fødselsattestVedleggId(): List<String> = fødselsattestVedleggId ?: listOf()
+
+    override fun mapTilPreprosessert(dokumentId: List<List<String>>) = PSBPreprosessertSøknad(
+        melding = this,
+        dokumentId = dokumentId
+    )
+
+    override fun pdfData(): Map<String, Any> = mapOf()
+
+    override fun mapTilPreprosesseringsData() = PreprosesseringsData(
+        søker.fødselsnummer,
+        k9FormatSøknad,
+        vedleggId,
+        fødselsattestVedleggId,
+        pdfData()
+    )
+}

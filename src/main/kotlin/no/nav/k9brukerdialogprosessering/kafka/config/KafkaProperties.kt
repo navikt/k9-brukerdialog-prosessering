@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogprosessering.config.kafka
+package no.nav.k9brukerdialogprosessering.kafka.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.core.io.Resource

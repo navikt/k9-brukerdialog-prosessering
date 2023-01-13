@@ -6,7 +6,7 @@
 	<springProfile name="test">
 		<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
 			<encoder>
-				<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{70} [sid=%X{soknad_id}, cid=%X{correlation_id}] - %msg%n</pattern>
+				<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{70} [ytelse=%X{ytelse}, sid=%X{soknad_id}, cid=%X{correlation_id}] - %msg%n</pattern>
 			</encoder>
 		</appender>
 	</springProfile>

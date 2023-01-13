@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogprosessering.config.kafka
+package no.nav.k9brukerdialogprosessering.kafka.config
 
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig
 import io.micrometer.core.instrument.MeterRegistry
@@ -90,8 +90,16 @@ class KafkaStreamsConfig(
     }
 
     private fun StreamsBuilderFactoryBean.configure() {
-        setStreamsUncaughtExceptionHandler { _: Throwable ->
+        setStreamsUncaughtExceptionHandler { throwable: Throwable ->
             logger.info("Setting StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD")
+            when(throwable) {
+                is org.apache.kafka.streams.errors.StreamsException -> {
+                    logger.error("StreamsException: ${throwable.message}")
+                }
+                else -> {
+                    logger.error("Exception: ${throwable.message}")
+                }
+            }
             StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
         }
 

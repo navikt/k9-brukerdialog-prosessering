@@ -1,86 +1,82 @@
 package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import no.nav.k9brukerdialogprosessering.common.TopicEntry
-import no.nav.k9brukerdialogprosessering.common.TypeReferanseHelper
-import no.nav.k9brukerdialogprosessering.config.kafka.KafkaStreamsConfig
+import no.nav.k9brukerdialogprosessering.innsending.CleanupService
+import no.nav.k9brukerdialogprosessering.innsending.JournalføringsService
+import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsService
+import no.nav.k9brukerdialogprosessering.kafka.config.KafkaStreamsConfig
+import no.nav.k9brukerdialogprosessering.kafka.config.Topic
+import no.nav.k9brukerdialogprosessering.kafka.processors.LoggingToMDCProcessor
+import no.nav.k9brukerdialogprosessering.kafka.types.Cleanup
+import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBPreprosessertSøknad
-import no.nav.k9brukerdialogprosessering.utils.StreamUtils.metadataToMDC
-import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.KStream
-import org.apache.kafka.streams.kstream.Produced
+import org.apache.kafka.streams.processor.api.ProcessorSupplier
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
-import org.springframework.kafka.support.serializer.JsonSerde
 import org.springframework.stereotype.Service
 
 
 @Service
 class PleiepengerSyktBarnSøknadKonsument(
-    private val mapper: ObjectMapper,
-    private val preprosesseringsService: PSBPreprosesseringsService,
+    private val preprosesseringsService: PreprosesseringsService,
+    private val journalføringsService: JournalføringsService,
+    private val cleanupService: CleanupService<PSBPreprosessertSøknad>,
+    private val psbMottattTopic: Topic<TopicEntry<PSBMottattSøknad>>,
+    private val psbPreprosesertTopic: Topic<TopicEntry<PSBPreprosessertSøknad>>,
+    private val psbCleanupTopic: Topic<TopicEntry<Cleanup<PSBPreprosessertSøknad>>>,
     @Qualifier(KafkaStreamsConfig.PSB_STREAMS_BUILDER_BEAN_NAME) private val psbKStreamBuilder: StreamsBuilder,
 ) {
-    companion object {
-        private val logger = org.slf4j.LoggerFactory.getLogger(PleiepengerSyktBarnSøknadKonsument::class.java)
-        const val PSB_MOTTATT_TOPIC = "dusseldorf.privat-pleiepengesoknad-mottatt-v2"
-        const val PSB_PREPROSESSERT_TOPIC = "dusseldorf.privat-pleiepengesoknad-preprosessert"
-        const val PSB_CLEANUP_TOPIC = "dusseldorf.privat-pleiepengesoknad-cleanup"
-    }
 
     @Bean
     fun pleiepengerSyktBarnPreprosesseringsStream(): KStream<String, TopicEntry<PSBMottattSøknad>> {
-        val stream: KStream<String, TopicEntry<PSBMottattSøknad>> = psbKStreamBuilder.stream(
-            PSB_MOTTATT_TOPIC,
-            Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper))
-        )
-
+        val stream: KStream<String, TopicEntry<PSBMottattSøknad>> = psbKStreamBuilder.streamFrom(psbMottattTopic)
         stream
-            .metadataToMDC()
-            .mapValues { key: String, value: TopicEntry<PSBMottattSøknad> ->
-                logger.info("Mottatt søknad med key: $key -> $value")
-                val søknad = value.data
-                val preprosesser = preprosesseringsService.preprosesser(søknad)
-                TopicEntry(value.metadata, preprosesser)
-            }.to(PSB_PREPROSESSERT_TOPIC, Produced.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper)))
-
+            .process(ProcessorSupplier { LoggingToMDCProcessor<PSBMottattSøknad>() })
+            .mapValues { _: String, value: TopicEntry<PSBMottattSøknad> ->
+                val psbMottattSøknad = value.data
+                val preprosesseringResultat =
+                    preprosesseringsService.preprosesser(psbMottattSøknad.mapTilPreprosesseringsData())
+                TopicEntry(value.metadata, psbMottattSøknad.mapTilPreprosessert(preprosesseringResultat.dokumenter))
+            }
+            .to(PSB_PREPROSESSERT_TOPIC, psbPreprosesertTopic.producedWith)
         return stream
     }
-
 
     @Bean
     fun pleiepengerSyktBarnJournalføringsStream(): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
-        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> = psbKStreamBuilder.stream(
-            PSB_PREPROSESSERT_TOPIC,
-            Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper))
-        )
+        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> =
+            psbKStreamBuilder.streamFrom(psbPreprosesertTopic)
         stream
-            .metadataToMDC()
-            .foreach { key: String, value: TopicEntry<PSBPreprosessertSøknad> ->
-            logger.info("Journalfører søknad med key: $key -> $value")
-            TopicEntry(value.metadata, null)
-        }
-        //.to(PSB_CLEANUP_TOPIC, Produced.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper)))
+            .process(ProcessorSupplier { LoggingToMDCProcessor() })
+            .mapValues { _: String, value: TopicEntry<PSBPreprosessertSøknad> ->
+                val preprosessertSøknad: PSBPreprosessertSøknad = value.data
+                val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
+                TopicEntry(value.metadata, Cleanup(value.metadata, preprosessertSøknad, journalførSøknad))
+            }
+            .to(PSB_CLEANUP_TOPIC, psbCleanupTopic.producedWith)
 
         return stream
     }
 
     @Bean
-    fun pleiepengerSyktBarnCleanupStream(): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
-        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> =
-            psbKStreamBuilder.stream(
-                PSB_CLEANUP_TOPIC,
-                Consumed.with(Serdes.StringSerde(), JsonSerde(TypeReferanseHelper(), mapper))
-            )
+    fun pleiepengerSyktBarnCleanupStream(): KStream<String, TopicEntry<Cleanup<PSBPreprosessertSøknad>>> {
+        val stream: KStream<String, TopicEntry<Cleanup<PSBPreprosessertSøknad>>> =
+            psbKStreamBuilder.streamFrom(psbCleanupTopic)
         stream
-            .metadataToMDC()
-            .mapValues { key: String, value: TopicEntry<PSBPreprosessertSøknad> ->
-            logger.info("Cleanup søknad med key: $key -> $value")
-        }
+            .process(ProcessorSupplier { LoggingToMDCProcessor<Cleanup<PSBPreprosessertSøknad>>() })
+            .mapValues { _: String, value: TopicEntry<Cleanup<PSBPreprosessertSøknad>> ->
+                cleanupService.cleanup(value.data)
+                value
+            }
 
         return stream
     }
+}
+
+inline fun <reified T> StreamsBuilder.streamFrom(topic: Topic<TopicEntry<T>>): KStream<String, TopicEntry<T>> {
+    return this.stream(topic.name, topic.consumedWith)
 }
