@@ -1,16 +1,22 @@
 package no.nav.k9brukerdialogprosessering.innsending
 
 import no.nav.k9.søknad.Søknad
+import no.nav.k9brukerdialogprosessering.pdf.PDFGenerator
+import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import org.springframework.stereotype.Service
 
 @Service
-class PreprosesseringsService {
+class PreprosesseringsService(
+    private val pdfGenerator: PDFGenerator
+) {
     companion object {
         private val logger = org.slf4j.LoggerFactory.getLogger(PreprosesseringsService::class.java)
     }
 
     fun preprosesser(søknad: PreprosesseringsData): PreprosesseringsResultat {
         logger.info("Preprosesserer søknad: $søknad")
+
+        val søknadsPDF = pdfGenerator.genererPDF(søknad.pdfData)
 
         // søknad.søker.fødselsnummer
         søknad.søkerFødselsnummer
@@ -35,7 +41,7 @@ data class PreprosesseringsData(
     val k9FormatSøknad: Søknad,
     val vedleggId: List<String>,
     val fødselsattestVedleggId: List<String>?,
-    val pdfData: Map<String, Any>
+    val pdfData: PdfData
 )
 data class PreprosesseringsResultat(
     val dokumenter: List<List<String>>

@@ -18,6 +18,7 @@ import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
 import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBSøknadPdfData
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -69,7 +70,7 @@ data class PSBMottattSøknad(
         dokumentId = dokumentId
     )
 
-    override fun pdfData(): Map<String, Any> = mapOf()
+    override fun pdfData() = PSBSøknadPdfData(this)
 
     override fun mapTilPreprosesseringsData() = PreprosesseringsData(
         søker.fødselsnummer,

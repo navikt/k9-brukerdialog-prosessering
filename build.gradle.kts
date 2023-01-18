@@ -40,6 +40,10 @@ val k9FormatVersion = "8.0.0"
 val springMockkVersion by extra("3.1.2")
 val confluentVersion by extra("7.3.0")
 val logstashLogbackEncoderVersion by extra("7.2")
+val slf4jVersion = "2.0.5"
+val kotlinxCoroutinesVersion = "1.6.4"
+val openhtmltopdfVersion = "1.0.10"
+val handlebarsVersion = "4.3.1"
 
 dependencies {
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
@@ -59,6 +63,12 @@ dependencies {
 	implementation("io.confluent:kafka-avro-serializer:$confluentVersion")
 	implementation("org.apache.kafka:kafka-streams")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
+
+	// PDF
+	implementation("com.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion")
+	implementation("com.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
+	implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
+	implementation("com.github.jknack:handlebars:$handlebarsVersion")
 
 	// kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
