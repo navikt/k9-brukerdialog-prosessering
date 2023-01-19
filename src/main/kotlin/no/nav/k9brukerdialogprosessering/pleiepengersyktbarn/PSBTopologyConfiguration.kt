@@ -38,7 +38,7 @@ class PSBTopologyConfiguration(
         )
     }
     @Bean
-    fun psbCleanupTopic(): Topic<TopicEntry<Cleanup<PSBPreprosessertSøknad>>> {
+    fun psbCleanupTopic(): Topic<TopicEntry<Cleanup>> {
         return Topic(
             name = PSB_CLEANUP_TOPIC,
             serDes = CleanupSøknadSerdes(objectMapper)
@@ -54,20 +54,18 @@ class PSBMottattSøknadSerdes(
     }
 }
 
-@Component
 class PSBMPreprosessertSøknadSerdes(
     private val objectMapper: ObjectMapper
 ) : SerDes<TopicEntry<PSBPreprosessertSøknad>>(objectMapper) {
     override fun deserialize(topic: String, data: ByteArray): TopicEntry<PSBPreprosessertSøknad> {
-        return objectMapper.readValue(data, jacksonTypeRef())
+        return objectMapper.readValue(data, jacksonTypeRef<TopicEntry<PSBPreprosessertSøknad>>())
     }
 }
 
-@Component
-class CleanupSøknadSerdes<V: Preprosessert>(
+class CleanupSøknadSerdes(
     private val objectMapper: ObjectMapper
-) : SerDes<TopicEntry<Cleanup<V>>>(objectMapper) {
-    override fun deserialize(topic: String, data: ByteArray): TopicEntry<Cleanup<V>> {
-        return objectMapper.readValue(data, jacksonTypeRef<TopicEntry<Cleanup<V>>>())
+) : SerDes<TopicEntry<Cleanup>>(objectMapper) {
+    override fun deserialize(topic: String, data: ByteArray): TopicEntry<Cleanup> {
+        return objectMapper.readValue(data, jacksonTypeRef<TopicEntry<Cleanup>>())
     }
 }

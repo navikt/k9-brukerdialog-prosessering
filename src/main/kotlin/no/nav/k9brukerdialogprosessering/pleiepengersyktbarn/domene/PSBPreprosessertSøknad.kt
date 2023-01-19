@@ -53,7 +53,7 @@ data class PSBPreprosessertSøknad(
     val harVærtEllerErVernepliktig: Boolean? = null,
     val k9FormatSøknad: Søknad,
 ) : Preprosessert {
-    internal constructor(
+    constructor(
         melding: PSBMottattSøknad,
         dokumentId: List<List<String>>,
     ) : this(

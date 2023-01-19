@@ -19,6 +19,9 @@ no.nav:
             client-id: ${AZURE_APP_CLIENT_ID}
             client-jwk: ${AZURE_APP_JWK}
 
+  integration:
+    k9-mellomlagring-base-url: ${K9_MELLOMLAGRING_BASE_URL}
+
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     application-id: ${KAFKA_STREAMS_APPLICATION_ID}

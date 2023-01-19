@@ -24,59 +24,62 @@ import org.springframework.stereotype.Service
 class PleiepengerSyktBarnSøknadKonsument(
     private val preprosesseringsService: PreprosesseringsService,
     private val journalføringsService: JournalføringsService,
-    private val cleanupService: CleanupService<PSBPreprosessertSøknad>,
+    private val cleanupService: CleanupService,
     private val psbMottattTopic: Topic<TopicEntry<PSBMottattSøknad>>,
     private val psbPreprosesertTopic: Topic<TopicEntry<PSBPreprosessertSøknad>>,
-    private val psbCleanupTopic: Topic<TopicEntry<Cleanup<PSBPreprosessertSøknad>>>,
+    private val psbCleanupTopic: Topic<TopicEntry<Cleanup>>,
     @Qualifier(KafkaStreamsConfig.PSB_STREAMS_BUILDER_BEAN_NAME) private val psbKStreamBuilder: StreamsBuilder,
 ) {
 
     @Bean
     fun pleiepengerSyktBarnPreprosesseringsStream(): KStream<String, TopicEntry<PSBMottattSøknad>> {
-        val stream: KStream<String, TopicEntry<PSBMottattSøknad>> = psbKStreamBuilder.streamFrom(psbMottattTopic)
+        val stream: KStream<String, TopicEntry<PSBMottattSøknad>> = psbKStreamBuilder
+            .stream(psbMottattTopic.name, psbMottattTopic.consumedWith)
+
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor<PSBMottattSøknad>() })
             .mapValues { _: String, value: TopicEntry<PSBMottattSøknad> ->
                 val psbMottattSøknad = value.data
                 val preprosesseringResultat =
                     preprosesseringsService.preprosesser(psbMottattSøknad.mapTilPreprosesseringsData())
-                TopicEntry(value.metadata, psbMottattSøknad.mapTilPreprosessert(preprosesseringResultat.dokumenter))
+                val preprosessert: PSBPreprosessertSøknad =
+                    psbMottattSøknad.mapTilPreprosessert(preprosesseringResultat.dokumenter)
+                TopicEntry(value.metadata, preprosessert)
             }
-            .to(PSB_PREPROSESSERT_TOPIC, psbPreprosesertTopic.producedWith)
+            .to(psbPreprosesertTopic.name, psbPreprosesertTopic.producedWith)
         return stream
     }
 
     @Bean
     fun pleiepengerSyktBarnJournalføringsStream(): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
-        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> =
-            psbKStreamBuilder.streamFrom(psbPreprosesertTopic)
+        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> = psbKStreamBuilder
+            .stream(psbPreprosesertTopic.name, psbPreprosesertTopic.consumedWith)
+
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
             .mapValues { _: String, value: TopicEntry<PSBPreprosessertSøknad> ->
                 val preprosessertSøknad: PSBPreprosessertSøknad = value.data
                 val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
-                TopicEntry(value.metadata, Cleanup(value.metadata, preprosessertSøknad, journalførSøknad))
+                val cleanup: Cleanup = Cleanup(value.metadata, preprosessertSøknad, journalførSøknad)
+                TopicEntry(value.metadata, cleanup)
             }
-            .to(PSB_CLEANUP_TOPIC, psbCleanupTopic.producedWith)
+            .to(psbCleanupTopic.name, psbCleanupTopic.producedWith)
 
         return stream
     }
 
     @Bean
-    fun pleiepengerSyktBarnCleanupStream(): KStream<String, TopicEntry<Cleanup<PSBPreprosessertSøknad>>> {
-        val stream: KStream<String, TopicEntry<Cleanup<PSBPreprosessertSøknad>>> =
-            psbKStreamBuilder.streamFrom(psbCleanupTopic)
+    fun pleiepengerSyktBarnCleanupStream(): KStream<String, TopicEntry<Cleanup>> {
+        val stream: KStream<String, TopicEntry<Cleanup>> = psbKStreamBuilder
+            .stream(psbCleanupTopic.name, psbCleanupTopic.consumedWith)
+
         stream
-            .process(ProcessorSupplier { LoggingToMDCProcessor<Cleanup<PSBPreprosessertSøknad>>() })
-            .mapValues { _: String, value: TopicEntry<Cleanup<PSBPreprosessertSøknad>> ->
+            .process(ProcessorSupplier { LoggingToMDCProcessor<Cleanup>() })
+            .mapValues { _: String, value: TopicEntry<Cleanup> ->
                 cleanupService.cleanup(value.data)
                 value
             }
 
         return stream
     }
-}
-
-inline fun <reified T> StreamsBuilder.streamFrom(topic: Topic<TopicEntry<T>>): KStream<String, TopicEntry<T>> {
-    return this.stream(topic.name, topic.consumedWith)
 }

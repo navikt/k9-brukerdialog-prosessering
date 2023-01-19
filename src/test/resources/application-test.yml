@@ -1,4 +1,5 @@
 KAFKA_BOOTSTRAP_SERVERS: localhost:9092 # placeholder
+K9_MELLOMLAGRING_BASE_URL: http://localhost:8003 # placeholder
 
 no.nav:
   security.jwt:

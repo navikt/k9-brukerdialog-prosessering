@@ -73,10 +73,12 @@ data class PSBMottattSøknad(
     override fun pdfData() = PSBSøknadPdfData(this)
 
     override fun mapTilPreprosesseringsData() = PreprosesseringsData(
-        søker.fødselsnummer,
-        k9FormatSøknad,
-        vedleggId,
-        fødselsattestVedleggId,
-        pdfData()
+        søkerFødselsnummer = søker.fødselsnummer,
+        k9FormatSøknad = k9FormatSøknad,
+        vedleggId = vedleggId,
+        fødselsattestVedleggId = fødselsattestVedleggId,
+        pdfJournalføringsTittel = "Søknad om pleiepenger",
+        jsonJournalføringsTittel = "Søknad om pleiepenger som JSON",
+        pdfData = pdfData()
     )
 }

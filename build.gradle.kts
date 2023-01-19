@@ -46,6 +46,7 @@ val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
 
 dependencies {
+	implementation("no.nav.security:token-validation-core:$tokenSupportVersion")
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
 	testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
 

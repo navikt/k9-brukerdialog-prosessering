@@ -2,6 +2,7 @@ package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.every
 import io.mockk.verify
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
 import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsResultat
@@ -103,16 +104,8 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
             listOf(listOf("123456789", "987654321"))
         )
 
-        producer.leggPåTopic(
-            key = søknadId,
-            value = topicEntryJson,
-            topic = PSB_MOTTATT_TOPIC,
-        )
-        val lesMelding =
-            consumer.lesMelding(
-                key = søknadId,
-                topic = PSB_CLEANUP_TOPIC
-            ).value()
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_MOTTATT_TOPIC,)
+        val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_CLEANUP_TOPIC).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").getJSONObject("melding").toString()
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
