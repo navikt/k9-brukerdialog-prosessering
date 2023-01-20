@@ -6,7 +6,7 @@ env:
 on:
   push:
     paths:
-      - ${{ env.TOPICS_PATH }}
+      - 'nais/topics/pleiepenger-sykt-barn-topics.yml'
 
 jobs:
   deploy-psb-topics:
