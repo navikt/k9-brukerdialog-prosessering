@@ -11,8 +11,8 @@ spec:
     cleanupPolicy: delete  # delete, compact
     minimumInSyncReplicas: 2
     partitions: 1
-    replication: 3  # see min/max requirements
-    retentionBytes: -1  # -1 means unlimited
+    replication: 3
+    retentionBytes: -1  # -1 ubegrenset
     retentionHours: 730 # 30 dager
   acl:
     - team: dusseldorf
