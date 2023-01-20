@@ -10,6 +10,7 @@ on:
       - '.github/workflows/apply-alerts.yml'
       - '.github/workflows/snyk.yml'
       - '.github/workflows/*-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
       - 'nais/alerterator-*'
       - 'nais/topics/*'
     branches:
