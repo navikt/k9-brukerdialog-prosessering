@@ -9,7 +9,9 @@ on:
       - 'CODEOWNERS'
       - '.github/workflows/apply-alerts.yml'
       - '.github/workflows/snyk.yml'
+      - '.github/workflows/*-topics.yml'
       - 'nais/alerterator-*'
+      - 'nais/topics/*'
     branches:
 
 env:

@@ -10,8 +10,8 @@ on:
 
 jobs:
   deploy-psb-topics:
-    uses: ./.github/workflows/topics/reusable-topic-workflow
+    uses: ./.github/workflows/reusble-topic-workflow.yml
     with:
-      job-name: 'Pleiepenger sykt barn topics'
+      job-name: 'psb-topics'
       topics-path: ${{ env.TOPICS_PATH }}
     secrets: inherit
