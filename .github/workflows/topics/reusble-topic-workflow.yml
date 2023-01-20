@@ -1,0 +1,40 @@
+name: Reusable topics workflow
+
+on:
+  workflow_call:
+    inputs:
+      job-name:
+        description: 'Name of the job'
+        required: true
+        type: string
+      topics-path:
+        description: 'Path to the topics file'
+        required: true
+        type: string
+
+jobs:
+  deploy-dev:
+    name: Deploy ${{ inputs.job-name }} to Aiven Dev
+    if: startsWith(github.ref, 'refs/heads/dev-') || startsWith(github.ref, 'refs/heads/main') # Deploy if branch is either main or dev-*
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          VAR: kafka-pool=nav-dev
+          RESOURCE: ${{ inputs.topics-path }}
+
+  deploy-prod:
+    name: Deploy ${{ inputs.job-name }} to Aiven Prod
+    if: startsWith(github.ref, 'refs/heads/main')  # If the branch is main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          VAR: kafka-pool=nav-prod
+          RESOURCE: ${{ inputs.topics-path }}

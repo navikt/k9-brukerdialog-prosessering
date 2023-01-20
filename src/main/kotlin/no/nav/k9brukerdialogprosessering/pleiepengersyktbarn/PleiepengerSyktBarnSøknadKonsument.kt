@@ -6,10 +6,9 @@ import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsService
 import no.nav.k9brukerdialogprosessering.kafka.config.KafkaStreamsConfig
 import no.nav.k9brukerdialogprosessering.kafka.config.Topic
 import no.nav.k9brukerdialogprosessering.kafka.processors.LoggingToMDCProcessor
+import no.nav.k9brukerdialogprosessering.kafka.processors.process
 import no.nav.k9brukerdialogprosessering.kafka.types.Cleanup
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBPreprosessertSøknad
 import org.apache.kafka.streams.StreamsBuilder
@@ -38,13 +37,14 @@ class PleiepengerSyktBarnSøknadKonsument(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor<PSBMottattSøknad>() })
-            .mapValues { _: String, value: TopicEntry<PSBMottattSøknad> ->
-                val psbMottattSøknad = value.data
-                val preprosesseringResultat =
-                    preprosesseringsService.preprosesser(psbMottattSøknad.mapTilPreprosesseringsData())
-                val preprosessert: PSBPreprosessertSøknad =
-                    psbMottattSøknad.mapTilPreprosessert(preprosesseringResultat.dokumenter)
-                TopicEntry(value.metadata, preprosessert)
+            .mapValues { søknadId: String, value: TopicEntry<PSBMottattSøknad> ->
+                process(name = "pleiepengerSyktBarnPreprosesseringsStream", soknadId = søknadId, entry = value) {
+                    val psbMottattSøknad = value.data
+                    val preprosesseringsResultat =
+                        preprosesseringsService.preprosesser(psbMottattSøknad.mapTilPreprosesseringsData())
+
+                    psbMottattSøknad.mapTilPreprosessert(preprosesseringsResultat.dokumenter)
+                }
             }
             .to(psbPreprosesertTopic.name, psbPreprosesertTopic.producedWith)
         return stream
@@ -57,11 +57,12 @@ class PleiepengerSyktBarnSøknadKonsument(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
-            .mapValues { _: String, value: TopicEntry<PSBPreprosessertSøknad> ->
-                val preprosessertSøknad: PSBPreprosessertSøknad = value.data
-                val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
-                val cleanup: Cleanup = Cleanup(value.metadata, preprosessertSøknad, journalførSøknad)
-                TopicEntry(value.metadata, cleanup)
+            .mapValues { søknadId: String, value: TopicEntry<PSBPreprosessertSøknad> ->
+                process(name = "pleiepengerSyktBarnJournalføringsStream", soknadId = søknadId, entry = value) {
+                    val preprosessertSøknad: PSBPreprosessertSøknad = value.data
+                    val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
+                    Cleanup(value.metadata, preprosessertSøknad, journalførSøknad)
+                }
             }
             .to(psbCleanupTopic.name, psbCleanupTopic.producedWith)
 
@@ -74,10 +75,11 @@ class PleiepengerSyktBarnSøknadKonsument(
             .stream(psbCleanupTopic.name, psbCleanupTopic.consumedWith)
 
         stream
-            .process(ProcessorSupplier { LoggingToMDCProcessor<Cleanup>() })
-            .mapValues { _: String, value: TopicEntry<Cleanup> ->
-                cleanupService.cleanup(value.data)
-                value
+            .process(ProcessorSupplier { LoggingToMDCProcessor() })
+            .mapValues { søknadId: String, value: TopicEntry<Cleanup> ->
+                process(name = "pleiepengerSyktBarnCleanupStream", soknadId = søknadId, entry = value) {
+                    cleanupService.cleanup(value.data)
+                }
             }
 
         return stream

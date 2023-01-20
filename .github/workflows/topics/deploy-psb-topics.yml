@@ -1,0 +1,17 @@
+name: Deploy pleiepenger sykt barn topics
+
+env:
+  TOPICS_PATH: 'nais/topics/pleiepenger-sykt-barn-topics.yml'
+
+on:
+  push:
+    paths:
+      - ${{ env.TOPICS_PATH }}
+
+jobs:
+  deploy-psb-topics:
+    uses: ./.github/workflows/topics/reusable-topic-workflow
+    with:
+      job-name: 'Pleiepenger sykt barn topics'
+      topics-path: ${{ env.TOPICS_PATH }}
+    secrets: inherit
