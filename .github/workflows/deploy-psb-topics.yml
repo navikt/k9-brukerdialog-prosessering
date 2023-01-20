@@ -13,5 +13,5 @@ jobs:
     uses: ./.github/workflows/reusble-topic-workflow.yml
     with:
       job-name: 'psb-topics'
-      topics-path: ${{ env.TOPICS_PATH }}
+      topics-path: 'nais/topics/pleiepenger-sykt-barn-topics.yml'
     secrets: inherit
