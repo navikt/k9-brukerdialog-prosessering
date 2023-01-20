@@ -15,4 +15,3 @@ jobs:
       job-name: 'psb-topics'
       topics-path: ${{ env.TOPICS_PATH }}
     secrets: inherit
-
