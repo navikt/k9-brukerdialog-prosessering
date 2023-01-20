@@ -12,7 +12,7 @@ on:
         required: true
         type: string
     secrets:
-      NAI_DEPLOY_APIKEY:
+      NAIS_DEPLOY_APIKEY:
         description: 'API key for nais deploy'
         required: true
 
