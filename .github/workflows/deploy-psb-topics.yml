@@ -6,12 +6,14 @@ env:
 on:
   push:
     paths:
-      - 'nais/topics/pleiepenger-sykt-barn-topics.yml'
+      - '.github/workflows/deploy-pleiepenger-sykt-barn-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - ${{ env.TOPICS_PATH }}
 
 jobs:
   deploy-psb-topics:
     uses: ./.github/workflows/reusble-topic-workflow.yml
     with:
       job-name: 'psb-topics'
-      topics-path: 'nais/topics/pleiepenger-sykt-barn-topics.yml'
+      topics-path: ${{ env.TOPICS_PATH }}
     secrets: inherit

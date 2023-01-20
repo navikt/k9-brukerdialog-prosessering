@@ -11,6 +11,10 @@ on:
         description: 'Path to the topics file'
         required: true
         type: string
+    secrets:
+      NAI_DEPLOY_APIKEY:
+        description: 'API key for nais deploy'
+        required: true
 
 jobs:
   deploy-dev:
