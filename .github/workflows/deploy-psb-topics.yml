@@ -8,7 +8,7 @@ on:
     paths:
       - '.github/workflows/deploy-pleiepenger-sykt-barn-topics.yml'
       - '.github/workflows/reusable-topic-workflow.yml'
-      - 'nais/topics/pleiepenger-sykt-barn-topics.yml
+      - 'nais/topics/pleiepenger-sykt-barn-topics.yml'
 
 jobs:
   deploy-psb-topics:
