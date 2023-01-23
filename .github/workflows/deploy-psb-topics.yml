@@ -16,5 +16,4 @@ jobs:
     with:
       job-name: psb-topics
       topics-path: 'nais/topics/pleiepenger-sykt-barn-topics.yml'
-    secrets:
-      naisDeployApikey: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+    secrets: inherit
