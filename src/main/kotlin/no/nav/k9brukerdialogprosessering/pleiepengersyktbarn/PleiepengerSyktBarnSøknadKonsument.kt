@@ -23,10 +23,10 @@ import org.springframework.stereotype.Service
 class PleiepengerSyktBarnSøknadKonsument(
     private val preprosesseringsService: PreprosesseringsService,
     private val journalføringsService: JournalføringsService,
-    private val cleanupService: CleanupService,
+    private val cleanupService: CleanupService<PSBPreprosessertSøknad>,
     private val psbMottattTopic: Topic<TopicEntry<PSBMottattSøknad>>,
     private val psbPreprosesertTopic: Topic<TopicEntry<PSBPreprosessertSøknad>>,
-    private val psbCleanupTopic: Topic<TopicEntry<Cleanup>>,
+    private val psbCleanupTopic: Topic<TopicEntry<Cleanup<PSBPreprosessertSøknad>>>,
     @Qualifier(KafkaStreamsConfig.PSB_STREAMS_BUILDER_BEAN_NAME) private val psbKStreamBuilder: StreamsBuilder,
 ) {
 
@@ -52,7 +52,7 @@ class PleiepengerSyktBarnSøknadKonsument(
 
     @Bean
     fun pleiepengerSyktBarnJournalføringsStream(): KStream<String, TopicEntry<PSBPreprosessertSøknad>> {
-        val stream: KStream<String, TopicEntry<PSBPreprosessertSøknad>> = psbKStreamBuilder
+        val stream = psbKStreamBuilder
             .stream(psbPreprosesertTopic.name, psbPreprosesertTopic.consumedWith)
 
         stream
@@ -70,13 +70,12 @@ class PleiepengerSyktBarnSøknadKonsument(
     }
 
     @Bean
-    fun pleiepengerSyktBarnCleanupStream(): KStream<String, TopicEntry<Cleanup>> {
-        val stream: KStream<String, TopicEntry<Cleanup>> = psbKStreamBuilder
-            .stream(psbCleanupTopic.name, psbCleanupTopic.consumedWith)
+    fun pleiepengerSyktBarnCleanupStream(): KStream<String, TopicEntry<Cleanup<PSBPreprosessertSøknad>>> {
+        val stream: KStream<String, TopicEntry<Cleanup<PSBPreprosessertSøknad>>> = psbKStreamBuilder.stream(psbCleanupTopic.name, psbCleanupTopic.consumedWith)
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
-            .mapValues { søknadId: String, value: TopicEntry<Cleanup> ->
+            .mapValues { søknadId: String, value: TopicEntry<Cleanup<PSBPreprosessertSøknad>> ->
                 process(name = "pleiepengerSyktBarnCleanupStream", soknadId = søknadId, entry = value) {
                     cleanupService.cleanup(value.data)
                 }

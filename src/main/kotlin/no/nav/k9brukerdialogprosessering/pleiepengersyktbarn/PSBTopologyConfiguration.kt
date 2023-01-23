@@ -13,13 +13,14 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class PSBTopologyConfiguration(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) {
     companion object {
         const val PSB_MOTTATT_TOPIC = "dusseldorf.pp-sykt-barn-soknad-mottatt"
         const val PSB_PREPROSESSERT_TOPIC = "dusseldorf.pp-sykt-barn-soknad-preprosessert"
         const val PSB_CLEANUP_TOPIC = "dusseldorf.pp-sykt-barn-soknad-cleanup"
     }
+
     @Bean
     fun psbMottattTopic(): Topic<TopicEntry<PSBMottattSøknad>> {
         return Topic(
@@ -27,6 +28,7 @@ class PSBTopologyConfiguration(
             serDes = PSBMottattSøknadSerdes(objectMapper)
         )
     }
+
     @Bean
     fun psbPreprosessertTopic(): Topic<TopicEntry<PSBPreprosessertSøknad>> {
         return Topic(
@@ -34,8 +36,9 @@ class PSBTopologyConfiguration(
             serDes = PSBMPreprosessertSøknadSerdes(objectMapper)
         )
     }
+
     @Bean
-    fun psbCleanupTopic(): Topic<TopicEntry<Cleanup>> {
+    fun psbCleanupTopic(): Topic<TopicEntry<Cleanup<PSBPreprosessertSøknad>>> {
         return Topic(
             name = PSB_CLEANUP_TOPIC,
             serDes = CleanupSøknadSerdes(objectMapper)
@@ -44,7 +47,7 @@ class PSBTopologyConfiguration(
 }
 
 class PSBMottattSøknadSerdes(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) : SerDes<TopicEntry<PSBMottattSøknad>>(objectMapper) {
     override fun deserialize(topic: String, data: ByteArray): TopicEntry<PSBMottattSøknad> {
         return objectMapper.readValue(data)
@@ -52,7 +55,7 @@ class PSBMottattSøknadSerdes(
 }
 
 class PSBMPreprosessertSøknadSerdes(
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
 ) : SerDes<TopicEntry<PSBPreprosessertSøknad>>(objectMapper) {
     override fun deserialize(topic: String, data: ByteArray): TopicEntry<PSBPreprosessertSøknad> {
         return objectMapper.readValue(data)
@@ -60,9 +63,9 @@ class PSBMPreprosessertSøknadSerdes(
 }
 
 class CleanupSøknadSerdes(
-    private val objectMapper: ObjectMapper
-) : SerDes<TopicEntry<Cleanup>>(objectMapper) {
-    override fun deserialize(topic: String, data: ByteArray): TopicEntry<Cleanup> {
+    private val objectMapper: ObjectMapper,
+) : SerDes<TopicEntry<Cleanup<PSBPreprosessertSøknad>>>(objectMapper) {
+    override fun deserialize(topic: String, data: ByteArray): TopicEntry<Cleanup<PSBPreprosessertSøknad>> {
         return objectMapper.readValue(data)
     }
 }

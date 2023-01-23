@@ -6,14 +6,14 @@ import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
 import org.springframework.stereotype.Service
 
 @Service
-class CleanupService(
+class CleanupService<T: Preprosessert>(
     private val k9MellomlagringService: K9MellomlagringService
 ) {
     private companion object {
         private val logger = org.slf4j.LoggerFactory.getLogger(CleanupService::class.java)
     }
 
-    suspend fun cleanup(cleanup: Cleanup): Cleanup {
+    suspend fun cleanup(cleanup: Cleanup<T>): Cleanup<T> {
         logger.info("Sletter dokumenter etter prosessering av søknad: $cleanup")
         val preprosessert = cleanup.melding
         k9MellomlagringService.slettDokumeter(

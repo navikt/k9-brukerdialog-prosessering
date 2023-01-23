@@ -2,6 +2,7 @@ package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.verify
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
@@ -9,11 +10,11 @@ import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsResultat
 import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
+import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
+import no.nav.k9brukerdialogprosessering.pdf.PDFGenerator
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBMottattSøknad
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBPreprosessertSøknad
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.utils.PSBSøknadUtils
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
@@ -67,6 +68,9 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
     @MockkBean(relaxed = true)
     private lateinit var preprosesseringsService: PreprosesseringsService
 
+    @MockkBean(relaxed = true)
+    private lateinit var k9MellomlagringService: K9MellomlagringService
+
     lateinit var producer: Producer<String, Any> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
     lateinit var consumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
 
@@ -90,7 +94,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
     }
 
     @Test
-    fun `forvent riktig serialisering og deserialisering`() {
+    fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
         val søknadId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15.000Z"
         val mottatt = ZonedDateTime.parse(mottattString)
@@ -100,15 +104,15 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
-        io.mockk.every { preprosesseringsService.preprosesser(any()) } returns PreprosesseringsResultat(
-            listOf(listOf("123456789", "987654321"))
+        val forventetDokmentIderForSletting = listOf("123456789", "987654321")
+        every { preprosesseringsService.preprosesser(any()) } returns PreprosesseringsResultat(
+            listOf(forventetDokmentIderForSletting)
         )
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_MOTTATT_TOPIC,)
-        val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_CLEANUP_TOPIC).value()
-
-        val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").getJSONObject("melding").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_MOTTATT_TOPIC)
+        coVerify(exactly = 1, timeout = 10 * 1000) {
+            k9MellomlagringService.slettDokumeter(eq(forventetDokmentIderForSletting), any())
+        }
     }
 
     @Test
@@ -122,14 +126,16 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
-        io.mockk.every { preprosesseringsService.preprosesser(any()) }
+        every { preprosesseringsService.preprosesser(any()) }
             .throws(IllegalStateException("Feil i prosessering..."))
             .andThenThrows(IllegalStateException("Feil i prosessering..."))
             .andThenThrows(IllegalStateException("Feil i prosessering..."))
             .andThenThrows(IllegalStateException("Feil i prosessering..."))
-            .andThen(PreprosesseringsResultat(
-                listOf(listOf("123456789", "987654321"))
-            ))
+            .andThen(
+                PreprosesseringsResultat(
+                    listOf(listOf("123456789", "987654321"))
+                )
+            )
 
         producer.leggPåTopic(
             key = søknadId,
