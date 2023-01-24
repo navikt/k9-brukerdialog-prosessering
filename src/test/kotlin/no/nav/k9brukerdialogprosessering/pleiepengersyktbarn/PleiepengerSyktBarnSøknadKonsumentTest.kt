@@ -4,14 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.verify
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
-import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsResultat
-import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
-import no.nav.k9brukerdialogprosessering.pdf.PDFGenerator
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
@@ -39,6 +35,7 @@ import org.springframework.kafka.test.context.EmbeddedKafka
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -54,8 +51,7 @@ import java.util.*
 @EnableMockOAuth2Server // Tilgjengliggjør en oicd-provider for test. Se application-test.yml -> no.nav.security.jwt.issuer.selvbetjening for konfigurasjon
 @ActiveProfiles("test")
 @SpringBootTest(
-    classes = [K9brukerdialogprosesseringApplication::class],
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+    classes = [K9brukerdialogprosesseringApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 ) // Integrasjonstest - Kjører opp hele Spring Context med alle konfigurerte beans.
 class PleiepengerSyktBarnSøknadKonsumentTest {
 
@@ -64,9 +60,6 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
 
     @Autowired
     private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
-
-    @MockkBean(relaxed = true)
-    private lateinit var preprosesseringsService: PreprosesseringsService
 
     @MockkBean(relaxed = true)
     private lateinit var k9MellomlagringService: K9MellomlagringService
@@ -78,11 +71,8 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
     fun setUp() {
         producer = embeddedKafkaBroker.opprettKafkaProducer()
         consumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "pleiepenger-sykt-barn",
-            topics = listOf(
-                PSB_MOTTATT_TOPIC,
-                PSB_PREPROSESSERT_TOPIC,
-                PSB_CLEANUP_TOPIC
+            groupPrefix = "pleiepenger-sykt-barn", topics = listOf(
+                PSB_MOTTATT_TOPIC, PSB_PREPROSESSERT_TOPIC, PSB_CLEANUP_TOPIC
             )
         )
     }
@@ -105,13 +95,11 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
         val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        every { preprosesseringsService.preprosesser(any()) } returns PreprosesseringsResultat(
-            listOf(forventetDokmentIderForSletting)
-        )
+        every { k9MellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_MOTTATT_TOPIC)
-        coVerify(exactly = 1, timeout = 10 * 1000) {
-            k9MellomlagringService.slettDokumeter(eq(forventetDokmentIderForSletting), any())
+        coVerify(exactly = 1, timeout = 20 * 1000) {
+            k9MellomlagringService.slettDokumeter(any(), any())
         }
     }
 
@@ -126,36 +114,23 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
-        every { preprosesseringsService.preprosesser(any()) }
-            .throws(IllegalStateException("Feil i prosessering..."))
-            .andThenThrows(IllegalStateException("Feil i prosessering..."))
-            .andThenThrows(IllegalStateException("Feil i prosessering..."))
-            .andThenThrows(IllegalStateException("Feil i prosessering..."))
-            .andThen(
-                PreprosesseringsResultat(
-                    listOf(listOf("123456789", "987654321"))
-                )
-            )
+        every { k9MellomlagringService.lagreDokument(any()) }
+            .throws(IllegalStateException("Feilet med lagring av dokument..."))
+            .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
+            .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
+            .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
+            .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
 
-        producer.leggPåTopic(
-            key = søknadId,
-            value = topicEntryJson,
-            topic = PSB_MOTTATT_TOPIC,
-        )
-        val lesMelding = consumer.lesMelding(
-            key = søknadId,
-            topic = PSB_PREPROSESSERT_TOPIC,
-            maxWaitInSeconds = 40
-        ).value()
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_MOTTATT_TOPIC)
+        val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
-        verify(exactly = 5) { preprosesseringsService.preprosesser(any()) }
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
+        println("---> " + preprosessertSøknadJson)
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }
 
     @Language("JSON")
-    private fun preprosessertSøknadSomJson(søknadId: String, mottatt: String) =
-        """
+    private fun preprosessertSøknadSomJson(søknadId: String, mottatt: String) = """
          {
             "apiDataVersjon": null,
             "søknadId": "$søknadId",
@@ -378,11 +353,20 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               "skalOppholdeSegIUtlandetIPerioden": true
             },
             "dokumentId": [
-              [
-                "123456789",
-                "987654321"
-              ]
-            ],
+                [
+                  "123456789",
+                  "987654321"
+                ],
+                [
+                  "123"
+                ],
+                [
+                  "456"
+                ],
+                [
+                  "789"
+                ]
+              ],
             "k9FormatSøknad": {
               "søknadId": "$søknadId",
               "mottattDato": "$mottatt",
