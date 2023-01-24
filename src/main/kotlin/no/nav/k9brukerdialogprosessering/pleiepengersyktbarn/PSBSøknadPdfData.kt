@@ -46,10 +46,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "soknad_id" to søknad.søknadId,
         "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(Constants.ZONE_ID).somNorskDag(),
         "soknad_mottatt" to Constants.DATE_TIME_FORMATTER.format(søknad.mottatt),
-        "har_medsoker" to søknad.harMedsøker,
         "harIkkeVedlegg" to søknad.sjekkOmHarIkkeVedlegg(),
         "harLastetOppFødselsattest" to !søknad.fødselsattestVedleggId.isNullOrEmpty(),
-        "samtidig_hjemme" to søknad.samtidigHjemme,
         "soker" to mapOf(
             "navn" to søknad.søker.formatertNavn().capitalizeName(),
             "fodselsnummer" to søknad.søker.fødselsnummer
@@ -71,7 +69,6 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
             "har_bekreftet_opplysninger" to søknad.harBekreftetOpplysninger
         ),
         "hjelp" to mapOf(
-            "har_medsoker" to søknad.harMedsøker,
             "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
             "sprak" to søknad.språk?.sprakTilTekst()
         ),

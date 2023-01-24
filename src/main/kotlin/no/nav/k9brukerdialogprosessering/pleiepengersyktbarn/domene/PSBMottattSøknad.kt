@@ -40,8 +40,6 @@ data class PSBMottattSøknad(
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
     val utenlandskNæring: List<UtenlandskNæring>,
-    val harMedsøker : Boolean,
-    val samtidigHjemme: Boolean? = null,
     val harForståttRettigheterOgPlikter : Boolean,
     val harBekreftetOpplysninger : Boolean,
     val omsorgstilbud: Omsorgstilbud? = null,

@@ -80,7 +80,6 @@ internal object PSBSøknadUtils {
             ),
             skalBoIUtlandetNeste12Mnd = false
         ),
-        harMedsøker = true,
         harBekreftetOpplysninger = true,
         harForståttRettigheterOgPlikter = true,
         beredskap = Beredskap(
@@ -212,7 +211,6 @@ internal object PSBSøknadUtils {
         ),
         harVærtEllerErVernepliktig = true,
         k9FormatSøknad = defaultK9FormatPSB(søknadId, mottatt),
-        samtidigHjemme = null,
         omsorgstilbud = null,
         barnRelasjon = null,
         barnRelasjonBeskrivelse = null,

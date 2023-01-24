@@ -254,7 +254,6 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
             },
             "harBekreftetOpplysninger": true,
             "harForstattRettigheterOgPlikter": true,
-            "harMedsøker": true,
             "harVærtEllerErVernepliktig": true,
             "medlemskap": {
               "harBoddIUtlandetSiste12Mnd": true,
@@ -286,7 +285,6 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
                 "tilOgMed": "2020-10-01"
               }
             ],
-            "samtidigHjemme": null,
             "selvstendigNæringsdrivende": {
               "arbeidsforhold": {
                 "arbeidIPeriode": {
