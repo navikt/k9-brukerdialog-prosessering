@@ -46,4 +46,5 @@ spec:
      value: "{{this}}"
   {{/each}}
   kafka:
+    streams: true
     pool: {{kafkaPool}}
