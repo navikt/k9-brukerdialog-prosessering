@@ -45,7 +45,7 @@ import java.util.*
 @EmbeddedKafka( // Setter opp og tilgjengligjør embeded kafka broker
     partitions = 1,
     count = 3,
-    bootstrapServersProperty = "KAFKA_BOOTSTRAP_SERVERS", // Setter bootstrap-servers for consumer og producer.
+    bootstrapServersProperty = "KAFKA_BROKERS", // Setter bootstrap-servers for consumer og producer.
     topics = [PSB_MOTTATT_TOPIC, PSB_PREPROSESSERT_TOPIC, PSB_CLEANUP_TOPIC]
 )
 @DirtiesContext // Sørger for at context blir re-instantiert mellom hver test.

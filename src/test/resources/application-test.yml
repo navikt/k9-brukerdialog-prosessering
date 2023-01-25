@@ -1,4 +1,4 @@
-KAFKA_BOOTSTRAP_SERVERS: localhost:9092 # placeholder
+KAFKA_BROKERS: localhost:9092 # placeholder
 K9_MELLOMLAGRING_BASE_URL: http://localhost:8003 # placeholder
 K9_JOARK_BASE_URL: http://localhost:8003 # placeholder
 
