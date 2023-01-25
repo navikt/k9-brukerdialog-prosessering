@@ -40,3 +40,15 @@ no.nav:
       url: ${KAFKA_SCHEMA_REGISTRY_URL}
       user: ${KAFKA_SCHEMA_REGISTRY_USER}
       password: ${KAFKA_SCHEMA_REGISTRY_PASSWORD}
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health, prometheus
+      path-mapping:
+        prometheus: /metrics
