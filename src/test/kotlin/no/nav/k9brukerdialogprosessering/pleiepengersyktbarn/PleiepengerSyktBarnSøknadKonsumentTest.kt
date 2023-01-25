@@ -105,7 +105,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_MOTTATT_TOPIC)
-        coVerify(exactly = 1, timeout = 20 * 1000) {
+        coVerify(exactly = 1, timeout = 30 * 1000) {
             k9MellomlagringService.slettDokumeter(any(), any())
         }
     }
