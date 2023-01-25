@@ -20,7 +20,7 @@ class PreprosesseringsService(
         private val logger = org.slf4j.LoggerFactory.getLogger(PreprosesseringsService::class.java)
     }
 
-    fun preprosesser(preprosesseringsData: PreprosesseringsData): PreprosesseringsResultat {
+    suspend fun preprosesser(preprosesseringsData: PreprosesseringsData): PreprosesseringsResultat {
         logger.info("Preprosesserer søknad: $preprosesseringsData")
 
         val søkerFødselsnummer = preprosesseringsData.søkerFødselsnummer

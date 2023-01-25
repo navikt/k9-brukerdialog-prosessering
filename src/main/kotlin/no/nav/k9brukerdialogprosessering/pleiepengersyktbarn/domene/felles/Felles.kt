@@ -2,6 +2,7 @@ package no.nav.helse.felles
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsforhold
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Navn
 import java.time.LocalDate
 
 enum class BarnRelasjon(val utskriftsvennlig: String) {
@@ -147,10 +148,4 @@ fun Søker.tilTpsNavn(): Navn = Navn(
     fornavn = fornavn,
     mellomnavn = mellomnavn,
     etternavn = etternavn
-)
-
-data class Navn(
-    val fornavn: String,
-    val mellomnavn: String?,
-    val etternavn: String
 )

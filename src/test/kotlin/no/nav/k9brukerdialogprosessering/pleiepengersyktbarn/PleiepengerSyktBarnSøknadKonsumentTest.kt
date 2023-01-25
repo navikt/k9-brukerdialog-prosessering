@@ -2,9 +2,12 @@ package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
+import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
+import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
@@ -64,6 +67,9 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
     @MockkBean(relaxed = true)
     private lateinit var k9MellomlagringService: K9MellomlagringService
 
+    @MockkBean(relaxed = true)
+    private lateinit var k9JoarkService: K9JoarkService
+
     lateinit var producer: Producer<String, Any> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
     lateinit var consumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
 
@@ -95,7 +101,8 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
         val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        every { k9MellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
+        coEvery { k9MellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
+        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_MOTTATT_TOPIC)
         coVerify(exactly = 1, timeout = 20 * 1000) {
@@ -114,7 +121,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
-        every { k9MellomlagringService.lagreDokument(any()) }
+        coEvery { k9MellomlagringService.lagreDokument(any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))

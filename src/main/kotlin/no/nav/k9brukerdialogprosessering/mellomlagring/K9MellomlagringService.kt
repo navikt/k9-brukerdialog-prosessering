@@ -25,7 +25,7 @@ class K9MellomlagringService(
             .toUri()
     }
 
-    internal fun lagreDokument(dokument: Dokument): URI {
+    internal suspend fun lagreDokument(dokument: Dokument): URI {
         return kotlin.runCatching { k9MellomlagringRestTemplate.postForLocation(dokumentUrl, HttpEntity(dokument)) }
             .fold(
                 onSuccess = { dokumentIdUrl: URI? -> dokumentIdUrl!! },

@@ -21,6 +21,7 @@ no.nav:
 
   integration:
     k9-mellomlagring-base-url: ${K9_MELLOMLAGRING_BASE_URL}
+    k9-joark-base-url: ${K9_JOARK_BASE_URL}
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}

@@ -17,6 +17,7 @@ import no.nav.helse.felles.UtenlandsoppholdIPerioden
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
+import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Navn
 import java.time.LocalDate
@@ -94,4 +95,13 @@ data class PSBPreprosessertSøknad(
     override fun k9FormatSøknad(): Søknad = k9FormatSøknad
 
     override fun dokumenter(): List<List<String>> = dokumentId
+    override fun tilJournaførigsRequest(): JournalføringsRequest {
+        return JournalføringsRequest(
+            ytelse = ytelse(),
+            norskIdent = søkerFødselsnummer(),
+            sokerNavn = søkerNavn(),
+            mottatt = mottattDato(),
+            dokumentId = dokumenter()
+        )
+    }
 }
