@@ -26,9 +26,9 @@ object RestTemplateUtils {
 
     fun requestLoggerInterceptor(logger: Logger) =
         ClientHttpRequestInterceptor { request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution ->
-            logger.info("Request: {} {}", request.method, request.uri)
+            logger.info("HTTP Request: {} {}", request.method, request.uri)
             val response = execution.execute(request, body)
-            logger.info("Response: {} {} {}", response.statusCode, request.method, request.uri)
+            logger.info("HTTP Response: {} {} {}", response.statusCode, request.method, request.uri)
             response
         }
 
