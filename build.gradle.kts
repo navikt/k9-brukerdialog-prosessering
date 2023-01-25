@@ -52,6 +52,7 @@ dependencies {
 
 	implementation("no.nav.k9:soknad:$k9FormatVersion")
 
+	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
