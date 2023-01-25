@@ -8,7 +8,7 @@ no.nav:
         trust-store-location: file:${KAFKA_TRUSTSTORE_PATH}
         trust-store-password: ${KAFKA_CREDSTORE_PASSWORD}
         key-store-location: file:${KAFKA_KEYSTORE_PATH}
-        key-store-password: ${KAFKA_KEYSTORE_PASSWORD}
+        key-store-password: ${KAFKA_CREDSTORE_PASSWORD}
         key-store-type: PKCS12
     schema-registry:
       url: ${KAFKA_SCHEMA_REGISTRY_URL}
