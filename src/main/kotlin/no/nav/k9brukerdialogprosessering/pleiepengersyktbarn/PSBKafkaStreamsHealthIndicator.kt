@@ -22,7 +22,7 @@ class PSBKafkaStreamsHealthIndicator(
         return when (val kafkaStreams: KafkaStreams? = psbKafkaStreamsBuilder.kafkaStreams) {
             null -> Health.down().withDetail(PSB_KAFKA_STREAMS, "$PSB_KAFKA_STREAMS is null").build()
             else -> when (val state = kafkaStreams.state()) {
-                KafkaStreams.State.RUNNING -> Health.up().withDetail("kafkaStreams", "$PSB_KAFKA_STREAMS is in $state state").build()
+                KafkaStreams.State.RUNNING -> Health.up().withDetail(PSB_KAFKA_STREAMS, "$PSB_KAFKA_STREAMS is in $state state").build()
                 else -> Health.down().withDetail(PSB_KAFKA_STREAMS, "$PSB_KAFKA_STREAMS is in $state state").build()
             }
         }
