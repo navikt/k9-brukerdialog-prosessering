@@ -21,17 +21,9 @@ class PSBKafkaStreamsHealthIndicator(
     override fun health(): Health {
         return when (val kafkaStreams: KafkaStreams? = psbKafkaStreamsBuilder.kafkaStreams) {
             null -> Health.down().withDetail(PSB_KAFKA_STREAMS, "$PSB_KAFKA_STREAMS is null").build()
-            else -> when (kafkaStreams.state()) {
-                KafkaStreams.State.RUNNING -> {
-                    val streamsMetrics = kafkaStreams.metrics()
-                    logger.info("KafkaStreams metrics: {}", streamsMetrics)
-                    Health.up().withDetail("kafkaStreams", "$PSB_KAFKA_STREAMS is running").build()
-                }
-                else -> {
-                    val streamsMetrics = kafkaStreams.metrics()
-                    logger.info("KafkaStreams metrics: {}", streamsMetrics)
-                    Health.down().withDetail(PSB_KAFKA_STREAMS, kafkaStreams.state().toString()).build()
-                }
+            else -> when (val state = kafkaStreams.state()) {
+                KafkaStreams.State.RUNNING -> Health.up().withDetail("kafkaStreams", "$PSB_KAFKA_STREAMS is in $state state").build()
+                else -> Health.down().withDetail(PSB_KAFKA_STREAMS, "$PSB_KAFKA_STREAMS is in $state state").build()
             }
         }
     }
