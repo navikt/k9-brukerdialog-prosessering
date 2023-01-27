@@ -33,7 +33,7 @@ class KafkaStreamsConfig(
         val psbStreamProps =
             kafkaProperties.streams["psb"] ?: throw IllegalStateException("Mangler konfiguration for psb streams")
         val props = commonStreamsConfigProperties(kafkaProperties.security, kafkaProperties.schemaRegistry)
-        props[StreamsConfig.APPLICATION_ID_CONFIG] = "${kafkaProperties.applicationId}-psb-stream"
+        props[StreamsConfig.APPLICATION_ID_CONFIG] = "${kafkaProperties.applicationId}${psbStreamProps.applicationIdSuffix}"
         props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = psbStreamProps.autoOffsetReset
 
         val streamsBuilderFactoryBean = StreamsBuilderFactoryBean(KafkaStreamsConfiguration(props))
