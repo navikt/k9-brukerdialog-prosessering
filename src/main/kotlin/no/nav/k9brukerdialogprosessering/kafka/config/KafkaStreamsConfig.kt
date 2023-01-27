@@ -27,7 +27,7 @@ import org.springframework.kafka.support.serializer.JsonSerde
 class KafkaStreamsConfig(
     private val meterRegistry: MeterRegistry,
     private val kafkaProperties: KafkaProperties,
-): HealthIndicator {
+) {
     @Bean(name = [PSB_STREAMS_BUILDER_BEAN_NAME])
     fun psbKafkaStreamsBuilder(): StreamsBuilderFactoryBean {
         val psbStreamProps =
@@ -116,9 +116,5 @@ class KafkaStreamsConfig(
         private val logger = LoggerFactory.getLogger(KafkaStreamsConfig::class.java)
         const val PSB_STREAMS_BUILDER_BEAN_NAME = "psbKafkaStreamsBuilder"
         const val OMP_STREAMS_BUILDER_BEAN_NAME = "ompKafkaStreamsBuilder"
-    }
-
-    override fun health(): Health {
-        TODO("Not yet implemented")
     }
 }
