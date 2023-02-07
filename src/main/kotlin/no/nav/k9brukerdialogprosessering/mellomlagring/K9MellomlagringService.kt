@@ -9,7 +9,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
-import org.springframework.web.util.UriComponents
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 
@@ -26,7 +25,7 @@ class K9MellomlagringService(
     }
 
     internal suspend fun lagreDokument(dokument: Dokument): URI {
-        return kotlin.runCatching { k9MellomlagringRestTemplate.postForLocation(dokumentUrl, HttpEntity(dokument)) }
+        return kotlin.runCatching { k9MellomlagringRestTemplate.postForLocation(dokumentUrl.path, HttpEntity(dokument)) }
             .fold(
                 onSuccess = { dokumentIdUrl: URI? -> dokumentIdUrl!! },
                 onFailure = { error: Throwable ->
@@ -47,13 +46,13 @@ class K9MellomlagringService(
             deffered.add(coroutineScope {
                 async {
                     val slettDokumentUrl: URI = UriComponentsBuilder.fromUri(dokumentUrl)
-                        .path(dokumentId)
+                        .path("/$dokumentId")
                         .build()
                         .toUri()
 
                     kotlin.runCatching {
                         k9MellomlagringRestTemplate.exchange(
-                            slettDokumentUrl,
+                            slettDokumentUrl.path,
                             HttpMethod.DELETE,
                             HttpEntity(dokumentEier),
                             Unit::class.java

@@ -21,17 +21,14 @@ class K9JoarkService(
 
     private companion object {
         private val logger = LoggerFactory.getLogger(K9JoarkService::class.java)
-        val journalføringsUrl = UriComponentsBuilder
-            .fromPath("/v1")
-            .build()
-            .toUri()
     }
 
     suspend fun journalfør(
         journalføringsRequest: JournalføringsRequest,
     ): JournalføringsResponse = kotlin.runCatching {
+        val resolveJournalføringsUrl = resolveJournalføringsUrl(journalføringsRequest.ytelse)
         k9JoarkRestTemplate.exchange(
-            resolveJournalføringsUrl(journalføringsRequest.ytelse),
+            resolveJournalføringsUrl.path,
             HttpMethod.POST,
             HttpEntity(journalføringsRequest),
             JournalføringsResponse::class.java
@@ -50,8 +47,8 @@ class K9JoarkService(
     )
 
     private fun resolveJournalføringsUrl(ytelse: Ytelse) = when (ytelse) {
-        Ytelse.PLEIEPENGER_SYKT_BARN -> UriComponentsBuilder.fromUri(journalføringsUrl)
-            .path("/pleiepenge/journalforing")
+        Ytelse.PLEIEPENGER_SYKT_BARN -> UriComponentsBuilder
+            .fromPath("/v1/pleiepenge/journalforing")
             .build()
             .toUri()
 

@@ -1,6 +1,6 @@
 KAFKA_BROKERS: localhost:9092 # placeholder
-K9_MELLOMLAGRING_BASE_URL: http://localhost:8003 # placeholder
-K9_JOARK_BASE_URL: http://localhost:8003 # placeholder
+K9_MELLOMLAGRING_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-mellomlagring-mock
+K9_JOARK_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-joark-mock
 
 no.nav:
   security.jwt:
@@ -36,3 +36,8 @@ no.nav:
       url: mock://localhost
       user: username
       password: password
+
+wiremock:
+  reset-mappings-after-each-test: true
+  server:
+    port: 0 # random port

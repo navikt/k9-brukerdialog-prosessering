@@ -3,6 +3,7 @@ package no.nav.k9brukerdialogprosessering.utils
 import no.nav.k9brukerdialogprosessering.common.Constants.CORRELATION_ID_KEY
 import no.nav.k9brukerdialogprosessering.common.Constants.NAV_CALL_ID
 import no.nav.security.token.support.client.core.ClientProperties
+import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenResponse
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import org.slf4j.Logger
 import org.slf4j.MDC
@@ -18,8 +19,9 @@ object RestTemplateUtils {
         oAuth2AccessTokenService: OAuth2AccessTokenService,
     ): ClientHttpRequestInterceptor {
         return ClientHttpRequestInterceptor { request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution ->
+            val accessToken: String = accessToken(clientProperties, oAuth2AccessTokenService)
             request.headers[HttpHeaders.AUTHORIZATION] =
-                "Bearer ${accessToken(clientProperties, oAuth2AccessTokenService)}"
+                "Bearer $accessToken"
             execution.execute(request, body)
         }
     }
@@ -41,6 +43,7 @@ object RestTemplateUtils {
         }
 
     fun accessToken(clientProperties: ClientProperties, oAuth2AccessTokenService: OAuth2AccessTokenService): String {
-        return oAuth2AccessTokenService.getAccessToken(clientProperties).accessToken
+        val accessToken: OAuth2AccessTokenResponse = oAuth2AccessTokenService.getAccessToken(clientProperties)
+        return accessToken.accessToken
     }
 }

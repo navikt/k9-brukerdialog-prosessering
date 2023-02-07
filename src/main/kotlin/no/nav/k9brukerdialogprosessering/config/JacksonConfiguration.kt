@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.config
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import no.nav.k9.søknad.JsonUtils
@@ -14,6 +15,7 @@ class JacksonConfiguration {
     @Autowired
     fun objectMapper(kotlinModule: KotlinModule): ObjectMapper {
         return JsonUtils.getObjectMapper()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .registerModule(kotlinModule)
     }
 

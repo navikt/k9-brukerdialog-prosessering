@@ -45,6 +45,8 @@ val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
 
+extra["springCloudVersion"] = "2022.0.1"
+
 dependencies {
 	implementation("no.nav.security:token-validation-core:$tokenSupportVersion")
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
@@ -87,6 +89,13 @@ dependencies {
 
 	testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
+	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+	}
 }
 
 tasks.withType<KotlinCompile> {
