@@ -29,7 +29,7 @@ class K9JoarkClientsConfig(
     fun k9JoarkRestTemplate(
         restTemplateBuilder: RestTemplateBuilder,
         clientConfigurationProperties: ClientConfigurationProperties,
-        oAuth2AccessTokenService: OAuth2AccessTokenService,
+        oAuth2AccessTokenService: OAuth2AccessTokenService
     ): RestTemplate {
         logger.info("Konfigurerer opp azure klient for k9-joark.")
         return restTemplateBuilder

@@ -4,10 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Navn
+import no.nav.k9brukerdialogprosessering.utils.RetryContextUtils.logHttpRetries
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
+import org.springframework.retry.RetryContext
+import org.springframework.retry.support.RetryTemplate
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
@@ -16,7 +20,9 @@ import java.time.ZonedDateTime
 
 @Service
 class K9JoarkService(
-    private val k9JoarkRestTemplate: RestTemplate
+    private val k9JoarkRestTemplate: RestTemplate,
+    private val retryTemplate: RetryTemplate,
+    @Value("\${no.nav.integration.k9-joark-base-url}") private val baseUrl: String,
 ) {
 
     private companion object {
@@ -27,12 +33,16 @@ class K9JoarkService(
         journalføringsRequest: JournalføringsRequest,
     ): JournalføringsResponse = kotlin.runCatching {
         val resolveJournalføringsUrl = resolveJournalføringsUrl(journalføringsRequest.ytelse)
-        k9JoarkRestTemplate.exchange(
-            resolveJournalføringsUrl.path,
-            HttpMethod.POST,
-            HttpEntity(journalføringsRequest),
-            JournalføringsResponse::class.java
-        )
+        retryTemplate.execute<ResponseEntity<JournalføringsResponse>, Throwable> { context: RetryContext ->
+            context.logHttpRetries(logger, "${baseUrl}$resolveJournalføringsUrl")
+
+            k9JoarkRestTemplate.exchange(
+                resolveJournalføringsUrl.path,
+                HttpMethod.POST,
+                HttpEntity(journalføringsRequest),
+                JournalføringsResponse::class.java
+            )
+        }
     }.fold(
         onSuccess = { response: ResponseEntity<JournalføringsResponse> ->
             logger.info("Journalført dokumenter")
@@ -42,7 +52,7 @@ class K9JoarkService(
             if (error is RestClientException) {
                 logger.error("Feil ved journalføring. Feilmelding: ${error.message}")
             }
-            throw RuntimeException("Feil ved journalføring", error)
+            throw error
         }
     )
 

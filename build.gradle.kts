@@ -44,6 +44,7 @@ val slf4jVersion = "2.0.5"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
+val retryVersion by extra("2.0.0")
 
 extra["springCloudVersion"] = "2022.0.1"
 
@@ -57,6 +58,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.retry:spring-retry:$retryVersion")
+	implementation("org.springframework:spring-aspects")
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

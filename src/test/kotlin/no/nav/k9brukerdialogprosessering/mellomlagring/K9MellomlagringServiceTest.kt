@@ -16,6 +16,7 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.web.client.RestClientException
 import java.net.URI
 import java.util.*
 
@@ -54,6 +55,30 @@ class K9MellomlagringServiceTest {
 
         val response: URI = k9MellomlagringService.lagreDokument(dokument)
         Assertions.assertThat(response.path).isEqualTo(expectedLocationPath)
+    }
+
+    @Test
+    fun `Gitt lagring av dokumenter feiler, forvent retry med 3 forsøk`(): Unit = runBlocking {
+        val dokument = Dokument(
+            eier = DokumentEier(eiersFødselsnummer = "123456"),
+            content = "som etext as bytearray".encodeToByteArray(),
+            contentType = MediaType.APPLICATION_PDF_VALUE,
+            title = "some pdf-file"
+        )
+
+        wireMockServer.stubLagreDokument(
+            urlPathMatching = "/v1/dokument",
+            requestBodyJson = objectMapper.writeValueAsString(dokument),
+            responseStatus = HttpStatus.INTERNAL_SERVER_ERROR,
+            responseLocationHeaderPath = "/v1/dokument/${UUID.randomUUID()}"
+        )
+
+        assertThrows(RestClientException::class.java) {
+            runBlocking {
+                (k9MellomlagringService.lagreDokument(dokument))
+            }
+        }
+        WireMock.verify(3, WireMock.postRequestedFor(WireMock.urlPathMatching(".*/v1/dokument")))
     }
 
     @Test

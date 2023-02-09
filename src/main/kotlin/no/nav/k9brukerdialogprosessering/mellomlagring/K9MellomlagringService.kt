@@ -3,18 +3,25 @@ package no.nav.k9brukerdialogprosessering.mellomlagring
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import no.nav.k9brukerdialogprosessering.utils.RetryContextUtils.logHttpRetries
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
+import org.springframework.retry.RetryContext
+import org.springframework.retry.support.RetryTemplate
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
+import kotlin.math.log
 
 @Service
 class K9MellomlagringService(
     private val k9MellomlagringRestTemplate: RestTemplate,
+    private val retryTemplate: RetryTemplate,
+    @Value("\${no.nav.integration.k9-mellomlagring-base-url}") private val baseUrl: String,
 ) {
     private companion object {
         private val logger = LoggerFactory.getLogger(K9MellomlagringService::class.java)
@@ -25,14 +32,19 @@ class K9MellomlagringService(
     }
 
     internal suspend fun lagreDokument(dokument: Dokument): URI {
-        return kotlin.runCatching { k9MellomlagringRestTemplate.postForLocation(dokumentUrl.path, HttpEntity(dokument)) }
+        return kotlin.runCatching {
+            retryTemplate.execute<URI, Throwable> { context: RetryContext ->
+                context.logHttpRetries(logger, "$baseUrl$dokumentUrl.path")
+                k9MellomlagringRestTemplate.postForLocation(dokumentUrl.path, HttpEntity(dokument))
+            }
+        }
             .fold(
                 onSuccess = { dokumentIdUrl: URI? -> dokumentIdUrl!! },
                 onFailure = { error: Throwable ->
                     if (error is RestClientException) {
                         logger.error("Feil ved lagring av dokument. Feilmelding: ${error.message}")
                     }
-                    throw RuntimeException("Kunne ikke lagre dokument", error)
+                    throw error
                 }
             )
     }
@@ -51,12 +63,15 @@ class K9MellomlagringService(
                         .toUri()
 
                     kotlin.runCatching {
-                        k9MellomlagringRestTemplate.exchange(
-                            slettDokumentUrl.path,
-                            HttpMethod.DELETE,
-                            HttpEntity(dokumentEier),
-                            Unit::class.java
-                        )
+                        retryTemplate.execute<Unit, Throwable> { context ->
+                            context.logHttpRetries(logger, "$baseUrl$slettDokumentUrl.path")
+                            k9MellomlagringRestTemplate.exchange(
+                                slettDokumentUrl.path,
+                                HttpMethod.DELETE,
+                                HttpEntity(dokumentEier),
+                                Unit::class.java
+                            )
+                        }
                     }
                         .fold(
                             onSuccess = { logger.info("Slettet dokument med id: $dokumentId") },
