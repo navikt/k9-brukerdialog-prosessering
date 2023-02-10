@@ -41,14 +41,19 @@ class KafkaStreamsConfig(
 
         return streamsBuilderFactoryBean
     }
+    @Bean(name = [PSB_ENDRINGSMELDING_STREAMS_BUILDER_BEAN_NAME])
+    fun psbEndringsmeldingKafkaStreamsBuilder(): StreamsBuilderFactoryBean {
+        val psbStreamProps =
+            kafkaProperties.streams["psb-endringsmelding"] ?: throw IllegalStateException("Mangler konfiguration for psb-endringsmelding streams")
+        val props = commonStreamsConfigProperties(kafkaProperties.security, kafkaProperties.schemaRegistry)
+        props[StreamsConfig.APPLICATION_ID_CONFIG] = "${kafkaProperties.applicationId}${psbStreamProps.applicationIdSuffix}"
+        props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = psbStreamProps.autoOffsetReset
 
-    /*@Bean(name = [OMP_STREAMS_BUILDER_BEAN_NAME])
-    fun ompKafkaStreamsBuilder(): StreamsBuilderFactoryBean {
-        val app2StreamsConfigProperties = commonStreamsConfigProperties()
-        app2StreamsConfigProperties[StreamsConfig.APPLICATION_ID_CONFIG] = "$applicationId-omp-stream"
-        return StreamsBuilderFactoryBean(KafkaStreamsConfiguration(app2StreamsConfigProperties))
-    }*/
+        val streamsBuilderFactoryBean = StreamsBuilderFactoryBean(KafkaStreamsConfiguration(props))
+        streamsBuilderFactoryBean.configure()
 
+        return streamsBuilderFactoryBean
+    }
 
     private fun commonStreamsConfigProperties(
         security: KafkaSecurityProperties?,
@@ -115,6 +120,7 @@ class KafkaStreamsConfig(
     companion object {
         private val logger = LoggerFactory.getLogger(KafkaStreamsConfig::class.java)
         const val PSB_STREAMS_BUILDER_BEAN_NAME = "psbKafkaStreamsBuilder"
+        const val PSB_ENDRINGSMELDING_STREAMS_BUILDER_BEAN_NAME = "psbEndringsmeldingKafkaStreamsBuilder"
         const val OMP_STREAMS_BUILDER_BEAN_NAME = "ompKafkaStreamsBuilder"
     }
 }

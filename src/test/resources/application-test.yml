@@ -30,7 +30,7 @@ no.nav:
     streams:
       psb:
         auto-offset-reset: earliest
-      omp:
+      psb-endringsmelding:
         auto-offset-reset: earliest
     schema-registry:
       url: mock://localhost

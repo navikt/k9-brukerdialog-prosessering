@@ -133,6 +133,7 @@ abstract class PdfData {
     abstract fun pdfData(): Map<String, Any?>
     fun resolveTemplate(): String = when (ytelse()) {
         Ytelse.PLEIEPENGER_SYKT_BARN -> "pleiepenger-sykt-barn-soknad"
+        Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> "pleiepenger-sykt-barn-endringsmelding"
         Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-soknad"
         Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad"
         Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad"

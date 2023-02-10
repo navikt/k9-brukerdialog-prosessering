@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Søknad om pleiepenger for sykt barn eller person over 18 år</title>
+    <meta name="subject" content="Søknad om pleiepenger for sykt barn eller person over 18 år"/>
+    <meta name="author" content="nav.no"/>
+    <meta name="description"
+          content="Søknad om pleiepenger for sykt barn eller person over 18 år mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}"/>
+    <bookmarks>
+        <bookmark name="Søker" href="#søker"/>
+        <bookmark name="Barn" href="#barn"/>
+        <bookmark name="Arbeidstid" href="#arbeidstid"/>
+        <bookmark name="Samtykke" href="#samtykke"/>
+    </bookmarks>
+    {{#block 'style-common' }} {{/block}}
+</head>
+
+<body>
+<h1 id="header">Endringsmelding om pleiepenger for sykt barn eller person over 18 år</h1>
+
+<p class="nokkelinfo"><strong>Sendt til NAV </strong>{{mottattDag}} {{ mottattDato }}</p>
+
+<div class="innholdscontainer">
+    <div class="person" id="søker">
+        <p>Søker</p>
+        <p class="navn">
+            {{ soker.navn }}
+        </p>
+        <p>
+            {{ soker.fødselsnummer }}<br/>
+        </p>
+    </div>
+
+    <div class="person" id="barn">
+        <p>Barn</p>
+        <p class="navn">
+            <span class="ikke_satt">Navn ikke angitt</span>
+        </p>
+        <p>{{ barn.fødselsnummer }}</p>
+    </div>
+
+    {{#if arbeidstid}}
+        <section id="arbeidstid">
+            {{#if arbeidstid.arbeidstakerList}}
+                <h2>Endringer i arbeidstid som areidstaker</h2>
+                <ul class="li-style-none ul-no-indent">
+                    {{#each arbeidstid.arbeidstakerList as |arbeidsgiver|~}}
+                        <li>
+                            <b>Organisasjonsnummer</b>: {{arbeidsgiver.organisasjonsnummer}} <br/>
+                            {{> partial/arbeid/arbeidstidinfoPartial arbeidstidinfo=arbeidsgiver.arbeidstidInfo}}
+                        </li>
+                    {{/each}}
+                </ul>
+                <br/>
+            {{/if}}
+
+            {{#if arbeidstid.frilanserArbeidstidInfo}}
+                <h2>Endringer i arbeidstid som frilanser</h2>
+                {{> partial/arbeid/arbeidstidinfoPartial arbeidstidinfo=arbeidstid.frilanserArbeidstidInfo}}
+                <br/>
+            {{/if}}
+
+            {{#if arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo}}
+                <h2>Endringer i arbeidstid som selvstendig næringsdrivende</h2>
+                {{> partial/arbeid/arbeidstidinfoPartial arbeidstidinfo=arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo}}
+                <br/>
+            {{/if}}
+
+        </section>
+    {{/if}}
+
+    <section id="samtykke">
+        <h2>Samtykke fra deg</h2>
+        <p class="sporsmalstekst">Har du forstått dine rettigheter og plikter?</p>
+        <p>{{ jaNeiSvar samtykke.har_forstatt_rettigheter_og_plikter }}</p>
+        <hr/>
+        <p class="sporsmalstekst">Har du bekreftet at opplysninger som er gitt er riktige?</p>
+        <p>{{ jaNeiSvar samtykke.har_bekreftet_opplysninger }}</p>
+    </section>
+</div>
+<!-- FOOTER -->
+<p id="footer">
+    <span class="soknadsid">{{ søknadId }}</span>
+    <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
+</p>
+</body>
+
+</html>

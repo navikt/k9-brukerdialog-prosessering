@@ -57,7 +57,7 @@ class K9JoarkService(
     )
 
     private fun resolveJournalføringsUrl(ytelse: Ytelse) = when (ytelse) {
-        Ytelse.PLEIEPENGER_SYKT_BARN -> UriComponentsBuilder
+        Ytelse.PLEIEPENGER_SYKT_BARN, Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> UriComponentsBuilder
             .fromPath("/v1/pleiepenge/journalforing")
             .build()
             .toUri()

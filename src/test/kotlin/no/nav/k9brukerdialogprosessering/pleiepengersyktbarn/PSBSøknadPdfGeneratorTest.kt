@@ -40,6 +40,7 @@ import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbei
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.utils.PSBSøknadUtils
+import no.nav.k9brukerdialogprosessering.utils.K9FormatUtils
 import no.nav.k9brukerdialogprosessering.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -259,7 +260,7 @@ class PSBSøknadPdfGeneratorTest {
                 harVærtEllerErVernepliktig = true,
                 barnRelasjon = BarnRelasjon.ANNET,
                 barnRelasjonBeskrivelse = "Blaabla annet",
-                k9FormatSøknad = PSBSøknadUtils.defaultK9FormatPSB(soknadsId, mottatt),
+                k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
                 omsorgstilbud = Omsorgstilbud(
                     erLiktHverUke = true,
                     ukedager = PlanUkedager(
