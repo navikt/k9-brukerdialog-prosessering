@@ -1,4 +1,4 @@
-name: Deploy pleiepenger sykt barn topics
+name: Deploy pleiepenger sykt barn endringsmelding topics
 
 env:
   TOPICS_PATH: 'nais/topics/pleiepenger-sykt-barn-endringsmelding-topics.yml'
