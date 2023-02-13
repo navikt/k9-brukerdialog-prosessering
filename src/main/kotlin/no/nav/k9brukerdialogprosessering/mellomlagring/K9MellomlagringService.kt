@@ -1,7 +1,7 @@
 package no.nav.k9brukerdialogprosessering.mellomlagring
 
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import no.nav.k9brukerdialogprosessering.utils.RetryContextUtils.logHttpRetries
 import org.slf4j.LoggerFactory
@@ -15,7 +15,6 @@ import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
-import kotlin.math.log
 
 @Service
 class K9MellomlagringService(
@@ -49,13 +48,12 @@ class K9MellomlagringService(
             )
     }
 
-    internal suspend fun slettDokumeter(
+    internal suspend fun slettDokumenter(
         dokumentIder: List<String>,
         dokumentEier: DokumentEier,
     ) {
-        val deffered = mutableListOf<Deferred<Unit>>()
-        dokumentIder.forEach { dokumentId: String ->
-            deffered.add(coroutineScope {
+        coroutineScope {
+            val deferred = dokumentIder.map { dokumentId ->
                 async {
                     val slettDokumentUrl: URI = UriComponentsBuilder.fromUri(dokumentUrl)
                         .path("/$dokumentId")
@@ -72,20 +70,21 @@ class K9MellomlagringService(
                                 Unit::class.java
                             )
                         }
-                    }
-                        .fold(
-                            onSuccess = { logger.info("Slettet dokument med id: $dokumentId") },
-                            onFailure = { error: Throwable ->
-                                if (error is RestClientException) {
-                                    logger.error("Feil ved sletting av dokument med id: $dokumentId. Feilmelding: ${error.message}")
-                                }
-                                throw RuntimeException("Feil ved sletting av dokument med id: $dokumentId", error)
+                    }.fold(
+                        onSuccess = { logger.info("Slettet dokument med id: $dokumentId") },
+                        onFailure = { error: Throwable ->
+                            if (error is RestClientException) {
+                                logger.error("Feil ved sletting av dokument med id: $dokumentId. Feilmelding: ${error.message}")
                             }
-                        )
+                            throw RuntimeException("Feil ved sletting av dokument med id: $dokumentId", error)
+                        }
+                    )
                 }
-            })
+            }
+            deferred.awaitAll()
         }
     }
+
 }
 
 fun URI.dokumentId() = this.toString().substringAfterLast("/")

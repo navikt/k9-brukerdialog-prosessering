@@ -33,7 +33,8 @@ class KafkaStreamsConfig(
         val psbStreamProps =
             kafkaProperties.streams["psb"] ?: throw IllegalStateException("Mangler konfiguration for psb streams")
         val props = commonStreamsConfigProperties(kafkaProperties.security, kafkaProperties.schemaRegistry)
-        props[StreamsConfig.APPLICATION_ID_CONFIG] = "${kafkaProperties.applicationId}${psbStreamProps.applicationIdSuffix}"
+        props[StreamsConfig.APPLICATION_ID_CONFIG] =
+            "${kafkaProperties.applicationId}${psbStreamProps.applicationIdSuffix}"
         props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = psbStreamProps.autoOffsetReset
 
         val streamsBuilderFactoryBean = StreamsBuilderFactoryBean(KafkaStreamsConfiguration(props))
@@ -41,12 +42,15 @@ class KafkaStreamsConfig(
 
         return streamsBuilderFactoryBean
     }
+
     @Bean(name = [PSB_ENDRINGSMELDING_STREAMS_BUILDER_BEAN_NAME])
     fun psbEndringsmeldingKafkaStreamsBuilder(): StreamsBuilderFactoryBean {
         val psbStreamProps =
-            kafkaProperties.streams["psb-endringsmelding"] ?: throw IllegalStateException("Mangler konfiguration for psb-endringsmelding streams")
+            kafkaProperties.streams["psb-endringsmelding"]
+                ?: throw IllegalStateException("Mangler konfiguration for psb-endringsmelding streams")
         val props = commonStreamsConfigProperties(kafkaProperties.security, kafkaProperties.schemaRegistry)
-        props[StreamsConfig.APPLICATION_ID_CONFIG] = "${kafkaProperties.applicationId}${psbStreamProps.applicationIdSuffix}"
+        props[StreamsConfig.APPLICATION_ID_CONFIG] =
+            "${kafkaProperties.applicationId}${psbStreamProps.applicationIdSuffix}"
         props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = psbStreamProps.autoOffsetReset
 
         val streamsBuilderFactoryBean = StreamsBuilderFactoryBean(KafkaStreamsConfiguration(props))
@@ -99,10 +103,11 @@ class KafkaStreamsConfig(
     private fun StreamsBuilderFactoryBean.configure() {
         setStreamsUncaughtExceptionHandler { throwable: Throwable ->
             logger.info("Setting StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD")
-            when(throwable) {
+            when (throwable) {
                 is org.apache.kafka.streams.errors.StreamsException -> {
                     logger.error("StreamsException: ${throwable.message}")
                 }
+
                 else -> {
                     logger.error("Exception: ${throwable.message}")
                 }

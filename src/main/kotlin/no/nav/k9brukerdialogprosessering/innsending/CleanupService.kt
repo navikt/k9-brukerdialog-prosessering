@@ -16,7 +16,7 @@ class CleanupService<T: Preprosessert>(
     suspend fun cleanup(cleanup: Cleanup<T>): Cleanup<T> {
         logger.info("Sletter dokumenter etter prosessering av søknad: $cleanup")
         val preprosessert = cleanup.melding
-        k9MellomlagringService.slettDokumeter(
+        k9MellomlagringService.slettDokumenter(
             dokumentIder = preprosessert.dokumenter().flatten(),
             dokumentEier = DokumentEier(preprosessert.søkerFødselsnummer())
         )

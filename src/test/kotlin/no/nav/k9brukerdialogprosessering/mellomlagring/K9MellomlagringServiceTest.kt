@@ -82,9 +82,9 @@ class K9MellomlagringServiceTest {
     }
 
     @Test
-    fun `slettDokumeter`() {
+    fun `slettDokumenter`() {
         val dokumentEier = DokumentEier(eiersFødselsnummer = "123456")
-        val dokumentIder = listOf("123")
+        val dokumentIder = listOf("123", "456")
 
         dokumentIder.forEach { dokumentId: String ->
             wireMockServer.stubSlettDokument(
@@ -96,7 +96,7 @@ class K9MellomlagringServiceTest {
 
         Assertions.assertThatNoException().isThrownBy {
             runBlocking {
-                k9MellomlagringService.slettDokumeter(dokumentIder, dokumentEier)
+                k9MellomlagringService.slettDokumenter(dokumentIder, dokumentEier)
             }
         }
 
