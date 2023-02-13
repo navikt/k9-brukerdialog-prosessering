@@ -3,12 +3,17 @@
 	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
 			<throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
-				<maxDepthPerThrowable>30</maxDepthPerThrowable>
+                <!-- Se her for mer info: https://github.com/logfellow/logstash-logback-encoder#customizing-stack-traces -->
+				<rootCauseFirst>true</rootCauseFirst>
+				<maxDepthPerThrowable>256</maxDepthPerThrowable>
+				<maxLength>10280</maxLength>
+				<shortenedClassNameLength>20</shortenedClassNameLength>
+				<exclude>^sun\.reflect\..*\.invoke</exclude>
+				<exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
 				<exclude>java\.util\.concurrent\..*</exclude>
-				<exclude>org\.apache\.tomcat\..*</exclude>
-				<exclude>org\.apache\.coyote\..*</exclude>
 				<exclude>org\.apache\.catalina\..*</exclude>
-				<exclude>org\.springframework\.web\..*</exclude>
+				<exclude>org\.apache\.coyote\..*</exclude>
+				<exclude>org\.apache\.tomcat\..*</exclude>
 			</throwableConverter>
 		</encoder>
 	</appender>
