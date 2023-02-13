@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
 import no.nav.k9brukerdialogprosessering.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC
@@ -104,8 +106,10 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
         coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
-        coVerify(exactly = 1, timeout = 120 * 1000) {
-            k9MellomlagringService.slettDokumeter(any(), any())
+        verify(exactly = 1, timeout = 120 * 1000) {
+            runBlocking {
+                k9MellomlagringService.slettDokumeter(any(), any())
+            }
         }
     }
 
