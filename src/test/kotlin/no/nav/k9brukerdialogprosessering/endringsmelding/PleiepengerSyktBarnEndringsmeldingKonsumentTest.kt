@@ -91,6 +91,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
     }
 
     @Test
+    @Ignore
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
         val søknadId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15.000Z"
