@@ -15,6 +15,7 @@
 				<exclude>org\.apache\.catalina\..*</exclude>
 				<exclude>org\.apache\.coyote\..*</exclude>
 				<exclude>org\.apache\.tomcat\..*</exclude>
+				<exclude>org\.springframework\.web\..*</exclude>
 			</throwableConverter>
 		</encoder>
 	</appender>
