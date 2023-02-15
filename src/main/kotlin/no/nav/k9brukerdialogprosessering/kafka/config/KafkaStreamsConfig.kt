@@ -103,15 +103,9 @@ class KafkaStreamsConfig(
     private fun StreamsBuilderFactoryBean.configure() {
         setStreamsUncaughtExceptionHandler { throwable: Throwable ->
             logger.info("Setting StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD")
-            when (throwable) {
-                is org.apache.kafka.streams.errors.StreamsException -> {
-                    logger.error("StreamsException: ${throwable.message}")
-                }
+            logger.error("Failed to stream {}", throwable)
 
-                else -> {
-                    logger.error("Exception: ${throwable.message}")
-                }
-            }
+
             StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
         }
 
