@@ -43,6 +43,7 @@ class EndringsmeldingPleiepengerSyktBarnKonsument(
             .filterNot { søknadId, entry -> "generated-865a538e-ca9a-4217-9d27-9cf68de4d875"== entry.metadata.correlationId }
             .filterNot { søknadId, entry -> "generated-8c29239f-50e7-46b3-9ddd-0878405215fa"== entry.metadata.correlationId }
             .filterNot { søknadId, entry -> "generated-6a70019d-3208-459b-9e08-545c03ca0dca"== entry.metadata.correlationId }
+            .filterNot { søknadId, entry -> "generated-646fde4e-779b-4521-84b3-c5f1a4b10cf7"== entry.metadata.correlationId }
             .mapValues { søknadId: String, value: TopicEntry<PSBEndringsmeldingMottatt> ->
                 process(name = "pleiepengerSyktBarnEndringsmeldingPreprosesseringsStream", soknadId = søknadId, entry = value) {
                     val psbEndringsmeldingMottatt = value.data
@@ -69,6 +70,7 @@ class EndringsmeldingPleiepengerSyktBarnKonsument(
             .filterNot { søknadId, entry -> "generated-865a538e-ca9a-4217-9d27-9cf68de4d875"== entry.metadata.correlationId }
             .filterNot { søknadId, entry -> "generated-8c29239f-50e7-46b3-9ddd-0878405215fa"== entry.metadata.correlationId }
             .filterNot { søknadId, entry -> "generated-6a70019d-3208-459b-9e08-545c03ca0dca"== entry.metadata.correlationId }
+            .filterNot { søknadId, entry -> "generated-646fde4e-779b-4521-84b3-c5f1a4b10cf7"== entry.metadata.correlationId }
             .mapValues { søknadId: String, value: TopicEntry<PSBPreprossesertEndringsmelding> ->
                 process(name = "pleiepengerSyktBarnEndringsmeldingJournalføringsStream", soknadId = søknadId, entry = value) {
                     val preprosessertSøknad: PSBPreprossesertEndringsmelding = value.data
@@ -93,6 +95,7 @@ class EndringsmeldingPleiepengerSyktBarnKonsument(
             .filterNot { søknadId, entry -> "generated-865a538e-ca9a-4217-9d27-9cf68de4d875"== entry.metadata.correlationId }
             .filterNot { søknadId, entry -> "generated-8c29239f-50e7-46b3-9ddd-0878405215fa"== entry.metadata.correlationId }
             .filterNot { søknadId, entry -> "generated-6a70019d-3208-459b-9e08-545c03ca0dca"== entry.metadata.correlationId }
+            .filterNot { søknadId, entry -> "generated-646fde4e-779b-4521-84b3-c5f1a4b10cf7"== entry.metadata.correlationId }
             .mapValues { søknadId: String, value: TopicEntry<Cleanup<PSBPreprossesertEndringsmelding>> ->
                 process(name = "pleiepengerSyktBarnEndringsmeldingCleanupStream", soknadId = søknadId, entry = value) {
                     cleanupService.cleanup(value.data)

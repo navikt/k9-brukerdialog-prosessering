@@ -104,8 +104,6 @@ class KafkaStreamsConfig(
         setStreamsUncaughtExceptionHandler { throwable: Throwable ->
             logger.info("Setting StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD")
             logger.error("Failed to stream message:", throwable)
-
-
             StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
         }
 
