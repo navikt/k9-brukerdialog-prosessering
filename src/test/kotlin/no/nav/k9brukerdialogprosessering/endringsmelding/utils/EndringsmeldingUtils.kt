@@ -1,6 +1,6 @@
 package no.nav.k9brukerdialogprosessering.endringsmelding.utils
 
-import no.nav.helse.felles.Søker
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9brukerdialogprosessering.endringsmelding.domene.PSBEndringsmeldingMottatt
 import no.nav.k9brukerdialogprosessering.utils.K9FormatUtils.defaultK9FormatPSB
 import java.time.LocalDate

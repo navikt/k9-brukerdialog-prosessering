@@ -1,6 +1,6 @@
 package no.nav.k9brukerdialogprosessering.endringsmelding
 
-import no.nav.helse.felles.Søker
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid

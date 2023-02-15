@@ -1,4 +1,4 @@
-package no.nav.helse.felles
+package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles
 
 import java.time.LocalDate
 

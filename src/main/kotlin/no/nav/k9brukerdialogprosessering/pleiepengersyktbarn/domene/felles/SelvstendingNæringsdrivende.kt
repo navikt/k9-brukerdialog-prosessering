@@ -1,7 +1,6 @@
-package no.nav.helse.felles
+package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import java.time.LocalDate
 
 data class SelvstendigNæringsdrivende(

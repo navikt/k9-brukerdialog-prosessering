@@ -1,18 +1,37 @@
 package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.utils
 
-import no.nav.helse.felles.*
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.ArbeiderIPeriodenSvar
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsgiver
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Barn
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Beredskap
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Bosted
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Ferieuttak
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.FerieuttakIPerioden
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Frilans
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Land
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Medlemskap
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Nattevåk
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.NormalArbeidstid
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Næringstyper
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.OpptjeningType
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Periode
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Søker
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.UtenlandskNæring
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Utenlandsopphold
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Virksomhet
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.YrkesaktivSisteTreFerdigliknedeÅrene
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Årsak
 import no.nav.k9brukerdialogprosessering.utils.K9FormatUtils.defaultK9FormatPSB
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.util.*
 
 internal object PSBSøknadUtils {
 

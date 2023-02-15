@@ -1,6 +1,5 @@
 package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles
 
-import no.nav.helse.felles.Periode
 import java.time.Duration
 
 data class Arbeidsgiver(

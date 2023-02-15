@@ -1,12 +1,11 @@
 package no.nav.k9brukerdialogprosessering.endringsmelding.domene
 
-import no.nav.helse.felles.Søker
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.endringsmelding.PSBEndringsmeldingPdfData
 import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
 import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
-import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 
 data class PSBEndringsmeldingMottatt(

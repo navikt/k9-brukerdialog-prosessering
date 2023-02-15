@@ -1,7 +1,7 @@
 package no.nav.k9brukerdialogprosessering.endringsmelding.domene
 
-import no.nav.helse.felles.Søker
-import no.nav.helse.felles.tilTpsNavn
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Søker
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.tilTpsNavn
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
