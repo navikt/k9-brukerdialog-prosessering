@@ -16,6 +16,7 @@
 				<exclude>org\.apache\.coyote\..*</exclude>
 				<exclude>org\.apache\.tomcat\..*</exclude>
 				<exclude>org\.springframework\.web\..*</exclude>
+				<exclude>org\.apache\.kafka\..*</exclude>
 			</throwableConverter>
 		</encoder>
 	</appender>
