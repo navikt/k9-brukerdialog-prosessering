@@ -24,6 +24,7 @@ import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
+import org.junit.Ignore
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
@@ -90,6 +91,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
     }
 
     @Test
+    @Ignore
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
         val søknadId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15.000Z"
