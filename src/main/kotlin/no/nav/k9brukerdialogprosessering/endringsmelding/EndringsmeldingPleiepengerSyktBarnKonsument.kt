@@ -42,7 +42,8 @@ class EndringsmeldingPleiepengerSyktBarnKonsument(
             "generated-4bda1c1e-e92e-4a1e-996c-ffff22e34cfd",
             "generated-83c9d8e1-2e20-4eaf-b2a5-5bf680636446",
             "generated-657dea85-e0cc-449c-acb7-2647a11d2e3b",
-            "generated-e0d4039e-8238-46ac-aa8e-e16ab330f18c"
+            "generated-e0d4039e-8238-46ac-aa8e-e16ab330f18c",
+            "generated-f20325bb-823c-43cb-b360-6ff434877650"
         )
     }
 
