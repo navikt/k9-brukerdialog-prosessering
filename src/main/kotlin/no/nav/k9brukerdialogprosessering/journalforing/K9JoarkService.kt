@@ -45,8 +45,9 @@ class K9JoarkService(
         }
     }.fold(
         onSuccess = { response: ResponseEntity<JournalføringsResponse> ->
-            logger.info("Journalført dokumenter")
-            response.body!!
+            val journalføringsResponse = response.body!!
+            logger.info("Dokumenter journalført på journalpost med id: ${journalføringsResponse.journalPostId}")
+            journalføringsResponse
         },
         { error: Throwable ->
             if (error is RestClientException) {
