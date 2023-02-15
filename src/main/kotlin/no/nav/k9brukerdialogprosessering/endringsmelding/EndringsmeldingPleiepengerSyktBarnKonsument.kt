@@ -30,6 +30,22 @@ class EndringsmeldingPleiepengerSyktBarnKonsument(
     @Qualifier(KafkaStreamsConfig.PSB_ENDRINGSMELDING_STREAMS_BUILDER_BEAN_NAME) private val psbEndringsmeldingKStreamBuilder: StreamsBuilder,
 ) {
 
+    private companion object {
+        private val IGNORE_LIST = listOf(
+            "generated-e7b749b9-3777-4900-9d58-a6e52f2d5105",
+            "generated-7c20e434-3416-4ace-80b4-ad844c58e80f",
+            "generated-e7b749b9-3777-4900-9d58-a6e52f2d5105",
+            "generated-865a538e-ca9a-4217-9d27-9cf68de4d875",
+            "generated-8c29239f-50e7-46b3-9ddd-0878405215fa",
+            "generated-6a70019d-3208-459b-9e08-545c03ca0dca",
+            "generated-646fde4e-779b-4521-84b3-c5f1a4b10cf7",
+            "generated-4bda1c1e-e92e-4a1e-996c-ffff22e34cfd",
+            "generated-83c9d8e1-2e20-4eaf-b2a5-5bf680636446",
+            "generated-657dea85-e0cc-449c-acb7-2647a11d2e3b",
+            "generated-e0d4039e-8238-46ac-aa8e-e16ab330f18c"
+        )
+    }
+
     @Bean
     fun pleiepengerSyktBarnEndringsmeldingPreprosesseringsStream(): KStream<String, TopicEntry<PSBEndringsmeldingMottatt>> {
         val stream: KStream<String, TopicEntry<PSBEndringsmeldingMottatt>> = psbEndringsmeldingKStreamBuilder
@@ -37,13 +53,7 @@ class EndringsmeldingPleiepengerSyktBarnKonsument(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor<PSBEndringsmeldingMottatt>() })
-            .filterNot { søknadId, entry -> "generated-e7b749b9-3777-4900-9d58-a6e52f2d5105" == entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-7c20e434-3416-4ace-80b4-ad844c58e80f" == entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-e7b749b9-3777-4900-9d58-a6e52f2d5105"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-865a538e-ca9a-4217-9d27-9cf68de4d875"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-8c29239f-50e7-46b3-9ddd-0878405215fa"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-6a70019d-3208-459b-9e08-545c03ca0dca"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-646fde4e-779b-4521-84b3-c5f1a4b10cf7"== entry.metadata.correlationId }
+            .filterNot { søknadId, entry -> IGNORE_LIST.contains(entry.metadata.correlationId) }
             .mapValues { søknadId: String, value: TopicEntry<PSBEndringsmeldingMottatt> ->
                 process(name = "pleiepengerSyktBarnEndringsmeldingPreprosesseringsStream", soknadId = søknadId, entry = value) {
                     val psbEndringsmeldingMottatt = value.data
@@ -64,13 +74,7 @@ class EndringsmeldingPleiepengerSyktBarnKonsument(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
-            .filterNot { søknadId, entry -> "generated-e7b749b9-3777-4900-9d58-a6e52f2d5105" == entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-7c20e434-3416-4ace-80b4-ad844c58e80f" == entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-e7b749b9-3777-4900-9d58-a6e52f2d5105"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-865a538e-ca9a-4217-9d27-9cf68de4d875"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-8c29239f-50e7-46b3-9ddd-0878405215fa"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-6a70019d-3208-459b-9e08-545c03ca0dca"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-646fde4e-779b-4521-84b3-c5f1a4b10cf7"== entry.metadata.correlationId }
+            .filterNot { søknadId, entry -> IGNORE_LIST.contains(entry.metadata.correlationId) }
             .mapValues { søknadId: String, value: TopicEntry<PSBPreprossesertEndringsmelding> ->
                 process(name = "pleiepengerSyktBarnEndringsmeldingJournalføringsStream", soknadId = søknadId, entry = value) {
                     val preprosessertSøknad: PSBPreprossesertEndringsmelding = value.data
@@ -89,13 +93,7 @@ class EndringsmeldingPleiepengerSyktBarnKonsument(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
-            .filterNot { søknadId, entry -> "generated-e7b749b9-3777-4900-9d58-a6e52f2d5105" == entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-7c20e434-3416-4ace-80b4-ad844c58e80f" == entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-e7b749b9-3777-4900-9d58-a6e52f2d5105"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-865a538e-ca9a-4217-9d27-9cf68de4d875"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-8c29239f-50e7-46b3-9ddd-0878405215fa"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-6a70019d-3208-459b-9e08-545c03ca0dca"== entry.metadata.correlationId }
-            .filterNot { søknadId, entry -> "generated-646fde4e-779b-4521-84b3-c5f1a4b10cf7"== entry.metadata.correlationId }
+            .filterNot { søknadId, entry -> IGNORE_LIST.contains(entry.metadata.correlationId) }
             .mapValues { søknadId: String, value: TopicEntry<Cleanup<PSBPreprossesertEndringsmelding>> ->
                 process(name = "pleiepengerSyktBarnEndringsmeldingCleanupStream", soknadId = søknadId, entry = value) {
                     cleanupService.cleanup(value.data)
