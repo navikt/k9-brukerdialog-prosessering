@@ -5,7 +5,7 @@
 			<throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
                 <!-- Se her for mer info: https://github.com/logfellow/logstash-logback-encoder#customizing-stack-traces -->
 				<rootCauseFirst>true</rootCauseFirst>
-				<maxDepthPerThrowable>256</maxDepthPerThrowable>
+				<maxDepthPerThrowable>512</maxDepthPerThrowable>
 				<maxLength>10280</maxLength>
 				<shortenedClassNameLength>20</shortenedClassNameLength>
 				<exclude>^sun\.reflect\..*\.invoke</exclude>
