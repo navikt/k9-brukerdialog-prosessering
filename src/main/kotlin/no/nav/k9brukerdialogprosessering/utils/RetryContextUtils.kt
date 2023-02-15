@@ -9,7 +9,7 @@ object RetryContextUtils {
         if (retryCount > 0) {
             logger.warn(
                 "$streamName feilet første gang. Forsøker på nytt. Forsøk {} av {}. Siste feil:",
-                retryCount, MAX_ATTEMPTS, lastThrowable
+                retryCount+1, MAX_ATTEMPTS, lastThrowable
             )
         }
     }
