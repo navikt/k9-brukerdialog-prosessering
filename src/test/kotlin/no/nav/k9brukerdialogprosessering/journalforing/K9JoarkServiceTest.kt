@@ -55,32 +55,4 @@ class K9JoarkServiceTest {
         val response = k9JoarkService.journalfør(journalføringsRequest)
         assertThat(response).isEqualTo(journalføringsResponse)
     }
-
-    @Test
-    fun `Gitt Journalføring av PSB feiler, forvent retry med 3 forsøk`(): Unit = runBlocking {
-        val journalføringsRequest = JournalføringsRequest(
-            ytelse = Ytelse.PLEIEPENGER_SYKT_BARN,
-            norskIdent = "12345678910",
-            sokerNavn = Navn("John", "Doe", "Hansen"),
-            mottatt = ZonedDateTime.now(),
-            dokumentId = listOf(listOf("123", "456"))
-        )
-        val journalføringsResponse = JournalføringsResponse("9876543210")
-
-        wireMockServer.stubJournalføring(
-            urlPathMatching = "/v1/pleiepenge/journalforing",
-            requestBodyJson = objectMapper.writeValueAsString(journalføringsRequest),
-            responseStatus = HttpStatus.INTERNAL_SERVER_ERROR,
-            responseBodyJson = objectMapper.writeValueAsString(journalføringsResponse)
-        )
-
-        assertThrows(RestClientException::class.java) {
-            runBlocking {
-                k9JoarkService.journalfør(
-                    journalføringsRequest
-                )
-            }
-        }
-        WireMock.verify(3, WireMock.postRequestedFor(WireMock.urlPathMatching(".*/v1/pleiepenge/journalforing")))
-    }
 }

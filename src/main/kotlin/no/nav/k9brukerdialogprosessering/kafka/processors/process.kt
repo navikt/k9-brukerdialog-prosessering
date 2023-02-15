@@ -2,17 +2,26 @@ package no.nav.k9brukerdialogprosessering.kafka.processors
 
 import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
+import no.nav.k9brukerdialogprosessering.utils.RetryContextUtils.logStreamingRetries
+import org.slf4j.Logger
+import org.springframework.retry.support.RetryTemplate
 
 fun <BEFORE, AFTER> process(
     name: String,
-    soknadId: String,
     entry: TopicEntry<BEFORE>,
+    retryTemplate: RetryTemplate,
+    logger: Logger,
     block: suspend () -> AFTER,
-    ): TopicEntry<AFTER> = runBlocking {
-        val processed = try {
-            block()
-        } catch (cause: Throwable) {
-            throw cause
+): TopicEntry<AFTER> {
+    val processed = try {
+        retryTemplate.execute<AFTER, Throwable> { context ->
+            runBlocking {
+                context.logStreamingRetries(name, logger)
+                block()
+            }
         }
-        TopicEntry(metadata = entry.metadata, data = processed)
+    } catch (cause: Throwable) {
+        throw cause
     }
+    return TopicEntry(metadata = entry.metadata, data = processed)
+}

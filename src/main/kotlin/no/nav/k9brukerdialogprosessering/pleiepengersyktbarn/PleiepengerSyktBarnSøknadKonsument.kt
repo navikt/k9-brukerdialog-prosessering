@@ -14,8 +14,10 @@ import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBPreproses
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.processor.api.ProcessorSupplier
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
+import org.springframework.retry.support.RetryTemplate
 import org.springframework.stereotype.Service
 
 
@@ -27,8 +29,13 @@ class PleiepengerSyktBarnSøknadKonsument(
     private val psbMottattTopic: Topic<TopicEntry<PSBMottattSøknad>>,
     private val psbPreprosesertTopic: Topic<TopicEntry<PSBPreprosessertSøknad>>,
     private val psbCleanupTopic: Topic<TopicEntry<Cleanup<PSBPreprosessertSøknad>>>,
+    private val retryTemplate: RetryTemplate,
     @Qualifier(KafkaStreamsConfig.PSB_STREAMS_BUILDER_BEAN_NAME) private val psbKStreamBuilder: StreamsBuilder,
 ) {
+
+    private companion object {
+        private val logger = LoggerFactory.getLogger(PleiepengerSyktBarnSøknadKonsument::class.java)
+    }
 
     @Bean
     fun pleiepengerSyktBarnPreprosesseringsStream(): KStream<String, TopicEntry<PSBMottattSøknad>> {
@@ -37,8 +44,8 @@ class PleiepengerSyktBarnSøknadKonsument(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor<PSBMottattSøknad>() })
-            .mapValues { søknadId: String, value: TopicEntry<PSBMottattSøknad> ->
-                process(name = "pleiepengerSyktBarnPreprosesseringsStream", soknadId = søknadId, entry = value) {
+            .mapValues { _: String, value: TopicEntry<PSBMottattSøknad> ->
+                process(name = "pleiepengerSyktBarnPreprosesseringsStream", entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val psbMottattSøknad = value.data
                     val preprosesseringsResultat =
                         preprosesseringsService.preprosesser(psbMottattSøknad.mapTilPreprosesseringsData())
@@ -57,8 +64,8 @@ class PleiepengerSyktBarnSøknadKonsument(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
-            .mapValues { søknadId: String, value: TopicEntry<PSBPreprosessertSøknad> ->
-                process(name = "pleiepengerSyktBarnJournalføringsStream", soknadId = søknadId, entry = value) {
+            .mapValues { _: String, value: TopicEntry<PSBPreprosessertSøknad> ->
+                process(name = "pleiepengerSyktBarnJournalføringsStream", entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val preprosessertSøknad: PSBPreprosessertSøknad = value.data
                     val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
                     Cleanup(value.metadata, preprosessertSøknad, journalførSøknad)
@@ -75,8 +82,8 @@ class PleiepengerSyktBarnSøknadKonsument(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
-            .mapValues { søknadId: String, value: TopicEntry<Cleanup<PSBPreprosessertSøknad>> ->
-                process(name = "pleiepengerSyktBarnCleanupStream", soknadId = søknadId, entry = value) {
+            .mapValues { _: String, value: TopicEntry<Cleanup<PSBPreprosessertSøknad>> ->
+                process(name = "pleiepengerSyktBarnCleanupStream", entry = value, retryTemplate = retryTemplate, logger = logger) {
                     cleanupService.cleanup(value.data)
                 }
             }
