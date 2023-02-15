@@ -8,6 +8,7 @@
 				<maxDepthPerThrowable>512</maxDepthPerThrowable>
 				<maxLength>10280</maxLength>
 				<shortenedClassNameLength>20</shortenedClassNameLength>
+				<omitCommonFrames>true</omitCommonFrames>
 				<exclude>^sun\.reflect\..*\.invoke</exclude>
 				<exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
 				<exclude>java\.util\.concurrent\..*</exclude>
