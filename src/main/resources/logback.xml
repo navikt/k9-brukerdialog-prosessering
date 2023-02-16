@@ -42,5 +42,6 @@
 
 	<springProfile name="dev-gcp,prod-gcp">
 		<logger name="no.nav.k9brukerdialogprosessering" level="trace" />
+		<logger name="org.apache" level="ERROR" />
 	</springProfile>
 </configuration>
