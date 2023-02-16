@@ -28,9 +28,18 @@ no.nav:
     retries: 5
     retry-backoff-ms: 100 # 100 ms
     streams:
-      psb:
+      psb-soknad-preprosessering:
         auto-offset-reset: earliest
-      psb-endringsmelding:
+      psb-soknad-journalforing:
+        auto-offset-reset: earliest
+      psb-soknad-cleanup:
+        auto-offset-reset: earliest
+
+      psb-endringsmelding-preprosessering:
+        auto-offset-reset: earliest
+      psb-endringsmelding-journalforing:
+        auto-offset-reset: earliest
+      psb-endringsmelding-cleanup:
         auto-offset-reset: earliest
     schema-registry:
       url: mock://localhost

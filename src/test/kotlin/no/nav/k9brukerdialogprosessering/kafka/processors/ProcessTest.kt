@@ -2,6 +2,7 @@ package no.nav.k9brukerdialogprosessering.kafka.processors
 
 import io.mockk.every
 import no.nav.k9brukerdialogprosessering.RetryTemplateConfiguration
+import no.nav.k9brukerdialogprosessering.kafka.config.KafkaStreamName
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -18,13 +19,12 @@ class ProcessTest {
 
     @Test
     fun `Gitt process ikke feiler, forvent riktig returdata`() {
-        val prosessNavn = "test-name"
         val innkommendeData = "test-data"
         val utgåendeData = "processed-test-data"
         val topicEntry =
             TopicEntry(Metadata(version = 1, correlationId = UUID.randomUUID().toString()), innkommendeData)
 
-        val resultat: TopicEntry<String> = process(prosessNavn, topicEntry, retryTemplate, logger) { utgåendeData }
+        val resultat: TopicEntry<String> = process(KafkaStreamName.PSB_SØKNAD_PREPROSESSERING, topicEntry, retryTemplate, logger) { utgåendeData }
 
         assertEquals(topicEntry.metadata, resultat.metadata)
         assertEquals(utgåendeData, resultat.data)
@@ -32,7 +32,6 @@ class ProcessTest {
 
     @Test
     fun `Gitt process feiler, forvent 3 forsøk til returdata returneres`() {
-        val prosessNavn = "test-name"
         val innkommendeData = "test-data"
         val testDataMock = io.mockk.mockk<TestData>()
         val topicEntry =
@@ -44,7 +43,7 @@ class ProcessTest {
             .andThenThrows(IllegalStateException("Ukjent feil..."))
             .andThen(forventetReturData)
 
-        val result: TopicEntry<String> = process(prosessNavn, topicEntry, retryTemplate, logger) { testDataMock.data }
+        val result: TopicEntry<String> = process(KafkaStreamName.PSB_SØKNAD_PREPROSESSERING, topicEntry, retryTemplate, logger) { testDataMock.data }
 
         assertEquals(topicEntry.metadata, result.metadata)
         assertEquals(forventetReturData, result.data)
