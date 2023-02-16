@@ -8,6 +8,8 @@ import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
+import com.openhtmltopdf.slf4j.Slf4jLogger
+import com.openhtmltopdf.util.XRLog
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
@@ -17,6 +19,11 @@ import java.util.*
 
 @Component
 class PDFGenerator {
+
+    init {
+        XRLog.setLoggerImpl(Slf4jLogger())
+    }
+
     private companion object {
         private val ROOT = "handlebars"
         private val REGULAR_FONT = ClassPathResource("${ROOT}/fonts/SourceSansPro-Regular.ttf").inputStream.readAllBytes()
