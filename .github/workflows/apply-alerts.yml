@@ -22,7 +22,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: nais/alerterator.yml
+          RESOURCE: nais/alerts.yml
           VARS: nais/dev-gcp.json
 
   deploy-prod-gcp:
@@ -35,5 +35,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: nais/alerterator.yml
+          RESOURCE: nais/alerts.yml
           VARS: nais/prod-gcp.json
