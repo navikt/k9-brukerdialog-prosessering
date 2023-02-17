@@ -62,6 +62,12 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                                 .medPerioder(
                                                     mapOf(
                                                         Periode(
+                                                            LocalDate.parse("2023-01-23"),
+                                                            LocalDate.parse("2023-01-27")
+                                                        ) to ArbeidstidPeriodeInfo()
+                                                            .medJobberNormaltTimerPerDag(Duration.ofHours(8))
+                                                            .medFaktiskArbeidTimerPerDag(Duration.ofHours(2)),
+                                                        Periode(
                                                             LocalDate.parse("2022-12-26"),
                                                             LocalDate.parse("2022-12-30")
                                                         ) to ArbeidstidPeriodeInfo()
@@ -70,12 +76,6 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                                         Periode(
                                                             LocalDate.parse("2023-01-02"),
                                                             LocalDate.parse("2023-01-06")
-                                                        ) to ArbeidstidPeriodeInfo()
-                                                            .medJobberNormaltTimerPerDag(Duration.ofHours(8))
-                                                            .medFaktiskArbeidTimerPerDag(Duration.ofHours(2)),
-                                                        Periode(
-                                                            LocalDate.parse("2023-01-23"),
-                                                            LocalDate.parse("2023-01-27")
                                                         ) to ArbeidstidPeriodeInfo()
                                                             .medJobberNormaltTimerPerDag(Duration.ofHours(8))
                                                             .medFaktiskArbeidTimerPerDag(Duration.ofHours(2))

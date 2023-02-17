@@ -90,7 +90,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
     }
 
     fun ArbeidstidInfo.somMap(): Map<String, Any?> = mapOf(
-        "perioder" to perioder.somMap()
+        "perioder" to perioder.toSortedMap { p1, p2 -> p1.compareTo(p2) }.somMap()
     )
 
     fun MutableMap<no.nav.k9.søknad.felles.type.Periode, ArbeidstidPeriodeInfo>.somMap(): List<Map<String, Any?>> = map { entry ->
