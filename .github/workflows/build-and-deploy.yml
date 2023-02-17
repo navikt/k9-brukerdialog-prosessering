@@ -11,7 +11,7 @@ on:
       - '.github/workflows/snyk.yml'
       - '.github/workflows/*-topics.yml'
       - '.github/workflows/reusable-topic-workflow.yml'
-      - 'nais/alerterator-*'
+      - 'nais/alerts.yml'
       - 'nais/topics/*'
     branches:
 

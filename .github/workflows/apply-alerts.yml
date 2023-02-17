@@ -3,12 +3,12 @@ name: Alerts
 on:
   push:
     paths:
-      - 'nais/alerterator-*'
+      - 'nais/alerts.yml'
       - 'nais/dev-gcp.json'
       - 'nais/prod-gcp.json'
       - '.github/workflows/apply-alerts.yml'
     branches:
-      - 'master'
+      - 'main'
       - 'dev-**'
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: nais/alerterator-dev.yml
+          RESOURCE: nais/alerterator.yml
           VARS: nais/dev-gcp.json
 
   deploy-prod-gcp:
@@ -35,5 +35,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: nais/alerterator-prod.yml
+          RESOURCE: nais/alerterator.yml
           VARS: nais/prod-gcp.json

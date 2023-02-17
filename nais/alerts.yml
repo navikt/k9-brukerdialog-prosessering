@@ -1,0 +1,62 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{app}}-alerts
+  team: {{team}}
+  namespace: {{namespace}}
+spec:
+  groups:
+    - name: {{app}}-alerts
+      rules:
+        - alert: Applikasjon nede
+          expr: kube_deployment_status_replicas_available{deployment="{{app}}"} == 0
+          for: 5m
+          annotations:
+            consequence: Ingen søknader blir prosessert
+            action: "`kubectl describe pod <podname>` -> `kubectl logs <podname>`"
+            summary: "App \{{ $labels.deployment }} er nede i namespace \{{ $labels.namespace }}"
+          labels:
+            namespace: {{namespace}}
+            severity: danger
+
+        - alert: Helsesjekk feiler
+          expr: floor(increase(http_server_requests_seconds_count{app="{{app}}", status!~"200", uri="/health/**"}[1d])) > 0
+          for: 5m
+          annotations:
+            consequence: Prosessering av stream feiler.
+            action: "`kubectl describe pod <podname>` -> `kubectl logs <podname>`"
+            summary: "Helsesjekk for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
+          labels:
+            namespace: {{namespace}}
+            severity: danger
+
+        - alert: Kafka stream nede
+          expr: kafka_stream_alive_stream_threads{app="{{app}}"} == 0
+          for: 5m
+          annotations:
+            consequence: Prosessering av stream feiler.
+            action: "`kubectl logs \{{$labels.pod}} -c \{{labels.container}} -n \{{$labels.namespace}}`"
+            summary: "Stream \{{ $labels.client_id }} feiler i namespace \{{ $labels.namespace }}"
+          labels:
+            namespace: {{namespace}}
+            severity: danger
+
+        - alert: Høy andel error i logger
+          expr: sum by (app, container, pod, namespace) (floor(increase(logback_events_total{app="{{app}}", level="error"} [3m]))) > 0
+          for: 5m
+          annotations:
+            action: "`kubectl logs \{{$labels.pod}} -c \{{labels.container}} -n \{{$labels.namespace}}`"
+            summary: "Helsesjekk for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
+          labels:
+            namespace: {{namespace}}
+            severity: danger
+
+        - alert: Høy andel warning i logger
+          expr: sum by (app, container, pod, namespace) (floor(increase(logback_events_total{app="{{app}}", level="warning"} [3m]))) > 0
+          for: 5m
+          annotations:
+            action: "`kubectl logs \{{$labels.pod}} -c \{{labels.container}} -n \{{$labels.namespace}}`"
+            summary: "Helsesjekk for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
+          labels:
+            namespace: {{namespace}}
+            severity: warning
