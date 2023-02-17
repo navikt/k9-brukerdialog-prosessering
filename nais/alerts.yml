@@ -3,6 +3,8 @@ kind: PrometheusRule
 metadata:
   name: {{app}}-alerts
   namespace: {{namespace}}
+  labels:
+    team: {{team}}
 spec:
   groups:
     - name: {{app}}-alerts
