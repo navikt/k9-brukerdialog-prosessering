@@ -1,0 +1,19 @@
+name: Deploy pleiepenger sykt barn endringsmelding topics
+
+env:
+  TOPICS_PATH: 'nais/topics/pleiepenger-sykt-barn-endringsmelding-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-psb-endringsmelding-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/pleiepenger-sykt-barn-endringsmelding-topics.yml'
+
+jobs:
+  deploy-psb-endringsmelding-topics:
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: psb-endringsmelding-topics
+      topics-path: 'nais/topics/pleiepenger-sykt-barn-endringsmelding-topics.yml'
+    secrets: inherit

@@ -12,6 +12,7 @@ object Constants {
     const val SOKNAD_ID_KEY = "soknad_id"
     const val CORRELATION_ID_KEY = "correlation_id"
     const val NAV_CALL_ID = "Nav-Callid"
+    const val X_CORRELATION_ID = "X-Correlation-ID"
 
     val NORMAL_ARBEIDSDAG = Duration.ofHours(7).plusMinutes(30)
     val ZONE_ID = ZoneId.of("Europe/Oslo")

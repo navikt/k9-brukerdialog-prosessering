@@ -1,35 +1,35 @@
 package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn
 
-import no.nav.helse.felles.Barn
-import no.nav.helse.felles.BarnRelasjon
-import no.nav.helse.felles.Beredskap
-import no.nav.helse.felles.Bosted
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Barn
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.BarnRelasjon
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Beredskap
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Bosted
 import no.nav.helse.felles.Enkeltdag
-import no.nav.helse.felles.Ferieuttak
-import no.nav.helse.felles.FerieuttakIPerioden
-import no.nav.helse.felles.Frilans
-import no.nav.helse.felles.Land
-import no.nav.helse.felles.Medlemskap
-import no.nav.helse.felles.Nattevåk
-import no.nav.helse.felles.Næringstyper
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Ferieuttak
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.FerieuttakIPerioden
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Frilans
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Land
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Medlemskap
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Nattevåk
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Næringstyper
 import no.nav.helse.felles.Omsorgstilbud
 import no.nav.helse.felles.OmsorgstilbudSvarFortid
 import no.nav.helse.felles.OmsorgstilbudSvarFremtid
-import no.nav.helse.felles.OpptjeningIUtlandet
-import no.nav.helse.felles.OpptjeningType
-import no.nav.helse.felles.Periode
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.OpptjeningType
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Periode
 import no.nav.helse.felles.PlanUkedager
-import no.nav.helse.felles.Regnskapsfører
-import no.nav.helse.felles.SelvstendigNæringsdrivende
-import no.nav.helse.felles.Søker
-import no.nav.helse.felles.UtenlandskNæring
-import no.nav.helse.felles.Utenlandsopphold
-import no.nav.helse.felles.UtenlandsoppholdIPerioden
-import no.nav.helse.felles.VarigEndring
-import no.nav.helse.felles.Virksomhet
-import no.nav.helse.felles.YrkesaktivSisteTreFerdigliknedeÅrene
-import no.nav.helse.felles.Årsak
-import no.nav.helse.felles.ÅrsakManglerIdentitetsnummer
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Regnskapsfører
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Søker
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.UtenlandskNæring
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Utenlandsopphold
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.VarigEndring
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Virksomhet
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.YrkesaktivSisteTreFerdigliknedeÅrene
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Årsak
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.ÅrsakManglerIdentitetsnummer
 import no.nav.k9brukerdialogprosessering.pdf.PDFGenerator
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
@@ -39,7 +39,7 @@ import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbei
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.NormalArbeidstid
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.utils.PSBSøknadUtils
+import no.nav.k9brukerdialogprosessering.utils.K9FormatUtils
 import no.nav.k9brukerdialogprosessering.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -259,7 +259,7 @@ class PSBSøknadPdfGeneratorTest {
                 harVærtEllerErVernepliktig = true,
                 barnRelasjon = BarnRelasjon.ANNET,
                 barnRelasjonBeskrivelse = "Blaabla annet",
-                k9FormatSøknad = PSBSøknadUtils.defaultK9FormatPSB(soknadsId, mottatt),
+                k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
                 omsorgstilbud = Omsorgstilbud(
                     erLiktHverUke = true,
                     ukedager = PlanUkedager(

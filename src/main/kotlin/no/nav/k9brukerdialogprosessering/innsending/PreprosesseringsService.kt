@@ -21,15 +21,16 @@ class PreprosesseringsService(
     }
 
     suspend fun preprosesser(preprosesseringsData: PreprosesseringsData): PreprosesseringsResultat {
-        logger.info("Preprosesserer søknad: $preprosesseringsData")
+        val k9FormatSøknad = preprosesseringsData.k9FormatSøknad
+        logger.info("Preprosesserer med søknadId: {}", k9FormatSøknad.søknadId)
 
         val søkerFødselsnummer = preprosesseringsData.søkerFødselsnummer
         val dokumentEier = DokumentEier(søkerFødselsnummer)
 
-        logger.info("Genererer Oppsummerings-PDF av søknaden.")
+        logger.info("Genererer Oppsummerings-PDF...")
         val oppsummringPdf = pdfGenerator.genererPDF(preprosesseringsData.pdfData)
 
-        logger.info("Mellomlagrer Oppsummerings-PDF.")
+        logger.info("Mellomlagrer Oppsummerings-PDF...")
         val oppsummeringPdfDokumentId = k9MellomlagringService.lagreDokument(
             Dokument(
                 eier = dokumentEier,
@@ -40,7 +41,6 @@ class PreprosesseringsService(
         ).dokumentId()
 
         logger.info("Mellomlagrer Oppsummerings-JSON")
-        val k9FormatSøknad = preprosesseringsData.k9FormatSøknad
         val soknadJsonDokumentId = k9MellomlagringService.lagreDokument(
             dokument = Dokument(
                 eier = dokumentEier,

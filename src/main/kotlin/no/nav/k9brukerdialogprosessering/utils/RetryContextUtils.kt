@@ -5,11 +5,11 @@ import org.slf4j.Logger
 import org.springframework.retry.RetryContext
 
 object RetryContextUtils {
-    fun RetryContext.logHttpRetries(logger: Logger, url: String) {
+    fun RetryContext.logStreamingRetries(streamName: String, logger: Logger) {
         if (retryCount > 0) {
             logger.warn(
-                "Gjenforsøker HTTP forespørsel for URL {}. Forsøk {} av {}. Siste feil:",
-                url, retryCount, MAX_ATTEMPTS, lastThrowable
+                "$streamName feilet første gang. Forsøker på nytt. Forsøk {} av {}. Siste feil:",
+                retryCount+1, MAX_ATTEMPTS, lastThrowable
             )
         }
     }

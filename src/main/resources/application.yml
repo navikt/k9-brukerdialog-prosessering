@@ -30,11 +30,24 @@ no.nav:
     retry-backoff-ms: 5000 # 5 seconds
     replication-factor: 3
     streams:
-      psb:
-        application-id-suffix: psb-stream
+      psb-soknad-preprosessering:
+        application-id-suffix: psb-soknad-preprosessering
         auto-offset-reset: latest
-      omp:
-        application-id-suffix: omp-stream
+      psb-soknad-journalforing:
+        application-id-suffix: psb-soknad-journalforing
+        auto-offset-reset: latest
+      psb-soknad-cleanup:
+        application-id-suffix: psb-soknad-cleanup-stream
+        auto-offset-reset: latest
+
+      psb-endringsmelding-preprosessering:
+        application-id-suffix: psb-endringsmelding-preprosessering
+        auto-offset-reset: latest
+      psb-endringsmelding-journalforing:
+        application-id-suffix: psb-endringsmelding-journalforing
+        auto-offset-reset: latest
+      psb-endringsmelding-cleanup:
+        application-id-suffix: psb-endringsmelding-cleanup
         auto-offset-reset: latest
     schema-registry:
       url: ${KAFKA_SCHEMA_REGISTRY_URL}

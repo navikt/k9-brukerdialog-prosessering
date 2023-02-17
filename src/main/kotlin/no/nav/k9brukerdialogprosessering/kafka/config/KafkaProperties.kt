@@ -15,7 +15,11 @@ data class KafkaProperties(
     val streams: Map<String, KafkaStreamsProperties>,
     val schemaRegistry: KafkaSchemaRegistryProperties,
     val security: KafkaSecurityProperties? = null,
-)
+) {
+    fun streamProperties(streamPropertyKey: KafkaStreamName): KafkaStreamsProperties {
+        return streams[streamPropertyKey.value] ?: throw IllegalStateException("Mangler konfiguration for ${streamPropertyKey.value} streams")
+    }
+}
 
 data class KafkaStreamsProperties(
     val applicationIdSuffix: String,
@@ -42,3 +46,15 @@ data class KafkaSchemaRegistryProperties(
     val user: String,
     val password: String
 )
+
+enum class KafkaStreamName(val value: String) {
+    // PSB Søknad
+    PSB_SØKNAD_PREPROSESSERING("psb-soknad-preprosessering"),
+    PSB_SØKNAD_JOURNALFØRING("psb-soknad-journalforing"),
+    PSB_SØKNAD_CLEANUP("psb-soknad-cleanup"),
+
+    // PSB Endringsmelding
+    PSB_ENDRINGSMELDING_PREPROSESSERING("psb-endringsmelding-preprosessering"),
+    PSB_ENDRINGSMELDING_JOURNALFØRING("psb-endringsmelding-journalforing"),
+    PSB_ENDRINGSMELDING_CLEANUP("psb-endringsmelding-cleanup"),
+}

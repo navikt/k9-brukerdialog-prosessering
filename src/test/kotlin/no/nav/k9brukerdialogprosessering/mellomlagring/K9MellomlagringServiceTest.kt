@@ -58,33 +58,9 @@ class K9MellomlagringServiceTest {
     }
 
     @Test
-    fun `Gitt lagring av dokumenter feiler, forvent retry med 3 forsøk`(): Unit = runBlocking {
-        val dokument = Dokument(
-            eier = DokumentEier(eiersFødselsnummer = "123456"),
-            content = "som etext as bytearray".encodeToByteArray(),
-            contentType = MediaType.APPLICATION_PDF_VALUE,
-            title = "some pdf-file"
-        )
-
-        wireMockServer.stubLagreDokument(
-            urlPathMatching = "/v1/dokument",
-            requestBodyJson = objectMapper.writeValueAsString(dokument),
-            responseStatus = HttpStatus.INTERNAL_SERVER_ERROR,
-            responseLocationHeaderPath = "/v1/dokument/${UUID.randomUUID()}"
-        )
-
-        assertThrows(RestClientException::class.java) {
-            runBlocking {
-                (k9MellomlagringService.lagreDokument(dokument))
-            }
-        }
-        WireMock.verify(3, WireMock.postRequestedFor(WireMock.urlPathMatching(".*/v1/dokument")))
-    }
-
-    @Test
-    fun `slettDokumeter`() {
+    fun `slettDokumenter`() {
         val dokumentEier = DokumentEier(eiersFødselsnummer = "123456")
-        val dokumentIder = listOf("123")
+        val dokumentIder = listOf("123", "456")
 
         dokumentIder.forEach { dokumentId: String ->
             wireMockServer.stubSlettDokument(
@@ -96,7 +72,7 @@ class K9MellomlagringServiceTest {
 
         Assertions.assertThatNoException().isThrownBy {
             runBlocking {
-                k9MellomlagringService.slettDokumeter(dokumentIder, dokumentEier)
+                k9MellomlagringService.slettDokumenter(dokumentIder, dokumentEier)
             }
         }
 

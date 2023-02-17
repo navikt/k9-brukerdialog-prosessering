@@ -8,6 +8,8 @@ import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
+import com.openhtmltopdf.slf4j.Slf4jLogger
+import com.openhtmltopdf.util.XRLog
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
@@ -17,6 +19,11 @@ import java.util.*
 
 @Component
 class PDFGenerator {
+
+    init {
+        XRLog.setLoggerImpl(Slf4jLogger())
+    }
+
     private companion object {
         private val ROOT = "handlebars"
         private val REGULAR_FONT = ClassPathResource("${ROOT}/fonts/SourceSansPro-Regular.ttf").inputStream.readAllBytes()
@@ -133,6 +140,7 @@ abstract class PdfData {
     abstract fun pdfData(): Map<String, Any?>
     fun resolveTemplate(): String = when (ytelse()) {
         Ytelse.PLEIEPENGER_SYKT_BARN -> "pleiepenger-sykt-barn-soknad"
+        Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> "pleiepenger-sykt-barn-endringsmelding"
         Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-soknad"
         Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad"
         Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad"

@@ -2,6 +2,7 @@ package no.nav.k9brukerdialogprosessering.utils
 
 import no.nav.k9brukerdialogprosessering.common.Constants.CORRELATION_ID_KEY
 import no.nav.k9brukerdialogprosessering.common.Constants.NAV_CALL_ID
+import no.nav.k9brukerdialogprosessering.common.Constants.X_CORRELATION_ID
 import no.nav.security.token.support.client.core.ClientProperties
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenResponse
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
@@ -11,6 +12,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor
+import org.springframework.kafka.support.KafkaHeaders.CORRELATION_ID
 import java.util.*
 
 object RestTemplateUtils {
@@ -38,7 +40,7 @@ object RestTemplateUtils {
         ClientHttpRequestInterceptor { request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution ->
             val correlationId = MDC.get(CORRELATION_ID_KEY) ?: UUID.randomUUID().toString()
             request.headers[NAV_CALL_ID] = correlationId
-            request.headers[CORRELATION_ID_KEY] = correlationId
+            request.headers[X_CORRELATION_ID] = correlationId
             execution.execute(request, body)
         }
 
