@@ -55,4 +55,26 @@ class K9JoarkServiceTest {
         val response = k9JoarkService.journalfør(journalføringsRequest)
         assertThat(response).isEqualTo(journalføringsResponse)
     }
+
+    @Test
+    fun `Gitt Journalføring av PSB Endringsmelding, forvent riktig response`(): Unit = runBlocking {
+        val journalføringsRequest = JournalføringsRequest(
+            ytelse = Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING,
+            norskIdent = "12345678910",
+            sokerNavn = Navn("John", "Doe", "Hansen"),
+            mottatt = ZonedDateTime.now(),
+            dokumentId = listOf(listOf("123", "456"))
+        )
+        val journalføringsResponse = JournalføringsResponse("9876543210")
+
+        wireMockServer.stubJournalføring(
+            urlPathMatching = "/v1/pleiepenge/endringsmelding/journalforing",
+            requestBodyJson = objectMapper.writeValueAsString(journalføringsRequest),
+            responseStatus = HttpStatus.OK,
+            responseBodyJson = objectMapper.writeValueAsString(journalføringsResponse)
+        )
+
+        val response = k9JoarkService.journalfør(journalføringsRequest)
+        assertThat(response).isEqualTo(journalføringsResponse)
+    }
 }

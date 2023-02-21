@@ -554,6 +554,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               "begrunnelseForInnsending": {
                 "tekst": null
               },
+              "kildesystem": null,
               "journalposter": []
             }
           }

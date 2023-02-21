@@ -334,6 +334,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
               "begrunnelseForInnsending": {
                 "tekst": null
               },
+              "kildesystem": null,
               "journalposter": []
             }
           }
