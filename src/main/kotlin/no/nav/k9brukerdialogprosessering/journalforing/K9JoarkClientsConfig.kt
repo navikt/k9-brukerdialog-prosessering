@@ -34,7 +34,7 @@ class K9JoarkClientsConfig(
         logger.info("Konfigurerer opp azure klient for k9-joark.")
         return restTemplateBuilder
             .rootUri(baseUrl)
-            .setReadTimeout(Duration.ofSeconds(20))
+            .setReadTimeout(Duration.ofSeconds(120))
             .additionalInterceptors(
                 RestTemplateUtils.authorizationInterceptor(azureK9JoarkClientProperties, oAuth2AccessTokenService),
                 RestTemplateUtils.requestLoggerInterceptor(logger),
