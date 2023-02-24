@@ -80,10 +80,11 @@
     </section>
 </div>
 <!-- FOOTER -->
-<p id="footer">
-    <span class="soknadsid">{{ søknadId }}</span>
-    <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
-</p>
+{{> partial/footerPartial søknadId=søknadId gitSha=soknadDialogCommitSha}}
 </body>
+
+<footer>
+
+</footer>
 
 </html>

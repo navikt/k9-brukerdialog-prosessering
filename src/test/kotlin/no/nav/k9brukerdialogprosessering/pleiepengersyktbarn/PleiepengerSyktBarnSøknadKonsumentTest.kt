@@ -439,7 +439,8 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
                   "harBekreftetOpplysninger": true,
                   "harForståttRettigheterOgPlikter": true,
                   "harMedsøker": true,
-                  "samtidigHjemme": true
+                  "samtidigHjemme": true,
+                  "soknadDialogCommitSha": "commit-abc-123"
                 },
                 "endringsperiode": [],
                 "infoFraPunsj": null,

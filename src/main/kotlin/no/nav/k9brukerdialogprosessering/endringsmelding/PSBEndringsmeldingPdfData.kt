@@ -28,6 +28,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         val ytelse = k9Format.getYtelse<PleiepengerSyktBarn>()
         return mapOf(
             "søknadId" to k9Format.søknadId.id,
+            "soknadDialogCommitSha" to ytelse.søknadInfo.orElse(null)?.soknadDialogCommitSha,
             "mottattDag" to k9Format.mottattDato.withZoneSameInstant(ZONE_ID).somNorskDag(),
             "mottattDato" to DATE_TIME_FORMATTER.format(k9Format.mottattDato),
             "soker" to mapOf(

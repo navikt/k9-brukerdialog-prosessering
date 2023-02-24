@@ -48,7 +48,7 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                 no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of("12345678910")),
                 PleiepengerSyktBarn()
                     .medSøknadsperiode(Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")))
-                    .medSøknadInfo(DataBruktTilUtledning(true, true, true, true, true))
+                    .medSøknadInfo(DataBruktTilUtledning(true, true, true, true, "commit-abc-123", true))
                     .medBarn(Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("10987654321")))
                     .medArbeidstid(
                         Arbeidstid()
