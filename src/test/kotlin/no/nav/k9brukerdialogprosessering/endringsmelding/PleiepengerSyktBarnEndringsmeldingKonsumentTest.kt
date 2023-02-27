@@ -150,6 +150,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
                "mellomnavn": "Mellomnavn",
                "etternavn": "Nordmann"
             },
+            "pleietrengendeNavn": "Barn Barnesen",
             "dokumentId": [
                 [
                   "123456789",

@@ -144,6 +144,7 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                     etternavn = "ÅNSNES",
                     fødselsnummer = "29099012345"
                 ),
+                pleietrengendeNavn = "Barn Barnesen",
                 harBekreftetOpplysninger = true,
                 harForståttRettigheterOgPlikter = true,
                 k9Format = k9FormatEndringsmelding(søknadId = UUID.fromString(søknadsId))

@@ -18,6 +18,7 @@ internal object EndringsmeldingUtils {
             mellomnavn = "Mellomnavn",
             fornavn = "Ola"
         ),
+        pleietrengendeNavn = "Barn Barnesen",
         harBekreftetOpplysninger = true,
         harForståttRettigheterOgPlikter = true,
         k9Format = defaultK9FormatPSB(søknadsId, mottatt)

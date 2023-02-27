@@ -35,9 +35,11 @@
     <div class="person" id="barn">
         <p>Barn</p>
         <p class="navn">
-            <span class="ikke_satt">Navn ikke angitt</span>
+            {{ barn.navn }}
         </p>
-        <p>{{ barn.fødselsnummer }}</p>
+        <p>
+            {{ barn.fødselsnummer }}<br/>
+        </p>
     </div>
 
     {{#if arbeidstid}}

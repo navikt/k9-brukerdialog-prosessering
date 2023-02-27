@@ -10,6 +10,7 @@ import no.nav.k9brukerdialogprosessering.pdf.PdfData
 
 data class PSBEndringsmeldingMottatt(
     val søker: Søker,
+    val pleietrengendeNavn: String,
     val harBekreftetOpplysninger: Boolean,
     val harForståttRettigheterOgPlikter: Boolean,
     val k9Format: Søknad

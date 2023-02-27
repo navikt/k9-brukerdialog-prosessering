@@ -11,6 +11,7 @@ import java.time.ZonedDateTime
 
 data class PSBPreprossesertEndringsmelding(
     val søker: Søker,
+    val pleietrengendeNavn: String,
     val k9FormatSøknad: Søknad,
     val dokumentId: List<List<String>>
 ): Preprosessert {
@@ -20,6 +21,7 @@ data class PSBPreprossesertEndringsmelding(
         k9Format: Søknad
     ) : this(
         søker = endringsmelding.søker,
+        pleietrengendeNavn = endringsmelding.pleietrengendeNavn,
         k9FormatSøknad = k9Format,
         dokumentId = dokumentId
     )

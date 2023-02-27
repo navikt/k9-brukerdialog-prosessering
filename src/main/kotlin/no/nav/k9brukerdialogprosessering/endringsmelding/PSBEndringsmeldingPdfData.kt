@@ -35,7 +35,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
                 "navn" to endringsmelding.søker.formatertNavn().capitalizeName(),
                 "fødselsnummer" to endringsmelding.søker.fødselsnummer
             ),
-            "barn" to ytelse.barn.somMap(),
+            "barn" to ytelse.barn.somMap(endringsmelding.pleietrengendeNavn),
             "arbeidstid" to when {
                 ytelse.arbeidstid != null -> ytelse.arbeidstid.somMap()
                 else -> null
@@ -64,7 +64,8 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         "etablertTilsynTimerPerDag" to etablertTilsynTimerPerDag.somTekst()
     )
 
-    private fun no.nav.k9.søknad.felles.personopplysninger.Barn.somMap(): Map<String, Any?> = mapOf(
+    private fun no.nav.k9.søknad.felles.personopplysninger.Barn.somMap(pleietrengendeNavn: String): Map<String, Any?> = mapOf(
+        "navn" to pleietrengendeNavn,
         "fødselsnummer" to personIdent.verdi
     )
 
