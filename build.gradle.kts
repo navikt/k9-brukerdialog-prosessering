@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.0.1"
+	id("org.springframework.boot") version "3.0.3"
 	id("io.spring.dependency-management") version "1.1.0"
-	kotlin("jvm") version "1.7.22"
-	kotlin("plugin.spring") version "1.7.22"
+	kotlin("jvm") version "1.8.10"
+	kotlin("plugin.spring") version "1.8.10"
 }
 
 group = "no.nav"
@@ -40,7 +40,7 @@ val k9FormatVersion = "8.0.7"
 val springMockkVersion by extra("3.1.2")
 val confluentVersion by extra("7.3.0")
 val logstashLogbackEncoderVersion by extra("7.2")
-val slf4jVersion = "2.0.5"
+val slf4jVersion = "2.0.6"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
