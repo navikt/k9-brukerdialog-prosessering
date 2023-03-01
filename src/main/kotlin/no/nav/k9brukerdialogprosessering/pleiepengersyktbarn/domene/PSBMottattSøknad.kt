@@ -25,7 +25,7 @@ import java.time.ZonedDateTime
 
 data class PSBMottattSøknad(
     val søknadId: String,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     val mottatt: ZonedDateTime,
     val apiDataVersjon: String? = null,
     val språk: String? = null,
