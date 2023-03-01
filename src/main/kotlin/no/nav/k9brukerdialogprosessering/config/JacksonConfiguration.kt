@@ -7,11 +7,13 @@ import no.nav.k9.søknad.JsonUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 
 @Configuration
 class JacksonConfiguration {
 
     @Bean
+    @Primary
     @Autowired
     fun objectMapper(kotlinModule: KotlinModule): ObjectMapper {
         return JsonUtils.getObjectMapper()
