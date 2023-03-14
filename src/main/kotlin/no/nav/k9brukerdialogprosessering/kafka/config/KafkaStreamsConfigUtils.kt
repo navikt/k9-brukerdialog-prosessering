@@ -84,7 +84,6 @@ object KafkaStreamsConfigUtils {
 }
 
 class K9BrukerdialogProsesseringStreamUncaughtExceptionHandler : StreamsUncaughtExceptionHandler {
-
     override fun handle(exception: Throwable): StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse {
         return StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
     }
