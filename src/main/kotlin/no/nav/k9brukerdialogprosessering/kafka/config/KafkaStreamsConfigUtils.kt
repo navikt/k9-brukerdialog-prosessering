@@ -4,16 +4,20 @@ import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig
 import io.micrometer.core.instrument.MeterRegistry
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.StreamsConfig
+import org.apache.kafka.streams.errors.DeserializationExceptionHandler
 import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler
+import org.apache.kafka.streams.processor.ProcessorContext
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.config.StreamsBuilderFactoryBean
 import org.springframework.kafka.streams.KafkaStreamsMicrometerListener
 import org.springframework.kafka.support.serializer.JsonSerde
+import java.lang.Exception
 
 /**
  * Configuration for Kafka Streams.
@@ -33,6 +37,7 @@ object KafkaStreamsConfigUtils {
         props[StreamsConfig.APPLICATION_ID_CONFIG] = "${kafkaProperties.applicationId}${streamProps.applicationIdSuffix}"
         props[StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG] = Serdes.StringSerde::class.java
         props[StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG] = JsonSerde<String>()::class.java
+        props[StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG] = K9BrukerdialogProsesseringDeserializationExceptionHandler::class.java
         props[StreamsConfig.REPLICATION_FACTOR_CONFIG] = kafkaProperties.replicationFactor
         props[CommonClientConfigs.RETRIES_CONFIG] = kafkaProperties.retries
         props[StreamsConfig.RETRY_BACKOFF_MS_CONFIG] = kafkaProperties.retryBackoffMs
@@ -69,16 +74,38 @@ object KafkaStreamsConfigUtils {
     }
 
     fun StreamsBuilderFactoryBean.configure(streamPropertyKey: KafkaStreamName, meterRegistry: MeterRegistry) {
-        setStreamsUncaughtExceptionHandler { throwable: Throwable ->
-            logger.info("Setting StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD")
-            logger.error("Failed to stream message:", throwable)
-            StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
-        }
-
+        setStreamsUncaughtExceptionHandler(K9BrukerdialogProsesseringStreamUncaughtExceptionHandler())
         setStateListener { newState: KafkaStreams.State, oldState: KafkaStreams.State ->
             logger.info("${streamPropertyKey.value} State transition from $oldState to $newState")
         }
 
         addListener(KafkaStreamsMicrometerListener(meterRegistry))
     }
+}
+
+class K9BrukerdialogProsesseringStreamUncaughtExceptionHandler : StreamsUncaughtExceptionHandler {
+    private val logger = LoggerFactory.getLogger(K9BrukerdialogProsesseringStreamUncaughtExceptionHandler::class.java)
+
+    override fun handle(exception: Throwable): StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse {
+        logger.error("Failed to stream message:", exception)
+        return StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
+    }
+}
+
+class K9BrukerdialogProsesseringDeserializationExceptionHandler : DeserializationExceptionHandler {
+    private val logger = LoggerFactory.getLogger(K9BrukerdialogProsesseringStreamUncaughtExceptionHandler::class.java)
+    override fun configure(configs: MutableMap<String, *>) {
+        // Do nothing
+    }
+
+    override fun handle(
+        context: ProcessorContext,
+        record: ConsumerRecord<ByteArray, ByteArray>,
+        exception: Exception,
+    ): DeserializationExceptionHandler.DeserializationHandlerResponse {
+        logger.error("Error processing record $record", exception)
+        return DeserializationExceptionHandler.DeserializationHandlerResponse.FAIL
+    }
+
+
 }
