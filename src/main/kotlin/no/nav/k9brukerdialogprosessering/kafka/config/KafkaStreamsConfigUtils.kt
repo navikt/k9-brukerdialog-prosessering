@@ -84,16 +84,13 @@ object KafkaStreamsConfigUtils {
 }
 
 class K9BrukerdialogProsesseringStreamUncaughtExceptionHandler : StreamsUncaughtExceptionHandler {
-    private val logger = LoggerFactory.getLogger(K9BrukerdialogProsesseringStreamUncaughtExceptionHandler::class.java)
 
     override fun handle(exception: Throwable): StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse {
-        logger.error("Failed to stream message:", exception)
         return StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
     }
 }
 
 class K9BrukerdialogProsesseringDeserializationExceptionHandler : DeserializationExceptionHandler {
-    private val logger = LoggerFactory.getLogger(K9BrukerdialogProsesseringStreamUncaughtExceptionHandler::class.java)
     override fun configure(configs: MutableMap<String, *>) {
         // Do nothing
     }
@@ -103,7 +100,6 @@ class K9BrukerdialogProsesseringDeserializationExceptionHandler : Deserializatio
         record: ConsumerRecord<ByteArray, ByteArray>,
         exception: Exception,
     ): DeserializationExceptionHandler.DeserializationHandlerResponse {
-        logger.error("Error processing record $record", exception)
         return DeserializationExceptionHandler.DeserializationHandlerResponse.FAIL
     }
 }
