@@ -6,7 +6,7 @@
                 <!-- Se her for mer info: https://github.com/logfellow/logstash-logback-encoder#customizing-stack-traces -->
                 <rootCauseFirst>true</rootCauseFirst>
                 <maxDepthPerThrowable>512</maxDepthPerThrowable>
-                <maxLength>15000</maxLength>
+                <maxLength>50000</maxLength>
                 <shortenedClassNameLength>20</shortenedClassNameLength>
                 <omitCommonFrames>true</omitCommonFrames>
                 <exclude>^sun\.reflect\..*\.invoke</exclude>
