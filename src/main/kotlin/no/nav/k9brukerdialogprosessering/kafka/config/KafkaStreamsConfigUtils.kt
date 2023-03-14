@@ -106,6 +106,4 @@ class K9BrukerdialogProsesseringDeserializationExceptionHandler : Deserializatio
         logger.error("Error processing record $record", exception)
         return DeserializationExceptionHandler.DeserializationHandlerResponse.FAIL
     }
-
-
 }
