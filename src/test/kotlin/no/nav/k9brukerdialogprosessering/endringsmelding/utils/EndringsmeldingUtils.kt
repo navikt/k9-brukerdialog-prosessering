@@ -21,6 +21,7 @@ internal object EndringsmeldingUtils {
         pleietrengendeNavn = "Barn Barnesen",
         harBekreftetOpplysninger = true,
         harForståttRettigheterOgPlikter = true,
+        påkrevdFelt = "xxx",
         k9Format = defaultK9FormatPSB(søknadsId, mottatt)
     )
 }
