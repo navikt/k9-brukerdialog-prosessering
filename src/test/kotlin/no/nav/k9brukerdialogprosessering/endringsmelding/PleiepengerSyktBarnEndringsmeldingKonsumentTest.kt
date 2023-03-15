@@ -15,6 +15,9 @@ import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaConsumer
@@ -24,17 +27,16 @@ import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
-import org.junit.Ignore
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.kafka.test.EmbeddedKafkaBroker
 import org.springframework.kafka.test.context.EmbeddedKafka
 import org.springframework.test.annotation.DirtiesContext
@@ -48,7 +50,10 @@ import java.util.*
     partitions = 1,
     count = 3,
     bootstrapServersProperty = "KAFKA_BROKERS", // Setter bootstrap-servers for consumer og producer.
-    topics = [PSB_ENDRINGSMELDING_MOTTATT_TOPIC, PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, PSB_ENDRINGSMELDING_CLEANUP_TOPIC]
+    topics = [
+        PSB_ENDRINGSMELDING_MOTTATT_TOPIC, PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, PSB_ENDRINGSMELDING_CLEANUP_TOPIC,
+        PSB_MOTTATT_TOPIC, PSB_PREPROSESSERT_TOPIC, PSB_CLEANUP_TOPIC
+    ]
 )
 @DirtiesContext // Sørger for at context blir re-instantiert mellom hver test.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -64,13 +69,16 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
     private lateinit var mapper: ObjectMapper
 
     @Autowired
-    private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
+    private lateinit var testRestTemplate: TestRestTemplate
 
-    @MockkBean(relaxed = true)
+    @MockkBean
     private lateinit var k9MellomlagringService: K9MellomlagringService
 
     @MockkBean(relaxed = true)
     private lateinit var k9JoarkService: K9JoarkService
+
+    @Autowired
+    private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
 
     lateinit var producer: Producer<String, Any> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
     lateinit var consumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
@@ -80,7 +88,9 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
         producer = embeddedKafkaBroker.opprettKafkaProducer()
         consumer = embeddedKafkaBroker.opprettKafkaConsumer(
             groupPrefix = "pleiepenger-sykt-barn-endringsmelding", topics = listOf(
-                PSB_ENDRINGSMELDING_MOTTATT_TOPIC, PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, PSB_ENDRINGSMELDING_CLEANUP_TOPIC
+                PSB_ENDRINGSMELDING_MOTTATT_TOPIC,
+                PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC,
+                PSB_ENDRINGSMELDING_CLEANUP_TOPIC
             )
         )
     }

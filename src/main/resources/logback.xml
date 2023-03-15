@@ -1,47 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder class="net.logstash.logback.encoder.LogstashEncoder">
-			<throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+    <appender name="stdout_json" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
                 <!-- Se her for mer info: https://github.com/logfellow/logstash-logback-encoder#customizing-stack-traces -->
-				<rootCauseFirst>true</rootCauseFirst>
-				<maxDepthPerThrowable>512</maxDepthPerThrowable>
-				<maxLength>10280</maxLength>
-				<shortenedClassNameLength>20</shortenedClassNameLength>
-				<omitCommonFrames>true</omitCommonFrames>
-				<exclude>^sun\.reflect\..*\.invoke</exclude>
-				<exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
-				<exclude>java\.util\.concurrent\..*</exclude>
-				<exclude>org\.apache\.catalina\..*</exclude>
-				<exclude>org\.apache\.coyote\..*</exclude>
-				<exclude>org\.apache\.tomcat\..*</exclude>
-				<exclude>org\.springframework\.web\..*</exclude>
-				<exclude>org\.apache\.kafka\..*</exclude>
-			</throwableConverter>
-		</encoder>
-	</appender>
-	<springProfile name="test">
-		<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-			<encoder>
-				<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{70} [ytelse=%X{ytelse}, sid=%X{soknad_id}, cid=%X{correlation_id}] - %msg%n</pattern>
-			</encoder>
-		</appender>
-	</springProfile>
+                <rootCauseFirst>true</rootCauseFirst>
+                <maxDepthPerThrowable>512</maxDepthPerThrowable>
+                <maxLength>50000</maxLength>
+                <shortenedClassNameLength>20</shortenedClassNameLength>
+                <omitCommonFrames>true</omitCommonFrames>
+                <exclude>^sun\.reflect\..*\.invoke</exclude>
+                <exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+                <exclude>java\.util\.concurrent\..*</exclude>
+                <exclude>org\.apache\.catalina\..*</exclude>
+                <exclude>org\.apache\.coyote\..*</exclude>
+                <exclude>org\.apache\.tomcat\..*</exclude>
+                <exclude>org\.springframework\.web\..*</exclude>
+                <exclude>org\.apache\.kafka\..*</exclude>
+            </throwableConverter>
+        </encoder>
+    </appender>
 
-	<root level="info">
-		<appender-ref ref="stdout" />
-	</root>
+    <turboFilter class="ch.qos.logback.classic.turbo.MarkerFilter">
+        <Name>CONFIDENTIAL_FILTER</Name>
+        <Marker>CONFIDENTIAL</Marker>
+        <OnMatch>DENY</OnMatch>
+    </turboFilter>
 
-	<springProfile name="default">
-		<turboFilter class="ch.qos.logback.classic.turbo.MarkerFilter">
-			<Name>CONFIDENTIAL_FILTER</Name>
-			<Marker>CONFIDENTIAL</Marker>
-			<OnMatch>DENY</OnMatch>
-		</turboFilter>
-	</springProfile>
+    <root level="info">
+        <appender-ref ref="stdout_json"/>
+    </root>
 
-	<springProfile name="dev-gcp,prod-gcp">
-		<logger name="no.nav.k9brukerdialogprosessering" level="trace" />
-		<logger name="org.apache" level="ERROR" />
-	</springProfile>
+    <logger name="no.nav.k9brukerdialogprosessering" level="trace"/>
+    <logger name="org.apache" level="ERROR"/>
+
 </configuration>

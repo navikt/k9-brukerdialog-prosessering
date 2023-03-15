@@ -37,7 +37,7 @@ repositories {
 val tokenSupportVersion by extra("3.0.0")
 val jsonassertVersion = "1.5.1"
 val k9FormatVersion = "8.0.7"
-val springMockkVersion by extra("3.1.2")
+val springMockkVersion by extra("4.0.2")
 val confluentVersion by extra("7.3.0")
 val logstashLogbackEncoderVersion by extra("7.2")
 val slf4jVersion = "2.0.6"
@@ -45,6 +45,7 @@ val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
 val retryVersion by extra("2.0.0")
+val awailitilityKotlinVersion by extra("4.1.1")
 
 extra["springCloudVersion"] = "2022.0.1"
 
@@ -93,6 +94,8 @@ dependencies {
 	testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
+	testImplementation("org.awaitility:awaitility-kotlin:$awailitilityKotlinVersion")
+
 }
 
 dependencyManagement {

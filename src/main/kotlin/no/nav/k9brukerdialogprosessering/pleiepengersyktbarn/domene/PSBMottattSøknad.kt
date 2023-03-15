@@ -1,6 +1,12 @@
 package no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene
 
-import com.fasterxml.jackson.annotation.JsonFormat
+import no.nav.helse.felles.Omsorgstilbud
+import no.nav.k9.søknad.Søknad
+import no.nav.k9brukerdialogprosessering.common.Ytelse
+import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
+import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBSøknadPdfData
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Barn
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.BarnRelasjon
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Beredskap
@@ -8,24 +14,16 @@ import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Ferie
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Medlemskap
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Nattevåk
-import no.nav.helse.felles.Omsorgstilbud
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
-import no.nav.k9.søknad.Søknad
-import no.nav.k9brukerdialogprosessering.common.Ytelse
-import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
-import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBSøknadPdfData
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
 data class PSBMottattSøknad(
     val søknadId: String,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     val mottatt: ZonedDateTime,
     val apiDataVersjon: String? = null,
     val språk: String? = null,
