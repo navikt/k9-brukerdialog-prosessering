@@ -13,7 +13,6 @@ data class PSBEndringsmeldingMottatt(
     val pleietrengendeNavn: String,
     val harBekreftetOpplysninger: Boolean,
     val harForståttRettigheterOgPlikter: Boolean,
-    val påkrevdFelt: String,
     val k9Format: Søknad
 ): MottattMelding {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING
