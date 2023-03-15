@@ -15,32 +15,38 @@ import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
+import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
-import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaProducer
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
+import org.assertj.core.api.Assertions.assertThat
+import org.awaitility.kotlin.await
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
-import org.junit.Ignore
-import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.HttpStatus
+import org.springframework.http.RequestEntity
 import org.springframework.kafka.test.EmbeddedKafkaBroker
 import org.springframework.kafka.test.context.EmbeddedKafka
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.net.URI
+import java.time.Duration
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -48,10 +54,13 @@ import java.util.*
     partitions = 1,
     count = 3,
     bootstrapServersProperty = "KAFKA_BROKERS", // Setter bootstrap-servers for consumer og producer.
-    topics = [PSB_ENDRINGSMELDING_MOTTATT_TOPIC, PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, PSB_ENDRINGSMELDING_CLEANUP_TOPIC]
+    topics = [
+        PSB_ENDRINGSMELDING_MOTTATT_TOPIC, PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, PSB_ENDRINGSMELDING_CLEANUP_TOPIC,
+        PSB_MOTTATT_TOPIC, PSB_PREPROSESSERT_TOPIC, PSB_CLEANUP_TOPIC
+    ]
 )
-@DirtiesContext // Sørger for at context blir re-instantiert mellom hver test.
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD) // Sørger for at context blir re-instantiert mellom hver test.
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @ExtendWith(SpringExtension::class)
 @EnableMockOAuth2Server // Tilgjengliggjør en oicd-provider for test. Se application-test.yml -> no.nav.security.jwt.issuer.selvbetjening for konfigurasjon
 @ActiveProfiles("test")
@@ -64,28 +73,33 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
     private lateinit var mapper: ObjectMapper
 
     @Autowired
-    private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
+    private lateinit var testRestTemplate: TestRestTemplate
 
-    @MockkBean(relaxed = true)
+    @MockkBean
     private lateinit var k9MellomlagringService: K9MellomlagringService
 
     @MockkBean(relaxed = true)
     private lateinit var k9JoarkService: K9JoarkService
 
+    @Autowired
+    private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
+
     lateinit var producer: Producer<String, Any> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
     lateinit var consumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
 
-    @BeforeAll
+    @BeforeEach
     fun setUp() {
         producer = embeddedKafkaBroker.opprettKafkaProducer()
         consumer = embeddedKafkaBroker.opprettKafkaConsumer(
             groupPrefix = "pleiepenger-sykt-barn-endringsmelding", topics = listOf(
-                PSB_ENDRINGSMELDING_MOTTATT_TOPIC, PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, PSB_ENDRINGSMELDING_CLEANUP_TOPIC
+                PSB_ENDRINGSMELDING_MOTTATT_TOPIC,
+                PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC,
+                PSB_ENDRINGSMELDING_CLEANUP_TOPIC
             )
         )
     }
 
-    @AfterAll
+    @AfterEach
     fun tearDown() {
         producer.close()
         consumer.close()
@@ -130,14 +144,26 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
-            .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
-        val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
-        val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        println("---> " + preprosessertSøknadJson)
-        JSONAssert.assertEquals(preprosessertEndringsmeldingSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+        await.atMost(Duration.ofSeconds(60)).untilAsserted {
+            testRestTemplate.exchange(RequestEntity.get("/health").build(), String::class.java).also {
+                assertThat(it.statusCode).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE)
+                val health = JSONObject(it.body)
+                val preprosesseringsStreamHealth = health.getJSONObject("components").getJSONObject("pleiepengerSyktBarnEndringsmeldingPreprossering")
+                JSONAssert.assertEquals(
+                    """
+                    {
+                      "details": {
+                        "psb-endringsmelding-preprosessering": "psb-endringsmelding-preprosessering is in ERROR state"
+                      },
+                      "status": "DOWN"
+                    }
+                """.trimIndent(), preprosesseringsStreamHealth, true
+                )
+            }
+        }
     }
 
     @Language("JSON")
