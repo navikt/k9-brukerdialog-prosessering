@@ -36,7 +36,7 @@ spec:
           for: 5m
           annotations:
             consequence: Prosessering av stream feiler.
-            action: "`kubectl logs {{$labels.pod}} -c {{$labels.container}} -n {{$labels.namespace}}`"
+            action: "`kubectl logs \{{ $labels.pod}} -c \{{ $labels.container }} -n \{{ $labels.namespace }}`"
             summary: "Stream \{{ $labels.client_id }} feiler i namespace \{{ $labels.namespace }}"
           labels:
             namespace: {{namespace}}
@@ -46,8 +46,8 @@ spec:
           expr: sum by (app, container, pod, namespace) (floor(increase(logback_events_total{app="{{app}}", level="error"} [3m]))) > 0
           for: 5m
           annotations:
-            action: "`kubectl logs {{$labels.pod}} -c {{$labels.container}} -n {{$labels.namespace}}`"
-            summary: "Helsesjekk for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
+            action: "`kubectl logs \{{ $labels.pod }} -c \{{ $labels.container }} -n \{{ $labels.namespace }}`"
+            summary: "Høy andel error i logger for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
           labels:
             namespace: {{namespace}}
             severity: danger
@@ -56,7 +56,7 @@ spec:
           expr: sum by (app, container, pod, namespace) (floor(increase(logback_events_total{app="{{app}}", level="warning"} [3m]))) > 0
           for: 5m
           annotations:
-            action: "`kubectl logs {{$labels.pod}} -c {{$labels.container}} -n {{$labels.namespace}}`"
+            action: "`kubectl logs \{{ $labels.pod }} -c \{{ $labels.container }} -n \{{ $labels.namespace }}`"
             summary: "Helsesjekk for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
           labels:
             namespace: {{namespace}}
