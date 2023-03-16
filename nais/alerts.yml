@@ -57,7 +57,7 @@ spec:
           for: 5m
           annotations:
             action: "`kubectl logs \{{ $labels.pod }} -c \{{ $labels.container }} -n \{{ $labels.namespace }}`"
-            summary: "Helsesjekk for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
+            summary: "Høy andel error i logger for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
           labels:
             namespace: {{namespace}}
             severity: warning
