@@ -40,7 +40,7 @@ val k9FormatVersion = "8.0.7"
 val springMockkVersion by extra("4.0.2")
 val confluentVersion by extra("7.3.0")
 val logstashLogbackEncoderVersion by extra("7.2")
-val slf4jVersion = "2.0.6"
+val slf4jVersion = "2.0.7"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
