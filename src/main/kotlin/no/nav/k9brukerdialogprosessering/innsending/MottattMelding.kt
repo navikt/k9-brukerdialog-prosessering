@@ -4,7 +4,7 @@ import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Navn
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Navn
 import java.time.ZonedDateTime
 
 interface MottattMelding {

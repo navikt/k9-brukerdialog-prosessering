@@ -3,7 +3,7 @@ package no.nav.k9brukerdialogprosessering.journalforing
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import no.nav.k9brukerdialogprosessering.common.Ytelse
-import no.nav.k9brukerdialogprosessering.pleiepengersyktbarn.domene.felles.Navn
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Navn
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
