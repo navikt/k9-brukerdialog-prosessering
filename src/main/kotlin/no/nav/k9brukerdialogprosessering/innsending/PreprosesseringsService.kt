@@ -1,7 +1,7 @@
 package no.nav.k9brukerdialogprosessering.innsending
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.nav.k9.søknad.Søknad
+import no.nav.k9.søknad.Innsending
 import no.nav.k9brukerdialogprosessering.mellomlagring.Dokument
 import no.nav.k9brukerdialogprosessering.mellomlagring.DokumentEier
 import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
@@ -78,7 +78,7 @@ class PreprosesseringsService(
 
 data class PreprosesseringsData(
     val søkerFødselsnummer: String,
-    val k9FormatSøknad: Søknad,
+    val k9FormatSøknad: Innsending,
     val vedleggId: List<String>,
     val fødselsattestVedleggId: List<String>?,
     val pdfData: PdfData,

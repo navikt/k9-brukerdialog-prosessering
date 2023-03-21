@@ -57,4 +57,9 @@ enum class KafkaStreamName(val value: String) {
     PSB_ENDRINGSMELDING_PREPROSESSERING("psb-endringsmelding-preprosessering"),
     PSB_ENDRINGSMELDING_JOURNALFØRING("psb-endringsmelding-journalforing"),
     PSB_ENDRINGSMELDING_CLEANUP("psb-endringsmelding-cleanup"),
+
+    // Ettersendelse
+    ETTERSENDELSE_PREPROSESSERING("ettersendelse-preprosessering"),
+    ETTERSENDELSE_JOURNALFØRING("ettersendelse-journalforing"),
+    ETTERSENDELSE_CLEANUP("ettersendelse-cleanup"),
 }

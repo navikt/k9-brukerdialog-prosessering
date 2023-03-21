@@ -49,6 +49,16 @@ no.nav:
       psb-endringsmelding-cleanup:
         application-id-suffix: psb-endringsmelding-cleanup
         auto-offset-reset: latest
+
+      ettersendelse-preprosessering:
+        application-id-suffix: ettersendelse-preprosessering
+        auto-offset-reset: latest
+      ettersendelse-journalforing:
+        application-id-suffix: ettersendelse-journalforing
+        auto-offset-reset: latest
+      ettersendelse-cleanup:
+        application-id-suffix: ettersendelse-cleanup
+        auto-offset-reset: latest
     schema-registry:
       url: ${KAFKA_SCHEMA_REGISTRY_URL}
       user: ${KAFKA_SCHEMA_REGISTRY_USER}
