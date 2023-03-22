@@ -27,7 +27,7 @@ internal object EttersendingUtils {
             mellomnavn = "Øverbø",
             etternavn = "Ånsnes",
             fødselsnummer = "29099012345",
-            fødselsdato = LocalDate.now().minusYears(20)
+            fødselsdato = LocalDate.parse("2003-03-21")
         ),
         beskrivelse = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
                 "Sed accumsan erat cursus enim aliquet, ac auctor orci consequat. " +
