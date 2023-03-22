@@ -1,0 +1,19 @@
+name: Deploy pleiepenger sykt barn topics
+
+env:
+  TOPICS_PATH: 'nais/topics/ettersendelse-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-ettersendelse-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/ettersendelse-topics.yml'
+
+jobs:
+  deploy-ettersendelse-topics:
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: ettersendelse-topics
+      topics-path: 'nais/topics/ettersendelse-topics.yml'
+    secrets: inherit
