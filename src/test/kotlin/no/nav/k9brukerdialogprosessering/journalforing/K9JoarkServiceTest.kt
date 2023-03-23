@@ -79,8 +79,11 @@ class K9JoarkServiceTest {
         assertThat(response).isEqualTo(journalføringsResponse)
     }
 
+    /**
+     * Test for å sjekke at alle søknadstyper blir journalført på riktig url.
+     */
     @ParameterizedTest
-    @EnumSource(Søknadstype::class)
+    @EnumSource(Søknadstype::class) // Alle søknadstyper
     fun `Gitt Journalføring av ettersendelse, forvent riktig response`(søknadstype: Søknadstype): Unit = runBlocking {
         val journalføringsRequest = JournalføringsRequest(
             ytelse = Ytelse.ETTERSENDELSE,
