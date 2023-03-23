@@ -32,12 +32,12 @@ spec:
             severity: danger
 
         - alert: Kafka stream nede
-          expr: kafka_stream_alive_stream_threads{app="{{app}}"} == 0
+          expr: sum by (app, pod, container, namespace, client_id) (increase(kafka_stream_failed_stream_threads_total{app="{{app}}"} [3m])) > 10
           for: 5m
           annotations:
             consequence: Prosessering av stream feiler.
             action: "`kubectl logs \{{ $labels.pod}} -c \{{ $labels.container }} -n \{{ $labels.namespace }}`"
-            summary: "Stream \{{ $labels.client_id }} feiler i namespace \{{ $labels.namespace }}"
+            summary: "Stream \{{ $labels.client_id }} feiler."
           labels:
             namespace: {{namespace}}
             severity: danger
