@@ -29,6 +29,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.NormalArbeidstid
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.k9brukerdialogprosessering.utils.DateUtils
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.tilString
@@ -89,6 +90,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
         "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
         "frilans" to søknad.frilans.somMap(),
+        "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
         "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
         "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
         "hjelper" to mapOf(
@@ -374,4 +376,11 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     }
 
     private fun PSBMottattSøknad.sjekkOmHarIkkeVedlegg(): Boolean = vedleggId.isEmpty()
+    private fun StønadGodtgjørelse.somMap() = mapOf(
+        "mottarStønadGodtgjørelse" to mottarStønadGodtgjørelse,
+        "startdato" to Constants.DATE_FORMATTER.format(startdato),
+        "startetIPerioden" to (startdato != null),
+        "sluttdato" to Constants.DATE_FORMATTER.format(sluttdato),
+        "sluttetIPerioden" to (sluttdato != null),
+    )
 }

@@ -21,6 +21,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningType
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Periode
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Utenlandsopphold
@@ -143,6 +144,11 @@ internal object PSBSøknadUtils {
                     arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
                 )
             )
+        ),
+        stønadGodtgjørelse = StønadGodtgjørelse(
+            mottarStønadGodtgjørelse = true,
+            startdato = LocalDate.parse("2023-03-13"),
+            sluttdato = LocalDate.parse("2023-03-29")
         ),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
             harInntektSomSelvstendig = true,

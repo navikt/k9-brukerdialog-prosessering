@@ -39,6 +39,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.NormalArbeidstid
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.k9brukerdialogprosessering.utils.K9FormatUtils
 import no.nav.k9brukerdialogprosessering.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Test
@@ -182,6 +183,11 @@ class PSBSøknadPdfGeneratorTest {
                             arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
                         )
                     )
+                ),
+                stønadGodtgjørelse = StønadGodtgjørelse(
+                    mottarStønadGodtgjørelse = true,
+                    startdato = LocalDate.now().minusDays(10),
+                    sluttdato = LocalDate.now().plusDays(10)
                 ),
                 selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
                     harInntektSomSelvstendig = true,

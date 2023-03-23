@@ -215,6 +215,11 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               "sluttdato": null,
               "startdato": "2019-01-01"
             },
+          "stønadGodtgjørelse": {
+           "mottarStønadGodtgjørelse": true,
+           "startdato": "2023-03-13",
+           "sluttdato": "2023-03-29"
+          },
             "harBekreftetOpplysninger": true,
             "harForstattRettigheterOgPlikter": true,
             "harVærtEllerErVernepliktig": true,

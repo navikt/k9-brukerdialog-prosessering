@@ -21,6 +21,7 @@
         <bookmark name="Verneplikt" href="#verneplikt"/>
         <bookmark name="Nattevåk" href="#nattevaak"/>
         <bookmark name="Beredskap" href="#beredskap"/>
+        <bookmark name="Omsorgsstønad" href="#omsorgsstønad"/>
         <bookmark name="Frilans" href="#frilans"/>
         <bookmark name="Selvstendig" href="#selvstendig"/>
         <bookmark name="Medlemskap" href="#medlemskap"/>
@@ -123,6 +124,28 @@
 
         {{/if}}
     </section>
+
+    {{#if stønadGodtgjørelse }}
+        <section id="omsorgsstønad">
+            <h2>Omsorgsstønad eller fosterhjemsgodtgjørelse</h2>
+
+            <p class="sporsmalstekst">Mottar du omsorgsstønad eller fosterhjemsgodtgjørelse?</p>
+            <p>{{ jaNeiSvar stønadGodtgjørelse.mottarStønadGodtgjørelse}}</p>
+
+            <p class="sporsmalstekst">Startet du å motta dette underveis i perioden du søker for?</p>
+            <p>
+                {{ jaNeiSvar stønadGodtgjørelse.startetIPerioden}}.
+                {{#if stønadGodtgjørelse.startdato}} Startet {{stønadGodtgjørelse.startdato}}{{/if}}
+            </p>
+
+            <p class="sporsmalstekst">Slutter du å motta dette underveis i perioden du søker for?</p>
+            <p>
+                {{ jaNeiSvar stønadGodtgjørelse.sluttetIPerioden}}.
+                {{#if stønadGodtgjørelse.sluttdato}} Sluttet {{stønadGodtgjørelse.sluttdato}}{{/if}}
+            </p>
+
+        </section>
+    {{/if}}
 
     <section id="frilans">
         {{# if frilans.harInntektSomFrilanser }}
