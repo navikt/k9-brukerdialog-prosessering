@@ -5,24 +5,20 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
-import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
-import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.utils.EndringsmeldingUtils
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
+import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.utils.EndringsmeldingUtils
 import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
+import no.nav.k9brukerdialogprosessering.utils.KafkaIntegrationTest
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaProducer
-import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
@@ -31,38 +27,15 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.extension.ExtendWith
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.kafka.test.EmbeddedKafkaBroker
-import org.springframework.kafka.test.context.EmbeddedKafka
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
 
-@EmbeddedKafka( // Setter opp og tilgjengligjør embeded kafka broker
-    partitions = 1,
-    count = 3,
-    bootstrapServersProperty = "KAFKA_BROKERS", // Setter bootstrap-servers for consumer og producer.
-    topics = [
-        PSB_ENDRINGSMELDING_MOTTATT_TOPIC, PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, PSB_ENDRINGSMELDING_CLEANUP_TOPIC,
-        PSB_MOTTATT_TOPIC, PSB_PREPROSESSERT_TOPIC, PSB_CLEANUP_TOPIC
-    ]
-)
-@DirtiesContext // Sørger for at context blir re-instantiert mellom hver test.
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith(SpringExtension::class)
-@EnableMockOAuth2Server // Tilgjengliggjør en oicd-provider for test. Se application-test.yml -> no.nav.security.jwt.issuer.selvbetjening for konfigurasjon
-@ActiveProfiles("test")
-@SpringBootTest(
-    classes = [K9brukerdialogprosesseringApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-) // Integrasjonstest - Kjører opp hele Spring Context med alle konfigurerte beans.
+@KafkaIntegrationTest
 class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
 
     @Autowired
