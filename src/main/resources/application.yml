@@ -52,13 +52,13 @@ no.nav:
 
       ettersendelse-preprosessering:
         application-id-suffix: ettersendelse-preprosessering
-        auto-offset-reset: latest
+        auto-offset-reset: none
       ettersendelse-journalforing:
         application-id-suffix: ettersendelse-journalforing
-        auto-offset-reset: latest
+        auto-offset-reset: none
       ettersendelse-cleanup:
         application-id-suffix: ettersendelse-cleanup
-        auto-offset-reset: latest
+        auto-offset-reset: none
     schema-registry:
       url: ${KAFKA_SCHEMA_REGISTRY_URL}
       user: ${KAFKA_SCHEMA_REGISTRY_USER}
