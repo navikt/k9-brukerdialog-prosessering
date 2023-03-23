@@ -89,7 +89,7 @@ fun Søknadstype.toUri(): URI {
             .toUri()
 
         Søknadstype.OMP_UTV_KS -> UriComponentsBuilder
-            .fromPath("/v1/omsorgspenger/ettersending/journalforing")
+            .fromPath("/v1/omsorgspenge/ettersending/journalforing")
             .build()
             .toUri()
 
