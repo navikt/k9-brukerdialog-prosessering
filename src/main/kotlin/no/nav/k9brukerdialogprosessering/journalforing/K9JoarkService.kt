@@ -32,7 +32,7 @@ class K9JoarkService(
             resolveJournalføringsUrl(journalføringsRequest.ytelse, journalføringsRequest.søknadstype)
 
         k9JoarkRestTemplate.exchange(
-            resolveJournalføringsUrl.path,
+            resolveJournalføringsUrl.toString(),
             HttpMethod.POST,
             HttpEntity(journalføringsRequest),
             JournalføringsResponse::class.java
