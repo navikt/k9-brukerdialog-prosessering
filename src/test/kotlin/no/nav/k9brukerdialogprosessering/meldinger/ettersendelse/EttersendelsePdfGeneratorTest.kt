@@ -4,21 +4,24 @@ import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søknads
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.utils.EttersendingUtils
 import no.nav.k9brukerdialogprosessering.pdf.PDFGenerator
 import no.nav.k9brukerdialogprosessering.utils.PathUtils.pdfPath
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import java.io.File
 import java.time.ZonedDateTime
+import java.util.*
 
 class EttersendelsePdfGeneratorTest {
 
-    @Test
-    fun `generering av oppsummerings-PDF fungerer`() {
-        genererOppsummeringsPdfer(false)
+    @ParameterizedTest
+    @EnumSource(Søknadstype::class)
+    fun `generering av oppsummerings-PDF fungerer`(søknadstype: Søknadstype) {
+        genererOppsummeringsPdfer(søknadstype, false)
     }
 
-    @Test
-    //@Ignore
-    fun `opprett lesbar oppsummerings-PDF`() {
-        genererOppsummeringsPdfer(true)
+    @ParameterizedTest
+    @EnumSource(Søknadstype::class)
+    fun `opprett lesbar oppsummerings-PDF`(søknadstype: Søknadstype) {
+        genererOppsummeringsPdfer(søknadstype, true)
     }
 
     private companion object {
@@ -26,69 +29,15 @@ class EttersendelsePdfGeneratorTest {
         private val generator = PDFGenerator()
     }
 
-    private fun genererOppsummeringsPdfer(writeBytes: Boolean) {
-        var id = "omsorgspenger"
-        var pdf = generator.genererPDF(
+    private fun genererOppsummeringsPdfer(søknadstype: Søknadstype, writeBytes: Boolean) {
+        val id = søknadstype.name.lowercase()
+        val pdf = generator.genererPDF(
             EttersendingUtils.defaultEttersendelse(id, ZonedDateTime.now()).copy(
-                søknadstype = Søknadstype.OMP_UTV_KS,
+                søknadstype = søknadstype,
                 beskrivelse = null
             ).pdfData()
         )
 
-        if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-        id = "pleiepenger"
-        pdf = generator.genererPDF(
-            EttersendingUtils.defaultEttersendelse(id, ZonedDateTime.now()).copy(
-                søknadstype = Søknadstype.PLEIEPENGER_SYKT_BARN,
-                beskrivelse = null
-            ).pdfData()
-        )
-        if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-        id = "omsorgspenger-utbetaling-snf"
-        pdf = generator.genererPDF(
-            EttersendingUtils.defaultEttersendelse(id, ZonedDateTime.now()).copy(
-                søknadstype = Søknadstype.OMP_UT_SNF,
-                beskrivelse = null
-            ).pdfData()
-        )
-        if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-        id = "omsorgspenger-utbetaling-arbeidstaker"
-        pdf = generator.genererPDF(
-            EttersendingUtils.defaultEttersendelse(id, ZonedDateTime.now()).copy(
-                søknadstype = Søknadstype.OMP_UT_ARBEIDSTAKER,
-                beskrivelse = null
-            ).pdfData()
-        )
-        if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-        id = "omsorgspenger-midlertidig-alene"
-        pdf = generator.genererPDF(
-            EttersendingUtils.defaultEttersendelse(id, ZonedDateTime.now()).copy(
-                søknadstype = Søknadstype.OMP_UTV_MA,
-                beskrivelse = null
-            ).pdfData()
-        )
-        if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-        id = "melding-dele-dager"
-        pdf = generator.genererPDF(
-            EttersendingUtils.defaultEttersendelse(id, ZonedDateTime.now()).copy(
-                søknadstype = Søknadstype.OMP_DELE_DAGER,
-                beskrivelse = null
-            ).pdfData()
-        )
-        if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-        id = "pp-livets-sluttfase"
-        pdf = generator.genererPDF(
-            EttersendingUtils.defaultEttersendelse(id, ZonedDateTime.now()).copy(
-                søknadstype = Søknadstype.PLEIEPENGER_LIVETS_SLUTTFASE,
-                beskrivelse = null
-            ).pdfData()
-        )
         if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
     }
 }
