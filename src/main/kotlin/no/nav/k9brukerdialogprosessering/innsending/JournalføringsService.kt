@@ -18,7 +18,7 @@ class JournalføringsService(
     }
 
     suspend fun journalfør(preprosessertSøknad: Preprosessert): Journalfort {
-        logger.info("Journalfører dokumenter: $preprosessertSøknad")
+        logger.info("Journalfører dokumenter: ${preprosessertSøknad.dokumenter().size}")
         val journalføringsResponse = k9JoarkService.journalfør(preprosessertSøknad.tilJournaførigsRequest())
         return resolve(preprosessertSøknad, journalføringsResponse)
     }
