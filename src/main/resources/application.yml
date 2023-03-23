@@ -32,23 +32,23 @@ no.nav:
     streams:
       psb-soknad-preprosessering:
         application-id-suffix: psb-soknad-preprosessering
-        auto-offset-reset: latest
+        auto-offset-reset: none
       psb-soknad-journalforing:
         application-id-suffix: psb-soknad-journalforing
-        auto-offset-reset: latest
+        auto-offset-reset: none
       psb-soknad-cleanup:
         application-id-suffix: psb-soknad-cleanup-stream
-        auto-offset-reset: latest
+        auto-offset-reset: none
 
       psb-endringsmelding-preprosessering:
         application-id-suffix: psb-endringsmelding-preprosessering
-        auto-offset-reset: latest
+        auto-offset-reset: none
       psb-endringsmelding-journalforing:
         application-id-suffix: psb-endringsmelding-journalforing
-        auto-offset-reset: latest
+        auto-offset-reset: none
       psb-endringsmelding-cleanup:
         application-id-suffix: psb-endringsmelding-cleanup
-        auto-offset-reset: latest
+        auto-offset-reset: none
 
       ettersendelse-preprosessering:
         application-id-suffix: ettersendelse-preprosessering

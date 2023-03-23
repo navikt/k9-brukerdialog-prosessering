@@ -14,17 +14,3 @@ no.nav:
       url: ${KAFKA_SCHEMA_REGISTRY_URL}
       username: ${KAFKA_SCHEMA_REGISTRY_USER}
       password: ${KAFKA_SCHEMA_REGISTRY_PASSWORD}
-    streams:
-      psb-soknad-preprosessering:
-        auto-offset-reset: none
-      psb-soknad-journalforing:
-        auto-offset-reset: none
-      psb-soknad-cleanup:
-        auto-offset-reset: none
-
-      psb-endringsmelding-preprosessering:
-        auto-offset-reset: none
-      psb-endringsmelding-journalforing:
-        auto-offset-reset: none
-      psb-endringsmelding-cleanup:
-        auto-offset-reset: none
