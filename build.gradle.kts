@@ -54,7 +54,9 @@ dependencies {
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
 	testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
 
+	// K9-format
 	implementation("no.nav.k9:soknad:$k9FormatVersion")
+	implementation("no.nav.k9:ettersendelse:$k9FormatVersion")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")

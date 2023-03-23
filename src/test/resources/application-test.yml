@@ -41,6 +41,13 @@ no.nav:
         auto-offset-reset: earliest
       psb-endringsmelding-cleanup:
         auto-offset-reset: earliest
+
+      ettersendelse-preprosessering:
+        auto-offset-reset: earliest
+      ettersendelse-journalforing:
+        auto-offset-reset: earliest
+      ettersendelse-cleanup:
+        auto-offset-reset: earliest
     schema-registry:
       url: mock://localhost
       user: username

@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.WireMockServer
 import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.common.Ytelse
+import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søknadstype
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Navn
 import no.nav.k9brukerdialogprosessering.utils.WireMockServerUtils.stubJournalføring
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
@@ -67,6 +70,33 @@ class K9JoarkServiceTest {
 
         wireMockServer.stubJournalføring(
             urlPathMatching = "/v1/pleiepenge/endringsmelding/journalforing",
+            requestBodyJson = objectMapper.writeValueAsString(journalføringsRequest),
+            responseStatus = HttpStatus.OK,
+            responseBodyJson = objectMapper.writeValueAsString(journalføringsResponse)
+        )
+
+        val response = k9JoarkService.journalfør(journalføringsRequest)
+        assertThat(response).isEqualTo(journalføringsResponse)
+    }
+
+    /**
+     * Test for å sjekke at alle søknadstyper blir journalført på riktig url.
+     */
+    @ParameterizedTest
+    @EnumSource(Søknadstype::class) // Alle søknadstyper
+    fun `Gitt Journalføring av ettersendelse, forvent riktig response`(søknadstype: Søknadstype): Unit = runBlocking {
+        val journalføringsRequest = JournalføringsRequest(
+            ytelse = Ytelse.ETTERSENDELSE,
+            søknadstype = søknadstype,
+            norskIdent = "12345678910",
+            sokerNavn = Navn("John", "Doe", "Hansen"),
+            mottatt = ZonedDateTime.now(),
+            dokumentId = listOf(listOf("123", "456"))
+        )
+        val journalføringsResponse = JournalføringsResponse("9876543210")
+
+        wireMockServer.stubJournalføring(
+            urlPathMatching = søknadstype.toUri().path,
             requestBodyJson = objectMapper.writeValueAsString(journalføringsRequest),
             responseStatus = HttpStatus.OK,
             responseBodyJson = objectMapper.writeValueAsString(journalføringsResponse)

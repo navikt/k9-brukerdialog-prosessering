@@ -26,7 +26,8 @@ class PDFGenerator {
 
     private companion object {
         private val ROOT = "handlebars"
-        private val REGULAR_FONT = ClassPathResource("${ROOT}/fonts/SourceSansPro-Regular.ttf").inputStream.readAllBytes()
+        private val REGULAR_FONT =
+            ClassPathResource("${ROOT}/fonts/SourceSansPro-Regular.ttf").inputStream.readAllBytes()
         private val BOLD_FONT = ClassPathResource("${ROOT}/fonts/SourceSansPro-Bold.ttf").inputStream.readAllBytes()
         private val ITALIC_FONT = ClassPathResource("${ROOT}/fonts/SourceSansPro-Italic.ttf").inputStream.readAllBytes()
         private val bilder: Map<String, String> = emptyMap()
@@ -38,6 +39,7 @@ class PDFGenerator {
             equalsNumberHelper()
             fritekstHelper()
             jaNeiSvarHelper()
+            capitalizeHelper()
             infiniteLoops(true)
         }
 
@@ -68,6 +70,12 @@ class PDFGenerator {
         private fun Handlebars.equalsNumberHelper() {
             registerHelper("eqTall", Helper<Int> { context, options ->
                 if (context == options.param(0)) options.fn() else options.inverse()
+            })
+        }
+
+        private fun Handlebars.capitalizeHelper() {
+            registerHelper("capitalize", Helper<String> { context, _ ->
+                context.capitalize()
             })
         }
 
@@ -147,6 +155,6 @@ abstract class PdfData {
         Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspengerutbetaling-arbeidstaker-soknad"
         Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspengerutbetaling-snf-soknad"
         Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> "pleiepenger-livets-sluttfase-soknad"
-        Ytelse.ETTERSENDING, Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN, Ytelse.ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE, Ytelse.ETTERSENDING_OMP -> "/ettersending-soknad"
+        Ytelse.ETTERSENDELSE -> "ettersendelse"
     }
 }
