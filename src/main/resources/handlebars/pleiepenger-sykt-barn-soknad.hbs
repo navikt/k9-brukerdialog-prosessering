@@ -150,8 +150,19 @@
     <section id="frilans">
         {{# if frilans.harInntektSomFrilanser }}
             <h2>Frilans</h2>
-            <p class="sporsmalstekst">Er du frilanser i perioden du søker for?</p>
+            <p class="sporsmalstekst">Jobber du som som frilanser eller får du honorarer for verv?</p>
             <p>{{ jaNeiSvar true }}</p>
+            <ul class="ul-no-indent">
+                {{#each frilans.frilansTyper as |frilansType|}}
+                    {{#eq frilansType "FRILANS" }}
+                        <li>Jeg jobber som frilanser</li>
+                    {{/eq}}
+                    {{#eq frilansType "STYREVERV" }}
+                        <li>Jeg mottar honorar for styreverv eller andre verv</li>
+                    {{/eq}}
+                {{/each}}
+            </ul>
+
             <p class="sporsmalstekst">Når startet du som frilanser?</p>
             <p>{{frilans.startdato}}</p>
             {{#if frilans.arbeidsforhold}}
