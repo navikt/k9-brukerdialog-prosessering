@@ -32,7 +32,7 @@ class K9JoarkService(
             resolveJournalføringsUrl(journalføringsRequest.ytelse, journalføringsRequest.søknadstype)
 
         k9JoarkRestTemplate.exchange(
-            resolveJournalføringsUrl.path,
+            resolveJournalføringsUrl.toString(),
             HttpMethod.POST,
             HttpEntity(journalføringsRequest),
             JournalføringsResponse::class.java
@@ -51,7 +51,7 @@ class K9JoarkService(
         }
     )
 
-    private fun resolveJournalføringsUrl(ytelse: Ytelse, søknadstype: Søknadstype?) = when (ytelse) {
+    private fun resolveJournalføringsUrl(ytelse: Ytelse, søknadstype: Søknadstype?): URI = when (ytelse) {
         Ytelse.PLEIEPENGER_SYKT_BARN -> UriComponentsBuilder
             .fromPath("/v1/pleiepenge/journalforing")
             .build()
@@ -89,13 +89,13 @@ fun Søknadstype.toUri(): URI {
             .toUri()
 
         Søknadstype.OMP_UTV_KS -> UriComponentsBuilder
-            .fromPath("/v1/omsorgspenger/ettersending/journalforing")
+            .fromPath("/v1/omsorgspenge/ettersending/journalforing")
             .build()
             .toUri()
 
         Søknadstype.OMP_UT_SNF -> UriComponentsBuilder
             .fromPath("/v1/omsorgspengeutbetaling/ettersending/journalforing")
-            .queryParam("arbeidstype", listOf("frilanser", "selvstendig næringsdrivende"))
+            .queryParam("arbeidstype", listOf("frilanser", "selvstendig-naeringsdrivende"))
             .build()
             .toUri()
 
