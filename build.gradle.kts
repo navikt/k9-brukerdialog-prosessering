@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.0.3"
+	id("org.springframework.boot") version "3.0.5"
 	id("io.spring.dependency-management") version "1.1.0"
 	kotlin("jvm") version "1.8.10"
 	kotlin("plugin.spring") version "1.8.10"
@@ -34,7 +34,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion by extra("3.0.0")
+val tokenSupportVersion by extra("3.0.8")
 val jsonassertVersion = "1.5.1"
 val k9FormatVersion = "8.0.7"
 val springMockkVersion by extra("4.0.2")
