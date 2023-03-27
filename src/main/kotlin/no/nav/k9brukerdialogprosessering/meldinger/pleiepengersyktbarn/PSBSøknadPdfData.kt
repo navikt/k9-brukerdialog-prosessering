@@ -379,9 +379,9 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     private fun PSBMottattSøknad.sjekkOmHarIkkeVedlegg(): Boolean = vedleggId.isEmpty()
     private fun StønadGodtgjørelse.somMap() = mapOf(
         "mottarStønadGodtgjørelse" to mottarStønadGodtgjørelse,
-        "startdato" to Constants.DATE_FORMATTER.format(startdato),
+        "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
         "startetIPerioden" to (startdato != null),
-        "sluttdato" to Constants.DATE_FORMATTER.format(sluttdato),
+        "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
         "sluttetIPerioden" to (sluttdato != null),
     )
 }
