@@ -97,12 +97,14 @@ fun Søknadstype.toUri(): URI {
             .fromPath("/v1/omsorgspengeutbetaling/ettersending/journalforing")
             .queryParam("arbeidstype", listOf("frilanser", "selvstendig næringsdrivende"))
             .build()
+            .encode()
             .toUri()
 
         Søknadstype.OMP_UT_ARBEIDSTAKER -> UriComponentsBuilder
             .fromPath("/v1/omsorgspengeutbetaling/ettersending/journalforing")
             .queryParam("arbeidstype", listOf("arbeidstaker"))
             .build()
+            .encode()
             .toUri()
 
 
