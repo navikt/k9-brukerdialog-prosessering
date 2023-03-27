@@ -15,6 +15,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Bosted
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Ferieuttak
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Frilans
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FrilansType
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Land
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.NormalArbeidstid
@@ -258,7 +259,10 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "sluttdato" to if (sluttdato != null) Constants.DATE_FORMATTER.format(sluttdato) else null,
         "jobberFortsattSomFrilans" to jobberFortsattSomFrilans,
         "frilansTyper" to frilansTyper?.map { it.name },
-        "arbeidsforhold" to arbeidsforhold?.somMap()
+        "arbeidsforhold" to arbeidsforhold?.somMap(),
+        "erKunFrilanser" to (frilansTyper?.all { it == FrilansType.FRILANS } ?: false),
+        "harKunStyreverv" to (frilansTyper?.all { it == FrilansType.STYREVERV } ?: false),
+        "harFrilansOgStyreverv" to (frilansTyper?.containsAll(listOf(FrilansType.FRILANS, FrilansType.STYREVERV)) ?: false)
     )
 
     private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(

@@ -163,20 +163,58 @@
                 {{/each}}
             </ul>
 
-            <p class="sporsmalstekst">Når startet du som frilanser?</p>
-            <p>{{frilans.startdato}}</p>
-            {{#if frilans.arbeidsforhold}}
-                {{> partial/arbeid/normalArbeidstidPartial normalarbeidstid=frilans.arbeidsforhold.normalarbeidstid}}
+            {{#if frilans.erKunFrilanser}}
+                <p class="sporsmalstekst">Når startet du som frilanser?</p>
+                <p>{{frilans.startdato}}</p>
+
+                {{#if frilans.arbeidsforhold}}
+                    {{> partial/arbeid/normalArbeidstidPartial normalarbeidstid=frilans.arbeidsforhold.normalarbeidstid}}
+                {{/if}}
+
+                <p class="sporsmalstekst">Jobber du fremdeles som frilanser?</p>
+                <p>{{ jaNeiSvar frilans.jobberFortsattSomFrilans }}</p>
+                {{#unless frilans.jobberFortsattSomFrilans}}
+                    <p class="sporsmalstekst">Når sluttet du som frilanser?</p>
+                    <p>{{frilans.sluttdato}}</p>
+                {{/unless}}
             {{/if}}
-            <p class="sporsmalstekst">Jobber du fremdeles som frilanser?</p>
-            <p>{{ jaNeiSvar frilans.jobberFortsattSomFrilans }}</p>
-            {{#unless frilans.jobberFortsattSomFrilans}}
-                <p class="sporsmalstekst">Når sluttet du som frilanser?</p>
-                <p>{{frilans.sluttdato}}</p>
-            {{/unless}}
+
+            {{#if frilans.harKunStyreverv}}
+                {{#if frilans.startdato}}
+                    <p class="sporsmalstekst">Når startet du å motta honorar?</p>
+                    <p>{{frilans.startdato}}</p>
+                {{/if}}
+                <p class="sporsmalstekst">Når startet du å motta honorar?</p>
+                <p>{{frilans.startdato}}</p>
+
+                {{#if frilans.arbeidsforhold}}
+                    {{> partial/arbeid/normalArbeidstidPartial normalarbeidstid=frilans.arbeidsforhold.normalarbeidstid}}
+                {{/if}}
+
+                {{#if frilans.sluttdato}}
+                    <p class="sporsmalstekst">Når sluttet du å motta honorar?</p>
+                    <p>{{frilans.sluttdato}}</p>
+                {{/if}}
+            {{/if}}
+
+            {{#if frilans.harFrilansOgStyreverv}}
+                {{#if frilans.startdato}}
+                    <p class="sporsmalstekst">Når begynte du å jobbe som frilanser/startet å motta honorar?</p>
+                    <p>{{frilans.startdato}}</p>
+                {{/if}}
+
+                {{#if frilans.arbeidsforhold}}
+                    {{> partial/arbeid/normalArbeidstidPartial normalarbeidstid=frilans.arbeidsforhold.normalarbeidstid}}
+                {{/if}}
+
+                {{#if frilans.sluttdato}}
+                    <p class="sporsmalstekst">Når sluttet du å jobbe som frilanser/sluttet å motta honorar?</p>
+                    <p>{{frilans.sluttdato}}</p>
+                {{/if}}
+            {{/if}}
         {{else}}
             <h2>Frilans</h2>
-            <p>Har ikke vært frilanser i perioden det søkes om.</p>
+            <p>Har ikke vært frilanser eller mottatt honorar for verv i perioden det søkes om.</p>
         {{/if}}
     </section>
 
