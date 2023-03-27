@@ -27,7 +27,7 @@ jobs:
 
   deploy-prod-gcp:
     name: Deploy to prod-gcp
-    if: startsWith(github.ref, 'refs/heads/master')  # If the branch is main
+    if: startsWith(github.ref, 'refs/heads/main')  # If the branch is main
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
