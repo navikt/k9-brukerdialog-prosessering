@@ -95,13 +95,14 @@ fun Søknadstype.toUri(): URI {
 
         Søknadstype.OMP_UT_SNF -> UriComponentsBuilder
             .fromPath("/v1/omsorgspengeutbetaling/ettersending/journalforing")
-            .queryParam("arbeidstype", listOf("frilanser", "selvstendig næringsdrivende"))
+            .queryParam("arbeidstype", "frilanser")
+            .queryParam("arbeidstype", "selvstendig-naeringsdrivende")
             .build()
             .toUri()
 
         Søknadstype.OMP_UT_ARBEIDSTAKER -> UriComponentsBuilder
             .fromPath("/v1/omsorgspengeutbetaling/ettersending/journalforing")
-            .queryParam("arbeidstype", listOf("arbeidstaker"))
+            .queryParam("arbeidstype", "arbeidstaker")
             .build()
             .toUri()
 
