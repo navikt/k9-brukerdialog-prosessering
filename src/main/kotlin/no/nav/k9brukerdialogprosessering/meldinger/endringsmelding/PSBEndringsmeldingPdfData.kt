@@ -127,10 +127,16 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         "faktiskArbeidTimerPerUke" to faktiskArbeidTimerPerDag.tilTimerPerUke().formaterString()
     )
 
-    private fun LovbestemtFerie.somMap() = mapOf(
-        "perioderLagtTil" to perioder.toSortedMap { p1, p2 -> p1.compareTo(p2) }.filter { it.value.isSkalHaFerie }.somMap(),
-        "perioderFjernet" to perioder.toSortedMap { p1, p2 -> p1.compareTo(p2) }.filter { !it.value.isSkalHaFerie }.somMap()
-    )
+    private fun LovbestemtFerie.somMap(): Map<String, Any> {
+        val perioderLagtTil = perioder.toSortedMap { p1, p2 -> p1.compareTo(p2) }.filter { it.value.isSkalHaFerie }
+        val perioderFjernet = perioder.toSortedMap { p1, p2 -> p1.compareTo(p2) }.filter { !it.value.isSkalHaFerie }
+        return mapOf(
+            "harPerioderLagtTil" to perioderLagtTil.isNotEmpty(),
+            "perioderLagtTil" to perioderLagtTil.somMap(),
+            "harPerioderFjernet" to perioderFjernet.isNotEmpty(),
+            "perioderFjernet" to perioderFjernet.somMap()
+        )
+    }
 
     @JvmName("somMapPeriodeLovbestemtFeriePeriodeInfo")
     private fun Map<Periode, LovbestemtFerie.LovbestemtFeriePeriodeInfo>.somMap() = map {
