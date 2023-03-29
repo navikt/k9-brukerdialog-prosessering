@@ -9,6 +9,8 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie.LovbestemtFeriePeriodeInfo
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
@@ -134,6 +136,20 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                         )
                                     )
                             )
+                    )
+                    .medLovbestemtFerie(
+                        LovbestemtFerie().medPerioder(
+                            mapOf(
+                                Periode(
+                                    LocalDate.parse("2022-12-26"),
+                                    LocalDate.parse("2022-12-30")
+                                ) to LovbestemtFeriePeriodeInfo().medSkalHaFerie(true),
+                                Periode(
+                                    LocalDate.parse("2023-01-02"),
+                                    LocalDate.parse("2023-01-06")
+                                ) to LovbestemtFeriePeriodeInfo().medSkalHaFerie(false)
+                            )
+                        )
                     )
             )
             return PSBEndringsmeldingMottatt(

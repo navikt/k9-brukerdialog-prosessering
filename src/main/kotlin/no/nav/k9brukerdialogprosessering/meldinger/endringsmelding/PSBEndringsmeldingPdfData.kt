@@ -1,5 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding
 
+import no.nav.k9.søknad.felles.type.Periode
+import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
@@ -18,6 +20,7 @@ import no.nav.k9brukerdialogprosessering.utils.DurationUtils.timer
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.time.DayOfWeek
 import java.time.Duration
+import java.time.ZoneOffset.UTC
 import java.time.temporal.WeekFields
 
 class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingMottatt) : PdfData() {
@@ -40,6 +43,10 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
                 ytelse.arbeidstid != null -> ytelse.arbeidstid.somMap()
                 else -> null
             },
+            "lovbestemtFerie" to when {
+                ytelse.lovbestemtFerie != null && ytelse.lovbestemtFerie.perioder.isNotEmpty() -> ytelse.lovbestemtFerie.somMap()
+                else -> null
+            },
             "samtykke" to mapOf(
                 "har_forstatt_rettigheter_og_plikter" to endringsmelding.harForståttRettigheterOgPlikter,
                 "har_bekreftet_opplysninger" to endringsmelding.harBekreftetOpplysninger
@@ -53,7 +60,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
     }
 
     @JvmName("somMapPeriodeTilsynPeriodeInfo")
-    private fun MutableMap<no.nav.k9.søknad.felles.type.Periode, TilsynPeriodeInfo>.somMap(): List<Map<String, Any?>> = map { entry ->
+    private fun MutableMap<Periode, TilsynPeriodeInfo>.somMap(): List<Map<String, Any?>> = map { entry ->
         mapOf(
             "periode" to entry.key.somMap(),
             "tilsynPeriodeInfo" to entry.value.somMap()
@@ -64,10 +71,11 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         "etablertTilsynTimerPerDag" to etablertTilsynTimerPerDag.somTekst()
     )
 
-    private fun no.nav.k9.søknad.felles.personopplysninger.Barn.somMap(pleietrengendeNavn: String): Map<String, Any?> = mapOf(
-        "navn" to pleietrengendeNavn,
-        "fødselsnummer" to personIdent.verdi
-    )
+    private fun no.nav.k9.søknad.felles.personopplysninger.Barn.somMap(pleietrengendeNavn: String): Map<String, Any?> =
+        mapOf(
+            "navn" to pleietrengendeNavn,
+            "fødselsnummer" to personIdent.verdi
+        )
 
     fun Arbeidstid.somMap(): Map<String, Any?> = mapOf(
         "arbeidstakerList" to when {
@@ -79,7 +87,9 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
             else -> null
         },
         "selvstendigNæringsdrivendeArbeidstidInfo" to when {
-            selvstendigNæringsdrivendeArbeidstidInfo.isPresent -> selvstendigNæringsdrivendeArbeidstidInfo.get().somMap()
+            selvstendigNæringsdrivendeArbeidstidInfo.isPresent -> selvstendigNæringsdrivendeArbeidstidInfo.get()
+                .somMap()
+
             else -> null
         }
     )
@@ -95,18 +105,20 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         "perioder" to perioder.toSortedMap { p1, p2 -> p1.compareTo(p2) }.somMap()
     )
 
-    fun MutableMap<no.nav.k9.søknad.felles.type.Periode, ArbeidstidPeriodeInfo>.somMap(): List<Map<String, Any?>> = map { entry ->
+    fun Map<Periode, ArbeidstidPeriodeInfo>.somMap() = map { entry ->
         mapOf(
             "periode" to entry.key.somMap(),
             "arbeidstidPeriodeInfo" to entry.value.somMap()
         )
     }
 
-    fun no.nav.k9.søknad.felles.type.Periode.uke(): Int = fraOgMed.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear())
+    fun Periode.uke(): Int = fraOgMed.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear())
 
-    fun no.nav.k9.søknad.felles.type.Periode.somMap(): Map<String, Any?> = mutableMapOf(
+    fun Periode.somMap(): Map<String, Any?> = mutableMapOf(
         "uke" to uke(),
+        "fraOgMedDag" to fraOgMed.atStartOfDay(UTC).somNorskDag(),
         "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
+        "tilOgMedDag" to tilOgMed.atStartOfDay(UTC).somNorskDag(),
         "tilOgMed" to DATE_FORMATTER.format(tilOgMed)
     )
 
@@ -114,6 +126,18 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         "jobberNormaltTimerPerUke" to jobberNormaltTimerPerDag.tilTimerPerUke().formaterString(),
         "faktiskArbeidTimerPerUke" to faktiskArbeidTimerPerDag.tilTimerPerUke().formaterString()
     )
+
+    private fun LovbestemtFerie.somMap() = mapOf(
+        "perioderLagtTil" to perioder.toSortedMap { p1, p2 -> p1.compareTo(p2) }.filter { it.value.isSkalHaFerie }.somMap(),
+        "perioderFjernet" to perioder.toSortedMap { p1, p2 -> p1.compareTo(p2) }.filter { !it.value.isSkalHaFerie }.somMap()
+    )
+
+    @JvmName("somMapPeriodeLovbestemtFeriePeriodeInfo")
+    private fun Map<Periode, LovbestemtFerie.LovbestemtFeriePeriodeInfo>.somMap() = map {
+        mapOf("periode" to it.key.somMap(), "lovbestemtFeriePeriodeInfo" to it.value.somMap())
+    }
+
+    private fun LovbestemtFerie.LovbestemtFeriePeriodeInfo.somMap() = mutableMapOf("skalHaFerie" to isSkalHaFerie)
 
     private fun Duration.formaterString(): String {
         return "${timer()}t. ${toMinutesPart()}m."
