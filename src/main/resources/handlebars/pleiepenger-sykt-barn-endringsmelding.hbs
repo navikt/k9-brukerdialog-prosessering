@@ -11,6 +11,7 @@
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Barn" href="#barn"/>
         <bookmark name="Arbeidstid" href="#arbeidstid"/>
+        <bookmark name="LovbestemtFerie" href="#lovbestemtFerie"/>
         <bookmark name="Samtykke" href="#samtykke"/>
     </bookmarks>
     {{#block 'style-common' }} {{/block}}
@@ -67,6 +68,31 @@
                 <h2>Endringer i jobb som selvstendig næringsdrivende</h2>
                 {{> partial/arbeid/arbeidstidinfoPartial arbeidstidinfo=arbeidstid.selvstendigNæringsdrivendeArbeidstidInfo}}
                 <br/>
+            {{/if}}
+
+        </section>
+    {{/if}}
+
+    {{#if lovbestemtFerie}}
+        <section id="lovbestemtFerie">
+            <h2>Endringer i lovbestemt ferie</h2>
+
+            {{#if lovbestemtFerie.harPerioderLagtTil}}
+                <h3>Ferie som er lagt til</h3>
+                <ul>
+                    {{#each lovbestemtFerie.perioderLagtTil as |periode|~}}
+                        <li>{{periode.periode.fraOgMedDag}} {{periode.periode.fraOgMed}} - {{periode.periode.tilOgMedDag}} {{periode.periode.tilOgMed}}</li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+
+            {{#if lovbestemtFerie.harPerioderFjernet}}
+                <h3>Ferie som er fjernet</h3>
+                <ul>
+                    {{#each lovbestemtFerie.perioderFjernet as |periode|~}}
+                        <li>{{periode.periode.fraOgMedDag}} {{periode.periode.fraOgMed}} - {{periode.periode.tilOgMedDag}} {{periode.periode.tilOgMed}}</li>
+                    {{/each}}
+                </ul>
             {{/if}}
 
         </section>
