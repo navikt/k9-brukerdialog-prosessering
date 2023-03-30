@@ -146,7 +146,11 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
     private fun LovbestemtFerie.LovbestemtFeriePeriodeInfo.somMap() = mutableMapOf("skalHaFerie" to isSkalHaFerie)
 
     private fun Duration.formaterString(): String {
-        return "${timer()}t. ${toMinutesPart()}m."
+        val totalMinutes = toMinutes()
+        val hours = totalMinutes / 60
+        val minutes = totalMinutes % 60
+        val totalT = hours + (minutes.toDouble() / 60.0)
+        return "${String.format("%.1f", totalT)}t (${hours}t. ${minutes}m.)"
     }
 
     private fun Duration.tilTimerPerUke(): Duration = this.multipliedBy(5)
