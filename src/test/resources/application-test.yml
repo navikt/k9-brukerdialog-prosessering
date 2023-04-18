@@ -48,6 +48,13 @@ no.nav:
         auto-offset-reset: earliest
       ettersendelse-cleanup:
         auto-offset-reset: earliest
+
+      omp-utv-ks-preprosessering:
+        auto-offset-reset: earliest
+      omp-utv-ks-journalforing:
+        auto-offset-reset: earliest
+      omp-utv-ks-cleanup:
+        auto-offset-reset: earliest
     schema-registry:
       url: mock://localhost
       user: username

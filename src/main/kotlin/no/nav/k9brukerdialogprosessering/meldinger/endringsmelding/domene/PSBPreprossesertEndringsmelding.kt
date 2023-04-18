@@ -1,12 +1,12 @@
 package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.domene
 
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.tilTpsNavn
 import no.nav.k9.søknad.Søknad
+import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Navn
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.tilTpsNavn
 import java.time.ZonedDateTime
 
 data class PSBPreprossesertEndringsmelding(
