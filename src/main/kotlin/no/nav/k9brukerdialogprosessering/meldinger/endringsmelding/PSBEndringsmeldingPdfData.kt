@@ -11,12 +11,11 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo
 import no.nav.k9brukerdialogprosessering.common.Constants.DATE_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
-import no.nav.k9brukerdialogprosessering.common.Constants.ZONE_ID
+import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
-import no.nav.k9brukerdialogprosessering.utils.DurationUtils.timer
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.time.DayOfWeek
 import java.time.Duration
@@ -32,7 +31,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         return mapOf(
             "søknadId" to k9Format.søknadId.id,
             "soknadDialogCommitSha" to ytelse.søknadInfo.orElse(null)?.soknadDialogCommitSha,
-            "mottattDag" to k9Format.mottattDato.withZoneSameInstant(ZONE_ID).somNorskDag(),
+            "mottattDag" to k9Format.mottattDato.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "mottattDato" to DATE_TIME_FORMATTER.format(k9Format.mottattDato),
             "soker" to mapOf(
                 "navn" to endringsmelding.søker.formatertNavn().capitalizeName(),

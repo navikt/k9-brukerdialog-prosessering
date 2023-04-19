@@ -1,12 +1,16 @@
 package no.nav.k9brukerdialogprosessering.utils
 
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
+import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_PREPROSESSERT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
@@ -49,15 +53,28 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     count = 3,
     bootstrapServersProperty = "KAFKA_BROKERS",
     topics = [
+        // Endringsmelding - Pleiepenger sykt barn
         PSB_ENDRINGSMELDING_MOTTATT_TOPIC,
         PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC,
         PSB_ENDRINGSMELDING_CLEANUP_TOPIC,
+
+        // Pleiepenger sykt barn
         PSB_MOTTATT_TOPIC,
         PSB_PREPROSESSERT_TOPIC,
         PSB_CLEANUP_TOPIC,
+
+        // Ettersendelse
         ETTERSENDELSE_MOTTATT_TOPIC,
         ETTERSENDELSE_PREPROSESSERT_TOPIC,
-        ETTERSENDELSE_CLEANUP_TOPIC
+        ETTERSENDELSE_CLEANUP_TOPIC,
+
+        // Omsorgspenger utvidet rett - kronisk sykt barn
+        OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC,
+        OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC,
+        OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC,
+
+        // K9 Dittnav varsel
+        K9_DITTNAV_VARSEL_TOPIC
     ]
 )
 @DirtiesContext

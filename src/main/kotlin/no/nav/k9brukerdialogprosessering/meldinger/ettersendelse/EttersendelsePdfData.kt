@@ -1,7 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.ettersendelse
 
 import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
-import no.nav.k9brukerdialogprosessering.common.Constants.ZONE_ID
+import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Ettersendelse
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søker
@@ -14,7 +14,7 @@ class EttersendelsePdfData(private val ettersendelse: Ettersendelse) : PdfData()
 
     override fun pdfData(): Map<String, Any?> = mapOf(
         "soknad_id" to ettersendelse.søknadId,
-        "soknad_mottatt_dag" to ettersendelse.mottatt.withZoneSameInstant(ZONE_ID).somNorskDag(),
+        "soknad_mottatt_dag" to ettersendelse.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "soknad_mottatt" to DATE_TIME_FORMATTER.format(ettersendelse.mottatt),
         "søker" to mapOf(
             "navn" to ettersendelse.søker.formatertNavn().capitalizeName(),

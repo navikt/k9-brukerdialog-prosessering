@@ -1,10 +1,10 @@
 package no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Navn
 import java.time.ZonedDateTime
 
 data class PreprosessertEttersendelse(
@@ -42,8 +42,7 @@ data class PreprosessertEttersendelse(
 
     override fun mottattDato(): ZonedDateTime = mottatt
 
-    override fun søkerNavn(): Navn =
-        Navn(fornavn = søker.fornavn, mellomnavn = søker.mellomnavn, etternavn = søker.etternavn)
+    override fun søkerNavn() = Navn(fornavn = søker.fornavn, mellomnavn = søker.mellomnavn, etternavn = søker.etternavn)
 
     override fun søkerFødselsnummer(): String = søker.fødselsnummer
 

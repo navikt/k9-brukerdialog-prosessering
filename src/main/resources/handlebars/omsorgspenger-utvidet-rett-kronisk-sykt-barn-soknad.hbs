@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="NO">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Søknad om ekstra omsorgsdager</title>
+    <meta name="subject" content="Søknad om ekstra omsorgsdager" />
+    <meta name="author" content="nav.no" />
+    <meta name="description"
+        content="Søknad om ekstra omsorgsdager mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
+    <bookmarks>
+        <bookmark name="Søker" href="#søker" />
+        <bookmark name="Barn" href="#barn" />
+        <bookmark name="Om barnet" href="#omBarnet" />
+        {{#if harIkkeLastetOppLegeerklæring}}
+        <bookmark name="Legeerklæring" href="#legeerklæring" />
+        {{/if}}
+        <bookmark name="Samtykke" href="#samtykke" />
+    </bookmarks>
+    {{#block 'style-common' }}
+    {{/block}}
+</head>
+
+<body>
+    <h1 id="header">
+        Søknad om ekstra omsorgsdager
+    </h1>
+    <p class="nokkelinfo">
+        <strong>Sendt til NAV</strong>
+        {{soknad_mottatt_dag}} {{ soknad_mottatt }}
+    </p>
+
+    <div class="innholdscontainer">
+        <div class="person" id="søker">
+            <p class="navn">{{ søker.navn }}</p>
+            <p>{{ søker.fødselsnummer }}<br /></p>
+        </div>
+
+        <div class="person" id="barn">
+            <p>Barn</p>
+            <p class="navn">
+                {{# if barn.navn }}
+                    {{ barn.navn }}
+                {{else}}
+                    <span class="ikke_satt">Navn ikke angitt</span>
+                {{/if}}
+            </p>
+            <p>
+                {{# if barn.fødselsdato }}
+                    {{ barn.fødselsdato }} <br />
+                {{/if}}
+                {{# if barn.id }}
+                    {{ barn.id }}
+                {{else}}
+                    <span class="ikke_satt">ID ikke angitt</span>
+                {{/if}}
+            </p>
+        </div>
+
+        <section id="omBarnet">
+            <h2>Om barnet</h2>
+
+            <p class="sporsmalstekst">Har barnet kronisk sykdom, funksjonshemming eller langvarig sykdom?</p>
+            <p>{{ jaNeiSvar kroniskEllerFunksjonshemming }}</p>
+
+            {{#if relasjonTilBarnet}}
+                <p class="sporsmalstekst">Din relasjon til barnet:</p>
+                <p>{{relasjonTilBarnet}}</p>
+            {{/if}}
+
+            <p class="sporsmalstekst">Bor du og barnet på samme folkeregistrerte adresse?</p>
+            <p>{{ jaNeiSvar sammeAddresse }}</p>
+        </section>
+
+        <!-- Info om har ikke lastet opp vedlegg -->
+        <section id="legeerklæring">
+        {{#if harIkkeLastetOppLegeerklæring}}
+            <h2>Legeerklæring</h2>
+            <p>Ingen vedlegg er lastet opp.</p>
+        {{/if}}
+        </section>
+
+        <!-- SAMTYKKE -->
+        <section id="samtykke">
+            <h2>Samtykke fra deg</h2>
+            <p class="sporsmalstekst">Har du forstått rettigheter og plikter?</p>
+            <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
+            <hr />
+            <p class="sporsmalstekst">Har du bekreftet at opplysninger som er gitt er riktige?</p>
+            <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    {{> partial/footerPartial søknadId=soknad_id gitSha=soknadDialogCommitSha}}
+</body>
+
+</html>

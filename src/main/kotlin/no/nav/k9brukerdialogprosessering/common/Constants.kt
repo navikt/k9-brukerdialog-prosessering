@@ -15,8 +15,8 @@ object Constants {
     const val X_CORRELATION_ID = "X-Correlation-ID"
 
     val NORMAL_ARBEIDSDAG = Duration.ofHours(7).plusMinutes(30)
-    val ZONE_ID = ZoneId.of("Europe/Oslo")
-    val DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZONE_ID)
-    val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withZone(ZONE_ID)
+    val OSLO_ZONE_ID = ZoneId.of("Europe/Oslo")
+    val DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(OSLO_ZONE_ID)
+    val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm").withZone(OSLO_ZONE_ID)
 
 }

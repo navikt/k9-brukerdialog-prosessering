@@ -1,6 +1,13 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import no.nav.helse.felles.Omsorgstilbud
+import no.nav.k9.søknad.Søknad
+import no.nav.k9brukerdialogprosessering.common.Navn
+import no.nav.k9brukerdialogprosessering.common.Ytelse
+import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
+import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Barn
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Beredskap
@@ -8,18 +15,11 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Medlemskap
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
-import no.nav.helse.felles.Omsorgstilbud
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
-import no.nav.k9.søknad.Søknad
-import no.nav.k9brukerdialogprosessering.common.Ytelse
-import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
-import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Navn
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -87,8 +87,7 @@ data class PSBPreprosessertSøknad(
 
     override fun mottattDato(): ZonedDateTime = mottatt
 
-    override fun søkerNavn(): Navn =
-        Navn(fornavn = søker.fornavn, mellomnavn = søker.mellomnavn, etternavn = søker.etternavn)
+    override fun søkerNavn() = Navn(fornavn = søker.fornavn, mellomnavn = søker.mellomnavn, etternavn = søker.etternavn)
 
     override fun søkerFødselsnummer(): String = søker.fødselsnummer
 
