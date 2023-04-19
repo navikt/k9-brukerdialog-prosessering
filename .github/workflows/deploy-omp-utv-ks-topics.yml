@@ -1,0 +1,19 @@
+name: Deploy omsorgspenger utvidet rett - kronisk sykt barn topics
+
+env:
+  TOPICS_PATH: 'nais/topics/omp-utv-ks-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-omp-utv-ks-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/omp-utv-ks-topics.yml'
+
+jobs:
+  deploy-omp-utv-ks-topics:
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: omp-utv-ks-topics
+      topics-path: 'nais/topics/omp-utv-ks-topics.yml'
+    secrets: inherit

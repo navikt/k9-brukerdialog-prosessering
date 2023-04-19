@@ -29,9 +29,9 @@ class OMPKSTopologyConfiguration(
         const val OMP_UTV_KS_JOURNALFØRING_STREAMS_BUILDER_NAME = "ompUtvKsJournalføringStreamsBuilder"
         const val OMP_UTV_KS_CLEANUP_STREAMS_BUILDER_NAME = "ompUtvKsCleanupStreamsBuilder"
 
-        const val OMP_UTV_KS_MOTTATT_TOPIC = "dusseldorf.omp-utv-kronisk-syk-mottatt"
-        const val OMP_UTV_KS_PREPROSESSERT_TOPIC = "dusseldorf.omp-utv-kronisk-syk-preprosessert"
-        const val OMP_UTV_KS_CLEANUP_TOPIC = "dusseldorf.omp-utv-kronisk-syk-cleanup"
+        const val OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC = "dusseldorf.omp-utv-kronisk-sykt-barn-soknad-mottatt"
+        const val OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC = "dusseldorf.omp-utv-kronisk-sykt-barn-soknad-preprosessert"
+        const val OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC = "dusseldorf.omp-utv-kronisk-sykt-barn-soknad-cleanup"
     }
 
     @Bean(name = [OMP_UTV_KS_PREPROSESSERING_STREAMS_BUILDER_NAME])
@@ -64,7 +64,7 @@ class OMPKSTopologyConfiguration(
     @Bean
     fun ompUtvKsMottattTopic(): Topic<TopicEntry<OMPUTVKroniskSyktBarnSøknadMottatt>> {
         return Topic(
-            name = OMP_UTV_KS_MOTTATT_TOPIC,
+            name = OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC,
             serDes = OmpUtvKsMottattSerdes(objectMapper)
         )
     }
@@ -72,7 +72,7 @@ class OMPKSTopologyConfiguration(
     @Bean
     fun ompUtvKsPreprosessertTopic(): Topic<TopicEntry<OMPUTVKroniskSyktBarnSøknadPreprosesssert>> {
         return Topic(
-            name = OMP_UTV_KS_PREPROSESSERT_TOPIC,
+            name = OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC,
             serDes = OmpUtvKsPreprosessertSerdes(objectMapper)
         )
     }
@@ -80,7 +80,7 @@ class OMPKSTopologyConfiguration(
     @Bean
     fun ompUtvKsCleanupTopic(): Topic<TopicEntry<Cleanup<OMPUTVKroniskSyktBarnSøknadPreprosesssert>>> {
         return Topic(
-            name = OMP_UTV_KS_CLEANUP_TOPIC,
+            name = OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC,
             serDes = CleanupMeldingSerdes(objectMapper)
         )
     }

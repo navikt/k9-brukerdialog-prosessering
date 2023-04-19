@@ -9,9 +9,9 @@ import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_CLEANUP_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_MOTTATT_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_PREPROSESSERT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.utils.SøknadUtils
 import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
 import no.nav.k9brukerdialogprosessering.utils.KafkaIntegrationTest
@@ -31,7 +31,6 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.test.EmbeddedKafkaBroker
 import java.net.URI
-import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -58,7 +57,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
         producer = embeddedKafkaBroker.opprettKafkaProducer()
         consumer = embeddedKafkaBroker.opprettKafkaConsumer(
             groupPrefix = "omsorgspenger-kronisk-sykt-barn", topics = listOf(
-                OMP_UTV_KS_MOTTATT_TOPIC, OMP_UTV_KS_PREPROSESSERT_TOPIC, OMP_UTV_KS_CLEANUP_TOPIC
+                OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC, OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC, OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC
             )
         )
     }
@@ -84,7 +83,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
         coEvery { k9MellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
         coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTV_KS_MOTTATT_TOPIC)
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC)
         verify(exactly = 1, timeout = 120 * 1000) {
             runBlocking {
                 k9MellomlagringService.slettDokumenter(any(), any())
@@ -110,9 +109,9 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTV_KS_MOTTATT_TOPIC)
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC)
         val lesMelding =
-            consumer.lesMelding(key = søknadId, topic = OMP_UTV_KS_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
+            consumer.lesMelding(key = søknadId, topic = OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         println("---> " + preprosessertSøknadJson)
