@@ -3,9 +3,9 @@ package no.nav.k9brukerdialogprosessering.journalforing
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.WireMockServer
 import kotlinx.coroutines.runBlocking
+import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søknadstype
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Navn
 import no.nav.k9brukerdialogprosessering.utils.WireMockServerUtils.stubJournalføring
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat

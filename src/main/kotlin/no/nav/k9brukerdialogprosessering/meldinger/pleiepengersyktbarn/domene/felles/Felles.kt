@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import no.nav.k9brukerdialogprosessering.common.Navn
 import java.time.LocalDate
 
 enum class BarnRelasjon(val utskriftsvennlig: String) {

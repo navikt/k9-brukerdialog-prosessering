@@ -1,0 +1,72 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: omp-utv-kronisk-sykt-barn-soknad-mottatt
+  namespace: dusseldorf
+  labels:
+    team: dusseldorf
+spec:
+  pool: {{kafka-pool}}
+  config:
+    cleanupPolicy: delete  # delete, compact
+    minimumInSyncReplicas: 2
+    partitions: 1
+    replication: 3
+    retentionBytes: -1  # -1 ubegrenset
+    retentionHours: 730 # 30 dager
+  acl:
+    - team: dusseldorf
+      access: write
+      application: k9-brukerdialog-api
+    - team: dusseldorf
+      application: k9-brukerdialog-prosessering
+      access: read
+
+---
+
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: omp-utv-kronisk-sykt-barn-soknad-preprosessert
+  namespace: dusseldorf
+  labels:
+    team: dusseldorf
+spec:
+  pool: {{kafka-pool}}
+  config:
+    cleanupPolicy: delete  # delete, compact
+    minimumInSyncReplicas: 2
+    partitions: 1
+    replication: 3  # see min/max requirements
+    retentionBytes: -1  # -1 means unlimited
+    retentionHours: 730 # 30 dager
+  acl:
+    - team: dusseldorf
+      application: k9-brukerdialog-prosessering
+      access: readwrite
+
+---
+
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: omp-utv-kronisk-sykt-barn-soknad-cleanup
+  namespace: dusseldorf
+  labels:
+    team: dusseldorf
+spec:
+  pool: {{kafka-pool}}
+  config:
+    cleanupPolicy: delete  # delete, compact
+    minimumInSyncReplicas: 2
+    partitions: 1
+    replication: 3  # see min/max requirements
+    retentionBytes: -1  # -1 means unlimited
+    retentionHours: 730 # 30 dager
+  acl:
+    - team: dusseldorf
+      application: k9-brukerdialog-prosessering
+      access: readwrite
+    - team: dusseldorf
+      application: sif-innsyn-api
+      access: read

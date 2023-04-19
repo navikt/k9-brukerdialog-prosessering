@@ -62,4 +62,9 @@ enum class KafkaStreamName(val value: String) {
     ETTERSENDELSE_PREPROSESSERING("ettersendelse-preprosessering"),
     ETTERSENDELSE_JOURNALFØRING("ettersendelse-journalforing"),
     ETTERSENDELSE_CLEANUP("ettersendelse-cleanup"),
+
+    // Omsorgspenger utvidet rett - kronisk sykt barn
+    OMP_UTV_KS_PREPROSESSERING("omp-utv-ks-preprosessering"),
+    OMP_UTV_KS_JOURNALFØRING("omp-utv-ks-journalforing"),
+    OMP_UTV_KS_CLEANUP("omp-utv-ks-cleanup"),
 }
