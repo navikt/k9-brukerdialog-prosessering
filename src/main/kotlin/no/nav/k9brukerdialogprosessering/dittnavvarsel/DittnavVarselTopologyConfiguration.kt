@@ -28,7 +28,7 @@ class K9DittNavVarselSerdes(
     private val objectMapper: ObjectMapper,
 ) : SerDes<TopicEntry<K9Beskjed>>(objectMapper) {
     override fun serialize(topic: String, entry: TopicEntry<K9Beskjed>): ByteArray{
-        return objectMapper.writeValueAsBytes(entry)
+        return objectMapper.writeValueAsBytes(entry.data)
     }
 
     override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<K9Beskjed> {

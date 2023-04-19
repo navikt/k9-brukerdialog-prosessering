@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.innsending.CleanupService
 import no.nav.k9brukerdialogprosessering.kafka.config.KafkaStreamName
@@ -48,7 +49,7 @@ class OmsorgspengerKroniskSyktBarnSøknadCleanup(
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val cleanup = cleanupService.cleanup(value.data)
 
-                    cleanup.melding.tilK9DittnavVarsel(value.metadata)
+                   cleanup.melding.tilK9DittnavVarsel(value.metadata)
                 }
             }
             .to(k9DittnavVarselTopic.name, k9DittnavVarselTopic.producedWith)
