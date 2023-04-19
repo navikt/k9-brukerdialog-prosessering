@@ -5,6 +5,8 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
+import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
@@ -51,6 +53,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
 
     lateinit var producer: Producer<String, Any> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
     lateinit var consumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
+    lateinit var k9DittnavVarselConsumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
 
     @BeforeAll
     fun setUp() {
@@ -60,12 +63,17 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
                 OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC, OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC, OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC
             )
         )
+        k9DittnavVarselConsumer = embeddedKafkaBroker.opprettKafkaConsumer(
+            groupPrefix = "k9-dittnav-varsel",
+            topics = listOf(K9_DITTNAV_VARSEL_TOPIC)
+        )
     }
 
     @AfterAll
     fun tearDown() {
         producer.close()
         consumer.close()
+        k9DittnavVarselConsumer.close()
     }
 
     @Test
@@ -89,6 +97,23 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
                 k9MellomlagringService.slettDokumenter(any(), any())
             }
         }
+
+        k9DittnavVarselConsumer.lesMelding(
+            key = søknadId,
+            topic = K9_DITTNAV_VARSEL_TOPIC,
+            maxWaitInSeconds = 40
+        ).value().assertDittnavVarsel(
+            K9Beskjed(
+                metadata = metadata,
+                grupperingsId = søknadId,
+                tekst = "Vi har mottatt søknad fra deg om ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn.",
+                link = null,
+                dagerSynlig = 7,
+                søkerFødselsnummer = søknadMottatt.søkerFødselsnummer(),
+                eventId = "testes ikke",
+                ytelse = "OMSORGSPENGER_UTV_KS",
+            )
+        )
     }
 
     @Test
@@ -111,7 +136,8 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC)
         val lesMelding =
-            consumer.lesMelding(key = søknadId, topic = OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
+            consumer.lesMelding(key = søknadId, topic = OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40)
+                .value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         println("---> " + preprosessertSøknadJson)
@@ -179,4 +205,12 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
           }
         }
         """.trimIndent()
+}
+
+private fun String.assertDittnavVarsel(k9Beskjed: K9Beskjed) {
+    val k9BeskjedJson = JSONObject(this)
+    assertEquals(k9Beskjed.grupperingsId, k9BeskjedJson.getString("grupperingsId"))
+    assertEquals(k9Beskjed.tekst, k9BeskjedJson.getString("tekst"))
+    assertEquals(k9Beskjed.ytelse, k9BeskjedJson.getString("ytelse"))
+    assertEquals(k9Beskjed.dagerSynlig, k9BeskjedJson.getLong("dagerSynlig"))
 }

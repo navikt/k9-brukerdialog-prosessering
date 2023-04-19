@@ -12,13 +12,13 @@ class DittnavVarselTopologyConfiguration(
     private val objectMapper: ObjectMapper
 ) {
     companion object {
-        const val K9_DITTNAV_VARSEL = "dusseldorf.privat-k9-dittnav-varsel-beskjed"
+        const val K9_DITTNAV_VARSEL_TOPIC = "dusseldorf.privat-k9-dittnav-varsel-beskjed"
     }
 
     @Bean
     fun k9DittnavVarselTopic(): Topic<TopicEntry<K9Beskjed>> {
         return Topic(
-            name = K9_DITTNAV_VARSEL,
+            name = K9_DITTNAV_VARSEL_TOPIC,
             serDes = K9DittNavVarselSerdes(objectMapper)
         )
     }
