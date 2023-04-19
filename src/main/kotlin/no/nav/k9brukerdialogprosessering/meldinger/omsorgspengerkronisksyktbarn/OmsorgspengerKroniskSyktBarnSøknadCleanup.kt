@@ -49,6 +49,7 @@ class OmsorgspengerKroniskSyktBarnSøknadCleanup(
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val cleanup = cleanupService.cleanup(value.data)
 
+                    logger.info("Sender K9Beskjed viderer til ${k9DittnavVarselTopic.name}")
                    cleanup.melding.tilK9DittnavVarsel(value.metadata)
                 }
             }
