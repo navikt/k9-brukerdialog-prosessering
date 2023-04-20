@@ -241,13 +241,13 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     )
 
     @JvmName("somMapArbeidsUke")
-    private fun List<ArbeidsUke>.somMap() = map {
-
-        mapOf(
-            "uke" to it.periode.fraOgMed.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear()),
-            "faktiskTimerPerUke" to it.timer?.tilString()
-        )
-    }
+    private fun List<ArbeidsUke>.somMap() = sortedBy { it: ArbeidsUke -> it.periode.fraOgMed }
+        .map {
+            mapOf(
+                "uke" to it.periode.fraOgMed.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear()),
+                "faktiskTimerPerUke" to it.timer?.tilString()
+            )
+        }
 
     private fun NormalArbeidstid.somMap(): Map<String, Any?> = mapOf(
         "timerPerUkeISnitt" to this.timerPerUkeISnitt.tilString()
