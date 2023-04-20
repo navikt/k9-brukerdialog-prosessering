@@ -552,13 +552,6 @@ class PSBSøknadPdfGeneratorTest {
                                     arbeidsuker = listOf(
                                         ArbeidsUke(
                                             periode = Periode(
-                                                fraOgMed = LocalDate.parse("2022-10-17"),
-                                                tilOgMed = LocalDate.parse("2022-10-23")
-                                            ),
-                                            timer = Duration.ofHours(37).plusMinutes(30)
-                                        ),
-                                        ArbeidsUke(
-                                            periode = Periode(
                                                 fraOgMed = LocalDate.parse("2022-10-24"),
                                                 tilOgMed = LocalDate.parse("2022-10-30")
                                             ),
@@ -570,6 +563,13 @@ class PSBSøknadPdfGeneratorTest {
                                                 tilOgMed = LocalDate.parse("2022-11-06")
                                             ),
                                             timer = Duration.ofHours(15).plusMinutes(30)
+                                        ),
+                                        ArbeidsUke(
+                                            periode = Periode(
+                                                fraOgMed = LocalDate.parse("2022-10-17"),
+                                                tilOgMed = LocalDate.parse("2022-10-23")
+                                            ),
+                                            timer = Duration.ofHours(37).plusMinutes(30)
                                         ),
                                         ArbeidsUke(
                                             periode = Periode(
