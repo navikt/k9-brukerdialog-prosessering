@@ -42,6 +42,13 @@ no.nav:
       psb-endringsmelding-cleanup:
         auto-offset-reset: earliest
 
+      pils-soknad-preprosessering:
+        auto-offset-reset: earliest
+      pils-soknad-journalforing:
+        auto-offset-reset: earliest
+      pils-soknad-cleanup:
+        auto-offset-reset: earliest
+
       ettersendelse-preprosessering:
         auto-offset-reset: earliest
       ettersendelse-journalforing:

@@ -1,0 +1,31 @@
+{{#if arbeidIPeriode.jobberIPerioden}}
+    <li>Jobber i perioden</li>
+{{else}}
+    <li>Jobber ikke i perioden</li>
+{{/if}}
+
+{{#if arbeidIPeriode.enkeltdagerPerMnd}}
+    <li class="li-style-none">
+        <ul class="ul-no-indent">
+            {{#each arbeidIPeriode.enkeltdagerPerMnd as |enkeltdagerPerMnd|~}}
+                <li>
+                    <p><b>Jobb registrert i {{enkeltdagerPerMnd.måned}} {{enkeltdagerPerMnd.år}}</b></p>
+                    <ul class="ul-no-indent">
+                        {{#each enkeltdagerPerMnd.enkeltdagerPerUke as |enkeltdagerPerUke|~}}
+                            <li>
+                                <p>Uke {{enkeltdagerPerUke.uke}}</p>
+                                <ul>
+                                    {{#each enkeltdagerPerUke.dager as |enkeltdag|~}}
+                                        <li>
+                                            <p>{{enkeltdag.dag}} {{enkeltdag.dato}}: {{enkeltdag.tid}}</p>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            </li>
+                        {{/each}}
+                    </ul>
+                </li>
+            {{/each}}
+        </ul>
+    </li>
+{{/if}}
