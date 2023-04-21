@@ -149,12 +149,12 @@ abstract class PdfData {
     fun resolveTemplate(): String = when (ytelse()) {
         Ytelse.PLEIEPENGER_SYKT_BARN -> "pleiepenger-sykt-barn-soknad"
         Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> "pleiepenger-sykt-barn-endringsmelding"
+        Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> "pleiepenger-i-livets-sluttfase-soknad"
         Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-kronisk-sykt-barn-soknad"
         Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad"
         Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad"
         Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspengerutbetaling-arbeidstaker-soknad"
         Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspengerutbetaling-snf-soknad"
-        Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> "pleiepenger-livets-sluttfase-soknad"
         Ytelse.ETTERSENDELSE -> "ettersendelse"
     }
 }
