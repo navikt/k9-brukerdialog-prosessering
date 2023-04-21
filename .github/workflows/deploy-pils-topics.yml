@@ -1,0 +1,19 @@
+name: Deploy pleiepenger sykt barn topics
+
+env:
+  TOPICS_PATH: 'nais/topics/pleiepenger-livets-sluttfase-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-pils-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/pleiepenger-livets-sluttfase-topics.yml'
+
+jobs:
+  deploy-pils-topics:
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: pils-topics
+      topics-path: 'nais/topics/pleiepenger-livets-sluttfase-topics.yml'
+    secrets: inherit

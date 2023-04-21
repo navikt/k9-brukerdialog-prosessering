@@ -50,6 +50,16 @@ no.nav:
         application-id-suffix: psb-endringsmelding-cleanup
         auto-offset-reset: none
 
+      pils-soknad-preprosessering:
+        application-id-suffix: pils-soknad-preprosessering
+        auto-offset-reset: earliest
+      pils-soknad-journalforing:
+        application-id-suffix: pils-soknad-journalforing
+        auto-offset-reset: earliest
+      pils-soknad-cleanup:
+        application-id-suffix: pils-soknad-cleanup-stream
+        auto-offset-reset: earliest
+
       ettersendelse-preprosessering:
         application-id-suffix: ettersendelse-preprosessering
         auto-offset-reset: none

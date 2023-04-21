@@ -33,7 +33,7 @@ interface Preprosessert {
     fun dokumenter(): List<List<String>>
 
     fun tilJournaførigsRequest(): JournalføringsRequest
-    fun tilK9DittnavVarsel(metadata: Metadata): K9Beskjed? = null
+    fun tilK9DittnavVarsel(metadata: Metadata): K9Beskjed?
 
 }
 

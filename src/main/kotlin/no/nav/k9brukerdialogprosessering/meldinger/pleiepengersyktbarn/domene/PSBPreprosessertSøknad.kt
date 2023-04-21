@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.helse.felles.Omsorgstilbud
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
+import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
+import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Barn
@@ -106,4 +108,6 @@ data class PSBPreprosessertSøknad(
             dokumentId = dokumenter()
         )
     }
+
+    override fun tilK9DittnavVarsel(metadata: Metadata): K9Beskjed? = null
 }

@@ -72,11 +72,15 @@ class K9JoarkService(
             .build()
             .toUri()
 
+        Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> UriComponentsBuilder
+            .fromPath("/v1/pleiepenge/livets-sluttfase/journalforing")
+            .build()
+            .toUri()
+
         Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> TODO()
         Ytelse.OMSORGSDAGER_ALENEOMSORG -> TODO()
         Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> TODO()
         Ytelse.OMSORGSPENGER_UTBETALING_SNF -> TODO()
-        Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> TODO()
     }
 }
 
