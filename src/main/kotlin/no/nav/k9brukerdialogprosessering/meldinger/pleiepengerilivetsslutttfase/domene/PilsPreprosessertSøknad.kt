@@ -60,7 +60,7 @@ data class PilsPreprosessertSøknad(
         harBekreftetOpplysninger = pilsSøknadMottatt.harBekreftetOpplysninger
     )
 
-    override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
+    override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 
     override fun mottattDato(): ZonedDateTime = mottatt
 
