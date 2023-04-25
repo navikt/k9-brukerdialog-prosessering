@@ -10,11 +10,18 @@ import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import com.openhtmltopdf.slf4j.Slf4jLogger
 import com.openhtmltopdf.util.XRLog
+import no.nav.k9brukerdialogprosessering.common.Constants.DATE_FORMATTER
+import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Ytelse
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.FraværÅrsak
+import no.nav.k9brukerdialogprosessering.utils.DurationUtils.tilString
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.time.Duration
+import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.util.*
 
 @Component
@@ -37,9 +44,14 @@ class PDFGenerator {
             imageHelper()
             equalsHelper()
             equalsNumberHelper()
+            equalsJaNeiHelper()
             fritekstHelper()
             jaNeiSvarHelper()
             capitalizeHelper()
+            datoHelper()
+            tidspunktHelper()
+            varighetHelper()
+            årsakHelper()
             infiniteLoops(true)
         }
 
@@ -90,8 +102,46 @@ class PDFGenerator {
                 if (context == null) "" else bilder[context]
             })
         }
-    }
 
+        private fun Handlebars.equalsJaNeiHelper() {
+            registerHelper("eqJaNei") { context: Boolean, options ->
+                val con = when (context) {
+                    true -> "Ja"
+                    false -> "Nei"
+                }
+                if (con == options.param(0)) options.fn() else options.inverse()
+            }
+        }
+
+        private fun Handlebars.datoHelper() {
+            registerHelper("dato", Helper<String> { context, _ ->
+                DATE_FORMATTER.format(LocalDate.parse(context))
+            })
+        }
+
+
+        private fun Handlebars.tidspunktHelper() {
+            registerHelper("tidspunkt", Helper<String> { context, _ ->
+                DATE_TIME_FORMATTER.format(ZonedDateTime.parse(context))
+            })
+        }
+
+        private fun Handlebars.varighetHelper() {
+            registerHelper("varighet", Helper<String> { context, _ ->
+                Duration.parse(context).tilString()
+            })
+        }
+
+        private fun Handlebars.årsakHelper() {
+            registerHelper("årsak", Helper<String> { context, _ ->
+                when (FraværÅrsak.valueOf(context)) {
+                    FraværÅrsak.ORDINÆRT_FRAVÆR -> "Ordinært fravær"
+                    FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE -> "Stengt skole eller barnehage"
+                    FraværÅrsak.SMITTEVERNHENSYN -> "Smittevernhensyn"
+                }
+            })
+        }
+    }
 
     fun genererPDF(pdfData: PdfData): ByteArray = template(pdfData)
         .apply(
@@ -153,7 +203,7 @@ abstract class PdfData {
         Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-kronisk-sykt-barn-soknad"
         Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad"
         Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad"
-        Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspengerutbetaling-arbeidstaker-soknad"
+        Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspenger-utbetaling-arbeidstaker-soknad"
         Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspengerutbetaling-snf-soknad"
         Ytelse.ETTERSENDELSE -> "ettersendelse"
     }

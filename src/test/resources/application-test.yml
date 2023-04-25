@@ -62,6 +62,17 @@ no.nav:
         auto-offset-reset: earliest
       omp-utv-ks-cleanup:
         auto-offset-reset: earliest
+
+      omp-utb-at-preprosessering:
+        application-id-suffix: omp-utb-at-preprosessering
+        auto-offset-reset: earliest
+      omp-utb-at-journalforing:
+        application-id-suffix: omp-utb-at-journalforing
+        auto-offset-reset: earliest
+      omp-utb-at-cleanup:
+        application-id-suffix: omp-utb-at-cleanup
+        auto-offset-reset: earliest
+
     schema-registry:
       url: mock://localhost
       user: username
