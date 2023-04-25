@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="NO">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler</title>
+    <meta name="subject" content="Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler" />
+    <meta name="author" content="nav.no" />
+    <meta name="description"
+          content="Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
+    <bookmarks>
+        <bookmark name="Søker" href="#søker" />
+        <bookmark name="Smittevernhensyn" href="#smittevernhensyn" />
+        <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder" />
+        <bookmark name="Utenlandsopphold" href="#utenlandsopphold" />
+        <bookmark name="Årsak til søknad om utbetaling" href="#årsakTilUtbetaling" />
+        <bookmark name="Medlemskap" href="#medlemskap" />
+        <bookmark name="Vedlegg" href="#vedlegg" />
+        <bookmark name="Samtykke" href="#samtykke" />
+    </bookmarks>
+    {{#block 'style-common' }}
+    {{/block}}
+</head>
+<body>
+<h1 id="header">Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler</h1>
+<p class="nokkelinfo"><strong>Sendt til NAV </strong>{{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}</p>
+<p class="nokkelinfo">Språk: {{språk}}</p>
+
+<div class="innholdscontainer">
+    <div class="person" id="søker">
+        <p>Søker</p>
+        <p class="navn">{{ søker.formatertNavn }}</p>
+        <p>{{ søknad.søker.fødselsnummer  }}</p>
+    </div>
+
+    <section id="smittevernhensyn">
+        {{#if søknad.hjemmePgaSmittevernhensyn}}
+            <h2>Særlige smittevernhensyn</h2>
+            <ul>
+                <li>Du opplyser at du har vært hjemme med barn på grunn av særlige smittevernhensyn.</li>
+                {{#if ikkeHarSendtInnVedlegg}}
+                    <li>Bekreftelse fra lege er ikke lastet opp. Må ettersendes.</li>
+                {{/if}}
+            </ul>
+        {{/if}}
+
+        {{#if søknad.hjemmePgaStengtBhgSkole}}
+            <h2>Lokalt stengt barnehage eller skole</h2>
+            <ul>
+                <li>Du opplyser at du har vært hjemme med barn fordi barnehagen eller skolen var stengt.</li>
+                {{#if ikkeHarSendtInnVedlegg}}
+                    <li>Bekreftelse fra barnehage/skole er ikke lastet opp. Må ettersendes.</li>
+                {{/if}}
+            </ul>
+        {{/if}}
+    </section>
+
+    <section id="utbetalingsperioder">
+        <h2>Omsorgsdager du søker utbetaling for</h2>
+        {{# each søknad.arbeidsgivere as |org|}}
+            <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
+
+            <ul>{{# each org.perioder as |p|}}
+                <li>
+                    Periode: {{#dato p.fraOgMed}}{{/dato}} - {{#dato p.tilOgMed}}{{/dato}}
+                    {{#if p.antallTimerBorte}}
+                        <br/>Antall timer du skulle ha jobbet denne dagen:  {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
+                        <br/>Antall timer du var borte fra jobb denne dagen:  {{#varighet p.antallTimerBorte}}{{/varighet}}
+                    {{/if}}
+                    {{#if p.årsak}}
+                        <br/>Årsak: {{#årsak p.årsak}}{{/årsak}}
+                    {{/if}}
+                </li>
+            {{/each}}
+            </ul>
+        {{/each}}
+    </section>
+
+    <section id="utenlandsopphold">
+        {{#if harOpphold}}
+            <h2>Utenlandsopphold i dager med fravær</h2>
+            <p>Har du vært i utlandet i noen av dagene du søker omsorgspenger for?</p>
+            {{jaNeiSvar harOpphold}}<br/>
+        {{/if}}
+        <ul>
+            {{# each søknad.opphold as |o|}}
+            <li>
+                {{# if o.erEØSLand}}
+                    <li>{{o.landnavn}}: {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/></li>
+                {{else}}
+                    <li>{{o.landnavn}} (utenfor EØS): {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/></li>
+                {{/if}}
+                </li>
+            {{/each}}
+        </ul>
+    </section>
+
+    <section id="årsakTilUtbetaling">
+        <h2>Årsak til søknad om utbetaling</h2>
+            {{# each arbeidsgivere as |arbeidsgiver|}}
+                <h3 class="sporsmalstekst">{{arbeidsgiver.navn}} ({{arbeidsgiver.organisasjonsnummer}})</h3>
+
+                <p>Årsak til søknad: {{ arbeidsgiver.utbetalingsårsak}}</p>
+
+                {{#if arbeidsgiver.harSattKonfliktForklaring}}
+                    <p>Din forklaring på situasjonen med arbeidsgiver:</p>
+                    <p class="fritekst">{{arbeidsgiver.konfliktForklaring}}</p>
+                {{/if}}
+
+                {{#if arbeidsgiver.harSattÅrsakNyoppstartet}}
+                    <p>Hva var situasjonen din rett før du startet hos denne arbeidsgiveren? {{arbeidsgiver.årsakNyoppstartet}}</p>
+                {{/if}}
+                <br/>
+            {{/each}}
+    </section>
+
+    <section id="medlemskap">
+        <h2>Medlemskap i folketrygden</h2>
+
+        <p class="sporsmalstekst">Har du bodd i utlandet i de siste 12 månedene?</p>
+        {{jaNeiSvar medlemskap.siste12}}
+
+        <br/><br/>
+
+        <p class="sporsmalstekst">Skal du bo i utlandet i de neste 12 månedene?</p>
+        {{ jaNeiSvar medlemskap.neste12}}
+        <br/><br/>
+
+        {{#if harBosteder}}
+            <h3>Utenlandsopphold i medlemsperioden</h3>
+        {{/if}}
+        <ul>
+            {{# each søknad.bosteder as |b|}}
+                <li>
+                    {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
+                </li>
+            {{/each}}
+        </ul>
+    </section>
+
+    <section id="vedlegg">
+        <h2>Vedlegg</h2>
+        {{#if harVedlegg}}
+            <ul>
+                {{#each titler.vedlegg as |vedlegg|}}
+                    <li><p>{{vedlegg.tittel}}</p></li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p>Har ikke lastet opp vedlegg</p>
+        {{/if}}
+    </section>
+
+    <section id="samtykke">
+        <h2>Samtykke fra deg</h2>
+        <p class="sporsmalstekst">Har du forstått dine rettigheter og plikter?</p>
+        <p>{{ jaNeiSvar bekreftelser.harForståttRettigheterOgPlikter }}</p>
+        <hr />
+        <p class="sporsmalstekst">Har du bekreftet at opplysninger du har gitt er riktige?</p>
+        <p>{{ jaNeiSvar bekreftelser.harBekreftetOpplysninger }}</p>
+    </section>
+
+</div>
+<!-- FOOTER -->
+{{> partial/footerPartial søknadId=søknad.søknadId gitSha=soknadDialogCommitSha}}
+</body>
+
+</html>
+

@@ -1,0 +1,19 @@
+name: Deploy omsorgspengerutbetaling - arbeidstaker topics
+
+env:
+  TOPICS_PATH: 'nais/topics/omsorgspengerutbetaling-at-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-omp-utb-at-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/omsorgspengerutbetaling-at-topics.yml'
+
+jobs:
+  deploy-omp-utb-at-topics:
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: omp-utb-at-topics
+      topics-path: 'nais/topics/omsorgspengerutbetaling-at-topics.yml'
+    secrets: inherit
