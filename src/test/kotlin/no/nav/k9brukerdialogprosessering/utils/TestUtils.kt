@@ -8,6 +8,9 @@ import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsme
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_PREPROSESSERT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_CLEANUP_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_MOTTATT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC
@@ -80,6 +83,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
         OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC,
         OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC,
         OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC,
+
+        // Omsorgspengerutbetaling - arbeidstaker
+        OMP_UTB_AT_MOTTATT_TOPIC,
+        OMP_UTB_AT_PREPROSESSERT_TOPIC,
+        OMP_UTB_AT_CLEANUP_TOPIC,
 
         // K9 Dittnav varsel
         K9_DITTNAV_VARSEL_TOPIC
