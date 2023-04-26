@@ -3,13 +3,13 @@ package no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.helse.felles.Omsorgstilbud
 import no.nav.k9.søknad.Søknad
-import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
+import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Barn
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Beredskap
@@ -19,6 +19,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
@@ -45,6 +46,7 @@ data class PSBPreprosessertSøknad(
     val nattevåk: Nattevåk?,
     val omsorgstilbud: Omsorgstilbud? = null,
     val frilans: Frilans? = null,
+    val stønadGodtgjørelse: StønadGodtgjørelse? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val arbeidsgivere: List<Arbeidsgiver>,
     val barnRelasjon: BarnRelasjon? = null,
@@ -71,6 +73,7 @@ data class PSBPreprosessertSøknad(
         nattevåk = melding.nattevåk,
         omsorgstilbud = melding.omsorgstilbud,
         frilans = melding.frilans,
+        stønadGodtgjørelse = melding.stønadGodtgjørelse,
         selvstendigNæringsdrivende = melding.selvstendigNæringsdrivende,
         opptjeningIUtlandet = melding.opptjeningIUtlandet,
         utenlandskNæring = melding.utenlandskNæring,

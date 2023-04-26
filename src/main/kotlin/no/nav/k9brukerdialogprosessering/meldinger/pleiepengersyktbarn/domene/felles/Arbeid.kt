@@ -21,7 +21,7 @@ data class Arbeidsforhold(
 
 data class ArbeidIPeriode(
     val type: ArbeidIPeriodeType,
-    val arbeiderIPerioden: ArbeiderIPeriodenSvar,
+    val arbeiderIPerioden: ArbeiderIPeriodenSvar? = null,
     val prosentAvNormalt: Double? = null,
     val timerPerUke: Duration? = null,
     val arbeidsuker: List<ArbeidsUke>? = null

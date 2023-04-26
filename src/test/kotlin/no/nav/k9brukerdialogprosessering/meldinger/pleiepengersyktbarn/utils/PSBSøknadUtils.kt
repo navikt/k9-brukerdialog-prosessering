@@ -12,6 +12,8 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Ferieuttak
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FerieuttakIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Frilans
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FrilansType
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.HonorarerIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Land
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Medlemskap
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
@@ -21,6 +23,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningType
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Periode
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Utenlandsopphold
@@ -134,6 +137,9 @@ internal object PSBSøknadUtils {
             harInntektSomFrilanser = true,
             startdato = LocalDate.parse("2019-01-01"),
             jobberFortsattSomFrilans = true,
+            frilansTyper = listOf(FrilansType.FRILANS, FrilansType.STYREVERV),
+            misterHonorarer = true,
+            misterHonorarerIPerioden = HonorarerIPerioden.MISTER_DELER_AV_HONORARER,
             arbeidsforhold = Arbeidsforhold(
                 normalarbeidstid = NormalArbeidstid(
                     timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
@@ -143,6 +149,11 @@ internal object PSBSøknadUtils {
                     arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
                 )
             )
+        ),
+        stønadGodtgjørelse = StønadGodtgjørelse(
+            mottarStønadGodtgjørelse = true,
+            startdato = LocalDate.parse("2023-03-13"),
+            sluttdato = LocalDate.parse("2023-03-29")
         ),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
             harInntektSomSelvstendig = true,

@@ -1,34 +1,36 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn
 
+import no.nav.helse.felles.Enkeltdag
+import no.nav.helse.felles.Omsorgstilbud
+import no.nav.helse.felles.PlanUkedager
+import no.nav.k9brukerdialogprosessering.common.Constants
+import no.nav.k9brukerdialogprosessering.common.Ytelse
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsUke
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Barn
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Beredskap
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Bosted
-import no.nav.helse.felles.Enkeltdag
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Ferieuttak
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Frilans
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FrilansType
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Land
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
-import no.nav.helse.felles.Omsorgstilbud
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Periode
-import no.nav.helse.felles.PlanUkedager
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Regnskapsfører
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Utenlandsopphold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.VarigEndring
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Virksomhet
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.YrkesaktivSisteTreFerdigliknedeÅrene
-import no.nav.k9brukerdialogprosessering.common.Constants
-import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsUke
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.utils.DateUtils
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.tilString
@@ -89,6 +91,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
         "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
         "frilans" to søknad.frilans.somMap(),
+        "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
         "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
         "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
         "hjelper" to mapOf(
@@ -255,7 +258,11 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "startdato" to if (startdato != null) Constants.DATE_FORMATTER.format(startdato) else null,
         "sluttdato" to if (sluttdato != null) Constants.DATE_FORMATTER.format(sluttdato) else null,
         "jobberFortsattSomFrilans" to jobberFortsattSomFrilans,
-        "arbeidsforhold" to arbeidsforhold?.somMap()
+        "frilansTyper" to frilansTyper?.map { it.name },
+        "arbeidsforhold" to arbeidsforhold?.somMap(),
+        "erKunFrilanser" to (frilansTyper?.all { it == FrilansType.FRILANS } ?: false),
+        "harKunStyreverv" to (frilansTyper?.all { it == FrilansType.STYREVERV } ?: false),
+        "harFrilansOgStyreverv" to (frilansTyper?.containsAll(listOf(FrilansType.FRILANS, FrilansType.STYREVERV)) ?: false)
     )
 
     private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(
@@ -374,4 +381,11 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     }
 
     private fun PSBMottattSøknad.sjekkOmHarIkkeVedlegg(): Boolean = vedleggId.isEmpty()
+    private fun StønadGodtgjørelse.somMap() = mapOf(
+        "mottarStønadGodtgjørelse" to mottarStønadGodtgjørelse,
+        "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
+        "startetIPerioden" to (startdato != null),
+        "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
+        "sluttetIPerioden" to (sluttdato != null),
+    )
 }
