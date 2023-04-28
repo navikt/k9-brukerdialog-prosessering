@@ -110,17 +110,23 @@ dependencyManagement {
 	}
 }
 
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "17"
+tasks {
+	withType<KotlinCompile> {
+		kotlinOptions {
+			freeCompilerArgs = listOf("-Xjsr305=strict")
+			jvmTarget = "17"
+		}
 	}
-}
 
-tasks.withType<Jar> {
-	archiveFileName.set("app.jar")
-}
+	withType<Jar> {
+		archiveFileName.set("app.jar")
+	}
 
-tasks.withType<Test> {
-	useJUnitPlatform()
+	withType<Test> {
+		useJUnitPlatform()
+	}
+	
+	withType<Wrapper> {
+        	gradleVersion = "8.1.1"
+	}
 }
