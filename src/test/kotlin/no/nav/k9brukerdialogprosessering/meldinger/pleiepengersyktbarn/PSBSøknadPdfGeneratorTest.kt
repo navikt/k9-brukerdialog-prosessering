@@ -597,6 +597,23 @@ class PSBSøknadPdfGeneratorTest {
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "20-frilanser-uten-honorarer"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                   frilans = Frilans(
+                       harInntektSomFrilanser = true,
+                       startdato = null,
+                       sluttdato = null,
+                       jobberFortsattSomFrilans = null,
+                       misterHonorarer = null,
+                       misterHonorarerIPerioden = null,
+                       frilansTyper = null,
+                       arbeidsforhold = null
+                   )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }
