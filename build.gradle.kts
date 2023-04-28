@@ -55,8 +55,7 @@ val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
 val retryVersion by extra("2.0.0")
 val awailitilityKotlinVersion by extra("4.1.1")
-
-extra["springCloudVersion"] = "2022.0.1"
+val springCloudContractVersion = "4.0.2"
 
 dependencies {
 	implementation("no.nav.security:token-validation-core:$tokenSupportVersion")
@@ -104,15 +103,9 @@ dependencies {
 
 	testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
-	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
+	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:$springCloudContractVersion")
 	testImplementation("org.awaitility:awaitility-kotlin:$awailitilityKotlinVersion")
 
-}
-
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
-	}
 }
 
 tasks {
