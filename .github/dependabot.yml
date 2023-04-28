@@ -16,7 +16,7 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-     registries:
+    registries:
       - k9-felles
 
   - package-ecosystem: docker
