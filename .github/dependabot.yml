@@ -1,4 +1,10 @@
 version: 2
+registries:
+  k9-felles:
+    type: maven-repository
+    url: https://maven.pkg.github.com/navikt/k9-brukerdialog-prosessering
+    username: x-access-token
+    password: ${{secrets.READER_TOKEN}}
 updates:
   - package-ecosystem: github-actions
     directory: "/"
@@ -10,6 +16,8 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+     registries:
+      - k9-felles
 
   - package-ecosystem: docker
     directory: "/"
