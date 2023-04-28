@@ -9,7 +9,11 @@ plugins {
 
 group = "no.nav"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 configurations {
 	compileOnly {
@@ -106,17 +110,23 @@ dependencyManagement {
 	}
 }
 
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "17"
+tasks {
+	withType<KotlinCompile> {
+		kotlinOptions {
+			freeCompilerArgs = listOf("-Xjsr305=strict")
+			jvmTarget = "17"
+		}
 	}
-}
 
-tasks.withType<Jar> {
-	archiveFileName.set("app.jar")
-}
+	withType<Jar> {
+		archiveFileName.set("app.jar")
+	}
 
-tasks.withType<Test> {
-	useJUnitPlatform()
+	withType<Test> {
+		useJUnitPlatform()
+	}
+	
+	withType<Wrapper> {
+        	gradleVersion = "8.1.1"
+	}
 }
