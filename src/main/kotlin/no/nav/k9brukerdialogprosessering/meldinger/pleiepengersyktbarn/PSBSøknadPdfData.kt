@@ -259,6 +259,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "sluttdato" to if (sluttdato != null) Constants.DATE_FORMATTER.format(sluttdato) else null,
         "jobberFortsattSomFrilans" to jobberFortsattSomFrilans,
         "frilansTyper" to frilansTyper?.map { it.name },
+        "misterHonorarer" to misterHonorarer,
+        "misterHonorarerIPerioden" to misterHonorarerIPerioden?.name,
         "arbeidsforhold" to arbeidsforhold?.somMap(),
         "erKunFrilanser" to (frilansTyper?.all { it == FrilansType.FRILANS } ?: false),
         "harKunStyreverv" to (frilansTyper?.all { it == FrilansType.STYREVERV } ?: false),

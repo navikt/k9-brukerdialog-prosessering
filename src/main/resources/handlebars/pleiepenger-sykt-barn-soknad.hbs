@@ -314,6 +314,18 @@
         {{#if frilans.arbeidsforhold}}
             <ul class="ul-no-indent">
                 <li><b>Frilans</b></li>
+                {{#if frilans.misterHonorarer}}
+                    {{#if frilans.misterHonorarerIPerioden}}
+                        {{#eq frilans.misterHonorarerIPerioden "MISTER_ALLE_HONORARER"}}
+                            <li><ul><li>Honorar for verv: Jeg mister alle honorar.</li></ul></li>
+                        {{/eq}}
+                        {{#eq frilans.misterHonorarerIPerioden "MISTER_DELER_AV_HONORARER"}}
+                            <li><ul><li>Honorar for verv: Jeg mister deler av honorar</li></ul>.</li>
+                        {{/eq}}
+                    {{/if}}
+                {{else}}
+                    <p>Jeg mister ikke honorar for verv i søknadsperioden</p>
+                {{/if}}
                 {{> partial/arbeid/arbeidsforholdPartial arbeidsforhold=frilans.arbeidsforhold}}
             </ul>
         {{/if}}

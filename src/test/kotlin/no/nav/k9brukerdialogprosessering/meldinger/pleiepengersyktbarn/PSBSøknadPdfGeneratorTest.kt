@@ -39,6 +39,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FrilansType
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.HonorarerIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.k9brukerdialogprosessering.utils.K9FormatUtils
@@ -176,6 +177,8 @@ class PSBSøknadPdfGeneratorTest {
                     sluttdato = LocalDate.now(),
                     jobberFortsattSomFrilans = false,
                     frilansTyper = listOf(FrilansType.FRILANS, FrilansType.STYREVERV),
+                    misterHonorarer = true,
+                    misterHonorarerIPerioden = HonorarerIPerioden.MISTER_ALLE_HONORARER,
                     arbeidsforhold = Arbeidsforhold(
                         normalarbeidstid = NormalArbeidstid(
                             timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
