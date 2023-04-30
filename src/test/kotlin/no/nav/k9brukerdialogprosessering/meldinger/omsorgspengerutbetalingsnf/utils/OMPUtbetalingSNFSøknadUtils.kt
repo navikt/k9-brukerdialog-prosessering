@@ -44,7 +44,7 @@ internal object OMPUtbetalingSNFSøknadUtils {
         søker = Søker(
             aktørId = "123456",
             fødselsnummer = "02119970078",
-            fødselsdato = LocalDate.now().minusDays(1000),
+            fødselsdato = LocalDate.parse("2020-08-02"),
             etternavn = "Nordmann",
             mellomnavn = "Mellomnavn",
             fornavn = "Ola"
@@ -129,15 +129,15 @@ internal object OMPUtbetalingSNFSøknadUtils {
         ),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
             næringstype = Næringstyper.FISKE,
-            fraOgMed = LocalDate.now(),
+            fraOgMed = LocalDate.parse("2023-04-29"),
             erNyoppstartet = true,
-            tilOgMed = LocalDate.now().plusDays(10),
+            tilOgMed = LocalDate.parse("2023-05-09"),
             navnPåVirksomheten = "Kjells Møbelsnekkeri",
             registrertINorge = JaNei.Ja,
             næringsinntekt = 123456789,
             organisasjonsnummer = "111111",
             varigEndring = VarigEndring(
-                dato = LocalDate.now().minusDays(20),
+                dato = LocalDate.parse("2023-04-09"),
                 inntektEtterEndring = 234543,
                 forklaring = "Forklaring som handler om varig endring"
             ),
