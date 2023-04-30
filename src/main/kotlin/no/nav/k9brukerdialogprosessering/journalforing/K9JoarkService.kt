@@ -83,9 +83,15 @@ class K9JoarkService(
             .build()
             .toUri()
 
+        Ytelse.OMSORGSPENGER_UTBETALING_SNF -> UriComponentsBuilder
+            .fromPath("/v1/omsorgspengeutbetaling/journalforing")
+            .queryParam("arbeidstype", "frilanser")
+            .queryParam("arbeidstype", "selvstendig-naeringsdrivende")
+            .build()
+            .toUri()
+
         Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> TODO()
         Ytelse.OMSORGSDAGER_ALENEOMSORG -> TODO()
-        Ytelse.OMSORGSPENGER_UTBETALING_SNF -> TODO()
     }
 }
 
@@ -138,7 +144,7 @@ data class JournalføringsRequest(
     @JsonProperty("norsk_ident") val norskIdent: String,
     @JsonProperty("soker_navn") val sokerNavn: Navn,
     @JsonProperty("mottatt") val mottatt: ZonedDateTime,
-    @JsonProperty("dokument_id") val dokumentId: List<List<String>>
+    @JsonProperty("dokument_id") val dokumentId: List<List<String>>,
 )
 
 data class JournalføringsResponse(
