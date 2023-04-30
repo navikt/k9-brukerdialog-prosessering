@@ -14,6 +14,7 @@ import no.nav.k9brukerdialogprosessering.common.Constants.DATE_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.FraværÅrsak
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.AktivitetFravær
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.tilString
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
@@ -52,6 +53,8 @@ class PDFGenerator {
             tidspunktHelper()
             varighetHelper()
             årsakHelper()
+            fraværSomFormatHelper()
+            aktivitetFraværHelper()
             infiniteLoops(true)
         }
 
@@ -141,56 +144,75 @@ class PDFGenerator {
                 }
             })
         }
-    }
 
-    fun genererPDF(pdfData: PdfData): ByteArray = template(pdfData)
-        .apply(
-            Context
-                .newBuilder(pdfData.pdfData())
-                .resolver(MapValueResolver.INSTANCE)
-                .build()
-        ).let { html ->
-            val outputStream = ByteArrayOutputStream()
-            PdfRendererBuilder()
-                .useFastMode()
-                .usePdfUaAccessbility(true)
-                .withHtmlContent(html, "")
-                .medFonter()
-                .toStream(outputStream)
-                .buildPdfRenderer()
-                .createPDF()
-
-            outputStream.use {
-                it.toByteArray()
-            }
+        private fun Handlebars.fraværSomFormatHelper() {
+            registerHelper("fraværSomFormat", Helper<List<String>> { context, _ ->
+                when(context.size) {
+                    1 -> "Fravær som"
+                    2 -> "Fravær både som"
+                    else -> ""
+                }
+            })
         }
 
-    private fun template(pdfData: PdfData): Template = handlebars.compile(pdfData.resolveTemplate())
+        private fun Handlebars.aktivitetFraværHelper() {
+            registerHelper("aktivitetFravær", Helper<String> { context, _ ->
+                when(AktivitetFravær.valueOf(context)) {
+                    AktivitetFravær.FRILANSER -> "frilanser"
+                    AktivitetFravær.SELVSTENDIG_VIRKSOMHET -> "selvstendig næringsdrivende"
+                }
+            })
+        }
+    }
 
-    private fun PdfRendererBuilder.medFonter(): PdfRendererBuilder {
-        val sourceSansPro = "Source Sans Pro"
-        return useFont(
-            { ByteArrayInputStream(REGULAR_FONT) },
+fun genererPDF(pdfData: PdfData): ByteArray = template(pdfData)
+    .apply(
+        Context
+            .newBuilder(pdfData.pdfData())
+            .resolver(MapValueResolver.INSTANCE)
+            .build()
+    ).let { html ->
+        val outputStream = ByteArrayOutputStream()
+        PdfRendererBuilder()
+            .useFastMode()
+            .usePdfUaAccessbility(true)
+            .withHtmlContent(html, "")
+            .medFonter()
+            .toStream(outputStream)
+            .buildPdfRenderer()
+            .createPDF()
+
+        outputStream.use {
+            it.toByteArray()
+        }
+    }
+
+private fun template(pdfData: PdfData): Template = handlebars.compile(pdfData.resolveTemplate())
+
+private fun PdfRendererBuilder.medFonter(): PdfRendererBuilder {
+    val sourceSansPro = "Source Sans Pro"
+    return useFont(
+        { ByteArrayInputStream(REGULAR_FONT) },
+        sourceSansPro,
+        400,
+        BaseRendererBuilder.FontStyle.NORMAL,
+        false
+    )
+        .useFont(
+            { ByteArrayInputStream(BOLD_FONT) },
             sourceSansPro,
-            400,
+            700,
             BaseRendererBuilder.FontStyle.NORMAL,
             false
         )
-            .useFont(
-                { ByteArrayInputStream(BOLD_FONT) },
-                sourceSansPro,
-                700,
-                BaseRendererBuilder.FontStyle.NORMAL,
-                false
-            )
-            .useFont(
-                { ByteArrayInputStream(ITALIC_FONT) },
-                sourceSansPro,
-                400,
-                BaseRendererBuilder.FontStyle.ITALIC,
-                false
-            )
-    }
+        .useFont(
+            { ByteArrayInputStream(ITALIC_FONT) },
+            sourceSansPro,
+            400,
+            BaseRendererBuilder.FontStyle.ITALIC,
+            false
+        )
+}
 }
 
 abstract class PdfData {
@@ -204,7 +226,7 @@ abstract class PdfData {
         Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad"
         Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad"
         Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspenger-utbetaling-arbeidstaker-soknad"
-        Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspengerutbetaling-snf-soknad"
+        Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspenger-utbetaling-snf-soknad"
         Ytelse.ETTERSENDELSE -> "ettersendelse"
     }
 }

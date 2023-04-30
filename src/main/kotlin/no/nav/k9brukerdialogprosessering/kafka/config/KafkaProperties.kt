@@ -78,4 +78,9 @@ enum class KafkaStreamName(val value: String) {
     OMP_UTB_AT_PREPROSESSERING("omp-utb-at-preprosessering"),
     OMP_UTB_AT_JOURNALFØRING("omp-utb-at-journalforing"),
     OMP_UTB_AT_CLEANUP("omp-utb-at-cleanup"),
+
+    // Omsorgspengerutbetaling - selvstendig næringsdrivende og frilanser
+    OMP_UTB_SNF_PREPROSESSERING("omp-utb-snf-preprosessering"),
+    OMP_UTB_SNF_JOURNALFØRING("omp-utb-snf-journalforing"),
+    OMP_UTB_SNF_CLEANUP("omp-utb-snf-cleanup"),
 }
