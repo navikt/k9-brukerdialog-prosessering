@@ -92,13 +92,13 @@ no.nav:
 
       omp-utb-snf-preprosessering:
         application-id-suffix: omp-utb-snf-preprosessering
-        auto-offset-reset: earliest
+        auto-offset-reset: none
       omp-utb-snf-journalforing:
         application-id-suffix: omp-utb-snf-journalforing
-        auto-offset-reset: earliest
+        auto-offset-reset: none
       omp-utb-snf-cleanup:
         application-id-suffix: omp-utb-snf-cleanup
-        auto-offset-reset: earliest
+        auto-offset-reset: none
     schema-registry:
       url: ${KAFKA_SCHEMA_REGISTRY_URL}
       user: ${KAFKA_SCHEMA_REGISTRY_USER}
