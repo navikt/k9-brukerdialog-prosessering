@@ -13,7 +13,6 @@ data class KafkaProperties(
     val retryBackoffMs: Int,
     val replicationFactor: Int,
     val streams: Map<String, KafkaStreamsProperties>,
-    val schemaRegistry: KafkaSchemaRegistryProperties,
     val security: KafkaSecurityProperties? = null,
 ) {
     fun streamProperties(streamPropertyKey: KafkaStreamName): KafkaStreamsProperties {
@@ -39,12 +38,6 @@ data class KafkaSSlProperties(
     val keyStoreLocation: Resource,
     val keyStoreType: String,
     val keyStorePassword: String
-)
-
-data class KafkaSchemaRegistryProperties(
-    val url: String,
-    val user: String,
-    val password: String
 )
 
 enum class KafkaStreamName(val value: String) {

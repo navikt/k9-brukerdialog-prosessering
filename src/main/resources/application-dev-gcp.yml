@@ -10,7 +10,3 @@ no.nav:
         key-store-location: file:${KAFKA_KEYSTORE_PATH}
         key-store-password: ${KAFKA_CREDSTORE_PASSWORD}
         key-store-type: PKCS12
-    schema-registry:
-      url: ${KAFKA_SCHEMA_REGISTRY_URL}
-      username: ${KAFKA_SCHEMA_REGISTRY_USER}
-      password: ${KAFKA_SCHEMA_REGISTRY_PASSWORD}

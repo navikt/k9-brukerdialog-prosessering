@@ -99,10 +99,6 @@ no.nav:
       omp-utb-snf-cleanup:
         application-id-suffix: omp-utb-snf-cleanup
         auto-offset-reset: none
-    schema-registry:
-      url: ${KAFKA_SCHEMA_REGISTRY_URL}
-      user: ${KAFKA_SCHEMA_REGISTRY_USER}
-      password: ${KAFKA_SCHEMA_REGISTRY_PASSWORD}
 
 management:
   endpoint:
