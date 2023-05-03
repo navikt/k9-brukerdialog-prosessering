@@ -1,6 +1,5 @@
 package no.nav.k9brukerdialogprosessering.kafka.config
 
-import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig
 import io.micrometer.core.instrument.MeterRegistry
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.kafka.config.StreamsBuilderFactoryBean
 import org.springframework.kafka.streams.KafkaStreamsMicrometerListener
 import org.springframework.kafka.support.serializer.JsonSerde
-import java.lang.Exception
 
 /**
  * Configuration for Kafka Streams.
@@ -50,8 +48,6 @@ object KafkaStreamsConfigUtils {
         props[ProducerConfig.ACKS_CONFIG] = "all"
         props[ProducerConfig.RETRIES_CONFIG] = kafkaProperties.retries
 
-
-
         kafkaProperties.security?.let {
             props[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = it.protocol
             props[SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG] = ""
@@ -61,13 +57,6 @@ object KafkaStreamsConfigUtils {
             props[SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG] = it.ssl.keyStoreLocation.file.absolutePath
             props[SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG] = it.ssl.keyStorePassword
             props[SslConfigs.SSL_KEYSTORE_TYPE_CONFIG] = it.ssl.keyStoreType
-        }
-
-        kafkaProperties.schemaRegistry.let {
-            props[KafkaAvroDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG] = it.url
-            props[KafkaAvroDeserializerConfig.BASIC_AUTH_CREDENTIALS_SOURCE] = "USER_INFO"
-            props[KafkaAvroDeserializerConfig.USER_INFO_CONFIG] = "${it.user}:${it.password}"
-            props[KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG] = "true"
         }
 
         return props
