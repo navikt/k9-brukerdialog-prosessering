@@ -11,8 +11,13 @@ group = "no.nav"
 version = "0.0.1-SNAPSHOT"
 
 java {
-	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(17))
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
+configurations {
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
 	}
 }
 
@@ -77,7 +82,6 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-
 
 	// Logging
 	implementation("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
