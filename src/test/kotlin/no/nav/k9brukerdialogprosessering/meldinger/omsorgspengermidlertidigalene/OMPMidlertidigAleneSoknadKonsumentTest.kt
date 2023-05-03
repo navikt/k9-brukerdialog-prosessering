@@ -59,7 +59,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest {
     fun setUp() {
         producer = embeddedKafkaBroker.opprettKafkaProducer()
         consumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "omsorgspengerutbetaling-arbeidstaker", topics = listOf(
+            groupPrefix = "omsorgspenger-midlertidig-alene", topics = listOf(
                 OMP_MA_MOTTATT_TOPIC, OMP_MA_PREPROSESSERT_TOPIC, OMP_MA_CLEANUP_TOPIC
             )
         )

@@ -59,7 +59,7 @@ class OMPUtbetalingSNFSøknadKonsumentTest {
     fun setUp() {
         producer = embeddedKafkaBroker.opprettKafkaProducer()
         consumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "omsorgspengerutbetaling-arbeidstaker", topics = listOf(
+            groupPrefix = "omsorgspengerutbetaling-snf", topics = listOf(
                 OMP_UTB_SNF_MOTTATT_TOPIC, OMP_UTB_SNF_PREPROSESSERT_TOPIC, OMP_UTB_SNF_CLEANUP_TOPIC
             )
         )
