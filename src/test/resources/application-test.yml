@@ -83,6 +83,16 @@ no.nav:
         application-id-suffix: omp-utb-snf-cleanup
         auto-offset-reset: earliest
 
+      omp-ma-preprosessering:
+        application-id-suffix: omp-ma-preprosessering
+        auto-offset-reset: earliest
+      omp-ma-journalforing:
+        application-id-suffix: omp-ma-journalforing
+        auto-offset-reset: earliest
+      omp-ma-cleanup:
+        application-id-suffix: omp-ma-cleanup
+        auto-offset-reset: earliest
+
     schema-registry:
       url: mock://localhost
       user: username
