@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.0.5"
+	id("org.springframework.boot") version "3.0.6"
 	id("io.spring.dependency-management") version "1.1.0"
 	kotlin("jvm") version "1.8.10"
 	kotlin("plugin.spring") version "1.8.10"
@@ -16,16 +16,6 @@ java {
 	}
 }
 
-kotlin {
-	jvmToolchain(17)
-}
-
-configurations {
-	compileOnly {
-		extendsFrom(configurations.annotationProcessor.get())
-	}
-}
-
 repositories {
 	mavenCentral()
 	maven {
@@ -36,25 +26,21 @@ repositories {
 			password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
 		}
 	}
-
-	maven {
-		name = "confluent"
-		url = uri("https://packages.confluent.io/maven/")
-	}
 }
 
-val tokenSupportVersion by extra("3.0.8")
+val tokenSupportVersion = "3.0.8"
 val jsonassertVersion = "1.5.1"
 val k9FormatVersion = "8.0.7"
-val springMockkVersion by extra("4.0.2")
-val confluentVersion by extra("7.3.0")
-val logstashLogbackEncoderVersion by extra("7.2")
+val springMockkVersion = "4.0.2"
+val confluentVersion = "7.3.0"
+val logstashLogbackEncoderVersion = "7.2"
 val slf4jVersion = "2.0.6"
+val jacksonVersion = "2.15.0"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
-val retryVersion by extra("2.0.0")
-val awailitilityKotlinVersion by extra("4.1.1")
+val retryVersion = "2.0.0"
+val awailitilityKotlinVersion = "4.1.1"
 val springCloudContractVersion = "4.0.2"
 
 dependencies {
@@ -77,8 +63,6 @@ dependencies {
 
 	// kafka
 	implementation("org.springframework.kafka:spring-kafka")
-	implementation("io.confluent:kafka-connect-avro-converter:$confluentVersion")
-	implementation("io.confluent:kafka-avro-serializer:$confluentVersion")
 	implementation("org.apache.kafka:kafka-streams")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 
@@ -94,12 +78,11 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
-
 	// Logging
 	implementation("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
 
 	// Jackson
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
 	testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")

@@ -110,11 +110,6 @@ no.nav:
         application-id-suffix: omp-ma-cleanup
         auto-offset-reset: earliest
 
-    schema-registry:
-      url: ${KAFKA_SCHEMA_REGISTRY_URL}
-      user: ${KAFKA_SCHEMA_REGISTRY_USER}
-      password: ${KAFKA_SCHEMA_REGISTRY_PASSWORD}
-
 management:
   endpoint:
     health:

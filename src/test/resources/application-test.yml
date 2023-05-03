@@ -93,11 +93,6 @@ no.nav:
         application-id-suffix: omp-ma-cleanup
         auto-offset-reset: earliest
 
-    schema-registry:
-      url: mock://localhost
-      user: username
-      password: password
-
 wiremock:
   reset-mappings-after-each-test: true
   server:
