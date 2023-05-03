@@ -1,0 +1,19 @@
+name: Deploy omsorgspenger - midlertidig alene topics
+
+env:
+  TOPICS_PATH: 'nais/topics/omsorgspenger-ma-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-omp-ma-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/omsorgspenger-ma-topics.yml'
+
+jobs:
+  deploy-omp-ma-topics:
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: omp-ma-topics
+      topics-path: 'nais/topics/omsorgspenger-ma-topics.yml'
+    secrets: inherit

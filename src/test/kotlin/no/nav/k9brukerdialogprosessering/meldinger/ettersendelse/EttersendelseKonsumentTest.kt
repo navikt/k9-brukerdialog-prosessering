@@ -118,7 +118,7 @@ class EttersendelseKonsumentTest {
     }
 
     @Language("JSON")
-    private fun preprosessertEttersendelseSomJson(søknadId: String, mottatt: String) = """
+    private fun preprosessertEttersendelseSomJson(søknadId: String, mottatt: String)   = """
         {
           "harForstattRettigheterOgPlikter": true,
           "k9Format": {
