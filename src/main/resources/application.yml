@@ -102,13 +102,13 @@ no.nav:
 
       omp-ma-preprosessering:
         application-id-suffix: omp-ma-preprosessering
-        auto-offset-reset: earliest
+        auto-offset-reset: none
       omp-ma-journalforing:
         application-id-suffix: omp-ma-journalforing
-        auto-offset-reset: earliest
+        auto-offset-reset: none
       omp-ma-cleanup:
         application-id-suffix: omp-ma-cleanup
-        auto-offset-reset: earliest
+        auto-offset-reset: none
 
 management:
   endpoint:
