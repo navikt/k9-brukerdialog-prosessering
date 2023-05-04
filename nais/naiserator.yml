@@ -7,8 +7,6 @@ metadata:
     team: {{team}}
 spec:
   image: {{ image }}
-  ingresses:
-    - "https://k9-brukerdialog-prosessering.dev.nav.no"
   port: 8080
   azure:
     application:
