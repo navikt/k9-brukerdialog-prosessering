@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="NO">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>{{tittel}}</title>
+    <meta name="subject" content="Søknad om ekstra omsorgsdager ved aleneomsorg"/>
+    <meta name="author" content="nav.no"/>
+    <meta name="description"
+          content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
+    <bookmarks>
+        <bookmark name="Søker" href="#søker"/>
+        <bookmark name="Barn" href="#barn"/>
+        <bookmark name="Samtykke" href="#samtykke"/>
+    </bookmarks>
+    {{#block 'style-common' }}
+    {{/block}}
+</head>
+
+<body>
+<h1 id="header">{{tittel}}</h1>
+<div class="nokkelinfo">
+    <p><strong>Sendt til NAV</strong> {{søknadMottattDag}} {{ søknadMottatt }}</p>
+    <p><strong>Språk:</strong> {{hjelp.språk}}</p>
+</div>
+<div class="innholdscontainer">
+
+    <div class="person" id="søker">
+        <p class="navn">{{ søker.navn }}</p>
+        <p>{{ søker.fødselsnummer }}</p>
+        <br/>
+    </div>
+
+    <section id="barn">
+        <h2>Barn du har aleneomsorg for</h2>
+        <p><b>Navn: </b>
+            {{#if barn.type}}
+                {{barn.navn}} {{barn.type}}
+            {{else}}
+                {{barn.navn}}
+            {{/if}}
+        </p>
+        <p><b>Fødselsnummer: </b>{{barn.identitetsnummer}}</p>
+        <p>
+            {{#if barn.dato}}
+                <b>Tidspunkt for aleneomsorg: </b> {{barn.dato}}
+            {{else}}
+                <b>{{barn.tidspunktForAleneomsorgUtskrift}}</b>
+            {{/if}}
+        </p>
+        {{#if barn.fødselsdato}}
+            <p><b>Fødselsdato: </b> {{barn.fødselsdato}}</p>
+        {{/if}}
+    </section>
+
+    <!-- SAMTYKKE -->
+    <section id="samtykke">
+        <h2>Samtykke fra deg</h2>
+        <p class="sporsmalstekst">Har du forstått dine rettigheter og plikter?</p>
+        <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
+        <hr/>
+        <p class="sporsmalstekst">Har du bekreftet at opplysningene du har gitt er riktige?</p>
+        <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
+    </section>
+
+</div>
+
+<!-- FOOTER -->
+{{> partial/footerPartial søknadId=søknadId gitSha=soknadDialogCommitSha}}
+</body>
+
+</html>

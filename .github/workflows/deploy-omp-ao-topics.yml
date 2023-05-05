@@ -1,0 +1,19 @@
+name: Deploy omsorgspenger - aleneomsorg topics
+
+env:
+  TOPICS_PATH: 'nais/topics/omsorgspenger-ao-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-omp-ao-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/omsorgspenger-ao-topics.yml'
+
+jobs:
+  deploy-omp-ao-topics:
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: omp-ao-topics
+      topics-path: 'nais/topics/omsorgspenger-ao-topics.yml'
+    secrets: inherit

@@ -95,7 +95,10 @@ class K9JoarkService(
             .build()
             .toUri()
 
-        Ytelse.OMSORGSDAGER_ALENEOMSORG -> TODO()
+        Ytelse.OMSORGSDAGER_ALENEOMSORG -> UriComponentsBuilder
+            .fromPath("/v1/omsorgsdager/aleneomsorg/journalforing")
+            .build()
+            .toUri()
     }
 }
 
