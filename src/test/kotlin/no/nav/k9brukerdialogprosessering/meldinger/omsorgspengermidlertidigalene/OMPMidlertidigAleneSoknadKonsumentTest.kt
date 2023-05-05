@@ -146,7 +146,6 @@ class OMPMidlertidigAleneSoknadKonsumentTest {
             consumer.lesMelding(key = søknadId, topic = OMP_MA_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        println("---> " + preprosessertSøknadJson)
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }
     @Language("JSON")

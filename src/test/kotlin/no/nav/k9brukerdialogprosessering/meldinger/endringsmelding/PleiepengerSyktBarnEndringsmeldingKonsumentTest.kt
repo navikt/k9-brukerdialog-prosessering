@@ -119,7 +119,6 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
         val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        println("---> " + preprosessertSøknadJson)
         JSONAssert.assertEquals(preprosessertEndringsmeldingSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }
 
