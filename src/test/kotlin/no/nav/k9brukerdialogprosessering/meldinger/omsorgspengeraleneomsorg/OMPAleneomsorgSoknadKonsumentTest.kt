@@ -1,20 +1,20 @@
-package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn
+package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
-import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
+import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.utils.SøknadUtils
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.OMPAleneomsorgTopologyConfiguration.Companion.OMP_AO_CLEANUP_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.OMPAleneomsorgTopologyConfiguration.Companion.OMP_AO_MOTTATT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.OMPAleneomsorgTopologyConfiguration.Companion.OMP_AO_PREPROSESSERT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.utils.OMPAleneomsorgSoknadUtils
 import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
 import no.nav.k9brukerdialogprosessering.utils.KafkaIntegrationTest
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
@@ -37,10 +37,10 @@ import java.time.ZonedDateTime
 import java.util.*
 
 @KafkaIntegrationTest
-class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
+class OMPAleneomsorgSoknadKonsumentTest {
 
     @Autowired
-    private lateinit var objectMapper: ObjectMapper
+    private lateinit var mapper: ObjectMapper
 
     @Autowired
     private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
@@ -51,21 +51,21 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
     @MockkBean(relaxed = true)
     private lateinit var k9JoarkService: K9JoarkService
 
-    lateinit var producer: Producer<String, Any> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
-    lateinit var consumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
-    lateinit var k9DittnavVarselConsumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
+    lateinit var producer: Producer<String, Any>
+    lateinit var consumer: Consumer<String, String>
+    lateinit var k9DittnavVarselConsumer: Consumer<String, String>
 
     @BeforeAll
     fun setUp() {
         producer = embeddedKafkaBroker.opprettKafkaProducer()
         consumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "omsorgspenger-kronisk-sykt-barn", topics = listOf(
-                OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC, OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC, OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC
+            groupPrefix = "omsorgspenger-aleneomsorg", topics = listOf(
+                OMP_AO_MOTTATT_TOPIC, OMP_AO_PREPROSESSERT_TOPIC, OMP_AO_CLEANUP_TOPIC
             )
         )
         k9DittnavVarselConsumer = embeddedKafkaBroker.opprettKafkaConsumer(
             groupPrefix = "k9-dittnav-varsel",
-            topics = listOf(K9_DITTNAV_VARSEL_TOPIC)
+            topics = listOf(DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC)
         )
     }
 
@@ -81,17 +81,21 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
         val søknadId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15.000Z"
         val mottatt = ZonedDateTime.parse(mottattString)
-        val søknadMottatt = SøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
+        val søknadMottatt = OMPAleneomsorgSoknadUtils.defaultSøknad(
+            søknadId = søknadId,
+            mottatt = mottatt
+        )
+
         val correlationId = UUID.randomUUID().toString()
         val metadata = Metadata(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
-        val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
+        val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
         val forventetDokmentIderForSletting = listOf("123456789", "987654321")
         coEvery { k9MellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
         coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC)
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_AO_MOTTATT_TOPIC)
         verify(exactly = 1, timeout = 120 * 1000) {
             runBlocking {
                 k9MellomlagringService.slettDokumenter(any(), any())
@@ -100,18 +104,18 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
 
         k9DittnavVarselConsumer.lesMelding(
             key = søknadId,
-            topic = K9_DITTNAV_VARSEL_TOPIC,
+            topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC,
             maxWaitInSeconds = 40
         ).value().assertDittnavVarsel(
             K9Beskjed(
                 metadata = metadata,
                 grupperingsId = søknadId,
-                tekst = "Vi har mottatt søknad fra deg om ekstra omsorgsdager ved kronisk sykt eller funksjonshemmet barn.",
+                tekst = "Vi har mottatt din melding om registrering av aleneomsorg.",
                 link = null,
                 dagerSynlig = 7,
                 søkerFødselsnummer = søknadMottatt.søkerFødselsnummer(),
                 eventId = "testes ikke",
-                ytelse = "OMSORGSPENGER_UTV_KS",
+                ytelse = "OMSORGSDAGER_ALENEOMSORG",
             )
         )
     }
@@ -121,11 +125,14 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
         val søknadId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15.000Z"
         val mottatt = ZonedDateTime.parse(mottattString)
-        val søknadMottatt = SøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
+        val søknadMottatt = OMPAleneomsorgSoknadUtils.defaultSøknad(
+            søknadId = søknadId,
+            mottatt = mottatt
+        )
         val correlationId = UUID.randomUUID().toString()
         val metadata = Metadata(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
-        val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
+        val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
         coEvery { k9MellomlagringService.lagreDokument(any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
@@ -134,67 +141,59 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC)
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_AO_MOTTATT_TOPIC)
         val lesMelding =
-            consumer.lesMelding(key = søknadId, topic = OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40)
-                .value()
+            consumer.lesMelding(key = søknadId, topic = OMP_AO_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }
-
     @Language("JSON")
     private fun preprosessertSøknadSomJson(søknadId: String, mottatt: String) = """
-         {
-          "soknadId": "$søknadId",
+       {
+          "søknadId": "$søknadId",
           "mottatt": "$mottatt",
           "språk": "nb",
           "barn": {
-            "aktørId": "123456",
-            "fødselsdato": "2020-01-01",
-            "navn": "Ole Dole Doffen",
-            "norskIdentifikator": "02119970078"
-          },
-          "kroniskEllerFunksjonshemming": false,
-          "søker": {
-            "etternavn": "Kjeller",
-            "mellomnavn": null,
+            "identitetsnummer": "29076523302",
+            "dato": "2020-08-07",
             "aktørId": "12345",
-            "fødselsdato": "2000-01-01",
-            "fornavn": "Kjell",
-            "fødselsnummer": "26104500284"
+            "tidspunktForAleneomsorg": "SISTE_2_ÅRENE",
+            "fødselsdato": null,
+            "navn": "Ole Dole",
+            "type": "FRA_OPPSLAG"
+          },
+          "søker": {
+            "etternavn": "Nordmann",
+            "mellomnavn": "Mellomnavn",
+            "aktørId": "123456",
+            "fødselsdato": "1993-01-04",
+            "fornavn": "Ola",
+            "fødselsnummer": "02119970078"
           },
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
             [
               "123456789",
               "987654321"
-            ],
-            [
-              "5678"
-            ],
-            [
-              "1234"
             ]
           ],
-          "relasjonTilBarnet": "FAR",
-          "sammeAdresse": true,
           "harBekreftetOpplysninger": true,
-          "k9FormatSøknad": {
+          "k9Søknad": {
             "språk": "nb",
             "kildesystem": null,
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "26104500284"
+              "norskIdentitetsnummer": "02119970078"
             },
             "ytelse": {
               "barn": {
                 "fødselsdato": null,
-                "norskIdentitetsnummer": "02119970078"
+                "norskIdentitetsnummer": "29076523302"
               },
-              "kroniskEllerFunksjonshemming": true,
-              "type": "OMP_UTV_KS"
+              "type": "OMP_UTV_AO",
+              "periode": "2020-01-01\/.."
             },
             "journalposter": [],
             "begrunnelseForInnsending": {
@@ -204,6 +203,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
           }
         }
         """.trimIndent()
+
 }
 
 private fun String.assertDittnavVarsel(k9Beskjed: K9Beskjed) {

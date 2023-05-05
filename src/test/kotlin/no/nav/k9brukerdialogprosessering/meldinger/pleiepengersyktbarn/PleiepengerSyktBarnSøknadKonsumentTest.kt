@@ -113,7 +113,6 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        println("---> " + preprosessertSøknadJson)
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }
 

@@ -113,7 +113,6 @@ class EttersendelseKonsumentTest {
         val lesMelding = consumer.lesMelding(key = søknadId, topic = ETTERSENDELSE_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        println("---> " + preprosessertSøknadJson)
         JSONAssert.assertEquals(preprosessertEttersendelseSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }
 

@@ -81,4 +81,9 @@ enum class KafkaStreamName(val value: String) {
     OMP_MA_PREPROSESSERING("omp-ma-preprosessering"),
     OMP_MA_JOURNALFØRING("omp-ma-journalforing"),
     OMP_MA_CLEANUP("omp-ma-cleanup"),
+
+    // Omsorgspenger - alene omsorg
+    OMP_AO_PREPROSESSERING("omp-ao-preprosessering"),
+    OMP_AO_JOURNALFØRING("omp-ao-journalforing"),
+    OMP_AO_CLEANUP("omp-ao-cleanup"),
 }

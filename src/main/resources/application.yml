@@ -110,6 +110,16 @@ no.nav:
         application-id-suffix: omp-ma-cleanup
         auto-offset-reset: none
 
+      omp-ao-preprosessering:
+        application-id-suffix: omp-ao-preprosessering
+        auto-offset-reset: earliest
+      omp-ao-journalforing:
+        application-id-suffix: omp-ao-journalforing
+        auto-offset-reset: earliest
+      omp-ao-cleanup:
+        application-id-suffix: omp-ao-cleanup
+        auto-offset-reset: earliest
+
 management:
   endpoint:
     health:

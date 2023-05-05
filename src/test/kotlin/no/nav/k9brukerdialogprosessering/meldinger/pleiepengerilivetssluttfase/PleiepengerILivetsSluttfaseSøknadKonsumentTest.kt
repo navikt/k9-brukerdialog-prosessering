@@ -144,7 +144,6 @@ class PleiepengerILivetsSluttfaseSøknadKonsumentTest {
                 .value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        println("---> " + preprosessertSøknadJson)
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }
 
