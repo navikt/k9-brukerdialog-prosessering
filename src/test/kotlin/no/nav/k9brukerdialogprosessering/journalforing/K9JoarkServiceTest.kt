@@ -42,6 +42,7 @@ class K9JoarkServiceTest {
             norskIdent = "12345678910",
             sokerNavn = Navn("John", "Doe", "Hansen"),
             mottatt = ZonedDateTime.now(),
+            correlationId = "123456789",
             dokumentId = listOf(listOf("123", "456"))
         )
         val journalføringsResponse = JournalføringsResponse("9876543210")
@@ -50,6 +51,7 @@ class K9JoarkServiceTest {
             urlPathMatching = "/v1/pleiepenge/journalforing",
             requestBodyJson = objectMapper.writeValueAsString(journalføringsRequest),
             responseStatus = HttpStatus.OK,
+            correlationId = "123456789",
             responseBodyJson = objectMapper.writeValueAsString(journalføringsResponse)
         )
 
