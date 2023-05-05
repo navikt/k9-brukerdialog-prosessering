@@ -40,9 +40,7 @@ object RestTemplateUtils {
         ClientHttpRequestInterceptor { request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution ->
             val correlationId = MDC.get(CORRELATION_ID_KEY) ?: UUID.randomUUID().toString()
             request.headers[NAV_CALL_ID] = correlationId
-            if (request.headers[X_CORRELATION_ID] == null) {
-                request.headers[X_CORRELATION_ID] = correlationId
-            }
+            request.headers.computeIfAbsent(CORRELATION_ID_KEY) { listOf(correlationId) }
             execution.execute(request, body)
         }
 
