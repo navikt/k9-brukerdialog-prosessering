@@ -2,11 +2,13 @@ package no.nav.k9brukerdialogprosessering.journalforing
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import no.nav.k9brukerdialogprosessering.common.Constants.X_CORRELATION_ID
 import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søknadstype
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -31,10 +33,17 @@ class K9JoarkService(
         val resolveJournalføringsUrl =
             resolveJournalføringsUrl(journalføringsRequest.ytelse, journalføringsRequest.søknadstype)
 
+        val httpEntity = when (val correlationId = journalføringsRequest.correlationId ) {
+            null -> HttpEntity(journalføringsRequest)
+            else -> HttpEntity(journalføringsRequest, HttpHeaders().apply {
+                this[X_CORRELATION_ID] = listOf(correlationId)
+            })
+        }
+
         k9JoarkRestTemplate.exchange(
             resolveJournalføringsUrl.toString(),
             HttpMethod.POST,
-            HttpEntity(journalføringsRequest),
+            httpEntity,
             JournalføringsResponse::class.java
         )
     }.fold(
@@ -147,6 +156,7 @@ fun Søknadstype.toUri(): URI {
 
 data class JournalføringsRequest(
     @JsonIgnore val ytelse: Ytelse,
+    @JsonIgnore val correlationId: String? = null,
     @JsonIgnore val søknadstype: Søknadstype? = null,
     @JsonProperty("norsk_ident") val norskIdent: String,
     @JsonProperty("soker_navn") val sokerNavn: Navn,

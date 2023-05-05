@@ -50,6 +50,7 @@ data class OMPAleneomsorgSoknadPreprosessert(
 
     override fun tilJournaførigsRequest() = JournalføringsRequest(
         ytelse = ytelse(),
+        correlationId = søknadId,
         norskIdent = søkerFødselsnummer(),
         sokerNavn = søkerNavn(),
         mottatt = mottattDato(),
