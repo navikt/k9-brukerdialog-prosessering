@@ -32,7 +32,8 @@ data class PilsPreprosessertSøknad(
     val harVærtEllerErVernepliktig: Boolean? = null,
     val k9Format: K9Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
-    val harBekreftetOpplysninger: Boolean
+    val harBekreftetOpplysninger: Boolean,
+    val flereSokere: FlereSokereSvar? = null
 ): Preprosessert {
     internal constructor(
         pilsSøknadMottatt: PilsSøknadMottatt,
@@ -57,7 +58,8 @@ data class PilsPreprosessertSøknad(
         harVærtEllerErVernepliktig = pilsSøknadMottatt.harVærtEllerErVernepliktig,
         k9Format = pilsSøknadMottatt.k9Format,
         harForståttRettigheterOgPlikter = pilsSøknadMottatt.harForståttRettigheterOgPlikter,
-        harBekreftetOpplysninger = pilsSøknadMottatt.harBekreftetOpplysninger
+        harBekreftetOpplysninger = pilsSøknadMottatt.harBekreftetOpplysninger,
+        flereSokere = pilsSøknadMottatt.flereSokere
     )
 
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE

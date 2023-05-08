@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetssluttfase
 
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetssluttfase.utils.PilsSøknadUtils
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.FlereSokereSvar
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Frilans
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Land
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Næringstype
@@ -106,7 +107,6 @@ class PILSSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-
             id = "6-har-ikke-lastet-opp-id-ved-manglende-norskIdentifikator"
             pdf = generator.genererPDF(
                 PilsSøknadUtils.gyldigSøknad(søknadId = id).copy(
@@ -119,6 +119,14 @@ class PILSSøknadPdfGeneratorTest {
                         fødselsdato = LocalDate.now().minusYears(45),
                         årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.BOR_I_UTLANDET
                     )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "7-flere-søkere-ja"
+            pdf = generator.genererPDF(
+                PilsSøknadUtils.gyldigSøknad(søknadId = id).copy(
+                    flereSokere = FlereSokereSvar.JA
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
