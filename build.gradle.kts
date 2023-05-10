@@ -102,6 +102,9 @@ tasks {
 
 	withType<Jar> {
 		archiveFileName.set("app.jar")
+		manifest {
+			attributes["Main-Class"] = "no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplicationKt"
+		}
 	}
 
 	withType<Test> {
