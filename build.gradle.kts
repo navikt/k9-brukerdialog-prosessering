@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "3.0.6"
 	id("io.spring.dependency-management") version "1.1.0"
-	kotlin("jvm") version "1.8.21"
-	kotlin("plugin.spring") version "1.8.21"
+	kotlin("jvm") version "1.8.10"
+	kotlin("plugin.spring") version "1.8.10"
 }
 
 group = "no.nav"
@@ -102,9 +102,6 @@ tasks {
 
 	withType<Jar> {
 		archiveFileName.set("app.jar")
-		manifest {
-			attributes["Main-Class"] = "no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplicationKt"
-		}
 	}
 
 	withType<Test> {
