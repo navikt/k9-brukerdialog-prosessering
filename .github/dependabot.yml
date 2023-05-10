@@ -18,6 +18,7 @@ updates:
       interval: daily
     registries:
       - k9-felles
+    open-pull-requests-limit: 15
 
   - package-ecosystem: docker
     directory: "/"
