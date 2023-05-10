@@ -32,7 +32,8 @@ data class PilsSøknadMottatt(
     val harVærtEllerErVernepliktig: Boolean? = null,
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
-    val harBekreftetOpplysninger: Boolean
+    val harBekreftetOpplysninger: Boolean,
+    val flereSokere: FlereSokereSvar? = null
 ): MottattMelding {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 

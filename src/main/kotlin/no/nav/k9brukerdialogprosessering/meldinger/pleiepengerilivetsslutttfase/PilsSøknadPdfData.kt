@@ -73,6 +73,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
             "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,
             "harBekreftetOpplysninger" to søknad.harBekreftetOpplysninger
         ),
+        "flereSokere" to søknad.flereSokere?.name,
         "hjelp" to mapOf(
             "språk" to søknad.språk?.språkTilTekst(),
             "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),

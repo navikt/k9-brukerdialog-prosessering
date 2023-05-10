@@ -11,6 +11,7 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Pleietrengende" href="#pleietrengende"/>
+        <bookmark name="Flere søkere" href="#flereSokere"/>
         <bookmark name="Utenlandsopphold" href="#utenlandsopphold"/>
         <bookmark name="Medlemskap" href="#medlemskap"/>
         <bookmark name="Arbeidsgivere" href="#arbeidsgivere"/>
@@ -58,6 +59,22 @@
             {{#if pleietrengende.årsakManglerIdentitetsnummer}}
                 <p>Personen har ikke fødselsnummer/D-nummer på grunn av: {{pleietrengende.årsakManglerIdentitetsnummer}}</p>
             {{/if}}
+    </section>
+
+    <section id="flereSokere">
+    {{#if flereSokere }}
+        <h2>Flere søkere</h2>
+        <p class="sporsmalstekst">Er dere flere som skal dele på pleiepengene?</p>
+        {{#eq flereSokere "JA" }}
+            <p>Ja</p>
+        {{/eq}}
+        {{#eq flereSokere "NEI" }}
+            <p>Nei</p>
+        {{/eq}}
+        {{#eq flereSokere "USIKKER" }}
+            <p>Usikker</p>
+        {{/eq}}
+    {{/if}}
     </section>
 
     <section id="perioder">

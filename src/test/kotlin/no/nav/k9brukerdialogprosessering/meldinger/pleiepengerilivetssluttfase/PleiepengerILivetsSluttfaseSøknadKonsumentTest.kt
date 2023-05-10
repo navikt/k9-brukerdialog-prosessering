@@ -166,6 +166,7 @@ class PleiepengerILivetsSluttfaseSøknadKonsumentTest {
             "årsakManglerIdentitetsnummer": null,
             "norskIdentitetsnummer": "02119970078"
           },
+          "flereSokere": "JA",
           "selvstendigNæringsdrivende": {
             "arbeidsforhold": {
               "arbeidIPeriode": {
