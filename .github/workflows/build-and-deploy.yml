@@ -8,10 +8,10 @@ on:
       - 'LICENCE'
       - 'CODEOWNERS'
       - '.github/workflows/apply-alerts.yml'
-      - '.github/workflows/snyk.yml'
       - '.github/workflows/*-topics.yml'
       - '.github/workflows/reusable-topic-workflow.yml'
       - ".github/workflows/dependency-submission.yml"
+      - ".github/workflows/codeql.yml"
       - 'nais/alerts.yml'
       - 'nais/topics/*'
     branches:
