@@ -1,7 +1,6 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import no.nav.k9brukerdialogprosessering.common.Navn
 import java.time.LocalDate
 
 enum class BarnRelasjon(val utskriftsvennlig: String) {
@@ -10,18 +9,6 @@ enum class BarnRelasjon(val utskriftsvennlig: String) {
     FAR("Du er far til barnet"),
     FOSTERFORELDER("Du er fosterforelder til barnet"),
     ANNET("Annet")
-}
-
-data class Søker(
-    val aktørId: String,
-    val fødselsnummer: String,
-    val fornavn: String,
-    val mellomnavn: String? = null,
-    val etternavn: String
-) {
-    override fun toString(): String {
-        return "Soker()"
-    }
 }
 
 data class Barn(
@@ -154,9 +141,3 @@ data class Ferieuttak(
         return "Ferieuttak(fraOgMed=$fraOgMed, tilOgMed=$tilOgMed)"
     }
 }
-
-fun Søker.tilTpsNavn(): Navn = Navn(
-    fornavn = fornavn,
-    mellomnavn = mellomnavn,
-    etternavn = etternavn
-)

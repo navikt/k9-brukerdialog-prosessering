@@ -1,7 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.utils
 
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.utils.K9FormatUtils.defaultK9FormatPSB
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -16,7 +16,8 @@ internal object EndringsmeldingUtils {
             fødselsnummer = "02119970078",
             etternavn = "Nordmann",
             mellomnavn = "Mellomnavn",
-            fornavn = "Ola"
+            fornavn = "Ola",
+            fødselsdato = LocalDate.parse("1999-11-02"),
         ),
         pleietrengendeNavn = "Barn Barnesen",
         harBekreftetOpplysninger = true,

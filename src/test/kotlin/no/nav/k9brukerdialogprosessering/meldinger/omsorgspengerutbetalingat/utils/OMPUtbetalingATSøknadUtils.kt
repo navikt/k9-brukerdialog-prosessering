@@ -14,6 +14,7 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.ArbeidsgiverDetaljer
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bosted
@@ -21,7 +22,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.dome
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.JaNei
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Opphold
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Utbetalingsperiode
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Utbetalingsårsak
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.ÅrsakNyoppstartet

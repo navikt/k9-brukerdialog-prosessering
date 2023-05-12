@@ -7,11 +7,11 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAlene
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.AnnenForelder
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.Barn
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.OMPMidlertidigAleneSoknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.Situasjon
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.Søker
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*

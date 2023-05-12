@@ -6,9 +6,9 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneOmsorg
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.Barn
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.OMPAleneomsorgSoknadMottatt
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.TidspunktForAleneomsorg
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.TypeBarn
 import java.time.LocalDate

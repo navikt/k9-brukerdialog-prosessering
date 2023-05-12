@@ -4,8 +4,6 @@ import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.OMPAleneomsorgSoknadMottatt
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.Søker
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.capitalizeName
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.somMapTilPdf
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
@@ -19,10 +17,7 @@ class OMPAleneomsorgSoknadPDFData(private val melding: OMPAleneomsorgSoknadMotta
         "søknadId" to melding.søknadId,
         "søknadMottattDag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "søknadMottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),
-        "søker" to mapOf(
-            "navn" to melding.søker.formatertNavn().capitalizeName(),
-            "fødselsnummer" to melding.søker.fødselsnummer
-        ),
+        "søker" to melding.søker.somMap(),
         "barn" to melding.barn.somMapTilPdf(),
         "samtykke" to mapOf(
             "harForståttRettigheterOgPlikter" to melding.harForståttRettigheterOgPlikter,
@@ -32,8 +27,6 @@ class OMPAleneomsorgSoknadPDFData(private val melding: OMPAleneomsorgSoknadMotta
             "språk" to melding.språk?.språkTilTekst()
         )
     )
-
-    private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 
     private fun String.språkTilTekst() = when (this.lowercase(Locale.getDefault())) {
         "nb" -> "bokmål"

@@ -128,6 +128,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
             "søker": {
                "aktørId": "123456",
                "fødselsnummer": "02119970078",
+               "fødselsdato": "1999-11-02",
                "fornavn": "Ola",
                "mellomnavn": "Mellomnavn",
                "etternavn": "Nordmann"

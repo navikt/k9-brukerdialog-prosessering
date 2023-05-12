@@ -7,7 +7,6 @@ import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.ArbeidsgiverDetaljer
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Søker
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.time.Duration
@@ -26,9 +25,7 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
             "søknad" to melding.somMap(),
             "språk" to melding.språk.sprakTilTekst(),
             "mottaksUkedag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
-            "søker" to mapOf(
-                "formatertNavn" to melding.søker.formatertNavn().capitalizeName()
-            ),
+            "søker" to melding.søker.somMap(),
             "medlemskap" to mapOf(
                 "siste12" to melding.bosteder.any {
                     it.fraOgMed.isBefore(mottatt) || it.tilOgMed.isEqual(mottatt)
@@ -89,9 +86,6 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
             )
         }
     }
-
-    private fun Søker.formatertNavn() =
-        if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 
     fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.lowercase().capitalize() }
 

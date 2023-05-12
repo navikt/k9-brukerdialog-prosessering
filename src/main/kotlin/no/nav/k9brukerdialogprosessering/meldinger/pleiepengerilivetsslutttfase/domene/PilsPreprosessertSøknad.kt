@@ -1,12 +1,13 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene
 
 import no.nav.k9.søknad.Søknad
-import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Navn
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*

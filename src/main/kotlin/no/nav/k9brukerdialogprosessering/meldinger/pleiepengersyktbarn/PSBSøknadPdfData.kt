@@ -24,7 +24,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Regnskapsfører
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Utenlandsopphold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.VarigEndring
@@ -34,6 +33,7 @@ import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.DateUtils
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.tilString
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.storForbokstav
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.somNorskMåned
 import java.time.DayOfWeek
@@ -50,10 +50,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "soknad_mottatt" to Constants.DATE_TIME_FORMATTER.format(søknad.mottatt),
         "harIkkeVedlegg" to søknad.sjekkOmHarIkkeVedlegg(),
         "harLastetOppFødselsattest" to !søknad.fødselsattestVedleggId.isNullOrEmpty(),
-        "soker" to mapOf(
-            "navn" to søknad.søker.formatertNavn().capitalizeName(),
-            "fodselsnummer" to søknad.søker.fødselsnummer
-        ),
+        "soker" to søknad.søker.somMap(),
         "barn" to søknad.barn.somMap(),
         "periode" to mapOf(
             "fra_og_med" to Constants.DATE_FORMATTER.format(søknad.fraOgMed),
@@ -104,7 +101,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     private fun Barn.somMap() = mapOf<String, Any?>(
         "manglerNorskIdentitetsnummer" to (fødselsnummer == null),
         "norskIdentitetsnummer" to fødselsnummer,
-        "navn" to navn.capitalizeName(),
+        "navn" to navn.storForbokstav(),
         "fødselsdato" to if (fødselsdato != null) Constants.DATE_FORMATTER.format(fødselsdato) else null,
         "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst
     )
@@ -171,7 +168,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         return omsorgsdagerPerMnd.map {
             mapOf(
                 "år" to it.value.first().dato.year,
-                "måned" to it.key.somNorskMåned().capitalizeName(),
+                "måned" to it.key.somNorskMåned().storForbokstav(),
                 "enkeltdagerPerUke" to it.value.somMapPerUke()
             )
         }
@@ -362,12 +359,6 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
                 "tilOgMed" to Constants.DATE_FORMATTER.format(it.tilOgMed)
             )
         }
-    }
-
-    fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
-
-    fun String.capitalizeName(): String = split(" ").joinToString(" ") { name: String ->
-        name.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
     }
 
     private fun String.sprakTilTekst() = when (this.lowercase()) {

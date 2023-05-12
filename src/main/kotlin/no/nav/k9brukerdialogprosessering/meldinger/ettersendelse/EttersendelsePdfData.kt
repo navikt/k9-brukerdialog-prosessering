@@ -4,7 +4,6 @@ import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Ettersendelse
-import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søker
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.util.*
@@ -16,10 +15,7 @@ class EttersendelsePdfData(private val ettersendelse: Ettersendelse) : PdfData()
         "soknad_id" to ettersendelse.søknadId,
         "soknad_mottatt_dag" to ettersendelse.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "soknad_mottatt" to DATE_TIME_FORMATTER.format(ettersendelse.mottatt),
-        "søker" to mapOf(
-            "navn" to ettersendelse.søker.formatertNavn().capitalizeName(),
-            "fødselsnummer" to ettersendelse.søker.fødselsnummer
-        ),
+        "søker" to ettersendelse.søker.somMap(),
         "beskrivelse" to ettersendelse.beskrivelse,
         "søknadstype" to ettersendelse.søknadstype.pdfNavn,
         "samtykke" to mapOf(
@@ -33,9 +29,6 @@ class EttersendelsePdfData(private val ettersendelse: Ettersendelse) : PdfData()
             "språk" to ettersendelse.språk?.sprakTilTekst()
         )
     )
-
-    fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
-    fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.lowercase(Locale.getDefault()).capitalize() }
 
     private fun List<String>.somMapTitler(): List<Map<String, Any?>> {
         return map {

@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogprosessering.common
+package no.nav.k9brukerdialogprosessering.meldinger.felles.domene
 
 data class Navn(
     val fornavn: String,

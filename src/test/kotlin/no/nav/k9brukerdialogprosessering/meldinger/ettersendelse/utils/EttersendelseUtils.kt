@@ -4,8 +4,8 @@ import no.nav.k9.ettersendelse.Ytelse
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Ettersendelse
-import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søknadstype
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*

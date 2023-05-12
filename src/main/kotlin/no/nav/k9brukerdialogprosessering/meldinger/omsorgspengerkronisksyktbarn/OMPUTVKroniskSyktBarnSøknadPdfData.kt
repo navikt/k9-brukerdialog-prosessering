@@ -4,8 +4,8 @@ import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.Søker
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.storForbokstav
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 
 class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSyktBarnSøknadMottatt) : PdfData() {
@@ -15,12 +15,9 @@ class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSykt
         "soknad_id" to søknad.søknadId,
         "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "soknad_mottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
-        "søker" to mapOf(
-            "navn" to søknad.søker.formatertNavn().capitalizeName(),
-            "fødselsnummer" to søknad.søker.fødselsnummer
-        ),
+        "søker" to søknad.søker.somMap(),
         "barn" to mapOf(
-            "navn" to søknad.barn.navn.capitalizeName(),
+            "navn" to søknad.barn.navn.storForbokstav(),
             "id" to søknad.barn.norskIdentifikator,
             "fødselsdato" to søknad.barn.fødselsdato
         ),
@@ -36,11 +33,6 @@ class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSykt
         ),
         "harIkkeLastetOppLegeerklæring" to søknad.harIkkeLastetOppLegeerklæring()
     )
-
-    private fun Søker.formatertNavn() =
-        if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
-
-    fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.lowercase().capitalize() }
 
     private fun String.sprakTilTekst() = when (this.lowercase()) {
         "nb" -> "bokmål"

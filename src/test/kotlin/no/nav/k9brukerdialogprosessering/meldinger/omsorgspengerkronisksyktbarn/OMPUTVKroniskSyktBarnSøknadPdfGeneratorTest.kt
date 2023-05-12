@@ -1,8 +1,8 @@
 package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn
 
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.Barn
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.SøkerBarnRelasjon
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.utils.SøknadUtils
 import no.nav.k9brukerdialogprosessering.pdf.PDFGenerator

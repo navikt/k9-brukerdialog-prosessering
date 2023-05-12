@@ -1,6 +1,5 @@
 package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding
 
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.personopplysninger.Barn
@@ -17,6 +16,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.pdf.PDFGenerator
 import no.nav.k9brukerdialogprosessering.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Test
@@ -158,7 +158,8 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                     fornavn = "Ærling",
                     mellomnavn = "ØVERBØ",
                     etternavn = "ÅNSNES",
-                    fødselsnummer = "29099012345"
+                    fødselsnummer = "29099012345",
+                    fødselsdato = LocalDate.parse("1990-09-29"),
                 ),
                 pleietrengendeNavn = "Barn Barnesen",
                 harBekreftetOpplysninger = true,
