@@ -3,9 +3,9 @@ package no.nav.k9brukerdialogprosessering.journalforing
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import no.nav.k9brukerdialogprosessering.common.Constants.X_CORRELATION_ID
-import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søknadstype
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Navn
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders

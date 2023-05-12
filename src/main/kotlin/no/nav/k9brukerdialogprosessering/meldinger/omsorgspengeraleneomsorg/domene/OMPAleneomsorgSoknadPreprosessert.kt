@@ -1,12 +1,12 @@
 package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene
 
 import no.nav.k9.søknad.Søknad
-import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -40,7 +40,7 @@ data class OMPAleneomsorgSoknadPreprosessert(
 
     override fun mottattDato(): ZonedDateTime = mottatt
 
-    override fun søkerNavn() = Navn(søker.fornavn, søker.mellomnavn, søker.etternavn)
+    override fun søkerNavn() = søker.fullnavn()
 
     override fun søkerFødselsnummer(): String = søker.fødselsnummer
 

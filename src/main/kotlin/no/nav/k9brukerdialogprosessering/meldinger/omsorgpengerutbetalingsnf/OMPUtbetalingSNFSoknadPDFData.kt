@@ -12,7 +12,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.dom
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.OMPUtbetalingSNFSoknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Regnskapsfører
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.SelvstendigNæringsdrivende
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.VarigEndring
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.YrkesaktivSisteTreFerdigliknedeÅrene
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
@@ -34,9 +33,7 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
             "søknad" to melding.somMap(),
             "språk" to melding.språk.sprakTilTekst(),
             "mottaksUkedag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
-            "søker" to mapOf(
-                "formatertNavn" to melding.søker.formatertNavn().capitalizeName()
-            ),
+            "søker" to melding.søker.somMap(),
             "medlemskap" to mapOf(
                 "siste12" to melding.bosteder.any {
                     it.fraOgMed.isBefore(mottatt) || it.tilOgMed.isEqual(mottatt)
@@ -85,10 +82,6 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
         0 -> "${this.toHours()} timer"
         else -> "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
     }
-
-    private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
-
-    fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.lowercase().capitalize() }
 
     private fun String.sprakTilTekst() = when (this.lowercase()) {
         "nb" -> "Bokmål"

@@ -4,6 +4,7 @@ import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
 import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.OMPAleneomsorgSoknadPDFData
 import java.time.ZonedDateTime
 

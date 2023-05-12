@@ -7,6 +7,7 @@ import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
 import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.OMPUtbetalingSNFSoknadPDFData
 import java.time.Duration
 import java.time.LocalDate
@@ -163,19 +164,6 @@ data class Regnskapsfører(
     val navn: String,
     val telefon: String
 )
-
-data class Søker(
-    val fødselsnummer: String,
-    val fornavn: String,
-    val mellomnavn: String?,
-    val etternavn: String,
-    @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate?,
-    val aktørId: String
-) {
-    override fun toString(): String {
-        return "Soker()"
-    }
-}
 
 data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,

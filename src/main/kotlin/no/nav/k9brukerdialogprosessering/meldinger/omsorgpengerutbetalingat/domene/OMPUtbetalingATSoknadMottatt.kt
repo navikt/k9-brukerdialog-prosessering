@@ -7,6 +7,7 @@ import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
 import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATSoknadPDFData
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import java.time.Duration
@@ -117,19 +118,6 @@ enum class FraværÅrsak {
     STENGT_SKOLE_ELLER_BARNEHAGE,
     SMITTEVERNHENSYN,
     ORDINÆRT_FRAVÆR
-}
-
-data class Søker(
-    val fødselsnummer: String,
-    val fornavn: String,
-    val mellomnavn: String?,
-    val etternavn: String,
-    @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate?,
-    val aktørId: String
-) {
-    override fun toString(): String {
-        return "Soker(fornavn='$fornavn', mellomnavn=$mellomnavn, etternavn='$etternavn', fødselsdato=$fødselsdato, aktørId='******')"
-    }
 }
 
 /**

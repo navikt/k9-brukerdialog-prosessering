@@ -4,8 +4,6 @@ import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.OMPMidlertidigAleneSoknadMottatt
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.Søker
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.capitalizeName
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.somMapTilPdf
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
@@ -18,10 +16,7 @@ class OMPMidlertidigAleneSoknadPDFData(private val melding: OMPMidlertidigAleneS
         "søknadId" to melding.søknadId,
         "søknadMottattDag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "søknadMottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),
-        "søker" to mapOf(
-            "navn" to melding.søker.formatertNavn().capitalizeName(),
-            "fødselsnummer" to melding.søker.fødselsnummer
-        ),
+        "søker" to melding.søker.somMap(),
         "barn" to melding.barn.somMapTilPdf(),
         "annenForelder" to melding.annenForelder.somMapTilPdf(),
         "samtykke" to mapOf(
@@ -34,8 +29,6 @@ class OMPMidlertidigAleneSoknadPDFData(private val melding: OMPMidlertidigAleneS
             "erPeriodenOver6Måneder" to melding.erPeriodeOver6Mnd()
         )
     )
-
-    private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 
     private fun Boolean?.erSatt() = this != null
 

@@ -1,14 +1,13 @@
 package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.domene
 
 import no.nav.k9.søknad.Søknad
-import no.nav.k9brukerdialogprosessering.common.Navn
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.tilTpsNavn
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Navn
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import java.time.ZonedDateTime
 
 data class PSBPreprossesertEndringsmelding(
@@ -32,7 +31,7 @@ data class PSBPreprossesertEndringsmelding(
 
     override fun mottattDato(): ZonedDateTime = k9FormatSøknad.mottattDato
 
-    override fun søkerNavn(): Navn = søker.tilTpsNavn()
+    override fun søkerNavn(): Navn = søker.fullnavn()
 
     override fun søkerFødselsnummer(): String = søker.fødselsnummer
 

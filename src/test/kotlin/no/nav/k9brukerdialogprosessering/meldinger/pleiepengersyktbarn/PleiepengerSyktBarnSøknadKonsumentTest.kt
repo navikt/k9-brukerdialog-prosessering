@@ -128,6 +128,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               "etternavn": "Nordmann",
               "fornavn": "Ola",
               "fødselsnummer": "02119970078",
+               "fødselsdato": "1999-11-02",
               "mellomnavn": "Mellomnavn"
             },
             "barn": {

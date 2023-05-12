@@ -16,6 +16,7 @@ import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.felles.type.VirksomhetType
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
+import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.AktivitetFravær
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Bosted
@@ -25,7 +26,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.dom
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.OMPUtbetalingSNFSoknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.SelvstendigNæringsdrivende
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.SpørsmålOgSvar
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Utbetalingsperiode
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.VarigEndring
 import java.math.BigDecimal

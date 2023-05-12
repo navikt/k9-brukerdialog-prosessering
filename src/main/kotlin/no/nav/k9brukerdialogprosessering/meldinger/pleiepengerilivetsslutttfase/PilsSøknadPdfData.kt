@@ -18,7 +18,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Pleietrengende
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Regnskapsfører
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.SelvstendigNæringsdrivende
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.UtenlandskNæring
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Utenlandsopphold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.VarigEndring
@@ -47,10 +46,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
             "fraOgMed" to DATE_FORMATTER.format(søknad.fraOgMed),
             "tilOgMed" to DATE_FORMATTER.format(søknad.tilOgMed)
         ),
-        "søker" to mapOf(
-            "navn" to søknad.søker.formatertNavn().capitalizeName(),
-            "fødselsnummer" to søknad.søker.fødselsnummer
-        ),
+        "søker" to søknad.søker.somMap(),
         "pleietrengende" to søknad.pleietrengende.somMap(),
         "medlemskap" to søknad.medlemskap.somMap(),
         "utenlandsoppholdIPerioden" to mapOf(
@@ -82,9 +78,6 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
             "harVærtEllerErVernepliktigErSatt" to (søknad.harVærtEllerErVernepliktig != null)
         )
     )
-
-
-    private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 
     private fun String.språkTilTekst() = when (this.lowercase()) {
         "nb" -> "bokmål"

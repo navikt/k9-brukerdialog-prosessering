@@ -2,7 +2,6 @@ package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding
 
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Søker
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
@@ -33,10 +32,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
             "soknadDialogCommitSha" to ytelse.søknadInfo.orElse(null)?.soknadDialogCommitSha,
             "mottattDag" to k9Format.mottattDato.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "mottattDato" to DATE_TIME_FORMATTER.format(k9Format.mottattDato),
-            "soker" to mapOf(
-                "navn" to endringsmelding.søker.formatertNavn().capitalizeName(),
-                "fødselsnummer" to endringsmelding.søker.fødselsnummer
-            ),
+            "soker" to endringsmelding.søker.somMap(),
             "barn" to ytelse.barn.somMap(endringsmelding.pleietrengendeNavn),
             "arbeidstid" to when {
                 ytelse.arbeidstid != null -> ytelse.arbeidstid.somMap()
@@ -51,11 +47,6 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
                 "har_bekreftet_opplysninger" to endringsmelding.harBekreftetOpplysninger
             )
         )
-    }
-
-    fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
-    fun String.capitalizeName(): String = split(" ").joinToString(" ") { name: String ->
-        name.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
     }
 
     @JvmName("somMapPeriodeTilsynPeriodeInfo")
