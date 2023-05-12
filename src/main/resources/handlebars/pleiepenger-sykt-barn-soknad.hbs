@@ -37,36 +37,8 @@
 <p class="nokkelinfo"><strong>Sendt til NAV </strong>{{soknad_mottatt_dag}} {{ soknad_mottatt }}</p>
 
 <div class="innholdscontainer">
-    <div class="person" id="søker">
-        <p>Søker</p>
-        <p class="navn">
-            {{ soker.navn }}
-        </p>
-        <p>
-            {{ soker.fødselsnummer }}<br/>
-        </p>
-    </div>
-
-    <div class="person" id="barn">
-        <p>Barn</p>
-        <p class="navn">
-            {{# if barn.navn }}
-                {{ barn.navn }}
-            {{else}}
-                <span class="ikke_satt">Navn ikke angitt</span>
-            {{/if}}
-        </p>
-        {{# if barn.norskIdentitetsnummer }}
-            <p>{{ barn.norskIdentitetsnummer }}</p>
-        {{/if}}
-        {{#if barn.fødselsdato}}
-            <p>Fødselsdato: {{barn.fødselsdato}}</p>
-        {{/if}}
-        {{#if barn.årsakManglerIdentitetsnummer}}
-            <p>Oppgitt grunn for at barnet ikke har fødselsnummer/D-nummer: {{barn.årsakManglerIdentitetsnummer}}</p>
-        {{/if}}
-
-    </div>
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=soker.navn fødselsnummer=soker.fødselsnummer }}
+    {{> partial/felles/personPartial id="barn" title="Barn" navn=barn.navn fødselsnummer=barn.norskIdentitetsnummer fødselsdato=barn.fødselsdato årsakManglerIdentitetsnummer=barn.årsakManglerIdentitetsnummer }}
 
     <section id="relasjonTilBarnet">
         {{#if barnRelasjon}}

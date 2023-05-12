@@ -34,31 +34,11 @@
     <p><strong>Språk:</strong> {{hjelp.språk}}</p>
 </div>
 <div class="innholdscontainer">
-
-    <div class="person" id="søker">
-        <p class="navn">{{ søker.navn }}</p>
-        <p>{{ søker.fødselsnummer }}</p>
-        <br/>
-    </div>
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
     <section id="pleietrengende">
-            <h2>Den du pleier</h2>
-            <p class="navn">
-                Navn: {{# if pleietrengende.navn }}
-                    {{ pleietrengende.navn }}
-                {{else}}
-                    <span class="ikke_satt">Navn ikke angitt</span>
-                {{/if}}
-            </p>
-            {{# if pleietrengende.norskIdentitetsnummer }}
-                <p>Fødselsnummer/D-nummer: {{ pleietrengende.norskIdentitetsnummer }}</p>
-            {{/if}}
-            {{#if pleietrengende.fødselsdato}}
-                <p>Fødselsdato: {{pleietrengende.fødselsdato}}</p>
-            {{/if}}
-            {{#if pleietrengende.årsakManglerIdentitetsnummer}}
-                <p>Personen har ikke fødselsnummer/D-nummer på grunn av: {{pleietrengende.årsakManglerIdentitetsnummer}}</p>
-            {{/if}}
+        <h2>Den du pleier</h2>
+        {{> partial/felles/personPartial id="pleietrengende" title="" navn=pleietrengende.navn fødselsnummer=pleietrengende.norskIdentitetsnummer fødselsdato=pleietrengende.fødselsdato årsakManglerIdentitetsnummer=pleietrengende.årsakManglerIdentitetsnummer }}
     </section>
 
     <section id="flereSokere">

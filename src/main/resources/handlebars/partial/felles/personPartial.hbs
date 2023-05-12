@@ -1,0 +1,20 @@
+<div class="person" id="{{ id }}">
+    <p>{{ title }}</p>
+    <p class="navn">
+        {{# if navn }}
+            {{ navn }}
+        {{else}}
+            <span class="ikke_satt">Navn ikke angitt</span>
+        {{/if}}
+    </p>
+    {{# if fødselsnummer }}
+        <p>{{ fødselsnummer }}</p>
+    {{/if}}
+    {{#if fødselsdato}}
+        <p>Fødselsdato: {{barn.fødselsdato}}</p>
+    {{/if}}
+    {{#if årsakManglerIdentitetsnummer}}
+        <p>Oppgitt grunn for at barnet ikke har fødselsnummer/D-nummer: {{årsakManglerIdentitetsnummer}}</p>
+    {{/if}}
+</div>
+

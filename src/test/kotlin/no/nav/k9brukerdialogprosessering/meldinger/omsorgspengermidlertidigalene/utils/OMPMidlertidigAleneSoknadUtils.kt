@@ -44,6 +44,11 @@ internal object OMPMidlertidigAleneSoknadUtils {
                 navn = "Ole Dole",
                 norskIdentifikator = "29076523302",
                 aktørId = null
+            ),
+            Barn(
+                navn = "Ole Doffen",
+                norskIdentifikator = "29076523303",
+                aktørId = null
             )
         ),
         k9Format = gyldigK9Format(søknadId, mottatt),

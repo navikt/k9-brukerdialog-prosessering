@@ -23,25 +23,8 @@
 <p class="nokkelinfo"><strong>Sendt til NAV </strong>{{mottattDag}} {{ mottattDato }}</p>
 
 <div class="innholdscontainer">
-    <div class="person" id="søker">
-        <p>Søker</p>
-        <p class="navn">
-            {{ soker.navn }}
-        </p>
-        <p>
-            {{ soker.fødselsnummer }}<br/>
-        </p>
-    </div>
-
-    <div class="person" id="barn">
-        <p>Barn</p>
-        <p class="navn">
-            {{ barn.navn }}
-        </p>
-        <p>
-            {{ barn.fødselsnummer }}<br/>
-        </p>
-    </div>
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=soker.navn fødselsnummer=soker.fødselsnummer }}
+    {{> partial/felles/personPartial id="barn" title="Barn" navn=barn.navn fødselsnummer=barn.fødselsnummer }}
 
     {{#if arbeidstid}}
         <section id="arbeidstid">

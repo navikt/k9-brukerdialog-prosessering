@@ -31,31 +31,8 @@
     </p>
 
     <div class="innholdscontainer">
-        <div class="person" id="søker">
-            <p class="navn">{{ søker.navn }}</p>
-            <p>{{ søker.fødselsnummer }}<br /></p>
-        </div>
-
-        <div class="person" id="barn">
-            <p>Barn</p>
-            <p class="navn">
-                {{# if barn.navn }}
-                    {{ barn.navn }}
-                {{else}}
-                    <span class="ikke_satt">Navn ikke angitt</span>
-                {{/if}}
-            </p>
-            <p>
-                {{# if barn.fødselsdato }}
-                    {{ barn.fødselsdato }} <br />
-                {{/if}}
-                {{# if barn.id }}
-                    {{ barn.id }}
-                {{else}}
-                    <span class="ikke_satt">ID ikke angitt</span>
-                {{/if}}
-            </p>
-        </div>
+        {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
+        {{> partial/felles/personPartial id="barn" title="Barn" navn=barn.navn fødselsdato=barn.fødselsdato fødselsnummer=barn.id }}
 
         <section id="omBarnet">
             <h2>Om barnet</h2>

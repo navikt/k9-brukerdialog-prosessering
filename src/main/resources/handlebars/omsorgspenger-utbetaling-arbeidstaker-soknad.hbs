@@ -27,11 +27,7 @@
 <p class="nokkelinfo">Språk: {{språk}}</p>
 
 <div class="innholdscontainer">
-    <div class="person" id="søker">
-        <p>Søker</p>
-        <p class="navn">{{ søker.navn }}</p>
-        <p>{{ søker.fødselsnummer }}</p>
-    </div>
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
     <section id="smittevernhensyn">
         {{#if søknad.hjemmePgaSmittevernhensyn}}
