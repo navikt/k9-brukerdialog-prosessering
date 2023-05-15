@@ -68,7 +68,7 @@ internal object OMPMidlertidigAleneSoknadUtils {
             no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder(
                 NorskIdentitetsnummer.of("25058118020"),
                 no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder.SituasjonType.FENGSEL,
-                "Sitter i fengsel..",
+                "Sitter i «fengsel..»",
                 Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2030-01-01"))
             ),
             null

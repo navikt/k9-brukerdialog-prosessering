@@ -183,7 +183,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest {
           ],
           "annenForelder": {
             "periodeTilOgMed": "2020-10-01",
-            "situasjonBeskrivelse": "Sitter i fengsel..",
+            "situasjonBeskrivelse": "Sitter i «fengsel..»",
             "periodeFraOgMed": "2020-01-01",
             "navn": "Berit",
             "fnr": "02119970078",
@@ -208,7 +208,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest {
                 }
               ],
               "annenForelder": {
-                "situasjonBeskrivelse": "Sitter i fengsel..",
+                "situasjonBeskrivelse": "Sitter i «fengsel..»",
                 "norskIdentitetsnummer": "25058118020",
                 "periode": "2020-01-01\/2030-01-01",
                 "situasjon": "FENGSEL"
