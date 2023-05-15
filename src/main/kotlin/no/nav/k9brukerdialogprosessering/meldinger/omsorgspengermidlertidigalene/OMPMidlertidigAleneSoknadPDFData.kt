@@ -6,6 +6,7 @@ import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.OMPMidlertidigAleneSoknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene.somMapTilPdf
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.time.temporal.ChronoUnit
 
@@ -31,12 +32,6 @@ class OMPMidlertidigAleneSoknadPDFData(private val melding: OMPMidlertidigAleneS
     )
 
     private fun Boolean?.erSatt() = this != null
-
-    private fun String.språkTilTekst() = when (this.lowercase()) {
-        "nb" -> "bokmål"
-        "nn" -> "nynorsk"
-        else -> this
-    }
 
     private fun OMPMidlertidigAleneSoknadMottatt.erPeriodeOver6Mnd(): Boolean? {
         return if(annenForelder.periodeFraOgMed == null || annenForelder.periodeTilOgMed == null) null else {

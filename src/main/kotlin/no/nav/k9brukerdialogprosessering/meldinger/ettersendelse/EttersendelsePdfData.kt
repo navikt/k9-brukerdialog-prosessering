@@ -5,6 +5,7 @@ import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Ettersendelse
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.util.*
 
@@ -26,7 +27,7 @@ class EttersendelsePdfData(private val ettersendelse: Ettersendelse) : PdfData()
             "vedlegg" to ettersendelse.titler.somMapTitler()
         ),
         "hjelp" to mapOf(
-            "språk" to ettersendelse.språk?.sprakTilTekst()
+            "språk" to ettersendelse.språk?.språkTilTekst()
         )
     )
 
@@ -36,11 +37,5 @@ class EttersendelsePdfData(private val ettersendelse: Ettersendelse) : PdfData()
                 "tittel" to it
             )
         }
-    }
-
-    private fun String.sprakTilTekst() = when (this.lowercase(Locale.getDefault())) {
-        "nb" -> "bokmål"
-        "nn" -> "nynorsk"
-        else -> this
     }
 }

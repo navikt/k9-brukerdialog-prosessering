@@ -15,6 +15,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.dom
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.VarigEndring
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.YrkesaktivSisteTreFerdigliknedeÅrene
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.time.Duration
 
@@ -31,7 +32,7 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
         val mottatt = melding.mottatt.toLocalDate()
         return mapOf(
             "søknad" to melding.somMap(),
-            "språk" to melding.språk.sprakTilTekst(),
+            "språk" to melding.språk.språkTilTekst(),
             "mottaksUkedag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "søker" to melding.søker.somMap(),
             "medlemskap" to mapOf(
@@ -81,12 +82,6 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
     private fun Duration.tilString(): String = when (this.toMinutesPart()) {
         0 -> "${this.toHours()} timer"
         else -> "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
-    }
-
-    private fun String.sprakTilTekst() = when (this.lowercase()) {
-        "nb" -> "Bokmål"
-        "nn" -> "Nynorsk"
-        else -> this
     }
 
     @Deprecated("Kan fjernes etter lansering")

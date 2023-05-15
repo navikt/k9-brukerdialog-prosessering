@@ -5,6 +5,7 @@ import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.storForbokstav
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 
@@ -29,16 +30,10 @@ class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSykt
             "harBekreftetOpplysninger" to søknad.harBekreftetOpplysninger
         ),
         "hjelp" to mapOf(
-            "språk" to søknad.språk?.sprakTilTekst()
+            "språk" to søknad.språk?.språkTilTekst()
         ),
         "harIkkeLastetOppLegeerklæring" to søknad.harIkkeLastetOppLegeerklæring()
     )
-
-    private fun String.sprakTilTekst() = when (this.lowercase()) {
-        "nb" -> "bokmål"
-        "nn" -> "nynorsk"
-        else -> this
-    }
 
     private fun OMPUTVKroniskSyktBarnSøknadMottatt.harIkkeLastetOppLegeerklæring(): Boolean =
         !legeerklæringVedleggId.isNotEmpty()

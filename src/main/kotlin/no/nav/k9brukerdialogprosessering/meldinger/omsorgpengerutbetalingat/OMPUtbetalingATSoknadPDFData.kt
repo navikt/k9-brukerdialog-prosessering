@@ -8,6 +8,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.dome
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.time.Duration
 
@@ -23,7 +24,7 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
         val mottatt = melding.mottatt.toLocalDate()
         return mapOf(
             "søknad" to melding.somMap(),
-            "språk" to melding.språk.sprakTilTekst(),
+            "språk" to melding.språk.språkTilTekst(),
             "mottaksUkedag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "søker" to melding.søker.somMap(),
             "medlemskap" to mapOf(
@@ -88,10 +89,4 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
     }
 
     fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.lowercase().capitalize() }
-
-    private fun String.sprakTilTekst() = when (this.lowercase()) {
-        "nb" -> "Bokmål"
-        "nn" -> "Nynorsk"
-        else -> this
-    }
 }

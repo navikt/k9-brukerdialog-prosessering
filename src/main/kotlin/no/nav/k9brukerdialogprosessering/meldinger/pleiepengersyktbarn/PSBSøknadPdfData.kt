@@ -33,6 +33,7 @@ import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.DateUtils
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.tilString
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.storForbokstav
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.somNorskMåned
@@ -69,7 +70,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         ),
         "hjelp" to mapOf(
             "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
-            "sprak" to søknad.språk?.sprakTilTekst()
+            "sprak" to søknad.språk?.språkTilTekst()
         ),
         "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
         "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
@@ -359,12 +360,6 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
                 "tilOgMed" to Constants.DATE_FORMATTER.format(it.tilOgMed)
             )
         }
-    }
-
-    private fun String.sprakTilTekst() = when (this.lowercase()) {
-        "nb" -> "bokmål"
-        "nn" -> "nynorsk"
-        else -> this
     }
 
     private fun Double.somString(): String {

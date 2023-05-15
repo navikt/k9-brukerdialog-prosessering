@@ -26,6 +26,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.capitalizeName
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.somNorskMåned
 import java.time.Month
@@ -78,12 +79,6 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
             "harVærtEllerErVernepliktigErSatt" to (søknad.harVærtEllerErVernepliktig != null)
         )
     )
-
-    private fun String.språkTilTekst() = when (this.lowercase()) {
-        "nb" -> "bokmål"
-        "nn" -> "nynorsk"
-        else -> this
-    }
 
     private fun Pleietrengende.somMap() = mapOf<String, Any?>(
         "manglerNorskIdentitetsnummer" to (norskIdentitetsnummer == null),

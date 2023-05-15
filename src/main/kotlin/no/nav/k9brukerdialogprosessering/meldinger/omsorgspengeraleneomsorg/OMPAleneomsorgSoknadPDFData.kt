@@ -6,6 +6,7 @@ import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.OMPAleneomsorgSoknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.somMapTilPdf
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.util.*
 
@@ -27,10 +28,4 @@ class OMPAleneomsorgSoknadPDFData(private val melding: OMPAleneomsorgSoknadMotta
             "språk" to melding.språk?.språkTilTekst()
         )
     )
-
-    private fun String.språkTilTekst() = when (this.lowercase(Locale.getDefault())) {
-        "nb" -> "bokmål"
-        "nn" -> "nynorsk"
-        else -> this
-    }
 }
