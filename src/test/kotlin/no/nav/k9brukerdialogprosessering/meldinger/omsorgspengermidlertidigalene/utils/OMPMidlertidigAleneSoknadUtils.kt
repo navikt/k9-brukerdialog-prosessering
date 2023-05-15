@@ -34,7 +34,7 @@ internal object OMPMidlertidigAleneSoknadUtils {
             navn = "Berit",
             fnr = "02119970078",
             situasjon = Situasjon.FENGSEL,
-            situasjonBeskrivelse = "Sitter i fengsel..",
+            situasjonBeskrivelse = "Sitter i «fengsel..»",
             periodeOver6Måneder = false,
             periodeFraOgMed = LocalDate.parse("2020-01-01"),
             periodeTilOgMed = LocalDate.parse("2020-10-01")
