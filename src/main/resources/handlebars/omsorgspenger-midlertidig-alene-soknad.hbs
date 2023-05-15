@@ -25,20 +25,14 @@
     <p><strong>Språk:</strong> {{hjelp.språk}}</p>
 </div>
 <div class="innholdscontainer">
-
-    <div class="person" id="søker">
-        <p class="navn">{{ søker.navn }}</p>
-        <p>{{ søker.fødselsnummer }}</p>
-        <br/>
-    </div>
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
     <section id="dineBarn">
         <h2>Dine barn</h2>
-        <ul>
+        <ul class="ul-no-indent">
             {{# each barn as |barn|~}}
                 <li>
-                    <p><b>Navn: </b>{{barn.navn}}</p>
-                    <p><b>Fødselsnummer: </b>{{barn.norskIdentifikator}}</p>
+                    {{> partial/felles/personPartial id="dineBarn" title="" navn=barn.navn fødselsnummer=barn.norskIdentifikator }}
                 </li>
             {{/each}}
         </ul>

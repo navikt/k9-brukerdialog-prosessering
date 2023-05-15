@@ -26,6 +26,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.dom
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.OMPUtbetalingSNFSoknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.SelvstendigNæringsdrivende
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.SpørsmålOgSvar
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.TypeBarn
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Utbetalingsperiode
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.VarigEndring
 import java.math.BigDecimal
@@ -48,6 +49,32 @@ internal object OMPUtbetalingSNFSøknadUtils {
             etternavn = "Nordmann",
             mellomnavn = "Mellomnavn",
             fornavn = "Ola"
+        ),
+        barn = listOf(
+            no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Barn(
+                navn = "Barn 1 Barnesen",
+                fødselsdato = LocalDate.parse("2020-01-01"),
+                identitetsnummer = "1234",
+                type = TypeBarn.FOSTERBARN,
+                aktørId = null,
+                utvidetRett = true
+            ),
+            no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Barn(
+                navn = "Barn 2 Barnesen",
+                fødselsdato = LocalDate.parse("2019-01-01"),
+                identitetsnummer = "5677",
+                type = TypeBarn.FRA_OPPSLAG,
+                aktørId = "123456789",
+                utvidetRett = true
+            ),
+            no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Barn(
+                navn = "Barn 3 Barnesen",
+                fødselsdato = LocalDate.parse("2018-01-01"),
+                identitetsnummer = "8888",
+                type = TypeBarn.ANNET,
+                aktørId = null,
+                utvidetRett = false
+            )
         ),
         harDekketTiFørsteDagerSelv = true,
         bosteder = listOf(

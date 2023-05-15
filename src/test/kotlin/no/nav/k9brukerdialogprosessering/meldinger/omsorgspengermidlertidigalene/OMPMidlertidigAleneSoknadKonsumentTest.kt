@@ -159,6 +159,11 @@ class OMPMidlertidigAleneSoknadKonsumentTest {
               "aktørId": null,
               "navn": "Ole Dole",
               "norskIdentifikator": "29076523302"
+            },
+            {
+              "aktørId": null,
+              "navn": "Ole Doffen",
+              "norskIdentifikator": "29076523303"
             }
           ],
           "søker": {

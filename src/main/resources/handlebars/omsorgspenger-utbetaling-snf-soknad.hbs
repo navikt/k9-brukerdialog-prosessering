@@ -30,11 +30,7 @@
 <p class="nokkelinfo"><strong>Språk</strong> {{språk}}</p>
 
 <div class="innholdscontainer">
-    <div class="person" id="søker">
-        <p>Søker</p>
-        <p class="navn">{{ søker.navn }}</p>
-        <p>{{ søker.fødselsnummer }}<br/></p>
-    </div>
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
     <div class="person" id="barn">
         {{#if barn}}
