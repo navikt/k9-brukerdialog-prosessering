@@ -29,7 +29,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "3.0.12"
+val tokenSupportVersion = "3.1.0"
 val jsonassertVersion = "1.5.1"
 val k9FormatVersion = "8.0.9"
 val springMockkVersion = "4.0.2"
