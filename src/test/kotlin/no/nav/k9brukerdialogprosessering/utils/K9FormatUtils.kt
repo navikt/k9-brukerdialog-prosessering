@@ -15,12 +15,15 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.felles.type.VirksomhetType
+import no.nav.k9.søknad.ytelse.psb.v1.ArbeiderIPeriodenSvar
 import no.nav.k9.søknad.ytelse.psb.v1.Beredskap
 import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk
+import no.nav.k9.søknad.ytelse.psb.v1.NormalArbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
+import no.nav.k9.søknad.ytelse.psb.v1.UkjentArbeidsforhold
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
@@ -41,7 +44,18 @@ object K9FormatUtils {
         Søker(NorskIdentitetsnummer.of("12345678910")),
         PleiepengerSyktBarn()
             .medSøknadsperiode(Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")))
-            .medSøknadInfo(DataBruktTilUtledning(true, true, true, true, "commit-abc-123", true))
+            .medSøknadInfo(
+                DataBruktTilUtledning(
+                    true, true, true, true, "commit-abc-123", true,
+                    listOf(
+                        UkjentArbeidsforhold()
+                            .medOrganisasjonsnummer(Organisasjonsnummer.of("926032925"))
+                            .medErAnsatt(true)
+                            .medArbeiderIPerioden(ArbeiderIPeriodenSvar.HELT_FRAVÆR)
+                            .medNormalarbeidstid(NormalArbeidstid().medTimerPerUke(Duration.ofHours(8)))
+                    )
+                )
+            )
             .medBarn(Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("10987654321")))
             .medOpptjeningAktivitet(
                 OpptjeningAktivitet()
@@ -95,11 +109,13 @@ object K9FormatUtils {
                         Periode(
                             LocalDate.parse("2020-01-01"),
                             LocalDate.parse("2020-01-05")
-                        ) to Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon("Jeg skal være i beredskap. Basta!"),
+                        ) to Beredskap.BeredskapPeriodeInfo()
+                            .medTilleggsinformasjon("Jeg skal være i beredskap. Basta!"),
                         Periode(
                             LocalDate.parse("2020-01-07"),
                             LocalDate.parse("2020-01-10")
-                        ) to Beredskap.BeredskapPeriodeInfo().medTilleggsinformasjon("Jeg skal være i beredskap i denne perioden også. Basta!")
+                        ) to Beredskap.BeredskapPeriodeInfo()
+                            .medTilleggsinformasjon("Jeg skal være i beredskap i denne perioden også. Basta!")
                     )
                 )
             )
@@ -113,7 +129,8 @@ object K9FormatUtils {
                         Periode(
                             LocalDate.parse("2020-01-07"),
                             LocalDate.parse("2020-01-10")
-                        ) to Nattevåk.NattevåkPeriodeInfo().medTilleggsinformasjon("Jeg skal ha nattevåk i perioden også. Basta!")
+                        ) to Nattevåk.NattevåkPeriodeInfo()
+                            .medTilleggsinformasjon("Jeg skal ha nattevåk i perioden også. Basta!")
                     )
                 )
             )
@@ -139,22 +156,23 @@ object K9FormatUtils {
                             .medOrganisasjonsnummer(Organisasjonsnummer.of("926032925"))
                             .medArbeidstidInfo(
                                 ArbeidstidInfo()
-                                .medPerioder(
-                                    mapOf(
-                                        Periode(
-                                            LocalDate.parse("2018-01-01"),
-                                            LocalDate.parse("2020-01-05")
-                                        ) to ArbeidstidPeriodeInfo()
-                                            .medJobberNormaltTimerPerDag(Duration.ofHours(8))
-                                            .medFaktiskArbeidTimerPerDag(Duration.ofHours(4)),
-                                        Periode(
-                                            LocalDate.parse("2020-01-06"),
-                                            LocalDate.parse("2020-01-10")
-                                        ) to ArbeidstidPeriodeInfo()
-                                            .medJobberNormaltTimerPerDag(Duration.ofHours(8))
-                                            .medFaktiskArbeidTimerPerDag(Duration.ofHours(2))
+                                    .medPerioder(
+                                        mapOf(
+                                            Periode(
+                                                LocalDate.parse("2018-01-01"),
+                                                LocalDate.parse("2020-01-05")
+                                            ) to ArbeidstidPeriodeInfo()
+                                                .medJobberNormaltTimerPerDag(Duration.ofHours(8))
+                                                .medFaktiskArbeidTimerPerDag(Duration.ofHours(4)),
+                                            Periode(
+                                                LocalDate.parse("2020-01-06"),
+                                                LocalDate.parse("2020-01-10")
+                                            ) to ArbeidstidPeriodeInfo()
+                                                .medJobberNormaltTimerPerDag(Duration.ofHours(8))
+                                                .medFaktiskArbeidTimerPerDag(Duration.ofHours(2))
+                                        )
                                     )
-                                ))
+                            )
                     )
                 )
             )
