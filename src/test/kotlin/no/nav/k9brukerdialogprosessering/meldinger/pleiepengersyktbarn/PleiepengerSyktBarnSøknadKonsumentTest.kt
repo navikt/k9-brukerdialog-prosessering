@@ -427,7 +427,17 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
                   "harForståttRettigheterOgPlikter": true,
                   "harMedsøker": true,
                   "samtidigHjemme": true,
-                  "soknadDialogCommitSha": "commit-abc-123"
+                  "soknadDialogCommitSha": "commit-abc-123",
+                  "ukjenteArbeidsforhold": [
+                    {
+                      "organisasjonsnummer": "926032925",
+                      "erAnsatt": true,
+                      "normalarbeidstid": {
+                        "timerPerUke": "PT8H"
+                      },
+                      "arbeiderIPerioden": "HELT_FRAVÆR"
+                    }
+                  ]
                 },
                 "endringsperiode": [],
                 "infoFraPunsj": null,

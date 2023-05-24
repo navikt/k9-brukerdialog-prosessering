@@ -7,10 +7,13 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
+import no.nav.k9.søknad.ytelse.psb.v1.ArbeiderIPeriodenSvar
 import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie.LovbestemtFeriePeriodeInfo
+import no.nav.k9.søknad.ytelse.psb.v1.NormalArbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
+import no.nav.k9.søknad.ytelse.psb.v1.UkjentArbeidsforhold
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
@@ -50,7 +53,23 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                 no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of("12345678910")),
                 PleiepengerSyktBarn()
                     .medSøknadsperiode(Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")))
-                    .medSøknadInfo(DataBruktTilUtledning(true, true, true, true, "commit-abc-123", true))
+                    .medSøknadInfo(
+                        DataBruktTilUtledning(
+                            true,
+                            true,
+                            true,
+                            true,
+                            "commit-abc-123",
+                            true,
+                            listOf(
+                                UkjentArbeidsforhold()
+                                    .medOrganisasjonsnummer(Organisasjonsnummer.of("926032925"))
+                                    .medErAnsatt(true)
+                                    .medArbeiderIPerioden(ArbeiderIPeriodenSvar.HELT_FRAVÆR)
+                                    .medNormalarbeidstid(NormalArbeidstid().medTimerPerUke(Duration.ofHours(8)))
+                            )
+                        )
+                    )
                     .medBarn(Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("10987654321")))
                     .medArbeidstid(
                         Arbeidstid()
@@ -67,19 +86,25 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                                             LocalDate.parse("2023-01-23"),
                                                             LocalDate.parse("2023-01-27")
                                                         ) to ArbeidstidPeriodeInfo()
-                                                            .medJobberNormaltTimerPerDag(Duration.ofHours(7).plusMinutes(10))
+                                                            .medJobberNormaltTimerPerDag(
+                                                                Duration.ofHours(7).plusMinutes(10)
+                                                            )
                                                             .medFaktiskArbeidTimerPerDag(Duration.ofHours(2)),
                                                         Periode(
                                                             LocalDate.parse("2022-12-26"),
                                                             LocalDate.parse("2022-12-30")
                                                         ) to ArbeidstidPeriodeInfo()
-                                                            .medJobberNormaltTimerPerDag(Duration.ofHours(7).plusMinutes(30))
+                                                            .medJobberNormaltTimerPerDag(
+                                                                Duration.ofHours(7).plusMinutes(30)
+                                                            )
                                                             .medFaktiskArbeidTimerPerDag(Duration.ofHours(4)),
                                                         Periode(
                                                             LocalDate.parse("2023-01-02"),
                                                             LocalDate.parse("2023-01-06")
                                                         ) to ArbeidstidPeriodeInfo()
-                                                            .medJobberNormaltTimerPerDag(Duration.ofHours(7).plusMinutes(30))
+                                                            .medJobberNormaltTimerPerDag(
+                                                                Duration.ofHours(7).plusMinutes(30)
+                                                            )
                                                             .medFaktiskArbeidTimerPerDag(Duration.ofHours(2))
                                                     )
                                                 )
