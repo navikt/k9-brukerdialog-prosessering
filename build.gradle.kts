@@ -45,6 +45,10 @@ val awailitilityKotlinVersion = "4.2.0"
 val springCloudContractVersion = "4.0.2"
 
 dependencies {
+	implementation("org.yaml:snakeyaml:2.0") {
+		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
+	}
+
 	implementation("no.nav.security:token-validation-core:$tokenSupportVersion")
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
 	testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
