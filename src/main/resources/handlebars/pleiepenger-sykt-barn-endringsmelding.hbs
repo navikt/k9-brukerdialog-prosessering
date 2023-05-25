@@ -10,6 +10,7 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Barn" href="#barn"/>
+        <bookmark name="UkjenteArbeidsforhold" href="#ukjenteArbeidsforhold"/>
         <bookmark name="Arbeidstid" href="#arbeidstid"/>
         <bookmark name="LovbestemtFerie" href="#lovbestemtFerie"/>
         <bookmark name="Samtykke" href="#samtykke"/>
@@ -26,6 +27,22 @@
     {{> partial/felles/personPartial id="søker" title="Søker" navn=soker.navn fødselsnummer=soker.fødselsnummer }}
     {{> partial/felles/personPartial id="barn" title="Barn" navn=barn.navn fødselsnummer=barn.fødselsnummer }}
 
+    {{#if ukjenteArbeidsforhold}}
+        <section id="ukjenteArbeidsforhold">
+            <h2>Ukjente arbeidsforhold</h2>
+        {{#each ukjenteArbeidsforhold as |forhold|~}}
+            <h3>Organisasjonsnummer: {{forhold.organisasjonsnummer}}</h3>
+            <p class="sporsmalstekst">Er ansatt hos {{forhold.organisasjonsnummer}} i perioden med pleiepenger?</p>
+            <p>{{ jaNeiSvar forhold.erAnsatt }}</p><br/>
+
+        {{#if forhold.normalarbeidstid}}
+            <p class="sporsmalstekst">Hvor mange timer jobber du normalt per uke hos {{forhold.organisasjonsnummer}}?</p>
+            <p>{{forhold.normalarbeidstid.timerPerUke}}</p>
+        {{/if}}
+        {{/each}}
+        </section>
+    {{/if}}
+
     {{#if arbeidstid}}
         <section id="arbeidstid">
             {{#if arbeidstid.arbeidstakerList}}
@@ -34,7 +51,21 @@
                     {{#each arbeidstid.arbeidstakerList as |arbeidsgiver|~}}
                         <li>
                             <b>Organisasjonsnummer</b>: {{arbeidsgiver.organisasjonsnummer}} <br/>
-                            {{> partial/arbeid/arbeidstidinfoPartial arbeidstidinfo=arbeidsgiver.arbeidstidInfo}}
+
+                            {{#if arbeidsgiver.ukjentArbeidsforhold.arbeiderIPerioden}}
+                                <p class="sporsmalstekst">I perioden med pleiepenger, hvilken situasjon gjelder for deg hos {{arbeidsgiver.organisasjonsnummer}}?</p>
+                                {{#eq arbeidsgiver.ukjentArbeidsforhold.arbeiderIPerioden "SOM_VANLIG" }}
+                                    <p>Jeg jobber som normalt og har ingen fravær her</p>
+                                {{/eq}}
+                                {{#eq arbeidsgiver.ukjentArbeidsforhold.arbeiderIPerioden "HELT_FRAVÆR" }}
+                                    <p>Jeg jobber ikke og har fullt fravær her</p>
+                                {{/eq}}
+                                {{#eq arbeidsgiver.ukjentArbeidsforhold.arbeiderIPerioden "REDUSERT" }}
+                                    <p>Jeg kombinerer delvis jobb med pleiepenger</p>
+                                {{/eq}}
+                            {{/if}}
+
+                            {{> partial/arbeid/arbeidstidinfoPartial arbeidstidinfo=arbeidsgiver.arbeidstidInfo}}<br/>
                         </li>
                     {{/each}}
                 </ul>
