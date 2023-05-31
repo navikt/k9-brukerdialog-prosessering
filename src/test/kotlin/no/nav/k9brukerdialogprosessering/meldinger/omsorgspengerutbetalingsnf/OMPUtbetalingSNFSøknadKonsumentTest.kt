@@ -198,7 +198,6 @@ class OMPUtbetalingSNFSøknadKonsumentTest {
             "registrertIUtlandet": null,
             "regnskapsfører": null
           },
-          "andreUtbetalinger": null,
           "frilans": null,
           "bosteder": [
             {
