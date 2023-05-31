@@ -23,7 +23,6 @@ data class OMPUtbetalingSNFSoknadMottatt(
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
     val utbetalingsperioder: List<Utbetalingsperiode>,
-    @Deprecated("Kan fjernes etter lansering") val andreUtbetalinger: List<AndreUtbetalinger>? = null,
     val barn: List<Barn> = listOf(),
     val vedleggId: List<String> = listOf(),
     val titler: List<String>? = null,
@@ -59,13 +58,6 @@ data class OMPUtbetalingSNFSoknadMottatt(
         pdfJournalføringsTittel = "Søknad om utbetaling av omsorgspenger",
         jsonJournalføringsTittel = "Søknad om utbetaling av omsorgspenger som JSON"
     )
-}
-
-@Deprecated("Kan fjernes etter lansering")
-enum class AndreUtbetalinger (val pdfTekst: String){
-    DAGPENGER("Dagpenger"),
-    SYKEPENGER("Sykepenger"),
-    MIDLERTIDIG_KOMPENSASJON_SN_FRI ("Midlertidig kompensasjon for selvstendig næringsdrivende og frilansere")
 }
 
 data class Barn(
