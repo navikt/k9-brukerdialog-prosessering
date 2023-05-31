@@ -64,6 +64,7 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                             listOf(
                                 UkjentArbeidsforhold()
                                     .medOrganisasjonsnummer(Organisasjonsnummer.of("926032925"))
+                                    .medOrganisasjonsnavn("Something Fishy AS")
                                     .medErAnsatt(true)
                                     .medArbeiderIPerioden(ArbeiderIPeriodenSvar.HELT_FRAVÆR)
                                     .medNormalarbeidstid(NormalArbeidstid().medTimerPerUke(Duration.ofHours(8)))
@@ -78,6 +79,7 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                     Arbeidstaker()
                                         .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("12345678910"))
                                         .medOrganisasjonsnummer(Organisasjonsnummer.of("926032925"))
+                                        .medOrganisasjonsnavn("Something Fishy AS")
                                         .medArbeidstidInfo(
                                             ArbeidstidInfo()
                                                 .medPerioder(
@@ -112,6 +114,7 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                     Arbeidstaker()
                                         .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("12345678910"))
                                         .medOrganisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                                        .medOrganisasjonsnavn("Dirty Bit AS")
                                         .medArbeidstidInfo(
                                             ArbeidstidInfo()
                                                 .medPerioder(

@@ -31,12 +31,12 @@
         <section id="ukjenteArbeidsforhold">
             <h2>Ukjente arbeidsforhold</h2>
         {{#each ukjenteArbeidsforhold as |forhold|~}}
-            <h3>Organisasjonsnummer: {{forhold.organisasjonsnummer}}</h3>
-            <p class="sporsmalstekst">Er ansatt hos {{forhold.organisasjonsnummer}} i perioden med pleiepenger?</p>
+            <p><b>{{forhold.organisasjonsnavn}}</b> ({{forhold.organisasjonsnummer}})</p>
+            <p class="sporsmalstekst">Er ansatt hos {{forhold.organisasjonsnavn}} i perioden med pleiepenger?</p>
             <p>{{ jaNeiSvar forhold.erAnsatt }}</p><br/>
 
         {{#if forhold.normalarbeidstid}}
-            <p class="sporsmalstekst">Hvor mange timer jobber du normalt per uke hos {{forhold.organisasjonsnummer}}?</p>
+            <p class="sporsmalstekst">Hvor mange timer jobber du normalt per uke hos {{forhold.organisasjonsnavn}}?</p>
             <p>{{forhold.normalarbeidstid.timerPerUke}}</p>
         {{/if}}
         {{/each}}
@@ -50,10 +50,10 @@
                 <ul class="li-style-none ul-no-indent">
                     {{#each arbeidstid.arbeidstakerList as |arbeidsgiver|~}}
                         <li>
-                            <b>Organisasjonsnummer</b>: {{arbeidsgiver.organisasjonsnummer}} <br/>
+                            <b>{{arbeidsgiver.organisasjonsnavn}}</b> ({{arbeidsgiver.organisasjonsnummer}}) <br/>
 
                             {{#if arbeidsgiver.ukjentArbeidsforhold.arbeiderIPerioden}}
-                                <p class="sporsmalstekst">I perioden med pleiepenger, hvilken situasjon gjelder for deg hos {{arbeidsgiver.organisasjonsnummer}}?</p>
+                                <p class="sporsmalstekst">I perioden med pleiepenger, hvilken situasjon gjelder for deg hos {{arbeidsgiver.organisasjonsnavn}}?</p>
                                 {{#eq arbeidsgiver.ukjentArbeidsforhold.arbeiderIPerioden "SOM_VANLIG" }}
                                     <p>Jeg jobber som normalt og har ingen fravær her</p>
                                 {{/eq}}

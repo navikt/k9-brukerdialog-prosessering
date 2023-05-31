@@ -78,6 +78,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
     private fun List<UkjentArbeidsforhold>.somMap(): List<Map<String, Any?>> = map { it.somMap() }
     private fun UkjentArbeidsforhold.somMap(): Map<String, Any?> = mapOf(
         "organisasjonsnummer" to organisasjonsnummer.verdi,
+        "organisasjonsnavn" to organisasjonsnavn,
         "erAnsatt" to isErAnsatt,
         "arbeiderIPerioden" to arbeiderIPerioden.name,
         "normalarbeidstid" to normalarbeidstid.somMap()
@@ -110,6 +111,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
                 ukjenteArbeidsforhold?.find { it.organisasjonsnummer.verdi == arbeidstaker.organisasjonsnummer.verdi }
             mapOf(
                 "organisasjonsnummer" to arbeidstaker.organisasjonsnummer.verdi,
+                "organisasjonsnavn" to arbeidstaker.organisasjonsnavn,
                 "arbeidstidInfo" to arbeidstaker.arbeidstidInfo.somMap(),
                 "ukjentArbeidsforhold" to ukjentArbeidsforhold?.somMap()
             )
