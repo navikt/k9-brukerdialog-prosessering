@@ -166,7 +166,8 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
                         }
                       },
                       "norskIdentitetsnummer": "12345678910",
-                      "organisasjonsnummer": "926032925"
+                      "organisasjonsnummer": "926032925",
+                      "organisasjonsnavn": "Something Fishy AS"
                     }
                   ],
                   "frilanserArbeidstidInfo": null,
@@ -208,6 +209,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
                   "ukjenteArbeidsforhold": [
                     {
                       "organisasjonsnummer": "926032925",
+                      "organisasjonsnavn": "Something Fishy AS",
                       "erAnsatt": true,
                       "normalarbeidstid": {
                         "timerPerUke": "PT8H"
