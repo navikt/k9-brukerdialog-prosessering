@@ -67,6 +67,12 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                     .medOrganisasjonsnavn("Something Fishy AS")
                                     .medErAnsatt(true)
                                     .medArbeiderIPerioden(ArbeiderIPeriodenSvar.HELT_FRAVÆR)
+                                    .medNormalarbeidstid(NormalArbeidstid().medTimerPerUke(Duration.ofHours(8))),
+                                UkjentArbeidsforhold()
+                                    .medOrganisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                                    .medOrganisasjonsnavn("Dirty Bit AS")
+                                    .medErAnsatt(true)
+                                    .medArbeiderIPerioden(ArbeiderIPeriodenSvar.SOM_VANLIG)
                                     .medNormalarbeidstid(NormalArbeidstid().medTimerPerUke(Duration.ofHours(8)))
                             )
                         )
