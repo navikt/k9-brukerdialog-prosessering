@@ -5,7 +5,6 @@ import no.nav.k9brukerdialogprosessering.common.Constants.DATE_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.AndreUtbetalinger
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Barn
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Land
@@ -46,11 +45,9 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
             "barn" to if (melding.barn.isNotEmpty()) melding.barn.somMap() else null,
             "harUtbetalingsperioder" to melding.utbetalingsperioder.isNotEmpty(),
             "harOpphold" to melding.opphold.isNotEmpty(),
-            "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(), // TOOD: Fjerne
             "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),
             "harBosteder" to melding.bosteder.isNotEmpty(),
             "harVedlegg" to melding.vedleggId.isNotEmpty(),
-            "andreUtbetalinger" to melding.andreUtbetalinger?.somMapAndreUtbetalinger(), // TODO: Fjerne
             "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
             "selvstendigNæringsdrivende" to melding.selvstendigNæringsdrivende?.somMap(),
             "titler" to mapOf(
@@ -82,13 +79,6 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
     private fun Duration.tilString(): String = when (this.toMinutesPart()) {
         0 -> "${this.toHours()} timer"
         else -> "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
-    }
-
-    @Deprecated("Kan fjernes etter lansering")
-    private fun List<AndreUtbetalinger>.somMapAndreUtbetalinger() = map {
-        mapOf(
-            "utbetaling" to it.pdfTekst
-        )
     }
 
     private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(

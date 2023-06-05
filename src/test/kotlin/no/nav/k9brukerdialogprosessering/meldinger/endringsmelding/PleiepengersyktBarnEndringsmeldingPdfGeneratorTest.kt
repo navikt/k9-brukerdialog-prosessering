@@ -64,8 +64,15 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                             listOf(
                                 UkjentArbeidsforhold()
                                     .medOrganisasjonsnummer(Organisasjonsnummer.of("926032925"))
+                                    .medOrganisasjonsnavn("Something Fishy AS")
                                     .medErAnsatt(true)
                                     .medArbeiderIPerioden(ArbeiderIPeriodenSvar.HELT_FRAVÆR)
+                                    .medNormalarbeidstid(NormalArbeidstid().medTimerPerUke(Duration.ofHours(8))),
+                                UkjentArbeidsforhold()
+                                    .medOrganisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                                    .medOrganisasjonsnavn("Dirty Bit AS")
+                                    .medErAnsatt(true)
+                                    .medArbeiderIPerioden(ArbeiderIPeriodenSvar.SOM_VANLIG)
                                     .medNormalarbeidstid(NormalArbeidstid().medTimerPerUke(Duration.ofHours(8)))
                             )
                         )
@@ -78,6 +85,7 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                     Arbeidstaker()
                                         .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("12345678910"))
                                         .medOrganisasjonsnummer(Organisasjonsnummer.of("926032925"))
+                                        .medOrganisasjonsnavn("Something Fishy AS")
                                         .medArbeidstidInfo(
                                             ArbeidstidInfo()
                                                 .medPerioder(
@@ -108,7 +116,42 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                                             .medFaktiskArbeidTimerPerDag(Duration.ofHours(2))
                                                     )
                                                 )
-                                        )
+                                        ),
+                                    Arbeidstaker()
+                                        .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("12345678910"))
+                                        .medOrganisasjonsnummer(Organisasjonsnummer.of("88888888"))
+                                        .medOrganisasjonsnavn("Dirty Bit AS")
+                                        .medArbeidstidInfo(
+                                            ArbeidstidInfo()
+                                                .medPerioder(
+                                                    mapOf(
+                                                        Periode(
+                                                            LocalDate.parse("2023-01-23"),
+                                                            LocalDate.parse("2023-01-27")
+                                                        ) to ArbeidstidPeriodeInfo()
+                                                            .medJobberNormaltTimerPerDag(
+                                                                Duration.ofHours(7).plusMinutes(10)
+                                                            )
+                                                            .medFaktiskArbeidTimerPerDag(Duration.ofHours(2)),
+                                                        Periode(
+                                                            LocalDate.parse("2022-12-26"),
+                                                            LocalDate.parse("2022-12-30")
+                                                        ) to ArbeidstidPeriodeInfo()
+                                                            .medJobberNormaltTimerPerDag(
+                                                                Duration.ofHours(7).plusMinutes(30)
+                                                            )
+                                                            .medFaktiskArbeidTimerPerDag(Duration.ofHours(4)),
+                                                        Periode(
+                                                            LocalDate.parse("2023-01-02"),
+                                                            LocalDate.parse("2023-01-06")
+                                                        ) to ArbeidstidPeriodeInfo()
+                                                            .medJobberNormaltTimerPerDag(
+                                                                Duration.ofHours(7).plusMinutes(30)
+                                                            )
+                                                            .medFaktiskArbeidTimerPerDag(Duration.ofHours(2))
+                                                    )
+                                                )
+                                        ),
                                 )
                             )
                             .medFrilanserArbeidstid(

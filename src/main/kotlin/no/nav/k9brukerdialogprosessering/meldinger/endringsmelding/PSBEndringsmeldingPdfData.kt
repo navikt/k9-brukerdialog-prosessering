@@ -2,7 +2,9 @@ package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding
 
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie
+import no.nav.k9.søknad.ytelse.psb.v1.NormalArbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
+import no.nav.k9.søknad.ytelse.psb.v1.UkjentArbeidsforhold
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
@@ -27,15 +29,20 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
 
         val k9Format = endringsmelding.k9Format
         val ytelse = k9Format.getYtelse<PleiepengerSyktBarn>()
+        val dataBruktTilUtledning = ytelse.søknadInfo.orElse(null)
         return mapOf(
             "søknadId" to k9Format.søknadId.id,
-            "soknadDialogCommitSha" to ytelse.søknadInfo.orElse(null)?.soknadDialogCommitSha,
+            "soknadDialogCommitSha" to dataBruktTilUtledning?.soknadDialogCommitSha,
             "mottattDag" to k9Format.mottattDato.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "mottattDato" to DATE_TIME_FORMATTER.format(k9Format.mottattDato),
             "soker" to endringsmelding.søker.somMap(),
             "barn" to ytelse.barn.somMap(endringsmelding.pleietrengendeNavn),
+            "ukjenteArbeidsforhold" to when {
+                dataBruktTilUtledning?.ukjenteArbeidsforhold?.isNotEmpty() == true -> dataBruktTilUtledning.ukjenteArbeidsforhold.somMap()
+                else -> null
+            },
             "arbeidstid" to when {
-                ytelse.arbeidstid != null -> ytelse.arbeidstid.somMap()
+                ytelse.arbeidstid != null -> ytelse.arbeidstid.somMap(dataBruktTilUtledning.ukjenteArbeidsforhold)
                 else -> null
             },
             "lovbestemtFerie" to when {
@@ -67,9 +74,23 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
             "fødselsnummer" to personIdent.verdi
         )
 
-    fun Arbeidstid.somMap(): Map<String, Any?> = mapOf(
+    @JvmName("ukjentArbeidsforholdSomMap")
+    private fun List<UkjentArbeidsforhold>.somMap(): List<Map<String, Any?>> = map { it.somMap() }
+    private fun UkjentArbeidsforhold.somMap(): Map<String, Any?> = mapOf(
+        "organisasjonsnummer" to organisasjonsnummer.verdi,
+        "organisasjonsnavn" to organisasjonsnavn,
+        "erAnsatt" to isErAnsatt,
+        "arbeiderIPerioden" to arbeiderIPerioden.name,
+        "normalarbeidstid" to normalarbeidstid.somMap()
+    )
+
+    private fun NormalArbeidstid.somMap(): Map<String, Any> = mapOf(
+        "timerPerUke" to timerPerUke.formaterString()
+    )
+
+    fun Arbeidstid.somMap(ukjenteArbeidsforhold: List<UkjentArbeidsforhold>?): Map<String, Any?> = mapOf(
         "arbeidstakerList" to when {
-            !arbeidstakerList.isNullOrEmpty() -> arbeidstakerList.somMap()
+            !arbeidstakerList.isNullOrEmpty() -> arbeidstakerList.somMap(ukjenteArbeidsforhold)
             else -> null
         },
         "frilanserArbeidstidInfo" to when {
@@ -84,12 +105,17 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         }
     )
 
-    fun List<Arbeidstaker>.somMap(): List<Map<String, Any?>> = map { arbeidstaker ->
-        mapOf(
-            "organisasjonsnummer" to arbeidstaker.organisasjonsnummer.verdi,
-            "arbeidstidInfo" to arbeidstaker.arbeidstidInfo.somMap()
-        )
-    }
+    fun List<Arbeidstaker>.somMap(ukjenteArbeidsforhold: List<UkjentArbeidsforhold>?): List<Map<String, Any?>> =
+        map { arbeidstaker ->
+            val ukjentArbeidsforhold =
+                ukjenteArbeidsforhold?.find { it.organisasjonsnummer.verdi == arbeidstaker.organisasjonsnummer.verdi }
+            mapOf(
+                "organisasjonsnummer" to arbeidstaker.organisasjonsnummer.verdi,
+                "organisasjonsnavn" to arbeidstaker.organisasjonsnavn,
+                "arbeidstidInfo" to arbeidstaker.arbeidstidInfo.somMap(),
+                "ukjentArbeidsforhold" to ukjentArbeidsforhold?.somMap()
+            )
+        }
 
     fun ArbeidstidInfo.somMap(): Map<String, Any?> = mapOf(
         "perioder" to perioder.toSortedMap { p1, p2 -> p1.compareTo(p2) }.somMap()

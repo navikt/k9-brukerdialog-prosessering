@@ -109,20 +109,6 @@
                 </li>
             {{/each}}
         </ul>
-
-        {{#if harSøktAndreYtelser}}
-            <h3>Andre utbetalinger fra NAV</h3>
-            <p>Har du søkt om andre utbetalinger fra NAV?</p>
-            {{jaNeiSvar harSøktAndreYtelser}}: <br/>
-        {{/if}}
-        <ul>
-            {{# each andreUtbetalinger as |utbetaling|}}
-                <li>
-                    {{utbetaling.utbetaling}}
-                </li>
-            {{/each}}
-        </ul>
-
     </section>
 
     <section id="spørsmål">

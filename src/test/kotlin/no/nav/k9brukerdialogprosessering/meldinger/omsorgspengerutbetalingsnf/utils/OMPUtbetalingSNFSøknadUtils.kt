@@ -139,7 +139,6 @@ internal object OMPUtbetalingSNFSøknadUtils {
                 årsak = FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
             )
         ),
-        andreUtbetalinger = null,
         vedleggId = listOf(
             "123",
             "456",
