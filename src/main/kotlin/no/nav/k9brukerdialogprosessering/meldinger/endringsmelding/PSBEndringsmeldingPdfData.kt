@@ -80,7 +80,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         "organisasjonsnummer" to organisasjonsnummer.verdi,
         "organisasjonsnavn" to organisasjonsnavn,
         "erAnsatt" to isErAnsatt,
-        "arbeiderIPerioden" to arbeiderIPerioden.name,
+        "arbeiderIPerioden" to arbeiderIPerioden?.name,
         "normalarbeidstid" to normalarbeidstid.somMap()
     )
 
