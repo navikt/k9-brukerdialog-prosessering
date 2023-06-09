@@ -81,7 +81,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         "organisasjonsnavn" to organisasjonsnavn,
         "erAnsatt" to isErAnsatt,
         "arbeiderIPerioden" to arbeiderIPerioden?.name,
-        "normalarbeidstid" to normalarbeidstid.somMap()
+        "normalarbeidstid" to normalarbeidstid?.somMap()
     )
 
     private fun NormalArbeidstid.somMap(): Map<String, Any> = mapOf(
