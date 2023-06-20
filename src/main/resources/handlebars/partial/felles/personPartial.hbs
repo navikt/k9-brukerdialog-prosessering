@@ -14,7 +14,12 @@
         <p>Fødselsdato: {{barn.fødselsdato}}</p>
     {{/if}}
     {{#if årsakManglerIdentitetsnummer}}
-        <p>Oppgitt grunn for at barnet ikke har fødselsnummer/D-nummer: {{årsakManglerIdentitetsnummer}}</p>
+        {{#eq id "pleietrengende"}}
+            <p>Oppgitt grunn for at pleietrengende ikke har fødselsnummer/D-nummer: {{årsakManglerIdentitetsnummer}}</p>
+        {{/eq}}
+        {{#eq id "barn"}}
+            <p>Oppgitt grunn for at barnet ikke har fødselsnummer/D-nummer: {{årsakManglerIdentitetsnummer}}</p>
+        {{/eq}}
     {{/if}}
 </div>
 
