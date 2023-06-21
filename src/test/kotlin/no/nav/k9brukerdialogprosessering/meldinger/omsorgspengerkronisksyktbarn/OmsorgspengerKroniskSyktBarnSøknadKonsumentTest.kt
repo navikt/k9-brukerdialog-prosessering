@@ -194,7 +194,8 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
                 "norskIdentitetsnummer": "02119970078"
               },
               "kroniskEllerFunksjonshemming": true,
-              "type": "OMP_UTV_KS"
+              "type": "OMP_UTV_KS",
+              "dataBruktTilUtledning": null
             },
             "journalposter": [],
             "begrunnelseForInnsending": {

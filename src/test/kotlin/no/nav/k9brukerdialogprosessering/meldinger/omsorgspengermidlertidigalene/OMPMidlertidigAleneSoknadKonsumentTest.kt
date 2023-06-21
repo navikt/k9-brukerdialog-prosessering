@@ -213,7 +213,8 @@ class OMPMidlertidigAleneSoknadKonsumentTest {
                 "periode": "2020-01-01\/2030-01-01",
                 "situasjon": "FENGSEL"
               },
-              "type": "OMP_UTV_MA"
+              "type": "OMP_UTV_MA",
+              "dataBruktTilUtledning": null
             },
             "journalposter": [],
             "begrunnelseForInnsending": {

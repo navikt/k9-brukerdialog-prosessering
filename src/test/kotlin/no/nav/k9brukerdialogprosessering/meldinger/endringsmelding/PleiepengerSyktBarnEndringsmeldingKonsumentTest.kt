@@ -199,6 +199,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
                   },
                   "perioderSomSkalSlettes": {}
                 },
+                "annetDataBruktTilUtledning": null,
                 "dataBruktTilUtledning": {
                   "bekrefterPeriodeOver8Uker": true,
                   "harBekreftetOpplysninger": true,

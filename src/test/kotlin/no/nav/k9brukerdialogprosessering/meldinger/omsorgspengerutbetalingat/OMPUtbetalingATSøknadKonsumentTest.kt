@@ -321,7 +321,8 @@ class OMPUtbetalingATSøknadKonsumentTest {
                   }
                 },
                 "perioderSomSkalSlettes": {}
-              }
+              },
+              "dataBruktTilUtledning": null
             },
             "journalposter": [],
             "begrunnelseForInnsending": {

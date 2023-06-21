@@ -193,7 +193,8 @@ class OMPAleneomsorgSoknadKonsumentTest {
                 "norskIdentitetsnummer": "29076523302"
               },
               "type": "OMP_UTV_AO",
-              "periode": "2020-01-01\/.."
+              "periode": "2020-01-01\/..",
+              "dataBruktTilUtledning": null
             },
             "journalposter": [],
             "begrunnelseForInnsending": {

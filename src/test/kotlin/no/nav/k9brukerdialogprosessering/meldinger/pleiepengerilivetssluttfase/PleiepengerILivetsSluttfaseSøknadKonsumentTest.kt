@@ -385,7 +385,8 @@ class PleiepengerILivetsSluttfaseSøknadKonsumentTest {
                   "sluttdato": "2021-01-01"
                 }
               },
-              "trekkKravPerioder": []
+              "trekkKravPerioder": [],
+              "dataBruktTilUtledning": null
             },
             "journalposter": [],
             "begrunnelseForInnsending": {

@@ -399,7 +399,8 @@ class OMPUtbetalingSNFSøknadKonsumentTest {
                   }
                 },
                 "perioderSomSkalSlettes": {}
-              }
+              },
+              "dataBruktTilUtledning": null
             },
             "journalposter": [],
             "begrunnelseForInnsending": {
