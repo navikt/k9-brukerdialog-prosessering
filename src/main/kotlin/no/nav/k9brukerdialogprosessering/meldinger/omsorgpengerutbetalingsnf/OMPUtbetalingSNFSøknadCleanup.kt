@@ -44,7 +44,6 @@ class OMPUtbetalingSNFSøknadCleanup(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
-            .filter { _, value -> "0bca2f81-5fc1-4dd5-a362-d68a92947662" != value.metadata.correlationId }
             .mapValues { _: String, value: TopicEntry<Cleanup<OMPUtbetalingSNFSoknadPreprosessert>> ->
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val cleanup = cleanupService.cleanup(value.data)
