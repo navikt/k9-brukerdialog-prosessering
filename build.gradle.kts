@@ -104,8 +104,8 @@ tasks {
 		}
 	}
 
-	withType<Jar> {
-		archiveFileName.set("app.jar")
+	getByName<Jar>("jar") {
+		enabled = false
 	}
 
 	withType<Test> {
