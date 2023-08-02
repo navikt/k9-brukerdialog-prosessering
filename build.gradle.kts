@@ -23,7 +23,7 @@ repositories {
 		name = "GitHubPackages"
 		url = uri("https://maven.pkg.github.com/navikt/k9-format")
 		credentials {
-			username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
+			username = "k9-brukerdialog-prosessering"
 			password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
 		}
 	}
@@ -113,6 +113,6 @@ tasks {
 	}
 	
 	withType<Wrapper> {
-        	gradleVersion = "8.1.1"
+        	gradleVersion = "8.2.1"
 	}
 }
