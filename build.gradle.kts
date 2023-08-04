@@ -45,7 +45,7 @@ val awailitilityKotlinVersion = "4.2.0"
 val springCloudContractVersion = "4.0.4"
 
 dependencies {
-	implementation("org.yaml:snakeyaml:2.0") {
+	implementation("org.yaml:snakeyaml:2.1") {
 		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
 	}
 
