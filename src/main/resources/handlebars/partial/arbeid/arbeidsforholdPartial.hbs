@@ -2,20 +2,24 @@
     <ul>
         <li>
             {{#with arbeidsforhold.arbeidIPeriode}}
-                {{#eq type "ARBEIDER_IKKE" }}
+                {{#eq type "HELT_FRAVÆR" }}
                     <p>Jobber ikke i perioden.</p>
                 {{/eq}}
-                {{#eq type "ARBEIDER_VANLIG" }}
+                {{#eq type "SOM_VANLIG" }}
                     <p>Jobber som normalt i perioden. Har ikke fravær fra jobb.</p>
                 {{/eq}}
-                {{#eq type "ARBEIDER_PROSENT_AV_NORMALT" }}
-                    <p>Jobber {{arbeidsforhold.arbeidIPeriode.prosentAvNormalt}} prosent av normalt i perioden.</p>
-                {{/eq}}
-                {{#eq type "ARBEIDER_TIMER_I_SNITT_PER_UKE" }}
-                    <p>Jobber {{arbeidsforhold.arbeidIPeriode.timerPerUke}} hver uke.</p>
-                {{/eq}}
-                {{#eq type "ARBEIDER_ULIKE_UKER_TIMER" }}
-                    {{> partial/arbeid/arbeidIPeriode/arbeidsukerPartial}}
+                {{#eq type "REDUSERT" }}
+                    <p>Jobber kombinerer pleiepenger med arbeid i perioden.</p>
+
+                    {{#eq redusertArbeid.type "PROSENT_AV_NORMALT" }}
+                        <p>Jobber {{arbeidsforhold.arbeidIPeriode.prosentAvNormalt}} prosent av normalt i perioden.</p>
+                    {{/eq}}
+                    {{#eq redusertArbeid.type "TIMER_I_SNITT_PER_UKE" }}
+                        <p>Jobber {{arbeidsforhold.arbeidIPeriode.timerPerUke}} hver uke.</p>
+                    {{/eq}}
+                    {{#eq redusertArbeid.type "ULIKE_UKER_TIMER" }}
+                        {{> partial/arbeid/arbeidIPeriode/arbeidsukerPartial}}
+                    {{/eq}}
                 {{/eq}}
             {{/with}}
         </li>

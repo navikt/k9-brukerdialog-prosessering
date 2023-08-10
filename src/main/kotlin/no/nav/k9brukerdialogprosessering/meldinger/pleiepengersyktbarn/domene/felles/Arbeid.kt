@@ -21,13 +21,17 @@ data class Arbeidsforhold(
 
 data class ArbeidIPeriode(
     val type: ArbeidIPeriodeType,
-    val arbeiderIPerioden: ArbeiderIPeriodenSvar? = null,
+    val redusertArbeid: ArbeidsRedusert? = null,
+)
+
+data class ArbeidsRedusert(
+    val type: RedusertArbeidstidType,
     val prosentAvNormalt: Double? = null,
     val timerPerUke: Duration? = null,
     val arbeidsuker: List<ArbeidsUke>? = null
 )
 
-enum class ArbeiderIPeriodenSvar {
+enum class ArbeidIPeriodeType {
     SOM_VANLIG,
     REDUSERT,
     HELT_FRAVÆR;
@@ -35,15 +39,13 @@ enum class ArbeiderIPeriodenSvar {
     fun jobber() = this != HELT_FRAVÆR
 }
 
+enum class RedusertArbeidstidType {
+    PROSENT_AV_NORMALT,
+    TIMER_I_SNITT_PER_UKE,
+    ULIKE_UKER_TIMER
+}
+
 data class ArbeidsUke(
     val periode: Periode,
     val timer: Duration? = null
 )
-
-enum class ArbeidIPeriodeType {
-    ARBEIDER_IKKE,
-    ARBEIDER_VANLIG,
-    ARBEIDER_PROSENT_AV_NORMALT,
-    ARBEIDER_TIMER_I_SNITT_PER_UKE,
-    ARBEIDER_ULIKE_UKER_TIMER,
-}

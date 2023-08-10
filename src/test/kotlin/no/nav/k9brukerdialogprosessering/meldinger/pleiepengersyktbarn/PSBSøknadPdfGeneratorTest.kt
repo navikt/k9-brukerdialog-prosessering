@@ -9,7 +9,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeiderIPeriodenSvar
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsRedusert
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsUke
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
@@ -29,6 +29,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningType
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Periode
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.RedusertArbeidstidType
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Regnskapsfører
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
@@ -183,8 +184,7 @@ class PSBSøknadPdfGeneratorTest {
                             timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                         ),
                         arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
-                            arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                            type = ArbeidIPeriodeType.SOM_VANLIG
                         )
                     )
                 ),
@@ -223,8 +223,7 @@ class PSBSøknadPdfGeneratorTest {
                             timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                         ),
                         arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
-                            arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                            type = ArbeidIPeriodeType.SOM_VANLIG
                         )
                     )
                 ),
@@ -238,8 +237,7 @@ class PSBSøknadPdfGeneratorTest {
                                 timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                             ),
                             arbeidIPeriode = ArbeidIPeriode(
-                                type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
-                                arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                                type = ArbeidIPeriodeType.SOM_VANLIG
                             )
                         )
                     ),
@@ -252,9 +250,11 @@ class PSBSøknadPdfGeneratorTest {
                                 timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                             ),
                             arbeidIPeriode = ArbeidIPeriode(
-                                type = ArbeidIPeriodeType.ARBEIDER_TIMER_I_SNITT_PER_UKE,
-                                arbeiderIPerioden = ArbeiderIPeriodenSvar.REDUSERT,
-                                timerPerUke = Duration.ofHours(37).plusMinutes(30)
+                                type = ArbeidIPeriodeType.REDUSERT,
+                                redusertArbeid = ArbeidsRedusert(
+                                    type = RedusertArbeidstidType.TIMER_I_SNITT_PER_UKE,
+                                    timerPerUke = Duration.ofHours(37).plusMinutes(30)
+                                )
                             )
                         )
                     ),
@@ -557,36 +557,38 @@ class PSBSøknadPdfGeneratorTest {
                                     timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                                 ),
                                 arbeidIPeriode = ArbeidIPeriode(
-                                    type = ArbeidIPeriodeType.ARBEIDER_ULIKE_UKER_TIMER,
-                                    arbeiderIPerioden = ArbeiderIPeriodenSvar.REDUSERT,
-                                    arbeidsuker = listOf(
-                                        ArbeidsUke(
-                                            periode = Periode(
-                                                fraOgMed = LocalDate.parse("2022-10-24"),
-                                                tilOgMed = LocalDate.parse("2022-10-30")
+                                    type = ArbeidIPeriodeType.REDUSERT,
+                                    redusertArbeid = ArbeidsRedusert(
+                                        type = RedusertArbeidstidType.ULIKE_UKER_TIMER,
+                                        arbeidsuker = listOf(
+                                            ArbeidsUke(
+                                                periode = Periode(
+                                                    fraOgMed = LocalDate.parse("2022-10-24"),
+                                                    tilOgMed = LocalDate.parse("2022-10-30")
+                                                ),
+                                                timer = Duration.ofHours(25).plusMinutes(30)
                                             ),
-                                            timer = Duration.ofHours(25).plusMinutes(30)
-                                        ),
-                                        ArbeidsUke(
-                                            periode = Periode(
-                                                fraOgMed = LocalDate.parse("2022-10-31"),
-                                                tilOgMed = LocalDate.parse("2022-11-06")
+                                            ArbeidsUke(
+                                                periode = Periode(
+                                                    fraOgMed = LocalDate.parse("2022-10-31"),
+                                                    tilOgMed = LocalDate.parse("2022-11-06")
+                                                ),
+                                                timer = Duration.ofHours(15).plusMinutes(30)
                                             ),
-                                            timer = Duration.ofHours(15).plusMinutes(30)
-                                        ),
-                                        ArbeidsUke(
-                                            periode = Periode(
-                                                fraOgMed = LocalDate.parse("2022-10-17"),
-                                                tilOgMed = LocalDate.parse("2022-10-23")
+                                            ArbeidsUke(
+                                                periode = Periode(
+                                                    fraOgMed = LocalDate.parse("2022-10-17"),
+                                                    tilOgMed = LocalDate.parse("2022-10-23")
+                                                ),
+                                                timer = Duration.ofHours(37).plusMinutes(30)
                                             ),
-                                            timer = Duration.ofHours(37).plusMinutes(30)
-                                        ),
-                                        ArbeidsUke(
-                                            periode = Periode(
-                                                fraOgMed = LocalDate.parse("2022-11-14"),
-                                                tilOgMed = LocalDate.parse("2022-11-20")
-                                            ),
-                                            timer = Duration.ofHours(5).plusMinutes(30)
+                                            ArbeidsUke(
+                                                periode = Periode(
+                                                    fraOgMed = LocalDate.parse("2022-11-14"),
+                                                    tilOgMed = LocalDate.parse("2022-11-20")
+                                                ),
+                                                timer = Duration.ofHours(5).plusMinutes(30)
+                                            )
                                         )
                                     )
                                 )
@@ -612,8 +614,7 @@ class PSBSøknadPdfGeneratorTest {
                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                            ),
                            arbeidIPeriode = ArbeidIPeriode(
-                               type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
-                               arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                               type = ArbeidIPeriodeType.SOM_VANLIG
                            )
                        )
                    )
@@ -636,8 +637,7 @@ class PSBSøknadPdfGeneratorTest {
                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                            ),
                            arbeidIPeriode = ArbeidIPeriode(
-                               type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
-                               arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                               type = ArbeidIPeriodeType.HELT_FRAVÆR
                            )
                        )
                    )

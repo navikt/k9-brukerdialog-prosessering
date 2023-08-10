@@ -7,6 +7,7 @@ import no.nav.k9brukerdialogprosessering.common.Constants
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsRedusert
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsUke
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
@@ -233,6 +234,10 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
 
     private fun ArbeidIPeriode.somMap(): Map<String, Any?> = mapOf(
         "type" to this.type.name,
+        "redusertArbeid" to this.redusertArbeid?.somMap()
+    )
+
+    private fun ArbeidsRedusert.somMap() = mapOf(
         "timerPerUke" to this.timerPerUke?.tilString(),
         "prosentAvNormalt" to this.prosentAvNormalt?.somString(),
         "arbeidsuker" to this.arbeidsuker?.somMap()
