@@ -215,8 +215,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               "sluttdato": null,
               "startdato": "2019-01-01",
               "frilansTyper": ["FRILANS", "STYREVERV"],
-              "misterHonorarer": true,
-              "misterHonorarerIPerioden": "MISTER_DELER_AV_HONORARER"
+              "misterHonorarer": true
             },
           "stønadGodtgjørelse": {
            "mottarStønadGodtgjørelse": true,

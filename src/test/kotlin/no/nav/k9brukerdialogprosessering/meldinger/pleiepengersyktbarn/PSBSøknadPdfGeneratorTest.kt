@@ -21,7 +21,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FerieuttakIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FrilansType
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.HonorarerIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Land
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Medlemskap
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
@@ -177,9 +176,8 @@ class PSBSøknadPdfGeneratorTest {
                     startdato = LocalDate.now().minusYears(3),
                     sluttdato = LocalDate.now(),
                     jobberFortsattSomFrilans = false,
-                    frilansTyper = listOf(FrilansType.FRILANS, FrilansType.STYREVERV),
+                    type = FrilansType.FRILANS,
                     misterHonorarer = true,
-                    misterHonorarerIPerioden = HonorarerIPerioden.MISTER_ALLE_HONORARER,
                     arbeidsforhold = Arbeidsforhold(
                         normalarbeidstid = NormalArbeidstid(
                             timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
@@ -599,18 +597,49 @@ class PSBSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "20-frilanser-uten-honorarer"
+            id = "20-frilanser-med-honorarer"
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
                    frilans = Frilans(
                        harInntektSomFrilanser = true,
-                       startdato = null,
-                       sluttdato = null,
-                       jobberFortsattSomFrilans = null,
+                       type = FrilansType.FRILANS_HONORAR,
+                       startdato = LocalDate.parse("2021-01-01"),
+                       sluttdato = LocalDate.parse("2021-01-31"),
+                       jobberFortsattSomFrilans = false,
                        misterHonorarer = null,
-                       misterHonorarerIPerioden = null,
-                       frilansTyper = null,
-                       arbeidsforhold = null
+                       arbeidsforhold = Arbeidsforhold(
+                           normalarbeidstid = NormalArbeidstid(
+                               timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                           ),
+                           arbeidIPeriode = ArbeidIPeriode(
+                               type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
+                               arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                           )
+                       )
+                   )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "21-kun-honorarer"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                   frilans = Frilans(
+                       harInntektSomFrilanser = true,
+                       type = FrilansType.HONORAR,
+                       startdato = LocalDate.parse("2021-01-01"),
+                       sluttdato = LocalDate.parse("2021-01-31"),
+                       jobberFortsattSomFrilans = false,
+                       misterHonorarer = true,
+                       arbeidsforhold = Arbeidsforhold(
+                           normalarbeidstid = NormalArbeidstid(
+                               timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                           ),
+                           arbeidIPeriode = ArbeidIPeriode(
+                               type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
+                               arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                           )
+                       )
                    )
                 ).pdfData()
             )

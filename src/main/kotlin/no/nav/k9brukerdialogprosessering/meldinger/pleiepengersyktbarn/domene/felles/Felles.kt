@@ -53,18 +53,12 @@ data class Frilans(
     val sluttdato: LocalDate? = null,
     val jobberFortsattSomFrilans: Boolean? = null,
     val misterHonorarer: Boolean? = null,
-    val misterHonorarerIPerioden: HonorarerIPerioden? = null,
-    val frilansTyper: List<FrilansType>? = null,
+    val type: FrilansType? = null,
     val arbeidsforhold: Arbeidsforhold? = null
 )
 
 enum class FrilansType {
-    FRILANS, STYREVERV
-}
-
-enum class HonorarerIPerioden {
-    MISTER_ALLE_HONORARER,
-    MISTER_DELER_AV_HONORARER,
+    FRILANS, FRILANS_HONORAR, HONORAR
 }
 
 data class Beredskap(

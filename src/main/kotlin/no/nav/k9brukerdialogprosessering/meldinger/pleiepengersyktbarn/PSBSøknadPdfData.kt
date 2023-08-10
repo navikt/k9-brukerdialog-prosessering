@@ -256,13 +256,9 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "startdato" to if (startdato != null) Constants.DATE_FORMATTER.format(startdato) else null,
         "sluttdato" to if (sluttdato != null) Constants.DATE_FORMATTER.format(sluttdato) else null,
         "jobberFortsattSomFrilans" to jobberFortsattSomFrilans,
-        "frilansTyper" to frilansTyper?.map { it.name },
+        "type" to type?.name,
         "misterHonorarer" to misterHonorarer,
-        "misterHonorarerIPerioden" to misterHonorarerIPerioden?.name,
-        "arbeidsforhold" to arbeidsforhold?.somMap(),
-        "erKunFrilanser" to (frilansTyper?.all { it == FrilansType.FRILANS } ?: false),
-        "harKunStyreverv" to (frilansTyper?.all { it == FrilansType.STYREVERV } ?: false),
-        "harFrilansOgStyreverv" to (frilansTyper?.containsAll(listOf(FrilansType.FRILANS, FrilansType.STYREVERV)) ?: false)
+        "arbeidsforhold" to arbeidsforhold?.somMap()
     )
 
     private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(

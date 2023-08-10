@@ -14,7 +14,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FerieuttakIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FrilansType
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.HonorarerIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Land
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Medlemskap
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
@@ -138,9 +137,8 @@ internal object PSBSøknadUtils {
             harInntektSomFrilanser = true,
             startdato = LocalDate.parse("2019-01-01"),
             jobberFortsattSomFrilans = true,
-            frilansTyper = listOf(FrilansType.FRILANS, FrilansType.STYREVERV),
+            type = FrilansType.FRILANS,
             misterHonorarer = true,
-            misterHonorarerIPerioden = HonorarerIPerioden.MISTER_DELER_AV_HONORARER,
             arbeidsforhold = Arbeidsforhold(
                 normalarbeidstid = NormalArbeidstid(
                     timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
