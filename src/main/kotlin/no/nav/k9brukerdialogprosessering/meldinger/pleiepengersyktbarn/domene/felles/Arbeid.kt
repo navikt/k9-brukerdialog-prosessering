@@ -32,11 +32,11 @@ data class ArbeidsRedusert(
 )
 
 enum class ArbeidIPeriodeType {
-    SOM_VANLIG,
-    REDUSERT,
-    HELT_FRAVÆR;
+    ARBEIDER_VANLIG,
+    ARBEIDER_REDUSERT,
+    ARBEIDER_IKKE;
 
-    fun jobber() = this != HELT_FRAVÆR
+    fun jobber() = this != ARBEIDER_IKKE
 }
 
 enum class RedusertArbeidstidType {

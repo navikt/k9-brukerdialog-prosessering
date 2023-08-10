@@ -144,7 +144,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               {
                 "arbeidsforhold": {
                   "arbeidIPeriode": {
-                    "type": "SOM_VANLIG",
+                    "type": "ARBEIDER_VANLIG",
                     "redusertArbeid": null
                   },
                   "normalarbeidstid": {
@@ -159,7 +159,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               {
                 "arbeidsforhold": {
                   "arbeidIPeriode": {
-                    "type": "SOM_VANLIG",
+                    "type": "ARBEIDER_VANLIG",
                     "redusertArbeid": null
                   },
                   "normalarbeidstid": {
@@ -194,7 +194,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
             "frilans": {
               "arbeidsforhold": {
                 "arbeidIPeriode": {
-                  "type": "SOM_VANLIG",
+                  "type": "ARBEIDER_VANLIG",
                   "redusertArbeid": null
                 },
                 "normalarbeidstid": {
@@ -249,7 +249,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
             "selvstendigNæringsdrivende": {
               "arbeidsforhold": {
                 "arbeidIPeriode": {
-                  "type": "SOM_VANLIG",
+                  "type": "ARBEIDER_VANLIG",
                   "redusertArbeid": null
                 },
                 "normalarbeidstid": {

@@ -184,7 +184,7 @@ class PSBSøknadPdfGeneratorTest {
                             timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                         ),
                         arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.SOM_VANLIG
+                            type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                         )
                     )
                 ),
@@ -223,7 +223,7 @@ class PSBSøknadPdfGeneratorTest {
                             timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                         ),
                         arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.SOM_VANLIG
+                            type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                         )
                     )
                 ),
@@ -237,7 +237,7 @@ class PSBSøknadPdfGeneratorTest {
                                 timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                             ),
                             arbeidIPeriode = ArbeidIPeriode(
-                                type = ArbeidIPeriodeType.SOM_VANLIG
+                                type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                             )
                         )
                     ),
@@ -250,7 +250,7 @@ class PSBSøknadPdfGeneratorTest {
                                 timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                             ),
                             arbeidIPeriode = ArbeidIPeriode(
-                                type = ArbeidIPeriodeType.REDUSERT,
+                                type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
                                 redusertArbeid = ArbeidsRedusert(
                                     type = RedusertArbeidstidType.TIMER_I_SNITT_PER_UKE,
                                     timerPerUke = Duration.ofHours(37).plusMinutes(30)
@@ -557,7 +557,7 @@ class PSBSøknadPdfGeneratorTest {
                                     timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                                 ),
                                 arbeidIPeriode = ArbeidIPeriode(
-                                    type = ArbeidIPeriodeType.REDUSERT,
+                                    type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
                                     redusertArbeid = ArbeidsRedusert(
                                         type = RedusertArbeidstidType.ULIKE_UKER_TIMER,
                                         arbeidsuker = listOf(
@@ -614,7 +614,7 @@ class PSBSøknadPdfGeneratorTest {
                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                            ),
                            arbeidIPeriode = ArbeidIPeriode(
-                               type = ArbeidIPeriodeType.SOM_VANLIG
+                               type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                            )
                        )
                    )
@@ -637,7 +637,7 @@ class PSBSøknadPdfGeneratorTest {
                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                            ),
                            arbeidIPeriode = ArbeidIPeriode(
-                               type = ArbeidIPeriodeType.HELT_FRAVÆR
+                               type = ArbeidIPeriodeType.ARBEIDER_IKKE
                            )
                        )
                    )

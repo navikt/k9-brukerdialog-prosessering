@@ -2,13 +2,13 @@
     <ul>
         <li>
             {{#with arbeidsforhold.arbeidIPeriode}}
-                {{#eq type "HELT_FRAVÆR" }}
+                {{#eq type "ARBEIDER_IKKE" }}
                     <p>Jobber ikke i perioden.</p>
                 {{/eq}}
-                {{#eq type "SOM_VANLIG" }}
+                {{#eq type "ARBEIDER_VANLIG" }}
                     <p>Jobber som normalt i perioden. Har ikke fravær fra jobb.</p>
                 {{/eq}}
-                {{#eq type "REDUSERT" }}
+                {{#eq type "ARBEIDER_REDUSERT" }}
                     <p>Jobber kombinerer pleiepenger med arbeid i perioden.</p>
 
                     {{#eq redusertArbeid.type "PROSENT_AV_NORMALT" }}

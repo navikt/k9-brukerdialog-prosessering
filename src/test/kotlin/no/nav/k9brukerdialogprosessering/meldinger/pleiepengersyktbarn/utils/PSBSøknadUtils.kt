@@ -143,7 +143,7 @@ internal object PSBSøknadUtils {
                     timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                 ),
                 arbeidIPeriode = ArbeidIPeriode(
-                    type = ArbeidIPeriodeType.SOM_VANLIG
+                    type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                 )
             )
         ),
@@ -168,7 +168,7 @@ internal object PSBSøknadUtils {
                     timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                 ),
                 arbeidIPeriode = ArbeidIPeriode(
-                    type = ArbeidIPeriodeType.SOM_VANLIG
+                    type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                 )
             )
         ),
@@ -182,7 +182,7 @@ internal object PSBSøknadUtils {
                         timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                     ),
                     arbeidIPeriode = ArbeidIPeriode(
-                        type = ArbeidIPeriodeType.SOM_VANLIG
+                        type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                     )
                 )
             ),
@@ -195,7 +195,7 @@ internal object PSBSøknadUtils {
                         timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                     ),
                     arbeidIPeriode = ArbeidIPeriode(
-                        type = ArbeidIPeriodeType.SOM_VANLIG
+                        type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                     )
                 )
             )
