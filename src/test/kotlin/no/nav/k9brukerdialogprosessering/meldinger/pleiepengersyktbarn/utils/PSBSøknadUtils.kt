@@ -137,7 +137,7 @@ internal object PSBSøknadUtils {
             startdato = LocalDate.parse("2019-01-01"),
             jobberFortsattSomFrilans = true,
             type = FrilansType.FRILANS,
-            misterHonorarer = true,
+            misterHonorar = true,
             arbeidsforhold = Arbeidsforhold(
                 normalarbeidstid = NormalArbeidstid(
                     timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)

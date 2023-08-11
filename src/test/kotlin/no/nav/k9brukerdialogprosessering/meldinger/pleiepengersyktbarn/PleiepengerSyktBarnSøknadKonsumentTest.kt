@@ -206,7 +206,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               "sluttdato": null,
               "startdato": "2019-01-01",
               "type": "FRILANS",
-              "misterHonorarer": true
+              "misterHonorar": true
             },
           "stønadGodtgjørelse": {
            "mottarStønadGodtgjørelse": true,

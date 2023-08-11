@@ -178,7 +178,7 @@ class PSBSøknadPdfGeneratorTest {
                     sluttdato = LocalDate.now(),
                     jobberFortsattSomFrilans = false,
                     type = FrilansType.FRILANS,
-                    misterHonorarer = true,
+                    misterHonorar = true,
                     arbeidsforhold = Arbeidsforhold(
                         normalarbeidstid = NormalArbeidstid(
                             timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
@@ -608,7 +608,7 @@ class PSBSøknadPdfGeneratorTest {
                        startdato = LocalDate.parse("2021-01-01"),
                        sluttdato = LocalDate.parse("2021-01-31"),
                        jobberFortsattSomFrilans = false,
-                       misterHonorarer = null,
+                       misterHonorar = null,
                        arbeidsforhold = Arbeidsforhold(
                            normalarbeidstid = NormalArbeidstid(
                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
@@ -631,7 +631,7 @@ class PSBSøknadPdfGeneratorTest {
                        startdato = LocalDate.parse("2021-01-01"),
                        sluttdato = LocalDate.parse("2021-01-31"),
                        jobberFortsattSomFrilans = false,
-                       misterHonorarer = true,
+                       misterHonorar = true,
                        arbeidsforhold = Arbeidsforhold(
                            normalarbeidstid = NormalArbeidstid(
                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)

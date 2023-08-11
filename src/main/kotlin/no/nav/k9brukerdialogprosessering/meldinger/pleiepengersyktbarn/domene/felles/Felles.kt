@@ -52,7 +52,7 @@ data class Frilans(
     @JsonFormat(pattern = "yyyy-MM-dd")
     val sluttdato: LocalDate? = null,
     val jobberFortsattSomFrilans: Boolean? = null,
-    val misterHonorarer: Boolean? = null,
+    val misterHonorar: Boolean? = null,
     val type: FrilansType? = null,
     val arbeidsforhold: Arbeidsforhold? = null
 )
