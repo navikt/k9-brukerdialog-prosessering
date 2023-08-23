@@ -155,6 +155,7 @@ internal object OMPUtbetalingSNFSøknadUtils {
         ),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
             næringstype = Næringstyper.FISKE,
+            fiskerErPåBladB = JaNei.Nei,
             fraOgMed = LocalDate.parse("2023-04-29"),
             erNyoppstartet = true,
             tilOgMed = LocalDate.parse("2023-05-09"),
