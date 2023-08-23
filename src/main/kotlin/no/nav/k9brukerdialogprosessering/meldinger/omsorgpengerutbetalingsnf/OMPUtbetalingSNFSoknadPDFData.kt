@@ -84,7 +84,7 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
     private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(
         "næringsinntekt" to næringsinntekt,
         "næringstype" to næringstype.beskrivelse,
-        "fiskerErPåBladB" to fiskerErPåBladB,
+        "fiskerErPåBladB" to fiskerErPåBladB?.boolean,
         "yrkesaktivSisteTreFerdigliknedeÅrene" to yrkesaktivSisteTreFerdigliknedeÅrene?.somMap(),
         "varigEndring" to varigEndring?.somMap(),
         "harFlereAktiveVirksomheter" to harFlereAktiveVirksomheter,
