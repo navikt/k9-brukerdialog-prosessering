@@ -2,9 +2,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	id("org.springframework.boot") version "3.1.2"
-	id("io.spring.dependency-management") version "1.1.2"
-	kotlin("jvm") version "1.9.0"
-	kotlin("plugin.spring") version "1.9.0"
+	id("io.spring.dependency-management") version "1.1.3"
+	kotlin("jvm") version "1.9.10"
+	kotlin("plugin.spring") version "1.9.10"
 }
 
 group = "no.nav"
@@ -29,9 +29,9 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "3.1.1"
+val tokenSupportVersion = "3.1.3"
 val jsonassertVersion = "1.5.1"
-val k9FormatVersion = "9.0.0"
+val k9FormatVersion = "9.0.2"
 val springMockkVersion = "4.0.2"
 val confluentVersion = "7.3.0"
 val logstashLogbackEncoderVersion = "7.4"
