@@ -237,6 +237,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     )
 
     private fun ArbeidsRedusert.somMap() = mapOf(
+        "type" to this.type.name,
         "timerPerUke" to this.timerPerUke?.tilString(),
         "prosentAvNormalt" to this.prosentAvNormalt?.somString(),
         "arbeidsuker" to this.arbeidsuker?.somMap()

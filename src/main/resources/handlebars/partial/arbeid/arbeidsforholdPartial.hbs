@@ -12,10 +12,10 @@
                     <p>Jobber kombinerer pleiepenger med arbeid i perioden.</p>
 
                     {{#eq redusertArbeid.type "PROSENT_AV_NORMALT" }}
-                        <p>Jobber {{arbeidsforhold.arbeidIPeriode.prosentAvNormalt}} prosent av normalt i perioden.</p>
+                        <p>Jobber {{redusertArbeid.prosentAvNormalt}} prosent av normalt i perioden.</p>
                     {{/eq}}
                     {{#eq redusertArbeid.type "TIMER_I_SNITT_PER_UKE" }}
-                        <p>Jobber {{arbeidsforhold.arbeidIPeriode.timerPerUke}} hver uke.</p>
+                        <p>Jobber {{redusertArbeid.timerPerUke}} hver uke.</p>
                     {{/eq}}
                     {{#eq redusertArbeid.type "ULIKE_UKER_TIMER" }}
                         {{> partial/arbeid/arbeidIPeriode/arbeidsukerPartial}}
