@@ -134,6 +134,7 @@ internal object PSBSøknadUtils {
         ),
         frilans = Frilans(
             harInntektSomFrilanser = true,
+            startetFørOpptjeningsperiode = true,
             startdato = LocalDate.parse("2019-01-01"),
             jobberFortsattSomFrilans = true,
             type = FrilansType.FRILANS,
