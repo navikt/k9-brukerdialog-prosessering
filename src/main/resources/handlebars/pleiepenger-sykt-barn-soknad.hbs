@@ -128,8 +128,14 @@
             {{#eq frilans.type "FRILANS" }}
                 <p>Jeg jobber som frilanser</p><br/>
 
-                <p class="sporsmalstekst">Når startet du som frilanser?</p>
-                <p>{{frilans.startdato}}</p><br/>
+                {{#if frilans.startetFørOpptjeningsperiode}}
+                    <p class="sporsmalstekst">Startet du som frilanser før {{frilans.opptjeningsperiodeStartdato}}?</p>
+                    {{ jaNeiSvar frilans.startetFørOpptjeningsperiode }}
+
+                {{else}}
+                    <p class="sporsmalstekst">Når startet du som frilanser?</p>
+                    <p>{{frilans.startdato}}</p><br/>
+                {{/if}}
 
                 <p class="sporsmalstekst">Jobber du fremdeles som frilanser?</p>
                 <p>{{ jaNeiSvar frilans.jobberFortsattSomFrilans }}</p><br/>

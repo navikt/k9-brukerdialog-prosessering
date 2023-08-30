@@ -39,6 +39,7 @@ import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.somNorskMåned
 import java.time.DayOfWeek
 import java.time.Duration
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
@@ -88,7 +89,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
         "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
         "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
-        "frilans" to søknad.frilans.somMap(),
+        "frilans" to søknad.frilans.somMap(søknad.fraOgMed),
         "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
         "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
         "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
@@ -256,8 +257,10 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "timerPerUkeISnitt" to this.timerPerUkeISnitt.tilString()
     )
 
-    private fun Frilans.somMap(): Map<String, Any?> = mapOf(
+    private fun Frilans.somMap(søknadsperiodeStartdato: LocalDate): Map<String, Any?> = mapOf(
         "harInntektSomFrilanser" to harInntektSomFrilanser,
+        "startetFørOpptjeningsperiode" to startetFørOpptjeningsperiode,
+        "opptjeningsperiodeStartdato" to Constants.DATE_FORMATTER.format(søknadsperiodeStartdato.minusDays(28)),
         "startdato" to if (startdato != null) Constants.DATE_FORMATTER.format(startdato) else null,
         "sluttdato" to if (sluttdato != null) Constants.DATE_FORMATTER.format(sluttdato) else null,
         "jobberFortsattSomFrilans" to jobberFortsattSomFrilans,

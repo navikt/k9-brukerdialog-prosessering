@@ -644,6 +644,30 @@ class PSBSøknadPdfGeneratorTest {
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "22-frilanser-starter-før-opptjeningsperiode"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    fraOgMed = LocalDate.parse("2023-08-30"),
+                   frilans = Frilans(
+                       harInntektSomFrilanser = true,
+                       startetFørOpptjeningsperiode = true,
+                       type = FrilansType.FRILANS,
+                       startdato = LocalDate.parse("2023-08-01"),
+                       jobberFortsattSomFrilans = true,
+                       misterHonorar = false,
+                       arbeidsforhold = Arbeidsforhold(
+                           normalarbeidstid = NormalArbeidstid(
+                               timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                           ),
+                           arbeidIPeriode = ArbeidIPeriode(
+                               type = ArbeidIPeriodeType.ARBEIDER_IKKE
+                           )
+                       )
+                   )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }
