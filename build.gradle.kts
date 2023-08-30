@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.1.2"
-	id("io.spring.dependency-management") version "1.1.2"
-	kotlin("jvm") version "1.9.0"
-	kotlin("plugin.spring") version "1.9.0"
+	id("org.springframework.boot") version "3.1.3"
+	id("io.spring.dependency-management") version "1.1.3"
+	kotlin("jvm") version "1.9.10"
+	kotlin("plugin.spring") version "1.9.10"
 }
 
 group = "no.nav"
@@ -29,9 +29,9 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "3.1.1"
+val tokenSupportVersion = "3.1.5"
 val jsonassertVersion = "1.5.1"
-val k9FormatVersion = "9.0.0"
+val k9FormatVersion = "9.0.2"
 val springMockkVersion = "4.0.2"
 val confluentVersion = "7.3.0"
 val logstashLogbackEncoderVersion = "7.4"
@@ -45,7 +45,7 @@ val awailitilityKotlinVersion = "4.2.0"
 val springCloudContractVersion = "4.0.4"
 
 dependencies {
-	implementation("org.yaml:snakeyaml:2.1") {
+	implementation("org.yaml:snakeyaml:2.2") {
 		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
 	}
 
