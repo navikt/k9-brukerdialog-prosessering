@@ -128,9 +128,9 @@
             {{#eq frilans.type "FRILANS" }}
                 <p>Jeg jobber som frilanser</p><br/>
 
-                {{#if frilans.startetFørOpptjeningsperiode}}
-                    <p class="sporsmalstekst">Startet du som frilanser før {{frilans.opptjeningsperiodeStartdato}}?</p>
-                    {{ jaNeiSvar frilans.startetFørOpptjeningsperiode }}
+                {{#if frilans.startetFørSisteTreHeleMåneder}}
+                    <p class="sporsmalstekst">Startet du som frilanser før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
+                    {{ jaNeiSvar frilans.startetFørSisteTreHeleMåneder }}
 
                 {{else}}
                     <p class="sporsmalstekst">Når startet du som frilanser?</p>
@@ -149,8 +149,14 @@
             {{#eq frilans.type "FRILANS_HONORAR" }}
                 <p>Jeg jobber som frilanser og får honorar for styreverv eller andre verv</p><br/>
 
-                <p class="sporsmalstekst">Når begynte du å jobbe som frilanser/startet å motta honorar?</p>
-                <p>{{frilans.startdato}}</p><br/>
+                {{#if frilans.startetFørSisteTreHeleMåneder}}
+                    <p class="sporsmalstekst">Startet du som frilanser/startet å motta honorar før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
+                    {{ jaNeiSvar frilans.startetFørSisteTreHeleMåneder }}
+
+                {{else}}
+                    <p class="sporsmalstekst">Når begynte du å jobbe som frilanser/startet å motta honorar?</p>
+                    <p>{{frilans.startdato}}</p><br/>
+                {{/if}}
 
                 <p class="sporsmalstekst">Jobber du fortsatt som frilanser/mottar honorar?</p>
                 <p>{{ jaNeiSvar frilans.jobberFortsattSomFrilans }}</p><br/>
@@ -164,8 +170,13 @@
             {{#eq frilans.type "HONORAR" }}
                 <p>Jeg mottar honorar for styreverv eller andre verv</p><br/>
 
-                <p class="sporsmalstekst">Når begynte du å motta honorar?</p>
-                <p>{{frilans.startdato}}</p><br/>
+                {{#if frilans.startetFørSisteTreHeleMåneder}}
+                    <p class="sporsmalstekst">Startet du å motta honorar før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
+                    {{ jaNeiSvar frilans.startetFørSisteTreHeleMåneder }}
+                {{else}}
+                    <p class="sporsmalstekst">Når begynte du å motta honorar?</p>
+                    <p>{{frilans.startdato}}</p><br/>
+                {{/if}}
 
                 <p class="sporsmalstekst">Mottar du fortsatt honorar?</p>
                 <p>{{ jaNeiSvar frilans.jobberFortsattSomFrilans }}</p><br/>

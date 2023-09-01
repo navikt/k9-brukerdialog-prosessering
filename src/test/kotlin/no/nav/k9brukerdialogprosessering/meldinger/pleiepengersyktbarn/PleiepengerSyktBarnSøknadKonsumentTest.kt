@@ -201,7 +201,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
                   "timerPerUkeISnitt": "PT37H30M"
                 }
               },
-              "startetFørOpptjeningsperiode": true,
+              "startetFørSisteTreHeleMåneder": true,
               "harInntektSomFrilanser": true,
               "jobberFortsattSomFrilans": true,
               "sluttdato": null,

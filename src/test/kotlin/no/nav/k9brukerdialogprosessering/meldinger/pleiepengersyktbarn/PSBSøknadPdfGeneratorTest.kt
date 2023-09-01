@@ -645,15 +645,15 @@ class PSBSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "22-frilanser-starter-før-opptjeningsperiode"
+            id = "22-frilanser-starter-tre-måneder-før-søknadsperiode"
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
-                    fraOgMed = LocalDate.parse("2023-08-30"),
+                    fraOgMed = LocalDate.parse("2023-08-31"),
                    frilans = Frilans(
                        harInntektSomFrilanser = true,
-                       startetFørOpptjeningsperiode = true,
+                       startetFørSisteTreHeleMåneder = true,
                        type = FrilansType.FRILANS,
-                       startdato = LocalDate.parse("2023-08-01"),
+                       startdato = LocalDate.parse("2023-05-30"),
                        jobberFortsattSomFrilans = true,
                        misterHonorar = false,
                        arbeidsforhold = Arbeidsforhold(

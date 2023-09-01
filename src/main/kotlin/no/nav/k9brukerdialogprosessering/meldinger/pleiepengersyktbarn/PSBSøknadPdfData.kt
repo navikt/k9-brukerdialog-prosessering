@@ -259,8 +259,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
 
     private fun Frilans.somMap(søknadsperiodeStartdato: LocalDate): Map<String, Any?> = mapOf(
         "harInntektSomFrilanser" to harInntektSomFrilanser,
-        "startetFørOpptjeningsperiode" to startetFørOpptjeningsperiode,
-        "opptjeningsperiodeStartdato" to Constants.DATE_FORMATTER.format(søknadsperiodeStartdato.minusDays(28)),
+        "startetFørSisteTreHeleMåneder" to startetFørSisteTreHeleMåneder,
+        "sisteTreMånederFørSøknadsperiodeStart" to Constants.DATE_FORMATTER.format(søknadsperiodeStartdato.minusMonths(3)),
         "startdato" to if (startdato != null) Constants.DATE_FORMATTER.format(startdato) else null,
         "sluttdato" to if (sluttdato != null) Constants.DATE_FORMATTER.format(sluttdato) else null,
         "jobberFortsattSomFrilans" to jobberFortsattSomFrilans,
