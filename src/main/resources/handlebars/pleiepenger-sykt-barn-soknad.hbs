@@ -284,9 +284,9 @@
             {{/each}}
         {{/if}}
 
-        {{#if frilans}}
-            <ul class="ul-no-indent">
-                <li><b>Frilans</b></li>
+        {{#if frilans.harInntektSomFrilanser}}
+        <ul class="ul-no-indent">
+            <li><b>Frilans</b></li>
 
                 {{#if frilans.arbeidsforhold}}
                     {{> partial/arbeid/arbeidsforholdPartial arbeidsforhold=frilans.arbeidsforhold}}
