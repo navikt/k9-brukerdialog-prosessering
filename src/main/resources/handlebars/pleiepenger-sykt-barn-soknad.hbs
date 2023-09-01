@@ -122,7 +122,7 @@
     <section id="frilans">
         {{# if frilans.harInntektSomFrilanser }}
             <h2>Frilans</h2>
-            <p class="sporsmalstekst">Jobber du som som frilanser eller får du honorarer for verv?</p>
+            <p class="sporsmalstekst">Jobber du som frilanser eller mottar du honorarer?</p>
             <p>{{ jaNeiSvar true }}</p><br/>
 
             {{#eq frilans.type "FRILANS" }}
@@ -147,7 +147,7 @@
             {{/eq}}
 
             {{#eq frilans.type "FRILANS_HONORAR" }}
-                <p>Jeg jobber som frilanser og får honorar for styreverv eller andre verv</p><br/>
+                <p>Jeg jobber som frilanser og mottar honorar</p><br/>
 
                 {{#if frilans.startetFørSisteTreHeleMåneder}}
                     <p class="sporsmalstekst">Startet du som frilanser/startet å motta honorar før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
@@ -168,7 +168,7 @@
             {{/eq}}
 
             {{#eq frilans.type "HONORAR" }}
-                <p>Jeg mottar honorar for styreverv eller andre verv</p><br/>
+                <p>Jeg mottar honorar</p><br/>
 
                 {{#if frilans.startetFørSisteTreHeleMåneder}}
                     <p class="sporsmalstekst">Startet du å motta honorar før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
@@ -189,13 +189,13 @@
                 {{#if frilans.misterHonorar}}
                     <li>
                         <ul>
-                            <li class="">Jeg mister honorar for verv i søknadsperioden</li>
+                            <li class="">Jeg mister honorar i søknadsperioden</li>
                         </ul>
                     </li>
                 {{else}}
                     <li>
                         <ul>
-                            <li>Jeg mister ikke honorar for verv i søknadsperioden</li>
+                            <li>Jeg mister ikke honorar i søknadsperioden</li>
                         </ul>
                     </li>
                 {{/if}}
@@ -206,7 +206,7 @@
             {{/if}}
         {{else}}
             <h2>Frilans</h2>
-            <p>Har ikke vært frilanser eller mottatt honorar for verv i perioden det søkes om.</p>
+            <p>Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.</p>
         {{/if}}
     </section>
 
