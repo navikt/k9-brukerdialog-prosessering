@@ -129,7 +129,8 @@
                 <p>Jeg jobber som frilanser</p><br/>
 
                 {{#if frilans.startetFørSisteTreHeleMåneder}}
-                    <p class="sporsmalstekst">Startet du som frilanser før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
+                    <p class="sporsmalstekst">Startet du som frilanser
+                        før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
                     {{ jaNeiSvar frilans.startetFørSisteTreHeleMåneder }}
 
                 {{else}}
@@ -150,7 +151,8 @@
                 <p>Jeg jobber som frilanser og mottar honorar</p><br/>
 
                 {{#if frilans.startetFørSisteTreHeleMåneder}}
-                    <p class="sporsmalstekst">Startet du som frilanser/startet å motta honorar før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
+                    <p class="sporsmalstekst">Startet du som frilanser/startet å motta honorar
+                        før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
                     {{ jaNeiSvar frilans.startetFørSisteTreHeleMåneder }}
 
                 {{else}}
@@ -171,7 +173,8 @@
                 <p>Jeg mottar honorar</p><br/>
 
                 {{#if frilans.startetFørSisteTreHeleMåneder}}
-                    <p class="sporsmalstekst">Startet du å motta honorar før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
+                    <p class="sporsmalstekst">Startet du å motta honorar
+                        før {{frilans.sisteTreMånederFørSøknadsperiodeStart}}?</p>
                     {{ jaNeiSvar frilans.startetFørSisteTreHeleMåneder }}
                 {{else}}
                     <p class="sporsmalstekst">Når begynte du å motta honorar?</p>
@@ -187,17 +190,9 @@
                 {{/unless}}
 
                 {{#if frilans.misterHonorar}}
-                    <li>
-                        <ul>
-                            <li class="">Jeg mister honorar i søknadsperioden</li>
-                        </ul>
-                    </li>
+                    <br/><p class="sporsmalstekst">Jeg mister honorar i søknadsperioden</p>
                 {{else}}
-                    <li>
-                        <ul>
-                            <li>Jeg mister ikke honorar i søknadsperioden</li>
-                        </ul>
-                    </li>
+                    <br/><p class="sporsmalstekst">Jeg mister ikke honorar i søknadsperioden</p>
                 {{/if}}
             {{/eq}}
 
@@ -310,8 +305,8 @@
         {{/if}}
 
         {{#if frilans.harInntektSomFrilanser}}
-        <ul class="ul-no-indent">
-            <li><b>Frilans</b></li>
+            <ul class="ul-no-indent">
+                <li><b>Frilans</b></li>
 
                 {{#if frilans.arbeidsforhold}}
                     {{> partial/arbeid/arbeidsforholdPartial arbeidsforhold=frilans.arbeidsforhold}}
