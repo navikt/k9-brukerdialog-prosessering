@@ -144,11 +144,8 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               {
                 "arbeidsforhold": {
                   "arbeidIPeriode": {
-                    "arbeiderIPerioden": "SOM_VANLIG",
-                    "arbeidsuker": null,
-                    "prosentAvNormalt": null,
-                    "timerPerUke": null,
-                    "type": "ARBEIDER_VANLIG"
+                    "type": "ARBEIDER_VANLIG",
+                    "redusertArbeid": null
                   },
                   "normalarbeidstid": {
                     "timerPerUkeISnitt": "PT37H30M"
@@ -162,11 +159,8 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
               {
                 "arbeidsforhold": {
                   "arbeidIPeriode": {
-                    "arbeiderIPerioden": "SOM_VANLIG",
-                    "arbeidsuker": null,
-                    "prosentAvNormalt": null,
-                    "timerPerUke": null,
-                    "type": "ARBEIDER_VANLIG"
+                    "type": "ARBEIDER_VANLIG",
+                    "redusertArbeid": null
                   },
                   "normalarbeidstid": {
                     "timerPerUkeISnitt": "PT37H30M"
@@ -200,23 +194,20 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
             "frilans": {
               "arbeidsforhold": {
                 "arbeidIPeriode": {
-                  "arbeiderIPerioden": "SOM_VANLIG",
-                  "arbeidsuker": null,
-                  "prosentAvNormalt": null,
-                  "timerPerUke": null,
-                  "type": "ARBEIDER_VANLIG"
+                  "type": "ARBEIDER_VANLIG",
+                  "redusertArbeid": null
                 },
                 "normalarbeidstid": {
                   "timerPerUkeISnitt": "PT37H30M"
                 }
               },
+              "startetFørSisteTreHeleMåneder": true,
               "harInntektSomFrilanser": true,
               "jobberFortsattSomFrilans": true,
               "sluttdato": null,
               "startdato": "2019-01-01",
-              "frilansTyper": ["FRILANS", "STYREVERV"],
-              "misterHonorarer": true,
-              "misterHonorarerIPerioden": "MISTER_DELER_AV_HONORARER"
+              "type": "FRILANS",
+              "misterHonorar": true
             },
           "stønadGodtgjørelse": {
            "mottarStønadGodtgjørelse": true,
@@ -259,11 +250,8 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
             "selvstendigNæringsdrivende": {
               "arbeidsforhold": {
                 "arbeidIPeriode": {
-                  "arbeiderIPerioden": "SOM_VANLIG",
-                  "arbeidsuker": null,
-                  "prosentAvNormalt": null,
-                  "timerPerUke": null,
-                  "type": "ARBEIDER_VANLIG"
+                  "type": "ARBEIDER_VANLIG",
+                  "redusertArbeid": null
                 },
                 "normalarbeidstid": {
                   "timerPerUkeISnitt": "PT37H30M"

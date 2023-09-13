@@ -77,6 +77,6 @@ data class OMPUtbetalingSNFSoknadPreprosessert(
         dagerSynlig = 7,
         søkerFødselsnummer = søkerFødselsnummer(),
         eventId = UUID.randomUUID().toString(),
-        ytelse = "OMSORGSPENGER_UT_SNF"
+        ytelse = "OMSORGSPENGER_UT_SNF" // TODO: Bytt til OMSORGSPENGER_UTBETALING_SNF når det er støttet i k9-dittnav-varsel
     )
 }

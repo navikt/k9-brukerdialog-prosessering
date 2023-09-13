@@ -71,7 +71,7 @@ data class OMPUTVKroniskSyktBarnSøknadPreprosesssert(
         dagerSynlig = 7,
         søkerFødselsnummer = søkerFødselsnummer(),
         eventId = UUID.randomUUID().toString(),
-        ytelse = "OMSORGSPENGER_UTV_KS"
+        ytelse = "OMSORGSPENGER_UTV_KS" // TODO: Bytt til Ytelse.OMSORGSPENGER_UTVIDET_RETT når det er på plass i k9-dittnav-varsel
     )
 
     override fun toString(): String {

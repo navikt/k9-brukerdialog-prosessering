@@ -47,24 +47,19 @@ data class Nattevåk(
 
 data class Frilans(
     val harInntektSomFrilanser: Boolean,
+    val startetFørSisteTreHeleMåneder: Boolean? = null,
     @JsonFormat(pattern = "yyyy-MM-dd")
     val startdato: LocalDate? = null,
     @JsonFormat(pattern = "yyyy-MM-dd")
     val sluttdato: LocalDate? = null,
     val jobberFortsattSomFrilans: Boolean? = null,
-    val misterHonorarer: Boolean? = null,
-    val misterHonorarerIPerioden: HonorarerIPerioden? = null,
-    val frilansTyper: List<FrilansType>? = null,
+    val misterHonorar: Boolean? = null,
+    val type: FrilansType? = null,
     val arbeidsforhold: Arbeidsforhold? = null
 )
 
 enum class FrilansType {
-    FRILANS, STYREVERV
-}
-
-enum class HonorarerIPerioden {
-    MISTER_ALLE_HONORARER,
-    MISTER_DELER_AV_HONORARER,
+    FRILANS, FRILANS_HONORAR, HONORAR
 }
 
 data class Beredskap(

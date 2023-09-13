@@ -4,7 +4,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeiderIPeriodenSvar
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Barn
@@ -14,7 +13,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FerieuttakIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FrilansType
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.HonorarerIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Land
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Medlemskap
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
@@ -136,18 +134,17 @@ internal object PSBSøknadUtils {
         ),
         frilans = Frilans(
             harInntektSomFrilanser = true,
+            startetFørSisteTreHeleMåneder = true,
             startdato = LocalDate.parse("2019-01-01"),
             jobberFortsattSomFrilans = true,
-            frilansTyper = listOf(FrilansType.FRILANS, FrilansType.STYREVERV),
-            misterHonorarer = true,
-            misterHonorarerIPerioden = HonorarerIPerioden.MISTER_DELER_AV_HONORARER,
+            type = FrilansType.FRILANS,
+            misterHonorar = true,
             arbeidsforhold = Arbeidsforhold(
                 normalarbeidstid = NormalArbeidstid(
                     timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                 ),
                 arbeidIPeriode = ArbeidIPeriode(
-                    type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
-                    arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                    type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                 )
             )
         ),
@@ -172,8 +169,7 @@ internal object PSBSøknadUtils {
                     timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                 ),
                 arbeidIPeriode = ArbeidIPeriode(
-                    type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
-                    arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                    type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                 )
             )
         ),
@@ -187,8 +183,7 @@ internal object PSBSøknadUtils {
                         timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                     ),
                     arbeidIPeriode = ArbeidIPeriode(
-                        type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
-                        arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                        type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                     )
                 )
             ),
@@ -201,8 +196,7 @@ internal object PSBSøknadUtils {
                         timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
                     ),
                     arbeidIPeriode = ArbeidIPeriode(
-                        type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
-                        arbeiderIPerioden = ArbeiderIPeriodenSvar.SOM_VANLIG
+                        type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                     )
                 )
             )

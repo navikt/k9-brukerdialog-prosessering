@@ -72,7 +72,7 @@ data class OMPUtbetalingATSoknadPreprosessert(
         søkerFødselsnummer = søkerFødselsnummer(),
         eventId = UUID.randomUUID().toString(),
         link = null,
-        ytelse = "OMSORGSPENGER_UT_ARBEIDSTAKER"
+        ytelse = "OMSORGSPENGER_UT_ARBEIDSTAKER" // TODO: Bytt til OMSORGSPENGER_UTBETALING_ARBEIDSTAKER når det er på plass i k9-dittnav-varsel
     )
 
     override fun toString(): String {

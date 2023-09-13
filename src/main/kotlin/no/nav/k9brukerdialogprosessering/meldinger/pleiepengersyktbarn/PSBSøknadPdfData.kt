@@ -7,6 +7,7 @@ import no.nav.k9brukerdialogprosessering.common.Constants
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsRedusert
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsUke
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
@@ -15,7 +16,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Bosted
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Ferieuttak
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Frilans
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.FrilansType
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Land
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.NormalArbeidstid
@@ -39,6 +39,7 @@ import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.somNorskMåned
 import java.time.DayOfWeek
 import java.time.Duration
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
@@ -88,7 +89,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
         "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
         "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
-        "frilans" to søknad.frilans.somMap(),
+        "frilans" to søknad.frilans.somMap(søknad.fraOgMed),
         "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
         "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
         "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
@@ -233,6 +234,11 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
 
     private fun ArbeidIPeriode.somMap(): Map<String, Any?> = mapOf(
         "type" to this.type.name,
+        "redusertArbeid" to this.redusertArbeid?.somMap()
+    )
+
+    private fun ArbeidsRedusert.somMap() = mapOf(
+        "type" to this.type.name,
         "timerPerUke" to this.timerPerUke?.tilString(),
         "prosentAvNormalt" to this.prosentAvNormalt?.somString(),
         "arbeidsuker" to this.arbeidsuker?.somMap()
@@ -251,18 +257,16 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "timerPerUkeISnitt" to this.timerPerUkeISnitt.tilString()
     )
 
-    private fun Frilans.somMap(): Map<String, Any?> = mapOf(
+    private fun Frilans.somMap(søknadsperiodeStartdato: LocalDate): Map<String, Any?> = mapOf(
         "harInntektSomFrilanser" to harInntektSomFrilanser,
+        "startetFørSisteTreHeleMåneder" to startetFørSisteTreHeleMåneder,
+        "sisteTreMånederFørSøknadsperiodeStart" to Constants.DATE_FORMATTER.format(søknadsperiodeStartdato.minusMonths(3)),
         "startdato" to if (startdato != null) Constants.DATE_FORMATTER.format(startdato) else null,
         "sluttdato" to if (sluttdato != null) Constants.DATE_FORMATTER.format(sluttdato) else null,
         "jobberFortsattSomFrilans" to jobberFortsattSomFrilans,
-        "frilansTyper" to frilansTyper?.map { it.name },
-        "misterHonorarer" to misterHonorarer,
-        "misterHonorarerIPerioden" to misterHonorarerIPerioden?.name,
-        "arbeidsforhold" to arbeidsforhold?.somMap(),
-        "erKunFrilanser" to (frilansTyper?.all { it == FrilansType.FRILANS } ?: false),
-        "harKunStyreverv" to (frilansTyper?.all { it == FrilansType.STYREVERV } ?: false),
-        "harFrilansOgStyreverv" to (frilansTyper?.containsAll(listOf(FrilansType.FRILANS, FrilansType.STYREVERV)) ?: false)
+        "type" to type?.name,
+        "misterHonorar" to misterHonorar,
+        "arbeidsforhold" to arbeidsforhold?.somMap()
     )
 
     private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(
