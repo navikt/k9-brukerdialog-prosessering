@@ -15,17 +15,17 @@ object HealthIndicatorUtils {
     ): Health {
         val health = when (val kafkaStreams: KafkaStreams? = streamsBuilderFactoryBean.kafkaStreams) {
             null -> Health
-                .down()
-                .withDetail(streamName.value, "${streamName.value} is null")
+                .unknown()
+                .withDetail(streamName.value, "${streamName.value} has not yet started")
                 .build()
 
             else -> when (val state = kafkaStreams.state()) {
-                KafkaStreams.State.RUNNING, KafkaStreams.State.REBALANCING -> Health
+                KafkaStreams.State.CREATED, KafkaStreams.State.RUNNING, KafkaStreams.State.REBALANCING -> Health
                     .up()
                     .withDetail(streamName.value, "${streamName.value} is in $state state")
                     .build()
 
-                KafkaStreams.State.ERROR, KafkaStreams.State.NOT_RUNNING -> Health
+                KafkaStreams.State.PENDING_ERROR, KafkaStreams.State.ERROR, KafkaStreams.State.NOT_RUNNING -> Health
                     .down()
                     .withDetail(streamName.value, "${streamName.value} is in $state state")
                     .build()
