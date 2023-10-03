@@ -57,8 +57,8 @@ data class PilsSøknadMottatt(
         vedleggId = vedleggId(),
         fødselsattestVedleggId = fødselsattestVedleggId(),
         pdfData = pdfData(),
-        pdfJournalføringsTittel = "Søknad om pleiepenger i livets sluttfase",
-        jsonJournalføringsTittel = "Søknad om pleiepenger i livets sluttfase - JSON"
+        pdfJournalføringsTittel = ytelse().tittel,
+        jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
     )
 }
 

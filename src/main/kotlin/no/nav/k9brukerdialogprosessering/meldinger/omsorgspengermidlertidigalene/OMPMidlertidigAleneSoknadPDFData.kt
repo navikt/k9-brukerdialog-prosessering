@@ -14,6 +14,7 @@ class OMPMidlertidigAleneSoknadPDFData(private val melding: OMPMidlertidigAleneS
     override fun ytelse() = Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE
 
     override fun pdfData(): Map<String, Any?> = mapOf(
+        "tittel" to ytelse().tittel,
         "søknadId" to melding.søknadId,
         "søknadMottattDag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "søknadMottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),

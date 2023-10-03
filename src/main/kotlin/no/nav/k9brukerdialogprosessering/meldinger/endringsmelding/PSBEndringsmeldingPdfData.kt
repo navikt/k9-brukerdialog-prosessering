@@ -31,6 +31,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         val ytelse = k9Format.getYtelse<PleiepengerSyktBarn>()
         val dataBruktTilUtledning = ytelse.søknadInfo.orElse(null)
         return mapOf(
+            "tittel" to ytelse().tittel,
             "søknadId" to k9Format.søknadId.id,
             "soknadDialogCommitSha" to dataBruktTilUtledning?.soknadDialogCommitSha,
             "mottattDag" to k9Format.mottattDato.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),

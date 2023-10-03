@@ -14,7 +14,7 @@ class OMPAleneomsorgSoknadPDFData(private val melding: OMPAleneomsorgSoknadMotta
     override fun ytelse() = Ytelse.OMSORGSDAGER_ALENEOMSORG
 
     override fun pdfData(): Map<String, Any?> =  mapOf(
-        "tittel" to "Søknad om ekstra omsorgsdager ved aleneomsorg",
+        "tittel" to ytelse().tittel,
         "søknadId" to melding.søknadId,
         "søknadMottattDag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "søknadMottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),

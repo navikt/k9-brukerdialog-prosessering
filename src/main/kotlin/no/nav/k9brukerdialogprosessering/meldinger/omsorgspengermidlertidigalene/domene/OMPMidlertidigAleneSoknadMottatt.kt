@@ -43,8 +43,8 @@ data class OMPMidlertidigAleneSoknadMottatt(
         vedleggId = vedleggId(),
         fødselsattestVedleggId = fødselsattestVedleggId(),
         pdfData = pdfData(),
-        pdfJournalføringsTittel = "Søknad ekstra omsorgsdager – ikke tilsyn",
-        jsonJournalføringsTittel = "Søknad ekstra omsorgsdager – ikke tilsyn som JSON"
+        pdfJournalføringsTittel = ytelse().tittel,
+        jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
     )
 }
 

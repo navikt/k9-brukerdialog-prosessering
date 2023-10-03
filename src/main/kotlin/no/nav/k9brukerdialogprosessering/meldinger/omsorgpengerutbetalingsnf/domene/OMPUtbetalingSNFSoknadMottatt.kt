@@ -55,8 +55,8 @@ data class OMPUtbetalingSNFSoknadMottatt(
         vedleggId = vedleggId(),
         fødselsattestVedleggId = fødselsattestVedleggId(),
         pdfData = pdfData(),
-        pdfJournalføringsTittel = "Søknad om utbetaling av omsorgspenger",
-        jsonJournalføringsTittel = "Søknad om utbetaling av omsorgspenger som JSON"
+        pdfJournalføringsTittel = ytelse().tittel,
+        jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
     )
 }
 

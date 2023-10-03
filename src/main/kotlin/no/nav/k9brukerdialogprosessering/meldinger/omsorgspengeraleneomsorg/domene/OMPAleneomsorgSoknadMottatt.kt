@@ -41,7 +41,7 @@ data class OMPAleneomsorgSoknadMottatt(
         vedleggId = vedleggId(),
         fødselsattestVedleggId = fødselsattestVedleggId(),
         pdfData = pdfData(),
-        pdfJournalføringsTittel = "Søknad om ekstra omsorgsdager ved aleneomsorg",
-        jsonJournalføringsTittel = "Søknad om ekstra omsorgsdager ved aleneomsorg som JSON"
+        pdfJournalføringsTittel = ytelse().tittel,
+        jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
     )
 }

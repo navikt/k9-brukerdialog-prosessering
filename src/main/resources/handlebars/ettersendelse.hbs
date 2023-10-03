@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Ettersending av vedlegg - {{#capitalize søknadstype}}{{/capitalize}}</title>
-    <meta name="subject" content="Ettersending av vedlegg" />
+    <title>{{tittel}}</title>
+    <meta name="subject" content="{{tittel}}" />
     <meta name="author" content="nav.no" />
     <meta name="description"
-          content="Ettersending av vedlegg mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
+          content="{{tittel}} mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
     <bookmarks>
         <bookmark name="Søker" href="#søker" />
         <bookmark name="Ettersending" href="#ettersending" />
@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <h1 id="header"> Ettersending av vedlegg - {{#capitalize søknadstype}}{{/capitalize}}</h1>
+    <h1 id="header">{{tittel}}</h1>
     <p class="nokkelinfo">
         <strong>Sendt til NAV</strong>
         {{soknad_mottatt_dag}} {{ soknad_mottatt }}

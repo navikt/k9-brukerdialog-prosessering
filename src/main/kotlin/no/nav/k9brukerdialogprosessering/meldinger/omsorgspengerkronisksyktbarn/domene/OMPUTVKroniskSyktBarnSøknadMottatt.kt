@@ -47,8 +47,8 @@ data class OMPUTVKroniskSyktBarnSøknadMottatt(
         k9FormatSøknad = k9FormatSøknad,
         vedleggId = vedleggId(),
         fødselsattestVedleggId = fødselsattestVedleggId(),
-        pdfJournalføringsTittel = "Søknad om ekstra omsorgsdager",
-        jsonJournalføringsTittel = "Søknad om ekstra omsorgsdager som JSON",
+        pdfJournalføringsTittel = ytelse().tittel,
+        jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
         pdfData = pdfData()
     )
 
