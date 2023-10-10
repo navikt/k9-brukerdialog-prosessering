@@ -47,6 +47,7 @@ import java.time.temporal.WeekFields
 class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
     override fun pdfData(): Map<String, Any?> = mapOf(
+        "tittel" to ytelse().tittel,
         "soknad_id" to søknad.søknadId,
         "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(Constants.OSLO_ZONE_ID).somNorskDag(),
         "soknad_mottatt" to Constants.DATE_TIME_FORMATTER.format(søknad.mottatt),

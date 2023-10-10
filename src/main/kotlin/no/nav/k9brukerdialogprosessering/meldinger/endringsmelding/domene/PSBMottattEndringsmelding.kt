@@ -38,8 +38,8 @@ data class PSBEndringsmeldingMottatt(
         k9FormatSøknad = k9Format,
         vedleggId = vedleggId(),
         fødselsattestVedleggId = fødselsattestVedleggId(),
-        pdfJournalføringsTittel = "Endringsmelding om pleiepenger",
-        jsonJournalføringsTittel = "Endringsmelding om pleiepenger som JSON",
+        pdfJournalføringsTittel = ytelse().tittel,
+        jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
         pdfData = pdfData()
     )
 }

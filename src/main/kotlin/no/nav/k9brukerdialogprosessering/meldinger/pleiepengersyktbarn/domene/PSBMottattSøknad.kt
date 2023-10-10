@@ -75,8 +75,8 @@ data class PSBMottattSøknad(
         k9FormatSøknad = k9FormatSøknad,
         vedleggId = vedleggId,
         fødselsattestVedleggId = fødselsattestVedleggId,
-        pdfJournalføringsTittel = "Søknad om pleiepenger",
-        jsonJournalføringsTittel = "Søknad om pleiepenger som JSON",
+        pdfJournalføringsTittel = ytelse().tittel,
+        jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
         pdfData = pdfData()
     )
 }

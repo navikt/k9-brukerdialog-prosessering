@@ -28,16 +28,16 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopolo
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
 
-enum class Ytelse {
-    OMSORGSPENGER_UTVIDET_RETT,
-    OMSORGSPENGER_MIDLERTIDIG_ALENE,
-    ETTERSENDELSE,
-    OMSORGSDAGER_ALENEOMSORG,
-    OMSORGSPENGER_UTBETALING_ARBEIDSTAKER,
-    OMSORGSPENGER_UTBETALING_SNF,
-    PLEIEPENGER_LIVETS_SLUTTFASE,
-    PLEIEPENGER_SYKT_BARN,
-    PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING;
+enum class Ytelse(val tittel: String) {
+    OMSORGSPENGER_UTVIDET_RETT("Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning"),
+    OMSORGSPENGER_MIDLERTIDIG_ALENE("Søknad om ekstra omsorgsdager når den andre forelderen ikke kan ha tilsyn med barn"),
+    ETTERSENDELSE("Ettersendelse av dokumentasjon"),
+    OMSORGSDAGER_ALENEOMSORG("Søknad om ekstra omsorgsdager ved aleneomsorg"),
+    OMSORGSPENGER_UTBETALING_ARBEIDSTAKER("Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler"),
+    OMSORGSPENGER_UTBETALING_SNF("Søknad om utbetaling av omsorgspenger for selvstendig næringsdrivende og frilansere"),
+    PLEIEPENGER_LIVETS_SLUTTFASE("Søknad om pleiepenger i livets sluttfase"),
+    PLEIEPENGER_SYKT_BARN("Søknad om pleiepenger for sykt barn"),
+    PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING("Endringsmelding for pleiepenger sykt barn");
 
     companion object {
         fun fraTopic(topic: String): Ytelse = when (topic) {

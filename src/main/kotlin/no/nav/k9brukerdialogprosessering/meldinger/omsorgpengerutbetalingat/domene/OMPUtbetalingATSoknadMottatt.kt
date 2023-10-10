@@ -52,8 +52,8 @@ data class OMPUtbetalingATSoknadMottatt(
         vedleggId = vedleggId(),
         fødselsattestVedleggId = fødselsattestVedleggId(),
         pdfData = pdfData(),
-        pdfJournalføringsTittel = "Søknad om utbetaling av omsorgspenger - Arbeidstaker",
-        jsonJournalføringsTittel = "Søknad om utbetaling av omsorgspenger - Arbeidstaker som JSON"
+        pdfJournalføringsTittel = ytelse().tittel,
+        jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
     )
 
     override fun toString(): String {

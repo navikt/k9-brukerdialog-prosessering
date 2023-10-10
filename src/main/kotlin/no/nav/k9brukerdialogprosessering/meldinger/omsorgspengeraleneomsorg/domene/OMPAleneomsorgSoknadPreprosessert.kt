@@ -60,7 +60,7 @@ data class OMPAleneomsorgSoknadPreprosessert(
     override fun tilK9DittnavVarsel(metadata: Metadata): K9Beskjed = K9Beskjed(
         metadata = metadata,
         grupperingsId = søknadId,
-        tekst = "Vi har mottatt din melding om registrering av aleneomsorg.",
+        tekst = "Vi har mottatt søknad fra deg om ekstra omsorgsdager ved aleneomsorg.",
         link = null,
         dagerSynlig = 7,
         søkerFødselsnummer = søkerFødselsnummer(),

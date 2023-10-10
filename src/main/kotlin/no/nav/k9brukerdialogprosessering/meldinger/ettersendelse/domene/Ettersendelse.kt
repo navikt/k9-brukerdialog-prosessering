@@ -43,20 +43,8 @@ data class Ettersendelse(
         k9FormatSøknad = k9Format,
         vedleggId = vedleggId,
         fødselsattestVedleggId = fødselsattestVedleggId(),
-        pdfJournalføringsTittel = søknadstype.somDokumentbeskrivelse(),
-        jsonJournalføringsTittel = "Ettersendelse $søknadstype som JSON",
+        pdfJournalføringsTittel = søknadstype.tittel,
+        jsonJournalføringsTittel = "${søknadstype.tittel} (JSON)",
         pdfData = pdfData()
     )
-
-    private fun Søknadstype.somDokumentbeskrivelse(): String {
-        return when (this) {
-            Søknadstype.PLEIEPENGER_SYKT_BARN -> "Ettersendelse pleiepenger sykt barn"
-            Søknadstype.OMP_UTV_KS -> "Ettersendelse ekstra omsorgsdager"
-            Søknadstype.OMP_UT_SNF -> "Ettersendelse omsorgspenger utbetaling selvstendig/frilanser"
-            Søknadstype.OMP_UT_ARBEIDSTAKER -> "Ettersendelse omsorgspenger utbetaling arbeidstaker"
-            Søknadstype.OMP_UTV_MA -> "Ettersendelse omsorgspenger regnet som alene"
-            Søknadstype.OMP_DELE_DAGER -> "Ettersendelse melding om deling av omsorgsdager"
-            Søknadstype.PLEIEPENGER_LIVETS_SLUTTFASE -> "Ettersendelse pleiepenger i livets sluttfase"
-        }
-    }
 }

@@ -39,7 +39,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 
     override fun pdfData(): Map<String, Any?> = mapOf(
-        "tittel" to "Søknad om pleiepenger i livets sluttfase",
+        "tittel" to ytelse().tittel,
         "søknadId" to søknad.søknadId,
         "søknadMottattDag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),

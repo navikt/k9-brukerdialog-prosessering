@@ -147,8 +147,8 @@ fun Søknadstype.toUri(): URI {
             .build()
             .toUri()
 
-        Søknadstype.OMP_DELE_DAGER -> UriComponentsBuilder
-            .fromPath("/v1/omsorgsdagerdeling/ettersending/journalforing")
+        Søknadstype.OMP_UTV_AO -> UriComponentsBuilder
+            .fromPath("/v1/omsorgsdager/aleneomsorg/ettersending/journalforing")
             .build()
             .toUri()
     }

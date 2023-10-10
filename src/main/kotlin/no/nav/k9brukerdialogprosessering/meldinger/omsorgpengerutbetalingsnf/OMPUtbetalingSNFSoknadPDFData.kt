@@ -30,6 +30,7 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
     override fun pdfData(): Map<String, Any?> {
         val mottatt = melding.mottatt.toLocalDate()
         return mapOf(
+            "tittel" to ytelse().tittel,
             "søknad" to melding.somMap(),
             "språk" to melding.språk.språkTilTekst(),
             "mottaksUkedag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),

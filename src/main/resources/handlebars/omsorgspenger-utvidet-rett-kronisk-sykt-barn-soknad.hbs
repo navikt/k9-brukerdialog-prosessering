@@ -3,11 +3,10 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Søknad om ekstra omsorgsdager</title>
-    <meta name="subject" content="Søknad om ekstra omsorgsdager" />
+    <title>{{tittel}}</title>
+    <meta name="subject" content="{{tittel}}" />
     <meta name="author" content="nav.no" />
-    <meta name="description"
-        content="Søknad om ekstra omsorgsdager mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
+    <meta name="description" content="{{tittel}} mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
     <bookmarks>
         <bookmark name="Søker" href="#søker" />
         <bookmark name="Barn" href="#barn" />
@@ -22,9 +21,7 @@
 </head>
 
 <body>
-    <h1 id="header">
-        Søknad om ekstra omsorgsdager
-    </h1>
+    <h1 id="header">{{tittel}}</h1>
     <p class="nokkelinfo">
         <strong>Sendt til NAV</strong>
         {{soknad_mottatt_dag}} {{ soknad_mottatt }}
@@ -37,7 +34,7 @@
         <section id="omBarnet">
             <h2>Om barnet</h2>
 
-            <p class="sporsmalstekst">Har barnet kronisk sykdom, funksjonshemming eller langvarig sykdom?</p>
+            <p class="sporsmalstekst">Har barnet kronisk/langvarig sykdom eller funksjonshemning?</p>
             <p>{{ jaNeiSvar kroniskEllerFunksjonshemming }}</p>
 
             {{#if relasjonTilBarnet}}
@@ -45,7 +42,7 @@
                 <p>{{relasjonTilBarnet}}</p>
             {{/if}}
 
-            <p class="sporsmalstekst">Bor du og barnet på samme folkeregistrerte adresse?</p>
+            <p class="sporsmalstekst">Bor du sammen med barnet?</p>
             <p>{{ jaNeiSvar sammeAddresse }}</p>
         </section>
 
