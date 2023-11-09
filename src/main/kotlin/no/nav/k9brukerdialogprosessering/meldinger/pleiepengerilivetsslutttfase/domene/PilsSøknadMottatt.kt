@@ -17,6 +17,8 @@ data class PilsSøknadMottatt(
     val søker: Søker,
     val fraOgMed: LocalDate,
     val tilOgMed: LocalDate,
+    val skalJobbeOgPleieSammeDag: Boolean,
+    val dagerMedPleie: List<LocalDate>,
     val vedleggId: List<String> = listOf(),
     val opplastetIdVedleggId: List<String> = listOf(),
     val ferieuttakIPerioden: FerieuttakIPerioden?,

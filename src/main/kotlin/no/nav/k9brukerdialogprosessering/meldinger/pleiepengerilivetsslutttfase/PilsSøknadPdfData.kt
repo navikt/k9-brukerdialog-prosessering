@@ -1,5 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase
 
+import no.nav.fpsak.tidsserie.LocalDateInterval
+import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9brukerdialogprosessering.common.Constants.DATE_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
@@ -29,6 +31,7 @@ import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.somNorskMåned
+import java.time.LocalDate
 import java.time.Month
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -47,6 +50,12 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
             "fraOgMed" to DATE_FORMATTER.format(søknad.fraOgMed),
             "tilOgMed" to DATE_FORMATTER.format(søknad.tilOgMed)
         ),
+        "dagerMedPleie" to mapOf(
+            "totalAntallDagerMedPleie" to søknad.dagerMedPleie.size,
+             "datoer" to søknad.dagerMedPleie.map { DATE_FORMATTER.format(it) },
+             "uker" to søknad.dagerMedPleie.grupperMedUkeOgSammenhengendeDatoer()
+        ),
+        "skalJobbeOgPleieSammeDag" to søknad.skalJobbeOgPleieSammeDag,
         "søker" to søknad.søker.somMap(),
         "pleietrengende" to søknad.pleietrengende.somMap(),
         "medlemskap" to søknad.medlemskap.somMap(),
@@ -273,6 +282,42 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
                 "fraOgMed" to DATE_FORMATTER.format(it.fraOgMed),
                 "tilOgMed" to DATE_FORMATTER.format(it.tilOgMed)
             )
+        }
+    }
+}
+
+fun List<LocalDate>.periodeList() = map { Periode(it, it) }
+fun List<LocalDate>.grupperMedUkeOgSammenhengendeDatoer(): List<Map<String, Any>> = groupBy {
+    val uketall = it.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+    if (uketall == 0) 53 else uketall
+}.map { it: Map.Entry<Int, List<LocalDate>> ->
+    mapOf(
+        "uke" to it.key,
+        "perioder" to it.value.beskrivPerioder()
+    )
+}
+
+fun List<LocalDate>.beskrivPerioder(): List<String> {
+    val perioder = periodeList()
+    val tidslinje = no.nav.k9.søknad.TidsserieUtils.toLocalDateTimeline(perioder)
+    val dates: NavigableSet<LocalDateInterval> = tidslinje.localDateIntervals
+    return dates.map { beskrivInterval(it) }
+}
+
+private fun beskrivInterval(interval: LocalDateInterval): String {
+    return when (interval.days()) {
+        1L -> {
+            "${interval.fomDato.dayOfWeek.somNorskDag()} ${interval.fomDato.format(DATE_FORMATTER)}"
+        }
+
+        else -> {
+            val firstDay = interval.fomDato
+            val lastDay = interval.tomDato
+            "${firstDay.dayOfWeek.somNorskDag()} ${firstDay.format(DATE_FORMATTER)} - ${lastDay.dayOfWeek.somNorskDag()} ${
+                lastDay.format(
+                    DATE_FORMATTER
+                )
+            }"
         }
     }
 }
