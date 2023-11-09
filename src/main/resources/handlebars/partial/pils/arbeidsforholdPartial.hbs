@@ -2,6 +2,10 @@
     <ul>
         {{#if arbeidsforhold.arbeidIPeriode}}
             <li class="li-style-none">
+
+                {{#with arbeidsforhold.arbeidIPeriode}}
+                   <p>{{jobberIPerioden}}</p>
+                {{/with}}
                 <ul>
                     {{> partial/pils/arbeidIPeriodePartial arbeidIPeriode=arbeidsforhold.arbeidIPeriode}}
                 </ul>

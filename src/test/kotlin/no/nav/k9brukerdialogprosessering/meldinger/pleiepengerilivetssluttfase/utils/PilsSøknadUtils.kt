@@ -68,6 +68,7 @@ object PilsSøknadUtils {
         flereSokere = FlereSokereSvar.JA,
         fraOgMed = LocalDate.parse("2022-01-01"),
         tilOgMed = LocalDate.parse("2022-02-01"),
+        pleierDuDenSykeHjemme = true,
         skalJobbeOgPleieSammeDag = true,
         dagerMedPleie = listOf(
             LocalDate.parse("2022-01-01"),

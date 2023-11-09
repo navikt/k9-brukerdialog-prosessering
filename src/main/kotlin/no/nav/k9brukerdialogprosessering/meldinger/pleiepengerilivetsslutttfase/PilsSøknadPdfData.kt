@@ -56,6 +56,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
              "uker" to søknad.dagerMedPleie.grupperMedUkeOgSammenhengendeDatoer()
         ),
         "skalJobbeOgPleieSammeDag" to søknad.skalJobbeOgPleieSammeDag,
+        "pleierDuDenSykeHjemme" to søknad.pleierDuDenSykeHjemme,
         "søker" to søknad.søker.somMap(),
         "pleietrengende" to søknad.pleietrengende.somMap(),
         "medlemskap" to søknad.medlemskap.somMap(),
@@ -147,7 +148,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
     )
 
     private fun ArbeidIPeriode.somMap(): Map<String, Any?> = mapOf(
-        "jobberIPerioden" to jobberIPerioden.tilBoolean(),
+        "jobberIPerioden" to jobberIPerioden.pdfTekst,
         "enkeltdagerPerMnd" to enkeltdager?.somMapPerMnd()
     )
 

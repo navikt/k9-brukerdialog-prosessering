@@ -24,7 +24,7 @@ data class ArbeidIPeriode(
 enum class JobberIPeriodeSvar(val pdfTekst: String) {
     SOM_VANLIG("Jeg jobber som normalt, og har ikke fravær"),
     REDUSERT("Jeg kombinerer delvis jobb med pleiepenger"),
-    HELT_FRAVÆR("Jeg jobber ikke");
+    HELT_FRAVÆR("Jeg jobber ikke her de dagene jeg pleier");
 
     fun tilBoolean(): Boolean{
         return when(this){
