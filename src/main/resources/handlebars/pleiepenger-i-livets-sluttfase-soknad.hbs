@@ -42,33 +42,28 @@
     </section>
 
     <section id="flereSokere">
-        {{#if flereSokere }}
-            <h2>Flere søkere</h2>
-            <p class="sporsmalstekst">Er dere flere som skal dele på pleiepengene?</p>
-            {{#eq flereSokere "JA" }}
-                <p>Ja</p>
-            {{/eq}}
-            {{#eq flereSokere "NEI" }}
-                <p>Nei</p>
-            {{/eq}}
-            {{#eq flereSokere "USIKKER" }}
-                <p>Usikker</p>
-            {{/eq}}
-        {{/if}}
+    {{#if flereSokere }}
+        <h2>Flere søkere</h2>
+        <p class="sporsmalstekst">Er dere flere som skal dele på pleiepengene?</p>
+        {{#eq flereSokere "JA" }}
+            <p>Ja</p>
+        {{/eq}}
+        {{#eq flereSokere "NEI" }}
+            <p>Nei</p>
+        {{/eq}}
+        {{#eq flereSokere "USIKKER" }}
+            <p>Usikker</p>
+        {{/eq}}
+    {{/if}}
     </section>
 
     <section id="perioder">
-        <h2>Dagene du søker pleiepenger for</h2>
-        <h3>{{dagerMedPleie.totalAntallDagerMedPleie}} dager med pleiepenger</h3>
-
-        {{#each dagerMedPleie.uker as |uke|~}}
-            <h4> Uke: {{uke.uke}}</h4>
-            <ul>
-                {{#each uke.perioder as |periode|~}}
-                    <li>{{periode}}</li>
-                {{/each}}
-            </ul>
-        {{/each}}
+        <h2>Perioder du søker om pleiepenger</h2>
+        <ul>
+            <li>
+                <strong>{{ periode.fraOgMed }} - {{ periode.tilOgMed }}</strong><br/>
+            </li>
+        </ul>
     </section>
 
     <section id="utenlandsopphold">
@@ -88,18 +83,18 @@
         {{/if}}
 
         <p class="sporsmalstekst">Skal du ha ferie i perioden du søker om pleiepenger?</p>
-        {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
-            <p>Du opplyser at du skal ha ferie</p>
-            <ul>
-                {{# each ferieuttakIPerioden.ferieuttak as |ferieuttak|~}}
-                    <li>
-                        {{ferieuttak.fraOgMed}} - {{ferieuttak.tilOgMed}}
-                    </li>
-                {{/each}}
-            </ul>
-        {{else}}
-            <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalTaUtFerieIPerioden }}</p>
-        {{/if}}
+                {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
+                    <p>Du opplyser at du skal ha ferie</p>
+                    <ul>
+                        {{# each ferieuttakIPerioden.ferieuttak as |ferieuttak|~}}
+                            <li>
+                                {{ferieuttak.fraOgMed}} - {{ferieuttak.tilOgMed}}
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{else}}
+                    <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalTaUtFerieIPerioden }}</p>
+                {{/if}}
     </section>
 
     <section id="arbeidsgivere">
@@ -123,7 +118,7 @@
                                 <li class="sporsmalstekst">Er ikke ansatt</li>
                                 {{#if arbeidsgiver.sluttetFørSøknadsperiodeErSatt}}
                                     <li>
-                                        <p><b>Sluttet du hos {{arbeidsgiver.navn}} før {{periode.fraOgMed}}?</b></p>
+                                        <p> <b>Sluttet du hos {{arbeidsgiver.navn}} før {{periode.fraOgMed}}?</b></p>
                                         <p>{{ jaNeiSvar arbeidsgiver.sluttetFørSøknadsperiode }}</p>
                                     </li>
                                 {{/if}}
