@@ -6,9 +6,8 @@ import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.OMPAleneomsorgSoknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene.somMapTilPdf
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
-import no.nav.k9brukerdialogprosessering.utils.somNorskDag
-import java.util.*
 
 class OMPAleneomsorgSoknadPDFData(private val melding: OMPAleneomsorgSoknadMottatt): PdfData() {
     override fun ytelse() = Ytelse.OMSORGSDAGER_ALENEOMSORG

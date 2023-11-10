@@ -1,7 +1,6 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase
 
 import no.nav.fpsak.tidsserie.LocalDateInterval
-import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9brukerdialogprosessering.common.Constants.DATE_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
@@ -27,10 +26,11 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.YrkesaktivSisteTreFerdigliknedeArene
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.capitalizeName
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.periodeList
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskMåned
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
-import no.nav.k9brukerdialogprosessering.utils.somNorskDag
-import no.nav.k9brukerdialogprosessering.utils.somNorskMåned
 import java.time.LocalDate
 import java.time.Month
 import java.time.ZoneId
@@ -287,7 +287,6 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
     }
 }
 
-fun List<LocalDate>.periodeList() = map { Periode(it, it) }
 fun List<LocalDate>.grupperMedUkeOgSammenhengendeDatoer(): List<Map<String, Any>> = groupBy {
     val uketall = it.get(WeekFields.of(Locale.getDefault()).weekOfYear())
     if (uketall == 0) 53 else uketall
