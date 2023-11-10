@@ -2,11 +2,11 @@
     <ul>
         {{#if arbeidsforhold.arbeidIPeriode}}
             <li class="li-style-none">
-
                 {{#with arbeidsforhold.arbeidIPeriode}}
-                   <p>{{jobberIPerioden}}</p>
+                    <p>{{jobberIPerioden}}</p>
+                    <br/>
                 {{/with}}
-                <ul>
+                <ul class="ul-no-indent">
                     {{> partial/pils/arbeidIPeriodePartial arbeidIPeriode=arbeidsforhold.arbeidIPeriode}}
                 </ul>
             </li>

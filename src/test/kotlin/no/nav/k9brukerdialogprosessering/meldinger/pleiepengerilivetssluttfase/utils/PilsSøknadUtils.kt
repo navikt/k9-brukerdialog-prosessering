@@ -145,7 +145,15 @@ object PilsSøknadUtils {
                     jobberNormaltTimer = 7.5,
                     arbeidIPeriode = ArbeidIPeriode(
                         jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
-                        enkeltdager = listOf(Enkeltdag(LocalDate.parse("2022-01-01"), Duration.ofHours(4)))
+                        enkeltdager = listOf(
+                            Enkeltdag(LocalDate.parse("2022-01-01"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-01-02"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-01-03"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-01-04"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-02-01"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-02-02"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-04-10"), Duration.ofHours(4)),
+                        )
                     )
                 )
             ),
