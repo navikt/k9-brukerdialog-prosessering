@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.utils
 
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.grupperMedUkeOgSammenhengendeDatoer
+import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.grupperSammenhengendeDatoerPerUke
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.grupperMedUker
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
@@ -37,7 +38,7 @@ class DateUtilsKtTest {
             LocalDate.parse("2022-02-01"),
         )
 
-        val uker: List<Map<String, Any>> = datoer.grupperMedUkeOgSammenhengendeDatoer()
+        val uker: List<Map<String, Any>> = datoer.grupperMedUker().grupperSammenhengendeDatoerPerUke()
         uker.forEach {
             logger.info("uke: ${it["uke"]}, periode: ${it["perioder"]}")
         }

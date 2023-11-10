@@ -26,7 +26,8 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.YrkesaktivSisteTreFerdigliknedeArene
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.capitalizeName
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
-import no.nav.k9brukerdialogprosessering.utils.DateUtils.periodeList
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.grupperMedUker
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.grupperSammenHengendeDatoer
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskMåned
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
@@ -38,7 +39,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.*
 
-class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
+class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 
     override fun pdfData(): Map<String, Any?> = mapOf(
@@ -52,8 +53,8 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
         ),
         "dagerMedPleie" to mapOf(
             "totalAntallDagerMedPleie" to søknad.dagerMedPleie.size,
-             "datoer" to søknad.dagerMedPleie.map { DATE_FORMATTER.format(it) },
-             "uker" to søknad.dagerMedPleie.grupperMedUkeOgSammenhengendeDatoer()
+            "datoer" to søknad.dagerMedPleie.map { DATE_FORMATTER.format(it) },
+            "uker" to søknad.dagerMedPleie.grupperMedUker().grupperSammenhengendeDatoerPerUke()
         ),
         "skalJobbeOgPleieSammeDag" to søknad.skalJobbeOgPleieSammeDag,
         "pleierDuDenSykeHjemme" to søknad.pleierDuDenSykeHjemme,
@@ -93,7 +94,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
     private fun Pleietrengende.somMap() = mapOf<String, Any?>(
         "manglerNorskIdentitetsnummer" to (norskIdentitetsnummer == null),
         "norskIdentitetsnummer" to norskIdentitetsnummer,
-        "fødselsdato" to if(fødselsdato != null) DATE_FORMATTER.format(fødselsdato) else null,
+        "fødselsdato" to if (fødselsdato != null) DATE_FORMATTER.format(fødselsdato) else null,
         "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst,
         "navn" to navn
     )
@@ -128,16 +129,16 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
         }
     }
 
-    private fun PilsSøknadMottatt.harMinstEtArbeidsforhold() : Boolean{
+    private fun PilsSøknadMottatt.harMinstEtArbeidsforhold(): Boolean {
         frilans?.let {
-            if(it.arbeidsforhold != null) return true
+            if (it.arbeidsforhold != null) return true
         }
 
         selvstendigNæringsdrivende?.let {
-            if(it.arbeidsforhold != null) return true
+            if (it.arbeidsforhold != null) return true
         }
 
-        if(arbeidsgivere.any(){it.arbeidsforhold != null}) return true
+        if (arbeidsgivere.any() { it.arbeidsforhold != null }) return true
 
         return false
     }
@@ -197,6 +198,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
             "sluttetFørSøknadsperiode" to it.sluttetFørSøknadsperiode
         )
     }
+
     private fun Frilans.somMap() = mapOf<String, Any?>(
         "startdato" to DATE_FORMATTER.format(startdato),
         "sluttdato" to if (sluttdato != null) DATE_FORMATTER.format(sluttdato) else null,
@@ -231,7 +233,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
     )
 
     private fun List<OpptjeningIUtlandet>.somMap(): List<Map<String, Any?>>? {
-        if(isEmpty()) return null
+        if (isEmpty()) return null
         return map {
             mapOf<String, Any?>(
                 "navn" to it.navn,
@@ -244,7 +246,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
     }
 
     private fun List<UtenlandskNæring>.somMapUtenlandskNæring(): List<Map<String, Any?>>? {
-        if(isEmpty()) return null
+        if (isEmpty()) return null
         return map {
             mapOf(
                 "næringstype" to it.næringstype.beskrivelse,
@@ -252,7 +254,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
                 "land" to it.land.somMap(),
                 "organisasjonsnummer" to it.organisasjonsnummer,
                 "fraOgMed" to DATE_FORMATTER.format(it.fraOgMed),
-                "tilOgMed" to if(it.tilOgMed != null) DATE_FORMATTER.format(it.tilOgMed) else null
+                "tilOgMed" to if (it.tilOgMed != null) DATE_FORMATTER.format(it.tilOgMed) else null
             )
         }
     }
@@ -287,22 +289,14 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt): PdfData() {
     }
 }
 
-fun List<LocalDate>.grupperMedUkeOgSammenhengendeDatoer(): List<Map<String, Any>> = groupBy {
-    val uketall = it.get(WeekFields.of(Locale.getDefault()).weekOfYear())
-    if (uketall == 0) 53 else uketall
-}.map { it: Map.Entry<Int, List<LocalDate>> ->
-    mapOf(
-        "uke" to it.key,
-        "perioder" to it.value.beskrivPerioder()
-    )
-}
-
-fun List<LocalDate>.beskrivPerioder(): List<String> {
-    val perioder = periodeList()
-    val tidslinje = no.nav.k9.søknad.TidsserieUtils.toLocalDateTimeline(perioder)
-    val dates: NavigableSet<LocalDateInterval> = tidslinje.localDateIntervals
-    return dates.map { beskrivInterval(it) }
-}
+fun Map<Int, List<LocalDate>>.grupperSammenhengendeDatoerPerUke(): List<Map<String, Any>> = map { it: Map.Entry<Int, List<LocalDate>> ->
+        mapOf(
+            "uke" to it.key,
+            "perioder" to it.value
+                .grupperSammenHengendeDatoer()
+                .map { beskrivInterval(it) }
+        )
+    }
 
 private fun beskrivInterval(interval: LocalDateInterval): String {
     return when (interval.days()) {
