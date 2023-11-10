@@ -164,10 +164,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
     }
 
     private fun List<Enkeltdag>.somMapPerUke(): List<Map<String, Any>> {
-        val perUke = this.groupBy {
-            val uketall = it.dato.get(WeekFields.of(Locale.getDefault()).weekOfYear())
-            if (uketall == 0) 53 else uketall
-        }
+        val perUke = grupperPerUke()
         return perUke.map {
             mapOf(
                 "uke" to it.key,
@@ -176,8 +173,15 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
         }
     }
 
+    private fun List<Enkeltdag>.grupperPerUke() = groupBy {
+        val uketall = it.dato.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+        if (uketall == 0) 53 else uketall
+    }
+
+    private fun List<Enkeltdag>.grupperPerMåned() = groupBy { it.dato.month }
+
     fun List<Enkeltdag>.somMapPerMnd(): List<Map<String, Any>> {
-        val perMåned: Map<Month, List<Enkeltdag>> = this.groupBy { it.dato.month }
+        val perMåned: Map<Month, List<Enkeltdag>> = grupperPerMåned()
 
         return perMåned.map {
             mapOf(
@@ -289,7 +293,8 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
     }
 }
 
-fun Map<Int, List<LocalDate>>.grupperSammenhengendeDatoerPerUke(): List<Map<String, Any>> = map { it: Map.Entry<Int, List<LocalDate>> ->
+fun Map<Int, List<LocalDate>>.grupperSammenhengendeDatoerPerUke(): List<Map<String, Any>> =
+    map { it: Map.Entry<Int, List<LocalDate>> ->
         mapOf(
             "uke" to it.key,
             "perioder" to it.value
