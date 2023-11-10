@@ -55,22 +55,22 @@
         <h3>{{dagerMedPleie.totalAntallDagerMedPleie}} dager med pleiepenger</h3>
 
         {{#each dagerMedPleie.uker as |uke|~}}
-            <h4> Uke: {{uke.uke}}</h4>
+            <p><b> Uke: {{uke.uke}}</b></p>
             <ul>
                 {{#each uke.perioder as |periode|~}}
                     <li>{{periode}}</li>
                 {{/each}}
             </ul>
         {{/each}}
-        <br/><br/>
+        <br/>
 
         <p class="sporsmalstekst">Skal du pleie personen i hjemme i de dagene du søker for?</p>
         <p>{{ jaNeiSvar pleierDuDenSykeHjemme}}</p>
-        <br/><br/>
+        <br/>
 
         <p class="sporsmalstekst">Skal du jobbe delvis i noen av dagene du søker for?</p>
         <p>{{ jaNeiSvar skalJobbeOgPleieSammeDag}}</p>
-        <br/><br/>
+        <br/>
 
         <p class="sporsmalstekst">Oppholder du deg i utlandet i noen av dagene du søker for?</p>
         {{# if utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}
@@ -147,6 +147,7 @@
         {{else}}
             <p>Er ikke frilanser i perioden det søkes om.</p>
         {{/if}}
+        <br/>
 
         {{#if selvstendigNæringsdrivende}}
             <h3>Selvstendig næringsdrivende</h3>
@@ -192,50 +193,62 @@
                     {{/if}}
                 {{/eq}}
             </p>
+            <br/>
 
             {{#if selvstendigNæringsdrivende.virksomhet.næringsinntekt}}
                 <p class="sporsmalstekst">Hva har du hatt i næringsresultat før skatt de siste 12 månedene?</p>
                 <p>{{selvstendigNæringsdrivende.virksomhet.næringsinntekt}}-,</p>
+                <br/>
             {{/if}}
 
             {{#if selvstendigNæringsdrivende.virksomhet.varigEndring}}
                 <p class="sporsmalstekst">Har du hatt en varig endring i noen av arbeidsforholdene, virksomhetene eller
                     arbeidssituasjonen din de siste fire årene?</p>
                 <p>Ja</p>
+                <br/>
 
                 <p class="sporsmalstekst">Dato for når varig endring:</p>
                 <p>{{selvstendigNæringsdrivende.virksomhet.varigEndring.dato}}</p>
+                <br/>
 
                 <p class="sporsmalstekst">Næringsinntekt etter endringen</p>
                 <p>{{selvstendigNæringsdrivende.virksomhet.varigEndring.inntektEtterEndring}}</p>
+                <br/>
 
                 <div class="fritekst">
                     <p class="sporsmalstekst">Beskrivelse av endring</p>
                     <p class="fritekst_textarea">{{selvstendigNæringsdrivende.virksomhet.varigEndring.forklaring}}</p>
+                    <br/>
                 </div>
             {{/if}}
 
             {{#if selvstendigNæringsdrivende.virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene}}
                 <p class="sporsmalstekst">Har du begynt i arbeidslivet i løpet av de 3 siste ferdigliknede årene?</p>
                 <p>Ja, ble yrkesaktiv: {{selvstendigNæringsdrivende.virksomhet.yrkesaktivSisteTreFerdigliknedeÅrene.oppstartsdato}}</p>
+                <br/>
             {{else}}
                 <p>Nei</p>
+                <br/>
             {{/if}}
 
             {{#if selvstendigNæringsdrivende.virksomhet.regnskapsfører}}
                 <p class="sporsmalstekst">Har du regnskapsfører?</p>
                 <p>Ja, {{selvstendigNæringsdrivende.virksomhet.regnskapsfører.navn}}, telefon {{selvstendigNæringsdrivende.virksomhet.regnskapsfører.telefon}}</p>
+                <br/>
             {{else}}
                 <p>Nei</p>
+                <br/>
             {{/if}}
 
             {{#if hjelper.harFlereAktiveVirksomheterErSatt}}
                 <p class="sporsmalstekst">Har du flere enn én næringsvirksomhet som er aktiv?</p>
                 {{jaNeiSvar selvstendigNæringsdrivende.virksomhet.harFlereAktiveVirksomheter}}
+                <br/>
             {{/if}}
         {{else}}
             <h2>Selvstendig næringsdrivende</h2>
             <p>Har ikke vært selvstending næringsdrivende i perioden det søkes om.</p>
+            <br/>
         {{/if}}
 
         {{#if opptjeningIUtlandet}}
