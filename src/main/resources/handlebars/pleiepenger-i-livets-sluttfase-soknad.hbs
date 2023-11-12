@@ -338,23 +338,6 @@
         {{/if}}
     </section>
 
-    <section id="utenlandsopphold">
-        <h2>Perioder med ferie</h2>
-        <p class="sporsmalstekst">Skal du ha ferie i perioden du søker om pleiepenger?</p>
-        {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
-            <p>Du opplyser at du skal ha ferie</p>
-            <ul>
-                {{# each ferieuttakIPerioden.ferieuttak as |ferieuttak|~}}
-                    <li>
-                        {{ferieuttak.fraOgMed}} - {{ferieuttak.tilOgMed}}
-                    </li>
-                {{/each}}
-            </ul>
-        {{else}}
-            <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalTaUtFerieIPerioden }}</p>
-        {{/if}}
-    </section>
-
     <section id="verneplikt">
         {{# if hjelp.harVærtEllerErVernepliktigErSatt}}
             <h2>Verneplikt</h2>

@@ -9,7 +9,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Enkeltdag
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Ferieuttak
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Frilans
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Land
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Medlemskap
@@ -64,10 +63,6 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
         "utenlandsoppholdIPerioden" to mapOf(
             "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
             "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
-        ),
-        "ferieuttakIPerioden" to mapOf(
-            "skalTaUtFerieIPerioden" to søknad.ferieuttakIPerioden?.skalTaUtFerieIPerioden,
-            "ferieuttak" to søknad.ferieuttakIPerioden?.ferieuttak?.somMapFerieuttak()
         ),
         "harLastetOppId" to søknad.opplastetIdVedleggId.isNotEmpty(),
         "harLastetOppLegeerklæring" to søknad.vedleggId.isNotEmpty(),
@@ -282,15 +277,6 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
         "inntektEtterEndring" to inntektEtterEndring,
         "forklaring" to forklaring
     )
-
-    private fun List<Ferieuttak>.somMapFerieuttak(): List<Map<String, Any?>> {
-        return map {
-            mapOf<String, Any?>(
-                "fraOgMed" to DATE_FORMATTER.format(it.fraOgMed),
-                "tilOgMed" to DATE_FORMATTER.format(it.tilOgMed)
-            )
-        }
-    }
 }
 
 fun Map<Int, List<LocalDate>>.grupperSammenhengendeDatoerPerUke(): List<Map<String, Any>> =

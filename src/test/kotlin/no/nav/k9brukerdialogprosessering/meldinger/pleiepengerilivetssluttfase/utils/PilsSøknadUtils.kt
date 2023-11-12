@@ -17,8 +17,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Bosted
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Enkeltdag
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Ferieuttak
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.FerieuttakIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.FlereSokereSvar
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Frilans
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.JobberIPeriodeSvar
@@ -234,14 +232,7 @@ object PilsSøknadUtils {
         ),
         k9Format = gyldigK9Format(søknadId, mottatt),
         harBekreftetOpplysninger = true,
-        harForståttRettigheterOgPlikter = true,
-        ferieuttakIPerioden = FerieuttakIPerioden(
-            skalTaUtFerieIPerioden = true,
-            ferieuttak = listOf(
-                Ferieuttak(fraOgMed = LocalDate.parse("2022-01-05"),
-                tilOgMed = LocalDate.parse("2022-01-06"))
-            )
-        )
+        harForståttRettigheterOgPlikter = true
     )
 
     fun gyldigK9Format(søknadId: String = UUID.randomUUID().toString(), mottatt: ZonedDateTime) = k9FormatSøknad(

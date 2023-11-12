@@ -224,15 +224,6 @@ class PleiepengerILivetsSluttfaseSøknadKonsumentTest {
               }
             ]
           },
-          "ferieuttakIPerioden": {
-            "ferieuttak": [
-              {
-                "fraOgMed": "2022-01-05",
-                "tilOgMed": "2022-01-06"
-              }
-            ],
-            "skalTaUtFerieIPerioden": true
-          },
           "frilans": {
             "harHattInntektSomFrilanser": true,
             "jobberFortsattSomFrilans": false,
@@ -282,6 +273,30 @@ class PleiepengerILivetsSluttfaseSøknadKonsumentTest {
                   "enkeltdager": [
                     {
                       "dato": "2022-01-01",
+                      "tid": "PT4H"
+                    },
+                    {
+                      "dato": "2022-01-02",
+                      "tid": "PT4H"
+                    },
+                    {
+                      "dato": "2022-01-03",
+                      "tid": "PT4H"
+                    },
+                    {
+                      "dato": "2022-01-04",
+                      "tid": "PT4H"
+                    },
+                    {
+                      "dato": "2022-02-01",
+                      "tid": "PT4H"
+                    },
+                    {
+                      "dato": "2022-02-02",
+                      "tid": "PT4H"
+                    },
+                    {
+                      "dato": "2022-04-10",
                       "tid": "PT4H"
                     }
                   ],
