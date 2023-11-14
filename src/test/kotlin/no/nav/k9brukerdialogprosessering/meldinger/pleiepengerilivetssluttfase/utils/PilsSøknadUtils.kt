@@ -17,8 +17,6 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Bosted
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Enkeltdag
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Ferieuttak
-import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.FerieuttakIPerioden
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.FlereSokereSvar
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.Frilans
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.JobberIPeriodeSvar
@@ -68,6 +66,33 @@ object PilsSøknadUtils {
         flereSokere = FlereSokereSvar.JA,
         fraOgMed = LocalDate.parse("2022-01-01"),
         tilOgMed = LocalDate.parse("2022-02-01"),
+        pleierDuDenSykeHjemme = true,
+        skalJobbeOgPleieSammeDag = true,
+        dagerMedPleie = listOf(
+            LocalDate.parse("2022-01-01"),
+            LocalDate.parse("2022-01-02"),
+            LocalDate.parse("2022-01-04"),
+            LocalDate.parse("2022-01-11"),
+            LocalDate.parse("2022-01-12"),
+            LocalDate.parse("2022-01-13"),
+            LocalDate.parse("2022-01-14"),
+            LocalDate.parse("2022-01-15"),
+            LocalDate.parse("2022-01-16"),
+            LocalDate.parse("2022-01-17"),
+            LocalDate.parse("2022-01-18"),
+            LocalDate.parse("2022-01-19"),
+            LocalDate.parse("2022-01-21"),
+            LocalDate.parse("2022-01-22"),
+            LocalDate.parse("2022-01-24"),
+            LocalDate.parse("2022-01-25"),
+            LocalDate.parse("2022-01-26"),
+            LocalDate.parse("2022-01-27"),
+            LocalDate.parse("2022-01-28"),
+            LocalDate.parse("2022-01-29"),
+            LocalDate.parse("2022-01-30"),
+            LocalDate.parse("2022-01-31"),
+            LocalDate.parse("2022-02-01"),
+        ),
         vedleggId = listOf("123", "456"),
         opplastetIdVedleggId = listOf("987"),
         pleietrengende = Pleietrengende(norskIdentitetsnummer = "02119970078", navn = "Bjarne"),
@@ -118,7 +143,15 @@ object PilsSøknadUtils {
                     jobberNormaltTimer = 7.5,
                     arbeidIPeriode = ArbeidIPeriode(
                         jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
-                        enkeltdager = listOf(Enkeltdag(LocalDate.parse("2022-01-01"), Duration.ofHours(4)))
+                        enkeltdager = listOf(
+                            Enkeltdag(LocalDate.parse("2022-01-01"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-01-02"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-01-03"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-01-04"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-02-01"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-02-02"), Duration.ofHours(4)),
+                            Enkeltdag(LocalDate.parse("2022-04-10"), Duration.ofHours(4)),
+                        )
                     )
                 )
             ),
@@ -199,14 +232,7 @@ object PilsSøknadUtils {
         ),
         k9Format = gyldigK9Format(søknadId, mottatt),
         harBekreftetOpplysninger = true,
-        harForståttRettigheterOgPlikter = true,
-        ferieuttakIPerioden = FerieuttakIPerioden(
-            skalTaUtFerieIPerioden = true,
-            ferieuttak = listOf(
-                Ferieuttak(fraOgMed = LocalDate.parse("2022-01-05"),
-                tilOgMed = LocalDate.parse("2022-01-06"))
-            )
-        )
+        harForståttRettigheterOgPlikter = true
     )
 
     fun gyldigK9Format(søknadId: String = UUID.randomUUID().toString(), mottatt: ZonedDateTime) = k9FormatSøknad(

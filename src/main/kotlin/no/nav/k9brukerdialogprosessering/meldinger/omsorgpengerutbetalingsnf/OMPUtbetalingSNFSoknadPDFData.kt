@@ -14,8 +14,8 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.dom
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.VarigEndring
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.YrkesaktivSisteTreFerdigliknedeÅrene
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
-import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.time.Duration
 
 class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadMottatt) : PdfData() {

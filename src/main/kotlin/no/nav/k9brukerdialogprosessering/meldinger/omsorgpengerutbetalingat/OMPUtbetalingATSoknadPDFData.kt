@@ -8,8 +8,8 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.dome
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
-import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.time.Duration
 
 class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMottatt): PdfData() {

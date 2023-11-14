@@ -16,8 +16,8 @@ import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
-import no.nav.k9brukerdialogprosessering.utils.somNorskDag
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.ZoneOffset.UTC

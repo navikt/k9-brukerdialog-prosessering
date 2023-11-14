@@ -31,12 +31,12 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.fe
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene.felles.YrkesaktivSisteTreFerdigliknedeÅrene
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.DateUtils
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskMåned
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.tilString
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.storForbokstav
-import no.nav.k9brukerdialogprosessering.utils.somNorskDag
-import no.nav.k9brukerdialogprosessering.utils.somNorskMåned
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
