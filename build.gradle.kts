@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.1.4"
-	id("io.spring.dependency-management") version "1.1.3"
-	kotlin("jvm") version "1.9.10"
-	kotlin("plugin.spring") version "1.9.10"
+	id("org.springframework.boot") version "3.1.5"
+	id("io.spring.dependency-management") version "1.1.4"
+	kotlin("jvm") version "1.9.20"
+	kotlin("plugin.spring") version "1.9.20"
 }
 
 group = "no.nav"
@@ -29,18 +29,18 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "3.1.7"
+val tokenSupportVersion = "3.1.8"
 val jsonassertVersion = "1.5.1"
-val k9FormatVersion = "9.0.4"
+val k9FormatVersion = "9.0.5"
 val springMockkVersion = "4.0.2"
 val confluentVersion = "7.3.0"
 val logstashLogbackEncoderVersion = "7.4"
 val slf4jVersion = "2.0.9"
-val jacksonVersion = "2.15.2"
+val jacksonVersion = "2.16.0"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
-val retryVersion = "2.0.3"
+val retryVersion = "2.0.4"
 val awailitilityKotlinVersion = "4.2.0"
 val springCloudContractVersion = "4.0.4"
 
