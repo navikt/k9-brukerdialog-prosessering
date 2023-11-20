@@ -33,23 +33,11 @@ class K9JoarkService(
         val resolveJournalføringsUrl =
             resolveJournalføringsUrl(journalføringsRequest.ytelse, journalføringsRequest.søknadstype)
 
-        val httpEntity = when (val correlationId = journalføringsRequest.correlationId) {
+        val httpEntity = when (val correlationId = journalføringsRequest.correlationId ) {
             null -> HttpEntity(journalføringsRequest)
-            else -> {
-
-                // TODO: Fjern når vi har fikset opp i dette
-                if (correlationId == "17943918-f3f4-41f5-a239-5eb62e99dbbe") {
-                    HttpEntity(
-                        journalføringsRequest.copy(dokumentId = listOf()),
-                        HttpHeaders().apply {
-                            this[X_CORRELATION_ID] = listOf(correlationId)
-                        })
-                } else {
-                    HttpEntity(journalføringsRequest, HttpHeaders().apply {
-                        this[X_CORRELATION_ID] = listOf(correlationId)
-                    })
-                }
-            }
+            else -> HttpEntity(journalføringsRequest, HttpHeaders().apply {
+                this[X_CORRELATION_ID] = listOf(correlationId)
+            })
         }
 
         k9JoarkRestTemplate.exchange(
