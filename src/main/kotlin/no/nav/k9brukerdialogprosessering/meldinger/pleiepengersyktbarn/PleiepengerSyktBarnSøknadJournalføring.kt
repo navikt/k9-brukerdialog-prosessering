@@ -47,10 +47,7 @@ class PleiepengerSyktBarnSøknadJournalføring(
             .mapValues { _: String, value: TopicEntry<PSBPreprosessertSøknad> ->
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val preprosessertSøknad: PSBPreprosessertSøknad = value.data
-                    val journalførSøknad = journalføringsService.journalfør(
-                        preprosessertSøknad,
-                        value.metadata.correlationId
-                    )
+                    val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
                     Cleanup(value.metadata, preprosessertSøknad, journalførSøknad)
                 }
             }

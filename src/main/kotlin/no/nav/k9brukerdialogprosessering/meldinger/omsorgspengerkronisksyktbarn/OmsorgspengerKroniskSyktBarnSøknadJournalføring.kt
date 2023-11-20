@@ -47,10 +47,7 @@ class OmsorgspengerKroniskSyktBarnSøknadJournalføring(
             .mapValues { _: String, value: TopicEntry<OMPUTVKroniskSyktBarnSøknadPreprosesssert> ->
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val preprosessertSøknad: OMPUTVKroniskSyktBarnSøknadPreprosesssert = value.data
-                    val journalførSøknad = journalføringsService.journalfør(
-                        preprosessertSøknad,
-                        value.metadata.correlationId
-                    )
+                    val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
                     Cleanup(value.metadata, preprosessertSøknad, journalførSøknad)
                 }
             }

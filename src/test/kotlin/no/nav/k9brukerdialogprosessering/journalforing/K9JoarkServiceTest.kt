@@ -9,6 +9,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Navn
 import no.nav.k9brukerdialogprosessering.utils.WireMockServerUtils.stubJournalføring
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -54,7 +55,7 @@ class K9JoarkServiceTest {
             responseBodyJson = objectMapper.writeValueAsString(journalføringsResponse)
         )
 
-        val response = k9JoarkService.journalfør(journalføringsRequest, "correlationId")
+        val response = k9JoarkService.journalfør(journalføringsRequest)
         assertThat(response).isEqualTo(journalføringsResponse)
     }
 
@@ -76,7 +77,7 @@ class K9JoarkServiceTest {
             responseBodyJson = objectMapper.writeValueAsString(journalføringsResponse)
         )
 
-        val response = k9JoarkService.journalfør(journalføringsRequest, "correlationId")
+        val response = k9JoarkService.journalfør(journalføringsRequest)
         assertThat(response).isEqualTo(journalføringsResponse)
     }
 
@@ -103,7 +104,7 @@ class K9JoarkServiceTest {
             responseBodyJson = objectMapper.writeValueAsString(journalføringsResponse)
         )
 
-        val response = k9JoarkService.journalfør(journalføringsRequest, "correlationId")
+        val response = k9JoarkService.journalfør(journalføringsRequest)
         assertThat(response).isEqualTo(journalføringsResponse)
     }
 }
