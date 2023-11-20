@@ -29,26 +29,35 @@ class K9JoarkService(
 
     suspend fun journalfør(
         journalføringsRequest: JournalføringsRequest,
+        correlationID: String,
     ): JournalføringsResponse = kotlin.runCatching {
         val resolveJournalføringsUrl =
             resolveJournalføringsUrl(journalføringsRequest.ytelse, journalføringsRequest.søknadstype)
 
         val httpEntity = when (val correlationId = journalføringsRequest.correlationId) {
-            null -> HttpEntity(journalføringsRequest)
-            else -> {
-
+            null -> {
                 // TODO: Fjern når vi har fikset opp i dette
-                if (correlationId == "17943918-f3f4-41f5-a239-5eb62e99dbbe") {
+                if (correlationID == "17943918-f3f4-41f5-a239-5eb62e99dbbe") {
+                    logger.info("Filterer ut feilende dokument for 17943918-f3f4-41f5-a239-5eb62e99dbbe")
+                    val dokumenter = journalføringsRequest.dokumentId
+                    val journalføringsRequestUtenDokumenter = journalføringsRequest.copy(
+                        dokumentId = dokumenter.filterNot { it.contains("eyJraWQiOiIxIiwiYWxnIjoibm9uZSIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4ZmE0MGYyZC1mOThmLTQwOTQtYjIzMS1lMzYzZDE1OGJmMjQifQ") }
+                    )
                     HttpEntity(
-                        journalføringsRequest.copy(dokumentId = listOf()),
+                        journalføringsRequestUtenDokumenter,
                         HttpHeaders().apply {
-                            this[X_CORRELATION_ID] = listOf(correlationId)
+                            this[X_CORRELATION_ID] = listOf(correlationID)
                         })
                 } else {
-                    HttpEntity(journalføringsRequest, HttpHeaders().apply {
-                        this[X_CORRELATION_ID] = listOf(correlationId)
-                    })
+                    logger.info("correlationId matchet ikke")
+                    HttpEntity(journalføringsRequest)
                 }
+            }
+
+            else -> {
+                HttpEntity(journalføringsRequest, HttpHeaders().apply {
+                    this[X_CORRELATION_ID] = listOf(correlationId)
+                })
             }
         }
 

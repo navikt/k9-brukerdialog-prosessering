@@ -26,7 +26,7 @@ import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -93,7 +93,7 @@ class OMPUtbetalingATSøknadKonsumentTest {
 
         val forventetDokmentIderForSletting = listOf("123456789", "987654321")
         coEvery { k9MellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
+        coEvery { k9JoarkService.journalfør(any(), correlationId) } returns JournalføringsResponse("123456789")
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTB_AT_MOTTATT_TOPIC)
         verify(exactly = 1, timeout = 120 * 1000) {

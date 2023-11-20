@@ -47,7 +47,7 @@ class EttersendelseJournalføring(
             .mapValues { _: String, value: TopicEntry<PreprosessertEttersendelse> ->
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val preprosessertSøknad: PreprosessertEttersendelse = value.data
-                    val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
+                    val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad, value.metadata.correlationId)
                     Cleanup(value.metadata, preprosessertSøknad, journalførSøknad)
                 }
             }

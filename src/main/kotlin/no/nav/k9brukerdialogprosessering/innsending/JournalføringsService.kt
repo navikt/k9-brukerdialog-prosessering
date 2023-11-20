@@ -17,9 +17,9 @@ class JournalføringsService(
         private val logger = org.slf4j.LoggerFactory.getLogger(JournalføringsService::class.java)
     }
 
-    suspend fun journalfør(preprosessertSøknad: Preprosessert): Journalfort {
+    suspend fun journalfør(preprosessertSøknad: Preprosessert, correlationId: String): Journalfort {
         logger.info("Journalfører dokumenter: ${preprosessertSøknad.dokumenter().size}")
-        val journalføringsResponse = k9JoarkService.journalfør(preprosessertSøknad.tilJournaførigsRequest())
+        val journalføringsResponse = k9JoarkService.journalfør(preprosessertSøknad.tilJournaførigsRequest(), correlationId)
         return resolve(preprosessertSøknad, journalføringsResponse)
     }
 

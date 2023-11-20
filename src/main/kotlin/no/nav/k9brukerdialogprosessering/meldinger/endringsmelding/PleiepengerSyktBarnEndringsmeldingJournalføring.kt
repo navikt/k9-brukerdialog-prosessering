@@ -1,7 +1,5 @@
 package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding
 
-import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_JOURNALFØRING_STREAMS_BUILDER_NAME
-import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.domene.PSBPreprossesertEndringsmelding
 import no.nav.k9brukerdialogprosessering.innsending.JournalføringsService
 import no.nav.k9brukerdialogprosessering.kafka.config.KafkaStreamName
 import no.nav.k9brukerdialogprosessering.kafka.config.Topic
@@ -9,6 +7,8 @@ import no.nav.k9brukerdialogprosessering.kafka.processors.LoggingToMDCProcessor
 import no.nav.k9brukerdialogprosessering.kafka.processors.process
 import no.nav.k9brukerdialogprosessering.kafka.types.Cleanup
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
+import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_JOURNALFØRING_STREAMS_BUILDER_NAME
+import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.domene.PSBPreprossesertEndringsmelding
 import no.nav.k9brukerdialogprosessering.utils.HealthIndicatorUtils
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream
@@ -49,7 +49,10 @@ class PleiepengerSyktBarnEndringsmeldingJournalføring(
             .mapValues { _: String, value: TopicEntry<PSBPreprossesertEndringsmelding> ->
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val preprosessertSøknad: PSBPreprossesertEndringsmelding = value.data
-                    val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
+                    val journalførSøknad = journalføringsService.journalfør(
+                        preprosessertSøknad,
+                        value.metadata.correlationId
+                    )
                     Cleanup(value.metadata, preprosessertSøknad, journalførSøknad)
                 }
             }
