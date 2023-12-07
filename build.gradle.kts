@@ -42,7 +42,7 @@ val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
 val retryVersion = "2.0.4"
 val awailitilityKotlinVersion = "4.2.0"
-val springCloudContractVersion = "4.0.4"
+val springCloudContractVersion = "4.1.0"
 
 dependencies {
 	implementation("org.yaml:snakeyaml:2.2") {
