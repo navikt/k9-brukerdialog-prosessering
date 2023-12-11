@@ -7,11 +7,11 @@ import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerKroniskSyktBarn
 import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.Barn
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.BarnSammeAdresse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.SøkerBarnRelasjon
 import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.util.*
 
 object SøknadUtils {
     val søker = Søker(
@@ -51,7 +51,9 @@ object SøknadUtils {
         søker = søker,
         kroniskEllerFunksjonshemming = false,
         barn = barn,
-        sammeAdresse = true,
+        sammeAdresse = BarnSammeAdresse.JA,
+        høyereRisikoForFravær = true,
+        høyereRisikoForFraværBeskrivelse = "Beskrivelse av høyere risiko for fravær",
         relasjonTilBarnet = SøkerBarnRelasjon.FAR,
         samværsavtaleVedleggId = listOf("1234"),
         legeerklæringVedleggId = listOf("5678"),

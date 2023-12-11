@@ -24,7 +24,9 @@ class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSykt
             "fødselsdato" to søknad.barn.fødselsdato
         ),
         "relasjonTilBarnet" to søknad.relasjonTilBarnet?.utskriftsvennlig,
-        "sammeAddresse" to søknad.sammeAdresse,
+        "sammeAddresse" to søknad.sammeAdresse?.name,
+        "høyereRisikoForFravær" to søknad.høyereRisikoForFravær,
+        "høyereRisikoForFraværBeskrivelse" to søknad.høyereRisikoForFraværBeskrivelse,
         "kroniskEllerFunksjonshemming" to søknad.kroniskEllerFunksjonshemming,
         "samtykke" to mapOf(
             "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,

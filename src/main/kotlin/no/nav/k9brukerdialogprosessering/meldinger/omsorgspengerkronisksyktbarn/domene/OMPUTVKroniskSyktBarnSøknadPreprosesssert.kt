@@ -20,7 +20,9 @@ data class OMPUTVKroniskSyktBarnSøknadPreprosesssert(
     val barn: Barn,
     val søker: Søker,
     val relasjonTilBarnet: SøkerBarnRelasjon? = null,
-    val sammeAdresse: Boolean = false,
+    val sammeAdresse: BarnSammeAdresse? = null,
+    val høyereRisikoForFravær: Boolean? = null, // TODO: Fjern nullable når lansert
+    val høyereRisikoForFraværBeskrivelse: String? = null,
     val harBekreftetOpplysninger: Boolean,
     val harForståttRettigheterOgPlikter: Boolean,
     val k9FormatSøknad: Søknad
@@ -36,6 +38,8 @@ data class OMPUTVKroniskSyktBarnSøknadPreprosesssert(
         kroniskEllerFunksjonshemming = melding.kroniskEllerFunksjonshemming,
         søker = melding.søker,
         sammeAdresse = melding.sammeAdresse,
+        høyereRisikoForFravær = melding.høyereRisikoForFravær,
+        høyereRisikoForFraværBeskrivelse = melding.høyereRisikoForFraværBeskrivelse,
         barn = melding.barn,
         relasjonTilBarnet = melding.relasjonTilBarnet,
         harForståttRettigheterOgPlikter = melding.harForståttRettigheterOgPlikter,
