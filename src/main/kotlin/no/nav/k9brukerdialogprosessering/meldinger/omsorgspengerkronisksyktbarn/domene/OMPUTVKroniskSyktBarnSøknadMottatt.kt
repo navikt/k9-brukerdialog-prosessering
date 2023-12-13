@@ -21,7 +21,7 @@ data class OMPUTVKroniskSyktBarnSøknadMottatt(
     val søker: Søker,
     val relasjonTilBarnet: SøkerBarnRelasjon? = null,
     val sammeAdresse: BarnSammeAdresse? = null,
-    val høyereRisikoForFravær: Boolean? = null, // TODO: Fjern nullable når lansert
+    val høyereRisikoForFravær: Boolean? = null,
     val høyereRisikoForFraværBeskrivelse: String? = null,
     val legeerklæringVedleggId: List<String> = listOf(),
     val samværsavtaleVedleggId: List<String> = listOf(),
