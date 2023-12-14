@@ -6,6 +6,7 @@ import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.ArbeidsgiverDetaljer
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bekreftelser
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Fosterbarn
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
@@ -38,6 +39,7 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
             ),
             "harArbeidsgivere" to melding.arbeidsgivere.isNotEmpty(),
             "arbeidsgivere" to melding.arbeidsgivere.somMap(),
+            "fosterbarn" to if (melding.fosterbarn.isNotEmpty()) melding.fosterbarn.somMap() else null,
             "harOpphold" to melding.opphold.isNotEmpty(),
             "harBosteder" to melding.bosteder.isNotEmpty(),
             "harVedlegg" to melding.vedleggId.isNotEmpty(),
@@ -87,6 +89,16 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
                 "årsakNyoppstartet" to it.årsakNyoppstartet?.pdfTekst
             )
         }
+    }
+
+    @JvmName("somMapFosterbarn")
+    private fun List<Fosterbarn>.somMap() = map {
+        mapOf(
+            "navn" to it.navn,
+            "fødselsdato" to it.fødselsdato,
+            "identitetsnummer" to it.identitetsnummer,
+            "harUtvidetRett" to (it.utvidetRett == true)
+        )
     }
 
     fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.lowercase().capitalize() }
