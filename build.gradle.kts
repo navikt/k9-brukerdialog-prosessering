@@ -40,7 +40,7 @@ val jacksonVersion = "2.16.0"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.3.1"
-val retryVersion = "2.0.4"
+val retryVersion = "2.0.5"
 val awailitilityKotlinVersion = "4.2.0"
 val springCloudContractVersion = "4.1.0"
 
