@@ -26,7 +26,7 @@ import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -162,6 +162,20 @@ class OMPUtbetalingATSøknadKonsumentTest {
             "fornavn": "Ola",
             "fødselsnummer": "02119970078"
           },
+          "fosterbarn": [
+            {
+              "navn": "Fosterbarn 1",
+              "fødselsdato": "2010-01-01",
+              "identitetsnummer": "01011012345",
+                "utvidetRett": true
+            },
+            {
+              "navn": "Fosterbarn 2",
+              "fødselsdato": "2010-01-01",
+              "identitetsnummer": "01011012234",
+              "utvidetRett": true
+            }
+          ],
           "opphold": [
             {
               "fraOgMed": "2019-12-12",

@@ -52,11 +52,13 @@ internal object OMPUtbetalingATSøknadUtils {
                 navn = "Fosterbarn 1",
                 fødselsdato = LocalDate.parse("2010-01-01"),
                 identitetsnummer = "01011012345",
+                utvidetRett = true
             ),
             Fosterbarn(
                 navn = "Fosterbarn 2",
                 fødselsdato = LocalDate.parse("2010-01-01"),
-                identitetsnummer = "01011012234"
+                identitetsnummer = "01011012234",
+                utvidetRett = true
             )
         ),
         arbeidsgivere = listOf(
