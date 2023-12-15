@@ -26,7 +26,7 @@ import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -178,7 +178,9 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
             ]
           ],
           "relasjonTilBarnet": "FAR",
-          "sammeAdresse": true,
+          "sammeAdresse": "JA",
+          "høyereRisikoForFravær": true,
+           "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær",
           "harBekreftetOpplysninger": true,
           "k9FormatSøknad": {
             "språk": "nb",

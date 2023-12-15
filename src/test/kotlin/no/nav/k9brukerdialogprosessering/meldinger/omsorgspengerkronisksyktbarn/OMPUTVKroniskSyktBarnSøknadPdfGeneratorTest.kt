@@ -2,6 +2,7 @@ package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn
 
 import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.Barn
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.BarnSammeAdresse
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.domene.SøkerBarnRelasjon
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.utils.SøknadUtils
@@ -54,6 +55,9 @@ class OMPUTVKroniskSyktBarnSøknadPdfGeneratorTest {
             kroniskEllerFunksjonshemming = true,
             harForståttRettigheterOgPlikter = true,
             harBekreftetOpplysninger = true,
+            sammeAdresse = BarnSammeAdresse.JA_DELT_BOSTED,
+            høyereRisikoForFravær = true,
+            høyereRisikoForFraværBeskrivelse = "Beskrivelse av høyere risiko for fravær",
             k9FormatSøknad = SøknadUtils.defaultK9Format(soknadsId, ZonedDateTime.now())
         )
     }

@@ -2,71 +2,93 @@
 <html lang="NO">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>{{tittel}}</title>
-    <meta name="subject" content="{{tittel}}" />
-    <meta name="author" content="nav.no" />
-    <meta name="description" content="{{tittel}} mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
+    <meta name="subject" content="{{tittel}}"/>
+    <meta name="author" content="nav.no"/>
+    <meta name="description" content="{{tittel}} mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}"/>
     <bookmarks>
-        <bookmark name="Søker" href="#søker" />
-        <bookmark name="Barn" href="#barn" />
-        <bookmark name="Om barnet" href="#omBarnet" />
+        <bookmark name="Søker" href="#søker"/>
+        <bookmark name="Barn" href="#barn"/>
+        <bookmark name="Om barnet" href="#omBarnet"/>
         {{#if harIkkeLastetOppLegeerklæring}}
-        <bookmark name="Legeerklæring" href="#legeerklæring" />
+            <bookmark name="Legeerklæring" href="#legeerklæring"/>
         {{/if}}
-        <bookmark name="Samtykke" href="#samtykke" />
+        <bookmark name="Samtykke" href="#samtykke"/>
     </bookmarks>
     {{#block 'style-common' }}
     {{/block}}
 </head>
 
 <body>
-    <h1 id="header">{{tittel}}</h1>
-    <p class="nokkelinfo">
-        <strong>Sendt til NAV</strong>
-        {{soknad_mottatt_dag}} {{ soknad_mottatt }}
-    </p>
+<h1 id="header">{{tittel}}</h1>
+<p class="nokkelinfo">
+    <strong>Sendt til NAV</strong>
+    {{soknad_mottatt_dag}} {{ soknad_mottatt }}
+</p>
 
-    <div class="innholdscontainer">
-        {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
-        {{> partial/felles/personPartial id="barn" title="Barn" navn=barn.navn fødselsdato=barn.fødselsdato fødselsnummer=barn.id }}
+<div class="innholdscontainer">
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
+    {{> partial/felles/personPartial id="barn" title="Barn" navn=barn.navn fødselsdato=barn.fødselsdato fødselsnummer=barn.id }}
 
-        <section id="omBarnet">
-            <h2>Om barnet</h2>
+    <section id="omBarnet">
+        <h2>Om barnet</h2>
 
-            <p class="sporsmalstekst">Har barnet kronisk/langvarig sykdom eller funksjonshemning?</p>
-            <p>{{ jaNeiSvar kroniskEllerFunksjonshemming }}</p>
+        <p class="sporsmalstekst">Bor du sammen med barnet?</p>
+        {{#eq sammeAddresse "JA" }}
+            <p>Ja</p>
+        {{/eq}}
+        {{#eq sammeAddresse "JA_DELT_BOSTED" }}
+            <p>Ja, barnet har delt bosted</p>
+        {{/eq}}
+        {{#eq sammeAddresse "NEI" }}
+            <p>Nei</p>
+        {{/eq}}
 
-            {{#if relasjonTilBarnet}}
-                <p class="sporsmalstekst">Din relasjon til barnet:</p>
-                <p>{{relasjonTilBarnet}}</p>
+        <p class="sporsmalstekst">Har barnet kronisk/langvarig sykdom eller funksjonshemning?</p>
+        <p>{{ jaNeiSvar kroniskEllerFunksjonshemming }}</p>
+
+        {{#if kroniskEllerFunksjonshemming}}
+            <p class="sporsmalstekst">Har du høyere risiko for fravær på jobb på grunn av barnets sykdom eller
+                funksjonshemming?</p>
+            <p>{{ jaNeiSvar høyereRisikoForFravær }}</p>
+
+            {{#if høyereRisikoForFravær}}
+                <div class="fritekst">
+                    <p class="sporsmalstekst">En beskrivelse på hvordan barnets sykdom eller funksjonshemming gir høyere risiko for fravær fra jobb</p>
+                    <p class="fritekst_textarea">{{fritekst høyereRisikoForFraværBeskrivelse}}</p>
+                </div>
             {{/if}}
+        {{/if}}
 
-            <p class="sporsmalstekst">Bor du sammen med barnet?</p>
-            <p>{{ jaNeiSvar sammeAddresse }}</p>
-        </section>
+        {{#if relasjonTilBarnet}}
+            <p class="sporsmalstekst">Din relasjon til barnet:</p>
+            <p>{{relasjonTilBarnet}}</p>
+        {{/if}}
 
-        <!-- Info om har ikke lastet opp vedlegg -->
-        <section id="legeerklæring">
+    </section>
+
+    <!-- Info om har ikke lastet opp vedlegg -->
+    <section id="legeerklæring">
         {{#if harIkkeLastetOppLegeerklæring}}
             <h2>Legeerklæring</h2>
             <p>Ingen vedlegg er lastet opp.</p>
         {{/if}}
-        </section>
+    </section>
 
-        <!-- SAMTYKKE -->
-        <section id="samtykke">
-            <h2>Samtykke fra deg</h2>
-            <p class="sporsmalstekst">Har du forstått rettigheter og plikter?</p>
-            <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
-            <hr />
-            <p class="sporsmalstekst">Har du bekreftet at opplysninger som er gitt er riktige?</p>
-            <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
-        </section>
-    </div>
+    <!-- SAMTYKKE -->
+    <section id="samtykke">
+        <h2>Samtykke fra deg</h2>
+        <p class="sporsmalstekst">Har du forstått rettigheter og plikter?</p>
+        <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
+        <hr/>
+        <p class="sporsmalstekst">Har du bekreftet at opplysninger som er gitt er riktige?</p>
+        <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
+    </section>
+</div>
 
-    <!-- FOOTER -->
-    {{> partial/footerPartial søknadId=soknad_id gitSha=soknadDialogCommitSha}}
+<!-- FOOTER -->
+{{> partial/footerPartial søknadId=soknad_id gitSha=soknadDialogCommitSha}}
 </body>
 
 </html>
