@@ -18,6 +18,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.ArbeidsgiverDetaljer
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bosted
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Fosterbarn
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.FraværÅrsak
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.JaNei
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
@@ -45,6 +46,20 @@ internal object OMPUtbetalingATSøknadUtils {
             etternavn = "Nordmann",
             mellomnavn = null,
             fornavn = "Ola"
+        ),
+        fosterbarn = listOf(
+            Fosterbarn(
+                navn = "Fosterbarn 1",
+                fødselsdato = LocalDate.parse("2010-01-01"),
+                identitetsnummer = "01011012345",
+                utvidetRett = true
+            ),
+            Fosterbarn(
+                navn = "Fosterbarn 2",
+                fødselsdato = LocalDate.parse("2010-01-01"),
+                identitetsnummer = "01011012234",
+                utvidetRett = true
+            )
         ),
         arbeidsgivere = listOf(
             ArbeidsgiverDetaljer(

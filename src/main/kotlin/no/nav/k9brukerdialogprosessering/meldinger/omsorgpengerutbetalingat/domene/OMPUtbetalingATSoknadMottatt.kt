@@ -22,6 +22,7 @@ data class OMPUtbetalingATSoknadMottatt(
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
+    val fosterbarn: List<Fosterbarn> = listOf(),
     val bekreftelser: Bekreftelser,
     val titler: List<String>,
     val vedleggId: List<String> = listOf(),
@@ -60,6 +61,13 @@ data class OMPUtbetalingATSoknadMottatt(
         return "ArbeidstakerutbetalingMelding(søknadId='$søknadId', mottatt=$mottatt)"
     }
 }
+
+data class Fosterbarn(
+    val navn: String,
+    val fødselsdato: LocalDate,
+    val identitetsnummer: String,
+    val utvidetRett: Boolean? = null
+)
 
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
