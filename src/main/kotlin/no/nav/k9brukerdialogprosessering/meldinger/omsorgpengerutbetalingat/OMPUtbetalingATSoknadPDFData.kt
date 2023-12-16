@@ -39,7 +39,7 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
             ),
             "harArbeidsgivere" to melding.arbeidsgivere.isNotEmpty(),
             "arbeidsgivere" to melding.arbeidsgivere.somMap(),
-            "fosterbarn" to if (melding.fosterbarn.isNotEmpty()) melding.fosterbarn.somMap() else null,
+            "fosterbarn" to if (!melding.fosterbarn.isNullOrEmpty()) melding.fosterbarn.somMap() else null,
             "harOpphold" to melding.opphold.isNotEmpty(),
             "harBosteder" to melding.bosteder.isNotEmpty(),
             "harVedlegg" to melding.vedleggId.isNotEmpty(),

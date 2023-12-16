@@ -16,7 +16,7 @@ data class OMPUtbetalingATSoknadPreprosessert(
     val språk: String?,
     val søker: Søker,
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
-    val fosterbarn: List<Fosterbarn> = listOf(),
+    val fosterbarn: List<Fosterbarn>? = listOf(),
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val bekreftelser: Bekreftelser,
