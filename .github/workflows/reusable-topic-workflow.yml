@@ -11,10 +11,6 @@ on:
         description: 'Path to the topics file'
         required: true
         type: string
-    secrets:
-      NAIS_DEPLOY_APIKEY:
-        description: 'API key for nais deploy'
-        required: true
 
 jobs:
   deploy-dev:
@@ -27,7 +23,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           VAR: kafka-pool=nav-dev
           RESOURCE: ${{ inputs.topics-path }}
@@ -42,7 +37,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           VAR: kafka-pool=nav-prod
           RESOURCE: ${{ inputs.topics-path }}
