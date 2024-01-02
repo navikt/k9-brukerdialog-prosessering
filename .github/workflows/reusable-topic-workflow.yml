@@ -21,8 +21,6 @@ jobs:
     name: Deploy ${{ inputs.job-name }} to Aiven Dev
     if: startsWith(github.ref, 'refs/heads/dev-') || startsWith(github.ref, 'refs/heads/main') # Deploy if branch is either main or dev-*
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
@@ -36,8 +34,6 @@ jobs:
     name: Deploy ${{ inputs.job-name }} to Aiven Prod
     if: startsWith(github.ref, 'refs/heads/main')  # If the branch is main
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: nais/deploy/actions/deploy@v2
