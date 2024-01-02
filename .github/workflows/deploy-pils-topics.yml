@@ -12,6 +12,8 @@ on:
 
 jobs:
   deploy-pils-topics:
+    permissions:
+      id-token: write
     uses: ./.github/workflows/reusable-topic-workflow.yml
     with:
       job-name: pils-topics

@@ -12,6 +12,8 @@ on:
 
 jobs:
   deploy-psb-endringsmelding-topics:
+    permissions:
+      id-token: write
     uses: ./.github/workflows/reusable-topic-workflow.yml
     with:
       job-name: psb-endringsmelding-topics

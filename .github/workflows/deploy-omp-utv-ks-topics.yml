@@ -12,6 +12,8 @@ on:
 
 jobs:
   deploy-omp-utv-ks-topics:
+    permissions:
+      id-token: write
     uses: ./.github/workflows/reusable-topic-workflow.yml
     with:
       job-name: omp-utv-ks-topics
