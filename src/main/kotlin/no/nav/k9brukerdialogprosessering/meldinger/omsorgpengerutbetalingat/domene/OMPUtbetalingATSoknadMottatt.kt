@@ -64,9 +64,7 @@ data class OMPUtbetalingATSoknadMottatt(
 
 data class Fosterbarn(
     val navn: String,
-    val fødselsdato: LocalDate,
     val identitetsnummer: String,
-    val utvidetRett: Boolean? = null
 )
 
 data class Bosted(

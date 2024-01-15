@@ -33,11 +33,7 @@
         {{#if fosterbarn}}
             <p> <b>Fosterbarn</b></p>
             {{# each fosterbarn as |barn|}}
-                <p>{{barn.navn}} {{barn.identitetsnummer}}.
-                    {{#if barn.harUtvidetRett}}
-                        Ekstra omsorgsdager.
-                    {{/if}}
-                </p>
+                <p>{{barn.navn}} {{barn.identitetsnummer}}.</p>
             {{/each}}
         {{/if}}
     </div>

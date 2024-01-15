@@ -95,11 +95,7 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
     private fun List<Fosterbarn>.somMap() = map {
         mapOf(
             "navn" to it.navn,
-            "fødselsdato" to it.fødselsdato,
-            "identitetsnummer" to it.identitetsnummer,
-            "harUtvidetRett" to (it.utvidetRett == true)
+            "identitetsnummer" to it.identitetsnummer
         )
     }
-
-    fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.lowercase().capitalize() }
 }

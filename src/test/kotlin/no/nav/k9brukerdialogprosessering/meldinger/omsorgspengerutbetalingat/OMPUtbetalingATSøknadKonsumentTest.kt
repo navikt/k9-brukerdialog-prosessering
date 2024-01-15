@@ -165,15 +165,11 @@ class OMPUtbetalingATSøknadKonsumentTest {
           "fosterbarn": [
             {
               "navn": "Fosterbarn 1",
-              "fødselsdato": "2010-01-01",
-              "identitetsnummer": "01011012345",
-                "utvidetRett": true
+              "identitetsnummer": "01011012345"
             },
             {
               "navn": "Fosterbarn 2",
-              "fødselsdato": "2010-01-01",
-              "identitetsnummer": "01011012234",
-              "utvidetRett": true
+              "identitetsnummer": "01011012234"
             }
           ],
           "opphold": [
