@@ -25,9 +25,19 @@ class OMPUtbetalingSNFSoknadPdfGeneratorTest {
     }
 
     fun genererOppsummeringsPdfer(writeBytes: Boolean) {
-        var id = "1-full-søknad-selvstendig-næringsdrivende-frilanser"
+        var id = "1-full-søknad"
         var pdf = generator.genererPDF(
             OMPUtbetalingSNFSøknadUtils.defaultSøknad(søknadId = id, mottatt = ZonedDateTime.now()).pdfData()
+        )
+        if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+        id = "1-søknad-om-barn-og-dager-du-må-dekke-selv"
+        pdf = generator.genererPDF(
+            OMPUtbetalingSNFSøknadUtils.defaultSøknad(søknadId = id, mottatt = ZonedDateTime.now()).copy(
+                harSyktBarn = true,
+                harAleneomsorg = true
+            )
+                .pdfData()
         )
         if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
     }

@@ -32,7 +32,7 @@
 
     <div class="person" id="barn">
         {{#if barn}}
-            <p> <b>Barn</b></p>
+            <p> <b>Om barn og dager du må dekke selv</b></p>
             {{# each barn as |barn|}}
                 <p>{{barn.navn}}
                     {{#if barn.type}}
@@ -45,13 +45,26 @@
                     {{/if}}
                 </p>
             {{/each}}
+            <br/>
+
+            {{#if harSyktBarn}}
+                <p class="sporsmalstekst">Har du fått ekstra omsorgsdager for et barn som har en sykdom eller
+                    funksjonshemning som gjør at du oftere må være borte fra jobb?</p>
+                {{jaNeiSvar harSyktBarn}}<br/><br/>
+            {{/if}}
+
+            {{#if harAleneomsorg}}
+                <p class="sporsmalstekst">Har du fått ekstra omsorgsdager fordi du er alene om omsorgen?</p>
+                {{jaNeiSvar harAleneomsorg}}<br/><br/>
+            {{/if}}
+
+            <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene i år?</p>
+            {{jaNeiSvar søknad.harDekketTiFørsteDagerSelv}} <br/>
         {{/if}}
     </div>
 
     <section id="utbetalingsperioder">
         <h2>Omsorgsdager du søker utbetaling for</h2>
-        <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene selv?</p>
-        {{jaNeiSvar søknad.harDekketTiFørsteDagerSelv}} <br/>
 
         {{#if harUtbetalingsperioder}}
             <p><b>Omsorgsdager du søker utbetaling for</b></p>

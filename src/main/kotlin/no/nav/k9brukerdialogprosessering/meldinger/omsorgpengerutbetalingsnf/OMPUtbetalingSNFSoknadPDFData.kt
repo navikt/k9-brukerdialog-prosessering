@@ -44,6 +44,8 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
                 }
             ),
             "barn" to if (melding.barn.isNotEmpty()) melding.barn.somMap() else null,
+            "harSyktBarn" to melding.harSyktBarn,
+            "harAleneomsorg" to melding.harAleneomsorg,
             "harUtbetalingsperioder" to melding.utbetalingsperioder.isNotEmpty(),
             "harOpphold" to melding.opphold.isNotEmpty(),
             "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),

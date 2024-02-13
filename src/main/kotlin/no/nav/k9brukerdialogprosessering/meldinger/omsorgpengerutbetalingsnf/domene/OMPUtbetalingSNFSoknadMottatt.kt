@@ -19,6 +19,8 @@ data class OMPUtbetalingSNFSoknadMottatt(
     val søker: Søker,
     val språk: String,
     val harDekketTiFørsteDagerSelv: Boolean?,
+    val harSyktBarn: Boolean? = null,
+    val harAleneomsorg: Boolean? = null,
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
