@@ -26,7 +26,7 @@ import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -162,6 +162,8 @@ class OMPUtbetalingSNFSøknadKonsumentTest {
             "fødselsnummer": "02119970078"
           },
           "harDekketTiFørsteDagerSelv": true,
+          "harSyktBarn": true,
+          "harAleneomsorg": true,
           "opphold": [
             {
               "fraOgMed": "2020-01-16",

@@ -77,6 +77,8 @@ internal object OMPUtbetalingSNFSøknadUtils {
             )
         ),
         harDekketTiFørsteDagerSelv = true,
+        harSyktBarn = true,
+        harAleneomsorg = true,
         bosteder = listOf(
             Bosted(
                 fraOgMed = start,
