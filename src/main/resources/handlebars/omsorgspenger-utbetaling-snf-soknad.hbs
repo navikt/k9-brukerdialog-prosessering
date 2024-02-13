@@ -6,7 +6,8 @@
     <title>{{tittel}}</title>
     <meta name="subject" content="{{tittel}}"/>
     <meta name="author" content="nav.no"/>
-    <meta name="description" content="{{tittel}} mottatt {{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}"/>
+    <meta name="description"
+          content="{{tittel}} mottatt {{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Barn" href="#barn"/>
@@ -15,7 +16,7 @@
         <bookmark name="Medlemskap" href="#medlemskap"/>
         <bookmark name="Frilans" href="#frilans"/>
         <bookmark name="Selvstendig næringsdrivende" href="#selvstendig"/>
-        <bookmark name="Vedlegg" href="#vedlegg" />
+        <bookmark name="Vedlegg" href="#vedlegg"/>
         <bookmark name="Samtykke" href="#samtykke"/>
     </bookmarks>
     {{#block 'style-common' }}
@@ -31,8 +32,8 @@
     {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
     <div class="person" id="barn">
+        <p><b>Om barn og dager du må dekke selv</b></p>
         {{#if barn}}
-            <p> <b>Om barn og dager du må dekke selv</b></p>
             {{# each barn as |barn|}}
                 <p>{{barn.navn}}
                     {{#if barn.type}}
@@ -41,28 +42,29 @@
                         {{barn.identitetsnummer}}.
                     {{/if}}
                     {{#if barn.harUtvidetRett}}
-                         Ekstra omsorgsdager.
+                        Ekstra omsorgsdager.
                     {{/if}}
                 </p>
             {{/each}}
             <br/>
-
-            {{#isNotNull harSyktBarn}}
-                <p class="sporsmalstekst">Har du fått ekstra omsorgsdager for et barn som har en sykdom eller
-                    funksjonshemning som gjør at du oftere må være borte fra jobb?</p>
-                {{jaNeiSvar harSyktBarn}}<br/><br/>
-            {{/isNotNull}}
-
-            {{#isNotNull harAleneomsorg}}
-                <p class="sporsmalstekst">Har du fått ekstra omsorgsdager fordi du er alene om omsorgen?</p>
-                {{jaNeiSvar harAleneomsorg}}<br/><br/>
-            {{/isNotNull}}
-
-            {{#isNotNull harDekketTiFørsteDagerSelv}}
-                <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene i år?</p>
-                {{jaNeiSvar harDekketTiFørsteDagerSelv}} <br/>
-            {{/isNotNull}}
         {{/if}}
+
+
+        {{#isNotNull harSyktBarn}}
+            <p class="sporsmalstekst">Har du fått ekstra omsorgsdager for et barn som har en sykdom eller
+                funksjonshemning som gjør at du oftere må være borte fra jobb?</p>
+            {{jaNeiSvar harSyktBarn}}<br/><br/>
+        {{/isNotNull}}
+
+        {{#isNotNull harAleneomsorg}}
+            <p class="sporsmalstekst">Har du fått ekstra omsorgsdager fordi du er alene om omsorgen?</p>
+            {{jaNeiSvar harAleneomsorg}}<br/><br/>
+        {{/isNotNull}}
+
+        {{#isNotNull harDekketTiFørsteDagerSelv}}
+            <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene i år?</p>
+            {{jaNeiSvar harDekketTiFørsteDagerSelv}} <br/>
+        {{/isNotNull}}
     </div>
 
     <section id="utbetalingsperioder">
@@ -166,7 +168,8 @@
                 <ul>
                     <li>
                         <p>Dato for når varig endring oppsto: {{selvstendigNæringsdrivende.varigEndring.dato}}</p>
-                        <p>Næringsinntekt etter endringen: {{selvstendigNæringsdrivende.varigEndring.inntektEtterEndring}}</p>
+                        <p>Næringsinntekt etter
+                            endringen: {{selvstendigNæringsdrivende.varigEndring.inntektEtterEndring}}</p>
                         <div class="fritekst">
                             <p class="sporsmalstekst">Din forklaring om varig endring</p>
                             <p class="fritekst_textarea">{{selvstendigNæringsdrivende.varigEndring.forklaring}}</p>
@@ -202,7 +205,8 @@
                 <p>Registrert i Norge</p>
                 <p>Organisasjonsnummeret: {{selvstendigNæringsdrivende.organisasjonsnummer}}</p>
             {{else}}
-                <p>Registrert i land: {{selvstendigNæringsdrivende.registrertIUtlandet.landnavn}}({{selvstendigNæringsdrivende.registrertIUtlandet.landkode}})</p>
+                <p>Registrert i land: {{selvstendigNæringsdrivende.registrertIUtlandet.landnavn}}
+                    ({{selvstendigNæringsdrivende.registrertIUtlandet.landkode}})</p>
             {{/if}}
 
             {{#if selvstendigNæringsdrivende.regnskapsfører}}
