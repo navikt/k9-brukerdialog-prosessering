@@ -47,21 +47,21 @@
             {{/each}}
             <br/>
 
-            {{#if harSyktBarn}}
+            {{#isNotNull harSyktBarn}}
                 <p class="sporsmalstekst">Har du fått ekstra omsorgsdager for et barn som har en sykdom eller
                     funksjonshemning som gjør at du oftere må være borte fra jobb?</p>
                 {{jaNeiSvar harSyktBarn}}<br/><br/>
-            {{/if}}
+            {{/isNotNull}}
 
-            {{#if harAleneomsorg}}
+            {{#isNotNull harAleneomsorg}}
                 <p class="sporsmalstekst">Har du fått ekstra omsorgsdager fordi du er alene om omsorgen?</p>
                 {{jaNeiSvar harAleneomsorg}}<br/><br/>
-            {{/if}}
+            {{/isNotNull}}
 
-            {{#if søknad.harDekketTiFørsteDagerSelv}}
+            {{#isNotNull harDekketTiFørsteDagerSelv}}
                 <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene i år?</p>
-                {{jaNeiSvar søknad.harDekketTiFørsteDagerSelv}} <br/>
-            {{/if}}
+                {{jaNeiSvar harDekketTiFørsteDagerSelv}} <br/>
+            {{/isNotNull}}
         {{/if}}
     </div>
 

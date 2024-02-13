@@ -48,6 +48,7 @@ class PDFGenerator {
             equalsJaNeiHelper()
             fritekstHelper()
             jaNeiSvarHelper()
+            isNotNullHelper()
             capitalizeHelper()
             datoHelper()
             tidspunktHelper()
@@ -62,6 +63,16 @@ class PDFGenerator {
             val bytes = ClassPathResource("${ROOT}/images/$name.png").inputStream.readAllBytes()
             val base64string = Base64.getEncoder().encodeToString(bytes)
             return "data:image/png;base64,$base64string"
+        }
+
+        private fun Handlebars.isNotNullHelper() {
+            registerHelper("isNotNull", Helper<Any> { context, options ->
+               return@Helper if (context != null) {
+                    options.fn()
+                } else {
+                    options.inverse()
+                }
+            })
         }
 
         private fun Handlebars.jaNeiSvarHelper() {
