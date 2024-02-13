@@ -58,8 +58,10 @@
                 {{jaNeiSvar harAleneomsorg}}<br/><br/>
             {{/if}}
 
-            <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene i år?</p>
-            {{jaNeiSvar søknad.harDekketTiFørsteDagerSelv}} <br/>
+            {{#if søknad.harDekketTiFørsteDagerSelv}}
+                <p class="sporsmalstekst">Har du dekket de 10 første omsorgsdagene i år?</p>
+                {{jaNeiSvar søknad.harDekketTiFørsteDagerSelv}} <br/>
+            {{/if}}
         {{/if}}
     </div>
 

@@ -18,7 +18,7 @@ data class OMPUtbetalingSNFSoknadMottatt(
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val språk: String,
-    val harDekketTiFørsteDagerSelv: Boolean?,
+    val harDekketTiFørsteDagerSelv: Boolean? = null,
     val harSyktBarn: Boolean? = null,
     val harAleneomsorg: Boolean? = null,
     val bosteder: List<Bosted>,
