@@ -29,13 +29,13 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "3.2.0"
+val tokenSupportVersion = "4.1.3"
 val jsonassertVersion = "1.5.1"
-val k9FormatVersion = "9.0.6"
+val k9FormatVersion = "9.2.9"
 val springMockkVersion = "4.0.2"
 val confluentVersion = "7.3.0"
 val logstashLogbackEncoderVersion = "7.4"
-val slf4jVersion = "2.0.11"
+val slf4jVersion = "2.0.12"
 val jacksonVersion = "2.16.1"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
