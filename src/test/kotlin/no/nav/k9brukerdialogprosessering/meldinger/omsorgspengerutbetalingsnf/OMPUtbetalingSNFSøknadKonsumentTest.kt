@@ -257,24 +257,21 @@ class OMPUtbetalingSNFSøknadKonsumentTest {
              "fødselsdato": "2020-01-01",
              "identitetsnummer": "1234",
              "navn": "Barn 1 Barnesen",
-             "type": "FOSTERBARN",
-             "utvidetRett": true
+             "type": "FOSTERBARN"
            },
            {
              "aktørId": "123456789",
              "fødselsdato": "2019-01-01",
              "identitetsnummer": "5677",
              "navn": "Barn 2 Barnesen",
-             "type": "FRA_OPPSLAG",
-             "utvidetRett": true
+             "type": "FRA_OPPSLAG"
            },
            {
              "aktørId": null,
              "fødselsdato": "2018-01-01",
              "identitetsnummer": "8888",
              "navn": "Barn 3 Barnesen",
-             "type": "ANNET",
-             "utvidetRett": false
+             "type": "ANNET"
            }
           ],
           "spørsmål": [

@@ -67,8 +67,7 @@ data class Barn(
     val fødselsdato: LocalDate,
     val identitetsnummer: String,
     val type: TypeBarn,
-    val aktørId: String? = null,
-    val utvidetRett: Boolean? = null
+    val aktørId: String? = null
 )
 
 enum class TypeBarn(val pdfTekst: String?){

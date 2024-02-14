@@ -126,8 +126,7 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
             "navn" to it.navn,
             "fødselsdato" to it.fødselsdato,
             "identitetsnummer" to it.identitetsnummer,
-            "type" to it.type.pdfTekst,
-            "harUtvidetRett" to (it.utvidetRett == true)
+            "type" to it.type.pdfTekst
         )
     }
 }

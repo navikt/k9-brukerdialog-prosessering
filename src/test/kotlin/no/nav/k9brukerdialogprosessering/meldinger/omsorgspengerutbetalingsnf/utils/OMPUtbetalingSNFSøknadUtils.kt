@@ -56,24 +56,21 @@ internal object OMPUtbetalingSNFSøknadUtils {
                 fødselsdato = LocalDate.parse("2020-01-01"),
                 identitetsnummer = "1234",
                 type = TypeBarn.FOSTERBARN,
-                aktørId = null,
-                utvidetRett = true
+                aktørId = null
             ),
             no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Barn(
                 navn = "Barn 2 Barnesen",
                 fødselsdato = LocalDate.parse("2019-01-01"),
                 identitetsnummer = "5677",
                 type = TypeBarn.FRA_OPPSLAG,
-                aktørId = "123456789",
-                utvidetRett = true
+                aktørId = "123456789"
             ),
             no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Barn(
                 navn = "Barn 3 Barnesen",
                 fødselsdato = LocalDate.parse("2018-01-01"),
                 identitetsnummer = "8888",
                 type = TypeBarn.ANNET,
-                aktørId = null,
-                utvidetRett = false
+                aktørId = null
             )
         ),
         harDekketTiFørsteDagerSelv = true,
