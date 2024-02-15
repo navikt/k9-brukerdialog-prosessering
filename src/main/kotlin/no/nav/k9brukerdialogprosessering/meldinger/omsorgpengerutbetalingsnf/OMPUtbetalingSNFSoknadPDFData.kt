@@ -44,6 +44,9 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
                 }
             ),
             "barn" to if (melding.barn.isNotEmpty()) melding.barn.somMap() else null,
+            "harSyktBarn" to melding.harSyktBarn,
+            "harDekketTiFørsteDagerSelv" to melding.harDekketTiFørsteDagerSelv,
+            "harAleneomsorg" to melding.harAleneomsorg,
             "harUtbetalingsperioder" to melding.utbetalingsperioder.isNotEmpty(),
             "harOpphold" to melding.opphold.isNotEmpty(),
             "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),
@@ -123,8 +126,7 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
             "navn" to it.navn,
             "fødselsdato" to it.fødselsdato,
             "identitetsnummer" to it.identitetsnummer,
-            "type" to it.type.pdfTekst,
-            "harUtvidetRett" to (it.utvidetRett == true)
+            "type" to it.type.pdfTekst
         )
     }
 }

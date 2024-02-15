@@ -18,7 +18,9 @@ data class OMPUtbetalingSNFSoknadMottatt(
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val språk: String,
-    val harDekketTiFørsteDagerSelv: Boolean?,
+    val harDekketTiFørsteDagerSelv: Boolean? = null,
+    val harSyktBarn: Boolean? = null,
+    val harAleneomsorg: Boolean? = null,
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
@@ -65,8 +67,7 @@ data class Barn(
     val fødselsdato: LocalDate,
     val identitetsnummer: String,
     val type: TypeBarn,
-    val aktørId: String? = null,
-    val utvidetRett: Boolean? = null
+    val aktørId: String? = null
 )
 
 enum class TypeBarn(val pdfTekst: String?){
