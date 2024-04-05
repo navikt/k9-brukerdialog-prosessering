@@ -1,9 +1,11 @@
 package no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.utils
 
+import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9.ettersendelse.Ytelse
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Ettersendelse
+import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Pleietrengende
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søknadstype
 import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import java.time.LocalDate
@@ -35,11 +37,19 @@ internal object EttersendingUtils {
         søknadstype = Søknadstype.PLEIEPENGER_SYKT_BARN,
         vedleggId = listOf("vedlegg1", "vedlegg2", "vedlegg3"),
         titler = listOf("Vedlegg 1", "Vedlegg 2", "Vedlegg 3"),
+        ettersendelsesType = EttersendelseType.LEGEERKLÆRING,
+        pleietrengende = Pleietrengende(
+            norskIdentitetsnummer = "29099012345",
+            navn = "Ola Nordmann",
+            fødselsdato = LocalDate.parse("2003-03-21")
+        ),
         k9Format = no.nav.k9.ettersendelse.Ettersendelse.builder()
             .søknadId(SøknadId(søknadId))
             .søker(no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of("29099012345")))
             .mottattDato(mottatt)
             .ytelse(Ytelse.PLEIEPENGER_SYKT_BARN)
+            .type(EttersendelseType.LEGEERKLÆRING)
+            .pleietrengende(no.nav.k9.ettersendelse.Pleietrengende(NorskIdentitetsnummer.of("29099012345")))
             .build()
     )
 }

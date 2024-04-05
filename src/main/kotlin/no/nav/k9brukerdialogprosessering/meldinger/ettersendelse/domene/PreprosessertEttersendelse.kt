@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
@@ -20,6 +21,8 @@ data class PreprosessertEttersendelse(
     val harBekreftetOpplysninger: Boolean,
     val beskrivelse: String?,
     val søknadstype: Søknadstype,
+    val ettersendelsesType: EttersendelseType,
+    val pleietrengende: Pleietrengende? = null,
     val titler: List<String>,
     val k9Format: no.nav.k9.ettersendelse.Ettersendelse,
 ) : Preprosessert {
@@ -34,6 +37,8 @@ data class PreprosessertEttersendelse(
         søker = melding.søker,
         beskrivelse = melding.beskrivelse,
         søknadstype = melding.søknadstype,
+        ettersendelsesType = melding.ettersendelsesType,
+        pleietrengende = melding.pleietrengende,
         harForstattRettigheterOgPlikter = melding.harForståttRettigheterOgPlikter,
         harBekreftetOpplysninger = melding.harBekreftetOpplysninger,
         titler = melding.titler,

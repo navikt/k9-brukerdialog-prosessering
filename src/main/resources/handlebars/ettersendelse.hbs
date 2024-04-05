@@ -10,6 +10,7 @@
           content="{{tittel}} mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
     <bookmarks>
         <bookmark name="Søker" href="#søker" />
+        <bookmark name="Barn" href="#barn"/>
         <bookmark name="Ettersending" href="#ettersending" />
         <bookmark name="Dokumenter" href="#dokumenter" />
         <bookmark name="Samtykke" href="#samtykke" />
@@ -27,6 +28,7 @@
 
     <div class="innholdscontainer">
         {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
+        {{> partial/felles/personPartial id="barn" title="Pleietrengende" navn=pleietrengende.navn fødselsnummer=pleietrengende.norskIdentitetsnummer fødselsdato=pleietrengende.fødselsdato }}
     </div>
 
     <!-- Ettersending -->

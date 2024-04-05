@@ -24,7 +24,6 @@ import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -127,7 +126,11 @@ class EttersendelseKonsumentTest {
               "norskIdentitetsnummer": "29099012345"
             },
             "ytelse": "PLEIEPENGER_SYKT_BARN",
-            "versjon": "0.0.1"
+            "versjon": "0.0.1",
+            "type": "LEGEERKLÆRING",
+            "pleietrengende": {
+              "norskIdentitetsnummer": "29099012345"
+            }
           },
           "soknadId": "$søknadId",
           "mottatt": "$mottatt",
@@ -139,6 +142,7 @@ class EttersendelseKonsumentTest {
             "fornavn": "Ærling",
             "fødselsnummer": "29099012345"
           },
+         
           "vedleggId": [
             [
               "123456789",
@@ -161,6 +165,12 @@ class EttersendelseKonsumentTest {
             "Vedlegg 3"
           ],
           "søknadstype": "PLEIEPENGER_SYKT_BARN",
+          "ettersendelsesType": "LEGEERKLÆRING",
+          "pleietrengende": {
+            "fødselsdato": "2003-03-21",
+            "navn": "Ola Nordmann",
+            "norskIdentitetsnummer": "29099012345"
+          },
           "harBekreftetOpplysninger": true,
           "beskrivelse": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan erat cursus enim aliquet, ac auctor orci consequat. Etiam nec tellus sapien. Nam gravida massa id sagittis ultrices."
         }
