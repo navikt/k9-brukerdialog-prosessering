@@ -4,6 +4,7 @@ import no.nav.k9brukerdialogprosessering.common.Constants.DATE_TIME_FORMATTER
 import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Ettersendelse
+import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Pleietrengende
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
@@ -17,6 +18,7 @@ class EttersendelsePdfData(private val ettersendelse: Ettersendelse) : PdfData()
         "soknad_mottatt_dag" to ettersendelse.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "soknad_mottatt" to DATE_TIME_FORMATTER.format(ettersendelse.mottatt),
         "søker" to ettersendelse.søker.somMap(),
+        "pleietrengende" to ettersendelse.pleietrengende?.somMap(),
         "beskrivelse" to ettersendelse.beskrivelse,
         "samtykke" to mapOf(
             "harForståttRettigheterOgPlikter" to ettersendelse.harForståttRettigheterOgPlikter,
@@ -36,5 +38,13 @@ class EttersendelsePdfData(private val ettersendelse: Ettersendelse) : PdfData()
                 "tittel" to it
             )
         }
+    }
+
+    private fun Pleietrengende.somMap(): Map<String, Any?> {
+        return mapOf(
+            "norskIdentitetsnummer" to norskIdentitetsnummer,
+            "navn" to navn,
+            "fødselsdato" to fødselsdato
+        )
     }
 }

@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene
 
+import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
 import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
@@ -18,6 +19,8 @@ data class Ettersendelse(
     val harBekreftetOpplysninger: Boolean,
     val beskrivelse: String?,
     val søknadstype: Søknadstype,
+    val ettersendelsesType: EttersendelseType,
+    val pleietrengende: Pleietrengende? = null,
     val titler: List<String>,
     val k9Format: no.nav.k9.ettersendelse.Ettersendelse,
 ) : MottattMelding {
