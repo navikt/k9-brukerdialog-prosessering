@@ -35,7 +35,7 @@ class PDFGenerator {
     private companion object {
         private val ROOT = "handlebars"
         private val REGULAR_FONT =
-            ClassPathResource("${ROOT}/fonts/SourceSansPro-Regular.ttf").inputStream.readAllBytes()
+                ClassPathResource("${ROOT}/fonts/SourceSansPro-Regular.ttf").inputStream.readAllBytes()
         private val BOLD_FONT = ClassPathResource("${ROOT}/fonts/SourceSansPro-Bold.ttf").inputStream.readAllBytes()
         private val ITALIC_FONT = ClassPathResource("${ROOT}/fonts/SourceSansPro-Italic.ttf").inputStream.readAllBytes()
         private val bilder: Map<String, String> = emptyMap()
@@ -67,7 +67,7 @@ class PDFGenerator {
 
         private fun Handlebars.isNotNullHelper() {
             registerHelper("isNotNull", Helper<Any> { context, options ->
-               return@Helper if (context != null) {
+                return@Helper if (context != null) {
                     options.fn()
                 } else {
                     options.inverse()
@@ -85,9 +85,9 @@ class PDFGenerator {
             registerHelper("fritekst", Helper<String> { context, _ ->
                 if (context == null) "" else {
                     val text = Handlebars.Utils.escapeExpression(context)
-                        .toString()
-                        .replace(Regex("\\u0002"), " ")
-                        .replace(Regex("\\r\\n|[\\n\\r]"), "<br/>")
+                            .toString()
+                            .replace(Regex("\\u0002"), " ")
+                            .replace(Regex("\\r\\n|[\\n\\r]"), "<br/>")
                     Handlebars.SafeString(text)
                 }
             })
@@ -158,7 +158,7 @@ class PDFGenerator {
 
         private fun Handlebars.fraværSomFormatHelper() {
             registerHelper("fraværSomFormat", Helper<List<String>> { context, _ ->
-                when(context.size) {
+                when (context.size) {
                     1 -> "Fravær som"
                     2 -> "Fravær både som"
                     else -> ""
@@ -168,7 +168,7 @@ class PDFGenerator {
 
         private fun Handlebars.aktivitetFraværHelper() {
             registerHelper("aktivitetFravær", Helper<String> { context, _ ->
-                when(AktivitetFravær.valueOf(context)) {
+                when (AktivitetFravær.valueOf(context)) {
                     AktivitetFravær.FRILANSER -> "frilanser"
                     AktivitetFravær.SELVSTENDIG_VIRKSOMHET -> "selvstendig næringsdrivende"
                 }
@@ -176,54 +176,56 @@ class PDFGenerator {
         }
     }
 
-fun genererPDF(pdfData: PdfData): ByteArray = template(pdfData)
-    .apply(
-        Context
-            .newBuilder(pdfData.pdfData())
-            .resolver(MapValueResolver.INSTANCE)
-            .build()
-    ).let { html ->
+    fun genererPDF(pdfData: PdfData): ByteArray = genererHTML(pdfData).let { html ->
         val outputStream = ByteArrayOutputStream()
         PdfRendererBuilder()
-            .useFastMode()
-            .usePdfUaAccessbility(true)
-            .withHtmlContent(html, "")
-            .medFonter()
-            .toStream(outputStream)
-            .buildPdfRenderer()
-            .createPDF()
+                .useFastMode()
+                .usePdfUaAccessbility(true)
+                .withHtmlContent(html, "")
+                .medFonter()
+                .toStream(outputStream)
+                .buildPdfRenderer()
+                .createPDF()
 
         outputStream.use {
             it.toByteArray()
         }
     }
 
-private fun template(pdfData: PdfData): Template = handlebars.compile(pdfData.resolveTemplate())
+    fun genererHTML(pdfData: PdfData): String = template(pdfData)
+            .apply(
+                    Context
+                            .newBuilder(pdfData.pdfData())
+                            .resolver(MapValueResolver.INSTANCE)
+                            .build()
+            )
 
-private fun PdfRendererBuilder.medFonter(): PdfRendererBuilder {
-    val sourceSansPro = "Source Sans Pro"
-    return useFont(
-        { ByteArrayInputStream(REGULAR_FONT) },
-        sourceSansPro,
-        400,
-        BaseRendererBuilder.FontStyle.NORMAL,
-        false
-    )
-        .useFont(
-            { ByteArrayInputStream(BOLD_FONT) },
-            sourceSansPro,
-            700,
-            BaseRendererBuilder.FontStyle.NORMAL,
-            false
+    private fun template(pdfData: PdfData): Template = handlebars.compile(pdfData.resolveTemplate())
+
+    private fun PdfRendererBuilder.medFonter(): PdfRendererBuilder {
+        val sourceSansPro = "Source Sans Pro"
+        return useFont(
+                { ByteArrayInputStream(REGULAR_FONT) },
+                sourceSansPro,
+                400,
+                BaseRendererBuilder.FontStyle.NORMAL,
+                false
         )
-        .useFont(
-            { ByteArrayInputStream(ITALIC_FONT) },
-            sourceSansPro,
-            400,
-            BaseRendererBuilder.FontStyle.ITALIC,
-            false
-        )
-}
+                .useFont(
+                        { ByteArrayInputStream(BOLD_FONT) },
+                        sourceSansPro,
+                        700,
+                        BaseRendererBuilder.FontStyle.NORMAL,
+                        false
+                )
+                .useFont(
+                        { ByteArrayInputStream(ITALIC_FONT) },
+                        sourceSansPro,
+                        400,
+                        BaseRendererBuilder.FontStyle.ITALIC,
+                        false
+                )
+    }
 }
 
 abstract class PdfData {
