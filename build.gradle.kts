@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.2.2"
+	id("org.springframework.boot") version "3.2.5"
 	id("io.spring.dependency-management") version "1.1.4"
-	kotlin("jvm") version "1.9.22"
-	kotlin("plugin.spring") version "1.9.22"
+	kotlin("jvm") version "1.9.23"
+	kotlin("plugin.spring") version "1.9.23"
 }
 
 group = "no.nav"
@@ -29,20 +29,20 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "3.2.0"
+val tokenSupportVersion = "4.1.4"
 val jsonassertVersion = "1.5.1"
 val k9FormatVersion = "9.2.14"
 val springMockkVersion = "4.0.2"
 val confluentVersion = "7.3.0"
 val logstashLogbackEncoderVersion = "7.4"
-val slf4jVersion = "2.0.11"
-val jacksonVersion = "2.16.1"
+val slf4jVersion = "2.0.13"
+val jacksonVersion = "2.17.0"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
-val handlebarsVersion = "4.3.1"
+val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.5"
-val awailitilityKotlinVersion = "4.2.0"
-val springCloudContractVersion = "4.1.1"
+val awailitilityKotlinVersion = "4.2.1"
+val springCloudContractVersion = "4.1.2"
 
 dependencies {
 	implementation("org.yaml:snakeyaml:2.2") {
