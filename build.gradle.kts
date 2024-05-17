@@ -29,7 +29,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "4.1.4"
+val tokenSupportVersion = "4.1.7"
 val jsonassertVersion = "1.5.1"
 val k9FormatVersion = "9.3.0"
 val springMockkVersion = "4.0.2"
@@ -40,7 +40,7 @@ val jacksonVersion = "2.17.1"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.4.0"
-val retryVersion = "2.0.5"
+val retryVersion = "2.0.6"
 val awailitilityKotlinVersion = "4.2.1"
 val springCloudContractVersion = "4.1.2"
 
