@@ -23,6 +23,7 @@ data class OMPUtbetalingATSoknadMottatt(
     val opphold: List<Opphold>,
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
     val fosterbarn: List<Fosterbarn>? = listOf(),
+    val dineBarn: DineBarn? = null,
     val bekreftelser: Bekreftelser,
     val titler: List<String>,
     val vedleggId: List<String> = listOf(),
@@ -66,6 +67,25 @@ data class Fosterbarn(
     val navn: String,
     val identitetsnummer: String,
 )
+
+data class DineBarn(
+    val barn: List<Barn>,
+    val harDeltBosted: Boolean
+)
+
+data class Barn(
+    val identitetsnummer: String,
+    val aktørId: String,
+    @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate,
+    val navn: String,
+    val type: TypeBarn
+)
+
+enum class TypeBarn {
+    FRA_OPPSLAG,
+    FOSTERBARN,
+    ANNET
+}
 
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,

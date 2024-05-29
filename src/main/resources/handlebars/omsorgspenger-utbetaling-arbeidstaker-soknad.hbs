@@ -32,9 +32,20 @@
     <div class="person" id="barn">
         {{#if fosterbarn}}
             <p> <b>Fosterbarn</b></p>
-            {{# each fosterbarn as |barn|}}
+            {{#each fosterbarn as |barn|}}
                 <p>{{barn.navn}} {{barn.identitetsnummer}}.</p>
             {{/each}}
+        {{/if}}
+        {{#if dineBarn}}
+            <p><b>Dine barn</b></p>
+            {{#each dineBarn.barn as |barn|}}
+                <p>{{barn.navn}} {{barn.identitetsnummer}} ({{barn.type}}).</p>
+            {{/each}}
+            {{#if dineBarn.hasDeltBosted}}
+                <p>
+                    Det er avtalt delt fast bosted for {{#if dineBarn.barn.length > 1}}minst ett av barna{{else}}barnet{{/if}}.
+                </p>
+            {{/if}}
         {{/if}}
     </div>
 
