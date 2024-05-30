@@ -81,10 +81,10 @@ data class Barn(
     val type: TypeBarn
 )
 
-enum class TypeBarn {
-    FRA_OPPSLAG,
-    FOSTERBARN,
-    ANNET
+enum class TypeBarn(val pdfTekst: String?){
+    FOSTERBARN("(Fosterbarn)"),
+    ANNET("(Annet)"),
+    FRA_OPPSLAG(null)
 }
 
 data class Bosted(

@@ -39,11 +39,11 @@
         {{#if dineBarn}}
             <p><b>Dine barn</b></p>
             {{#each dineBarn.barn as |barn|}}
-                <p>{{barn.navn}} {{barn.identitetsnummer}} ({{barn.type}}).</p>
+                <p>{{barn.navn}} {{barn.identitetsnummer}} {{barn.type}}.</p>
             {{/each}}
             {{#if dineBarn.hasDeltBosted}}
                 <p>
-                    Det er avtalt delt fast bosted for {{#if dineBarn.barn.length > 1}}minst ett av barna{{else}}barnet{{/if}}.
+                    Det er avtalt delt fast bosted for {{#if (gt dineBarn.barn.length 1)}}minst ett av barna{{else}}barnet{{/if}}.
                 </p>
             {{/if}}
         {{/if}}

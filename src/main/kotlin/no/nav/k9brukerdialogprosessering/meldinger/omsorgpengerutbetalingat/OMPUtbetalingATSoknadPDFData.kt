@@ -4,21 +4,20 @@ import com.fasterxml.jackson.core.type.TypeReference
 import no.nav.k9brukerdialogprosessering.common.Constants.OSLO_ZONE_ID
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.ArbeidsgiverDetaljer
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bekreftelser
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Fosterbarn
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.*
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Barn
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
 import java.time.Duration
 
-class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMottatt): PdfData() {
+class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMottatt) : PdfData() {
 
     private companion object {
         val jacksonConfig = JacksonConfiguration()
         val mapper = jacksonConfig.objectMapper(jacksonConfig.kotlinModule(), jacksonConfig.javaTimeModule())
     }
+
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
 
     override fun pdfData(): Map<String, Any?> {
@@ -40,7 +39,7 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
             "harArbeidsgivere" to melding.arbeidsgivere.isNotEmpty(),
             "arbeidsgivere" to melding.arbeidsgivere.somMap(),
             "fosterbarn" to if (!melding.fosterbarn.isNullOrEmpty()) melding.fosterbarn.somMap() else null,
-            "dineBarn" to if (!melding.dineBarn?.barn.isNullOrEmpty()) melding.dineBarn else null,
+            "dineBarn" to if (!melding.dineBarn?.barn.isNullOrEmpty()) melding.dineBarn?.somMap() else null,
             "harOpphold" to melding.opphold.isNotEmpty(),
             "harBosteder" to melding.bosteder.isNotEmpty(),
             "harVedlegg" to melding.vedleggId.isNotEmpty(),
@@ -56,6 +55,18 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
         this,
         object :
             TypeReference<MutableMap<String, Any?>>() {}
+    )
+
+    private fun DineBarn.somMap() = mapOf(
+        "harDeltBosted" to harDeltBosted,
+        "barn" to barn.map {
+            mapOf(
+                "navn" to it.navn,
+                "fødselsdato" to it.fødselsdato,
+                "identitetsnummer" to it.identitetsnummer,
+                "type" to it.type.pdfTekst
+            )
+        }
     )
 
     private fun Bekreftelser.bekreftelserSomMap(): Map<String, Boolean> {
