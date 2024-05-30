@@ -15,17 +15,8 @@ import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.ArbeidsgiverDetaljer
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bekreftelser
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Bosted
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Fosterbarn
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.FraværÅrsak
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.JaNei
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Opphold
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Utbetalingsperiode
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.Utbetalingsårsak
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.ÅrsakNyoppstartet
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.domene.*
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.utils.SøknadUtils.barn
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -55,6 +46,32 @@ internal object OMPUtbetalingATSøknadUtils {
             Fosterbarn(
                 navn = "Fosterbarn 2",
                 identitetsnummer = "01011012234"
+            )
+        ),
+        dineBarn = DineBarn(
+            harDeltBosted = true,
+            barn = listOf(
+                Barn(
+                    identitetsnummer = "01010101011",
+                    aktørId = "01010101011",
+                    fødselsdato = LocalDate.parse("2024-05-31"),
+                    navn = "Van Li Barnesen",
+                    type = TypeBarn.FRA_OPPSLAG
+                ),
+                Barn(
+                    identitetsnummer = "02020202020",
+                    aktørId = "02020202020",
+                    fødselsdato = LocalDate.parse("2024-05-30"),
+                    navn = "Foster Barnesen",
+                    type = TypeBarn.FOSTERBARN
+                ),
+                Barn(
+                    identitetsnummer = "02020202020",
+                    aktørId = "02020202020",
+                    fødselsdato = LocalDate.parse("2024-05-29"),
+                    navn = "Anna Barnesen",
+                    type = TypeBarn.ANNET
+                ),
             )
         ),
         arbeidsgivere = listOf(

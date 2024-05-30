@@ -43,7 +43,7 @@
             {{/each}}
             {{#if dineBarn.hasDeltBosted}}
                 <p>
-                    Det er avtalt delt fast bosted for {{#if (gt dineBarn.barn.length 1)}}minst ett av barna{{else}}barnet{{/if}}.
+                    Det er avtalt delt fast bosted for {{#if eqTall dineBarn.barn.length 1}}barnet{{else}}minst ett av barna{{/if}}.
                 </p>
             {{/if}}
         {{/if}}

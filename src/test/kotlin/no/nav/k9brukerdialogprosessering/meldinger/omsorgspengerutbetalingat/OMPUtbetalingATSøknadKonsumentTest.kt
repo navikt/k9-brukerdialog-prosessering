@@ -172,6 +172,32 @@ class OMPUtbetalingATSøknadKonsumentTest {
               "identitetsnummer": "01011012234"
             }
           ],
+          "dineBarn": {
+            "harDeltBosted": true,
+            "barn": [
+              {
+                "identitetsnummer": "01010101011",
+                "aktørId": "01010101011",
+                "fødselsdato": "2024-05-31",
+                "navn": "Van Li Barnesen",
+                "type": "FRA_OPPSLAG"
+              },
+              {
+                "identitetsnummer": "02020202020",
+                "aktørId": "02020202020",
+                "fødselsdato": "2024-05-30",
+                "navn": "Foster Barnesen",
+                "type": "FOSTERBARN"
+              },
+              {
+                "identitetsnummer": "02020202020",
+                "aktørId": "02020202020",
+                "fødselsdato": "2024-05-29",
+                "navn": "Anna Barnesen",
+                "type": "ANNET"
+              }
+            ]
+          },
           "opphold": [
             {
               "fraOgMed": "2019-12-12",
