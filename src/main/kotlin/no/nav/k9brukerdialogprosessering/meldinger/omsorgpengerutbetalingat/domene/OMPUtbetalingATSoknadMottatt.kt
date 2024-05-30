@@ -75,7 +75,7 @@ data class DineBarn(
 
 data class Barn(
     val identitetsnummer: String,
-    val aktørId: String,
+    val aktørId: String? = null,
     @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate,
     val navn: String,
     val type: TypeBarn
