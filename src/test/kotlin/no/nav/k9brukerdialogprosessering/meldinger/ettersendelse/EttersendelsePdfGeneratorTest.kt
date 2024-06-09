@@ -1,10 +1,8 @@
 package no.nav.k9brukerdialogprosessering.meldinger.ettersendelse
 
-import junit.framework.TestCase.assertTrue
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.domene.Søknadstype
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.utils.EttersendingUtils
 import no.nav.k9brukerdialogprosessering.pdf.PDFGenerator
-import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -51,8 +49,7 @@ class EttersendelsePdfGeneratorTest {
         val id = søknadstype.name.lowercase()
         val pdf = generator.genererPDF(
                 EttersendingUtils.defaultEttersendelse(id, ZonedDateTime.now()).copy(
-                        søknadstype = søknadstype,
-                        beskrivelse = null
+                        søknadstype = søknadstype
                 ).pdfData()
         )
 
