@@ -44,9 +44,6 @@ class PleiepengerSyktBarnSøknadJournalføring(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
-            // Ignorerer melding som har correlationId lik "a99bc074-0fd5-4869-b2a2-0e1ab298f1ac"
-            // Dette er en dobbeltinnsending. Den opprinnelige meldingen har allerede blitt journalført på correlationId: "04f6dff8-3324-420d-8bc1-c690088bb074"
-            .filterNot { _: String, value: TopicEntry<PSBPreprosessertSøknad> -> value.metadata.correlationId == "a99bc074-0fd5-4869-b2a2-0e1ab298f1ac" }
             .mapValues { _: String, value: TopicEntry<PSBPreprosessertSøknad> ->
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val preprosessertSøknad: PSBPreprosessertSøknad = value.data
