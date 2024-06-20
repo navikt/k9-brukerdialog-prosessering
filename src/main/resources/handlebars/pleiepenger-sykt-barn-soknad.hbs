@@ -485,7 +485,9 @@
                         {{#if opphold.erUtenforEØS}}
                             {{#if opphold.erBarnetInnlagt}}
                                 <p><b>Er barnet innlagt?</b> {{ jaNeiSvar opphold.erBarnetInnlagt }}</p>
-                                <p><b>Er barnet sammen med deg?</b> {{ jaNeiSvar opphold.erSammenMedBarnet }}</p>
+                                {{#if isNotNull opphold.erSammenMedBarnet }}
+                                    <p><b>Er barnet sammen med deg?</b> {{ jaNeiSvar opphold.erSammenMedBarnet }}</p>
+                                {{/if}}
                                 <p><b>Perioder:</b>
                                     {{# each opphold.perioderBarnetErInnlagt as |periode| }}
                                         {{#if @last}}
