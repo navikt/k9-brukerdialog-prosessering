@@ -294,6 +294,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
                 {
                   "erBarnetInnlagt": true,
                   "erUtenforEøs": true,
+                  "erSammenMedBarnet": true,
                   "fraOgMed": "2020-01-01",
                   "landkode": "BAH",
                   "landnavn": "Bahamas",
@@ -313,6 +314,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
                 {
                   "erBarnetInnlagt": true,
                   "erUtenforEøs": false,
+                  "erSammenMedBarnet": true,
                   "fraOgMed": "2020-01-01",
                   "landkode": "BHS",
                   "landnavn": "Svergie",

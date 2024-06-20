@@ -92,12 +92,13 @@ data class Utenlandsopphold(
     val landkode: String,
     val landnavn: String,
     val erUtenforEøs: Boolean?,
+    val erSammenMedBarnet: Boolean?,
     val erBarnetInnlagt: Boolean?,
     val perioderBarnetErInnlagt: List<Periode> = listOf(),
     val årsak: Årsak?
 ) {
     override fun toString(): String {
-        return "Utenlandsopphold(fraOgMed=$fraOgMed, tilOgMed=$tilOgMed, landkode='$landkode', landnavn='$landnavn', erUtenforEøs=$erUtenforEøs, erBarnetInnlagt=$erBarnetInnlagt, årsak=$årsak)"
+        return "Utenlandsopphold(fraOgMed=$fraOgMed, tilOgMed=$tilOgMed, landkode='$landkode', landnavn='$landnavn', erUtenforEøs=$erUtenforEøs, erSammenMedBarnet=$erSammenMedBarnet, erBarnetInnlagt=$erBarnetInnlagt, årsak=$årsak)"
     }
 }
 

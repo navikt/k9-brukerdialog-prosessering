@@ -342,6 +342,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
                 "fraOgMed" to dateFormatter.format(it.fraOgMed),
                 "tilOgMed" to dateFormatter.format(it.tilOgMed),
                 "erUtenforEØS" to it.erUtenforEøs,
+                "erSammenMedBarnet" to it.erSammenMedBarnet,
                 "erBarnetInnlagt" to it.erBarnetInnlagt,
                 "perioderBarnetErInnlagt" to it.perioderBarnetErInnlagt.somMapPerioder(),
                 "årsak" to it.årsak?.beskrivelse

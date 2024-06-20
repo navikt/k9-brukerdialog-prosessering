@@ -88,6 +88,7 @@ internal object PSBSøknadUtils {
                     landkode = "BAH",
                     erUtenforEøs = true,
                     erBarnetInnlagt = true,
+                    erSammenMedBarnet = true,
                     perioderBarnetErInnlagt = listOf(
                         Periode(
                             fraOgMed = LocalDate.parse("2020-01-01"),
@@ -107,6 +108,7 @@ internal object PSBSøknadUtils {
                     landkode = "BHS",
                     erUtenforEøs = false,
                     erBarnetInnlagt = true,
+                    erSammenMedBarnet = true,
                     perioderBarnetErInnlagt = listOf(
                         Periode(
                             fraOgMed = LocalDate.parse("2020-01-01"),
