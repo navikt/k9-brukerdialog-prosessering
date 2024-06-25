@@ -118,6 +118,7 @@ class PSBSøknadPdfGeneratorTest {
                             landkode = "BAH",
                             erUtenforEøs = true,
                             erBarnetInnlagt = true,
+                            erSammenMedBarnet = true,
                             perioderBarnetErInnlagt = listOf(
                                 Periode(
                                     fraOgMed = LocalDate.parse("2020-01-01"),
@@ -137,6 +138,7 @@ class PSBSøknadPdfGeneratorTest {
                             landkode = "BHS",
                             erUtenforEøs = false,
                             erBarnetInnlagt = true,
+                            erSammenMedBarnet = true,
                             perioderBarnetErInnlagt = listOf(
                                 Periode(
                                     fraOgMed = LocalDate.parse("2020-01-01"),

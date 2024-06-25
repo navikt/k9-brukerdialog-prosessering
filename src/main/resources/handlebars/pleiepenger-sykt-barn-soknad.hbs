@@ -482,6 +482,9 @@
                     <li>
                         <p>{{opphold.landnavn}}{{#if opphold.erUtenforEØS}}
                             (utenfor EØS) {{/if}}: {{opphold.fraOgMed}} - {{opphold.tilOgMed}}</p>
+                        {{#isNotNull opphold.erSammenMedBarnet }}
+                            <p><b>Er barnet sammen med deg?</b> {{ jaNeiSvar opphold.erSammenMedBarnet }}</p>
+                        {{/isNotNull}}
                         {{#if opphold.erUtenforEØS}}
                             {{#if opphold.erBarnetInnlagt}}
                                 <p><b>Er barnet innlagt?</b> {{ jaNeiSvar opphold.erBarnetInnlagt }}</p>
