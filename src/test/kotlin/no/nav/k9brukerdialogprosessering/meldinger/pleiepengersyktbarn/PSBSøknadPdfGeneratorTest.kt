@@ -670,6 +670,51 @@ class PSBSøknadPdfGeneratorTest {
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "23-uke-53"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    fraOgMed = LocalDate.parse("2024-12-30"),
+                    tilOgMed = LocalDate.parse("2025-01-02"),
+                    arbeidsgivere = listOf(
+                        Arbeidsgiver(
+                            navn = "Varierende frisør",
+                            organisasjonsnummer = "917755736",
+                            erAnsatt = true,
+                            arbeidsforhold = Arbeidsforhold(
+                                normalarbeidstid = NormalArbeidstid(
+                                    timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                                ),
+                                arbeidIPeriode = ArbeidIPeriode(
+                                    type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
+                                    redusertArbeid = ArbeidsRedusert(
+                                        type = RedusertArbeidstidType.ULIKE_UKER_TIMER,
+                                        arbeidsuker = listOf(
+                                            // Uke 52
+                                            ArbeidsUke(
+                                                periode = Periode(
+                                                    fraOgMed = LocalDate.parse("2024-12-23"),
+                                                    tilOgMed = LocalDate.parse("2024-12-27")
+                                                ),
+                                                timer = Duration.ofHours(25).plusMinutes(30)
+                                            ),
+                                            // Uke 53 -> 1
+                                            ArbeidsUke(
+                                                periode = Periode(
+                                                    fraOgMed = LocalDate.parse("2024-12-30"),
+                                                    tilOgMed = LocalDate.parse("2025-01-03")
+                                                ),
+                                                timer = Duration.ofHours(15).plusMinutes(30)
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }

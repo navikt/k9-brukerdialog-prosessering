@@ -248,8 +248,10 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     @JvmName("somMapArbeidsUke")
     private fun List<ArbeidsUke>.somMap() = sortedBy { it: ArbeidsUke -> it.periode.fraOgMed }
         .map {
+            WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear()
+            val ukeNr = it.periode.fraOgMed.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear())
             mapOf(
-                "uke" to it.periode.fraOgMed.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear()),
+                "uke" to if(ukeNr > 52) 1 else ukeNr,
                 "faktiskTimerPerUke" to it.timer?.tilString()
             )
         }
