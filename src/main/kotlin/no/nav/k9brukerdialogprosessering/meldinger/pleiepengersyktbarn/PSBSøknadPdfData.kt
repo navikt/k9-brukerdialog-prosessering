@@ -33,6 +33,7 @@ import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import no.nav.k9brukerdialogprosessering.utils.DateUtils
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskMåned
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.ukeNummer
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.somTekst
 import no.nav.k9brukerdialogprosessering.utils.DurationUtils.tilString
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.språkTilTekst
@@ -248,10 +249,9 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     @JvmName("somMapArbeidsUke")
     private fun List<ArbeidsUke>.somMap() = sortedBy { it: ArbeidsUke -> it.periode.fraOgMed }
         .map {
-            WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear()
-            val ukeNr = it.periode.fraOgMed.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear())
+            val fraOgMed = it.periode.fraOgMed
             mapOf(
-                "uke" to if(ukeNr > 52) 1 else ukeNr,
+                "uke" to fraOgMed.ukeNummer(),
                 "faktiskTimerPerUke" to it.timer?.tilString()
             )
         }

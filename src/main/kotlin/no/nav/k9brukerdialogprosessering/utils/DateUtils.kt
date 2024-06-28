@@ -54,8 +54,25 @@ object DateUtils {
     }
 
     fun List<LocalDate>.grupperMedUker() = groupBy {
-        val uketall = it.get(WeekFields.of(Locale.getDefault()).weekOfYear())
-        if (uketall == 0) 53 else uketall
+        it.ukeNummer()
+    }
+
+    fun LocalDate.antallUkerGittÅr(): Int {
+        val cal: Calendar = Calendar.getInstance()
+        cal.setWeekDate(year, monthValue, dayOfWeek.value)
+        return cal.weeksInWeekYear
+    }
+
+    fun LocalDate.ukeNummer(): Int {
+        val cal: Calendar = Calendar.getInstance()
+        cal.setWeekDate(year, monthValue, dayOfWeek.value)
+        val uketall = get(WeekFields.of(Locale.getDefault()).weekOfYear())
+        val antallUker = antallUkerGittÅr()
+        return when {
+            antallUker == 53 -> uketall
+            antallUker < 53 && uketall > 52 -> 1
+            else -> uketall
+        }
     }
 
     fun List<LocalDate>.somLocalDateTimeline(): LocalDateTimeline<Boolean> {

@@ -1,10 +1,14 @@
 package no.nav.k9brukerdialogprosessering.utils
 
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.grupperSammenhengendeDatoerPerUke
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.antallUkerGittÅr
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.grupperMedUker
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.ukeNummer
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import java.time.LocalDate
 
 class DateUtilsKtTest {
@@ -54,5 +58,23 @@ class DateUtilsKtTest {
         assertEquals("[Mandag 17.01.2022 - Onsdag 19.01.2022, Fredag 21.01.2022 - Lørdag 22.01.2022]", uker[3]["perioder"].toString())
         assertEquals("[Mandag 24.01.2022 - Søndag 30.01.2022]", uker[4]["perioder"].toString())
         assertEquals("[Mandag 31.01.2022 - Tirsdag 01.02.2022]", uker[5]["perioder"].toString())
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        // År, uker, ukeNr 15. januar
+        "2020, 53, 3",
+        "2021, 52, 2",
+        "2022, 52, 2",
+        "2023, 52, 2",
+        "2024, 52, 3",
+        "2025, 52, 3",
+        "2026, 53, 3",
+    )
+    fun `forvent riktig ukenr for gitt år`(år: Int, antallUker: Int, ukenummer: Int) {
+        LocalDate.parse("$år-01-15").apply {
+            antallUkerGittÅr().also { assertEquals(antallUker, it) }
+            ukeNummer().also { assertEquals(ukenummer, it) }
+        }
     }
 }
