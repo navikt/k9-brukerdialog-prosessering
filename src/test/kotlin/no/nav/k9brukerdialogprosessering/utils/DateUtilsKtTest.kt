@@ -73,8 +73,8 @@ class DateUtilsKtTest {
     )
     fun `forvent riktig ukenr for gitt år`(år: Int, antallUker: Int, ukenummer: Int) {
         LocalDate.parse("$år-01-15").apply {
-            antallUkerGittÅr().also { assertEquals(antallUker, it) }
-            ukeNummer().also { assertEquals(ukenummer, it) }
+            assertEquals(antallUker, antallUkerGittÅr())
+            assertEquals(ukenummer, ukeNummer())
         }
     }
 }
