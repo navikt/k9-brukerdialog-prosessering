@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogprosessering.mellomlagring
+package no.nav.k9brukerdialogprosessering.mellomlagring.dokument
 
 import no.nav.k9brukerdialogprosessering.utils.RestTemplateUtils
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.client.RestTemplate
 import java.time.Duration
-import java.util.*
 
 @Configuration
 class K9MellomlagringClientsConfig(

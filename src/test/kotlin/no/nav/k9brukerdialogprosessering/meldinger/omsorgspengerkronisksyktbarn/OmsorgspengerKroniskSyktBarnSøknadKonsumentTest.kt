@@ -15,7 +15,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.utils.SøknadUtils
-import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.K9DokumentMellomlagringService
 import no.nav.k9brukerdialogprosessering.utils.KafkaIntegrationTest
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
@@ -46,7 +46,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
     private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
 
     @MockkBean(relaxed = true)
-    private lateinit var k9MellomlagringService: K9MellomlagringService
+    private lateinit var k9DokumentMellomlagringService: K9DokumentMellomlagringService
 
     @MockkBean(relaxed = true)
     private lateinit var k9JoarkService: K9JoarkService
@@ -88,13 +88,13 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
         val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { k9MellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
+        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
         coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC)
         verify(exactly = 1, timeout = 120 * 1000) {
             runBlocking {
-                k9MellomlagringService.slettDokumenter(any(), any())
+                k9DokumentMellomlagringService.slettDokumenter(any(), any())
             }
         }
 
@@ -127,7 +127,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
-        coEvery { k9MellomlagringService.lagreDokument(any()) }
+        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))

@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import kotlinx.coroutines.runBlocking
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.Dokument
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.DokumentEier
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.K9DokumentMellomlagringService
 import no.nav.k9brukerdialogprosessering.utils.WireMockServerUtils.stubLagreDokument
 import no.nav.k9brukerdialogprosessering.utils.WireMockServerUtils.stubSlettDokument
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -16,7 +18,6 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.web.client.RestClientException
 import java.net.URI
 import java.util.*
 
@@ -24,13 +25,13 @@ import java.util.*
 @AutoConfigureWireMock
 @EnableMockOAuth2Server
 @ActiveProfiles("test")
-class K9MellomlagringServiceTest {
+class K9DokumentMellomlagringServiceTest {
 
     @Autowired
     lateinit var objectMapper: ObjectMapper
 
     @Autowired
-    lateinit var k9MellomlagringService: K9MellomlagringService
+    lateinit var k9DokumentMellomlagringService: K9DokumentMellomlagringService
 
     @Autowired
     lateinit var wireMockServer: WireMockServer
@@ -53,7 +54,7 @@ class K9MellomlagringServiceTest {
             responseLocationHeaderPath = expectedLocationPath
         )
 
-        val response: URI = k9MellomlagringService.lagreDokument(dokument)
+        val response: URI = k9DokumentMellomlagringService.lagreDokument(dokument)
         Assertions.assertThat(response.path).isEqualTo(expectedLocationPath)
     }
 
@@ -72,7 +73,7 @@ class K9MellomlagringServiceTest {
 
         Assertions.assertThatNoException().isThrownBy {
             runBlocking {
-                k9MellomlagringService.slettDokumenter(dokumentIder, dokumentEier)
+                k9DokumentMellomlagringService.slettDokumenter(dokumentIder, dokumentEier)
             }
         }
 

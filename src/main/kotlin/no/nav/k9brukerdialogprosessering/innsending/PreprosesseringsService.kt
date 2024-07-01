@@ -2,10 +2,10 @@ package no.nav.k9brukerdialogprosessering.innsending
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.k9.søknad.Innsending
-import no.nav.k9brukerdialogprosessering.mellomlagring.Dokument
-import no.nav.k9brukerdialogprosessering.mellomlagring.DokumentEier
-import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
-import no.nav.k9brukerdialogprosessering.mellomlagring.dokumentId
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.Dokument
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.DokumentEier
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.K9DokumentMellomlagringService
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.pdf.PDFGenerator
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import org.springframework.stereotype.Service
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 class PreprosesseringsService(
     private val pdfGenerator: PDFGenerator,
     private val mapper: ObjectMapper,
-    private val k9MellomlagringService: K9MellomlagringService,
+    private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
 ) {
     companion object {
         private val logger = org.slf4j.LoggerFactory.getLogger(PreprosesseringsService::class.java)
@@ -31,7 +31,7 @@ class PreprosesseringsService(
         val oppsummeringPdf = pdfGenerator.genererPDF(preprosesseringsData.pdfData)
 
         logger.info("Mellomlagrer Oppsummerings-PDF...")
-        val oppsummeringPdfDokumentId = k9MellomlagringService.lagreDokument(
+        val oppsummeringPdfDokumentId = k9DokumentMellomlagringService.lagreDokument(
             Dokument(
                 eier = dokumentEier,
                 content = oppsummeringPdf,
@@ -41,7 +41,7 @@ class PreprosesseringsService(
         ).dokumentId()
 
         logger.info("Mellomlagrer Oppsummerings-JSON")
-        val soknadJsonDokumentId = k9MellomlagringService.lagreDokument(
+        val soknadJsonDokumentId = k9DokumentMellomlagringService.lagreDokument(
             dokument = Dokument(
                 eier = dokumentEier,
                 content = mapper.writeValueAsBytes(k9FormatSøknad),

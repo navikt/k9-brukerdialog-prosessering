@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogprosessering.mellomlagring
+package no.nav.k9brukerdialogprosessering.mellomlagring.dokument
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

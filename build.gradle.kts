@@ -43,13 +43,14 @@ val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.6"
 val awailitilityKotlinVersion = "4.2.1"
 val springCloudContractVersion = "4.1.3"
+val orgJsonVersion = "20240303"
 
 dependencies {
 	implementation("org.yaml:snakeyaml:2.2") {
 		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
 	}
 
-	implementation("no.nav.security:token-validation-core:$tokenSupportVersion")
+	implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
 	testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
 
@@ -93,6 +94,9 @@ dependencies {
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:$springCloudContractVersion")
 	testImplementation("org.awaitility:awaitility-kotlin:$awailitilityKotlinVersion")
+
+	// Diverse
+	implementation("org.json:json:$orgJsonVersion")
 
 }
 
