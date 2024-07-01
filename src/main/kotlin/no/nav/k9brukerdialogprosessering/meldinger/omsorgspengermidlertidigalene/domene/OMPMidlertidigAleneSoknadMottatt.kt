@@ -6,8 +6,8 @@ import no.nav.k9brukerdialogprosessering.innsending.MottattMelding
 import no.nav.k9brukerdialogprosessering.innsending.PreprosesseringsData
 import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.OMPMidlertidigAleneSoknadPDFData
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.NO_LOCALE
 import java.time.ZonedDateTime
-import java.util.*
 
 data class OMPMidlertidigAleneSoknadMottatt(
     val søknadId: String,
@@ -69,5 +69,5 @@ internal fun List<Barn>.somMapTilPdf(): List<Map<String, Any?>> {
 
 fun String.capitalizeName(): String = split(" ").joinToString(" ") { s ->
     s.lowercase()
-        .replaceFirstChar { it.titlecase(Locale.getDefault()) }
+        .replaceFirstChar { it.titlecase(NO_LOCALE) }
 }

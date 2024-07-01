@@ -25,6 +25,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.YrkesaktivSisteTreFerdigliknedeArene
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.domene.capitalizeName
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.NO_LOCALE
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.grupperMedUker
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.grupperSammenHengendeDatoer
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.somNorskDag
@@ -36,7 +37,6 @@ import java.time.Month
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
-import java.util.*
 
 class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
@@ -169,7 +169,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
     }
 
     private fun List<Enkeltdag>.grupperPerUke() = groupBy {
-        val uketall = it.dato.get(WeekFields.of(Locale.getDefault()).weekOfYear())
+        val uketall = it.dato.get(WeekFields.of(NO_LOCALE).weekOfYear())
         if (uketall == 0) 53 else uketall
     }
 

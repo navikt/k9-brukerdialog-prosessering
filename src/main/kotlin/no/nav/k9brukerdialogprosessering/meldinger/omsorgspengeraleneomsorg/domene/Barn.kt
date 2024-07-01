@@ -1,9 +1,9 @@
 package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.domene
 
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.NO_LOCALE
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 enum class TypeBarn(val pdfTekst: String?){
     FOSTERBARN("(Fosterbarn)"),
@@ -43,4 +43,4 @@ internal fun Barn.somMapTilPdf(): Map<String, Any?> {
 
 private val ZONE_ID = ZoneId.of("Europe/Oslo")
 private val DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZONE_ID)
-fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.lowercase(Locale.getDefault()).capitalize() }
+fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.lowercase(NO_LOCALE).capitalize() }

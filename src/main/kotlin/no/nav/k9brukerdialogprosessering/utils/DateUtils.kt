@@ -18,6 +18,7 @@ import java.time.temporal.WeekFields
 import java.util.*
 
 object DateUtils {
+    val NO_LOCALE = Locale.of("nb", "NO")
 
     internal fun antallVirkedager(fraOgMed: LocalDate, tilOgMed: LocalDate): Long =
         fraOgMed.datesUntil(tilOgMed.plusDays(1)).toList()
@@ -58,15 +59,16 @@ object DateUtils {
     }
 
     fun LocalDate.antallUkerGittÅr(): Int {
-        val cal: Calendar = Calendar.getInstance()
+        val cal: Calendar = Calendar.getInstance(NO_LOCALE)
         cal.setWeekDate(year, monthValue, dayOfWeek.value)
         return cal.weeksInWeekYear
     }
 
     fun LocalDate.ukeNummer(): Int {
-        val cal: Calendar = Calendar.getInstance()
+
+        val cal: Calendar = Calendar.getInstance(NO_LOCALE)
         cal.setWeekDate(year, monthValue, dayOfWeek.value)
-        val uketall = get(WeekFields.of(Locale.getDefault()).weekOfYear())
+        val uketall = get(WeekFields.of(NO_LOCALE).weekOfYear())
         val antallUker = antallUkerGittÅr()
         return when {
             antallUker == 53 -> uketall

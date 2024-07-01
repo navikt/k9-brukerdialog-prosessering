@@ -5,7 +5,6 @@ import no.nav.k9brukerdialogprosessering.utils.DateUtils.antallUkerGittÅr
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.grupperMedUker
 import no.nav.k9brukerdialogprosessering.utils.DateUtils.ukeNummer
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -14,7 +13,6 @@ import java.time.LocalDate
 class DateUtilsKtTest {
 
     @Test
-    @Disabled("Kankun kjøre denne lokalt.Den feiler på GitHub Actions")
     fun `gitt sammenhengende datoer per uke, forvent at de grupperes sammen`() {
         val datoer = listOf(
             // Uke 53
