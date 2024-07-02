@@ -9,8 +9,8 @@ import java.time.Duration
 
 @Configuration
 class BarnCacheConfiguration(
-    @Value("nav.cache.barn.max_size") private val maxSize: Long,
-    @Value("no.nav.cache.barn.expiry_in_minutes") private val expiryInMinutes: Long,
+    @Value("\${no.nav.cache.barn.max-size}") private val maxSize: Long,
+    @Value("\${no.nav.cache.barn.expiry-in-minutes}") private val expiryInMinutes: Long
 ) {
 
     @Bean

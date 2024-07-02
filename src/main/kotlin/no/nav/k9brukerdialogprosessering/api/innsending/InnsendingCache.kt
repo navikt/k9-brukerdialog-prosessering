@@ -14,7 +14,7 @@ import java.time.Duration
 
 @Service
 class InnsendingCache(
-    @Value("no.nav.cache.innsending.expiry_in_seconds") private val expireSeconds: Long
+    @Value("\${no.nav.cache.innsending.expiry-in-seconds}") private val expireSeconds: Long
 ) {
 
     private val cache: Cache<String, String> = Caffeine.newBuilder()

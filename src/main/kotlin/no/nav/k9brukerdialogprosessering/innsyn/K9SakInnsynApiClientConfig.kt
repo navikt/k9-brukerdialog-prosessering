@@ -18,7 +18,7 @@ import java.time.Duration
 
 @Configuration
 class K9SakInnsynApiClientConfig(
-    @Value("\${no.nav.gateways.k9-sak-innsyn-api-base-url}") private val k9SakInnsynApiBaseUrl: String,
+    @Value("\${no.nav.integration.k9-sak-innsyn-api-base-url}") private val k9SakInnsynApiBaseUrl: String,
     oauth2Config: ClientConfigurationProperties,
     private val oAuth2AccessTokenService: OAuth2AccessTokenService
 ) {

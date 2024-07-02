@@ -44,6 +44,7 @@ val retryVersion = "2.0.6"
 val awailitilityKotlinVersion = "4.2.1"
 val springCloudContractVersion = "4.1.3"
 val orgJsonVersion = "20240303"
+val springdocVersion = "2.5.0"
 
 dependencies {
 	implementation("org.yaml:snakeyaml:2.2") {
@@ -53,6 +54,9 @@ dependencies {
 	implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
 	testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
+
+	// Swagger (openapi 3)
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
 
 	// K9-format
 	implementation("no.nav.k9:soknad:$k9FormatVersion")

@@ -46,10 +46,31 @@ no.nav:
                 audience: ${K9_SAK_INNSYN_API_TOKEN_X_AUDIENCE}
         ### K9 Sak Innsyn API
 
+        ### K9 Brukerdialog Cache
+        tokenx-k9-brukerdialog-cache:
+            token-endpoint-url: ${TOKEN_X_TOKEN_ENDPOINT}
+            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+            authentication:
+                client-auth-method: private_key_jwt
+                client-id: ${TOKEN_X_CLIENT_ID}
+                client-jwk: ${TOKEN_X_PRIVATE_JWK}
+            token-exchange:
+                audience: ${K9_BRUKERDIALOG_CACHE_TOKEN_X_AUDIENCE}
+        ### K9 Brukerdialog Cache
+
   integration:
+    k9-brukerdialog-cache-base-url: ${K9_BRUKERDIALOG_CACHE_BASE_URL}
     k9-mellomlagring-base-url: ${K9_MELLOMLAGRING_BASE_URL}
     k9-joark-base-url: ${K9_JOARK_BASE_URL}
     k9-sak-innsyn-api-base-url: ${K9_SAK_INNSYN_API_BASE_URL}
+    k9-selvbetjening-oppslag-base-url: ${K9_SELVBETJENING_OPPSLAG_BASE_URL}
+
+  cache:
+    barn:
+      max-size: ${BARN_CACHE_MAX_SIZE:500}
+      expiry-in-minutes: ${BARN_CACHE_EXPIRY_IN_MINUTES:30}
+    innsending:
+      expiry-in-seconds: ${INNSENDING_CACHE_EXPIRY_IN_MINUTES:10}
 
   kafka:
     bootstrap-servers: ${KAFKA_BROKERS}
@@ -159,3 +180,11 @@ management:
         include: health, prometheus
       path-mapping:
         prometheus: /metrics
+
+springdoc:
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:false}
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:false}
+    disable-swagger-default-url: true
+    path: swagger-ui.html
