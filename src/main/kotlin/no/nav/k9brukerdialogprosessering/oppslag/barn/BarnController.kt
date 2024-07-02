@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 class BarnController(private val barnService: BarnService) {
 
     @GetMapping
-    suspend fun hentSøker(@RequestHeader("X-Nav-Ytelse") ytelse: String): List<BarnOppslag> {
-        return barnService.hentBarn(ytelse = Ytelse.valueOf(ytelse))
+    suspend fun hentSøker(@RequestHeader("X-Nav-Ytelse") ytelse: Ytelse): List<BarnOppslag> {
+        return barnService.hentBarn(ytelse = ytelse)
     }
 }

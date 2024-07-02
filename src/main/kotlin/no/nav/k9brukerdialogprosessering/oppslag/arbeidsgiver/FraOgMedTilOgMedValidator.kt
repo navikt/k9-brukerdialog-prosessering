@@ -1,7 +1,7 @@
-package no.nav.k9brukerdialogapi.oppslag.arbeidsgiver
+package no.nav.k9brukerdialogprosessering.oppslag.arbeidsgiver
 
-import no.nav.helse.dusseldorf.ktor.core.ParameterType
-import no.nav.helse.dusseldorf.ktor.core.Violation
+import no.nav.k9brukerdialogprosessering.validation.ParameterType
+import no.nav.k9brukerdialogprosessering.validation.Violation
 import java.time.LocalDate
 
 class FraOgMedTilOgMedValidator {
@@ -57,7 +57,7 @@ class FraOgMedTilOgMedValidator {
             } catch (exception: Exception) {
                 add(
                     Violation(
-                        parameterName = "$navn",
+                        parameterName = navn,
                         parameterType = ParameterType.QUERY,
                         reason = "$navn er på ugyldig format. Feil: $exception",
                         invalidValue = dato

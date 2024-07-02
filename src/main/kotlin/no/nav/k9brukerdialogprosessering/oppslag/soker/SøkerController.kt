@@ -18,8 +18,8 @@ class SøkerController(private val søkerService: SøkerService) {
 
     @GetMapping
     suspend fun hentSøker(
-        @RequestHeader("X-Nav-Ytelse") ytelse: String,
+        @RequestHeader("X-Nav-Ytelse") ytelse: Ytelse,
     ): Søker {
-        return søkerService.hentSøker(ytelse = Ytelse.valueOf(ytelse))
+        return søkerService.hentSøker(ytelse = ytelse)
     }
 }
