@@ -1,10 +1,10 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingsnf.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene
 
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.validerIdentifikator
-import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingsnf.domene.TypeBarn.FOSTERBARN
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene.TypeBarn.FOSTERBARN
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 

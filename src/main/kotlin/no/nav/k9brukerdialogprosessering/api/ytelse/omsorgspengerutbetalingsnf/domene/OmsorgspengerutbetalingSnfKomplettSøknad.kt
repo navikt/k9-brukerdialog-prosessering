@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingsnf.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.type.SøknadId
@@ -32,12 +32,5 @@ class OmsorgspengerutbetalingSnfKomplettSøknad(
     private val selvstendigNæringsdrivende: Virksomhet? = null,
     private val vedleggId: List<String> = listOf(),
     private val titler: List<String>,
-    private val k9FormatSøknad: Søknad
-): KomplettInnsending {
-    override fun equals(other: Any?) = this === other || (other is OmsorgspengerutbetalingSnfKomplettSøknad && this.equals(other))
-
-    private fun equals(other: OmsorgspengerutbetalingSnfKomplettSøknad) = this.søknadId.id == other.søknadId.id &&
-            this.søker == other.søker &&
-            this.vedleggId == other.vedleggId &&
-            this.k9FormatSøknad.søknadId == other.k9FormatSøknad.søknadId
-}
+    private val k9FormatSøknad: Søknad,
+) : KomplettInnsending

@@ -1,13 +1,13 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingsnf.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene
 
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.kreverIkkeNull
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 
 class SpørsmålOgSvar(
     private val spørsmål: String,
-    private val svar: Boolean?
+    private val svar: Boolean?,
 ) {
-    companion object{
+    companion object {
         private const val MAX_FRITEKST_TEGN = 1000
 
         internal fun List<SpørsmålOgSvar>.valider(felt: String) = this.flatMapIndexed { index, spørsmålOgSvar ->
