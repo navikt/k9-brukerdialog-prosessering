@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengerutvidetrett.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutvidetrett.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Barn
@@ -24,10 +24,4 @@ class OmsorgspengerKroniskSyktBarnKomplettSøknad(
     private val harBekreftetOpplysninger: Boolean,
     private val høyereRisikoForFravær: Boolean?,
     private val høyereRisikoForFraværBeskrivelse: String?
-): KomplettInnsending {
-    override fun equals(other: Any?) = this === other || (other is OmsorgspengerKroniskSyktBarnKomplettSøknad && this.equals(other))
-
-    private fun equals(other: OmsorgspengerKroniskSyktBarnKomplettSøknad) =
-            this.søknadId == other.søknadId &&
-            this.k9FormatSøknad.søknadId == other.k9FormatSøknad.søknadId
-}
+): KomplettInnsending

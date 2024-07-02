@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengerutvidetrett.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutvidetrett.domene
 
 enum class BarnSammeAdresse() {
     JA, JA_DELT_BOSTED, NEI

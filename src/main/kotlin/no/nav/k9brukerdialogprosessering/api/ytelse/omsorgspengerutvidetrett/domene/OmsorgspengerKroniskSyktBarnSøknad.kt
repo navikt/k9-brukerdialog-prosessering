@@ -1,6 +1,6 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengerutvidetrett.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutvidetrett.domene
 
-import no.nav.helse.dusseldorf.ktor.core.Throwblem
+import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
@@ -8,18 +8,19 @@ import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerKroniskSyktBarn
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerKroniskSyktBarnSøknadValidator
-import no.nav.k9brukerdialogapi.general.ValidationProblemDetails
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.kreverIkkeNull
-import no.nav.k9brukerdialogapi.innsending.Innsending
-import no.nav.k9brukerdialogapi.utils.StringUtils.FRITEKST_REGEX
-import no.nav.k9brukerdialogapi.utils.StringUtils.FritekstPattern
-import no.nav.k9brukerdialogapi.vedlegg.vedleggId
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Barn
+import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.FRITEKST_REGEX
+import no.nav.k9brukerdialogprosessering.utils.StringUtils.FritekstPattern
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
+import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
+import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -88,11 +89,11 @@ class OmsorgspengerKroniskSyktBarnSøknad(
             sammeAdresse = sammeAdresse,
             høyereRisikoForFravær = høyereRisikoForFravær,
             høyereRisikoForFraværBeskrivelse = høyereRisikoForFraværBeskrivelse,
-            legeerklæringVedleggId = legeerklæring.map { it.vedleggId() },
-            samværsavtaleVedleggId = samværsavtale?.map { it.vedleggId() } ?: listOf(),
+            legeerklæringVedleggId = legeerklæring.map { it.toURI().dokumentId() },
+            samværsavtaleVedleggId = samværsavtale?.map { it.toURI().dokumentId() } ?: listOf(),
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
-            k9FormatSøknad = k9Format as no.nav.k9.søknad.Søknad
+            k9FormatSøknad = k9Format as Søknad
         )
     }
 
@@ -120,7 +121,7 @@ class OmsorgspengerKroniskSyktBarnSøknad(
 
         addAll(barn.valider("barn"))
 
-        if (isNotEmpty()) throw Throwblem(ValidationProblemDetails(this))
+        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
     }
 
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> =
