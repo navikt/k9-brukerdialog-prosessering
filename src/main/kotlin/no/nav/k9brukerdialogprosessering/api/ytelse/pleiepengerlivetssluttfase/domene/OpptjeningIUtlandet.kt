@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Land
 import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
 import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
@@ -8,7 +9,7 @@ import java.time.LocalDate
 class OpptjeningIUtlandet(
     private val navn: String,
     private val opptjeningType: OpptjeningType,
-    private val land: no.nav.k9brukerdialogapi.ytelse.fellesdomene.Land,
+    private val land: Land,
     private val fraOgMed: LocalDate,
     private val tilOgMed: LocalDate
 ) {

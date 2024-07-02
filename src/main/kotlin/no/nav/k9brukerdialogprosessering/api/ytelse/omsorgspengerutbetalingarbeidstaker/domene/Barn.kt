@@ -1,21 +1,24 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
 import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
 import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
 class Barn(
+    @Size(max = 11)
+    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private var identitetsnummer: String? = null,
     private val aktørId: String? = null,
     @JsonFormat(pattern = "yyyy-MM-dd") private val fødselsdato: LocalDate,
     private val navn: String,
-    private val type: TypeBarn
+    private val type: TypeBarn,
 ) {
     companion object {
         internal fun List<Barn>.somK9BarnListe() = kunFosterbarn().map { it.somK9Barn() }
@@ -26,7 +29,6 @@ class Barn(
     }
 
     internal fun valider(felt: String) = mutableListOf<String>().apply {
-        validerIdentifikator(identitetsnummer, "$felt.identitetsnummer")
         krever(navn.isNotBlank(), "$felt.navn kan ikke være tomt eller blankt.")
         krever(
             fødselsdato.erLikEllerEtter(LocalDate.now().minusYears(19)),
@@ -38,8 +40,9 @@ class Barn(
         )
     }
 
-    internal fun leggTilIdentifikatorHvisMangler(barnFraOppslag: List<BarnOppslag>){
-        if(identitetsnummer == null) identitetsnummer = barnFraOppslag.find { it.aktørId == this.aktørId }?.identitetsnummer
+    internal fun leggTilIdentifikatorHvisMangler(barnFraOppslag: List<BarnOppslag>) {
+        if (identitetsnummer == null) identitetsnummer =
+            barnFraOppslag.find { it.aktørId == this.aktørId }?.identitetsnummer
     }
 
     internal fun somK9Barn(): K9Barn {

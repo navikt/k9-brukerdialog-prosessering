@@ -1,13 +1,17 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import java.time.LocalDate
 import no.nav.k9.ettersendelse.Pleietrengende as K9Pleietrengende
 
 data class Pleietrengende(
+    @Size(max = 11)
+    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     var norskIdentitetsnummer: String?,
+
     val aktørId: String? = null,
     val navn: String? = null,
     @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate? = null,
@@ -27,8 +31,3 @@ data class Pleietrengende(
         else -> error("Mangler identitetsnummer")
     }
 }
-
-internal fun Pleietrengende.valider(felt: String) =
-    mutableListOf<String>().apply {
-        validerIdentifikator(norskIdentitetsnummer, "$felt.fødselsnummer")
-    }

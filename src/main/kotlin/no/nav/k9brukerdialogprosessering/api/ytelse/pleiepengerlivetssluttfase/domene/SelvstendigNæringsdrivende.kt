@@ -1,6 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Virksomhet
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Virksomhet
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsforhold.Companion.somK9ArbeidstidInfo
 import java.time.LocalDate
 

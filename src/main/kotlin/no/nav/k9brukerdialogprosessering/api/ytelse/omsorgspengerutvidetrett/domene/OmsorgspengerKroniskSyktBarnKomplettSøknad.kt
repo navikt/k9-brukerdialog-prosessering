@@ -1,8 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutvidetrett.domene
 
 import no.nav.k9.søknad.Søknad
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Barn
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Barn
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.time.ZoneOffset
 import java.time.ZonedDateTime

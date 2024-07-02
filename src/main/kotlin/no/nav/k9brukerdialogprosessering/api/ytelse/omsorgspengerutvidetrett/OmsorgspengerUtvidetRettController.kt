@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutvidetrett
 
+import jakarta.validation.Valid
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
@@ -46,7 +47,7 @@ class OmsorgspengerUtvidetRettController(
     suspend fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: Ytelse,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @RequestBody søknad: OmsorgspengerKroniskSyktBarnSøknad,
+        @Valid @RequestBody søknad: OmsorgspengerKroniskSyktBarnSøknad,
     ) {
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"

@@ -1,15 +1,15 @@
-package no.nav.k9brukerdialogapi.ytelse.fellesdomene
+package no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo
 import no.nav.k9.søknad.felles.type.Landkode
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9brukerdialogapi.general.erLikEllerEtter
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.kreverIkkeNull
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Regnskapsfører.Companion.leggTilK9Regnskapsfører
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.VarigEndring.Companion.leggTilVarigEndring
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Regnskapsfører.Companion.leggTilK9Regnskapsfører
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.VarigEndring.Companion.leggTilVarigEndring
+import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.math.BigDecimal
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende as K9SelvstendigNæringsdrivende
@@ -28,7 +28,7 @@ data class Virksomhet(
     val varigEndring: VarigEndring? = null,
     val regnskapsfører: Regnskapsfører? = null,
     val erNyoppstartet: Boolean,
-    val harFlereAktiveVirksomheter: Boolean? = null
+    val harFlereAktiveVirksomheter: Boolean? = null,
 ) {
 
     internal fun valider(felt: String) = mutableListOf<String>().apply {
@@ -38,9 +38,15 @@ data class Virksomhet(
         tilOgMed?.let { krever(it.erLikEllerEtter(fraOgMed), "$felt.tilOgMed må være før eller lik tilOgMed.") }
 
         if (registrertINorge == false) {
-            kreverIkkeNull(registrertIUtlandet, "$felt.registrertIUtlandet kan ikke være null når $felt.registrertINorge er false")
+            kreverIkkeNull(
+                registrertIUtlandet,
+                "$felt.registrertIUtlandet kan ikke være null når $felt.registrertINorge er false"
+            )
         } else {
-            kreverIkkeNull(organisasjonsnummer, "$felt.organisasjonsnummer kan ikke være når $felt.registrertINorge er true")
+            kreverIkkeNull(
+                organisasjonsnummer,
+                "$felt.organisasjonsnummer kan ikke være når $felt.registrertINorge er true"
+            )
         }
 
         if (næringstype == Næringstype.FISKE) {
@@ -55,8 +61,14 @@ data class Virksomhet(
 
     private fun MutableList<String>.validerErNyoppstartet(felt: String) {
         val fireÅrSiden = LocalDate.now().minusYears(4)
-        if(erNyoppstartet) krever(fraOgMed.erLikEllerEtter(fireÅrSiden), "$felt.nyOppstartet er true. $felt.fraOgMed må være maks 4 år siden")
-        if(!erNyoppstartet) krever(fraOgMed < fireÅrSiden, "$felt.nyOppstartet er false. $felt.fraOgMed må være over 4 år siden")
+        if (erNyoppstartet) krever(
+            fraOgMed.erLikEllerEtter(fireÅrSiden),
+            "$felt.nyOppstartet er true. $felt.fraOgMed må være maks 4 år siden"
+        )
+        if (!erNyoppstartet) krever(
+            fraOgMed < fireÅrSiden,
+            "$felt.nyOppstartet er false. $felt.fraOgMed må være over 4 år siden"
+        )
     }
 
     fun somK9SelvstendigNæringsdrivende() = K9SelvstendigNæringsdrivende().apply {
@@ -65,7 +77,7 @@ data class Virksomhet(
         this@Virksomhet.organisasjonsnummer?.let { medOrganisasjonsnummer(Organisasjonsnummer.of(it)) }
     }
 
-    private fun byggK9SelvstendingNæringsdrivendeInfo()= SelvstendigNæringsdrivendePeriodeInfo().apply {
+    private fun byggK9SelvstendingNæringsdrivendeInfo() = SelvstendigNæringsdrivendePeriodeInfo().apply {
         medVirksomhetstyper(listOf(næringstype.somK9Virksomhetstype()))
         medRegistrertIUtlandet(!registrertINorge!!)
         medErNyoppstartet(this@Virksomhet.erNyoppstartet)

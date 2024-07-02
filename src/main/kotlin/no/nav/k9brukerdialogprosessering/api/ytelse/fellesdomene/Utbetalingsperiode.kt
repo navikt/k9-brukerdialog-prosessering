@@ -1,13 +1,13 @@
-package no.nav.k9brukerdialogapi.ytelse.fellesdomene
+package no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.felles.fravær.FraværPeriode
 import no.nav.k9.søknad.felles.fravær.SøknadÅrsak
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9brukerdialogapi.general.erLikEllerEtter
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.kreverIkkeNull
+import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.time.Duration
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær as K9AktivitetFravær

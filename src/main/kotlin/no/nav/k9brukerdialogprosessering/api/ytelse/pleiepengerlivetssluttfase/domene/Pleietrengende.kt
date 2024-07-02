@@ -1,14 +1,17 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
 import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import java.time.LocalDate
 import no.nav.k9.søknad.ytelse.pls.v1.Pleietrengende as K9Pleietrengende
 
 class Pleietrengende(
+    @Size(max = 11)
+    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private val norskIdentitetsnummer: String? = null,
     @JsonFormat(pattern = "yyyy-MM-dd") private val fødselsdato: LocalDate? = null,
     private val navn: String,
@@ -34,8 +37,6 @@ class Pleietrengende(
                 årsakManglerIdentitetsnummer != null,
                 "$felt.årsakManglerIdentitetsnummer må være satt dersom norskIdentitetsnummer er null."
             )
-        } else {
-            validerIdentifikator(norskIdentitetsnummer, "$felt.norskIdentitetsnummer")
         }
     }
 }

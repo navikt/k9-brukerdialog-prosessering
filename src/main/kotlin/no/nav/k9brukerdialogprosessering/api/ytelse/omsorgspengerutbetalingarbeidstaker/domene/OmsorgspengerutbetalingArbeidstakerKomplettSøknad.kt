@@ -1,8 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
 import no.nav.k9.søknad.Søknad
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Opphold
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker

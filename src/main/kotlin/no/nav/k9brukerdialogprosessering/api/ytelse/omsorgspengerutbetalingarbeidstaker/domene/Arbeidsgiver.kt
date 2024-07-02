@@ -1,9 +1,9 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
 import no.nav.k9.søknad.felles.fravær.SøknadÅrsak
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Utbetalingsperiode
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Utbetalingsperiode.Companion.valider
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Utbetalingsårsak.KONFLIKT_MED_ARBEIDSGIVER
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER
 import no.nav.k9brukerdialogprosessering.utils.krever

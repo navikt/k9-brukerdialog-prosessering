@@ -1,11 +1,12 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
 import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -15,6 +16,8 @@ private val logger: Logger =
     LoggerFactory.getLogger("no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.BarnDetaljer")
 
 data class BarnDetaljer(
+    @Size(max = 11)
+    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     var fødselsnummer: String?,
     @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate?,
     val aktørId: String?,
@@ -54,7 +57,5 @@ internal fun BarnDetaljer.valider(felt: String) = mutableListOf<String>().apply 
             årsakManglerIdentitetsnummer != null,
             "$felt.årsakManglerIdentitetsnummer må være satt dersom fødselsnummer er null."
         )
-    } else {
-        validerIdentifikator(fødselsnummer, "$felt.fødselsnummer")
     }
 }

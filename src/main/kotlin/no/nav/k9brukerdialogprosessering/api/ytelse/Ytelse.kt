@@ -1,6 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse
 
-import no.nav.k9brukerdialogprosessering.utils.Constants
+import no.nav.k9brukerdialogprosessering.utils.NavHeaders
 import org.springframework.http.HttpHeaders
 
 enum class Ytelse(val dialog: String) {
@@ -20,7 +20,7 @@ enum class Ytelse(val dialog: String) {
 
     fun somHttpHeader(): HttpHeaders {
         val headers = HttpHeaders()
-        headers[Constants.X_K9_YTELSE] = name
+        headers[NavHeaders.X_K9_YTELSE] = name
         return headers
     }
 }

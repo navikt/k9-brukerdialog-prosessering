@@ -38,8 +38,6 @@ class Ettersendelse(
             krever(pleietrengende != null, "Pleietrengende må være satt dersom ettersendelsen gjelder legeerklæring")
         }
 
-        if (pleietrengende != null) addAll(pleietrengende.valider("Pleietrengende"))
-
         krever(harForståttRettigheterOgPlikter, "harForståttRettigheterOgPlikter må være true")
         krever(harBekreftetOpplysninger, "harBekreftetOpplysninger må være true")
         krever(vedlegg.isNotEmpty(), "Liste over vedlegg kan ikke være tom")

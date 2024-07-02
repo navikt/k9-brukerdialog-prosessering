@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.fellesdomene
+package no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene
 
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo

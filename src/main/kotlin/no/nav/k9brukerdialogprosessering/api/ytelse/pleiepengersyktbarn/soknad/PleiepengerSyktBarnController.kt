@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad
 
+import jakarta.validation.Valid
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
@@ -35,7 +36,7 @@ class PleiepengerSyktBarnController(
     private val innsendingCache: InnsendingCache,
     private val barnService: BarnService,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
-    private val metrikkService: MetrikkService
+    private val metrikkService: MetrikkService,
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(PleiepengerSyktBarnController::class.java)
@@ -46,7 +47,7 @@ class PleiepengerSyktBarnController(
     suspend fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: Ytelse,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @RequestBody søknad: PleiepengerSyktBarnSøknad,
+        @Valid @RequestBody søknad: PleiepengerSyktBarnSøknad,
     ) {
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"

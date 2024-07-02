@@ -13,10 +13,10 @@ import no.nav.k9.søknad.ytelse.pls.v1.PleipengerLivetsSluttfase
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak.UttakPeriodeInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.ArbeidUtils.SYV_OG_EN_HALV_TIME
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
 import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.ArbeidUtils.SYV_OG_EN_HALV_TIME
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsgiver.Companion.somK9Arbeidstaker
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsgiver.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.OpptjeningIUtlandet.Companion.valider
@@ -34,7 +34,7 @@ import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
-class PilsSøknad(
+class PleiepengerILivetsSluttfaseSøknad(
     internal val søknadId: String = UUID.randomUUID().toString(),
     private val språk: String,
     private val fraOgMed: LocalDate,
@@ -148,7 +148,7 @@ class PilsSøknad(
 
     private fun byggK9OpptjeningAktivitet() = OpptjeningAktivitet().apply {
         frilans?.let { medFrilanser(it.somK9Frilanser()) }
-        this@PilsSøknad.selvstendigNæringsdrivende?.let { medSelvstendigNæringsdrivende(it.somK9SelvstendigNæringsdrivende()) }
+        this@PleiepengerILivetsSluttfaseSøknad.selvstendigNæringsdrivende?.let { medSelvstendigNæringsdrivende(it.somK9SelvstendigNæringsdrivende()) }
     }
 
     private fun byggK9Arbeidstid() = Arbeidstid().apply {

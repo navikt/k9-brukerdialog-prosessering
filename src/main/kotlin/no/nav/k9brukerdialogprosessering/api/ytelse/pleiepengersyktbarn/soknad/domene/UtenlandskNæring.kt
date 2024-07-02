@@ -1,7 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Land
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Næringstype
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Land
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Næringstype
 import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
 
