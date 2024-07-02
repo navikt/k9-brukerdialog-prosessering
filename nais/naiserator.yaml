@@ -8,14 +8,26 @@ metadata:
 spec:
   image: {{ image }}
   port: 8080
+  tokenx:
+    enabled: true
   azure:
     application:
       enabled: true
   accessPolicy:
+    inbound:
+      rules:
+      {{#each inboundRules}}
+        - application: {{app}}
+          namespace: {{namespace}}
+          cluster: {{cluster}}
+      {{/each}}
     outbound:
       rules:
         - application: k9-mellomlagring
         - application: k9-joark
+        - application: k9-brukerdialog-cache
+        - application: k9-sak-innsyn-api
+        - application: k9-selvbetjening-oppslag
   liveness:
     path: /health/liveness
     initialDelay: 60
