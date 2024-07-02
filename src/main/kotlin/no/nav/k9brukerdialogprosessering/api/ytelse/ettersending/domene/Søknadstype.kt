@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.ettersending.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene
 
 import no.nav.k9.ettersendelse.Ytelse
 

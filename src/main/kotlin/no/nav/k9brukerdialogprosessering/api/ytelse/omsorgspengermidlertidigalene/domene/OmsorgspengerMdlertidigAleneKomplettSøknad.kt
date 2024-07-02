@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengermidlertidigalene.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Barn
@@ -17,11 +17,4 @@ class OmsorgspengerMdlertidigAleneKomplettSøknad(
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean
-): KomplettInnsending {
-    override fun equals(other: Any?) = this === other || (other is OmsorgspengerMdlertidigAleneKomplettSøknad && this.equals(other))
-
-    private fun equals(other: OmsorgspengerMdlertidigAleneKomplettSøknad) =
-            this.id == other.id &&
-            this.søknadId == other.søknadId &&
-            this.k9Format.søknadId == other.k9Format.søknadId
-}
+): KomplettInnsending

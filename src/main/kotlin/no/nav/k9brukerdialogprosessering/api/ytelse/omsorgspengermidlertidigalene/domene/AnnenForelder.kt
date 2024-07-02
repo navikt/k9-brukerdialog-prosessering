@@ -1,18 +1,18 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengermidlertidigalene.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9brukerdialogapi.general.erLikEllerEtter
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.kreverIkkeNull
-import no.nav.k9brukerdialogapi.general.validerIdentifikator
-import no.nav.k9brukerdialogapi.utils.StringUtils
-import no.nav.k9brukerdialogapi.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.ANNET
-import no.nav.k9brukerdialogapi.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.FENGSEL
-import no.nav.k9brukerdialogapi.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.INNLAGT_I_HELSEINSTITUSJON
-import no.nav.k9brukerdialogapi.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.SYKDOM
-import no.nav.k9brukerdialogapi.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.UTØVER_VERNEPLIKT
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.ANNET
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.FENGSEL
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.INNLAGT_I_HELSEINSTITUSJON
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.SYKDOM
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.UTØVER_VERNEPLIKT
+import no.nav.k9brukerdialogprosessering.utils.StringUtils
+import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
+import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import java.time.LocalDate
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder as K9AnnenForelder
 
@@ -61,7 +61,4 @@ class AnnenForelder(
             "$felt.periodeTilOgMed eller periodeOver6Måneder må være satt dersom situasjonen er $situasjon"
         )
     }
-
-    override fun equals(other: Any?) = this === other || (other is AnnenForelder && this.equals(other))
-    private fun equals(other: AnnenForelder) = this.fnr == other.fnr && this.navn == other.navn
 }

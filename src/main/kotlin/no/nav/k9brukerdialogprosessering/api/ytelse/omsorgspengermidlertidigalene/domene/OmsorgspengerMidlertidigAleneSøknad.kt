@@ -1,6 +1,6 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengermidlertidigalene.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene
 
-import no.nav.helse.dusseldorf.ktor.core.Throwblem
+import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
@@ -8,21 +8,22 @@ import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAlene
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAleneSøknadValidator
-import no.nav.k9brukerdialogapi.general.ValidationProblemDetails
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.innsending.Innsending
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Barn
+import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
+import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
-class OmsorgspengerMdlertidigAleneSøknad(
+class OmsorgspengerMidlertidigAleneSøknad(
     val søknadId: String = UUID.randomUUID().toString(),
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     private val id: String,
@@ -68,7 +69,7 @@ class OmsorgspengerMdlertidigAleneSøknad(
             språk = språk,
             annenForelder = annenForelder,
             barn = barn,
-            k9Format = k9Format as no.nav.k9.søknad.Søknad,
+            k9Format = k9Format as Søknad,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter
         )
@@ -87,7 +88,7 @@ class OmsorgspengerMdlertidigAleneSøknad(
         addAll(annenForelder.valider("annenForelder"))
         barn.forEachIndexed { index, barn -> addAll(barn.valider("barn[$index]")) }
 
-        if (isNotEmpty()) throw Throwblem(ValidationProblemDetails(this))
+        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
     }
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE

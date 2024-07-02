@@ -5,10 +5,6 @@ import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9.ettersendelse.EttersendelseValidator
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9brukerdialogapi.ytelse.ettersending.domene.KomplettEttersendelse
-import no.nav.k9brukerdialogapi.ytelse.ettersending.domene.Pleietrengende
-import no.nav.k9brukerdialogapi.ytelse.ettersending.domene.Søknadstype
-import no.nav.k9brukerdialogapi.ytelse.ettersending.domene.valider
 import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.hentIdentitetsnummerForBarn
 import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse

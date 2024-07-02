@@ -1,11 +1,11 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgsdageraleneomsorg.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene
 
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.validerIdentifikator
-import no.nav.k9brukerdialogapi.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg.SISTE_2_ÅRENE
-import no.nav.k9brukerdialogapi.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg.TIDLIGERE
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg.SISTE_2_ÅRENE
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg.TIDLIGERE
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
@@ -45,9 +45,6 @@ class Barn(
         if(type != TypeBarn.FRA_OPPSLAG) krever(fødselsdato != null, "$felt.fødselsdato må være satt når type!=FRA_OPPSLAG.")
         if(tidspunktForAleneomsorg == SISTE_2_ÅRENE) krever(dato != null, "$felt.dato må være satt.")
     }
-
-    override fun equals(other: Any?) = this === other || other is Barn && this.equals(other)
-    private fun equals(other: Barn) = this.identitetsnummer == other.identitetsnummer
 }
 
 enum class TidspunktForAleneomsorg {

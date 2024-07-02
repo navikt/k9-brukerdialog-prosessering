@@ -1,8 +1,8 @@
-package no.nav.k9brukerdialogapi.ytelse.ettersending.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9brukerdialogapi.general.validerIdentifikator
+import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import java.time.LocalDate
 import no.nav.k9.ettersendelse.Pleietrengende as K9Pleietrengende
 
