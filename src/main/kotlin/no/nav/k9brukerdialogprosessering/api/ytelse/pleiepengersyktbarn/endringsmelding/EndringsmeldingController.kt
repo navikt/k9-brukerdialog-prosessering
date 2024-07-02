@@ -1,13 +1,15 @@
-package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.endringsmelding
 
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
-import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PilsSøknad
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.endringsmelding.domene.Endringsmelding
 import no.nav.k9brukerdialogprosessering.api.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
 import no.nav.k9brukerdialogprosessering.config.Issuers
+import no.nav.k9brukerdialogprosessering.innsyn.InnsynService
 import no.nav.k9brukerdialogprosessering.utils.MDCUtil
 import no.nav.k9brukerdialogprosessering.utils.NavHeaders
 import no.nav.k9brukerdialogprosessering.utils.personIdent
@@ -25,17 +27,18 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/pleiepenger-livets-sluttfase")
+@RequestMapping("/pleiepenger-sykt-barn/endringsmelding")
 @RequiredIssuers(
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
-class PleiepengerLivetsSluttfaseController(
+class EndringsmeldingController(
     private val innsendingService: InnsendingService,
     private val innsendingCache: InnsendingCache,
+    private val innsynService: InnsynService,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
 ) {
     private companion object {
-        private val logger: Logger = LoggerFactory.getLogger(PleiepengerLivetsSluttfaseController::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(EndringsmeldingController::class.java)
     }
 
     @PostMapping("/innsending")
@@ -43,14 +46,21 @@ class PleiepengerLivetsSluttfaseController(
     suspend fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: Ytelse,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @RequestBody søknad: PilsSøknad,
+        @RequestBody endringsmelding: Endringsmelding,
     ) {
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
-        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
+        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${endringsmelding.ytelse()}"
 
-        logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
+        logger.info(formaterStatuslogging(endringsmelding.ytelse(), endringsmelding.søknadId, "mottatt."))
+
+        val søknadsopplysninger = innsynService.hentSøknadsopplysningerForBarn(endringsmelding)
+
+        val psbYtelse = søknadsopplysninger.søknad.getYtelse<PleiepengerSyktBarn>()
+        endringsmelding.gyldigeEndringsPerioder = psbYtelse.søknadsperiodeList
+        endringsmelding.pleietrengendeNavn = søknadsopplysninger.barn.navn()
+
+        innsendingService.registrer(endringsmelding, metadata, ytelse)
         innsendingCache.put(cacheKey)
-        innsendingService.registrer(søknad, metadata, ytelse)
-        registrerMottattSøknad(søknad.ytelse())
+        registrerMottattSøknad(endringsmelding.ytelse())
     }
 }

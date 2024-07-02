@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.endringsmelding.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.endringsmelding.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
@@ -10,12 +10,12 @@ import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.innsending.Innsending
+import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
+import no.nav.k9brukerdialogprosessering.utils.krever
 import java.net.URL
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
