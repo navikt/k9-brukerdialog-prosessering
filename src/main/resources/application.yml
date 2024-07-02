@@ -58,6 +58,19 @@ no.nav:
                 audience: ${K9_BRUKERDIALOG_CACHE_TOKEN_X_AUDIENCE}
         ### K9 Brukerdialog Cache
 
+        ### K9 Selvbetjening Oppslag
+        tokenx-k9-selvbetjening-oppslag:
+            token-endpoint-url: ${TOKEN_X_TOKEN_ENDPOINT}
+            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+            authentication:
+                client-auth-method: private_key_jwt
+                client-id: ${TOKEN_X_CLIENT_ID}
+                client-jwk: ${TOKEN_X_PRIVATE_JWK}
+            token-exchange:
+                audience: ${K9_SELVBETJENING_OPPSLAG_TOKEN_X_AUDIENCE}
+        ### K9 Selvbetjening Oppslag
+
+
   integration:
     k9-brukerdialog-cache-base-url: ${K9_BRUKERDIALOG_CACHE_BASE_URL}
     k9-mellomlagring-base-url: ${K9_MELLOMLAGRING_BASE_URL}
