@@ -1,13 +1,13 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdPeriodeInfo
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene.Utenlandsopphold.Companion.valider
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.Utenlandsopphold.Companion.valider
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold as K9Utenlandsopphold
 
 class UtenlandsoppholdIPerioden(
     internal val skalOppholdeSegIUtlandetIPerioden: Boolean? = null,
-    private val opphold: List<Utenlandsopphold> = listOf()
+    private val opphold: List<Utenlandsopphold> = listOf(),
 ) {
     internal fun valider(felt: String = "utenlandsoppholdIPerioden") = mutableListOf<String>().apply {
         addAll(opphold.valider("$felt.opphold"))

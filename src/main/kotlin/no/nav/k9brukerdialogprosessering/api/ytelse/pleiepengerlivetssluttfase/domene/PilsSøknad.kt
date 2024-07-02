@@ -1,6 +1,6 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
-import no.nav.helse.dusseldorf.ktor.core.Throwblem
+import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
@@ -13,19 +13,20 @@ import no.nav.k9.søknad.ytelse.pls.v1.PleipengerLivetsSluttfase
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak.UttakPeriodeInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
-import no.nav.k9brukerdialogapi.general.ValidationProblemDetails
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.innsending.Innsending
-import no.nav.k9brukerdialogapi.vedlegg.vedleggId
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.ArbeidUtils.SYV_OG_EN_HALV_TIME
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
-import no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsgiver.Companion.somK9Arbeidstaker
-import no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsgiver.Companion.valider
-import no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene.OpptjeningIUtlandet.Companion.valider
-import no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene.UtenlandskNæring.Companion.valider
+import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsgiver.Companion.somK9Arbeidstaker
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsgiver.Companion.valider
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.OpptjeningIUtlandet.Companion.valider
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.UtenlandskNæring.Companion.valider
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
+import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -56,13 +57,17 @@ class PilsSøknad(
     private val harForståttRettigheterOgPlikter: Boolean,
     private val harBekreftetOpplysninger: Boolean,
     private val flereSokere: FlereSokereSvar? = null,
-    private val dataBruktTilUtledningAnnetData: String? = null
-): Innsending {
-    companion object{
+    private val dataBruktTilUtledningAnnetData: String? = null,
+) : Innsending {
+    companion object {
         private val K9_SØKNAD_VERSJON = Versjon.of("1.0.0")
     }
 
-    override fun somKomplettSøknad(søker: Søker, k9Format: no.nav.k9.søknad.Innsending?, titler: List<String>): PilsKomplettSøknad {
+    override fun somKomplettSøknad(
+        søker: Søker,
+        k9Format: no.nav.k9.søknad.Innsending?,
+        titler: List<String>,
+    ): PilsKomplettSøknad {
         requireNotNull(k9Format)
         return PilsKomplettSøknad(
             søknadId = søknadId,
@@ -73,8 +78,8 @@ class PilsSøknad(
             skalJobbeOgPleieSammeDag = skalJobbeOgPleieSammeDag,
             dagerMedPleie = dagerMedPleie,
             mottatt = mottatt,
-            vedleggId = vedleggUrls.map { it.vedleggId() },
-            opplastetIdVedleggId = opplastetIdVedleggUrls.map { it.vedleggId() },
+            vedleggId = vedleggUrls.map { it.toURI().dokumentId() },
+            opplastetIdVedleggId = opplastetIdVedleggUrls.map { it.toURI().dokumentId() },
             medlemskap = medlemskap,
             pleietrengende = pleietrengende,
             utenlandsoppholdIPerioden = utenlandsoppholdIPerioden,
@@ -88,7 +93,7 @@ class PilsSøknad(
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
             flereSokere = flereSokere,
-            k9Format = k9Format as no.nav.k9.søknad.Søknad
+            k9Format = k9Format as Søknad
         )
     }
 
@@ -106,7 +111,7 @@ class PilsSøknad(
         pleierDuDenSykeHjemme?.let { krever(it, "pleierDuDenSykeHjemme må være true.") }
         krever(harBekreftetOpplysninger, "harBekreftetOpplysninger må være true.")
         krever(harForståttRettigheterOgPlikter, "harForståttRettigheterOgPlikter må være true.")
-        if (isNotEmpty()) throw Throwblem(ValidationProblemDetails(this))
+        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
     }
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): K9Søknad {
@@ -119,7 +124,7 @@ class PilsSøknad(
             .medArbeidstid(byggK9Arbeidstid())
             .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as PleipengerLivetsSluttfase
 
-        if(utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden == true){
+        if (utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden == true) {
             ytelse.medUtenlandsopphold(utenlandsoppholdIPerioden.somK9Utenlandsopphold())
         }
 
@@ -138,7 +143,8 @@ class PilsSøknad(
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)
         .medAnnetData(dataBruktTilUtledningAnnetData)
 
-    private fun byggK9Uttak() = Uttak().medPerioder(mapOf(Periode(fraOgMed, tilOgMed) to UttakPeriodeInfo(SYV_OG_EN_HALV_TIME)))
+    private fun byggK9Uttak() =
+        Uttak().medPerioder(mapOf(Periode(fraOgMed, tilOgMed) to UttakPeriodeInfo(SYV_OG_EN_HALV_TIME)))
 
     private fun byggK9OpptjeningAktivitet() = OpptjeningAktivitet().apply {
         frilans?.let { medFrilanser(it.somK9Frilanser()) }
@@ -146,11 +152,18 @@ class PilsSøknad(
     }
 
     private fun byggK9Arbeidstid() = Arbeidstid().apply {
-        if(arbeidsgivere.isNotEmpty()) medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(fraOgMed, tilOgMed))
+        if (arbeidsgivere.isNotEmpty()) medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(fraOgMed, tilOgMed))
 
-        selvstendigNæringsdrivende?.let { medSelvstendigNæringsdrivendeArbeidstidInfo(it.somK9ArbeidstidInfo(fraOgMed, tilOgMed)) }
+        selvstendigNæringsdrivende?.let {
+            medSelvstendigNæringsdrivendeArbeidstidInfo(
+                it.somK9ArbeidstidInfo(
+                    fraOgMed,
+                    tilOgMed
+                )
+            )
+        }
 
-        when(frilans){
+        when (frilans) {
             null -> medFrilanserArbeidstid(arbeidstidInfoMedNullTimer(fraOgMed, tilOgMed))
             else -> medFrilanserArbeidstid(frilans.somK9Arbeidstid(fraOgMed, tilOgMed))
         }
@@ -164,5 +177,6 @@ class PilsSøknad(
         addAll(opplastetIdVedleggUrls)
     }
 
-    override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = PleiepengerLivetsSluttfaseSøknadValidator()
+    override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> =
+        PleiepengerLivetsSluttfaseSøknadValidator()
 }

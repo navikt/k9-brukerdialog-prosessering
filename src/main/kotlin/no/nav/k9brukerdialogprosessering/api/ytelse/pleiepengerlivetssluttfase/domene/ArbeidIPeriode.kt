@@ -1,9 +1,9 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
-import no.nav.k9brukerdialogapi.general.krever
+import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.Duration
 import java.time.LocalDate
 

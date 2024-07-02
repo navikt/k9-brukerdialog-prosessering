@@ -1,7 +1,8 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
-import no.nav.k9brukerdialogapi.general.erLikEllerEtter
-import no.nav.k9brukerdialogapi.general.krever
+
+import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
+import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
 
 class OpptjeningIUtlandet(

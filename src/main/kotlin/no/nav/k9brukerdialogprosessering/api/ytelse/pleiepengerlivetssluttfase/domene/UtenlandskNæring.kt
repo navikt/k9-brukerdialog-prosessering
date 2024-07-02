@@ -1,8 +1,8 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
-import no.nav.k9brukerdialogapi.general.erLikEllerEtter
-import no.nav.k9brukerdialogapi.general.krever
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Næringstype
+import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
+import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
 
 class UtenlandskNæring(
@@ -11,13 +11,14 @@ class UtenlandskNæring(
     private val land: no.nav.k9brukerdialogapi.ytelse.fellesdomene.Land,
     private val organisasjonsnummer: String? = null,
     private val fraOgMed: LocalDate,
-    private val tilOgMed: LocalDate? = null
+    private val tilOgMed: LocalDate? = null,
 ) {
 
     companion object {
-        internal fun List<UtenlandskNæring>.valider(felt: String = "utenlandskNæring") = flatMapIndexed { index, utenlandskNæring ->
-            utenlandskNæring.valider("$felt[$index]")
-        }
+        internal fun List<UtenlandskNæring>.valider(felt: String = "utenlandskNæring") =
+            flatMapIndexed { index, utenlandskNæring ->
+                utenlandskNæring.valider("$felt[$index]")
+            }
     }
 
     internal fun valider(felt: String) = mutableListOf<String>().apply {

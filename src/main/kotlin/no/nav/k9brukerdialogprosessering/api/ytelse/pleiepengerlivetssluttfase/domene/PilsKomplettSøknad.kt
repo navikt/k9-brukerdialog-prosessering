@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
@@ -31,7 +31,4 @@ class PilsKomplettSøknad(
     private val harBekreftetOpplysninger: Boolean,
     private val flereSokere: FlereSokereSvar? = null,
     private val k9Format: K9Søknad
-): KomplettInnsending {
-    override fun equals(other: Any?) = this === other || other is PilsKomplettSøknad && this.equals(other)
-    private fun equals(other: PilsKomplettSøknad) = søknadId == other.søknadId
-}
+): KomplettInnsending
