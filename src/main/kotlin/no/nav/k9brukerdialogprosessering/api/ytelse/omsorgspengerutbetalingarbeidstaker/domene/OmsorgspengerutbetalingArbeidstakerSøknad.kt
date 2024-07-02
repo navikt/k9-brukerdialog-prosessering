@@ -1,6 +1,6 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
-import no.nav.helse.dusseldorf.ktor.core.Throwblem
+import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
@@ -9,23 +9,24 @@ import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetalingSøknadValidator
-import no.nav.k9brukerdialogapi.general.ValidationProblemDetails
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.innsending.Innsending
-import no.nav.k9brukerdialogapi.vedlegg.vedleggId
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bekreftelser
-import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver.Companion.somK9Fraværsperiode
-import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver.Companion.valider
-import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Barn.Companion.somK9BarnListe
+import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Opphold
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver.Companion.somK9Fraværsperiode
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver.Companion.valider
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Barn.Companion.somK9BarnListe
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
+import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -47,7 +48,7 @@ class OmsorgspengerutbetalingArbeidstakerSøknad(
     private val hjemmePgaSmittevernhensyn: Boolean,
     private val hjemmePgaStengtBhgSkole: Boolean? = null,
     private val dataBruktTilUtledningAnnetData: String? = null,
-) : Innsending {
+): Innsending {
     override fun valider() = mutableListOf<String>().apply {
         krever(arbeidsgivere.isNotEmpty(), "Må ha minst en arbeidsgiver satt.")
         addAll(bosteder.valider("bosteder"))
@@ -55,7 +56,7 @@ class OmsorgspengerutbetalingArbeidstakerSøknad(
         addAll(bekreftelser.valider("bekreftelser"))
         addAll(arbeidsgivere.valider("arbeidsgivere"))
 
-        if (isNotEmpty()) throw Throwblem(ValidationProblemDetails(this))
+        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
     }
 
     override fun somKomplettSøknad(
@@ -74,11 +75,11 @@ class OmsorgspengerutbetalingArbeidstakerSøknad(
             arbeidsgivere = arbeidsgivere,
             dineBarn = dineBarn,
             bekreftelser = bekreftelser,
-            vedleggId = vedlegg.map { it.vedleggId() },
+            vedleggId = vedlegg.map { it.toURI().dokumentId() },
             titler = titler,
             hjemmePgaSmittevernhensyn = hjemmePgaSmittevernhensyn,
             hjemmePgaStengtBhgSkole = hjemmePgaStengtBhgSkole,
-            k9Format = k9Format as no.nav.k9.søknad.Søknad
+            k9Format = k9Format as Søknad
         )
     }
 

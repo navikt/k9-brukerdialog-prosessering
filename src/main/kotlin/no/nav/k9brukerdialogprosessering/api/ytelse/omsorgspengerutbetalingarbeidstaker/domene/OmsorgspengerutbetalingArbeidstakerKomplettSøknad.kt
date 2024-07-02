@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bekreftelser
@@ -23,11 +23,4 @@ class OmsorgspengerutbetalingArbeidstakerKomplettSøknad(
     private val hjemmePgaSmittevernhensyn: Boolean,
     private val hjemmePgaStengtBhgSkole: Boolean? = null,
     private val k9Format: Søknad
-): KomplettInnsending {
-    override fun equals(other: Any?) = this === other || (other is OmsorgspengerutbetalingArbeidstakerKomplettSøknad && this.equals(other))
-
-    private fun equals(other: OmsorgspengerutbetalingArbeidstakerKomplettSøknad) = this.søknadId == other.søknadId &&
-            this.søker == other.søker &&
-            this.vedleggId == other.vedleggId &&
-            this.k9Format.søknadId == other.k9Format.søknadId
-}
+): KomplettInnsending

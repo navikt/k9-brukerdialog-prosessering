@@ -1,9 +1,9 @@
-package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker
 
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
-import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.OmsorgspengerMidlertidigAleneSøknad
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.OmsorgspengerutbetalingArbeidstakerSøknad
 import no.nav.k9brukerdialogprosessering.api.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
@@ -26,18 +26,18 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/omsorgspenger-midlertidig-alene")
+@RequestMapping("/omsorgspenger-utbetaling-arbeidstaker")
 @RequiredIssuers(
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
-class OmsorgspengerMidlertidigAleneController(
+class OmsorgspengerUtbetalingArbeidstakerController(
     private val innsendingService: InnsendingService,
     private val barnService: BarnService,
     private val innsendingCache: InnsendingCache,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
 ) {
     private companion object {
-        private val logger: Logger = LoggerFactory.getLogger(OmsorgspengerMidlertidigAleneController::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(OmsorgspengerUtbetalingArbeidstakerController::class.java)
     }
 
     @PostMapping("/innsending")
@@ -45,13 +45,17 @@ class OmsorgspengerMidlertidigAleneController(
     suspend fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: Ytelse,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @RequestBody søknad: OmsorgspengerMidlertidigAleneSøknad,
+        @RequestBody søknad: OmsorgspengerutbetalingArbeidstakerSøknad,
     ) {
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
-        søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn(ytelse))
+
+        val registrerteBarn = barnService.hentBarn(ytelse)
+
+        søknad.leggTilIdentifikatorPåBarnHvisMangler(registrerteBarn)
+        søknad.leggTilRegistrerteBarn(registrerteBarn)
 
         innsendingCache.put(cacheKey)
         innsendingService.registrer(søknad, metadata, ytelse)

@@ -1,12 +1,12 @@
-package no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9brukerdialogapi.general.erFørEllerLik
-import no.nav.k9brukerdialogapi.general.erLikEllerEtter
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.validerIdentifikator
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
+import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
+import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
