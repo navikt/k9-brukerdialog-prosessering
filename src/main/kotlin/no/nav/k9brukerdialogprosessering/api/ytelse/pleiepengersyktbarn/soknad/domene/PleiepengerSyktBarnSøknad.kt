@@ -1,8 +1,7 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.fpsak.tidsserie.LocalDateInterval
-import no.nav.helse.dusseldorf.ktor.core.Throwblem
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
@@ -14,18 +13,19 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning
-import no.nav.k9brukerdialogapi.general.ValidationProblemDetails
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.innsending.Innsending
-import no.nav.k9brukerdialogapi.utils.StringUtils
-import no.nav.k9brukerdialogapi.vedlegg.vedleggId
-import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.UtenlandskNæring.Companion.valider
-import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.k9Format.byggK9Arbeidstid
-import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.k9Format.byggK9OpptjeningAktivitet
+import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.UtenlandskNæring.Companion.valider
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.k9Format.byggK9Arbeidstid
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.k9Format.byggK9OpptjeningAktivitet
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
+import no.nav.k9brukerdialogprosessering.utils.StringUtils
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
+import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.Duration
 import java.time.LocalDate
@@ -39,7 +39,7 @@ enum class Språk { nb, nn }
 
 private val k9FormatVersjon = Versjon.of("1.0.0")
 
-data class Søknad(
+data class PleiepengerSyktBarnSøknad(
     val newVersion: Boolean?,
     val apiDataVersjon: String? = null,
     val søknadId: String = UUID.randomUUID().toString(),
@@ -93,8 +93,8 @@ data class Søknad(
             tilOgMed = tilOgMed,
             søker = søker,
             barn = barn,
-            vedleggId = vedlegg.map { it.vedleggId() },
-            fødselsattestVedleggId = fødselsattestVedleggUrls?.map { it.vedleggId() } ?: listOf(),
+            vedleggId = vedlegg.map { it.toURI().dokumentId() },
+            fødselsattestVedleggId = fødselsattestVedleggUrls?.map { it.toURI().dokumentId() } ?: listOf(),
             arbeidsgivere = arbeidsgivere,
             medlemskap = medlemskap,
             ferieuttakIPerioden = ferieuttakIPerioden,
@@ -148,7 +148,7 @@ data class Søknad(
             krever(url.path.matches(Regex("/vedlegg/.*")), "vedlegg[$index] inneholder ikke gyldig url")
         }
 
-        if (isNotEmpty()) throw Throwblem(ValidationProblemDetails(this))
+        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
 
     }
 
@@ -224,7 +224,7 @@ fun tilK9Tilsynsordning0Timer(periode: no.nav.k9.søknad.felles.type.Periode) = 
     )
 }
 
-private fun Søknad.validerBarnRelasjon() = mutableListOf<String>().apply {
+private fun PleiepengerSyktBarnSøknad.validerBarnRelasjon() = mutableListOf<String>().apply {
     if (barnRelasjon == BarnRelasjon.ANNET) {
         krever(
             !barnRelasjonBeskrivelse.isNullOrBlank(),

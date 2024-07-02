@@ -1,9 +1,9 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie
-import no.nav.k9brukerdialogapi.general.erFørEllerLik
-import no.nav.k9brukerdialogapi.general.krever
+import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
+import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.type.Periode as K9Periode
 

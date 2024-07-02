@@ -1,8 +1,8 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
-import no.nav.k9brukerdialogapi.general.krever
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Land
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Næringstype
+import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
 
 class UtenlandskNæring(
@@ -11,7 +11,7 @@ class UtenlandskNæring(
     val land: Land,
     val organisasjonsnummer: String? = null,
     val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate? = null
+    val tilOgMed: LocalDate? = null,
 ) {
     companion object {
         internal fun List<UtenlandskNæring>.valider(felt: String) = this.flatMapIndexed { index, utenlandskNæring ->
@@ -23,9 +23,7 @@ class UtenlandskNæring(
         addAll(land.valider("$felt.land"))
         tilOgMed?.let { krever(tilOgMed.erLikEllerEtter(fraOgMed), "$felt.tilOgMed må være lik eller etter fraOgMed") }
     }
-
-    override fun equals(other: Any?) = other === this || other is UtenlandskNæring && this.equals(other)
-    private fun equals(other: UtenlandskNæring) = this.organisasjonsnummer == other.organisasjonsnummer && this.navnPåVirksomheten == other.navnPåVirksomheten
 }
 
-internal fun LocalDate.erLikEllerEtter(tilOgMedDato: LocalDate) = this.isEqual(tilOgMedDato) || this.isAfter(tilOgMedDato)
+internal fun LocalDate.erLikEllerEtter(tilOgMedDato: LocalDate) =
+    this.isEqual(tilOgMedDato) || this.isAfter(tilOgMedDato)

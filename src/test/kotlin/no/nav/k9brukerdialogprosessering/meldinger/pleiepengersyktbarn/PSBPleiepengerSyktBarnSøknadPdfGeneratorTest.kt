@@ -50,7 +50,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
-class PSBSøknadPdfGeneratorTest {
+class PSBPleiepengerSyktBarnSøknadPdfGeneratorTest {
 
     @Test
     fun `generering av oppsummerings-PDF fungerer`() {

@@ -1,11 +1,11 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9brukerdialogapi.general.erFørEllerLik
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.validerIdentifikator
+import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.validerIdentifikator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDate

@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerutbetalingat
+package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerutbetalingsnf
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
@@ -11,10 +11,10 @@ import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_CLEANUP_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_MOTTATT_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_PREPROSESSERT_TOPIC
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerutbetalingat.utils.OMPUtbetalingATSøknadUtils
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.OMPUtbetalingSNFTopologyConfiguration.Companion.OMP_UTB_SNF_CLEANUP_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.OMPUtbetalingSNFTopologyConfiguration.Companion.OMP_UTB_SNF_MOTTATT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.OMPUtbetalingSNFTopologyConfiguration.Companion.OMP_UTB_SNF_PREPROSESSERT_TOPIC
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerutbetalingsnf.utils.OMPUtbetalingSNFSøknadUtils
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.K9DokumentMellomlagringService
 import no.nav.k9brukerdialogprosessering.utils.KafkaIntegrationTest
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
@@ -37,7 +37,7 @@ import java.time.ZonedDateTime
 import java.util.*
 
 @KafkaIntegrationTest
-class OMPUtbetalingATSøknadKonsumentTest {
+class OMPUtbetalingSNFPleiepengerSyktBarnSøknadKonsumentTest {
 
     @Autowired
     private lateinit var mapper: ObjectMapper
@@ -59,8 +59,8 @@ class OMPUtbetalingATSøknadKonsumentTest {
     fun setUp() {
         producer = embeddedKafkaBroker.opprettKafkaProducer()
         consumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "omsorgspengerutbetaling-arbeidstaker", topics = listOf(
-                OMP_UTB_AT_MOTTATT_TOPIC, OMP_UTB_AT_PREPROSESSERT_TOPIC, OMP_UTB_AT_CLEANUP_TOPIC
+            groupPrefix = "omsorgspengerutbetaling-snf", topics = listOf(
+                OMP_UTB_SNF_MOTTATT_TOPIC, OMP_UTB_SNF_PREPROSESSERT_TOPIC, OMP_UTB_SNF_CLEANUP_TOPIC
             )
         )
         k9DittnavVarselConsumer = embeddedKafkaBroker.opprettKafkaConsumer(
@@ -81,7 +81,7 @@ class OMPUtbetalingATSøknadKonsumentTest {
         val søknadId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15.000Z"
         val mottatt = ZonedDateTime.parse(mottattString)
-        val søknadMottatt = OMPUtbetalingATSøknadUtils.defaultSøknad(
+        val søknadMottatt = OMPUtbetalingSNFSøknadUtils.defaultSøknad(
             søknadId = søknadId,
             mottatt = mottatt
         )
@@ -95,7 +95,7 @@ class OMPUtbetalingATSøknadKonsumentTest {
         coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
         coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTB_AT_MOTTATT_TOPIC)
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTB_SNF_MOTTATT_TOPIC)
         verify(exactly = 1, timeout = 120 * 1000) {
             runBlocking {
                 k9DokumentMellomlagringService.slettDokumenter(any(), any())
@@ -115,7 +115,7 @@ class OMPUtbetalingATSøknadKonsumentTest {
                 dagerSynlig = 7,
                 søkerFødselsnummer = søknadMottatt.søkerFødselsnummer(),
                 eventId = "testes ikke",
-                ytelse = "OMSORGSPENGER_UT_ARBEIDSTAKER",
+                ytelse = "OMSORGSPENGER_UT_SNF",
             )
         )
     }
@@ -125,7 +125,7 @@ class OMPUtbetalingATSøknadKonsumentTest {
         val søknadId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15.000Z"
         val mottatt = ZonedDateTime.parse(mottattString)
-        val søknadMottatt = OMPUtbetalingATSøknadUtils.defaultSøknad(
+        val søknadMottatt = OMPUtbetalingSNFSøknadUtils.defaultSøknad(
             søknadId = søknadId,
             mottatt = mottatt
         )
@@ -141,188 +141,186 @@ class OMPUtbetalingATSøknadKonsumentTest {
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTB_AT_MOTTATT_TOPIC)
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTB_SNF_MOTTATT_TOPIC)
         val lesMelding =
-            consumer.lesMelding(key = søknadId, topic = OMP_UTB_AT_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
+            consumer.lesMelding(key = søknadId, topic = OMP_UTB_SNF_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
     }
-
     @Language("JSON")
     private fun preprosessertSøknadSomJson(søknadId: String, mottatt: String) = """
-        {
+       {
           "soknadId": "$søknadId",
           "mottatt": "$mottatt",
           "søker": {
             "etternavn": "Nordmann",
-            "mellomnavn": null,
+            "mellomnavn": "Mellomnavn",
             "aktørId": "123456",
-            "fødselsdato": "1999-11-02",
+            "fødselsdato": "2020-08-02",
             "fornavn": "Ola",
             "fødselsnummer": "02119970078"
           },
-          "fosterbarn": [
-            {
-              "navn": "Fosterbarn 1",
-              "identitetsnummer": "01011012345"
-            },
-            {
-              "navn": "Fosterbarn 2",
-              "identitetsnummer": "01011012234"
-            }
-          ],
-          "dineBarn": {
-            "harDeltBosted": true,
-            "barn": [
-              {
-                "identitetsnummer": "01010101011",
-                "aktørId": "01010101011",
-                "fødselsdato": "2024-05-31",
-                "navn": "Van Li Barnesen",
-                "type": "FRA_OPPSLAG"
-              },
-              {
-                "identitetsnummer": "02020202020",
-                "aktørId": "02020202020",
-                "fødselsdato": "2024-05-30",
-                "navn": "Foster Barnesen",
-                "type": "FOSTERBARN"
-              },
-              {
-                "identitetsnummer": "02020202020",
-                "aktørId": "02020202020",
-                "fødselsdato": "2024-05-29",
-                "navn": "Anna Barnesen",
-                "type": "ANNET"
-              }
-            ]
-          },
+          "harDekketTiFørsteDagerSelv": true,
+          "harSyktBarn": true,
+          "harAleneomsorg": true,
           "opphold": [
             {
-              "fraOgMed": "2019-12-12",
-              "landkode": "GB",
-              "landnavn": "Great Britain",
-              "tilOgMed": "2019-12-22",
-              "erEØSLand": true
-            }
-          ],
-          "titler": [
-            "vedlegg1"
-          ],
-          "bosteder": [
-            {
-              "fraOgMed": "2019-12-12",
-              "landkode": "GB",
-              "landnavn": "Great Britain",
-              "tilOgMed": "2019-12-22",
+              "fraOgMed": "2020-01-16",
+              "landkode": "Eng",
+              "landnavn": "England",
+              "tilOgMed": "2020-01-21",
               "erEØSLand": true
             },
             {
-              "fraOgMed": "2019-12-12",
-              "landkode": "US",
-              "landnavn": "USA",
-              "tilOgMed": "2019-12-22",
-              "erEØSLand": false
+              "fraOgMed": "2019-12-22",
+              "landkode": "CRO",
+              "landnavn": "Kroatia",
+              "tilOgMed": "2019-12-27",
+              "erEØSLand": true
+            }
+          ],
+          "selvstendigNæringsdrivende": {
+            "varigEndring": {
+              "forklaring": "Forklaring som handler om varig endring",
+              "dato": "2023-04-09",
+              "inntektEtterEndring": 234543
+            },
+            "harFlereAktiveVirksomheter": true,
+            "næringsinntekt": 123456789,
+            "fraOgMed": "2023-04-29",
+            "erNyoppstartet": true,
+            "yrkesaktivSisteTreFerdigliknedeÅrene": null,
+            "næringstype": "FISKE",
+            "tilOgMed": "2023-05-09",
+            "fiskerErPåBladB": false,
+            "navnPåVirksomheten": "Kjells Møbelsnekkeri",
+            "registrertINorge": true,
+            "organisasjonsnummer": "111111",
+            "registrertIUtlandet": null,
+            "regnskapsfører": null
+          },
+          "frilans": null,
+          "bosteder": [
+            {
+              "fraOgMed": "2020-01-01",
+              "landkode": "SWE",
+              "landnavn": "Sverige",
+              "tilOgMed": "2020-01-06",
+              "erEØSLand": true
+            },
+            {
+              "fraOgMed": "2020-01-11",
+              "landkode": "NOR",
+              "landnavn": "Norge",
+              "tilOgMed": "2020-01-11",
+              "erEØSLand": true
+            }
+          ],
+          "utbetalingsperioder": [
+            {
+              "årsak": "ORDINÆRT_FRAVÆR",
+              "aktivitetFravær": [
+                "FRILANSER"
+              ],
+              "fraOgMed": "2020-01-01",
+              "antallTimerBorte": null,
+              "tilOgMed": "2020-01-11",
+              "antallTimerPlanlagt": null
+            },
+            {
+              "årsak": "SMITTEVERNHENSYN",
+              "aktivitetFravær": [
+                "SELVSTENDIG_VIRKSOMHET"
+              ],
+              "fraOgMed": "2020-01-21",
+              "antallTimerBorte": null,
+              "tilOgMed": "2020-01-21",
+              "antallTimerPlanlagt": null
+            },
+            {
+              "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE",
+              "aktivitetFravær": [
+                "FRILANSER",
+                "SELVSTENDIG_VIRKSOMHET"
+              ],
+              "fraOgMed": "2020-01-31",
+              "antallTimerBorte": null,
+              "tilOgMed": "2020-02-05",
+              "antallTimerPlanlagt": null
             }
           ],
           "språk": "nb",
-          "arbeidsgivere": [
+          "barn": [
+           {
+             "aktørId": null,
+             "fødselsdato": "2020-01-01",
+             "identitetsnummer": "1234",
+             "navn": "Barn 1 Barnesen",
+             "type": "FOSTERBARN"
+           },
+           {
+             "aktørId": "123456789",
+             "fødselsdato": "2019-01-01",
+             "identitetsnummer": "5677",
+             "navn": "Barn 2 Barnesen",
+             "type": "FRA_OPPSLAG"
+           },
+           {
+             "aktørId": null,
+             "fødselsdato": "2018-01-01",
+             "identitetsnummer": "8888",
+             "navn": "Barn 3 Barnesen",
+             "type": "ANNET"
+           }
+          ],
+          "spørsmål": [
             {
-              "perioder": [
-                {
-                  "årsak": "SMITTEVERNHENSYN",
-                  "fraOgMed": "2020-01-01",
-                  "antallTimerBorte": "PT8H",
-                  "tilOgMed": "2020-01-11",
-                  "antallTimerPlanlagt": "PT8H"
-                },
-                {
-                  "årsak": null,
-                  "fraOgMed": "2020-01-11",
-                  "antallTimerBorte": "PT8H",
-                  "tilOgMed": "2020-01-21",
-                  "antallTimerPlanlagt": "PT8H"
-                }
-              ],
-              "utbetalingsårsak": "KONFLIKT_MED_ARBEIDSGIVER",
-              "harHattFraværHosArbeidsgiver": true,
-              "navn": "Arbeidsgiver 1",
-              "arbeidsgiverHarUtbetaltLønn": false,
-              "konfliktForklaring": "Har en konflikt med arbeidsgiver fordi ....",
-              "årsakNyoppstartet": null,
-              "organisasjonsnummer": "917755736"
+              "svar": true,
+              "spørsmål": "Har du vært hjemme?"
             },
             {
-              "perioder": [
-                {
-                  "årsak": "ORDINÆRT_FRAVÆR",
-                  "fraOgMed": "2020-01-21",
-                  "antallTimerBorte": "PT8H",
-                  "tilOgMed": "2020-01-21",
-                  "antallTimerPlanlagt": "PT8H"
-                }
-              ],
-              "utbetalingsårsak": "NYOPPSTARTET_HOS_ARBEIDSGIVER",
-              "harHattFraværHosArbeidsgiver": true,
-              "navn": "Arbeidsgiver 2",
-              "arbeidsgiverHarUtbetaltLønn": false,
-              "konfliktForklaring": null,
-              "årsakNyoppstartet": "UTØVDE_VERNEPLIKT",
-              "organisasjonsnummer": "917755736"
-            },
-            {
-              "perioder": [
-                {
-                  "årsak": "ORDINÆRT_FRAVÆR",
-                  "fraOgMed": "2020-02-01",
-                  "antallTimerBorte": null,
-                  "tilOgMed": "2020-02-06",
-                  "antallTimerPlanlagt": null
-                }
-              ],
-              "utbetalingsårsak": "NYOPPSTARTET_HOS_ARBEIDSGIVER",
-              "harHattFraværHosArbeidsgiver": true,
-              "navn": "Arbeidsgiver 3",
-              "arbeidsgiverHarUtbetaltLønn": false,
-              "konfliktForklaring": null,
-              "årsakNyoppstartet": "SØKTE_ANDRE_UTBETALINGER",
-              "organisasjonsnummer": "917755736"
+              "svar": false,
+              "spørsmål": "Skal du være hjemme?"
             }
           ],
-          
           "dokumentId": [
             [
               "123456789",
               "987654321"
             ],
             [
-              "1234"
+              "123"
             ],
             [
-              "5678"
+              "456"
+            ],
+            [
+              "789"
             ]
           ],
-          "hjemmePgaStengtBhgSkole": true,
-          "hjemmePgaSmittevernhensyn": true,
           "bekreftelser": {
             "harForståttRettigheterOgPlikter": true,
             "harBekreftetOpplysninger": true
           },
-          "k9Format": {
+          "k9FormatSøknad": {
             "språk": "nb",
-            "kildesystem": null,
+            "kildesystem": "søknadsdialog",
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "02119970078"
+              "norskIdentitetsnummer": "12345678910"
             },
             "ytelse": {
               "utenlandsopphold": {
                 "perioder": {
-                  "2020-01-01\/2020-01-10": {
+                  "2020-01-01\/2020-01-05": {
                     "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd",
-                    "land": "ESP"
+                    "land": "CAN"
+                  },
+                  "2020-01-06\/2020-01-10": {
+                    "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning",
+                    "land": "SWE"
                   }
                 },
                 "perioderSomSkalSlettes": {}
@@ -331,28 +329,71 @@ class OMPUtbetalingATSøknadKonsumentTest {
               "fosterbarn": [
                 {
                   "fødselsdato": null,
-                  "norskIdentitetsnummer": "26128027024"
+                  "norskIdentitetsnummer": "10987654321"
                 }
               ],
-              "aktivitet": null,
+              "aktivitet": {
+                "selvstendigNæringsdrivende": [
+                  {
+                    "perioder": {
+                      "2018-01-01\/2020-01-01": {
+                        "regnskapsførerNavn": "Regnskapsfører Svensen",
+                        "erNyoppstartet": true,
+                        "landkode": "NOR",
+                        "erVarigEndring": true,
+                        "regnskapsførerTlf": "+4799887766",
+                        "endringBegrunnelse": "Grunnet Covid-19",
+                        "endringDato": "2020-01-01",
+                        "erNyIArbeidslivet": true,
+                        "virksomhetstyper": [
+                          "DAGMAMMA"
+                        ],
+                        "bruttoInntekt": 5000000,
+                        "registrertIUtlandet": false
+                      }
+                    },
+                    "virksomhetNavn": "Mamsen Bamsen AS",
+                    "organisasjonsnummer": "12345678910112233444455667"
+                  }
+                ],
+                "frilanser": {
+                  "startdato": "2020-01-01",
+                  "sluttdato": null
+                }
+              },
               "fraværsperioder": [
                 {
-                  "duration": "PT7H30M",
+                  "duration": "PT7H",
                   "årsak": "STENGT_SKOLE_ELLER_BARNEHAGE",
                   "aktivitetFravær": [
-                    "ARBEIDSTAKER"
+                    "FRILANSER"
                   ],
                   "delvisFravær": null,
                   "arbeidsforholdId": null,
-                  "søknadÅrsak": "KONFLIKT_MED_ARBEIDSGIVER",
-                  "periode": "2020-01-01\/2020-01-10",
-                  "arbeidsgiverOrgNr": "917755736"
+                  "søknadÅrsak": null,
+                  "periode": "2020-01-01\/2020-01-05",
+                  "arbeidsgiverOrgNr": null
+                },
+                {
+                  "duration": "PT4H",
+                  "årsak": "SMITTEVERNHENSYN",
+                  "aktivitetFravær": [
+                    "SELVSTENDIG_VIRKSOMHET"
+                  ],
+                  "delvisFravær": null,
+                  "arbeidsforholdId": null,
+                  "søknadÅrsak": null,
+                  "periode": "2020-01-06\/2020-01-10",
+                  "arbeidsgiverOrgNr": null
                 }
               ],
               "type": "OMP_UT",
               "bosteder": {
                 "perioder": {
-                  "2020-01-01\/2020-01-10": {
+                  "2020-01-01\/2020-01-05": {
+                    "land": "ESP"
+                  },
+                  "2020-01-06\/2020-01-10": {
                     "land": "NOR"
                   }
                 },
@@ -364,10 +405,11 @@ class OMPUtbetalingATSøknadKonsumentTest {
             "begrunnelseForInnsending": {
               "tekst": null
             },
-            "versjon": "1.0.0"
+            "versjon": "1.1"
           }
         }
         """.trimIndent()
+
 }
 
 private fun String.assertDittnavVarsel(k9Beskjed: K9Beskjed) {

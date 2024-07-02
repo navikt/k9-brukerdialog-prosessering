@@ -5,9 +5,9 @@ import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9.ettersendelse.EttersendelseValidator
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.hentIdentitetsnummerForBarn
 import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.hentIdentitetsnummerForBarn
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag

@@ -1,13 +1,13 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
-import no.nav.k9brukerdialogapi.general.erFørEllerLik
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.kreverIkkeNull
-import no.nav.k9brukerdialogapi.utils.månedStart
-import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.Arbeidsforhold
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.Arbeidsforhold
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.månedStart
+import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.time.LocalDate
 
 data class Frilans(
@@ -38,9 +38,15 @@ data class Frilans(
 
         val sisteTreMånederFørSøknadsperioden = søknadsperiodeStart.månedStart().minusMonths(3)
         if (startetFørSisteTreHeleMåneder == true) {
-            kreverIkkeNull(startdato, "$felt.startdato kan ikke være null dersom $felt.startetFørOpptjeningsperiode er true")
+            kreverIkkeNull(
+                startdato,
+                "$felt.startdato kan ikke være null dersom $felt.startetFørOpptjeningsperiode er true"
+            )
             val dagenFørDeSisteTreMånderFørSøknadsperiodeStart = sisteTreMånederFørSøknadsperioden.minusDays(1)
-            krever(startdato == dagenFørDeSisteTreMånderFørSøknadsperiodeStart, "Når $felt.startetFørSisteTreHeleMåneder er true, må $felt.startdato ($startdato) må være 3 mnd før søknadsperioden ($sisteTreMånederFørSøknadsperioden)")
+            krever(
+                startdato == dagenFørDeSisteTreMånderFørSøknadsperiodeStart,
+                "Når $felt.startetFørSisteTreHeleMåneder er true, må $felt.startdato ($startdato) må være 3 mnd før søknadsperioden ($sisteTreMånederFørSøknadsperioden)"
+            )
         }
 
         if (type != null) {

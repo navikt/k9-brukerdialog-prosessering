@@ -37,7 +37,7 @@ import java.time.ZonedDateTime
 import java.util.*
 
 @KafkaIntegrationTest
-class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
+class OmsorgspengerKroniskSyktBarnPleiepengerSyktBarnSøknadKonsumentTest {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper

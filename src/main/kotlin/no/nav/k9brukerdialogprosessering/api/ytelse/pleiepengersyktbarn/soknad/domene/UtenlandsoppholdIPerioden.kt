@@ -1,12 +1,12 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.fpsak.tidsserie.LocalDateTimeline
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdPeriodeInfo
 import no.nav.k9.søknad.felles.type.Landkode
-import no.nav.k9brukerdialogapi.general.erFørEllerLik
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.kreverIkkeNull
+import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold as K9Utenlandsopphold
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdÅrsak as K9UtenlandsoppholdÅrsak
@@ -28,12 +28,12 @@ data class Utenlandsopphold(
     }
 
     fun somUtenlandsoppholdPeriodeInfo() = UtenlandsoppholdPeriodeInfo()
-            .medLand(Landkode.of(landkode))
-            .apply {
-                if (årsak != null && årsak != no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.Årsak.ANNET) {
-                    medÅrsak(årsak.tilK9Årsak())
-                }
+        .medLand(Landkode.of(landkode))
+        .apply {
+            if (årsak != null && årsak != no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.Årsak.ANNET) {
+                medÅrsak(årsak.tilK9Årsak())
             }
+        }
 
     fun valider(felt: String) = mutableListOf<String>().apply {
         krever(fraOgMed.erFørEllerLik(tilOgMed), "$felt.fraOgMed må være før $felt.tilOgMed")
@@ -42,14 +42,17 @@ data class Utenlandsopphold(
 
         if (erBarnetInnlagt == true) {
             krever(årsak != null, "$felt.årsak må være satt når $felt.erBarnetInnlagt er true")
-            krever(perioderBarnetErInnlagt.isNotEmpty(), "$felt.perioderBarnetErInnlagt kan ikke være tom når $felt.erBarnetInnlagt er true")
+            krever(
+                perioderBarnetErInnlagt.isNotEmpty(),
+                "$felt.perioderBarnetErInnlagt kan ikke være tom når $felt.erBarnetInnlagt er true"
+            )
         }
     }
 }
 
 data class UtenlandsoppholdIPerioden(
     val skalOppholdeSegIUtlandetIPerioden: Boolean? = null,
-    val opphold: List<Utenlandsopphold> = listOf()
+    val opphold: List<Utenlandsopphold> = listOf(),
 ) {
     internal fun tilK9Utenlandsopphold(): K9Utenlandsopphold {
         val perioder = mutableMapOf<K9Periode, UtenlandsoppholdPeriodeInfo>()
@@ -58,8 +61,10 @@ data class UtenlandsoppholdIPerioden(
             var tidslinjeUtenInnleggelse = LocalDateTimeline(utenlandsopphold.fraOgMed, utenlandsopphold.tilOgMed, 1)
 
             utenlandsopphold.perioderBarnetErInnlagt.forEach { periodeMedInnleggelse ->
-                tidslinjeUtenInnleggelse = tidslinjeUtenInnleggelse.disjoint(periodeMedInnleggelse.somLocalDateInterval())
-                perioder[K9Periode(periodeMedInnleggelse.fraOgMed, periodeMedInnleggelse.tilOgMed)] = utenlandsopphold.somUtenlandsoppholdPeriodeInfo()
+                tidslinjeUtenInnleggelse =
+                    tidslinjeUtenInnleggelse.disjoint(periodeMedInnleggelse.somLocalDateInterval())
+                perioder[K9Periode(periodeMedInnleggelse.fraOgMed, periodeMedInnleggelse.tilOgMed)] =
+                    utenlandsopphold.somUtenlandsoppholdPeriodeInfo()
             }
 
             val gjenværendePerioderUtenInnleggelse = tidslinjeUtenInnleggelse.toSegments().map {
@@ -67,8 +72,9 @@ data class UtenlandsoppholdIPerioden(
             }
 
             gjenværendePerioderUtenInnleggelse.forEach { periodeUtenInnleggelse ->
-                perioder[K9Periode(periodeUtenInnleggelse.fraOgMed, periodeUtenInnleggelse.tilOgMed)] = UtenlandsoppholdPeriodeInfo()
-                    .medLand(Landkode.of(utenlandsopphold.landkode))
+                perioder[K9Periode(periodeUtenInnleggelse.fraOgMed, periodeUtenInnleggelse.tilOgMed)] =
+                    UtenlandsoppholdPeriodeInfo()
+                        .medLand(Landkode.of(utenlandsopphold.landkode))
             }
         }
 

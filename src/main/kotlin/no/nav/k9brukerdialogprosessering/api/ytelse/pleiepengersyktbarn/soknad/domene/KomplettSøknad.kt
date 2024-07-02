@@ -1,4 +1,4 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending

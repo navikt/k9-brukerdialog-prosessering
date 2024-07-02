@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
 
-class PILSSøknadPdfGeneratorTest {
+class PILSPleiepengerSyktBarnSøknadPdfGeneratorTest {
 
     @Test
     fun `generering av oppsummerings-PDF fungerer`() {

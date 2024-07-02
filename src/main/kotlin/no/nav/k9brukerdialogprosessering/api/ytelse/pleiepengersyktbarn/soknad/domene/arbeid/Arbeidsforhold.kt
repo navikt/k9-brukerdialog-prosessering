@@ -1,12 +1,12 @@
-package no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.arbeid
+package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid
 
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
-import no.nav.k9brukerdialogapi.utils.ikkeErHelg
-import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType.PROSENT_AV_NORMALT
-import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType.TIMER_I_SNITT_PER_UKE
-import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType.ULIKE_UKER_TIMER
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType.PROSENT_AV_NORMALT
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType.TIMER_I_SNITT_PER_UKE
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType.ULIKE_UKER_TIMER
+import no.nav.k9brukerdialogprosessering.utils.DateUtils.ikkeErHelg
 import java.time.LocalDate
 import java.util.*
 import kotlin.time.toJavaDuration
@@ -43,7 +43,7 @@ data class Arbeidsforhold(
 
     fun arbeiderRedusert(fraOgMed: LocalDate, tilOgMed: LocalDate): ArbeidstidInfo {
         requireNotNull(arbeidIPeriode.redusertArbeid) { "For å regne ut redusert arbeid må den være satt." }
-        return when(arbeidIPeriode.redusertArbeid.type) {
+        return when (arbeidIPeriode.redusertArbeid.type) {
             PROSENT_AV_NORMALT -> arbeiderProsentAvNormalt(fraOgMed, tilOgMed)
             TIMER_I_SNITT_PER_UKE -> arbeiderTimerISnittPerUke(fraOgMed, tilOgMed)
             ULIKE_UKER_TIMER -> arbeidsukerUlikeTimer(fraOgMed, tilOgMed)
@@ -117,7 +117,7 @@ data class Arbeidsforhold(
 
     internal fun arbeidsukerUlikeTimer(
         fraOgMed: LocalDate,
-        tilOgMed: LocalDate
+        tilOgMed: LocalDate,
     ): ArbeidstidInfo {
         requireNotNull(arbeidIPeriode.redusertArbeid) { "For å regne ut redusert arbeid må den være satt." }
         requireNotNull(arbeidIPeriode.redusertArbeid.arbeidsuker) { "For å regne ut arbeid fra arbeidsuker må den være satt." }
@@ -157,8 +157,4 @@ data class Arbeidsforhold(
 
     private fun LocalDate.erInnenforPerioden(fraOgMed: LocalDate, tilOgMed: LocalDate) =
         this.isEqual(fraOgMed) || this.isEqual(tilOgMed) || (this.isAfter(fraOgMed) && this.isBefore(tilOgMed))
-
-    override fun equals(other: Any?) = other === this || other is Arbeidsforhold && this.equals(other)
-    private fun equals(other: Arbeidsforhold) =
-        this.normalarbeidstid == other.normalarbeidstid && this.arbeidIPeriode == other.arbeidIPeriode
 }
