@@ -1,9 +1,9 @@
-package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg
 
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
-import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene.Ettersendelse
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.OmsorgsdagerAleneOmOmsorgenSøknad
 import no.nav.k9brukerdialogprosessering.api.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/ettersending")
+@RequestMapping("//omsorgsdager-aleneomsorg")
 @RequiredIssuers(
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
@@ -45,19 +45,25 @@ class EttersendingController(
     suspend fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: Ytelse,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @RequestBody ettersendelse: Ettersendelse,
+        @RequestBody søknad: OmsorgsdagerAleneOmOmsorgenSøknad,
     ) {
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
-        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${ettersendelse.ytelse()}"
+        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
-        logger.info(formaterStatuslogging(ettersendelse.ytelse(), ettersendelse.søknadId, "mottatt."))
-        logger.info("Ettersending for ytelse ${ettersendelse.søknadstype}")
+        logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
 
-        val barnFraOppslag = barnService.hentBarn(ytelse)
-        ettersendelse.leggTilIdentifikatorPåBarnHvisMangler(barnFraOppslag)
+        søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn(ytelse))
 
+        if (søknad.gjelderFlereBarn()) {
+            val søknader = søknad.splittTilEgenSøknadPerBarn()
+            logger.info("SøknadId:${søknad.søknadId} splittet ut til ${søknader.map { it.søknadId }}")
+            søknader.forEach {
+                innsendingService.registrer(it, metadata, ytelse)
+            }
+        } else {
+            innsendingService.registrer(søknad, metadata, ytelse)
+        }
         innsendingCache.put(cacheKey)
-        innsendingService.registrer(ettersendelse, metadata, ytelse)
-        registrerMottattSøknad(ettersendelse.ytelse())
+        registrerMottattSøknad(søknad.ytelse())
     }
 }
