@@ -5,11 +5,11 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
-import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_MOTTATT_TOPIC
@@ -87,7 +87,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest {
         )
 
         val correlationId = UUID.randomUUID().toString()
-        val metadata = Metadata(version = 1, correlationId = correlationId)
+        val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
@@ -130,7 +130,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest {
             mottatt = mottatt
         )
         val correlationId = UUID.randomUUID().toString()
-        val metadata = Metadata(version = 1, correlationId = correlationId)
+        val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 

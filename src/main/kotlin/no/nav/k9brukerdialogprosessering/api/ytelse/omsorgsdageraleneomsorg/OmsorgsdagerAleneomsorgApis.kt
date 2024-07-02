@@ -12,12 +12,11 @@ import no.nav.k9brukerdialogapi.INNSENDING_URL
 import no.nav.k9brukerdialogapi.OMSORGSDAGER_ALENEOMSORG_URL
 import no.nav.k9brukerdialogapi.general.formaterStatuslogging
 import no.nav.k9brukerdialogapi.general.getCallId
-import no.nav.k9brukerdialogapi.kafka.getMetadata
 import no.nav.k9brukerdialogapi.ytelse.omsorgsdageraleneomsorg.domene.OmsorgsdagerAleneOmOmsorgenSøknad
-import no.nav.k9brukerdialogapi.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogapi.ytelse.ytelseFraHeader
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
+import no.nav.k9brukerdialogprosessering.api.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

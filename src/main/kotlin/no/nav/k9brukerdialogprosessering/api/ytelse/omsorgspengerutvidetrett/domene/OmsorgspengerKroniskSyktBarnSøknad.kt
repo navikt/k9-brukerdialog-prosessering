@@ -17,6 +17,7 @@ import no.nav.k9brukerdialogapi.utils.StringUtils.FritekstPattern
 import no.nav.k9brukerdialogapi.vedlegg.vedleggId
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Barn
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URL
@@ -50,7 +51,7 @@ class OmsorgspengerKroniskSyktBarnSøknad(
         if (barn.manglerIdentifikator()) barn.leggTilIdentifikatorHvisMangler(barnFraOppslag)
     }
 
-    override fun somK9Format(søker: Søker, metadata: Metadata): K9Søknad {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): K9Søknad {
         return K9Søknad(
             SøknadId.of(søknadId),
             k9FormatVersjon,
@@ -64,7 +65,7 @@ class OmsorgspengerKroniskSyktBarnSøknad(
         ).medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 
-    fun byggK9DataBruktTilUtledning(metadata: Metadata): DataBruktTilUtledning = DataBruktTilUtledning()
+    fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()
         .medHarBekreftetOpplysninger(harBekreftetOpplysninger)
         .medHarForståttRettigheterOgPlikter(harForståttRettigheterOgPlikter)
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)

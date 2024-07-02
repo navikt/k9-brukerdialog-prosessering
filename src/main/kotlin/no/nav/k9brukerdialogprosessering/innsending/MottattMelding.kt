@@ -1,10 +1,10 @@
 package no.nav.k9brukerdialogprosessering.innsending
 
 import no.nav.k9.søknad.Innsending
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
-import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Navn
 import no.nav.k9brukerdialogprosessering.pdf.PdfData
 import java.time.ZonedDateTime
@@ -33,7 +33,7 @@ interface Preprosessert {
     fun dokumenter(): List<List<String>>
 
     fun tilJournaførigsRequest(): JournalføringsRequest
-    fun tilK9DittnavVarsel(metadata: Metadata): K9Beskjed?
+    fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed?
 
 }
 

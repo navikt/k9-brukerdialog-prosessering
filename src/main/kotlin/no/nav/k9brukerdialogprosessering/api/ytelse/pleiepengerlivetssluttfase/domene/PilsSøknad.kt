@@ -24,6 +24,7 @@ import no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene.Arbeids
 import no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene.OpptjeningIUtlandet.Companion.valider
 import no.nav.k9brukerdialogapi.ytelse.pleiepengerlivetssluttfase.domene.UtenlandskNæring.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URL
 import java.time.LocalDate
@@ -108,7 +109,7 @@ class PilsSøknad(
         if (isNotEmpty()) throw Throwblem(ValidationProblemDetails(this))
     }
 
-    override fun somK9Format(søker: Søker, metadata: Metadata): K9Søknad {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): K9Søknad {
         val ytelse = PleipengerLivetsSluttfase()
             .medSøknadsperiode(Periode(fraOgMed, tilOgMed))
             .medPleietrengende(pleietrengende.somK9Pleietrengende())
@@ -131,7 +132,7 @@ class PilsSøknad(
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 
-    fun byggK9DataBruktTilUtledning(metadata: Metadata): DataBruktTilUtledning = DataBruktTilUtledning()
+    fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()
         .medHarBekreftetOpplysninger(harBekreftetOpplysninger)
         .medHarForståttRettigheterOgPlikter(harForståttRettigheterOgPlikter)
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)

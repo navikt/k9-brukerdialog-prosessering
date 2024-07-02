@@ -1,12 +1,12 @@
-package no.nav.k9brukerdialogapi.ytelse.fellesdomene
+package no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
 import no.nav.k9.søknad.felles.type.Landkode
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.general.kreverIkkeNull
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.time.LocalDate
 
 typealias Opphold = Bosted

@@ -1,7 +1,6 @@
-package no.nav.k9brukerdialogapi.ytelse
+package no.nav.k9brukerdialogprosessering.api.ytelse
 
 import io.prometheus.client.Counter
-import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 
 val antallMottatteSøknaderPerYtelseCounter = Counter.build()
     .help("Teller antall mottatte søknader per ytelse")

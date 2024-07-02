@@ -1,19 +1,24 @@
-package no.nav.k9brukerdialogapi.ytelse.ettersending.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene
 
-import no.nav.helse.dusseldorf.ktor.core.Throwblem
 import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9.ettersendelse.EttersendelseValidator
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9brukerdialogapi.general.ValidationProblemDetails
-import no.nav.k9brukerdialogapi.general.krever
-import no.nav.k9brukerdialogapi.innsending.Innsending
-import no.nav.k9brukerdialogapi.vedlegg.vedleggId
+import no.nav.k9brukerdialogapi.ytelse.ettersending.domene.KomplettEttersendelse
+import no.nav.k9brukerdialogapi.ytelse.ettersending.domene.Pleietrengende
+import no.nav.k9brukerdialogapi.ytelse.ettersending.domene.Søknadstype
+import no.nav.k9brukerdialogapi.ytelse.ettersending.domene.valider
 import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.hentIdentitetsnummerForBarn
+import no.nav.k9brukerdialogprosessering.api.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
+import no.nav.k9brukerdialogprosessering.utils.krever
+import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
+import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -42,7 +47,7 @@ class Ettersendelse(
         krever(harForståttRettigheterOgPlikter, "harForståttRettigheterOgPlikter må være true")
         krever(harBekreftetOpplysninger, "harBekreftetOpplysninger må være true")
         krever(vedlegg.isNotEmpty(), "Liste over vedlegg kan ikke være tom")
-        if (isNotEmpty()) throw Throwblem(ValidationProblemDetails(this))
+        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
     }
 
     override fun somKomplettSøknad(
@@ -55,7 +60,7 @@ class Ettersendelse(
             søker = søker,
             språk = språk,
             mottatt = mottatt,
-            vedleggId = vedlegg.map { it.vedleggId() },
+            vedleggId = vedlegg.map { it.toURI().dokumentId() },
             søknadId = søknadId,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
@@ -68,7 +73,7 @@ class Ettersendelse(
         )
     }
 
-    override fun somK9Format(søker: Søker, metadata: Metadata): Ettersendelse {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): Ettersendelse {
         val ettersendelse = Ettersendelse.builder()
             .søknadId(SøknadId(søknadId))
             .mottattDato(mottatt)

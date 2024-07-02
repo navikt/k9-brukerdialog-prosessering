@@ -14,15 +14,16 @@ import no.nav.k9brukerdialogapi.general.krever
 import no.nav.k9brukerdialogapi.innsending.Innsending
 import no.nav.k9brukerdialogapi.vedlegg.vedleggId
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bekreftelser
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bosted
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bosted.Companion.valider
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Opphold
 import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver.Companion.somK9Fraværsperiode
 import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver.Companion.valider
 import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Barn.Companion.somK9BarnListe
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.valider
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Opphold
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URL
@@ -97,7 +98,7 @@ class OmsorgspengerutbetalingArbeidstakerSøknad(
         }
     }
 
-    override fun somK9Format(søker: Søker, metadata: Metadata): no.nav.k9.søknad.Søknad {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Søknad {
         return K9Søknad(
             SøknadId.of(søknadId),
             k9FormatVersjon,
@@ -114,7 +115,7 @@ class OmsorgspengerutbetalingArbeidstakerSøknad(
         ).medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 
-    fun byggK9DataBruktTilUtledning(metadata: Metadata): DataBruktTilUtledning = DataBruktTilUtledning()
+    fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()
         .medHarBekreftetOpplysninger(bekreftelser.harBekreftetOpplysninger)
         .medHarForståttRettigheterOgPlikter(bekreftelser.harForståttRettigheterOgPlikter)
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)

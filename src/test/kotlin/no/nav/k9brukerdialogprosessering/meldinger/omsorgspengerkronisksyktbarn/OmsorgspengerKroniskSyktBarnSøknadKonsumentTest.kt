@@ -5,11 +5,11 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
-import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC
@@ -83,7 +83,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
         val mottatt = ZonedDateTime.parse(mottattString)
         val søknadMottatt = SøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
-        val metadata = Metadata(version = 1, correlationId = correlationId)
+        val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
@@ -123,7 +123,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest {
         val mottatt = ZonedDateTime.parse(mottattString)
         val søknadMottatt = SøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
-        val metadata = Metadata(version = 1, correlationId = correlationId)
+        val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 

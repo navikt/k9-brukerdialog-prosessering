@@ -1,9 +1,10 @@
 package no.nav.k9brukerdialogprosessering.http
 
 import no.nav.k9brukerdialogprosessering.utils.Constants.CALL_ID
+import no.nav.k9brukerdialogprosessering.utils.Constants.CORRELATION_ID
 import no.nav.k9brukerdialogprosessering.utils.Constants.NAV_CONSUMER_ID
-import no.nav.k9brukerdialogprosessering.utils.Constants.X_CORRELATION_ID
 import no.nav.k9brukerdialogprosessering.utils.MDCUtil.callIdOrNew
+import no.nav.k9brukerdialogprosessering.utils.NavHeaders.X_CORRELATION_ID
 import org.slf4j.MDC
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
@@ -11,7 +12,6 @@ import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.http.client.ClientHttpResponse
-import org.springframework.kafka.support.KafkaHeaders.CORRELATION_ID
 import org.springframework.stereotype.Component
 import java.io.IOException
 

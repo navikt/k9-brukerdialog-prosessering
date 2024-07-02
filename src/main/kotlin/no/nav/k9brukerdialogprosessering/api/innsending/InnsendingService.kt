@@ -6,6 +6,7 @@ import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.common.MeldingRegistreringFeiletException
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
 import no.nav.k9brukerdialogprosessering.kafka.KafkaProducerService
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.Dokument
@@ -15,11 +16,14 @@ import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.valider
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import no.nav.k9brukerdialogprosessering.oppslag.soker.SøkerService
 import no.nav.k9brukerdialogprosessering.utils.ObjectMapperUtils.somJson
+import no.nav.k9brukerdialogprosessering.validation.ParameterType
+import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
+import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetails
+import no.nav.k9brukerdialogprosessering.validation.Violation
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import org.springframework.web.ErrorResponseException
 
 @Service
 class InnsendingService(
@@ -29,7 +33,11 @@ class InnsendingService(
     private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
 ) {
 
-    internal suspend fun registrer(innsending: Innsending, metadata: no.nav.k9brukerdialogprosessering.kafka.Metadata, ytelse: Ytelse) {
+    internal suspend fun registrer(
+        innsending: Innsending,
+        metadata: MetaInfo,
+        ytelse: Ytelse,
+    ) {
         val søker = søkerService.hentSøker(ytelse)
 
         logger.info(formaterStatuslogging(innsending.ytelse(), innsending.søknadId(), "registreres."))
@@ -51,7 +59,7 @@ class InnsendingService(
         innsending: Innsending,
         søker: Søker,
         k9Format: no.nav.k9.søknad.Innsending?,
-        metadata: no.nav.k9brukerdialogprosessering.kafka.Metadata,
+        metadata: MetaInfo,
     ) {
         try {
             val komplettInnsending = innsending.somKomplettSøknad(søker, k9Format)
@@ -70,7 +78,7 @@ class InnsendingService(
         innsending: Innsending,
         søker: Søker,
         k9Format: no.nav.k9.søknad.Innsending?,
-        metadata: no.nav.k9brukerdialogprosessering.kafka.Metadata,
+        metadata: MetaInfo,
     ) {
         logger.info("Validerer ${innsending.vedlegg().size} vedlegg.")
         val dokumentEier = søker.somDokumentEier()
@@ -96,7 +104,7 @@ class InnsendingService(
 
     fun validerK9Format(
         innsending: Innsending,
-        k9Format: no.nav.k9.søknad.Innsending
+        k9Format: no.nav.k9.søknad.Innsending,
     ) {
         val feil = when (k9Format) {
             is Søknad -> {
@@ -128,7 +136,7 @@ class InnsendingService(
         }?.toMutableSet()
 
         if (!feil.isNullOrEmpty()) {
-            throw ErrorResponseException(ValidationProblemDetails(feil))
+            throw ValidationErrorResponseException(ValidationProblemDetails(feil))
         }
     }
 
@@ -137,7 +145,7 @@ class InnsendingService(
         vedlegg.valider("vedlegg", innsending.vedlegg())
     }
 
-    private suspend fun persisterVedlegg(innsending: Innsending,  eier: DokumentEier) {
+    private suspend fun persisterVedlegg(innsending: Innsending, eier: DokumentEier) {
         logger.info("Persisterer vedlegg")
         k9DokumentMellomlagringService.persisterDokumenter(innsending.vedlegg(), eier)
     }

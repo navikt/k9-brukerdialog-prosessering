@@ -13,6 +13,7 @@ import no.nav.k9brukerdialogapi.general.krever
 import no.nav.k9brukerdialogapi.innsending.Innsending
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Barn
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URL
@@ -37,7 +38,7 @@ class OmsorgspengerMdlertidigAleneSøknad(
         private val k9FormatVersjon = Versjon.of("1.0.0")
     }
 
-    override fun somK9Format(søker: Søker, metadata: Metadata): no.nav.k9.søknad.Søknad {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Søknad {
         return K9Søknad(
             SøknadId.of(søknadId),
             k9FormatVersjon,
@@ -51,7 +52,7 @@ class OmsorgspengerMdlertidigAleneSøknad(
         ).medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 
-    fun byggK9DataBruktTilUtledning(metadata: Metadata): DataBruktTilUtledning = DataBruktTilUtledning()
+    fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()
         .medHarBekreftetOpplysninger(harBekreftetOpplysninger)
         .medHarForståttRettigheterOgPlikter(harForståttRettigheterOgPlikter)
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)

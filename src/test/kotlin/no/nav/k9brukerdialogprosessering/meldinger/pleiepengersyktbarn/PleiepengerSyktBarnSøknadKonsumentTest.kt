@@ -5,9 +5,9 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
-import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
@@ -74,7 +74,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val mottatt = ZonedDateTime.parse(mottattString)
         val søknadMottatt = PSBSøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
-        val metadata = Metadata(version = 1, correlationId = correlationId)
+        val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 
@@ -97,7 +97,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest {
         val mottatt = ZonedDateTime.parse(mottattString)
         val søknadMottatt = PSBSøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
-        val metadata = Metadata(version = 1, correlationId = correlationId)
+        val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = mapper.writeValueAsString(topicEntry)
 

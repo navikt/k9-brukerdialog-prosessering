@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.kafka
 
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
 import no.nav.k9brukerdialogprosessering.kafka.Topics.ETTERSENDING_TOPIC
 import no.nav.k9brukerdialogprosessering.kafka.Topics.MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
@@ -26,11 +27,11 @@ class KafkaProducerService(val kafkaTemplate: KafkaTemplate<String, TopicEntry<J
     private val NAME = "KafkaProducer"
     private val logger = LoggerFactory.getLogger(KafkaProducer::class.java)
 
-    internal fun produserKafkaMelding(metadata: Metadata, komplettSøknadSomJson: JSONObject, ytelse: Ytelse) {
+    internal fun produserKafkaMelding(metadata: MetaInfo, komplettSøknadSomJson: JSONObject, ytelse: Ytelse) {
         sendMeldingTilTopic(metadata, komplettSøknadSomJson, ytelse)
     }
 
-    internal fun produserKafkaMeldinger(metadata: Metadata, komplettSøknadSomJson: List<JSONObject>, ytelse: Ytelse) {
+    internal fun produserKafkaMeldinger(metadata: MetaInfo, komplettSøknadSomJson: List<JSONObject>, ytelse: Ytelse) {
         try {
             komplettSøknadSomJson.forEach { sendMeldingTilTopic(metadata, it, ytelse) }
         } catch (e: Exception) {
@@ -39,7 +40,7 @@ class KafkaProducerService(val kafkaTemplate: KafkaTemplate<String, TopicEntry<J
         }
     }
 
-    private fun sendMeldingTilTopic(metadata: Metadata, komplettSøknadSomJson: JSONObject, ytelse: Ytelse) {
+    private fun sendMeldingTilTopic(metadata: MetaInfo, komplettSøknadSomJson: JSONObject, ytelse: Ytelse) {
         val topic = hentTopicForYtelse(ytelse)
         val producerRecord = ProducerRecord(
             topic,

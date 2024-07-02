@@ -1,9 +1,11 @@
 package no.nav.k9brukerdialogprosessering.mellomlagring.dokument
 
-import no.nav.helse.dusseldorf.ktor.core.ParameterType
-import no.nav.helse.dusseldorf.ktor.core.Throwblem
-import no.nav.helse.dusseldorf.ktor.core.ValidationProblemDetails
-import no.nav.helse.dusseldorf.ktor.core.Violation
+import no.nav.k9brukerdialogprosessering.validation.ParameterType
+import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
+import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetails
+import no.nav.k9brukerdialogprosessering.validation.Violation
+import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.web.ErrorResponseException
 import java.net.URL
 
@@ -16,11 +18,11 @@ const val MAX_VEDLEGG_SIZE = MAX_VEDLEGG_SIZE_IN_MB * 1024 * 1024 // Enkeltfil 1
 internal fun List<Dokument>.valider(path: String, vedleggUrler: List<URL>) {
     validerTotalStørresle()
     if (size != vedleggUrler.size) {
-        throw ErrorResponseException(
+        throw ValidationErrorResponseException(
             ValidationProblemDetails(
                 violations = setOf(
                     Violation(
-                        parameterName = "$path",
+                        parameterName = path,
                         parameterType = ParameterType.ENTITY,
                         reason = "Mottok referanse til ${vedleggUrler.size} vedlegg, men fant kun $size vedlegg.",
                         invalidValue = vedleggUrler
@@ -31,9 +33,24 @@ internal fun List<Dokument>.valider(path: String, vedleggUrler: List<URL>) {
     }
 }
 
-fun List<Vedlegg>.validerTotalStørresle() {
+fun List<Dokument>.validerTotalStørresle() {
     val totalSize = sumOf { it.content.size }
     if (totalSize > MAX_TOTAL_VEDLEGG_SIZE) {
-        throw Throwblem(vedleggTooLargeProblemDetails(this, MAX_TOTAL_VEDLEGG_SIZE_IN_MB))
+        throw ErrorResponseException(
+            HttpStatus.BAD_REQUEST,
+            vedleggTooLargeProblemDetails(this, MAX_TOTAL_VEDLEGG_SIZE_IN_MB),
+            null
+        )
+    }
+}
+
+fun vedleggTooLargeProblemDetails(vedlegg: List<Dokument>, tillattStørrelseIMB: Int): ProblemDetail {
+    val antallVedlegg = vedlegg.size
+    val faktiskStørrelseIMB = vedlegg.sumOf { it.content.size }.div(1024).div(1024).toDouble()
+
+    return ProblemDetail.forStatus(413).apply {
+        title = "attachment-too-large"
+        detail =
+            "De $antallVedlegg vedleggene overstiger grensen på $tillattStørrelseIMB MB (faktisk størrelse: $faktiskStørrelseIMB MB)"
     }
 }

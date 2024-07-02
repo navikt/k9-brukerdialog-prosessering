@@ -3,6 +3,7 @@ package no.nav.k9brukerdialogprosessering.api.innsending
 import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URL
 import no.nav.k9.søknad.felles.type.Periode as K9Periode
@@ -12,7 +13,7 @@ interface Innsending {
     fun søknadId(): String
     fun inneholderVedlegg(): Boolean = vedlegg().isNotEmpty()
     fun vedlegg(): List<URL>
-    fun somK9Format(søker: Søker, metadata: no.nav.k9brukerdialogprosessering.kafka.Metadata): no.nav.k9.søknad.Innsending? = null
+    fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Innsending? = null
 
     fun valider(): List<String>
     fun somKomplettSøknad(

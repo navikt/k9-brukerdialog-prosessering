@@ -23,6 +23,7 @@ import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.Utenlan
 import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.k9Format.byggK9Arbeidstid
 import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.domene.k9Format.byggK9OpptjeningAktivitet
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URL
@@ -153,7 +154,7 @@ data class Søknad(
 
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = PleiepengerSyktBarnSøknadValidator()
 
-    override fun somK9Format(søker: Søker, metadata: Metadata): no.nav.k9.søknad.Innsending {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Innsending {
         val søknadsperiode = K9Periode(fraOgMed, tilOgMed)
         val psb = PleiepengerSyktBarn()
             .medSøknadsperiode(søknadsperiode)
@@ -195,7 +196,7 @@ data class Søknad(
         return Uttak().medPerioder(perioder)
     }
 
-    fun byggK9DataBruktTilUtledning(metadata: Metadata): DataBruktTilUtledning = DataBruktTilUtledning()
+    fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()
         .medHarBekreftetOpplysninger(harBekreftetOpplysninger)
         .medHarForståttRettigheterOgPlikter(harForståttRettigheterOgPlikter)
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)

@@ -3,7 +3,6 @@ package no.nav.k9brukerdialogapi.ytelse
 import io.ktor.server.routing.Route
 import no.nav.helse.dusseldorf.ktor.auth.IdTokenProvider
 import no.nav.k9brukerdialogapi.innsyn.InnsynService
-import no.nav.k9brukerdialogapi.ytelse.ettersending.ettersendingApis
 import no.nav.k9brukerdialogapi.ytelse.omsorgsdageraleneomsorg.omsorgsdagerAleneomsorgApis
 import no.nav.k9brukerdialogapi.ytelse.omsorgspengermidlertidigalene.omsorgspengerMidlertidigAleneApis
 import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingarbeidstaker.omsorgspengerUtbetalingArbeidstakerApi
@@ -14,6 +13,7 @@ import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.endringsmelding.endri
 import no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.pleiepengerSyktBarnApi
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
+import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.ettersendingApis
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnService
 
 fun Route.ytelseRoutes(

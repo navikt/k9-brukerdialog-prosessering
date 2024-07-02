@@ -2,8 +2,8 @@ package no.nav.k9brukerdialogprosessering.kafka.processors
 
 import io.mockk.every
 import no.nav.k9brukerdialogprosessering.RetryTemplateConfiguration
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.kafka.config.KafkaStreamName
-import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class ProcessTest {
         val innkommendeData = "test-data"
         val utgåendeData = "processed-test-data"
         val topicEntry =
-            TopicEntry(Metadata(version = 1, correlationId = UUID.randomUUID().toString()), innkommendeData)
+            TopicEntry(MetaInfo(version = 1, correlationId = UUID.randomUUID().toString()), innkommendeData)
 
         val resultat: TopicEntry<String> = process(KafkaStreamName.PSB_SØKNAD_PREPROSESSERING, topicEntry, retryTemplate, logger) { utgåendeData }
 
@@ -35,7 +35,7 @@ class ProcessTest {
         val innkommendeData = "test-data"
         val testDataMock = io.mockk.mockk<TestData>()
         val topicEntry =
-            TopicEntry(Metadata(version = 1, correlationId = UUID.randomUUID().toString()), innkommendeData)
+            TopicEntry(MetaInfo(version = 1, correlationId = UUID.randomUUID().toString()), innkommendeData)
 
         val forventetReturData = "processed-test-data"
         every { testDataMock.data }

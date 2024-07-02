@@ -4,13 +4,18 @@ import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
+import org.springframework.stereotype.Service
 import org.springframework.web.ErrorResponseException
 import java.net.URI
 import java.time.Duration
 
-class InnsendingCache(expireSeconds: Long) {
+@Service
+class InnsendingCache(
+    @Value("no.nav.cache.innsending.expiry_in_seconds") private val expireSeconds: Long
+) {
 
     private val cache: Cache<String, String> = Caffeine.newBuilder()
         .maximumSize(1000)

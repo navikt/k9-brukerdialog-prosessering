@@ -13,11 +13,6 @@ import no.nav.k9brukerdialogapi.general.ValidationProblemDetails
 import no.nav.k9brukerdialogapi.innsending.Innsending
 import no.nav.k9brukerdialogapi.vedlegg.vedleggId
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bekreftelser
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bosted
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Bosted.Companion.valider
-import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Opphold
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Utbetalingsperiode
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
 import no.nav.k9brukerdialogapi.ytelse.fellesdomene.Utbetalingsperiode.Companion.valider
@@ -26,6 +21,12 @@ import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingsnf.domene.Barn.Co
 import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingsnf.domene.Barn.Companion.somK9BarnListe
 import no.nav.k9brukerdialogapi.ytelse.omsorgspengerutbetalingsnf.domene.Barn.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.valider
+import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Opphold
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URL
@@ -74,7 +75,7 @@ class OmsorgspengerutbetalingSnfSøknad(
         barn.forEach { it.leggTilIdentifikatorHvisMangler(barnFraOppslag) }
     }
 
-    override fun somK9Format(søker: Søker, metadata: Metadata): no.nav.k9.søknad.Søknad {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Søknad {
         return K9Søknad(
             søknadId,
             k9FormatVersjon,
@@ -91,7 +92,7 @@ class OmsorgspengerutbetalingSnfSøknad(
         ).medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 
-    fun byggK9DataBruktTilUtledning(metadata: Metadata): DataBruktTilUtledning = DataBruktTilUtledning()
+    fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()
         .medHarBekreftetOpplysninger(bekreftelser.harBekreftetOpplysninger)
         .medHarForståttRettigheterOgPlikter(bekreftelser.harForståttRettigheterOgPlikter)
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)

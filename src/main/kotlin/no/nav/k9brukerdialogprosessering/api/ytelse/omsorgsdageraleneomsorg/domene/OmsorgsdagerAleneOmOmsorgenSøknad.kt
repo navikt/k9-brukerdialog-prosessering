@@ -13,6 +13,7 @@ import no.nav.k9brukerdialogapi.general.ValidationProblemDetails
 import no.nav.k9brukerdialogapi.general.krever
 import no.nav.k9brukerdialogapi.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URL
@@ -49,7 +50,7 @@ class OmsorgsdagerAleneOmOmsorgenSøknad(
         }
     }
 
-    override fun somK9Format(søker: Søker, metadata: Metadata): K9Søknad {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): K9Søknad {
         // Innsendt søknad blir splittet opp i 1 søknad per barn. Derfor skal det kun være et barn i lista.
         require(barn.size == 1) { "Søknad etter splitt kan kun inneholdet et barn" }
 
@@ -67,7 +68,7 @@ class OmsorgsdagerAleneOmOmsorgenSøknad(
             )
     }
 
-    fun byggK9DataBruktTilUtledning(metadata: Metadata): DataBruktTilUtledning = DataBruktTilUtledning()
+    fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()
         .medHarBekreftetOpplysninger(harBekreftetOpplysninger)
         .medHarForståttRettigheterOgPlikter(harForståttRettigheterOgPlikter)
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)

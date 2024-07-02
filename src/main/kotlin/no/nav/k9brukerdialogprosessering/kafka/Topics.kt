@@ -14,6 +14,7 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse.OMSORGSPENGER_UTBETAL
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse.OMSORGSPENGER_UTVIDET_RETT
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse.PLEIEPENGER_SYKT_BARN
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.kafka.Topics.ETTERSENDING_TOPIC
 import no.nav.k9brukerdialogprosessering.kafka.Topics.MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
 import no.nav.k9brukerdialogprosessering.kafka.Topics.OMSORGSDAGER_ALENEOMSORG_TOPIC
@@ -40,7 +41,7 @@ object Topics {
 }
 
 data class TopicEntry<V>(
-    val metadata: Metadata,
+    val metadata: MetaInfo,
     val data: V,
 )
 

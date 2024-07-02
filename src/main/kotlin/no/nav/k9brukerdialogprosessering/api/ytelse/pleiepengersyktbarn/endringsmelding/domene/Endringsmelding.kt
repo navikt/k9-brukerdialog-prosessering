@@ -14,6 +14,7 @@ import no.nav.k9brukerdialogapi.general.krever
 import no.nav.k9brukerdialogapi.innsending.Innsending
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URL
 import java.time.ZoneOffset.UTC
@@ -44,7 +45,7 @@ data class Endringsmelding(
 
     override fun søknadValidator(): SøknadValidator<Søknad> = PleiepengerSyktBarnSøknadValidator()
 
-    override fun somK9Format(søker: Søker, metadata: Metadata): no.nav.k9.søknad.Innsending {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Innsending {
         return Søknad(
             SøknadId(søknadId),
             Versjon("1.0.0"),
