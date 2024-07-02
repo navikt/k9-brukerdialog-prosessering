@@ -2,9 +2,9 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg
 
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
+import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.OmsorgsdagerAleneOmOmsorgenSøknad
-import no.nav.k9brukerdialogprosessering.api.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
 import no.nav.k9brukerdialogprosessering.config.Issuers
@@ -35,6 +35,7 @@ class OmsorgsdagerAleneomsorgController(
     private val barnService: BarnService,
     private val innsendingCache: InnsendingCache,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
+    private val metrikkService: MetrikkService,
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(OmsorgsdagerAleneomsorgController::class.java)
@@ -64,6 +65,6 @@ class OmsorgsdagerAleneomsorgController(
             innsendingService.registrer(søknad, metadata, ytelse)
         }
         innsendingCache.put(cacheKey)
-        registrerMottattSøknad(søknad.ytelse())
+        metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
 }

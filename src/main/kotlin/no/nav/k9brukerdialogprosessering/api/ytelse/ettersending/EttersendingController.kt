@@ -2,9 +2,9 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending
 
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
+import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene.Ettersendelse
-import no.nav.k9brukerdialogprosessering.api.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
 import no.nav.k9brukerdialogprosessering.config.Issuers
@@ -35,6 +35,7 @@ class EttersendingController(
     private val barnService: BarnService,
     private val innsendingCache: InnsendingCache,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
+    private val metrikkService: MetrikkService,
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(EttersendingController::class.java)
@@ -58,6 +59,6 @@ class EttersendingController(
 
         innsendingCache.put(cacheKey)
         innsendingService.registrer(ettersendelse, metadata, ytelse)
-        registrerMottattSøknad(ettersendelse.ytelse())
+        metrikkService.registrerMottattSøknad(ettersendelse.ytelse())
     }
 }

@@ -2,9 +2,9 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutvidetrett
 
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
+import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutvidetrett.domene.OmsorgspengerKroniskSyktBarnSøknad
-import no.nav.k9brukerdialogprosessering.api.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
 import no.nav.k9brukerdialogprosessering.config.Issuers
@@ -35,6 +35,7 @@ class OmsorgspengerUtvidetRettController(
     private val barnService: BarnService,
     private val innsendingCache: InnsendingCache,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
+    private val metrikkService: MetrikkService,
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(OmsorgspengerUtvidetRettController::class.java)
@@ -55,6 +56,6 @@ class OmsorgspengerUtvidetRettController(
 
         innsendingCache.put(cacheKey)
         innsendingService.registrer(søknad, metadata, ytelse)
-        registrerMottattSøknad(søknad.ytelse())
+        metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
 }

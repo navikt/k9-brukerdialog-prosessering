@@ -3,9 +3,9 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.endring
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
+import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.endringsmelding.domene.Endringsmelding
-import no.nav.k9brukerdialogprosessering.api.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
 import no.nav.k9brukerdialogprosessering.config.Issuers
@@ -36,6 +36,7 @@ class EndringsmeldingController(
     private val innsendingCache: InnsendingCache,
     private val innsynService: InnsynService,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
+    private val metrikkService: MetrikkService
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(EndringsmeldingController::class.java)
@@ -61,6 +62,6 @@ class EndringsmeldingController(
 
         innsendingService.registrer(endringsmelding, metadata, ytelse)
         innsendingCache.put(cacheKey)
-        registrerMottattSøknad(endringsmelding.ytelse())
+        metrikkService.registrerMottattSøknad(endringsmelding.ytelse())
     }
 }

@@ -2,9 +2,9 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase
 
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
+import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PilsSøknad
-import no.nav.k9brukerdialogprosessering.api.ytelse.registrerMottattSøknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
 import no.nav.k9brukerdialogprosessering.config.Issuers
@@ -33,6 +33,7 @@ class PleiepengerLivetsSluttfaseController(
     private val innsendingService: InnsendingService,
     private val innsendingCache: InnsendingCache,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
+    private val metrikkService: MetrikkService,
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(PleiepengerLivetsSluttfaseController::class.java)
@@ -51,6 +52,6 @@ class PleiepengerLivetsSluttfaseController(
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
         innsendingCache.put(cacheKey)
         innsendingService.registrer(søknad, metadata, ytelse)
-        registrerMottattSøknad(søknad.ytelse())
+        metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
 }

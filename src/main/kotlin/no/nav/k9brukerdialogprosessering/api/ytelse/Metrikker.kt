@@ -1,11 +1,16 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse
 
-import io.prometheus.client.Counter
+import io.micrometer.core.instrument.Counter
+import io.micrometer.core.instrument.MeterRegistry
+import org.springframework.stereotype.Service
 
-val antallMottatteSøknaderPerYtelseCounter = Counter.build()
-    .help("Teller antall mottatte søknader per ytelse")
-    .name("antall_mottatte_soknader_per_ytelse_counter")
-    .labelNames("ytelse")
-    .register()
+@Service
+class MetrikkService(meterRegistry: MeterRegistry) {
 
-fun registrerMottattSøknad(ytelse: Ytelse) = antallMottatteSøknaderPerYtelseCounter.labels(ytelse.name).inc()
+    private val antallMottatteSøknaderPerYtelseCounter = Counter.builder("antall_mottatte_soknader_per_ytelse_counter")
+        .description("Teller antall mottatte søknader per ytelse")
+        .tag("ytelse", "ytelse")
+        .register(meterRegistry)
+
+    fun registrerMottattSøknad(ytelse: Ytelse) = antallMottatteSøknaderPerYtelseCounter.increment()
+}
