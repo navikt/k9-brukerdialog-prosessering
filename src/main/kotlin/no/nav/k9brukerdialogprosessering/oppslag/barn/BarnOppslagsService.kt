@@ -4,6 +4,8 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpMethod
 import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.Recover
 import org.springframework.retry.annotation.Retryable
@@ -46,7 +48,12 @@ class BarnOppslagsService(
 
     fun hentBarn(ytelse: Ytelse): List<BarnOppslagRespons> {
         logger.info("Slår opp barn...")
-        val exchange = k9OppslagsKlient.getForEntity(barnUrl.toUriString(), BarnOppslagResponsListe::class.java)
+        val exchange = k9OppslagsKlient.exchange(
+            barnUrl.toUriString(),
+            HttpMethod.GET,
+            HttpEntity(null, ytelse.somHttpHeader()),
+            BarnOppslagResponsListe::class.java
+        )
         logger.info("Fikk response {} fra oppslag av barn.", exchange.statusCode)
 
         return exchange.body?.barn ?: listOf()
