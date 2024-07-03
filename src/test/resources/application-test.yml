@@ -11,64 +11,64 @@ no.nav:
       tokenx:
         discoveryurl: http://localhost:${mock-oauth2-server.port}/tokenx/.well-known/openid-configuration
         accepted_audience: aud-localhost
-      client:
-        registration:
-          azure-k9-joark:
-            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
-            grant-type: client_credentials
-            scope: api://dev-gcp.k9-joark/.default
-            authentication:
-              client-auth-method: private_key_jwt
-              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
-              client-jwk: src/test/resources/private-jwk.json
+    client:
+      registration:
+        azure-k9-joark:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: client_credentials
+          scope: api://dev-gcp.k9-joark/.default
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
 
-          azure-k9-mellomlagring:
-            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
-            grant-type: client_credentials
-            scope: api://dev-gcp.k9-mellomlagring/.default
-            authentication:
-              client-auth-method: private_key_jwt
-              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
-              client-jwk: src/test/resources/private-jwk.json
-          tokenx-k9-mellomlagring:
-            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
-            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-            authentication:
-              client-auth-method: private_key_jwt
-              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
-              client-jwk: src/test/resources/private-jwk.json
-            token-exchange:
-              audience: k9-mellomlagring
+        azure-k9-mellomlagring:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: client_credentials
+          scope: api://dev-gcp.k9-mellomlagring/.default
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+        tokenx-k9-mellomlagring:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: k9-mellomlagring
 
-          tokenx-k9-sak-innsyn-api:
-            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
-            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-            authentication:
-              client-auth-method: private_key_jwt
-              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
-              client-jwk: src/test/resources/private-jwk.json
-            token-exchange:
-              audience: k9-sak-innsyn-api
+        tokenx-k9-sak-innsyn-api:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: k9-sak-innsyn-api
 
-          tokenx-k9-selvbetjening-oppslag:
-            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
-            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-            authentication:
-              client-auth-method: private_key_jwt
-              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
-              client-jwk: src/test/resources/private-jwk.json
-            token-exchange:
-              audience: k9-selvbetjening-oppslag
+        tokenx-k9-selvbetjening-oppslag:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: k9-selvbetjening-oppslag
 
-          tokenx-k9-brukerdialog-cache:
-            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
-            grant-type: urn:ietf:params:oauth:grant-type:token-exchange
-            authentication:
-              client-auth-method: private_key_jwt
-              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
-              client-jwk: src/test/resources/private-jwk.json
-            token-exchange:
-              audience: k9-brukerdialog-cache
+        tokenx-k9-brukerdialog-cache:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: k9-brukerdialog-cache
 
   cache:
     barn:
