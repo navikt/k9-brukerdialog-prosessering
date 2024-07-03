@@ -6,6 +6,9 @@
   "minReplicas": "1",
   "maxReplicas": "2",
   "kafkaPool": "nav-dev",
+  "ingresses": [
+    "https://k9-brukerdialog-prosessering.intern.dev.nav.no"
+  ],
   "inboundRules": [
     {
       "app": "tokenx-token-generator",
