@@ -6,16 +6,13 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
-import org.springframework.context.EnvironmentAware
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.env.Environment
 import org.springframework.http.HttpHeaders
 
 
 @Configuration
-class SwaggerConfiguration : EnvironmentAware {
-    private var env: Environment? = null
+class SwaggerConfiguration {
 
     @Bean
     fun openAPI(): OpenAPI {
@@ -53,9 +50,5 @@ class SwaggerConfiguration : EnvironmentAware {
                 For nytt token -> https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:dusseldorf:k9-brukerdialog-prosessering
             """.trimMargin()
             )
-    }
-
-    override fun setEnvironment(env: Environment) {
-        this.env = env
     }
 }
