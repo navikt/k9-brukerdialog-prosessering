@@ -18,6 +18,6 @@ class BarnController(private val barnService: BarnService) {
 
     @GetMapping
     suspend fun hentSøker(@RequestHeader("X-Nav-Ytelse") ytelse: Ytelse): List<BarnOppslag> {
-        return barnService.hentBarn(ytelse = ytelse)
+        return barnService.hentBarn()
     }
 }

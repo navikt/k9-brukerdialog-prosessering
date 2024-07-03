@@ -1,7 +1,6 @@
 package no.nav.k9brukerdialogprosessering.oppslag.arbeidsgiver
 
 import no.nav.k9brukerdialogapi.oppslag.arbeidsgiver.Arbeidsgivere
-import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.oppslag.TilgangNektetException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -19,14 +18,12 @@ class ArbeidsgiverService(
         tilOgMed: LocalDate,
         skalHentePrivateArbeidsgivere: Boolean,
         skalHenteFrilansoppdrag: Boolean,
-        ytelse: Ytelse,
     ): Arbeidsgivere = try {
         arbeidsgivereOppslagsService.hentArbeidsgivere(
             fraOgMed = fraOgMed,
             tilOgMed = tilOgMed,
             skalHentePrivateArbeidsgivere = skalHentePrivateArbeidsgivere,
-            skalHenteFrilansoppdrag = skalHenteFrilansoppdrag,
-            ytelse = ytelse
+            skalHenteFrilansoppdrag = skalHenteFrilansoppdrag
         ).arbeidsgivere
     } catch (cause: Throwable) {
         when (cause) {

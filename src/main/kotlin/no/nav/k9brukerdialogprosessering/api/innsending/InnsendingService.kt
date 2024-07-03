@@ -35,10 +35,9 @@ class InnsendingService(
 
     internal suspend fun registrer(
         innsending: Innsending,
-        metadata: MetaInfo,
-        ytelse: Ytelse,
+        metadata: MetaInfo
     ) {
-        val søker = søkerService.hentSøker(ytelse)
+        val søker = søkerService.hentSøker()
 
         logger.info(formaterStatuslogging(innsending.ytelse(), innsending.søknadId(), "registreres."))
 

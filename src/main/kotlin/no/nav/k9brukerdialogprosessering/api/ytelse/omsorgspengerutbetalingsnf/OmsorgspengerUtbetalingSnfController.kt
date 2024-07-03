@@ -53,12 +53,12 @@ class OmsorgspengerUtbetalingSnfController(
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId.id, "mottatt."))
-        val registrerteBarn = barnService.hentBarn(ytelse)
+        val registrerteBarn = barnService.hentBarn()
         søknad.leggTilIdentifikatorPåBarnHvisMangler(registrerteBarn)
 
 
         innsendingCache.put(cacheKey)
-        innsendingService.registrer(søknad, metadata, ytelse)
+        innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
 }

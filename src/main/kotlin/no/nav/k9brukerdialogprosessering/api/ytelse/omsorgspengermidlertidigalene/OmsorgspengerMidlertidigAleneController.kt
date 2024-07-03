@@ -53,10 +53,10 @@ class OmsorgspengerMidlertidigAleneController(
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
-        søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn(ytelse))
+        søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn())
 
         innsendingCache.put(cacheKey)
-        innsendingService.registrer(søknad, metadata, ytelse)
+        innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
 }

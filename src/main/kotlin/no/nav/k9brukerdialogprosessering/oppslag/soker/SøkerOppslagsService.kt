@@ -46,7 +46,8 @@ class SøkerOppslagsService(
             .build()
     }
 
-    fun hentSøker(ytelse: Ytelse): SøkerOppslagRespons {
+    fun hentSøker(): SøkerOppslagRespons {
+        val ytelse = Ytelse.fraMDC()
         logger.info("Slår opp søker...")
 
         val exchange = k9OppslagsKlient.exchange(

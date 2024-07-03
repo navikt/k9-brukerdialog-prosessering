@@ -54,16 +54,16 @@ class OmsorgsdagerAleneomsorgController(
 
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
 
-        søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn(ytelse))
+        søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn())
 
         if (søknad.gjelderFlereBarn()) {
             val søknader = søknad.splittTilEgenSøknadPerBarn()
             logger.info("SøknadId:${søknad.søknadId} splittet ut til ${søknader.map { it.søknadId }}")
             søknader.forEach {
-                innsendingService.registrer(it, metadata, ytelse)
+                innsendingService.registrer(it, metadata)
             }
         } else {
-            innsendingService.registrer(søknad, metadata, ytelse)
+            innsendingService.registrer(søknad, metadata)
         }
         innsendingCache.put(cacheKey)
         metrikkService.registrerMottattSøknad(søknad.ytelse())

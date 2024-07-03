@@ -52,7 +52,7 @@ class PleiepengerLivetsSluttfaseController(
 
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
         innsendingCache.put(cacheKey)
-        innsendingService.registrer(søknad, metadata, ytelse)
+        innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
 }

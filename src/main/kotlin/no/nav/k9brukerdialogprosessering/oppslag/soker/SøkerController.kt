@@ -20,6 +20,6 @@ class SøkerController(private val søkerService: SøkerService) {
     suspend fun hentSøker(
         @RequestHeader("X-Nav-Ytelse") ytelse: Ytelse,
     ): Søker {
-        return søkerService.hentSøker(ytelse = ytelse)
+        return søkerService.hentSøker()
     }
 }

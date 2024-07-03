@@ -54,13 +54,13 @@ class OmsorgspengerUtbetalingArbeidstakerController(
 
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
 
-        val registrerteBarn = barnService.hentBarn(ytelse)
+        val registrerteBarn = barnService.hentBarn()
 
         søknad.leggTilIdentifikatorPåBarnHvisMangler(registrerteBarn)
         søknad.leggTilRegistrerteBarn(registrerteBarn)
 
         innsendingCache.put(cacheKey)
-        innsendingService.registrer(søknad, metadata, ytelse)
+        innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
 }

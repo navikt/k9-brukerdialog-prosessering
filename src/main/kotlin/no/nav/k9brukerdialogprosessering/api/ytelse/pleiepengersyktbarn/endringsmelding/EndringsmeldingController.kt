@@ -60,7 +60,7 @@ class EndringsmeldingController(
         endringsmelding.gyldigeEndringsPerioder = psbYtelse.søknadsperiodeList
         endringsmelding.pleietrengendeNavn = søknadsopplysninger.barn.navn()
 
-        innsendingService.registrer(endringsmelding, metadata, ytelse)
+        innsendingService.registrer(endringsmelding, metadata)
         innsendingCache.put(cacheKey)
         metrikkService.registrerMottattSøknad(endringsmelding.ytelse())
     }

@@ -55,11 +55,11 @@ class EttersendingController(
         logger.info(formaterStatuslogging(ettersendelse.ytelse(), ettersendelse.søknadId, "mottatt."))
         logger.info("Ettersending for ytelse ${ettersendelse.søknadstype}")
 
-        val barnFraOppslag = barnService.hentBarn(ytelse)
+        val barnFraOppslag = barnService.hentBarn()
         ettersendelse.leggTilIdentifikatorPåBarnHvisMangler(barnFraOppslag)
 
         innsendingCache.put(cacheKey)
-        innsendingService.registrer(ettersendelse, metadata, ytelse)
+        innsendingService.registrer(ettersendelse, metadata)
         metrikkService.registrerMottattSøknad(ettersendelse.ytelse())
     }
 }

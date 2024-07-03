@@ -28,7 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder
 )
 class BarnOppslagsService(
     @Qualifier("k9OppslagsKlient")
-    private val k9OppslagsKlient: RestTemplate
+    private val k9OppslagsKlient: RestTemplate,
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(BarnOppslagsService::class.java)
@@ -46,7 +46,8 @@ class BarnOppslagsService(
             .build()
     }
 
-    fun hentBarn(ytelse: Ytelse): List<BarnOppslagRespons> {
+    fun hentBarn(): List<BarnOppslagRespons> {
+        val ytelse = Ytelse.fraMDC()
         logger.info("Slår opp barn...")
         val exchange = k9OppslagsKlient.exchange(
             barnUrl.toUriString(),

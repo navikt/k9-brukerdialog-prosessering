@@ -26,4 +26,8 @@ object MDCUtil {
         MDC.put(key, Optional.ofNullable(value)
                 .orElse(defaultValue))
     }
+
+    fun fromMDC(key: String): String? {
+        return MDC.get(key)
+    }
 }

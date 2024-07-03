@@ -1,7 +1,6 @@
 package no.nav.k9brukerdialogprosessering.oppslag.barn
 
 import com.github.benmanes.caffeine.cache.Cache
-import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.oppslag.TilgangNektetException
 import no.nav.k9brukerdialogprosessering.utils.personIdent
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
@@ -17,13 +16,13 @@ class BarnService(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(BarnService::class.java)
 
-    internal suspend fun hentBarn(ytelse: Ytelse): List<BarnOppslag> {
+    internal suspend fun hentBarn(): List<BarnOppslag> {
         val personIdent = springTokenValidationContextHolder.personIdent()
         val barnFraCache = barnCache.getIfPresent(personIdent)
         if (barnFraCache != null) return barnFraCache
 
         return try {
-            val barn = barnOppslagsService.hentBarn(ytelse = ytelse).map { it.tilBarnOppslag() }
+            val barn = barnOppslagsService.hentBarn().map { it.tilBarnOppslag() }
             barnCache.put(personIdent, barn)
             barn
         } catch (cause: Throwable) {

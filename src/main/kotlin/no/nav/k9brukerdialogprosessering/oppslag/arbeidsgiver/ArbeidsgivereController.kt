@@ -41,8 +41,7 @@ class ArbeidsgivereController(private val arbeidsgiverService: ArbeidsgiverServi
             fraOgMed = LocalDate.parse(fraOgMed),
             tilOgMed = LocalDate.parse(tilOgMed),
             skalHentePrivateArbeidsgivere = privateArbeidsgivere,
-            skalHenteFrilansoppdrag = frilansoppdrag,
-            ytelse = ytelse
+            skalHenteFrilansoppdrag = frilansoppdrag
         )
 
         return arbeidsgivere

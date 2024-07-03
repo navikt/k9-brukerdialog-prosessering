@@ -37,6 +37,7 @@ class HeadersToMDCFilterBean(
         try {
             MDCUtil.toMDC(Constants.NAV_CONSUMER_ID, req.getHeader(Constants.NAV_CONSUMER_ID), applicationName)
             MDCUtil.toMDC(Constants.CORRELATION_ID, req.getHeader(NavHeaders.X_CORRELATION_ID), generator.create())
+            MDCUtil.toMDC(Constants.YTELSE, req.getHeader(NavHeaders.X_K9_YTELSE))
         } catch (e: Exception) {
             LOG.warn("Feil ved setting av MDC-verdier for {}, MDC-verdier er inkomplette", req.requestURI, e)
         }
