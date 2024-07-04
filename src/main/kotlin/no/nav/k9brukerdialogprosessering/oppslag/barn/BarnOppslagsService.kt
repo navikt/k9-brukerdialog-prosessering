@@ -1,11 +1,13 @@
 package no.nav.k9brukerdialogprosessering.oppslag.barn
 
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.oppslag.TilgangNektetException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.Recover
 import org.springframework.retry.annotation.Retryable
@@ -69,6 +71,9 @@ class BarnOppslagsService(
     @Recover
     private fun recoverBarn(error: HttpClientErrorException): List<BarnOppslagRespons> {
         logger.error("Error response = '${error.responseBodyAsString}' fra '${barnUrl.toUriString()}'")
+        if(error.statusCode == HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS) {
+            throw TilgangNektetException("Tilgang nektet til barn.", HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS)
+        }
         throw IllegalStateException("Feil ved henting av søkers barn")
     }
 

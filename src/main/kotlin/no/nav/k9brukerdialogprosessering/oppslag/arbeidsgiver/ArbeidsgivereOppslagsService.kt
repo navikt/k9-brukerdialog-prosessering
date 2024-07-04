@@ -2,15 +2,19 @@ package no.nav.k9brukerdialogprosessering.oppslag.arbeidsgiver
 
 import no.nav.k9brukerdialogapi.oppslag.arbeidsgiver.ArbeidsgivereOppslagRespons
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.oppslag.TilgangNektetException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.retry.annotation.Backoff
+import org.springframework.retry.annotation.Recover
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.ResourceAccessException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponents
@@ -75,6 +79,27 @@ class ArbeidsgivereOppslagsService(
         logger.info("Fikk response {} for oppslag av arbeidsgivere.", exchange.statusCode)
 
         return exchange.body!!
+    }
+
+    @Recover
+    private fun recoverArbeidsgivere(error: HttpServerErrorException): ArbeidsgivereOppslagRespons {
+        logger.error("Error response = '${error.responseBodyAsString}' fra '${arbeidsgivereUrl.toUriString()}'")
+        throw IllegalStateException("Feil ved henting av arbeidsgivere")
+    }
+
+    @Recover
+    private fun recoverArbeidsgivere(error: HttpClientErrorException): ArbeidsgivereOppslagRespons {
+        logger.error("Error response = '${error.responseBodyAsString}' fra '${arbeidsgivereUrl.toUriString()}'")
+        if(error.statusCode == HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS) {
+            throw TilgangNektetException("Tilgang nektet til arbeidsgivere.", HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS)
+        }
+        throw IllegalStateException("Feil ved henting av arbeidsgivere")
+    }
+
+    @Recover
+    private fun recoverArbeidsgivere(error: ResourceAccessException): ArbeidsgivereOppslagRespons {
+        logger.error("{}", error.message)
+        throw IllegalStateException("Timeout ved henting av arbeidsgivere")
     }
 
     private fun genererAttributter(

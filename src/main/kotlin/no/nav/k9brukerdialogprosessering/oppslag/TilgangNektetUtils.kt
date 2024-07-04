@@ -15,10 +15,10 @@ class TilgangNektetException(
             httpStatus: HttpStatus,
         ): ProblemDetail {
             val problemDetail = ProblemDetail.forStatus(httpStatus)
-            problemDetail.title = "Feil ved oppslag av søker."
+            problemDetail.title = "Tilgang til personopplysninger nektet fra k9-selvbetjening-oppslag"
             problemDetail.detail = melding
 
-            problemDetail.type = URI("/problem-details/oppslag-soker")
+            problemDetail.type = URI("/problem-details/tilgang-nektet")
 
             return problemDetail
         }
