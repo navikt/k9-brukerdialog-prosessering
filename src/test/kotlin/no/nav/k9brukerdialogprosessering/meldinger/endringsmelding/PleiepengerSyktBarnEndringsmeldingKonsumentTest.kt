@@ -176,6 +176,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
                   "fødselsdato": null,
                   "norskIdentitetsnummer": "10987654321"
                 },
+                "erSammenMedBarnet": null,
                 "beredskap": {
                   "perioder": {
                     "2020-01-01/2020-01-05": {
@@ -308,11 +309,13 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
                   "perioder": {
                     "2020-01-01/2020-01-05": {
                       "land": "CAN",
-                      "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
+                      "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd",
+                      "erSammenMedBarnet": true
                     },
                     "2020-01-06/2020-01-10": {
                       "land": "SWE",
-                      "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
+                      "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning",
+                      "erSammenMedBarnet": true
                     }
                   },
                   "perioderSomSkalSlettes": {}
