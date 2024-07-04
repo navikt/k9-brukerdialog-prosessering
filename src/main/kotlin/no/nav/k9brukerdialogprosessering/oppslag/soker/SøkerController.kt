@@ -2,6 +2,7 @@ package no.nav.k9brukerdialogprosessering.oppslag.soker
 
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.config.Issuers
+import no.nav.k9brukerdialogprosessering.utils.NavHeaders
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,7 +19,7 @@ class SøkerController(private val søkerService: SøkerService) {
 
     @GetMapping
     suspend fun hentSøker(
-        @RequestHeader("X-Nav-Ytelse") ytelse: Ytelse,
+        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: Ytelse,
     ): Søker {
         return søkerService.hentSøker()
     }

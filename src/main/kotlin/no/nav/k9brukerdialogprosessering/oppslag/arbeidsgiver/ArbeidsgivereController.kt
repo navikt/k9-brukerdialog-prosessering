@@ -3,6 +3,7 @@ package no.nav.k9brukerdialogprosessering.oppslag.arbeidsgiver
 import no.nav.k9brukerdialogapi.oppslag.arbeidsgiver.Arbeidsgivere
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.config.Issuers
+import no.nav.k9brukerdialogprosessering.utils.NavHeaders
 import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
 import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetails
 import no.nav.security.token.support.core.api.ProtectedWithClaims
@@ -23,7 +24,7 @@ class ArbeidsgivereController(private val arbeidsgiverService: ArbeidsgiverServi
 
     @GetMapping
     suspend fun hentArbeidsgivere(
-        @RequestHeader("X-Nav-Ytelse") ytelse: Ytelse,
+        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: Ytelse,
         @RequestParam("fra_og_med", required = true) fraOgMed: String,
         @RequestParam("til_og_med", required = true) tilOgMed: String,
         @RequestParam("frilansoppdrag", required = false, defaultValue = "false") frilansoppdrag: Boolean,
