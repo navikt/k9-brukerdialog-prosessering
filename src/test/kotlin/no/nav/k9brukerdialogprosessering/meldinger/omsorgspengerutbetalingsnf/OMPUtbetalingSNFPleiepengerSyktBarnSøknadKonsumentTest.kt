@@ -316,11 +316,13 @@ class OMPUtbetalingSNFPleiepengerSyktBarnSøknadKonsumentTest {
                 "perioder": {
                   "2020-01-01\/2020-01-05": {
                     "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd",
-                    "land": "CAN"
+                    "land": "CAN",
+                    "erSammenMedBarnet": true
                   },
                   "2020-01-06\/2020-01-10": {
                     "årsak": "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning",
-                    "land": "SWE"
+                    "land": "SWE",
+                    "erSammenMedBarnet": true
                   }
                 },
                 "perioderSomSkalSlettes": {}

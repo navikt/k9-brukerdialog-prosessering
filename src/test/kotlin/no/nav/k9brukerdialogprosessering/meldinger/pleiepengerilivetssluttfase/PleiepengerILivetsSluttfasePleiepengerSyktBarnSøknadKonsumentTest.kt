@@ -367,7 +367,8 @@ class PleiepengerILivetsSluttfasePleiepengerSyktBarnSøknadKonsumentTest {
                 "perioder": {
                   "2021-03-01\/2021-03-03": {
                     "årsak": null,
-                    "land": "CAN"
+                    "land": "CAN",
+                     "erSammenMedBarnet": true
                   }
                 },
                 "perioderSomSkalSlettes": {}
