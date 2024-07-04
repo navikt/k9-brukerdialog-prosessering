@@ -11,8 +11,6 @@ import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration
-import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerkronisksyktbarn.utils.SøknadUtils
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetssluttfase.utils.PilsSøknadUtils
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.PILSTopologyConfiguration.Companion.PILS_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.PILSTopologyConfiguration.Companion.PILS_MOTTATT_TOPIC
@@ -369,7 +367,8 @@ class PleiepengerILivetsSluttfaseSøknadKonsumentTest {
                 "perioder": {
                   "2021-03-01\/2021-03-03": {
                     "årsak": null,
-                    "land": "CAN"
+                    "land": "CAN",
+                     "erSammenMedBarnet": true
                   }
                 },
                 "perioderSomSkalSlettes": {}

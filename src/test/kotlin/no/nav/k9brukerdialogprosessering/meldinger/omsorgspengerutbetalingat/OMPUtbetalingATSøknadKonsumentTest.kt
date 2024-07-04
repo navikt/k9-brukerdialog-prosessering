@@ -322,7 +322,8 @@ class OMPUtbetalingATSøknadKonsumentTest {
                 "perioder": {
                   "2020-01-01\/2020-01-10": {
                     "årsak": "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd",
-                    "land": "ESP"
+                    "land": "ESP",
+                    "erSammenMedBarnet": true
                   }
                 },
                 "perioderSomSkalSlettes": {}
