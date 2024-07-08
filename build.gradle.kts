@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	id("org.springframework.boot") version "3.3.1"
-	id("io.spring.dependency-management") version "1.1.5"
+	id("io.spring.dependency-management") version "1.1.6"
 	kotlin("jvm") version "2.0.0"
 	kotlin("plugin.spring") version "2.0.0"
 }
@@ -30,13 +30,13 @@ repositories {
 }
 
 val tokenSupportVersion = "5.0.1"
-val jsonassertVersion = "1.5.2"
+val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "9.4.0"
 val springMockkVersion = "4.0.2"
 val confluentVersion = "7.3.0"
 val logstashLogbackEncoderVersion = "7.4"
 val slf4jVersion = "2.0.13"
-val jacksonVersion = "2.17.1"
+val jacksonVersion = "2.17.2"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.4.0"
