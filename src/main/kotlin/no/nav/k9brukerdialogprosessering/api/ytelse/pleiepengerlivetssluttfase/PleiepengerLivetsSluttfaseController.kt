@@ -11,7 +11,7 @@ import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
 import no.nav.k9brukerdialogprosessering.config.Issuers
 import no.nav.k9brukerdialogprosessering.utils.MDCUtil
 import no.nav.k9brukerdialogprosessering.utils.NavHeaders
-import no.nav.k9brukerdialogprosessering.utils.personIdent
+import no.nav.k9brukerdialogprosessering.utils.TokenUtils.personIdent
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder

@@ -2,7 +2,7 @@ package no.nav.k9brukerdialogprosessering.oppslag.barn
 
 import com.github.benmanes.caffeine.cache.Cache
 import no.nav.k9brukerdialogprosessering.oppslag.TilgangNektetException
-import no.nav.k9brukerdialogprosessering.utils.personIdent
+import no.nav.k9brukerdialogprosessering.utils.TokenUtils.personIdent
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

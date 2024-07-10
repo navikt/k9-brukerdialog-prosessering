@@ -8,7 +8,6 @@ data class ValidationProblemDetails(val violations: Set<Violation>): ProblemDeta
     init {
         title = "invalid-request-parameters"
         detail = "Requesten inneholder ugyldige parametere"
-        setProperty("invalid_parameters", violations)
     }
 }
 data class ValidationProblemDetailsString(val violations: List<String>): ProblemDetail(400) {

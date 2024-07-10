@@ -1,6 +1,6 @@
 package no.nav.k9brukerdialogprosessering.oppslag.soker
 
-import no.nav.k9brukerdialogprosessering.utils.personIdent
+import no.nav.k9brukerdialogprosessering.utils.TokenUtils.personIdent
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.springframework.stereotype.Service
 

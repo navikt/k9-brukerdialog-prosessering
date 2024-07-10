@@ -1,8 +1,7 @@
 package no.nav.k9brukerdialogprosessering
 
 import com.nimbusds.jwt.SignedJWT
-import no.nav.k9brukerdialogprosessering.utils.hentToken
-import no.nav.k9brukerdialogprosessering.utils.tokenTilHttpEntity
+import no.nav.k9brukerdialogprosessering.utils.TokenTestUtils.hentToken
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
@@ -15,12 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.context.ApplicationContext
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
+import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -90,12 +96,12 @@ class K9brukerdialogAuthorizationTests {
             token = mockOAuth2Server.hentToken(expiry = -1000)
         )
 
-       // Kall på endepunkt med token for annen audience gir 401 feil`(endpoint: Endpoint) {
-            testRestTemplate.assertEquals(
-                endpoint = endpoint,
-                expectedStatus = HttpStatus.UNAUTHORIZED,
-                token = mockOAuth2Server.hentToken(audience = "annen-audience")
-            )
+        // Kall på endepunkt med token for annen audience gir 401 feil`(endpoint: Endpoint) {
+        testRestTemplate.assertEquals(
+            endpoint = endpoint,
+            expectedStatus = HttpStatus.UNAUTHORIZED,
+            token = mockOAuth2Server.hentToken(audience = "annen-audience")
+        )
     }
 
 
@@ -104,19 +110,29 @@ class K9brukerdialogAuthorizationTests {
             applicationContext.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping::class.java)
         val apiMappings: MutableMap<RequestMappingInfo, HandlerMethod> = requestMappingHandlerMapping.handlerMethods
 
-        val endpointList = apiMappings.mapNotNull { entry ->
-            val mappingInfo = entry.key
-            logger.info("--> Endpoint: {}", mappingInfo)
+        val endpointList = apiMappings.keys.mapNotNull { mappingInfo: RequestMappingInfo ->
+            logger.info("--> Endpoint: {}", mappingInfo.toString())
             val requestMethod = mappingInfo.methodsCondition.methods.firstOrNull()
             if (requestMethod == null) {
                 logger.warn("No request method found for mapping info: $mappingInfo")
                 return@mapNotNull null
             }
-            val path = mappingInfo.directPaths.first()
+            val pathPattern = mappingInfo.pathPatternsCondition!!.patterns.first()
+
+            var urlVariables: String? = null
+            if (pathPattern.hasPatternSyntax()) {
+                println("Pattern syntax error: ${pathPattern.patternString}")
+                urlVariables = UUID.randomUUID().toString()
+            }
+            val path = pathPattern.patternString
+
+            val contentType = mappingInfo.consumesCondition.consumableMediaTypes.firstOrNull()
 
             Endpoint(
                 method = requestMethod.asHttpMethod(),
                 url = path,
+                urlVariables = urlVariables,
+                contentType = contentType
             )
         }
 
@@ -133,12 +149,7 @@ class K9brukerdialogAuthorizationTests {
         val httpMethod = endpoint.method
 
         logger.info("Testing endpoint: $url with method: $httpMethod")
-        val response = testRestTemplate.exchange(
-            url,
-            httpMethod,
-            token?.tokenTilHttpEntity(),
-            String::class.java
-        )
+        val response = request(endpoint, url, httpMethod, token)
 
         val statusCode = response.statusCode
         if (expectedStatus != statusCode) {
@@ -156,12 +167,7 @@ class K9brukerdialogAuthorizationTests {
         val httpMethod = endpoint.method
 
         logger.info("Testing endpoint: $url with method: $httpMethod")
-        val response = testRestTemplate.exchange(
-            url,
-            httpMethod,
-            token?.tokenTilHttpEntity(),
-            String::class.java
-        )
+        val response = request(endpoint, url, httpMethod, token)
 
         val statusCode = response.statusCode
         if (expectedStatus != statusCode) {
@@ -170,8 +176,64 @@ class K9brukerdialogAuthorizationTests {
         assertThat(statusCode).isNotEqualTo(expectedStatus)
     }
 
+    private fun TestRestTemplate.request(
+        endpoint: Endpoint,
+        url: String,
+        httpMethod: HttpMethod,
+        token: SignedJWT?,
+    ): ResponseEntity<String> {
+        val httpEntity = HttpHeaders().let {
+
+            if (token != null) {
+                it.setBearerAuth(token.serialize())
+            }
+
+            it.contentType = endpoint.contentType
+
+            var body: Any? = null
+
+            if (it.contentType == MediaType.MULTIPART_FORM_DATA) {
+                body = håndterMultipartUpload(it)
+            }
+
+            HttpEntity(body, it)
+        }
+
+        return if (endpoint.urlVariables != null) {
+            exchange(
+                url,
+                httpMethod,
+                httpEntity,
+                String::class.java,
+                endpoint.urlVariables
+            )
+        } else {
+            exchange(
+                url,
+                httpMethod,
+                httpEntity,
+                String::class.java
+            )
+        }
+    }
+
+    private fun håndterMultipartUpload(httpHeaders: HttpHeaders): LinkedMultiValueMap<String, Any> {
+        httpHeaders.setContentDispositionFormData("vedlegg", "test-file.pdf")
+        val file = MockMultipartFile(
+            "vedlegg",
+            "test-file.pdf",
+            MediaType.APPLICATION_PDF_VALUE,
+            "Test content".toByteArray()
+        )
+        return LinkedMultiValueMap<String, Any>().apply {
+            add("vedlegg", file.resource)
+        }
+    }
+
     data class Endpoint(
         val method: HttpMethod,
         val url: String,
+        val urlVariables: String? = null,
+        val contentType: MediaType? = MediaType.APPLICATION_JSON,
     )
 }
