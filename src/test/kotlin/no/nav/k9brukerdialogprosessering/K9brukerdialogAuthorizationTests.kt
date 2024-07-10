@@ -235,5 +235,9 @@ class K9brukerdialogAuthorizationTests {
         val url: String,
         val urlVariables: String? = null,
         val contentType: MediaType? = MediaType.APPLICATION_JSON,
-    )
+    ) {
+        override fun toString(): String {
+            return "$method $url"
+        }
+    }
 }
