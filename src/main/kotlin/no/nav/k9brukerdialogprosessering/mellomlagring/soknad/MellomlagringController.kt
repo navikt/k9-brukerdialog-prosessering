@@ -10,15 +10,15 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/mellomlagring")
+@RequestMapping("/mellomlagring/{ytelse}")
 @RequiredIssuers(
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
@@ -28,38 +28,33 @@ class MellomlagringController(
 
     @PostMapping
     fun createMellomlagring(
-        @RequestParam ytelse: String,
-        @RequestBody mellomlagring: Map<String, Any>
+        @PathVariable ytelse: String,
+        @RequestBody mellomlagring: Map<String, Any>,
     ): ResponseEntity<Unit> = runBlocking {
-        try {
-            mellomlagringService.settMellomlagring(
-                Ytelse.valueOf(ytelse),
-                JSONObject(mellomlagring).toString()
-            )
-            ResponseEntity(HttpStatus.CREATED)
-        } catch (e: CacheConflictException) {
-            ResponseEntity(HttpStatus.CONFLICT)
-        }
+        mellomlagringService.settMellomlagring(
+            Ytelse.valueOf(ytelse),
+            JSONObject(mellomlagring).toString()
+        )
+        ResponseEntity(HttpStatus.CREATED)
+
     }
 
     @PutMapping
     fun updateMellomlagring(
-        @RequestParam ytelse: String,
-        @RequestBody mellomlagring: Map<String, Any>
+        @PathVariable ytelse: String,
+        @RequestBody mellomlagring: Map<String, Any>,
     ): ResponseEntity<Unit> = runBlocking {
-        try {
-            mellomlagringService.oppdaterMellomlagring(
-                Ytelse.valueOf(ytelse),
-                JSONObject(mellomlagring).toString()
-            )
-            ResponseEntity(HttpStatus.NO_CONTENT)
-        } catch (e: CacheNotFoundException) {
-            ResponseEntity(HttpStatus.NOT_FOUND)
-        }
+
+        mellomlagringService.oppdaterMellomlagring(
+            Ytelse.valueOf(ytelse),
+            JSONObject(mellomlagring).toString()
+        )
+        ResponseEntity(HttpStatus.NO_CONTENT)
+
     }
 
     @GetMapping
-    fun getMellomlagring(@RequestParam ytelse: String): ResponseEntity<String> = runBlocking {
+    fun getMellomlagring(@PathVariable ytelse: String): ResponseEntity<String> = runBlocking {
         val mellomlagring = mellomlagringService.hentMellomlagring(Ytelse.valueOf(ytelse))
         ResponseEntity(
             mellomlagring ?: "{}",
@@ -68,7 +63,7 @@ class MellomlagringController(
     }
 
     @DeleteMapping
-    fun deleteMellomlagring(@RequestParam ytelse: String): ResponseEntity<Void> = runBlocking {
+    fun deleteMellomlagring(@PathVariable ytelse: String): ResponseEntity<Void> = runBlocking {
         mellomlagringService.slettMellomlagring(Ytelse.valueOf(ytelse))
         ResponseEntity(HttpStatus.ACCEPTED)
     }

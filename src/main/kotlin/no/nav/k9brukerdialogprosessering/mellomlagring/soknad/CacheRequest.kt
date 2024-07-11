@@ -2,6 +2,9 @@ package no.nav.k9brukerdialogprosessering.mellomlagring.soknad
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
+import org.springframework.web.ErrorResponseException
 import java.time.ZonedDateTime
 
 data class CacheRequest(
@@ -14,7 +17,21 @@ data class CacheRequest(
 )
 
 class CacheConflictException(nøkkelPrefiks: String) :
-    RuntimeException("Cache med nøkkelPrefiks = $nøkkelPrefiks finnes allerede for person.")
+    ErrorResponseException(
+        HttpStatus.CONFLICT,
+        ProblemDetail.forStatusAndDetail(
+            HttpStatus.CONFLICT,
+            "Cache med nøkkelPrefiks = $nøkkelPrefiks for person finnes allerede."
+        ),
+        null
+    )
 
 class CacheNotFoundException(nøkkelPrefiks: String) :
-    RuntimeException("Cache med nøkkelPrefiks = $nøkkelPrefiks for person ble ikke funnet.")
+    ErrorResponseException(
+        HttpStatus.NOT_FOUND,
+        ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_FOUND,
+            "Cache med nøkkelPrefiks = $nøkkelPrefiks for person finnes ikke."
+        ),
+        null
+    )
