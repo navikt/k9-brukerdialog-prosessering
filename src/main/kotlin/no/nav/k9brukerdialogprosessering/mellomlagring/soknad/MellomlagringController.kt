@@ -4,6 +4,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.config.Issuers
 import no.nav.security.token.support.core.api.ProtectedWithClaims
+import no.nav.security.token.support.core.api.RequiredIssuers
 import org.json.JSONObject
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/mellomlagring")
-@ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
+@RequiredIssuers(
+    ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
+)
 class MellomlagringController(
     private val mellomlagringService: MellomlagringService,
 ) {
