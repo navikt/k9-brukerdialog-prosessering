@@ -5,7 +5,14 @@ import org.springframework.http.HttpOutputMessage
 import org.springframework.http.MediaType
 import org.springframework.http.converter.AbstractHttpMessageConverter
 
-class DokumentHttpMessageConverter : AbstractHttpMessageConverter<Dokument>() {
+class DokumentHttpMessageConverter : AbstractHttpMessageConverter<Dokument>(
+    MediaType.IMAGE_PNG,
+    MediaType.IMAGE_JPEG,
+    MediaType.APPLICATION_PDF,
+    MediaType.APPLICATION_JSON,
+    MediaType.APPLICATION_XML,
+    MediaType.TEXT_PLAIN
+) {
     override fun supports(clazz: Class<*>): Boolean {
         return Dokument::class.java == clazz
     }
