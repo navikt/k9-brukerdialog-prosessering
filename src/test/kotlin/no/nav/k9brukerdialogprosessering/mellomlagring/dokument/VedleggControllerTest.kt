@@ -151,18 +151,6 @@ class VedleggControllerTest {
             }
     }
 
-    /*
-    * @GetMapping("/{vedleggId}")
-    fun hentVedlegg(@NotBlank @PathVariable vedleggId: String): ResponseEntity<ByteArray> = runBlocking {
-        val personIdent = tokenValidationContextHolder.personIdent()
-        vedleggService.hentVedlegg(vedleggId, personIdent).let {
-            ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(it.contentType))
-                .body(it.content)
-        }
-    }
-    */
-
     @Test
     fun `Henting av vedlegg som ikke blir funnet returnerer 404`() {
         coEvery { vedleggService.hentVedlegg(any(), any()) } throws HttpClientErrorException.create(
