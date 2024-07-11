@@ -10,16 +10,22 @@ class VedleggService(
         return k9DokumentMellomlagringService.lagreDokument(vedlegg.somDokument(personIdent)).dokumentId()
     }
 
-    fun hentVedlegg() {
-        TODO("Not yet implemented")
+    suspend fun hentVedlegg(vedleggId: String, personIdent: String): Vedlegg {
+        return k9DokumentMellomlagringService.hentDokument(vedleggId, DokumentEier(personIdent)).somVedlegg()
     }
 
-    fun slettVedlegg() {
-        TODO("Not yet implemented")
+    suspend fun slettVedlegg(vedleggId: String, personIdent: String) {
+        return k9DokumentMellomlagringService.slettDokument(vedleggId, DokumentEier(personIdent))
     }
 
     private fun Vedlegg.somDokument(personIdent: String) = Dokument(
         eier = DokumentEier(personIdent),
+        content = content,
+        contentType = contentType,
+        title = title
+    )
+
+    private fun Dokument.somVedlegg() = Vedlegg(
         content = content,
         contentType = contentType,
         title = title

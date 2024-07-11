@@ -77,32 +77,38 @@ class K9DokumentMellomlagringService(
         coroutineScope {
             val deferred = dokumentIder.map { dokumentId ->
                 async {
-                    val slettDokumentUrl: URI = UriComponentsBuilder.fromUri(dokumentUrl)
-                        .path("/$dokumentId")
-                        .build()
-                        .toUri()
-
-                    kotlin.runCatching {
-                        k9MellomlagringRestTemplate.exchange(
-                            slettDokumentUrl.path,
-                            HttpMethod.DELETE,
-                            HttpEntity(dokumentEier),
-                            Unit::class.java
-                        )
-
-                    }.fold(
-                        onSuccess = { logger.info("Slettet dokument med id: $dokumentId") },
-                        onFailure = { error: Throwable ->
-                            if (error is RestClientException) {
-                                logger.error("Feil ved sletting av dokument med id: $dokumentId. Feilmelding: ${error.message}")
-                            }
-                            throw RuntimeException("Feil ved sletting av dokument med id: $dokumentId", error)
-                        }
-                    )
+                    slettDokument(dokumentId, dokumentEier)
                 }
             }
             deferred.awaitAll()
         }
+    }
+
+    internal suspend fun slettDokument(
+        dokumentId: String,
+        dokumentEier: DokumentEier,
+    ) {
+        val slettDokumentUrl: URI = UriComponentsBuilder.fromUri(dokumentUrl)
+            .path("/$dokumentId")
+            .build()
+            .toUri()
+
+        kotlin.runCatching {
+            k9MellomlagringRestTemplate.exchange(
+                slettDokumentUrl.path,
+                HttpMethod.DELETE,
+                HttpEntity(dokumentEier),
+                Unit::class.java
+            )
+        }.fold(
+            onSuccess = { logger.info("Slettet dokument med id: $dokumentId") },
+            onFailure = { error: Throwable ->
+                if (error is RestClientException) {
+                    logger.error("Feil ved sletting av dokument med id: $dokumentId. Feilmelding: ${error.message}")
+                }
+                throw RuntimeException("Feil ved sletting av dokument med id: $dokumentId", error)
+            }
+        )
     }
 
     internal suspend fun persisterVedlegg(

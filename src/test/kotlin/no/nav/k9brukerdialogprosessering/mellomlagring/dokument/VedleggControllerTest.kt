@@ -13,10 +13,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.FilterType
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.multipart
+import org.springframework.web.client.HttpClientErrorException
 
 @WebMvcTest(
     controllers = [VedleggController::class],
@@ -43,14 +47,11 @@ class VedleggControllerTest {
 
     @Test
     fun `Opplasting av vedlegg med støttet content-type returnerer location header`() {
-        // Mock the behavior of vedleggService
         coEvery { vedleggService.lagreVedlegg(any(), any()) } returns "12345"
 
-        // Create headers
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
 
-        // Create a mock multipart file
         val mockFile = MockMultipartFile(
             "vedlegg",
             "test-file.pdf",
@@ -58,7 +59,6 @@ class VedleggControllerTest {
             "test-content".toByteArray()
         )
 
-        // Perform the multipart request and verify the response
         mockMvc.multipart("/vedlegg") {
             file(mockFile)
             contentType = MediaType.MULTIPART_FORM_DATA
@@ -74,11 +74,9 @@ class VedleggControllerTest {
         // Mock the behavior of vedleggService
         coEvery { vedleggService.lagreVedlegg(any(), any()) } returns "12345"
 
-        // Create headers
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
 
-        // Create a mock multipart file
         val mockFile = MockMultipartFile(
             "vedlegg",
             "test-file.txt",
@@ -86,7 +84,6 @@ class VedleggControllerTest {
             "test-content".toByteArray()
         )
 
-        // Perform the multipart request and verify the response
         mockMvc.multipart("/vedlegg") {
             file(mockFile)
                 .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -114,6 +111,103 @@ class VedleggControllerTest {
                 )
             }
         }
+    }
+
+    @Test
+    fun `Sletting av vedlegg som feiler returnerer 500 problem details`() {
+        coEvery {
+            vedleggService.slettVedlegg(
+                any(),
+                any()
+            )
+        } throws RuntimeException("Feil ved sletting av dokument med id: 123")
+
+        mockMvc.delete("/vedlegg/12345")
+            .andExpect {
+                status { isInternalServerError() }
+                content {
+                    json(
+                        """
+                        {
+                          "type": "about:blank",
+                          "title": "Internal Server Error",
+                          "status": 500,
+                          "detail": "Feil ved sletting av vedlegg",
+                          "instance": "/vedlegg/12345"
+                        }
+                        """.trimIndent(), true
+                    )
+                }
+            }
+    }
+
+    @Test
+    fun `Sletting av vedlegg som lykkes returnerer 204`() {
+        coEvery { vedleggService.slettVedlegg(any(), any()) } returns Unit
+
+        mockMvc.delete("/vedlegg/12345")
+            .andExpect {
+                status { isNoContent() }
+            }
+    }
+
+    /*
+    * @GetMapping("/{vedleggId}")
+    fun hentVedlegg(@NotBlank @PathVariable vedleggId: String): ResponseEntity<ByteArray> = runBlocking {
+        val personIdent = tokenValidationContextHolder.personIdent()
+        vedleggService.hentVedlegg(vedleggId, personIdent).let {
+            ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(it.contentType))
+                .body(it.content)
+        }
+    }
+    */
+
+    @Test
+    fun `Henting av vedlegg som ikke blir funnet returnerer 404`() {
+        coEvery { vedleggService.hentVedlegg(any(), any()) } throws HttpClientErrorException.create(
+            HttpStatus.NOT_FOUND,
+            "Vedlegg ikke funnet",
+            HttpHeaders(),
+            "Vedlegg med id 12345 ble ikke funnet".toByteArray(),
+            null
+        )
+
+        mockMvc.get("/vedlegg/12345")
+            .andExpect {
+                status { isNotFound() }
+                content {
+                    json(
+                        """
+                        {
+                          "type": "about:blank",
+                          "title": "Not Found",
+                          "status": 404,
+                          "detail": "Vedlegg med id 12345 ble ikke funnet",
+                          "instance": "/vedlegg/12345"
+                        }
+                        """.trimIndent(), true
+                    )
+                }
+            }
+    }
+
+    @Test
+    fun `Henting av vedlegg som lykkes returnerer 200 og vedlegget`() {
+        coEvery { vedleggService.hentVedlegg(any(), any()) } returns Vedlegg(
+            content = "test-content".toByteArray(),
+            contentType = MediaType.APPLICATION_PDF_VALUE,
+            title = "test-file.pdf"
+        )
+
+        mockMvc.get("/vedlegg/12345")
+            .andExpect {
+                status { isOk() }
+                content {
+                    contentType(MediaType.APPLICATION_PDF_VALUE)
+                    bytes("test-content".toByteArray())
+                }
+            }
     }
 }
 
