@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 
 @Service
 class MellomlagringService(
-    @Value("no.nav.mellomlagring.søknad_tid_timer") private val mellomlagretTidTimer: String,
+    @Value("\${no.nav.mellomlagring.søknad_tid_timer}") private val mellomlagretTidTimer: String,
     private val k9BrukerdialogCacheService: K9BrukerdialogCacheService
 ) {
     private fun genererNøkkelPrefix(ytelse: Ytelse) = "mellomlagring_$ytelse"

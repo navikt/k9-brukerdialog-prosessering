@@ -82,7 +82,6 @@ no.nav:
                 audience: ${K9_SELVBETJENING_OPPSLAG_TOKEN_X_AUDIENCE}
         ### K9 Selvbetjening Oppslag
 
-
   integration:
     k9-brukerdialog-cache-base-url: ${K9_BRUKERDIALOG_CACHE_BASE_URL}
     k9-mellomlagring-base-url: ${K9_MELLOMLAGRING_BASE_URL}
@@ -96,6 +95,9 @@ no.nav:
       expiry-in-minutes: ${BARN_CACHE_EXPIRY_IN_MINUTES:30}
     innsending:
       expiry-in-seconds: ${INNSENDING_CACHE_EXPIRY_IN_MINUTES:10}
+
+  mellomlagring:
+        søknad_tid_timer: ${MELLOMLAGRING_SØKNAD_TID_TIMER:72}
 
   kafka:
     bootstrap-servers: ${KAFKA_BROKERS}
