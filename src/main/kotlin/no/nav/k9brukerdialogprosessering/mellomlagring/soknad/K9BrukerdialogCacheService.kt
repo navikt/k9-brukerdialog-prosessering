@@ -18,7 +18,7 @@ class K9BrukerdialogCacheService(
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(K9BrukerdialogCacheService::class.java)
         val cacheUrl = UriComponentsBuilder
-            .fromPath("/v1/cache")
+            .fromPath("/api/cache")
             .build()
             .toUri()
     }
