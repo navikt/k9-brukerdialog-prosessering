@@ -26,7 +26,7 @@ class K9BrukerdialogCacheService(
     fun mellomlagreSøknad(cacheRequest: CacheRequest): CacheResponse {
         return kotlin.runCatching {
             k9BrukerdialogCacheRestTemplate.postForEntity(
-                cacheUrl,
+                cacheUrl.path,
                 HttpEntity(cacheRequest),
                 CacheResponse::class.java
             ).body!!
@@ -44,7 +44,7 @@ class K9BrukerdialogCacheService(
     fun hentMellomlagretSøknad(nøkkelPrefiks: String): CacheResponse? {
         return kotlin.runCatching {
             k9BrukerdialogCacheRestTemplate.getForEntity(
-                "$cacheUrl/$nøkkelPrefiks",
+                "${cacheUrl.path}/$nøkkelPrefiks",
                 CacheResponse::class.java
             ).body
         }.fold(
@@ -61,7 +61,7 @@ class K9BrukerdialogCacheService(
     fun oppdaterMellomlagretSøknad(cacheRequest: CacheRequest): CacheResponse {
         return kotlin.runCatching {
             k9BrukerdialogCacheRestTemplate.exchange(
-                "$cacheUrl/${cacheRequest.nøkkelPrefiks}",
+                "${cacheUrl.path}/${cacheRequest.nøkkelPrefiks}",
                 HttpMethod.PUT,
                 HttpEntity(cacheRequest),
                 CacheResponse::class.java
@@ -79,7 +79,7 @@ class K9BrukerdialogCacheService(
 
     fun slettMellomlagretSøknad(nøkkelPrefiks: String): Boolean {
         return kotlin.runCatching {
-            k9BrukerdialogCacheRestTemplate.delete("$cacheUrl/$nøkkelPrefiks")
+            k9BrukerdialogCacheRestTemplate.delete("${cacheUrl.path}/$nøkkelPrefiks")
         }.fold(
             onSuccess = { true },
             onFailure = { error: Throwable ->
