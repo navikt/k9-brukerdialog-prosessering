@@ -37,8 +37,6 @@ class K9MellomlagringClientsConfig(
             .rootUri(baseUrl)
             .setReadTimeout(Duration.ofSeconds(20))
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-            .additionalMessageConverters(DokumentHttpMessageConverter())
             .additionalInterceptors(
                 RestTemplateUtils.authorizationInterceptor(azureK9MellomlagringClientProperties, oAuth2AccessTokenService),
                 RestTemplateUtils.requestLoggerInterceptor(logger),

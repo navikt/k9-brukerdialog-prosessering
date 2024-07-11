@@ -5,8 +5,11 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
+import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
@@ -26,13 +29,18 @@ class K9DokumentMellomlagringService(
     }
 
     internal suspend fun hentDokument(dokumentId: String, dokumentEier: DokumentEier): Dokument {
+        val headers = HttpHeaders(
+            LinkedMultiValueMap(
+                mapOf(HttpHeaders.ACCEPT to listOf(MediaType.APPLICATION_JSON_VALUE))
+            )
+        )
         return kotlin.runCatching {
             k9MellomlagringRestTemplate
                 .postForEntity(
-                "${dokumentUrl.path}/$dokumentId",
-                HttpEntity(dokumentEier),
-                Dokument::class.java
-            ).body!!
+                    "${dokumentUrl.path}/$dokumentId",
+                    HttpEntity(dokumentEier, headers),
+                    Dokument::class.java
+                ).body!!
         }
             .fold(
                 onSuccess = { dokument: Dokument -> dokument },
@@ -158,28 +166,28 @@ class K9DokumentMellomlagringService(
         dokumentEier: DokumentEier,
     ) {
 
-            val fjernHoldPåPersisterteDokumentUrl: URI = UriComponentsBuilder.fromUri(dokumentUrl)
-                .path("/persistert/$dokumentId")
-                .build()
-                .toUri()
+        val fjernHoldPåPersisterteDokumentUrl: URI = UriComponentsBuilder.fromUri(dokumentUrl)
+            .path("/persistert/$dokumentId")
+            .build()
+            .toUri()
 
-            kotlin.runCatching {
-                k9MellomlagringRestTemplate.exchange(
-                    fjernHoldPåPersisterteDokumentUrl.path,
-                    HttpMethod.PUT,
-                    HttpEntity(dokumentEier),
-                    Unit::class.java
-                )
-
-            }.fold(
-                onSuccess = { logger.info("Fjernet hold på dokument med id: $dokumentId") },
-                onFailure = { error: Throwable ->
-                    if (error is RestClientException) {
-                        logger.error("Feil ved fjerning av hold på dokument med id: $dokumentId. Feilmelding: ${error.message}")
-                    }
-                    throw RuntimeException("Feil ved fjerning av hold på dokument med id: $dokumentId", error)
-                }
+        kotlin.runCatching {
+            k9MellomlagringRestTemplate.exchange(
+                fjernHoldPåPersisterteDokumentUrl.path,
+                HttpMethod.PUT,
+                HttpEntity(dokumentEier),
+                Unit::class.java
             )
+
+        }.fold(
+            onSuccess = { logger.info("Fjernet hold på dokument med id: $dokumentId") },
+            onFailure = { error: Throwable ->
+                if (error is RestClientException) {
+                    logger.error("Feil ved fjerning av hold på dokument med id: $dokumentId. Feilmelding: ${error.message}")
+                }
+                throw RuntimeException("Feil ved fjerning av hold på dokument med id: $dokumentId", error)
+            }
+        )
     }
 
     internal suspend fun fjernHoldPåPersisterteDokumenter(
