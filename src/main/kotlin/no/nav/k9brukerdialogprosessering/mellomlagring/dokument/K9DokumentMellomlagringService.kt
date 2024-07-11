@@ -27,7 +27,8 @@ class K9DokumentMellomlagringService(
 
     internal suspend fun hentDokument(dokumentId: String, dokumentEier: DokumentEier): Dokument {
         return kotlin.runCatching {
-            k9MellomlagringRestTemplate.postForEntity(
+            k9MellomlagringRestTemplate
+                .postForEntity(
                 "${dokumentUrl.path}/$dokumentId",
                 HttpEntity(dokumentEier),
                 Dokument::class.java

@@ -3,7 +3,7 @@ package no.nav.k9brukerdialogprosessering.mellomlagring.dokument
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class Dokument(
-    val eier: DokumentEier,
+    val eier: DokumentEier? = null,
     val content: ByteArray,
     @JsonProperty("content_type")
     val contentType: String,
