@@ -16,8 +16,8 @@ private val logger: Logger =
     LoggerFactory.getLogger("no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.BarnDetaljer")
 
 data class BarnDetaljer(
-    @Size(max = 11)
-    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    @field:Size(min = 11, max = 11)
+    @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     var fødselsnummer: String?,
     @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate?,
     val aktørId: String?,

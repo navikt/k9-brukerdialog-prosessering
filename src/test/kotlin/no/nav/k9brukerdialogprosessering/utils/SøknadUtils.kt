@@ -4,12 +4,14 @@ import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
+import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.time.LocalDate
 import java.util.*
 
 class SøknadUtils {
     companion object{
+        val objectMapper = JacksonConfiguration.configureObjectMapper()
         fun Søknad.somJson(): String = JsonUtils.toString(this)
         fun Ettersendelse.somJson(): String = JsonUtils.toString(this)
 

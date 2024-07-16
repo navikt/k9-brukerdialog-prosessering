@@ -6,7 +6,7 @@ import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
-data class KomplettSøknad(
+data class KomplettPleiepengerSyktBarnSøknad(
     val apiDataVersjon: String? = null,
     val språk: Språk? = null,
     val søknadId: String,
@@ -16,7 +16,7 @@ data class KomplettSøknad(
     val søker: Søker,
     val barn: BarnDetaljer,
     val arbeidsgivere: List<Arbeidsgiver>,
-    var vedleggId : List<String> = listOf(),
+    var vedleggId: List<String> = listOf(),
     val fødselsattestVedleggId: List<String>,
     val medlemskap: Medlemskap,
     val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
@@ -34,5 +34,27 @@ data class KomplettSøknad(
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
-    val k9FormatSøknad: Søknad? = null
-): KomplettInnsending
+    val k9FormatSøknad: Søknad? = null,
+) : KomplettInnsending {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as KomplettPleiepengerSyktBarnSøknad
+
+        if (søknadId != other.søknadId) return false
+        if (mottatt != other.mottatt) return false
+        if (fraOgMed != other.fraOgMed) return false
+        if (tilOgMed != other.tilOgMed) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = søknadId.hashCode()
+        result = 31 * result + mottatt.hashCode()
+        result = 31 * result + fraOgMed.hashCode()
+        result = 31 * result + tilOgMed.hashCode()
+        return result
+    }
+}

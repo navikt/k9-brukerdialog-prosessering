@@ -143,9 +143,7 @@ object TestUtils {
 
     fun List<String>.verifiserFeil(antallFeil: Int, valideringsfeil: List<String> = listOf()) {
         assertEquals(antallFeil, this.size)
-        this.forEach {
-            assertThat(it).contains(valideringsfeil)
-        }
+        assertThat(this).contains(*valideringsfeil.toTypedArray())
     }
 
     fun List<String>.verifiserIngenFeil() {

@@ -82,9 +82,9 @@ data class PleiepengerSyktBarnSøknad(
         søker: Søker,
         k9Format: no.nav.k9.søknad.Innsending?,
         titler: List<String>,
-    ): KomplettSøknad {
+    ): KomplettPleiepengerSyktBarnSøknad {
         requireNotNull(k9Format)
-        return KomplettSøknad(
+        return KomplettPleiepengerSyktBarnSøknad(
             apiDataVersjon = apiDataVersjon,
             språk = språk,
             søknadId = søknadId,
@@ -213,6 +213,28 @@ data class PleiepengerSyktBarnSøknad(
                 else -> null
             }
         ).medBeskrivelseAvOmsorgsrollen(barnRelasjonBeskrivelse?.let { StringUtils.saniter(it) })
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PleiepengerSyktBarnSøknad
+
+        if (søknadId != other.søknadId) return false
+        if (mottatt != other.mottatt) return false
+        if (fraOgMed != other.fraOgMed) return false
+        if (tilOgMed != other.tilOgMed) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = søknadId.hashCode()
+        result = 31 * result + mottatt.hashCode()
+        result = 31 * result + fraOgMed.hashCode()
+        result = 31 * result + tilOgMed.hashCode()
+        return result
+    }
 }
 
 fun tilK9Tilsynsordning0Timer(periode: no.nav.k9.søknad.felles.type.Periode) = Tilsynsordning().apply {

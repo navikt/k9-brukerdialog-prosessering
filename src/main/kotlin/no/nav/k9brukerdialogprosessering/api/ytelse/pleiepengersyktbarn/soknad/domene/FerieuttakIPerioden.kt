@@ -21,7 +21,7 @@ data class FerieuttakIPerioden(
         val perioder = mutableMapOf<K9Periode, LovbestemtFerie.LovbestemtFeriePeriodeInfo>()
 
         ferieuttak.forEach { ferieuttak ->
-            perioder[K9Periode(ferieuttak.fraOgMed, ferieuttak.tilOgMed)] = LovbestemtFerie.LovbestemtFeriePeriodeInfo()
+            perioder[K9Periode(ferieuttak.fraOgMed, ferieuttak.tilOgMed)] = LovbestemtFerie.LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
         }
 
         return LovbestemtFerie().medPerioder(perioder)

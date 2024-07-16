@@ -29,6 +29,7 @@ data class Utenlandsopphold(
 
     fun somUtenlandsoppholdPeriodeInfo() = UtenlandsoppholdPeriodeInfo()
         .medLand(Landkode.of(landkode))
+        .medErSammenMedBarnet(erSammenMedBarnet)
         .apply {
             if (årsak != null && årsak != no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.Årsak.ANNET) {
                 medÅrsak(årsak.tilK9Årsak())
@@ -75,6 +76,7 @@ data class UtenlandsoppholdIPerioden(
                 perioder[K9Periode(periodeUtenInnleggelse.fraOgMed, periodeUtenInnleggelse.tilOgMed)] =
                     UtenlandsoppholdPeriodeInfo()
                         .medLand(Landkode.of(utenlandsopphold.landkode))
+                        .medErSammenMedBarnet(utenlandsopphold.erSammenMedBarnet)
             }
         }
 
