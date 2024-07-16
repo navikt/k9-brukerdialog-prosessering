@@ -1,7 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import jakarta.validation.Valid
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
@@ -11,7 +10,6 @@ import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
 class Barn(
-    @Valid
     @field:Size(min = 11, max = 11)
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private var norskIdentifikator: String? = null,
