@@ -1,5 +1,7 @@
 package no.nav.k9brukerdialogprosessering.utils
 
+import jakarta.validation.ConstraintViolation
+import jakarta.validation.Validation
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
@@ -30,6 +32,9 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopolo
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -127,3 +132,30 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 annotation class KafkaIntegrationTest
+
+object TestUtils {
+    val VALIDATOR = Validation.buildDefaultValidatorFactory().validator
+
+    fun <E> MutableSet<ConstraintViolation<E>>.verifiserFeil(antallFeil: Int, vararg valideringsfeil: String) {
+        assertThat(size).isEqualTo(antallFeil)
+        assertThat(this.map { it.message }).contains(*valideringsfeil)
+    }
+
+    fun List<String>.verifiserFeil(antallFeil: Int, valideringsfeil: List<String> = listOf()) {
+        assertEquals(antallFeil, this.size)
+        this.forEach {
+            assertThat(it).contains(valideringsfeil)
+        }
+    }
+
+    fun List<String>.verifiserIngenFeil() {
+        assertTrue(isEmpty())
+    }
+
+    internal fun MutableList<String>.assertFeilPå(reason: List<String> = emptyList()) {
+        println(this)
+        assertEquals(reason.size, size)
+
+        forEach { reason.contains(it) }
+    }
+}
