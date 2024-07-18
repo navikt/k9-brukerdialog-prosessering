@@ -92,13 +92,12 @@ class ArbeidsgiverTest {
 
     @Test
     fun `Arbeidsgiver uten navn gir feil`(){
-        Arbeidsgiver(
-            navn = " ",
+        VALIDATOR.validate(Arbeidsgiver(
+            navn = "",
             organisasjonsnummer = "977155436",
             erAnsatt = false,
             arbeidsforhold = null
-        ).valider("test")
-            .verifiserFeil(1, listOf("test.navn kan ikke være tomt eller kun whitespace"))
+        )).verifiserFeil(1, "navn kan ikke være tomt eller blankt")
     }
 
     @Test

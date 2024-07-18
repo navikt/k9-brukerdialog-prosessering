@@ -93,10 +93,10 @@ class VedleggControllerTest {
                 json(
                     """
                 {
-                  "type": "about:blank",
+                  "type": "/problem-details/invalid-request-parameters",
                   "title": "invalid-request-parameters",
                   "status": 400,
-                  "detail": "Requesten inneholder ugyldige parametere",
+                  "detail": "Forespørselen inneholder valideringsfeil",
                   "instance": "/vedlegg",
                   "violations": [
                     {

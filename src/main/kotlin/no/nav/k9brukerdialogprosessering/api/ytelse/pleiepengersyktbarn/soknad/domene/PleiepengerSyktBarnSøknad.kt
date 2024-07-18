@@ -49,7 +49,7 @@ data class PleiepengerSyktBarnSøknad(
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: Språk? = null,
     @field:Valid val barn: BarnDetaljer,
-    val arbeidsgivere: List<Arbeidsgiver>,
+    @field:Valid val arbeidsgivere: List<Arbeidsgiver>,
     val vedlegg: List<URL> = listOf(), // TODO: Fjern listof() når krav om legeerklæring er påkrevd igjen.
     val fødselsattestVedleggUrls: List<URL>? = listOf(),
     @JsonFormat(pattern = "yyyy-MM-dd")

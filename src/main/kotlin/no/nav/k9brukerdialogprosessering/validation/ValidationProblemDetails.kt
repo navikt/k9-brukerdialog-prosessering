@@ -10,7 +10,6 @@ data class ValidationProblemDetails(val violations: Set<Violation>): ProblemDeta
         type = URI("/problem-details/invalid-request-parameters")
         title = "invalid-request-parameters"
         detail = "Forespørselen inneholder valideringsfeil"
-        properties = mapOf("violations" to violations)
     }
 }
 data class ValidationProblemDetailsString(val violations: List<String>): ProblemDetail(400) {

@@ -7,6 +7,7 @@ import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.SøknadUtils
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.Arbeidsgiver
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnService
 import no.nav.k9brukerdialogprosessering.utils.CallIdGenerator
@@ -76,6 +77,14 @@ class PleiepengerSyktBarnControllerTest {
                 barn = defaultSøknad.barn.copy(
                     fødselsnummer = "123ABC",
                     navn = ""
+                ),
+                arbeidsgivere = listOf(
+                    Arbeidsgiver(
+                        organisasjonsnummer = "123ABC",
+                        navn = "",
+                        erAnsatt = false,
+                        arbeidsforhold = null
+                    )
                 )
             )
         )
@@ -98,36 +107,46 @@ class PleiepengerSyktBarnControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "properties": {
-                            "violations": [
-                              {
-                                "parameterName": "pleiepengerSyktBarnSøknad.barn.fødselsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'",
-                                "invalidValue": "123ABC"
-                              },
-                              {
-                                "parameterName": "pleiepengerSyktBarnSøknad.barn.fødselsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "size must be between 11 and 11",
-                                "invalidValue": "123ABC"
-                              },
-                              {
-                                "parameterName": "pleiepengerSyktBarnSøknad.harBekreftetOpplysninger",
-                                "parameterType": "ENTITY",
-                                "reason": "Opplysningene må bekreftes for å sende inn søknad",
-                                "invalidValue": false
-                              },
-                              {
-                                "parameterName": "pleiepengerSyktBarnSøknad.harForståttRettigheterOgPlikter",
-                                "parameterType": "ENTITY",
-                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad",
-                                "invalidValue": false
-                              }
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "pleiepengerSyktBarnSøknad.barn.fødselsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "size must be between 11 and 11"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "pleiepengerSyktBarnSøknad.harBekreftetOpplysninger",
+                              "parameterType": "ENTITY",
+                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "pleiepengerSyktBarnSøknad.arbeidsgivere[0].organisasjonsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "pleiepengerSyktBarnSøknad.arbeidsgivere[0].navn",
+                              "parameterType": "ENTITY",
+                              "reason": "navn kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "pleiepengerSyktBarnSøknad.barn.fødselsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "pleiepengerSyktBarnSøknad.harForståttRettigheterOgPlikter",
+                              "parameterType": "ENTITY",
+                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                            }
+                          ]
                         }
-                        """.trimIndent(), false
+                        """.trimIndent(), false,
                     )
                 }
             }

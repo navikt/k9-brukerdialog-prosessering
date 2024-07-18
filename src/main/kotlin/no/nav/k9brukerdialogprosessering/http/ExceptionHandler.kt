@@ -122,7 +122,7 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
             status = HttpStatus.valueOf(validationProblemDetails.status),
             title = validationProblemDetails.title!!,
             type = validationProblemDetails.type,
-            properties = validationProblemDetails.properties!!,
+            violations = validationProblemDetails.violations,
             detail = validationProblemDetails.detail!!
         )
 
@@ -149,7 +149,7 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
             status = HttpStatus.valueOf(validationProblemDetails.status),
             title = validationProblemDetails.title!!,
             type = validationProblemDetails.type,
-            properties = validationProblemDetails.properties!!,
+            violations = validationProblemDetails.violations,
             detail = validationProblemDetails.detail!!
         )
 
@@ -171,16 +171,16 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatus,
         title: String,
         type: URI,
-        properties: Map<String, Any> = mapOf(),
+        violations: Set<Violation> = setOf(),
         detail: String,
     ): ProblemDetail {
-        val problemDetail = ProblemDetail.forStatusAndDetail(status, detail)
+        val problemDetail = ValidationProblemDetails(violations)
+        problemDetail.status = status.value()
         problemDetail.title = title
         problemDetail.type = type
+        problemDetail.detail = detail
         problemDetail.instance = URI(URLDecoder.decode(request.requestURL.toString(), Charset.defaultCharset()))
-        properties.forEach {
-            problemDetail.setProperty(it.key, it.value)
-        }
+
         return problemDetail
     }
 }
