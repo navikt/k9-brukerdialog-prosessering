@@ -19,8 +19,10 @@ data class BarnDetaljer(
     @field:Size(min = 11, max = 11)
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     var fødselsnummer: String?,
+
     @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate?,
     val aktørId: String?,
+
     val navn: String?,
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
 ) {

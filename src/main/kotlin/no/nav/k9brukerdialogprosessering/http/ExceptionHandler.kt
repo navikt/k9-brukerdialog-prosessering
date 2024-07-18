@@ -1,30 +1,42 @@
 package no.nav.k9brukerdialogprosessering.http
 
 import jakarta.validation.ConstraintViolationException
+import no.nav.k9brukerdialogprosessering.validation.ParameterType
+import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetails
+import no.nav.k9brukerdialogprosessering.validation.Violation
 import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
 import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.FORBIDDEN
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.UNAUTHORIZED
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ProblemDetail
+import org.springframework.http.ResponseEntity
+import org.springframework.validation.FieldError
+import org.springframework.validation.ObjectError
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.ServletWebRequest
+import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.net.URI
 import java.net.URLDecoder
 import java.nio.charset.Charset
+import java.util.stream.Collectors
 
 @RestControllerAdvice
 class ExceptionHandler : ResponseEntityExceptionHandler() {
 
     companion object {
-        private val log: Logger = LoggerFactory.getLogger(no.nav.k9brukerdialogprosessering.http.ExceptionHandler::class.java)
+        private val log: Logger =
+            LoggerFactory.getLogger(no.nav.k9brukerdialogprosessering.http.ExceptionHandler::class.java)
     }
 
 
@@ -95,25 +107,64 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
         exception: ConstraintViolationException,
         request: ServletWebRequest,
     ): ProblemDetail {
+        val violations = exception.constraintViolations
+            .map {
+                Violation(
+                    parameterName = it.propertyPath.toString(),
+                    parameterType = ParameterType.ENTITY,
+                    reason = it.message,
+                    invalidValue = it.invalidValue,
+                )
+            }.toSortedSet { o1, o2 -> o1.parameterName.compareTo(o2.parameterName) }
+        val validationProblemDetails = ValidationProblemDetails(violations)
+
         val problemDetails = request.respondProblemDetails(
-            status = HttpStatus.BAD_REQUEST,
-            title = "Ugyldig forespørsel",
-            type = URI("/problem-details/ugyldig-forespørsel"),
-            detail = "Forespørselen inneholder valideringsfeil",
-            properties = mapOf(
-                "violations" to exception.constraintViolations
-                    .sortedBy { it.propertyPath.toString()}
-                    .map {
-                        mapOf(
-                            "property" to it.propertyPath.toString(),
-                            "message" to it.message,
-                            "invalidValue" to it.invalidValue,
-                        )
-                    }
-            )
+            status = HttpStatus.valueOf(validationProblemDetails.status),
+            title = validationProblemDetails.title!!,
+            type = validationProblemDetails.type,
+            properties = validationProblemDetails.properties!!,
+            detail = validationProblemDetails.detail!!
         )
-        log.error("{}", problemDetails)
+
+        log.error("Validerigsfeil: {}", problemDetails)
         return problemDetails
+    }
+
+    override fun handleMethodArgumentNotValid(
+        ex: MethodArgumentNotValidException,
+        headers: HttpHeaders,
+        status: HttpStatusCode,
+        request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val violations = ex.allErrors.stream()
+            .map { it.somViolation() }
+            .sorted(Comparator.comparing(Violation::parameterName).thenComparing(Violation::reason))
+            .collect(Collectors.toSet())
+
+        val validationProblemDetails = ValidationProblemDetails(violations)
+
+        val servletWebRequest = request as ServletWebRequest
+
+        val problemDetails = servletWebRequest.respondProblemDetails(
+            status = HttpStatus.valueOf(validationProblemDetails.status),
+            title = validationProblemDetails.title!!,
+            type = validationProblemDetails.type,
+            properties = validationProblemDetails.properties!!,
+            detail = validationProblemDetails.detail!!
+        )
+
+        log.error("Valideringsfeil: {}", problemDetails)
+        return ResponseEntity(problemDetails, headers, status)
+    }
+
+    private fun ObjectError.somViolation(): Violation {
+        this as FieldError
+        return Violation(
+            parameterName = "$objectName.$field",
+            parameterType = ParameterType.ENTITY,
+            reason = defaultMessage!!,
+            invalidValue = rejectedValue,
+        )
     }
 
     private fun ServletWebRequest.respondProblemDetails(

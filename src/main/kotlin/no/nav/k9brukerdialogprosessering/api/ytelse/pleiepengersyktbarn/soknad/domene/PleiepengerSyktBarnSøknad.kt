@@ -1,6 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
 import no.nav.fpsak.tidsserie.LocalDateInterval
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -43,9 +45,10 @@ data class PleiepengerSyktBarnSøknad(
     val newVersion: Boolean?,
     val apiDataVersjon: String? = null,
     val søknadId: String = UUID.randomUUID().toString(),
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: Språk? = null,
-    val barn: BarnDetaljer,
+    @field:Valid val barn: BarnDetaljer,
     val arbeidsgivere: List<Arbeidsgiver>,
     val vedlegg: List<URL> = listOf(), // TODO: Fjern listof() når krav om legeerklæring er påkrevd igjen.
     val fødselsattestVedleggUrls: List<URL>? = listOf(),
@@ -58,8 +61,13 @@ data class PleiepengerSyktBarnSøknad(
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
     val utenlandskNæring: List<UtenlandskNæring>,
-    val harForståttRettigheterOgPlikter: Boolean,
+
+    @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
     val harBekreftetOpplysninger: Boolean,
+
+    @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
+    val harForståttRettigheterOgPlikter: Boolean,
+
     val omsorgstilbud: Omsorgstilbud? = null,
     val nattevåk: Nattevåk? = null,
     val beredskap: Beredskap? = null,
@@ -134,8 +142,6 @@ data class PleiepengerSyktBarnSøknad(
         addAll(frilans.valider("frilans", fraOgMed))
         addAll(medlemskap.valider("medlemskap"))
         addAll(utenlandsoppholdIPerioden.valider("utenlandsoppholdIPerioden"))
-        krever(harBekreftetOpplysninger, "Opplysningene må bekreftes for å sende inn søknad")
-        krever(harForståttRettigheterOgPlikter, "Må ha forstått rettigheter og plikter for å sende inn søknad")
 
         omsorgstilbud?.let { addAll(it.valider("omsorgstilbud")) }
         ferieuttakIPerioden?.let { addAll(it.valider(("ferieuttakIPerioden"))) }

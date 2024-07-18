@@ -3,11 +3,14 @@ package no.nav.k9brukerdialogprosessering.validation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.web.ErrorResponseException
+import java.net.URI
 
 data class ValidationProblemDetails(val violations: Set<Violation>): ProblemDetail(400) {
     init {
+        type = URI("/problem-details/invalid-request-parameters")
         title = "invalid-request-parameters"
-        detail = "Requesten inneholder ugyldige parametere"
+        detail = "Forespørselen inneholder valideringsfeil"
+        properties = mapOf("violations" to violations)
     }
 }
 data class ValidationProblemDetailsString(val violations: List<String>): ProblemDetail(400) {
