@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.Valid
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.Arbeidsforhold
@@ -20,14 +21,10 @@ data class Frilans(
     val misterHonorar: Boolean? = null,
     val type: FrilansType? = null,
     val jobberFortsattSomFrilans: Boolean? = null,
-    val arbeidsforhold: Arbeidsforhold? = null,
+    @field:Valid val arbeidsforhold: Arbeidsforhold? = null,
 ) {
 
     internal fun valider(felt: String, søknadsperiodeStart: LocalDate) = mutableListOf<String>().apply {
-        if (arbeidsforhold != null) addAll(
-            arbeidsforhold.valider(felt = "$felt.arbeidsforhold")
-        )
-
         if (sluttdato != null && startdato != null) {
             krever(startdato.erFørEllerLik(sluttdato), "$felt.sluttdato kan ikke være etter startdato")
         }

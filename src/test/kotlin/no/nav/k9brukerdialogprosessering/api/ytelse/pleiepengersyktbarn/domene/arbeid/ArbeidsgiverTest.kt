@@ -29,25 +29,25 @@ class ArbeidsgiverTest {
 
     @Test
     fun `Arbeidstaker med valideringsfeil i arbeidsforhold`(){
-        Arbeidsgiver(
-            navn = "Coop",
-            organisasjonsnummer = "977155436",
-            erAnsatt = true,
-            arbeidsforhold = Arbeidsforhold(
-                normalarbeidstid = NormalArbeidstid(
-                    timerPerUkeISnitt = syvOgEnHalvTime
-                ),
-                arbeidIPeriode = ArbeidIPeriode(
-                    type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                    redusertArbeid = ArbeidsRedusert(
-                        type = RedusertArbeidstidType.ULIKE_UKER_TIMER,
-                        arbeidsuker = null
+        VALIDATOR.validate(
+            Arbeidsgiver(
+                navn = "Coop",
+                organisasjonsnummer = "977155436",
+                erAnsatt = true,
+                arbeidsforhold = Arbeidsforhold(
+                    normalarbeidstid = NormalArbeidstid(
+                        timerPerUkeISnitt = syvOgEnHalvTime
+                    ),
+                    arbeidIPeriode = ArbeidIPeriode(
+                        type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
+                        redusertArbeid = ArbeidsRedusert(
+                            type = RedusertArbeidstidType.ULIKE_UKER_TIMER,
+                            arbeidsuker = null
+                        )
                     )
                 )
             )
-        )
-            .valider("test")
-            .verifiserFeil(1, listOf("test.arbeidsforhold.arbeidIPeriode.redusertArbeid.arbeidsuker må være satt dersom type=ULIKE_UKER_TIMER"))
+        ).verifiserFeil(1, "Må være satt dersom type=ULIKE_UKER_TIMER")
     }
 
     @Test
@@ -109,5 +109,4 @@ class ArbeidsgiverTest {
             arbeidsforhold = null
         )).verifiserFeil(1, "'IKKE GYLDIG' matcher ikke tillatt pattern '^\\d+$'")
     }
-
 }

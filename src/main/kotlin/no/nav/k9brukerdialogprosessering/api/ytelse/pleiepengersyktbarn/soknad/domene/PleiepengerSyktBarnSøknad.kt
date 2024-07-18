@@ -71,9 +71,9 @@ data class PleiepengerSyktBarnSøknad(
     val omsorgstilbud: Omsorgstilbud? = null,
     val nattevåk: Nattevåk? = null,
     val beredskap: Beredskap? = null,
-    val frilans: Frilans,
+    @field:Valid val frilans: Frilans,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
-    val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,
+    @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
@@ -135,7 +135,6 @@ data class PleiepengerSyktBarnSøknad(
 
     override fun valider(): List<String> = mutableListOf<String>().apply {
         addAll(barn.valider("barn"))
-        addAll(arbeidsgivere.valider())
         addAll(selvstendigNæringsdrivende.valider())
         addAll(opptjeningIUtlandet.valider())
         addAll(utenlandskNæring.valider("utenlandskNæring"))

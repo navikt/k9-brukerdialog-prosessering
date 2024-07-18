@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
+import jakarta.validation.Valid
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
@@ -11,14 +12,14 @@ import java.time.LocalDate
 data class SelvstendigNæringsdrivende(
     val harInntektSomSelvstendig: Boolean,
     val virksomhet: Virksomhet? = null,
-    val arbeidsforhold: Arbeidsforhold? = null,
+    @field:Valid val arbeidsforhold: Arbeidsforhold? = null,
 ) {
     internal fun valider(felt: String = "selvstendigNæringsdrivende") = mutableListOf<String>().apply {
         if (harInntektSomSelvstendig) {
             kreverIkkeNull(arbeidsforhold, "$felt.arbeidsforhold må være satt når man har harInntektSomSelvstendig.")
             kreverIkkeNull(virksomhet, "$felt.virksomhet må være satt når man har harInntektSomSelvstendig.")
         }
-        arbeidsforhold?.let { addAll(it.valider("$felt.arbeidsforhold")) }
+
         virksomhet?.let { addAll(it.valider("$felt.virksomhet")) }
     }
 

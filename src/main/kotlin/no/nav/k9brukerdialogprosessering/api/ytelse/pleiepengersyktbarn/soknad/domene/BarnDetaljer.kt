@@ -1,11 +1,11 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
 import no.nav.k9brukerdialogprosessering.utils.krever
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,7 +20,9 @@ data class BarnDetaljer(
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     var fødselsnummer: String?,
 
+    @field:PastOrPresent(message = "kan ikke være i fremtiden.")
     @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate?,
+
     val aktørId: String?,
 
     val navn: String?,
@@ -52,7 +54,6 @@ enum class ÅrsakManglerIdentitetsnummer {
 
 internal fun BarnDetaljer.valider(felt: String) = mutableListOf<String>().apply {
     navn?.let { krever(it.isNotBlank(), "$felt.navn kan ikke være tomt eller blankt.") }
-    fødselsdato?.let { krever(it.erFørEllerLik(LocalDate.now()), "$felt.fødselsdato kan ikke være i fremtiden.") }
     if (fødselsnummer.isNullOrEmpty()) {
         krever(fødselsdato != null, "$felt.fødselsdato må være satt dersom fødselsnummer er null.")
         krever(

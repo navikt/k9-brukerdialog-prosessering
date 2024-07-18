@@ -9,6 +9,7 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NULL_TIMER
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -33,23 +34,20 @@ class ArbeidsforholdTest {
 
     @Test
     fun `Skal gi valideringsfeil dersom arbeidIPeriode er feil`() {
-        Arbeidsforhold(
-            normalarbeidstid = NormalArbeidstid(
-                timerPerUkeISnitt = Duration.ofHours(32)
-            ),
-            arbeidIPeriode = ArbeidIPeriode(
-                type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                redusertArbeid = ArbeidsRedusert(
-                    type = RedusertArbeidstidType.PROSENT_AV_NORMALT,
-                    prosentAvNormalt = null
+        VALIDATOR.validate(
+            Arbeidsforhold(
+                normalarbeidstid = NormalArbeidstid(
+                    timerPerUkeISnitt = Duration.ofHours(32)
+                ),
+                arbeidIPeriode = ArbeidIPeriode(
+                    type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
+                    redusertArbeid = ArbeidsRedusert(
+                        type = RedusertArbeidstidType.PROSENT_AV_NORMALT,
+                        prosentAvNormalt = null
+                    )
                 )
             )
-        )
-            .valider("test")
-            .verifiserFeil(
-                1,
-                listOf("test.arbeidIPeriode.redusertArbeid.prosentAvNormalt må være satt dersom type=PROSENT_AV_NORMALT")
-            )
+        ).verifiserFeil(1, "Må være satt dersom type=PROSENT_AV_NORMALT")
     }
 
     @Test

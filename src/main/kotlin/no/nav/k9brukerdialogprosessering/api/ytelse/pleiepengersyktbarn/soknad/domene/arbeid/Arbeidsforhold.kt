@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid
 
+import jakarta.validation.Valid
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
@@ -14,7 +15,7 @@ import kotlin.time.toKotlinDuration
 
 data class Arbeidsforhold(
     val normalarbeidstid: NormalArbeidstid,
-    val arbeidIPeriode: ArbeidIPeriode,
+    @field:Valid val arbeidIPeriode: ArbeidIPeriode
 ) {
 
     companion object {
@@ -27,10 +28,6 @@ data class Arbeidsforhold(
                 )
             )
 
-    }
-
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        addAll(arbeidIPeriode.valider(felt = "$felt.arbeidIPeriode"))
     }
 
     fun tilK9ArbeidstidInfo(fraOgMed: LocalDate, tilOgMed: LocalDate): ArbeidstidInfo {

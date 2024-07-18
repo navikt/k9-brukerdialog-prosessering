@@ -1,40 +1,38 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertFalse
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.Periode
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType.PROSENT_AV_NORMALT
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType.TIMER_I_SNITT_PER_UKE
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType.ULIKE_UKER_TIMER
-import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.time.Duration
 
 data class ArbeidsRedusert(
     val type: RedusertArbeidstidType,
     val prosentAvNormalt: Double? = null,
     val timerPerUke: Duration? = null,
-    val arbeidsuker: List<ArbeidsUke>? = null
+    val arbeidsuker: List<ArbeidsUke>? = null,
 ) {
-    fun valider(felt: String) = mutableListOf<String>().apply {
-        when(type){
-            PROSENT_AV_NORMALT -> kreverIkkeNull(prosentAvNormalt, "$felt.prosentAvNormalt må være satt dersom type=PROSENT_AV_NORMALT")
-            TIMER_I_SNITT_PER_UKE -> kreverIkkeNull(timerPerUke, "$felt.timerPerUke må være satt dersom type=TIMER_I_SNITT_PER_UKE")
-            ULIKE_UKER_TIMER -> kreverIkkeNull(arbeidsuker, "$felt.arbeidsuker må være satt dersom type=ULIKE_UKER_TIMER")
-        }
-    }
+
+    @AssertFalse(message = "Må være satt dersom type=PROSENT_AV_NORMALT")
+    fun isProsentAvNormalt(): Boolean = type == PROSENT_AV_NORMALT && prosentAvNormalt == null
+
+    @AssertFalse(message = "Må være satt dersom type=TIMER_I_SNITT_PER_UKE")
+    fun isTimerPerUke(): Boolean = type == TIMER_I_SNITT_PER_UKE && timerPerUke == null
+
+    @AssertFalse(message = "Må være satt dersom type=ULIKE_UKER_TIMER")
+    fun isArbeidsuker(): Boolean = type == ULIKE_UKER_TIMER && arbeidsuker == null
 }
 
 data class ArbeidIPeriode(
     val type: ArbeidIPeriodeType,
-    val redusertArbeid: ArbeidsRedusert? = null,
+    @field:Valid val redusertArbeid: ArbeidsRedusert? = null,
 ) {
 
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        when(type){
-            ArbeidIPeriodeType.ARBEIDER_REDUSERT -> {
-                kreverIkkeNull(redusertArbeid, "$felt.redusertArbeid må være satt dersom type=ARBEIDER_REDUSERT")
-                redusertArbeid?.valider("$felt.redusertArbeid")?.forEach { add(it) }
-            }
-            ArbeidIPeriodeType.ARBEIDER_VANLIG, ArbeidIPeriodeType.ARBEIDER_IKKE -> {} // Ikke noe å validere
-        }
+    @AssertFalse(message = "Må være satt dersom type=ARBEIDER_REDUSERT")
+    fun isArbeiderRedusert(): Boolean {
+        return type == ArbeidIPeriodeType.ARBEIDER_REDUSERT && redusertArbeid == null
     }
 
     override fun equals(other: Any?) = this === other || other is ArbeidIPeriode && this.equals(other)

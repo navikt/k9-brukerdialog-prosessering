@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
+import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
@@ -17,20 +18,11 @@ data class Arbeidsgiver(
     val navn: String,
     val erAnsatt: Boolean,
     val sluttetFørSøknadsperiode: Boolean? = null,
-    val arbeidsforhold: Arbeidsforhold? = null,
+
+    @field:Valid val arbeidsforhold: Arbeidsforhold? = null,
 ) {
     fun k9ArbeidstidInfo(fraOgMed: LocalDate, tilOgMed: LocalDate): ArbeidstidInfo {
         return arbeidsforhold?.tilK9ArbeidstidInfo(fraOgMed, tilOgMed)
             ?: k9ArbeidstidInfoMedNullTimer(fraOgMed, tilOgMed)
-    }
-
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        if (arbeidsforhold != null) addAll(arbeidsforhold.valider("$felt.arbeidsforhold"))
-    }
-}
-
-internal fun List<Arbeidsgiver>.valider() = mutableSetOf<String>().apply {
-    this@valider.mapIndexed { index, arbeidsgiver ->
-        addAll(arbeidsgiver.valider("arbeidsgiver[$index]"))
     }
 }
