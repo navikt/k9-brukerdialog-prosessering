@@ -1,26 +1,37 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Virksomhet
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.Arbeidsforhold
-import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.time.LocalDate
 
 data class SelvstendigNæringsdrivende(
     val harInntektSomSelvstendig: Boolean,
-    val virksomhet: Virksomhet? = null,
+    @field:Valid val virksomhet: Virksomhet? = null,
     @field:Valid val arbeidsforhold: Arbeidsforhold? = null,
 ) {
     internal fun valider(felt: String = "selvstendigNæringsdrivende") = mutableListOf<String>().apply {
-        if (harInntektSomSelvstendig) {
-            kreverIkkeNull(arbeidsforhold, "$felt.arbeidsforhold må være satt når man har harInntektSomSelvstendig.")
-            kreverIkkeNull(virksomhet, "$felt.virksomhet må være satt når man har harInntektSomSelvstendig.")
-        }
-
         virksomhet?.let { addAll(it.valider("$felt.virksomhet")) }
+    }
+
+    @AssertTrue(message = "Må være satt når man har harInntektSomSelvstendig.")
+    fun isArbeidsforhold(): Boolean {
+       if (harInntektSomSelvstendig) {
+              return arbeidsforhold != null
+       }
+        return true
+    }
+
+    @AssertTrue(message = "Må være satt når man har harInntektSomSelvstendig.")
+    fun isVirksomhet(): Boolean {
+       if (harInntektSomSelvstendig) {
+              return virksomhet != null
+       }
+        return true
     }
 
     fun tilK9SelvstendigNæringsdrivende(): SelvstendigNæringsdrivende {

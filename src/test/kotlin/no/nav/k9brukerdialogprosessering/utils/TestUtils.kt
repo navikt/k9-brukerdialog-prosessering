@@ -140,6 +140,9 @@ object TestUtils {
         assertThat(size).isEqualTo(antallFeil)
         assertThat(this.map { it.message }).contains(*valideringsfeil)
     }
+    fun <E> MutableSet<ConstraintViolation<E>>.verifiserIngenFeil() {
+        assertTrue(isEmpty())
+    }
 
     fun List<String>.verifiserFeil(antallFeil: Int, valideringsfeil: List<String> = listOf()) {
         assertEquals(antallFeil, this.size)

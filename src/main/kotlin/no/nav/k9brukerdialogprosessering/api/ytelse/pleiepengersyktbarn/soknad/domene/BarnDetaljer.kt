@@ -1,12 +1,13 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9brukerdialogprosessering.utils.krever
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -25,7 +26,8 @@ data class BarnDetaljer(
 
     val aktørId: String?,
 
-    val navn: String?,
+    @field:NotBlank(message = "kan ikke være tomt eller blankt.")
+    val navn: String,
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
 ) {
     override fun toString(): String {
@@ -44,21 +46,26 @@ data class BarnDetaljer(
         fødselsdato != null -> K9Barn().medFødselsdato(fødselsdato)
         else -> K9Barn()
     }
+
+    @AssertTrue(message = "Må være satt dersom fødselsnummer er null.")
+    fun isFødselsDato(): Boolean {
+        if(fødselsnummer.isNullOrEmpty()) {
+            return fødselsdato != null
+        }
+        return true
+    }
+
+    @AssertTrue(message = "Må være satt dersom fødselsnummer er null.")
+    fun isÅrsakManglerIdentitetsnummer(): Boolean {
+        if(fødselsnummer.isNullOrEmpty()) {
+            return årsakManglerIdentitetsnummer != null
+        }
+        return true
+    }
 }
 
 enum class ÅrsakManglerIdentitetsnummer {
     NYFØDT,
     BARNET_BOR_I_UTLANDET,
     ANNET
-}
-
-internal fun BarnDetaljer.valider(felt: String) = mutableListOf<String>().apply {
-    navn?.let { krever(it.isNotBlank(), "$felt.navn kan ikke være tomt eller blankt.") }
-    if (fødselsnummer.isNullOrEmpty()) {
-        krever(fødselsdato != null, "$felt.fødselsdato må være satt dersom fødselsnummer er null.")
-        krever(
-            årsakManglerIdentitetsnummer != null,
-            "$felt.årsakManglerIdentitetsnummer må være satt dersom fødselsnummer er null."
-        )
-    }
 }

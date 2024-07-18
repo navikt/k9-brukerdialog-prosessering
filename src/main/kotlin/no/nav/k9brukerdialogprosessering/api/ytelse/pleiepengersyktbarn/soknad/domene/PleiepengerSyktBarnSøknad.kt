@@ -134,7 +134,6 @@ data class PleiepengerSyktBarnSøknad(
     }
 
     override fun valider(): List<String> = mutableListOf<String>().apply {
-        addAll(barn.valider("barn"))
         addAll(selvstendigNæringsdrivende.valider())
         addAll(opptjeningIUtlandet.valider())
         addAll(utenlandskNæring.valider("utenlandskNæring"))

@@ -98,7 +98,7 @@ class SoknadValidationTest {
             aktørId = null,
             fødselsnummer = "02119970078",
             fødselsdato = LocalDate.now(),
-            navn = null
+            navn = "Barn"
         ),
         frilans = Frilans(harInntektSomFrilanser = false),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(harInntektSomSelvstendig = false),

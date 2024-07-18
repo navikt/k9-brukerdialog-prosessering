@@ -10,6 +10,7 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NULL_TIMER
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -39,30 +40,27 @@ class FrilansTest {
     @Test
     fun `Frilans med valideringsfeil i arbeidsforhold`() {
         val startdato = LocalDate.parse("2020-01-01")
-        Frilans(
-            startdato = startdato,
-            sluttdato = null,
-            jobberFortsattSomFrilans = true,
-            harInntektSomFrilanser = true,
-            type = FrilansType.FRILANS,
-            arbeidsforhold = Arbeidsforhold(
-                normalarbeidstid = NormalArbeidstid(
-                    timerPerUkeISnitt = syvOgEnHalvTime
-                ),
-                arbeidIPeriode = ArbeidIPeriode(
-                    type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                    redusertArbeid = ArbeidsRedusert(
-                        type = RedusertArbeidstidType.PROSENT_AV_NORMALT,
-                        prosentAvNormalt = null
+        VALIDATOR.validate(
+            Frilans(
+                startdato = startdato,
+                sluttdato = null,
+                jobberFortsattSomFrilans = true,
+                harInntektSomFrilanser = true,
+                type = FrilansType.FRILANS,
+                arbeidsforhold = Arbeidsforhold(
+                    normalarbeidstid = NormalArbeidstid(
+                        timerPerUkeISnitt = syvOgEnHalvTime
+                    ),
+                    arbeidIPeriode = ArbeidIPeriode(
+                        type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
+                        redusertArbeid = ArbeidsRedusert(
+                            type = RedusertArbeidstidType.PROSENT_AV_NORMALT,
+                            prosentAvNormalt = null
+                        )
                     )
                 )
             )
-        )
-            .valider("test", startdato)
-            .verifiserFeil(
-                1,
-                listOf("test.arbeidsforhold.arbeidIPeriode.redusertArbeid.prosentAvNormalt må være satt dersom type=PROSENT_AV_NORMALT")
-            )
+        ).verifiserFeil(1, "Må være satt dersom type=PROSENT_AV_NORMALT")
     }
 
     @Test
