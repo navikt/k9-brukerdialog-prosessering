@@ -9,8 +9,8 @@ import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
 
 class Arbeidsgiver(
-    @Size(max = 20)
-    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    @field:Size(max = 20)
+    @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private val organisasjonsnummer: String,
     private val navn: String? = null,
     private val erAnsatt: Boolean,

@@ -4,7 +4,8 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Land
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Næringstype
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Virksomhet
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.assertFeilPå
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -47,102 +48,110 @@ class VirksomhetTest {
 
     @Test
     fun `FraOgMed kan ikke være før tilOgMed, validate skal returnere en violation`() {
-        val virksomhet = gyldigVirksomhet(
-            fraOgMed = LocalDate.now(),
-            tilOgMed = LocalDate.now().minusDays(1),
-        )
-        virksomhet.valider(felt).assertFeilPå(listOf("virksomhet.tilogmed og virksomhet.fraogmed"))
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now().minusDays(1),
+            )
+        ).verifiserFeil(1, "Må være lik eller etter fraOgMed.")
     }
 
     @Test
     fun `FraOgMed er før tilogmed, validate skal ikke reagere`() {
-        val virksomhet = gyldigVirksomhet(
-            fraOgMed = LocalDate.now().minusDays(1),
-            tilOgMed = LocalDate.now()
-        )
-        virksomhet.valider(felt).verifiserIngenFeil()
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                fraOgMed = LocalDate.now().minusDays(1),
+                tilOgMed = LocalDate.now()
+            )
+        ).verifiserIngenFeil()
     }
 
     @Test
     fun `FraOgMed er lik tilogmed, validate skal ikke reagere`() {
-        val virksomhet = gyldigVirksomhet(
-            fraOgMed = LocalDate.now(),
-            tilOgMed = LocalDate.now(),
-        )
-        virksomhet.valider(felt).verifiserIngenFeil()
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now(),
+            )
+        ).verifiserIngenFeil()
     }
 
     @Test
     fun `Hvis virksomheten er registrert i Norge så må orgnummer være satt, validate skal ikke reagere`() {
-        val virksomhet = gyldigVirksomhet(
-            registrertINorge = true,
-            organisasjonsnummer = "101010",
-        )
-        virksomhet.valider(felt).verifiserIngenFeil()
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                registrertINorge = true,
+                organisasjonsnummer = "101010",
+            )
+        ).verifiserIngenFeil()
     }
 
     @Test
     fun `Hvis virksomheten er registrert i Norge så skal den feile hvis orgnummer ikke er satt, validate skal returnere en violation`() {
-        val virksomhet = gyldigVirksomhet(
-            organisasjonsnummer = null,
-            registrertINorge = true,
-        )
-        virksomhet.valider(felt).assertFeilPå(listOf("selvstendingNæringsdrivende.virksomhet.organisasjonsnummer"))
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                organisasjonsnummer = null,
+                registrertINorge = true,
+            )
+        ).verifiserFeil(1, "Kan ikke være null når registrertINorge er true")
     }
 
     @Test
     fun `Hvis virksomheten ikke er registrert i Norge så må registrertIUtlandet være satt til noe, validate skal ikke reagere`() {
-        val virksomhet = gyldigVirksomhet(
-            registrertINorge = false,
-            registrertIUtlandet = Land(
-                landkode = "DEU",
-                landnavn = "Tyskland"
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                registrertINorge = false,
+                registrertIUtlandet = Land(
+                    landkode = "DEU",
+                    landnavn = "Tyskland"
+                )
             )
-        )
-        virksomhet.valider(felt).verifiserIngenFeil()
+        ).verifiserIngenFeil()
     }
 
     @Test
     fun `Hvis virksomheten ikke er registrert i Norge så må den feile hvis registrertIUtlandet ikke er satt til null, validate skal returnere en violation`() {
-        val virksomhet = gyldigVirksomhet(
-            registrertINorge = false,
-            registrertIUtlandet = null
-        )
-        virksomhet.valider(felt).assertFeilPå(listOf("selvstendingNæringsdrivende.virksomhet.registrertIUtlandet"))
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                registrertINorge = false,
+                registrertIUtlandet = null
+            )
+        ).verifiserFeil(1, "Kan ikke være null når registrertINorge er false")
     }
 
     @Test
     fun `Hvis registrert i utlandet så må landkode være riktig ISO 3166 alpha-3 landkode, validering skal gi feil`() {
-        val virksomhet = gyldigVirksomhet(
-            registrertINorge = false,
-            registrertIUtlandet = Land(
-                landnavn = "Tyskland",
-                landkode = "NO"
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                registrertINorge = false,
+                registrertIUtlandet = Land(
+                    landnavn = "Tyskland",
+                    landkode = "NO"
+                )
             )
-        )
-        virksomhet.valider(felt)
-            .assertFeilPå(listOf("selvstendingNæringsdrivende.virksomhet.registrertIUtlandet.landkode"))
+        ).verifiserFeil(1, "NO er ikke en gyldig ISO 3166-1 alpha-3 kode.")
     }
 
     @Test
     fun `Hvis registrert i utlandet så må landkode være riktig ISO 3166 alpha-3 landkode`() {
-        val virksomhet = gyldigVirksomhet(
-            registrertINorge = false,
-            registrertIUtlandet = Land(
-                landnavn = "Tyskland",
-                landkode = "DEU"
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                registrertINorge = false,
+                registrertIUtlandet = Land(
+                    landnavn = "Tyskland",
+                    landkode = "DEU"
+                )
             )
-        )
-        virksomhet.valider(felt).verifiserIngenFeil()
+        ).verifiserIngenFeil()
     }
 
     @Test
     fun `Hvis harFlereAktiveVirksomheter er null skal validering gi feil`() {
-        val virksomhet = gyldigVirksomhet(
-            harFlereAktiveVirksomheter = null
-        )
-        virksomhet.valider(felt)
-            .assertFeilPå(listOf("selvstendingNæringsdrivende.virksomhet.harFlereAktiveVirksomheter"))
+        VALIDATOR.validate(
+            gyldigVirksomhet(
+                harFlereAktiveVirksomheter = null
+            )
+        ).verifiserFeil(1, "Kan ikke være null.")
     }
 }
 

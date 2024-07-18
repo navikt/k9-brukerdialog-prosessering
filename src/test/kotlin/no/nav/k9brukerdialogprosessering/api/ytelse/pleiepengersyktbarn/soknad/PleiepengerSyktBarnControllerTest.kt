@@ -195,6 +195,12 @@ class PleiepengerSyktBarnControllerTest {
                               "reason": "size must be between 11 and 11"
                             },
                             {
+                              "invalidValue": "",
+                              "parameterName": "pleiepengerSyktBarnSøknad.barn.navn",
+                              "parameterType": "ENTITY",
+                              "reason": "kan ikke være tomt eller blankt"
+                            },
+                            {
                               "invalidValue": false,
                               "parameterName": "pleiepengerSyktBarnSøknad.harBekreftetOpplysninger",
                               "parameterType": "ENTITY",
@@ -237,7 +243,7 @@ class PleiepengerSyktBarnControllerTest {
                               "invalidValue": "$fødselsdatoIFremtiden",
                               "parameterName": "pleiepengerSyktBarnSøknad.barn.fødselsdato",
                               "parameterType": "ENTITY",
-                              "reason": "kan ikke være i fremtiden."
+                              "reason": "kan ikke være i fremtiden"
                             },
                             {
                               "invalidValue": "123ABC",

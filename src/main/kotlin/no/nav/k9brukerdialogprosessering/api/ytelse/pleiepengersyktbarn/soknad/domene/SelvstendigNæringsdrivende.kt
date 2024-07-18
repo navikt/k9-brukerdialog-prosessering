@@ -14,9 +14,6 @@ data class SelvstendigNæringsdrivende(
     @field:Valid val virksomhet: Virksomhet? = null,
     @field:Valid val arbeidsforhold: Arbeidsforhold? = null,
 ) {
-    internal fun valider(felt: String = "selvstendigNæringsdrivende") = mutableListOf<String>().apply {
-        virksomhet?.let { addAll(it.valider("$felt.virksomhet")) }
-    }
 
     @AssertTrue(message = "Må være satt når man har harInntektSomSelvstendig.")
     fun isArbeidsforhold(): Boolean {

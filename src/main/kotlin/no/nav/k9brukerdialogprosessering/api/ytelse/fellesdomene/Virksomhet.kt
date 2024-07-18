@@ -1,6 +1,11 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende.SelvstendigNæringsdrivendePeriodeInfo
 import no.nav.k9.søknad.felles.type.Landkode
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer
@@ -8,8 +13,6 @@ import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Regnskapsfører.Companion.leggTilK9Regnskapsfører
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.VarigEndring.Companion.leggTilVarigEndring
 import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.math.BigDecimal
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende as K9SelvstendigNæringsdrivende
@@ -21,54 +24,68 @@ data class Virksomhet(
     val fiskerErPåBladB: Boolean? = null,
     val næringsinntekt: Int? = null,
     val navnPåVirksomheten: String,
+    @field:Size(max = 20)
+    @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     val organisasjonsnummer: String? = null,
+    @field:NotNull(message = "Kan ikke være null.")
     val registrertINorge: Boolean? = null,
-    val registrertIUtlandet: Land? = null,
+    @field:Valid val registrertIUtlandet: Land? = null,
     val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeArene? = null,
     val varigEndring: VarigEndring? = null,
     val regnskapsfører: Regnskapsfører? = null,
     val erNyoppstartet: Boolean,
+    @field:NotNull(message = "Kan ikke være null")
     val harFlereAktiveVirksomheter: Boolean? = null,
 ) {
 
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        kreverIkkeNull(harFlereAktiveVirksomheter, "$felt.harFlereAktiveVirksomheter kan ikke være null.")
-        kreverIkkeNull(registrertINorge, "$felt.registrertINorge kan ikke være null.")
-        validerErNyoppstartet(felt)
-        tilOgMed?.let { krever(it.erLikEllerEtter(fraOgMed), "$felt.tilOgMed må være før eller lik tilOgMed.") }
-
+    @AssertTrue(message = "Kan ikke være null når registrertINorge er false")
+    fun isRegistrertIUtlandet(): Boolean {
         if (registrertINorge == false) {
-            kreverIkkeNull(
-                registrertIUtlandet,
-                "$felt.registrertIUtlandet kan ikke være null når $felt.registrertINorge er false"
-            )
-        } else {
-            kreverIkkeNull(
-                organisasjonsnummer,
-                "$felt.organisasjonsnummer kan ikke være når $felt.registrertINorge er true"
-            )
+            return registrertIUtlandet != null
         }
-
-        if (næringstype == Næringstype.FISKE) {
-            krever(fiskerErPåBladB != null, "$felt.fiskerErPåBladB kan ikke være null når $felt.næringstype er FISKE")
-        }
-
-        registrertIUtlandet?.let { addAll(it.valider("$felt.registrertIUtlandet")) }
-        organisasjonsnummer?.let {
-            krever(it.all { tall -> tall.isDigit() }, "$felt.organisasjonsnummer kan kun bestå av tall.")
-        }
+        return true
     }
 
-    private fun MutableList<String>.validerErNyoppstartet(felt: String) {
+    @AssertTrue(message = "Kan ikke være null når registrertINorge er true")
+    fun isOrganisasjonsnummer(): Boolean {
+        if (registrertINorge == true) {
+            return organisasjonsnummer != null
+        }
+        return true
+    }
+
+    @AssertTrue(message = "Må være lik eller etter fraOgMed.")
+    fun isTilOgMed(): Boolean {
+        if (tilOgMed != null) {
+            return tilOgMed.erLikEllerEtter(fraOgMed)
+        }
+        return true
+    }
+
+    @AssertTrue(message = "Kan ikke være null når næringstype er FISKE")
+    fun isFiskerErPåBladB(): Boolean {
+        if (næringstype == Næringstype.FISKE) {
+            return fiskerErPåBladB != null
+        }
+        return true
+    }
+
+    @AssertTrue(message = "Når nyoppstartet er true, må fraOgMed være maks 4 år siden.")
+    fun isErNyoppstartet(): Boolean {
         val fireÅrSiden = LocalDate.now().minusYears(4)
-        if (erNyoppstartet) krever(
-            fraOgMed.erLikEllerEtter(fireÅrSiden),
-            "$felt.nyOppstartet er true. $felt.fraOgMed må være maks 4 år siden"
-        )
-        if (!erNyoppstartet) krever(
-            fraOgMed < fireÅrSiden,
-            "$felt.nyOppstartet er false. $felt.fraOgMed må være over 4 år siden"
-        )
+        if (erNyoppstartet) {
+            return fraOgMed.erLikEllerEtter(fireÅrSiden)
+        }
+        return true
+    }
+
+    @AssertTrue(message = "Når nyoppstartet er false, må fraOgMed må være over 4 år siden.")
+    fun isErIkkeNyoppstartet(): Boolean {
+        val fireÅrSiden = LocalDate.now().minusYears(4)
+        if (!erNyoppstartet) {
+            return fraOgMed < fireÅrSiden
+        }
+        return true
     }
 
     fun somK9SelvstendigNæringsdrivende() = K9SelvstendigNæringsdrivende().apply {

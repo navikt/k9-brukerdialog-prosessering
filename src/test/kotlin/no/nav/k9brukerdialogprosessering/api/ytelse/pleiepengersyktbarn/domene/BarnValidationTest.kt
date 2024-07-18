@@ -53,7 +53,7 @@ class BarnValidationTest {
             gyldigBarn.copy(
                 fødselsdato = LocalDate.now().plusDays(1)
             )
-        ).verifiserFeil(1, "kan ikke være i fremtiden.")
+        ).verifiserFeil(1, "kan ikke være i fremtiden")
     }
 
     @Test

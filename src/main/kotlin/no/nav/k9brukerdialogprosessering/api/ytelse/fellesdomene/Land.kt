@@ -1,18 +1,24 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene
 
+import jakarta.validation.constraints.NotBlank
 import no.nav.k9.søknad.felles.type.Landkode
+import no.nav.k9brukerdialogprosessering.api.validering.landkode.ValidLandkode
 import no.nav.k9brukerdialogprosessering.utils.krever
 import java.util.*
 
 data class Land(
+    @field:NotBlank
+    @field:ValidLandkode
     val landkode: String,
-    val landnavn: String
+
+    @field:NotBlank val landnavn: String,
 ) {
-    companion object{
+    companion object {
         // ISO 3166 alpha-3 landkode - https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
-        internal val LANDKODER: MutableSet<String> = Locale.getISOCountries(Locale.IsoCountryCode.PART1_ALPHA3).toMutableSet().also {
-            it.add("XXK") // Kode for "Kosovo
-        }
+        internal val LANDKODER: MutableSet<String> =
+            Locale.getISOCountries(Locale.IsoCountryCode.PART1_ALPHA3).toMutableSet().also {
+                it.add("XXK") // Kode for "Kosovo
+            }
     }
 
     override fun equals(other: Any?) = this === other || other is Land && this.equals(other)

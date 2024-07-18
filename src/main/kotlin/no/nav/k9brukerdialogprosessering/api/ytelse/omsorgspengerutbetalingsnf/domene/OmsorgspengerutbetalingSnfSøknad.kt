@@ -67,7 +67,6 @@ class OmsorgspengerutbetalingSnfSøknad(
         addAll(utbetalingsperioder.valider("utbetalingsperioder"))
         addAll(barn.valider("barn"))
         frilans?.let { addAll(it.valider("frilans")) }
-        selvstendigNæringsdrivende?.let { addAll(it.valider("selvstendigNæringsdrivende")) }
 
         if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
     }

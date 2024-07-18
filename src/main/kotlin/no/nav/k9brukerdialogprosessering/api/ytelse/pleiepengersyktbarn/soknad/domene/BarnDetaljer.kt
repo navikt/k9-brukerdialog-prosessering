@@ -21,13 +21,14 @@ data class BarnDetaljer(
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     var fødselsnummer: String?,
 
-    @field:PastOrPresent(message = "kan ikke være i fremtiden.")
+    @field:PastOrPresent(message = "kan ikke være i fremtiden")
     @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate?,
 
     val aktørId: String?,
 
-    @field:NotBlank(message = "kan ikke være tomt eller blankt.")
+    @field:NotBlank(message = "kan ikke være tomt eller blankt")
     val navn: String,
+
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
 ) {
     override fun toString(): String {
