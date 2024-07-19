@@ -1,18 +1,18 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotNull
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk.NattevåkPeriodeInfo
 import no.nav.k9brukerdialogprosessering.utils.StringUtils
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk as K9Nattevåk
 
 data class Nattevåk(
-    val harNattevåk: Boolean? = null,
+    @field:NotNull(message = "Kan ikke være null") val harNattevåk: Boolean? = null,
     val tilleggsinformasjon: String?,
 ) {
 
-    private companion object {
-        private const val MAX_FRITEKST_TEGN = 1000
+    companion object {
+        const val MAX_FRITEKST_TEGN = 1000
     }
 
     override fun toString(): String {
@@ -27,14 +27,19 @@ data class Nattevåk(
         )
     )
 
-    fun valider(felt: String) = mutableListOf<String>().apply {
-        kreverIkkeNull(harNattevåk, "$felt.harNattevåk kan ikke være null")
+    @AssertTrue(message = "Dersom harNattevåk er satt, må tilleggsinformasjon være satt")
+    private fun isTilleggsinformasjon(): Boolean {
         if (harNattevåk == true) {
-            krever(
-                tilleggsinformasjon !== null && tilleggsinformasjon.length <= MAX_FRITEKST_TEGN,
-                "$felt.tilleggsinformasjon kan være max $MAX_FRITEKST_TEGN tegn, men var ${tilleggsinformasjon?.length}"
-            )
+            return tilleggsinformasjon.isNullOrBlank().not()
         }
+        return true
+    }
 
+    @AssertTrue(message = "Kan ikke være over $MAX_FRITEKST_TEGN tegn")
+    private fun isTilleggsinformasjon_lengde(): Boolean {
+        if (harNattevåk == true) {
+            return tilleggsinformasjon != null && tilleggsinformasjon.length <= MAX_FRITEKST_TEGN
+        }
+        return true
     }
 }

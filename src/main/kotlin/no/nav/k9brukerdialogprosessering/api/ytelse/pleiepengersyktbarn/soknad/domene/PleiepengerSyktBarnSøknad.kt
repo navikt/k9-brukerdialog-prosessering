@@ -69,7 +69,7 @@ data class PleiepengerSyktBarnSøknad(
     val harForståttRettigheterOgPlikter: Boolean,
 
     val omsorgstilbud: Omsorgstilbud? = null,
-    val nattevåk: Nattevåk? = null,
+    @field:Valid val nattevåk: Nattevåk? = null,
     val beredskap: Beredskap? = null,
     @field:Valid val frilans: Frilans,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
@@ -133,6 +133,14 @@ data class PleiepengerSyktBarnSøknad(
         fødselsattestVedleggUrls?.let { addAll(it) }
     }
 
+    @AssertTrue(message = "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom")
+    fun isBarnRelasjonBeskrivelse(): Boolean {
+        if (barnRelasjon == BarnRelasjon.ANNET) {
+            return !barnRelasjonBeskrivelse.isNullOrBlank()
+        }
+        return true
+    }
+
     override fun valider(): List<String> = mutableListOf<String>().apply {
         addAll(opptjeningIUtlandet.valider())
         addAll(utenlandskNæring.valider("utenlandskNæring"))
@@ -143,9 +151,6 @@ data class PleiepengerSyktBarnSøknad(
         omsorgstilbud?.let { addAll(it.valider("omsorgstilbud")) }
         ferieuttakIPerioden?.let { addAll(it.valider(("ferieuttakIPerioden"))) }
         beredskap?.let { addAll(it.valider("beredskap")) }
-        nattevåk?.let { addAll(it.valider("nattevåk")) }
-
-        addAll(validerBarnRelasjon())
 
         vedlegg.mapIndexed { index, url ->
             krever(url.path.matches(Regex("/vedlegg/.*")), "vedlegg[$index] inneholder ikke gyldig url")
@@ -247,15 +252,6 @@ fun tilK9Tilsynsordning0Timer(periode: no.nav.k9.søknad.felles.type.Periode) = 
             Duration.ZERO
         )
     )
-}
-
-private fun PleiepengerSyktBarnSøknad.validerBarnRelasjon() = mutableListOf<String>().apply {
-    if (barnRelasjon == BarnRelasjon.ANNET) {
-        krever(
-            !barnRelasjonBeskrivelse.isNullOrBlank(),
-            "Når barnRelasjon er ANNET, kan ikke barnRelasjonBeskrivelse være tom"
-        )
-    }
 }
 
 fun List<BarnOppslag>.hentIdentitetsnummerForBarn(aktørId: String?): String? {

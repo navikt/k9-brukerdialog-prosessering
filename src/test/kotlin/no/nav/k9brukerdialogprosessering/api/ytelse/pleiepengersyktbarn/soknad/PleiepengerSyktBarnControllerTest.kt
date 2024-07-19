@@ -8,6 +8,9 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.SøknadUtils
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.Arbeidsgiver
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.BarnRelasjon
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.Nattevåk
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.Nattevåk.Companion.MAX_FRITEKST_TEGN
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.NormalArbeidsdag
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.ArbeidIPeriode
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.ArbeidIPeriodeType
@@ -107,13 +110,15 @@ class PleiepengerSyktBarnControllerTest {
                     fødselsdato = fødselsdatoIFremtiden // Fødselsdato i fremtiden er ikke gyldig
 
                 ),
+                barnRelasjon = BarnRelasjon.ANNET,
+                barnRelasjonBeskrivelse = null, // Må være satt dersom barnRelasjon = ANNET
                 arbeidsgivere = listOf(
                     Arbeidsgiver(
                         organisasjonsnummer = "123ABC", // Feil format
                         navn = "", // Tomt navn
                         erAnsatt = false,
                         arbeidsforhold = Arbeidsforhold(
-                            normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag,),
+                            normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag),
                             arbeidIPeriode = ArbeidIPeriode(
                                 type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
                                 redusertArbeid = null // Kan ikke være null om type = ARBEIDER_REDUSERT
@@ -125,7 +130,7 @@ class PleiepengerSyktBarnControllerTest {
                         navn = "AG 1",
                         erAnsatt = false,
                         arbeidsforhold = Arbeidsforhold(
-                            normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag,),
+                            normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag),
                             arbeidIPeriode = ArbeidIPeriode(
                                 type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
                                 redusertArbeid = ArbeidsRedusert(
@@ -140,7 +145,7 @@ class PleiepengerSyktBarnControllerTest {
                         navn = "AG 2",
                         erAnsatt = false,
                         arbeidsforhold = Arbeidsforhold(
-                            normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag,),
+                            normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag),
                             arbeidIPeriode = ArbeidIPeriode(
                                 type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
                                 redusertArbeid = ArbeidsRedusert(
@@ -155,7 +160,7 @@ class PleiepengerSyktBarnControllerTest {
                         navn = "AG 3",
                         erAnsatt = false,
                         arbeidsforhold = Arbeidsforhold(
-                            normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag,),
+                            normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag),
                             arbeidIPeriode = ArbeidIPeriode(
                                 type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
                                 redusertArbeid = ArbeidsRedusert(
@@ -165,6 +170,26 @@ class PleiepengerSyktBarnControllerTest {
                             )
                         )
                     )
+                ),
+                nattevåk = Nattevåk(
+                    harNattevåk = true,
+                    tilleggsinformasjon = """
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean consectetur nisi at velit tempor, 
+                        sed sagittis ex aliquet. Duis nec ante a magna vehicula egestas. Integer malesuada augue nec purus condimentum, 
+                        ut dictum magna vestibulum. Nulla vel dolor ut metus blandit lacinia. Maecenas bibendum feugiat turpis, 
+                        in congue erat. Etiam facilisis, eros nec egestas condimentum, lacus lacus convallis nulla, ut 
+                        varius velit elit non libero. Nulla facilisi. Fusce dapibus magna vitae magna tempor, at aliquet
+                        massa eleifend. Morbi fermentum nibh nisi, non cursus felis convallis non. Vivamus sit amet massa 
+                        at erat dictum suscipit a at urna. Cras mollis metus sed erat fermentum, sed efficitur orci tincidunt. 
+                        Sed non varius est, sit amet porttitor lorem. Nulla malesuada justo id justo ultrices, ut vehicula lorem interdum. 
+                        Phasellus sed risus vel turpis cursus volutpat. Sed dapibus sapien in nisl venenatis, sit amet ultrices libero convallis. 
+                        Donec fringilla felis et risus finibus, vitae vehicula lorem consectetur. Ut at velit in purus malesuada porttitor. 
+                        Duis non dui purus. Integer placerat nec sapien in volutpat. Morbi vitae eros nec eros scelerisque aliquet vel ut nulla. 
+                        Nullam vulputate sapien sit amet mi porttitor lacinia. Etiam laoreet augue nec vestibulum accumsan.
+                        Nullam vehicula elit id tortor ornare, sit amet aliquam sapien tempus. Nam commodo, risus eget vulputate suscipit, 
+                        lectus libero tempor purus, quis sollicitudin sapien nunc eget ligula. Curabitur nec scelerisque nisl. 
+                        In fermentum ligula non est auctor tincidunt. Morbi aliquam ex non volutpat fermentum.
+                    """.trimIndent() // Over maks tegn
                 )
             )
         )
@@ -199,6 +224,18 @@ class PleiepengerSyktBarnControllerTest {
                               "parameterName": "pleiepengerSyktBarnSøknad.barn.navn",
                               "parameterType": "ENTITY",
                               "reason": "kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "pleiepengerSyktBarnSøknad.barnRelasjonBeskrivelse",
+                              "parameterType": "ENTITY",
+                              "reason": "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "pleiepengerSyktBarnSøknad.nattevåk.tilleggsinformasjon_lengde",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være over $MAX_FRITEKST_TEGN tegn"
                             },
                             {
                               "invalidValue": false,
@@ -259,7 +296,8 @@ class PleiepengerSyktBarnControllerTest {
                             }
                           ]
                         }
-                        """.trimIndent(), false,
+                        """.trimIndent(),
+                        false,
                     )
                 }
             }
