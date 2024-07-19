@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.Ytelse
@@ -13,6 +14,7 @@ import java.util.*
 
 data class OMPUtbetalingSNFSoknadPreprosessert(
     val soknadId: String,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val språk: String?,

@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -41,6 +42,7 @@ class PleiepengerILivetsSluttfaseSøknad(
     private val tilOgMed: LocalDate,
     private val skalJobbeOgPleieSammeDag: Boolean,
     private val dagerMedPleie: List<LocalDate>,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     internal val vedleggUrls: List<URL> = listOf(),
     internal val opplastetIdVedleggUrls: List<URL> = listOf(),

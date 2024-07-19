@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.time.LocalDate
@@ -14,6 +15,7 @@ class PilsKomplettSøknad(
     private val tilOgMed: LocalDate,
     private val skalJobbeOgPleieSammeDag: Boolean,
     private val dagerMedPleie: List<LocalDate>,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private val mottatt: ZonedDateTime,
     private val vedleggId: List<String>,
     private val opplastetIdVedleggId: List<String>,

@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
@@ -10,6 +11,7 @@ class KomplettEttersendelse(
     private val søknadId: String,
     private val søker: Søker,
     private val språk: String,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private val mottatt: ZonedDateTime,
     private val vedleggId: List<String>,
     private val harForståttRettigheterOgPlikter: Boolean,

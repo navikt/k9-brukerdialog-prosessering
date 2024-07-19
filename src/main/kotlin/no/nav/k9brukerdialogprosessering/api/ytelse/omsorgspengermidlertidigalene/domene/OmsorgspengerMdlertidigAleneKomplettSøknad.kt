@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Barn
@@ -7,6 +8,7 @@ import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.time.ZonedDateTime
 
 class OmsorgspengerMdlertidigAleneKomplettSøknad(
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val søknadId: String,

@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.Ytelse
@@ -12,6 +13,7 @@ import java.util.*
 
 data class OMPMidlertidigAleneSoknadPreprosessert(
     val søknadId: String,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime,
     val språk: String?,
     val dokumentId: List<List<String>>,

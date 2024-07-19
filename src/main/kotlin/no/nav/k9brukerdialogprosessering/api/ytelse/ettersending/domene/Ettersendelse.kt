@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9.ettersendelse.EttersendelseValidator
@@ -23,6 +24,7 @@ import java.util.*
 class Ettersendelse(
     internal val søknadId: String = UUID.randomUUID().toString(),
     private val språk: String,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     internal val vedlegg: List<URL>,
     private val beskrivelse: String? = null,

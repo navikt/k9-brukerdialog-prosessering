@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -37,6 +38,7 @@ private val k9FormatVersjon = Versjon.of("1.1.0")
 
 class OmsorgspengerutbetalingArbeidstakerSøknad(
     internal val søknadId: String = UUID.randomUUID().toString(),
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     private val språk: String,
     internal val vedlegg: List<URL>,

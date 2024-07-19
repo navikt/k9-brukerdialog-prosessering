@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.helse.felles.Omsorgstilbud
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.common.Ytelse
@@ -25,6 +26,7 @@ import java.time.ZonedDateTime
 
 data class PSBMottattSøknad(
     val søknadId: String,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime,
     val apiDataVersjon: String? = null,
     val språk: String? = null,

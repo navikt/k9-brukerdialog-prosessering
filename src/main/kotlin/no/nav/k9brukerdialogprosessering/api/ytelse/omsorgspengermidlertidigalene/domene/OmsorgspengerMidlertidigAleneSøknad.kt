@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -25,6 +26,7 @@ import no.nav.k9.søknad.Søknad as K9Søknad
 
 class OmsorgspengerMidlertidigAleneSøknad(
     val søknadId: String = UUID.randomUUID().toString(),
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     private val id: String,
     private val språk: String,

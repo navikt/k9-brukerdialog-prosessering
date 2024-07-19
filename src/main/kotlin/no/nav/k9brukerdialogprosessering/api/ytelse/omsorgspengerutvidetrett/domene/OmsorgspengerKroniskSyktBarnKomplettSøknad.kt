@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutvidetrett.domene
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Barn
@@ -10,6 +11,7 @@ import java.util.*
 
 class OmsorgspengerKroniskSyktBarnKomplettSøknad(
     private val språk: String,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     private val søknadId: String = UUID.randomUUID().toString(),
     private var barn: Barn,
