@@ -151,7 +151,7 @@ class VirksomhetTest {
             gyldigVirksomhet(
                 harFlereAktiveVirksomheter = null
             )
-        ).verifiserFeil(1, "Kan ikke være null.")
+        ).verifiserFeil(1, "Kan ikke være null")
     }
 }
 
