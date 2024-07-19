@@ -1,6 +1,5 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
@@ -16,7 +15,6 @@ import java.util.*
 
 class OmsorgspengerutbetalingSnfKomplettSøknad(
     internal val søknadId: SøknadId = SøknadId(UUID.randomUUID().toString()),
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     private val språk: String,
     private val søker: Søker,

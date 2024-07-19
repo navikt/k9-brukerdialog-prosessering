@@ -14,7 +14,6 @@ import java.time.ZonedDateTime
 data class OMPUTVKroniskSyktBarnSøknadMottatt(
     val nyVersjon: Boolean = false,
     val søknadId: String,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime,
     val språk: String? = "nb",
     val kroniskEllerFunksjonshemming: Boolean = false,

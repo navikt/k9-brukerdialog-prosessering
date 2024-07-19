@@ -1,6 +1,5 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.k9.søknad.Søknad
 import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
@@ -11,7 +10,6 @@ data class KomplettPleiepengerSyktBarnSøknad(
     val apiDataVersjon: String? = null,
     val språk: Språk? = null,
     val søknadId: String,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime,
     val fraOgMed: LocalDate,
     val tilOgMed: LocalDate,

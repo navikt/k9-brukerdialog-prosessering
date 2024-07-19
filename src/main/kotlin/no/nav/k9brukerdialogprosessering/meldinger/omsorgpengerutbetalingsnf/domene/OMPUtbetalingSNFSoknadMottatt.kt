@@ -15,7 +15,6 @@ import java.time.ZonedDateTime
 
 data class OMPUtbetalingSNFSoknadMottatt(
     val søknadId: String,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val språk: String,

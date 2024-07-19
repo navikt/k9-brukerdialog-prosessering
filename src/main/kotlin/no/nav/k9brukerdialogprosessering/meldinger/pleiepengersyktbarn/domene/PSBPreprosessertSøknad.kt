@@ -30,7 +30,7 @@ data class PSBPreprosessertSøknad(
     val språk: String?,
     val søknadId: String,
     val dokumentId: List<List<String>>,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
     val mottatt: ZonedDateTime,
     val fraOgMed: LocalDate,
     val tilOgMed: LocalDate,
