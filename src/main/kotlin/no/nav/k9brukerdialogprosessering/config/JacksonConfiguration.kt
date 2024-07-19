@@ -13,17 +13,19 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import no.nav.k9.søknad.JsonUtils
+import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
-import java.time.ZoneOffset
+import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @Configuration
 class JacksonConfiguration {
     companion object {
+        val zonedDateTimeFormatter = DateTimeFormatter.ISO_INSTANT.withZone(UTC)
         fun configureKotlinModule(): KotlinModule {
             return KotlinModule.Builder().build().also {
                 it.addSerializer(ZonedDateTime::class.java, CustomZonedDateTimeSerializer())
@@ -47,6 +49,7 @@ class JacksonConfiguration {
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .registerModule(kotlinModule)
             .registerModule(javaTimeModule)
+            .findAndRegisterModules()
     }
 
     @Bean
@@ -64,22 +67,15 @@ class JacksonConfiguration {
 }
 
 class CustomZonedDateTimeSerializer : JsonSerializer<ZonedDateTime?>() {
-    companion object {
-        val FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.SSS]X").withZone(ZoneOffset.UTC)
-    }
-
     override fun serialize(zdt: ZonedDateTime?, gen: JsonGenerator?, serializers: SerializerProvider?) {
-        val formattedDate = zdt?.format(FORMATTER)
+        val formattedDate = zdt?.format(zonedDateTimeFormatter)
         gen?.writeString(formattedDate)
     }
 }
 
 class CustomZonedDateTimeDeSerializer : JsonDeserializer<ZonedDateTime?>() {
-    companion object {
-        val FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss[.SSS]X").withZone(ZoneOffset.UTC)
-    }
 
     override fun deserialize(p0: JsonParser?, p1: DeserializationContext?): ZonedDateTime? {
-        return ZonedDateTime.parse(p0?.valueAsString, FORMATTER)
+        return ZonedDateTime.parse(p0?.valueAsString, zonedDateTimeFormatter)
     }
 }

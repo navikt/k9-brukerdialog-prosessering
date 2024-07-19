@@ -6,6 +6,7 @@ import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
+import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
@@ -123,8 +124,8 @@ class OMPAleneomsorgSoknadKonsumentTest {
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val søknadId = UUID.randomUUID().toString()
-        val mottattString = "2020-01-01T10:30:15.000Z"
-        val mottatt = ZonedDateTime.parse(mottattString)
+        val mottattString = "2020-01-01T10:30:15Z"
+        val mottatt = ZonedDateTime.parse(mottattString, zonedDateTimeFormatter)
         val søknadMottatt = OMPAleneomsorgSoknadUtils.defaultSøknad(
             søknadId = søknadId,
             mottatt = mottatt

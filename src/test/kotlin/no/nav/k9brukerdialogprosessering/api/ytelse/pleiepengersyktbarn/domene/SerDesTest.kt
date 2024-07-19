@@ -34,7 +34,7 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.Årsak
-import no.nav.k9brukerdialogprosessering.config.CustomZonedDateTimeSerializer.Companion.FORMATTER
+import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.objectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -51,10 +51,11 @@ internal class SerDesTest {
     @Test
     fun `Test reserialisering av request`() {
         val søknadId = UUID.randomUUID().toString()
-        val mottatt = ZonedDateTime.parse("2021-01-10T03:04:05.000Z")
+        val mottatt = ZonedDateTime.parse("2021-01-10T03:04:05.000Z", zonedDateTimeFormatter)
         val søknad = SøknadUtils.defaultSøknad(søknadId).copy(mottatt = mottatt)
-        val søknadJson = søknadJson(søknadId, FORMATTER.format(mottatt))
-        JSONAssert.assertEquals(søknadJson, søknad.somJson(), true)
+        val søknadJson = søknadJson(søknadId, mottatt.toString())
+        val serialisertJson = søknad.somJson()
+        JSONAssert.assertEquals(søknadJson, serialisertJson, true)
         assertEquals(søknad, objectMapper.readValue<PleiepengerSyktBarnSøknad>(søknadJson))
     }
 
@@ -63,7 +64,7 @@ internal class SerDesTest {
         val søknadId = UUID.randomUUID().toString()
         val mottatt = ZonedDateTime.parse("2021-01-10T03:04:05.000Z")
         val komplettSøknad = komplettSøknad(søknadId).copy(mottatt = mottatt)
-        val komplettSøknadJson = komplettSøknadJson(søknadId, FORMATTER.format(mottatt))
+        val komplettSøknadJson = komplettSøknadJson(søknadId, zonedDateTimeFormatter.format(mottatt))
 
         JSONAssert.assertEquals(komplettSøknadJson, komplettSøknad.somJson(), true)
         assertEquals(komplettSøknad, objectMapper.readValue<KomplettPleiepengerSyktBarnSøknad>(komplettSøknadJson))

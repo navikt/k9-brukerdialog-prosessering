@@ -11,6 +11,7 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.OmsorgstilbudSvarFremtid
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.PlanUkedager
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.tilK9Tilsynsordning0Timer
+import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.Duration
 import java.time.LocalDate
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -26,7 +26,7 @@ class K9FormatTest {
 
     @Test
     fun `Full PP søknad blir til riktig K9Format`() {
-        val mottatt = ZonedDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC"))
+        val mottatt = ZonedDateTime.parse("2020-01-02T03:04:05Z", zonedDateTimeFormatter)
         val søknadId = UUID.randomUUID().toString()
         val fraOgMed = LocalDate.parse("2021-01-01")
         val tilOgMed = LocalDate.parse("2021-01-10")
@@ -68,7 +68,7 @@ class K9FormatTest {
             {
               "søknadId": "$søknadId",
               "versjon": "1.0.0",
-              "mottattDato": "2020-01-02T03:04:05.000Z",
+              "mottattDato": "2020-01-02T03:04:05Z",
               "søker": {
                 "norskIdentitetsnummer": "123456789"
               },

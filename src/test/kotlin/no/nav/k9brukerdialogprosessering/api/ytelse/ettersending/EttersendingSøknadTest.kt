@@ -4,6 +4,7 @@ import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene.Ettersendelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene.Pleietrengende
 import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene.Søknadstype
+import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.søker
@@ -11,12 +12,10 @@ import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
 import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.assertThrows
 import org.skyscreamer.jsonassert.JSONAssert
 import java.net.URI
 import java.net.URL
-import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class EttersendingSøknadTest {
@@ -25,7 +24,7 @@ class EttersendingSøknadTest {
     fun `Mapping av K9Format blir som forventet`(){
         val søknad = Ettersendelse(
             språk = "nb",
-            mottatt = ZonedDateTime.of(2020, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
+            mottatt = ZonedDateTime.parse("2020-01-02T03:04:05Z", zonedDateTimeFormatter),
             vedlegg = listOf(URL("http://localhost:8080/vedlegg/1")),
             søknadstype = Søknadstype.PLEIEPENGER_LIVETS_SLUTTFASE,
             beskrivelse = "Pleiepenger .....",
@@ -38,7 +37,7 @@ class EttersendingSøknadTest {
             {
               "søknadId": "${søknad.søknadId}",
               "versjon": "0.0.1",
-              "mottattDato": "2020-01-02T03:04:05.000Z",
+              "mottattDato": "2020-01-02T03:04:05Z",
               "søker": {
                 "norskIdentitetsnummer": "02119970078"
               },

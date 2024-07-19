@@ -6,6 +6,7 @@ import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
+import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
@@ -93,8 +94,7 @@ class PleiepengerSyktBarnPleiepengerSyktBarnSøknadKonsumentTest {
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val søknadId = UUID.randomUUID().toString()
-        val mottattString = "2020-01-01T10:30:15.000Z"
-        val mottatt = ZonedDateTime.parse(mottattString)
+        val mottatt = ZonedDateTime.parse("2024-07-19T08:36:49.490Z", zonedDateTimeFormatter)
         val søknadMottatt = PSBSøknadUtils.defaultSøknad(søknadId = søknadId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
@@ -112,7 +112,7 @@ class PleiepengerSyktBarnPleiepengerSyktBarnSøknadKonsumentTest {
         val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottatt.toString()), preprosessertSøknadJson, true)
     }
 
     @Language("JSON")
