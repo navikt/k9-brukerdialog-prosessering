@@ -18,6 +18,8 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.ArbeidIPeriodeType
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NormalArbeidstid
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
 import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -69,14 +71,12 @@ class SoknadValidationTest {
 
     @Test
     fun `Skal feile dersom barnRelasjon er ANNET men barnRelasjonBeskrivelse er tom`() {
-        Assertions.assertThrows(ValidationErrorResponseException::class.java) {
-            val søknad = soknad().copy(
+        VALIDATOR.validate(
+            soknad().copy(
                 barnRelasjon = BarnRelasjon.ANNET,
                 barnRelasjonBeskrivelse = null
             )
-
-            søknad.valider()
-        }
+        ).verifiserFeil(1, "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom")
     }
 
     private fun soknad(
