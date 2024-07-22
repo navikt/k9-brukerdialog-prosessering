@@ -10,18 +10,18 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import java.time.LocalDate
 import no.nav.k9.søknad.ytelse.pls.v1.Pleietrengende as K9Pleietrengende
 
-class Pleietrengende(
-    @field:Size(max = 11)
+data class Pleietrengende(
+    @field:Size(min = 11, max = 11)
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-    private val norskIdentitetsnummer: String? = null,
+    val norskIdentitetsnummer: String? = null,
 
     @field:PastOrPresent(message = "Kan ikke være i fremtiden")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private val fødselsdato: LocalDate? = null,
+    val fødselsdato: LocalDate? = null,
 
-    @field:NotBlank(message = "Kan ikke være tomt eller blankt") private val navn: String,
+    @field:NotBlank(message = "Kan ikke være tomt eller blankt") val navn: String,
 
-    private val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
+    val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
 ) {
     internal fun somK9Pleietrengende(): K9Pleietrengende = when {
         norskIdentitetsnummer != null -> K9Pleietrengende().medNorskIdentitetsnummer(

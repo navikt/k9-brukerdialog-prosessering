@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -34,28 +35,33 @@ import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
-class PleiepengerILivetsSluttfaseSøknad(
+data class PleiepengerILivetsSluttfaseSøknad(
     internal val søknadId: String = UUID.randomUUID().toString(),
-    private val språk: String,
-    private val fraOgMed: LocalDate,
-    private val tilOgMed: LocalDate,
-    private val skalJobbeOgPleieSammeDag: Boolean,
-    private val dagerMedPleie: List<LocalDate>,
-    private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    internal val vedleggUrls: List<URL> = listOf(),
-    internal val opplastetIdVedleggUrls: List<URL> = listOf(),
-    @field:Valid private val pleietrengende: Pleietrengende,
-    private val medlemskap: Medlemskap,
-    private val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
-    @field:Valid private val arbeidsgivere: List<Arbeidsgiver>,
-    @field:Valid private val frilans: Frilans? = null,
-    @field:Valid private val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
-    private val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
-    private val utenlandskNæring: List<UtenlandskNæring>,
-    private val harVærtEllerErVernepliktig: Boolean? = null,
-    private val pleierDuDenSykeHjemme: Boolean? = null,
-    private val harForståttRettigheterOgPlikter: Boolean,
-    private val harBekreftetOpplysninger: Boolean,
+    val språk: String,
+    val fraOgMed: LocalDate,
+    val tilOgMed: LocalDate,
+    val skalJobbeOgPleieSammeDag: Boolean,
+    val dagerMedPleie: List<LocalDate>,
+    val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    val vedleggUrls: List<URL> = listOf(),
+    val opplastetIdVedleggUrls: List<URL> = listOf(),
+    @field:Valid val pleietrengende: Pleietrengende,
+    val medlemskap: Medlemskap,
+    val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
+    @field:Valid val arbeidsgivere: List<Arbeidsgiver>,
+    @field:Valid val frilans: Frilans? = null,
+    @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
+    val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
+    val utenlandskNæring: List<UtenlandskNæring>,
+    val harVærtEllerErVernepliktig: Boolean? = null,
+    val pleierDuDenSykeHjemme: Boolean? = null,
+
+    @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
+    val harBekreftetOpplysninger: Boolean,
+
+    @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
+    val harForståttRettigheterOgPlikter: Boolean,
+
     private val flereSokere: FlereSokereSvar? = null,
     private val dataBruktTilUtledningAnnetData: String? = null,
 ) : Innsending {
@@ -104,8 +110,6 @@ class PleiepengerILivetsSluttfaseSøknad(
         addAll(utenlandsoppholdIPerioden.valider())
 
         pleierDuDenSykeHjemme?.let { krever(it, "pleierDuDenSykeHjemme må være true.") }
-        krever(harBekreftetOpplysninger, "harBekreftetOpplysninger må være true.")
-        krever(harForståttRettigheterOgPlikter, "harForståttRettigheterOgPlikter må være true.")
         if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
     }
 

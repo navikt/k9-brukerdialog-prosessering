@@ -3,6 +3,7 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Land
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Næringstype
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Virksomhet
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.SøknadUtils
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.JobberIPeriodeSvar.REDUSERT
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
@@ -20,13 +21,13 @@ import java.time.LocalDate
 class PilsSøknadTest {
     @Test
     fun `Gyldig søknad gir ingen valideringsfeil`() {
-        gyldigPILSSøknad().valider().verifiserIngenFeil()
+        SøknadUtils.defaultSøknad.valider().verifiserIngenFeil()
     }
 
     @Test
     fun `Ugydlig søknad gir valideringsfeil`() {
         assertThrows<ValidationErrorResponseException> {
-            gyldigPILSSøknad(
+            SøknadUtils.defaultSøknad.copy(
                 pleietrengende = Pleietrengende(norskIdentitetsnummer = "ABC", navn = "Bjarne"),
                 medlemskap = Medlemskap(
                     harBoddIUtlandetSiste12Mnd = null,
@@ -106,7 +107,7 @@ class PilsSøknadTest {
     @Test
     fun `Ugydlig søknad gir valideringsfeil (Hibernate)`() {
         TestUtils.VALIDATOR.validate(
-            gyldigPILSSøknad(
+            SøknadUtils.defaultSøknad.copy(
                 pleietrengende = Pleietrengende(norskIdentitetsnummer = "ABC", navn = "Bjarne"),
                 medlemskap = Medlemskap(
                     harBoddIUtlandetSiste12Mnd = null,
@@ -175,10 +176,11 @@ class PilsSøknadTest {
                 pleierDuDenSykeHjemme = false
             )
         ).verifiserFeil(
-            3,
+            4,
             "Kan ikke være tom liste",
             "'ABC123' matcher ikke tillatt pattern '^\\d+$'",
-            "'ABC' matcher ikke tillatt pattern '^\\d+$'"
+            "'ABC' matcher ikke tillatt pattern '^\\d+$'",
+            "size must be between 11 and 11"
         )
     }
 
@@ -375,7 +377,7 @@ class PilsSøknadTest {
         """.trimIndent()
         JSONAssert.assertEquals(
             forventet,
-            gyldigPILSSøknad(pleierDuDenSykeHjemme = false).somK9Format(søker, metadata).somJson(),
+            SøknadUtils.defaultSøknad.copy(pleierDuDenSykeHjemme = false).somK9Format(søker, metadata).somJson(),
             true
         )
     }
