@@ -1,5 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.endringsmelding.domene
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -15,7 +17,6 @@ import no.nav.k9brukerdialogprosessering.api.innsending.KomplettInnsending
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
-import no.nav.k9brukerdialogprosessering.utils.krever
 import java.net.URL
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
@@ -23,14 +24,19 @@ import java.util.*
 import no.nav.k9.søknad.felles.personopplysninger.Søker as K9Søker
 
 data class Endringsmelding(
-    val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
     val mottattDato: ZonedDateTime? = ZonedDateTime.now(UTC),
     val språk: String,
     var pleietrengendeNavn: String? = null,
     var gyldigeEndringsPerioder: List<Periode>? = null,
+
+    @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn endringsmelding")
     val harBekreftetOpplysninger: Boolean,
+
+    @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn endringsmelding")
     val harForståttRettigheterOgPlikter: Boolean,
-    val ytelse: PleiepengerSyktBarn,
+
+    @field:Valid val ytelse: PleiepengerSyktBarn,
 ) : Innsending {
     override fun ytelse(): Ytelse = Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN
 
@@ -38,10 +44,7 @@ data class Endringsmelding(
 
     override fun vedlegg(): List<URL> = listOf()
 
-    override fun valider(): List<String> = mutableListOf<String>().apply {
-        krever(harBekreftetOpplysninger, "Opplysningene må bekreftes for å sende inn søknad")
-        krever(harForståttRettigheterOgPlikter, "Må ha forstått rettigheter og plikter for å sende inn søknad")
-    }
+    override fun valider(): List<String> = mutableListOf()
 
     override fun søknadValidator(): SøknadValidator<Søknad> = PleiepengerSyktBarnSøknadValidator()
 
