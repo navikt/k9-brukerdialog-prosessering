@@ -7,11 +7,8 @@ import java.time.LocalDate
 
 class SelvstendigNæringsdrivende(
     @field:Valid val virksomhet: Virksomhet,
-    @field:Valid val arbeidsforhold: Arbeidsforhold
+    @field:Valid val arbeidsforhold: Arbeidsforhold,
 ) {
-    internal fun valider(felt: String = "selvstendigNæringsdrivende") = mutableListOf<String>().apply {
-        addAll(arbeidsforhold.valider("$felt.arbeidsforhold"))
-    }
 
     fun somK9SelvstendigNæringsdrivende() = virksomhet.somK9SelvstendigNæringsdrivende()
     fun somK9ArbeidstidInfo(fraOgMed: LocalDate, tilOgMed: LocalDate) =

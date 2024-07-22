@@ -1,20 +1,26 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
-import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
 import no.nav.k9.søknad.ytelse.pls.v1.Pleietrengende as K9Pleietrengende
 
 class Pleietrengende(
-    @Size(max = 11)
-    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    @field:Size(max = 11)
+    @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private val norskIdentitetsnummer: String? = null,
-    @JsonFormat(pattern = "yyyy-MM-dd") private val fødselsdato: LocalDate? = null,
-    private val navn: String,
+
+    @field:PastOrPresent(message = "Kan ikke være i fremtiden")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private val fødselsdato: LocalDate? = null,
+
+    @field:NotBlank(message = "Kan ikke være tomt eller blankt") private val navn: String,
+
     private val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
 ) {
     internal fun somK9Pleietrengende(): K9Pleietrengende = when {
@@ -28,16 +34,20 @@ class Pleietrengende(
         else -> K9Pleietrengende()
     }
 
-    fun valider(felt: String = "pleietrengende") = mutableListOf<String>().apply {
-        krever(navn.isNotBlank(), "$felt.navn kan ikke være tomt eller blankt.")
-        fødselsdato?.let { krever(it.erFørEllerLik(LocalDate.now()), "$felt.fødselsdato kan ikke være i fremtiden.") }
+    @AssertTrue(message = "'Fødselsdato' må være satt dersom 'norskIdentitetsnummer' er null")
+    fun isFødselsdato(): Boolean {
         if (norskIdentitetsnummer == null) {
-            krever(fødselsdato != null, "$felt.fødselsdato må være satt dersom norskIdentitetsnummer er null.")
-            krever(
-                årsakManglerIdentitetsnummer != null,
-                "$felt.årsakManglerIdentitetsnummer må være satt dersom norskIdentitetsnummer er null."
-            )
+            return fødselsdato != null
         }
+        return true
+    }
+
+    @AssertTrue(message = "'ÅrsakManglerIdentitetsnummer' må være satt dersom 'norskIdentitetsnummer' er null")
+    fun isÅrsakManglerIdentitetsnummer(): Boolean {
+        if (norskIdentitetsnummer == null) {
+            return årsakManglerIdentitetsnummer != null
+        }
+        return true
     }
 }
 

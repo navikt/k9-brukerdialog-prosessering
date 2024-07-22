@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
+import jakarta.validation.Valid
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -18,7 +19,6 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.ArbeidUtils.SYV_OG_EN_HALV_TIME
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsgiver.Companion.somK9Arbeidstaker
-import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsgiver.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.OpptjeningIUtlandet.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.UtenlandskNæring.Companion.valider
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
@@ -44,12 +44,12 @@ class PleiepengerILivetsSluttfaseSøknad(
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     internal val vedleggUrls: List<URL> = listOf(),
     internal val opplastetIdVedleggUrls: List<URL> = listOf(),
-    private val pleietrengende: Pleietrengende,
+    @field:Valid private val pleietrengende: Pleietrengende,
     private val medlemskap: Medlemskap,
     private val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
-    private val arbeidsgivere: List<Arbeidsgiver>,
-    private val frilans: Frilans? = null,
-    private val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
+    @field:Valid private val arbeidsgivere: List<Arbeidsgiver>,
+    @field:Valid private val frilans: Frilans? = null,
+    @field:Valid private val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     private val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
     private val utenlandskNæring: List<UtenlandskNæring>,
     private val harVærtEllerErVernepliktig: Boolean? = null,
@@ -99,14 +99,9 @@ class PleiepengerILivetsSluttfaseSøknad(
 
     override fun valider() = mutableListOf<String>().apply {
         addAll(medlemskap.valider())
-        addAll(arbeidsgivere.valider())
-        addAll(pleietrengende.valider())
         addAll(utenlandskNæring.valider())
         addAll(opptjeningIUtlandet.valider())
         addAll(utenlandsoppholdIPerioden.valider())
-
-        frilans?.let { addAll(it.valider()) }
-        selvstendigNæringsdrivende?.let { addAll(it.valider()) }
 
         pleierDuDenSykeHjemme?.let { krever(it, "pleierDuDenSykeHjemme må være true.") }
         krever(harBekreftetOpplysninger, "harBekreftetOpplysninger må være true.")

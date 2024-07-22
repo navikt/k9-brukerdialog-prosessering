@@ -1,11 +1,12 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotNull
 import no.nav.k9.søknad.felles.opptjening.Frilanser
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.Arbeidsforhold.Companion.somK9ArbeidstidInfo
 import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.time.LocalDate
 
 class Frilans(
@@ -14,24 +15,32 @@ class Frilans(
     @JsonFormat(pattern = "yyyy-MM-dd")
     val sluttdato: LocalDate? = null,
     val jobberFortsattSomFrilans: Boolean,
-    val arbeidsforhold: Arbeidsforhold? = null,
-    val harHattInntektSomFrilanser: Boolean? = null,
+    @field:Valid val arbeidsforhold: Arbeidsforhold? = null,
+    @field:NotNull(message = "Kan ikke være null") val harHattInntektSomFrilanser: Boolean? = null,
 ) {
-    internal fun valider(felt: String = "frilans") = mutableListOf<String>().apply {
-        kreverIkkeNull(harHattInntektSomFrilanser, "$felt.harHattInntektSomFrilanser kan ikke være null.")
-        if (sluttdato != null) krever(
-            sluttdato.erLikEllerEtter(startdato),
-            "$felt.sluttdato må være lik eller etter startdato."
-        )
-        if (jobberFortsattSomFrilans) krever(
-            sluttdato == null,
-            "$felt.sluttdato kan ikke være satt dersom jobberFortsattSomFrilans er true."
-        )
-        if (!jobberFortsattSomFrilans) krever(
-            sluttdato != null,
-            "$felt.sluttdato må være satt dersom jobberFortsattSomFrilans er false."
-        )
-        arbeidsforhold?.let { addAll(it.valider("$felt.arbeidsforhold")) }
+
+    @AssertTrue(message = "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt")
+    fun isSluttdato(): Boolean {
+        if (jobberFortsattSomFrilans) {
+            return sluttdato == null
+        }
+        return true
+    }
+
+    @AssertTrue(message = "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt")
+    fun isJobberFortsattSomFrilans(): Boolean {
+        if (!jobberFortsattSomFrilans) {
+            return sluttdato != null
+        }
+        return true
+    }
+
+    @AssertTrue(message = "'Sluttdato' må være lik eller etter 'startdato'")
+    fun isSluttdatoEtterStartdato(): Boolean {
+        if (sluttdato != null) {
+            return sluttdato.erLikEllerEtter(startdato)
+        }
+        return true
     }
 
     internal fun somK9Frilanser() = Frilanser().apply {
