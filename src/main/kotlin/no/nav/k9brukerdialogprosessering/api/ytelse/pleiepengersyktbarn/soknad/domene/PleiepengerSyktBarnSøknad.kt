@@ -44,7 +44,7 @@ private val k9FormatVersjon = Versjon.of("1.0.0")
 data class PleiepengerSyktBarnSøknad(
     val newVersion: Boolean?,
     val apiDataVersjon: String? = null,
-    val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: Språk? = null,

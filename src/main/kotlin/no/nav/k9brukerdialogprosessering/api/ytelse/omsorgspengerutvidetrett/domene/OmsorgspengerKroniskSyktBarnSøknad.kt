@@ -28,7 +28,7 @@ import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class OmsorgspengerKroniskSyktBarnSøknad(
-    val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: String,
     @field:Valid var barn: Barn,

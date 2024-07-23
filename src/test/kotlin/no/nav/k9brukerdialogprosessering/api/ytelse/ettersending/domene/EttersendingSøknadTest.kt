@@ -1,0 +1,61 @@
+package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene
+
+import no.nav.k9.ettersendelse.EttersendelseType
+import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.EttersendelseUtils.defaultEttersendelse
+import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
+import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
+import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.søker
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import org.junit.jupiter.api.Test
+import org.skyscreamer.jsonassert.JSONAssert
+
+class EttersendingSøknadTest {
+
+    @Test
+    fun `Mapping av K9Format blir som forventet`() {
+        val søknad = defaultEttersendelse
+        val forventetK9Format = """
+            {
+              "søknadId": "${søknad.søknadId}",
+              "versjon": "0.0.1",
+              "mottattDato": "2020-01-02T03:04:05Z",
+              "søker": {
+                "norskIdentitetsnummer": "02119970078"
+              },
+              "type": "LEGEERKLÆRING",
+              "pleietrengende": {
+                "norskIdentitetsnummer": "02119970078"
+              },
+              "ytelse": "PLEIEPENGER_LIVETS_SLUTTFASE"
+            }
+        """.trimIndent()
+        val faktiskK9Format = søknad.somK9Format(søker, metadata).somJson()
+        JSONAssert.assertEquals(forventetK9Format, faktiskK9Format, true)
+
+    }
+
+    @Test
+    fun `Gyldig søknad gir ingen valideringsfeil`() {
+        defaultEttersendelse.valider().verifiserIngenFeil()
+    }
+
+    @Test
+    fun `Forventer valideringsfeil dersom ettersendelse inneholder feil parametere`() {
+        VALIDATOR.validate(defaultEttersendelse.copy(
+            søknadId = "123ABC",
+            vedlegg = listOf(),
+            harForståttRettigheterOgPlikter = false,
+            harBekreftetOpplysninger = false,
+            ettersendelsesType = EttersendelseType.LEGEERKLÆRING,
+            pleietrengende = null,
+        )).verifiserFeil(5,
+            "Forventet gyldig UUID, men var '123ABC'",
+            "Kan ikke være tom",
+            "Pleietrengende må være satt dersom ettersendelsen gjelder legeerklæring",
+            "Opplysningene må bekreftes for å sende inn ettersendelse",
+            "Må ha forstått rettigheter og plikter for å sende inn ettersendelse",
+            )
+    }
+}

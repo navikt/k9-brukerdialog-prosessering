@@ -1,5 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.domene
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotEmpty
 import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9.ettersendelse.EttersendelseValidator
@@ -12,37 +15,37 @@ import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
-import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 
-class Ettersendelse(
-    internal val søknadId: String = UUID.randomUUID().toString(),
-    private val språk: String,
-    private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    internal val vedlegg: List<URL>,
-    private val beskrivelse: String? = null,
-    internal val søknadstype: Søknadstype,
-    internal val ettersendelsesType: EttersendelseType,
-    internal val pleietrengende: Pleietrengende? = null,
-    private val harBekreftetOpplysninger: Boolean,
-    private val harForståttRettigheterOgPlikter: Boolean,
+data class Ettersendelse(
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
+    val språk: String,
+    val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    @field:NotEmpty(message = "Kan ikke være tom") val vedlegg: List<URL>,
+    val beskrivelse: String? = null,
+    val søknadstype: Søknadstype,
+    val ettersendelsesType: EttersendelseType,
+    @field:Valid val pleietrengende: Pleietrengende? = null,
+
+    @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn ettersendelse")
+    val harBekreftetOpplysninger: Boolean,
+
+    @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn ettersendelse")
+    val harForståttRettigheterOgPlikter: Boolean,
 ) : Innsending {
 
-    override fun valider() = mutableListOf<String>().apply {
+    @AssertTrue(message = "Pleietrengende må være satt dersom ettersendelsen gjelder legeerklæring")
+    fun isPleietrengende(): Boolean {
         if (ettersendelsesType == EttersendelseType.LEGEERKLÆRING) {
-            krever(pleietrengende != null, "Pleietrengende må være satt dersom ettersendelsen gjelder legeerklæring")
+            return pleietrengende != null
         }
-
-        krever(harForståttRettigheterOgPlikter, "harForståttRettigheterOgPlikter må være true")
-        krever(harBekreftetOpplysninger, "harBekreftetOpplysninger må være true")
-        krever(vedlegg.isNotEmpty(), "Liste over vedlegg kan ikke være tom")
-        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
+        return true
     }
+
+    override fun valider() = mutableListOf<String>()
 
     override fun somKomplettSøknad(
         søker: Søker,

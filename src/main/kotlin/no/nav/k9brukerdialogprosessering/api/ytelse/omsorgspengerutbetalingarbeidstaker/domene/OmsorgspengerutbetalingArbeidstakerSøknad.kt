@@ -36,7 +36,7 @@ import no.nav.k9.søknad.Søknad as K9Søknad
 private val k9FormatVersjon = Versjon.of("1.1.0")
 
 class OmsorgspengerutbetalingArbeidstakerSøknad(
-    internal val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") internal val søknadId: String = UUID.randomUUID().toString(),
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     private val språk: String,
     internal val vedlegg: List<URL>,
