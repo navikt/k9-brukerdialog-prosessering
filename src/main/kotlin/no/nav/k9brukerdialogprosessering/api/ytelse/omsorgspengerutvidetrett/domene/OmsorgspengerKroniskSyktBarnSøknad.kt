@@ -1,5 +1,10 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutvidetrett.domene
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -15,33 +20,37 @@ import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
-import no.nav.k9brukerdialogprosessering.utils.StringUtils.FRITEKST_REGEX
 import no.nav.k9brukerdialogprosessering.utils.StringUtils.FritekstPattern
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
-import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
-import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
-class OmsorgspengerKroniskSyktBarnSøknad(
+data class OmsorgspengerKroniskSyktBarnSøknad(
     val søknadId: String = UUID.randomUUID().toString(),
-    private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    private val språk: String,
-    private var barn: Barn,
-    internal val legeerklæring: List<URL> = listOf(),
-    internal val samværsavtale: List<URL>? = null,
-    private val relasjonTilBarnet: SøkerBarnRelasjon? = null,
-    private val kroniskEllerFunksjonshemming: Boolean,
-    private val harForståttRettigheterOgPlikter: Boolean,
-    private val harBekreftetOpplysninger: Boolean,
-    private val sammeAdresse: BarnSammeAdresse?,
-    private val høyereRisikoForFravær: Boolean? = null,
-    private val høyereRisikoForFraværBeskrivelse: String? = null, // skal valideres hvis høyereRisikoForFravær er true
-    private val dataBruktTilUtledningAnnetData: String? = null,
+    val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    val språk: String,
+    @field:Valid var barn: Barn,
+    val legeerklæring: List<URL> = listOf(),
+    val samværsavtale: List<URL>? = null,
+    val relasjonTilBarnet: SøkerBarnRelasjon? = null,
+    val kroniskEllerFunksjonshemming: Boolean,
+
+    @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
+    val harForståttRettigheterOgPlikter: Boolean,
+
+    @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
+    val harBekreftetOpplysninger: Boolean,
+
+    @field:NotNull(message = "Kan ikke være null") val sammeAdresse: BarnSammeAdresse?,
+    val høyereRisikoForFravær: Boolean? = null,
+
+    @field:Pattern(regexp = FritekstPattern, message = "Matcher ikke tillatt mønster: '{regexp}'")
+    @field:Size(min = 1, max = 1000, message = "Må være mellom 1 og 1000 tegn")
+    val høyereRisikoForFraværBeskrivelse: String? = null, // skal valideres hvis høyereRisikoForFravær er true
+
+    val dataBruktTilUtledningAnnetData: String? = null,
 ) : Innsending {
 
     companion object {
@@ -97,32 +106,15 @@ class OmsorgspengerKroniskSyktBarnSøknad(
         )
     }
 
-    override fun valider() = mutableListOf<String>().apply {
-        krever(harBekreftetOpplysninger, "harBekreftetOpplysninger må være true")
-        krever(harForståttRettigheterOgPlikter, "harForståttRettigheterOgPlikter må være true")
-        kreverIkkeNull(sammeAdresse, "sammeAdresse må være satt.")
-
+    @AssertTrue(message = "Dersom 'høyereRisikoForFravær' er true, må 'høyereRisikoForFraværBeskrivelse' være satt")
+    fun isHøyereRisikoForFraværBeskrivelse(): Boolean {
         if (høyereRisikoForFravær == true) {
-            krever(
-                !høyereRisikoForFraværBeskrivelse.isNullOrBlank(),
-                "høyereRisikoForFraværBeskrivelse må være satt når høyereRisikoForFravær er true"
-            )
-            if (!høyereRisikoForFraværBeskrivelse.isNullOrBlank()) {
-                krever(
-                    høyereRisikoForFraværBeskrivelse.length in 1..1000,
-                    "høyereRisikoForFraværBeskrivelse må være mellom 1 og 1000 tegn"
-                )
-                krever(
-                    FRITEKST_REGEX.matches(høyereRisikoForFraværBeskrivelse),
-                    "høyereRisikoForFraværBeskrivelse matcher ikke tilatt møønster: $FritekstPattern"
-                )
-            }
+            return høyereRisikoForFraværBeskrivelse != null
         }
-
-        addAll(barn.valider("barn"))
-
-        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
+        return true
     }
+
+    override fun valider() = mutableListOf<String>()
 
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> =
         OmsorgspengerKroniskSyktBarnSøknadValidator()
