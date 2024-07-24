@@ -5,9 +5,9 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.EttersendelseUt
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.søker
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 
@@ -38,24 +38,26 @@ class EttersendingSøknadTest {
 
     @Test
     fun `Gyldig søknad gir ingen valideringsfeil`() {
-        defaultEttersendelse.valider().verifiserIngenFeil()
+        Validator.verifiserIngenValideringsFeil(defaultEttersendelse)
     }
 
     @Test
     fun `Forventer valideringsfeil dersom ettersendelse inneholder feil parametere`() {
-        VALIDATOR.validate(defaultEttersendelse.copy(
-            søknadId = "123ABC",
-            vedlegg = listOf(),
-            harForståttRettigheterOgPlikter = false,
-            harBekreftetOpplysninger = false,
-            ettersendelsesType = EttersendelseType.LEGEERKLÆRING,
-            pleietrengende = null,
-        )).verifiserFeil(5,
+        Validator.verifiserValideringsFeil(
+            defaultEttersendelse.copy(
+                søknadId = "123ABC",
+                vedlegg = listOf(),
+                harForståttRettigheterOgPlikter = false,
+                harBekreftetOpplysninger = false,
+                ettersendelsesType = EttersendelseType.LEGEERKLÆRING,
+                pleietrengende = null,
+            ),
+            5,
             "Forventet gyldig UUID, men var '123ABC'",
             "Kan ikke være tom",
             "Pleietrengende må være satt dersom ettersendelsen gjelder legeerklæring",
             "Opplysningene må bekreftes for å sende inn ettersendelse",
             "Må ha forstått rettigheter og plikter for å sende inn ettersendelse",
-            )
+        )
     }
 }

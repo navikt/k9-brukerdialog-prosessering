@@ -6,8 +6,8 @@ import no.nav.k9brukerdialogprosessering.utils.StringUtils.FritekstPattern
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.søker
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -34,14 +34,13 @@ class OmsorgspengerUtvidetRettSøknadTest {
 
     @Test
     fun `Forvent valideringsfeil dersom parametere har ugyldig verdi`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             defaultSøknad.copy(
                 harBekreftetOpplysninger = false,
                 harForståttRettigheterOgPlikter = false,
                 høyereRisikoForFravær = true,
                 høyereRisikoForFraværBeskrivelse = "¨ er ikke tillatt",
-            )
-        ).verifiserFeil(
+            ),
             3,
             "Opplysningene må bekreftes for å sende inn søknad",
             "Må ha forstått rettigheter og plikter for å sende inn søknad",
@@ -51,12 +50,11 @@ class OmsorgspengerUtvidetRettSøknadTest {
 
     @Test
     fun `Forvent valideringsfeil dersom høyereRisikoForFravær er true, men høyereRisikoForFraværBeskrivelse mangler`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             defaultSøknad.copy(
                 høyereRisikoForFravær = true,
                 høyereRisikoForFraværBeskrivelse = null
-            )
-        ).verifiserFeil(
+            ),
             1,
             "Dersom 'høyereRisikoForFravær' er true, må 'høyereRisikoForFraværBeskrivelse' være satt"
         )

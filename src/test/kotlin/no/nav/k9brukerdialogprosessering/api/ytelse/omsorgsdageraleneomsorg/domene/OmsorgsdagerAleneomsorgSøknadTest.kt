@@ -6,8 +6,8 @@ import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.søker
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -150,14 +150,13 @@ class OmsorgsdagerAleneomsorgSøknadTest {
 
     @Test
     fun `Gir valideringsfeil dersom Søknaden inneholder ugyldige parametere`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             SøknadUtils.defaultSøknad.copy(
                 søknadId = "123ABC",
                 barn = listOf(),
                 harForståttRettigheterOgPlikter = false,
                 harBekreftetOpplysninger = false
-            )
-        ).verifiserFeil(
+            ),
             4,
             "Forventet gyldig UUID, men var '123ABC'",
             "Kan ikke være en tom liste",
@@ -165,7 +164,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
             "Må ha forstått rettigheter og plikter for å sende inn søknad"
         )
 
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             SøknadUtils.defaultSøknad.copy(
                 barn = listOf(
                     Barn(
@@ -187,8 +186,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                         dato = null
                     )
                 ),
-            )
-        ).verifiserFeil(
+            ),
             7,
             "Må være satt når 'tidspunktForAleneomsorg' er 'SISTE_2_ÅRENE'",
             "'ABC123' matcher ikke tillatt pattern '^\\d+$'",

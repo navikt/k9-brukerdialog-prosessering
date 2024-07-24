@@ -2,9 +2,9 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.
 
 import no.nav.k9.søknad.JsonUtils
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.INGEN_ARBEIDSDAG
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -13,7 +13,7 @@ class ArbeidsgiverTest {
 
     @Test
     fun `Gyldig arbeidsgiver gir ingen valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserIngenValideringsFeil(
             Arbeidsgiver(
                 navn = "Fiskeriet AS",
                 organisasjonsnummer = "991346066",
@@ -24,12 +24,12 @@ class ArbeidsgiverTest {
                     ArbeidIPeriode(JobberIPeriodeSvar.SOM_VANLIG, PILSTestUtils.enkeltDagerMedJobbSomVanlig)
                 )
             )
-        ).verifiserIngenFeil()
+        )
     }
 
     @Test
     fun `Blankt navn skal gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Arbeidsgiver(
                 navn = " ",
                 organisasjonsnummer = "991346066",
@@ -39,21 +39,20 @@ class ArbeidsgiverTest {
                     37.5,
                     ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, PILSTestUtils.enkeltDagerMedFulltFravær)
                 )
-            )
-        ).verifiserFeil(1, "Kan ikke være tomt eller blankt")
+            ), 1, "Kan ikke være tomt eller blankt"
+        )
     }
 
     @Test
     fun `Ugyldig arbeidsforhold gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Arbeidsgiver(
                 navn = "Fiskeriet AS",
                 organisasjonsnummer = "991346066",
                 erAnsatt = true,
                 sluttetFørSøknadsperiode = false,
                 arbeidsforhold = Arbeidsforhold(37.5, ArbeidIPeriode(JobberIPeriodeSvar.REDUSERT, emptyList()))
-            )
-        ).verifiserFeil(
+            ),
             1,
             "Kan ikke være tom liste"
         )
@@ -61,7 +60,7 @@ class ArbeidsgiverTest {
 
     @Test
     fun `Liste med arbeidsgivere med ugyldig organisasjonsnummer skal gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Arbeidsgiver(
                 navn = "Fiskeriet AS",
                 organisasjonsnummer = "1ABC",
@@ -73,8 +72,7 @@ class ArbeidsgiverTest {
                         PILSTestUtils.enkeltDagerMedFulltFravær
                     )
                 )
-            )
-        ).verifiserFeil(
+            ),
             1,
             "'1ABC' matcher ikke tillatt pattern '^\\d+$'"
         )

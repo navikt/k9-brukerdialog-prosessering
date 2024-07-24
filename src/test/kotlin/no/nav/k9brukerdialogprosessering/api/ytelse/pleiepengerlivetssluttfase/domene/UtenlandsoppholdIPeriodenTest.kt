@@ -1,8 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 import no.nav.k9.søknad.JsonUtils
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -20,7 +20,7 @@ class UtenlandsoppholdIPeriodenTest {
                     landnavn = "Nederland"
                 )
             )
-        ).valider().verifiserIngenFeil()
+        ).valider().verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -35,7 +35,7 @@ class UtenlandsoppholdIPeriodenTest {
                     landnavn = "Nederland"
                 )
             )
-        ).valider().verifiserFeil(1,
+        ).valider().verifiserValideringsFeil(1,
             listOf(
                 "utenlandsoppholdIPerioden.opphold[0].landkode/landnavn.landkode 'X' er ikke en gyldig ISO 3166-1 alpha-3 kode."
             )

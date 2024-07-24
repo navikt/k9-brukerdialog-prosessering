@@ -9,32 +9,25 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.enkeltDagerMedRedusertArbeid
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.mandag
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.tirsdag
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class ArbeidIPeriodeTest {
     @Test
     fun `Gyldig ArbeidIPeriode gir ingen valideringsfeil`() {
-        VALIDATOR.validate(
-            ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, enkeltDagerMedFulltFravær)
-        ).verifiserIngenFeil()
+        Validator.verifiserIngenValideringsFeil(ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, enkeltDagerMedFulltFravær))
 
-        VALIDATOR.validate(
-            ArbeidIPeriode(JobberIPeriodeSvar.SOM_VANLIG, enkeltDagerMedJobbSomVanlig)
-        ).verifiserIngenFeil()
+        Validator.verifiserIngenValideringsFeil(ArbeidIPeriode(JobberIPeriodeSvar.SOM_VANLIG, enkeltDagerMedJobbSomVanlig))
 
-        VALIDATOR.validate(
-            ArbeidIPeriode(JobberIPeriodeSvar.REDUSERT, enkeltDagerMedRedusertArbeid)
-        ).verifiserIngenFeil()
+        Validator.verifiserIngenValideringsFeil(ArbeidIPeriode(JobberIPeriodeSvar.REDUSERT, enkeltDagerMedRedusertArbeid))
     }
 
     @Test
     fun `Forvent feil derom det sendes tom liste med enkeltdager`() {
-        VALIDATOR.validate(ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, emptyList()))
-            .verifiserFeil(1, "Kan ikke være tom liste")
+        Validator.verifiserValideringsFeil(ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, emptyList()), 1, "Kan ikke være tom liste")
     }
 
     @Test

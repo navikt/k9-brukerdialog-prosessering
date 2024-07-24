@@ -10,9 +10,9 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NULL_TIMER
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Duration
@@ -40,7 +40,7 @@ class FrilansTest {
     @Test
     fun `Frilans med valideringsfeil i arbeidsforhold`() {
         val startdato = LocalDate.parse("2020-01-01")
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Frilans(
                 startdato = startdato,
                 sluttdato = null,
@@ -59,8 +59,9 @@ class FrilansTest {
                         )
                     )
                 )
-            )
-        ).verifiserFeil(1, "Må være satt dersom type=PROSENT_AV_NORMALT")
+            ),
+            1, "Må være satt dersom type=PROSENT_AV_NORMALT"
+        )
     }
 
     @Test
@@ -75,7 +76,7 @@ class FrilansTest {
             arbeidsforhold = null
         )
             .valider("test", startdato)
-            .verifiserFeil(1, listOf("test.sluttdato kan ikke være etter startdato"))
+            .verifiserValideringsFeil(1, listOf("test.sluttdato kan ikke være etter startdato"))
     }
 
     @Test
@@ -88,7 +89,7 @@ class FrilansTest {
             harInntektSomFrilanser = true,
             type = FrilansType.FRILANS,
             arbeidsforhold = null
-        ).valider("test", startdato).verifiserIngenFeil()
+        ).valider("test", startdato).verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -101,7 +102,7 @@ class FrilansTest {
             harInntektSomFrilanser = true,
             type = FrilansType.FRILANS,
             arbeidsforhold = null
-        ).valider("test", startdato).verifiserIngenFeil()
+        ).valider("test", startdato).verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -115,7 +116,7 @@ class FrilansTest {
             arbeidsforhold = null
         )
             .valider("test", LocalDate.parse("2020-01-01"))
-            .verifiserFeil(
+            .verifiserValideringsFeil(
                 2, listOf(
                     "test.startdato kan ikke være null dersom test.type er FRILANS",
                     "test.jobberFortsattSomFrilans kan ikke være null dersom test.type er FRILANS"
@@ -281,7 +282,7 @@ class FrilansTest {
             type = null
         )
             .valider("test", startdato)
-            .verifiserFeil(
+            .verifiserValideringsFeil(
                 1, listOf(
                     "test.type kan ikke være null dersom søker har inntekt som frilanser",
                 )
@@ -301,7 +302,7 @@ class FrilansTest {
             type = FrilansType.FRILANS
         )
             .valider("test", søknadsperiodeStartdato)
-            .verifiserFeil(
+            .verifiserValideringsFeil(
                 1, listOf(
                     "Når test.startetFørSisteTreHeleMåneder er true, må test.startdato (2023-05-05) må være 3 mnd før søknadsperioden (2023-05-01)"
                 )
@@ -321,6 +322,6 @@ class FrilansTest {
             type = FrilansType.FRILANS
         )
             .valider("test", søknadsperiodeStartdato)
-            .verifiserIngenFeil()
+            .verifiserIngenValideringsFeil()
     }
 }

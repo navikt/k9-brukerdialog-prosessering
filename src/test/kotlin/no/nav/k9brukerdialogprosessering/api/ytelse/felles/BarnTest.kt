@@ -3,9 +3,9 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.felles
 import no.nav.k9.søknad.JsonUtils
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Barn
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -78,7 +78,7 @@ class BarnTest {
         Barn(
             norskIdentifikator = "02119970078",
             navn = "Barnesen"
-        ).valider("barn").verifiserIngenFeil()
+        ).valider("barn").verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -88,18 +88,17 @@ class BarnTest {
             aktørId = "123",
             navn = "Barn"
         ).valider("barn")
-            .verifiserFeil(1, listOf("barn.norskIdentifikator kan ikke være null eller blank."))
+            .verifiserValideringsFeil(1, listOf("barn.norskIdentifikator kan ikke være null eller blank."))
     }
 
     @Test
     fun `Forvent valideringsfeil dersom norskIdentifikator er ugyldig`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Barn(
                 norskIdentifikator = "123ABC",
                 aktørId = "123",
                 navn = "Barn"
-            )
-        ).verifiserFeil(
+            ),
             2,
             "'123ABC' matcher ikke tillatt pattern '^\\d+\$'",
             "size must be between 11 and 11"
@@ -111,6 +110,6 @@ class BarnTest {
         Barn(
             norskIdentifikator = "02119970078",
             navn = " "
-        ).valider("barn").verifiserFeil(1, listOf("barn.navn kan ikke være tomt eller blank."))
+        ).valider("barn").verifiserValideringsFeil(1, listOf("barn.navn kan ikke være tomt eller blank."))
     }
 }

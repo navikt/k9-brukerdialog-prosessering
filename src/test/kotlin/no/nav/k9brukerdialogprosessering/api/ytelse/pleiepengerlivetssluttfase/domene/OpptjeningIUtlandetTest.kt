@@ -3,8 +3,8 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Land
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.OpptjeningIUtlandet.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.OpptjeningType.ARBEIDSTAKER
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
@@ -18,7 +18,7 @@ class OpptjeningIUtlandetTest{
             land = Land("NLD", "Nederland"),
             fraOgMed = LocalDate.parse("2022-01-01"),
             tilOgMed = LocalDate.parse("2022-01-01")
-        ).valider("opptjeningIUtlandet").verifiserIngenFeil()
+        ).valider("opptjeningIUtlandet").verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -29,7 +29,7 @@ class OpptjeningIUtlandetTest{
             land = Land("MARS", "  "),
             fraOgMed = LocalDate.parse("2022-01-01"),
             tilOgMed = LocalDate.parse("2022-03-01")
-        ).valider("opptjeningIUtlandet").verifiserFeil(2,
+        ).valider("opptjeningIUtlandet").verifiserValideringsFeil(2,
             listOf(
                 "opptjeningIUtlandet.land.landkode 'MARS' er ikke en gyldig ISO 3166-1 alpha-3 kode.",
                 "opptjeningIUtlandet.land.landnavn kan ikke være tomt eller blankt."
@@ -52,7 +52,7 @@ class OpptjeningIUtlandetTest{
                 LocalDate.parse("2022-01-10"),
                 LocalDate.parse("2022-01-01")
             )
-        ).valider("opptjeningIUtlandet").verifiserFeil(2,
+        ).valider("opptjeningIUtlandet").verifiserValideringsFeil(2,
             listOf(
                 "opptjeningIUtlandet[0].tilOgMed må være lik eller etter fraOgMed.",
                 "opptjeningIUtlandet[1].tilOgMed må være lik eller etter fraOgMed."

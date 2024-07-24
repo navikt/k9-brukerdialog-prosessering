@@ -11,9 +11,9 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.enkeltDagerMedFulltFravær
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.fredag
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.mandag
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -123,7 +123,7 @@ class SelvstendigNæringsdrivendeTest {
 
     @Test
     fun `Gyldig SelvstendigNæringsdrivende gir ingen valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserIngenValideringsFeil(
             SelvstendigNæringsdrivende(
                 virksomhet = Virksomhet(
                     fraOgMed = LocalDate.parse("2022-01-01"),
@@ -150,12 +150,12 @@ class SelvstendigNæringsdrivendeTest {
                 ),
                 arbeidsforhold = Arbeidsforhold(37.5, ArbeidIPeriode(HELT_FRAVÆR, enkeltDagerMedFulltFravær))
             )
-        ).verifiserIngenFeil()
+        )
     }
 
     @Test
     fun `SelvstendigNæringsdrivende med feil i virksomhet og arbeidsforhold skal gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             SelvstendigNæringsdrivende(
                 virksomhet = Virksomhet(
                     fraOgMed = LocalDate.parse("2022-01-01"),
@@ -173,8 +173,7 @@ class SelvstendigNæringsdrivendeTest {
                     harFlereAktiveVirksomheter = true
                 ),
                 arbeidsforhold = Arbeidsforhold(37.5, ArbeidIPeriode(REDUSERT, emptyList()))
-            )
-        ).verifiserFeil(
+            ),
             2,
             "'123ABC' matcher ikke tillatt pattern '^\\d+$'",
             "Kan ikke være tom liste"

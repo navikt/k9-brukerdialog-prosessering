@@ -1,8 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.felles
 
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bekreftelser
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 
 class BekreftelserTest {
@@ -12,7 +12,7 @@ class BekreftelserTest {
         Bekreftelser(
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
-        ).valider("bekreftelser").verifiserIngenFeil()
+        ).valider("bekreftelser").verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -20,7 +20,7 @@ class BekreftelserTest {
         Bekreftelser(
             harBekreftetOpplysninger = false,
             harForståttRettigheterOgPlikter = true
-        ).valider("bekreftelser").verifiserFeil(1, listOf("bekreftelser.harBekreftetOpplysninger må være true"))
+        ).valider("bekreftelser").verifiserValideringsFeil(1, listOf("bekreftelser.harBekreftetOpplysninger må være true"))
     }
 
     @Test
@@ -28,7 +28,7 @@ class BekreftelserTest {
         Bekreftelser(
             harBekreftetOpplysninger = null,
             harForståttRettigheterOgPlikter = true
-        ).valider("bekreftelser").verifiserFeil(1, listOf("bekreftelser.harBekreftetOpplysninger må være true"))
+        ).valider("bekreftelser").verifiserValideringsFeil(1, listOf("bekreftelser.harBekreftetOpplysninger må være true"))
     }
 
     @Test
@@ -36,7 +36,7 @@ class BekreftelserTest {
         Bekreftelser(
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = false
-        ).valider("bekreftelser").verifiserFeil(1, listOf("bekreftelser.harForståttRettigheterOgPlikter må være true"))
+        ).valider("bekreftelser").verifiserValideringsFeil(1, listOf("bekreftelser.harForståttRettigheterOgPlikter må være true"))
     }
 
     @Test
@@ -44,6 +44,6 @@ class BekreftelserTest {
         Bekreftelser(
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = null
-        ).valider("bekreftelser").verifiserFeil(1, listOf("bekreftelser.harForståttRettigheterOgPlikter må være true"))
+        ).valider("bekreftelser").verifiserValideringsFeil(1, listOf("bekreftelser.harForståttRettigheterOgPlikter må være true"))
     }
 }

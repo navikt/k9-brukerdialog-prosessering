@@ -2,8 +2,8 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.
 
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder.BostedPeriodeInfo
 import no.nav.k9.søknad.felles.type.Landkode
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -17,7 +17,7 @@ class UtenlandsoppholdTest {
             tilOgMed = LocalDate.parse("2022-01-10"),
             landkode = "NLD",
             landnavn = "Nederland"
-        ).valider("utenlandsopphold").verifiserIngenFeil()
+        ).valider("utenlandsopphold").verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -27,7 +27,7 @@ class UtenlandsoppholdTest {
             tilOgMed = LocalDate.parse("2022-01-10"),
             landkode = "X",
             landnavn = " "
-        ).valider("utenlandsopphold").verifiserFeil(2,
+        ).valider("utenlandsopphold").verifiserValideringsFeil(2,
             listOf(
                 "utenlandsopphold.landkode/landnavn.landnavn kan ikke være tomt eller blankt.",
                 "utenlandsopphold.landkode/landnavn.landkode 'X' er ikke en gyldig ISO 3166-1 alpha-3 kode."
@@ -42,7 +42,7 @@ class UtenlandsoppholdTest {
             tilOgMed = LocalDate.parse("2022-01-01"),
             landkode = "NLD",
             landnavn = "Nederland"
-        ).valider("utenlandsopphold").verifiserFeil(1,
+        ).valider("utenlandsopphold").verifiserValideringsFeil(1,
             listOf(
                 "utenlandsopphold.fraOgMed må være før eller lik tilOgMed."
             )

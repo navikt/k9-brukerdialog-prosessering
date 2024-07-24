@@ -2,9 +2,9 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.
 
 import no.nav.k9.søknad.JsonUtils
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.ÅrsakManglerIdentitetsnummer.BOR_I_UTLANDET
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -35,63 +35,61 @@ class PleietrengendeTest {
 
     @Test
     fun `Gyldig pleietrengende gir ingen valideringsfeil`() {
-        VALIDATOR.validate(Pleietrengende(navn = "Ole", norskIdentitetsnummer = "06098523047"))
-            .verifiserIngenFeil()
+        Validator.verifiserIngenValideringsFeil(Pleietrengende(navn = "Ole", norskIdentitetsnummer = "06098523047"))
     }
 
     @Test
     fun `Blankt navn skal gi valideringsfeil`() {
-        VALIDATOR.validate(Pleietrengende(navn = " ", norskIdentitetsnummer = "06098523047"))
-            .verifiserFeil(1, "Kan ikke være tomt eller blankt")
+        Validator.verifiserValideringsFeil(
+            Pleietrengende(navn = " ", norskIdentitetsnummer = "06098523047"),
+            1,
+            "Kan ikke være tomt eller blankt"
+        )
     }
 
     @Test
     fun `Fødselsdato i fremtiden skal gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Pleietrengende(
                 navn = "Ole",
                 fødselsdato = LocalDate.now().plusDays(1),
                 årsakManglerIdentitetsnummer = BOR_I_UTLANDET
-            )
+            ), 1, "Kan ikke være i fremtiden"
         )
-            .verifiserFeil(1, "Kan ikke være i fremtiden")
     }
 
     @Test
     fun `NorskIdentitetsnummer og årsak som null skal gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Pleietrengende(
                 navn = "Ole",
                 fødselsdato = LocalDate.now(),
                 norskIdentitetsnummer = null,
                 årsakManglerIdentitetsnummer = null
-            )
+            ),
+            1,
+            "'ÅrsakManglerIdentitetsnummer' må være satt dersom 'norskIdentitetsnummer' er null"
         )
-            .verifiserFeil(
-                1,
-                "'ÅrsakManglerIdentitetsnummer' må være satt dersom 'norskIdentitetsnummer' er null"
-            )
     }
 
     @Test
     fun `NorskIdentitetsnummer og fødselsdato som null skal gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Pleietrengende(
                 navn = "Ole",
                 fødselsdato = null,
                 norskIdentitetsnummer = null,
                 årsakManglerIdentitetsnummer = BOR_I_UTLANDET
-            )
+            ), 1, "'Fødselsdato' må være satt dersom 'norskIdentitetsnummer' er null"
         )
-            .verifiserFeil(1, "'Fødselsdato' må være satt dersom 'norskIdentitetsnummer' er null")
     }
 
     @Test
     fun `Ugyldig norskIdentitetsnummer skal gi valideringsfeil`() {
-        VALIDATOR.validate(Pleietrengende(navn = "Ole", norskIdentitetsnummer = "IKKE_GYLDIG"))
-            .verifiserFeil(
-                1,
-                "'IKKE_GYLDIG' matcher ikke tillatt pattern '^\\d+$'"
-            )
+        Validator.verifiserValideringsFeil(
+            Pleietrengende(navn = "Ole", norskIdentitetsnummer = "IKKE_GYLDIG"),
+            1,
+            "'IKKE_GYLDIG' matcher ikke tillatt pattern '^\\d+$'"
+        )
     }
 }

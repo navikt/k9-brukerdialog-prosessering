@@ -2,6 +2,7 @@ package no.nav.k9brukerdialogprosessering.utils
 
 import jakarta.validation.ConstraintViolation
 import jakarta.validation.Validation
+import jakarta.validation.Validator
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
@@ -134,22 +135,31 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 annotation class KafkaIntegrationTest
 
 object TestUtils {
-    val VALIDATOR = Validation.buildDefaultValidatorFactory().validator
+    val Validator: Validator = Validation.buildDefaultValidatorFactory().validator
 
-    fun <E> MutableSet<ConstraintViolation<E>>.verifiserFeil(antallFeil: Int, vararg valideringsfeil: String) {
+    fun Validator.verifiserIngenValideringsFeil(objct: Any) = validate(objct).verifiserIngenValideringsFeil()
+
+    fun Validator.verifiserValideringsFeil(data: Any, antallFeil: Int, vararg valideringsfeil: String) =
+        validate(data).verifiserValideringsFeil(antallFeil, *valideringsfeil)
+
+    private fun <E> MutableSet<ConstraintViolation<E>>.verifiserValideringsFeil(
+        antallFeil: Int,
+        vararg valideringsfeil: String,
+    ) {
         assertThat(size).isEqualTo(antallFeil)
         assertThat(this.map { it.message }).contains(*valideringsfeil)
     }
-    fun <E> MutableSet<ConstraintViolation<E>>.verifiserIngenFeil() {
+
+    private fun <E> MutableSet<ConstraintViolation<E>>.verifiserIngenValideringsFeil() {
         assertTrue(isEmpty())
     }
 
-    fun List<String>.verifiserFeil(antallFeil: Int, valideringsfeil: List<String> = listOf()) {
+    fun List<String>.verifiserValideringsFeil(antallFeil: Int, valideringsfeil: List<String> = listOf()) {
         assertEquals(antallFeil, this.size)
         assertThat(this).contains(*valideringsfeil.toTypedArray())
     }
 
-    fun List<String>.verifiserIngenFeil() {
+    fun List<String>.verifiserIngenValideringsFeil() {
         assertTrue(isEmpty())
     }
 

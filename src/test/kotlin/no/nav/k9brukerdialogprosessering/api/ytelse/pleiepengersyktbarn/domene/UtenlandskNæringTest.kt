@@ -4,8 +4,8 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Land
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Næringstype
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.UtenlandskNæring
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.UtenlandskNæring.Companion.valider
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
@@ -20,7 +20,7 @@ class UtenlandskNæringTest {
             organisasjonsnummer = "123ABC",
             fraOgMed = LocalDate.parse("2022-01-01"),
             tilOgMed = LocalDate.parse("2022-03-01")
-        ).valider("utenlandskNæring[0]").verifiserIngenFeil()
+        ).valider("utenlandskNæring[0]").verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -32,7 +32,7 @@ class UtenlandskNæringTest {
             organisasjonsnummer = "123ABC",
             fraOgMed = LocalDate.parse("2022-01-01"),
             tilOgMed = LocalDate.parse("2022-03-01")
-        ).valider("utenlandskNæring[0]").verifiserFeil(2,
+        ).valider("utenlandskNæring[0]").verifiserValideringsFeil(2,
             listOf(
                 "utenlandskNæring[0].land.landkode 'ABC' er ikke en gyldig ISO 3166-1 alpha-3 kode.",
                 "utenlandskNæring[0].land.landnavn kan ikke være tomt eller blankt."
@@ -49,7 +49,7 @@ class UtenlandskNæringTest {
             organisasjonsnummer = "123ABC",
             fraOgMed = LocalDate.parse("2022-01-05"),
             tilOgMed = LocalDate.parse("2022-01-01")
-        ).valider("utenlandskNæring[0]").verifiserFeil(1,
+        ).valider("utenlandskNæring[0]").verifiserValideringsFeil(1,
             listOf("utenlandskNæring[0].tilOgMed må være lik eller etter fraOgMed")
         )
     }
@@ -72,7 +72,7 @@ class UtenlandskNæringTest {
                 organisasjonsnummer = "123ABC",
                 fraOgMed = LocalDate.parse("2022-01-05")
             )
-        ).valider("utenlandskNæring").verifiserFeil(2,
+        ).valider("utenlandskNæring").verifiserValideringsFeil(2,
             listOf(
                 "utenlandskNæring[0].land.landkode 'CBA' er ikke en gyldig ISO 3166-1 alpha-3 kode.",
                 "utenlandskNæring[1].land.landkode 'ABC' er ikke en gyldig ISO 3166-1 alpha-3 kode."

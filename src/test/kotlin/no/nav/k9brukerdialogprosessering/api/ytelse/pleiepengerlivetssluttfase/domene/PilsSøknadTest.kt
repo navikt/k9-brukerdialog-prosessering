@@ -8,9 +8,9 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.d
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.søker
-import no.nav.k9brukerdialogprosessering.utils.TestUtils
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -21,7 +21,7 @@ import java.time.LocalDate
 class PilsSøknadTest {
     @Test
     fun `Gyldig søknad gir ingen valideringsfeil`() {
-        SøknadUtils.defaultSøknad.valider().verifiserIngenFeil()
+        SøknadUtils.defaultSøknad.valider().verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -106,7 +106,7 @@ class PilsSøknadTest {
 
     @Test
     fun `Ugydlig søknad gir valideringsfeil (Hibernate)`() {
-        TestUtils.VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             SøknadUtils.defaultSøknad.copy(
                 pleietrengende = Pleietrengende(norskIdentitetsnummer = "ABC", navn = "Bjarne"),
                 medlemskap = Medlemskap(
@@ -174,8 +174,7 @@ class PilsSøknadTest {
                     arbeidsforhold = Arbeidsforhold(37.5, ArbeidIPeriode(REDUSERT, emptyList()))
                 ),
                 pleierDuDenSykeHjemme = false
-            )
-        ).verifiserFeil(
+            ),
             4,
             "Kan ikke være tom liste",
             "'ABC123' matcher ikke tillatt pattern '^\\d+$'",

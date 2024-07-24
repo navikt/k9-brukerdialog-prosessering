@@ -6,7 +6,7 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.OmsorgstilbudSvarFremtid
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.PlanUkedager
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.assertFeilPå
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
 import org.junit.jupiter.api.Test
 import java.time.Duration
 import java.time.LocalDate
@@ -28,7 +28,7 @@ class OmsorgstilbudValideringTest {
 
     @Test
     fun `Gyldig omsorgstilbud gir ingen feil`() {
-        gyldigOmsorgstilbud.valider(felt).verifiserIngenFeil()
+        gyldigOmsorgstilbud.valider(felt).verifiserIngenValideringsFeil()
     }
 
     @Test

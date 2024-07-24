@@ -3,8 +3,8 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Land
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Næringstype.FISKE
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.UtenlandskNæring.Companion.valider
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
@@ -19,7 +19,7 @@ class UtenlandskNæringTest {
             organisasjonsnummer = "123ABC",
             fraOgMed = LocalDate.parse("2022-01-01"),
             tilOgMed = null
-        ).valider("utenlandskNæring").verifiserIngenFeil()
+        ).valider("utenlandskNæring").verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -31,7 +31,7 @@ class UtenlandskNæringTest {
             organisasjonsnummer = "123ABC",
             fraOgMed = LocalDate.parse("2022-01-01"),
             tilOgMed = null
-        ).valider("utenlandskNæring").verifiserFeil(
+        ).valider("utenlandskNæring").verifiserValideringsFeil(
             2,
             listOf(
                 "utenlandskNæring.land.landkode 'MARS' er ikke en gyldig ISO 3166-1 alpha-3 kode.",
@@ -53,7 +53,7 @@ class UtenlandskNæringTest {
                 Land("NLD", "Nederland"), "123ABC",
                 LocalDate.parse("2022-01-10"), LocalDate.parse("2022-01-01")
             )
-        ).valider("utenlandskNæring").verifiserFeil(
+        ).valider("utenlandskNæring").verifiserValideringsFeil(
             2,
             listOf(
                 "utenlandskNæring[0].tilOgMed må være lik eller etter fraOgMed.",

@@ -6,9 +6,9 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.INGEN_ARBEIDSDAG
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.fredag
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene.PILSTestUtils.mandag
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -17,75 +17,75 @@ class FrilansTest {
 
     @Test
     fun `Gyldig frilans gir ingen valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserIngenValideringsFeil(
             Frilans(
                 startdato = LocalDate.parse("2022-01-01"),
                 sluttdato = null,
                 jobberFortsattSomFrilans = true,
                 harHattInntektSomFrilanser = true
             )
-        ).verifiserIngenFeil()
+        )
     }
 
     @Test
     fun `harHattInntektSomFrilans er null skal gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Frilans(
                 startdato = LocalDate.parse("2022-01-01"),
                 jobberFortsattSomFrilans = true,
                 harHattInntektSomFrilanser = null
-            )
-        ).verifiserFeil(1, "Kan ikke være null")
+            ), 1, "Kan ikke være null"
+        )
     }
 
 
     @Test
     fun `sluttdato før startdato skal gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Frilans(
                 startdato = LocalDate.parse("2022-01-02"),
                 sluttdato = LocalDate.parse("2022-01-01"),
                 jobberFortsattSomFrilans = false,
                 harHattInntektSomFrilanser = true
-            )
-        ).verifiserFeil(1, "'Sluttdato' må være lik eller etter 'startdato'")
+            ),
+            1,
+            "'Sluttdato' må være lik eller etter 'startdato'"
+        )
     }
 
     @Test
     fun `Dersom jobberFortsattSomFrilans er true og sluttdato er satt skal det gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Frilans(
                 startdato = LocalDate.parse("2022-01-01"),
                 sluttdato = LocalDate.parse("2022-01-02"),
                 jobberFortsattSomFrilans = true,
                 harHattInntektSomFrilanser = true
-            )
+            ), 1, "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt"
         )
-            .verifiserFeil(1, "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt")
     }
 
     @Test
     fun `Dersom jobberFortsattSomFrilans er false og sluttdato er null skal det gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Frilans(
                 startdato = LocalDate.parse("2022-01-01"),
                 sluttdato = null,
                 jobberFortsattSomFrilans = false,
                 harHattInntektSomFrilanser = true
-            )
-        ).verifiserFeil(1, "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt")
+            ), 1, "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt"
+        )
     }
 
     @Test
     fun `Feil i arbeidsforhold skal gi valideringsfeil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Frilans(
                 startdato = LocalDate.parse("2022-01-01"),
                 jobberFortsattSomFrilans = true,
                 harHattInntektSomFrilanser = true,
                 arbeidsforhold = Arbeidsforhold(20.0, ArbeidIPeriode(JobberIPeriodeSvar.REDUSERT, emptyList())),
-            )
-        ).verifiserFeil(
+            ),
             1,
             "Kan ikke være tom liste"
         )

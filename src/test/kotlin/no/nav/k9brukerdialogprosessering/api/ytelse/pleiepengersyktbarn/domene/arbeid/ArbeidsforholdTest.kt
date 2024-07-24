@@ -9,8 +9,8 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NULL_TIMER
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.RedusertArbeidstidType
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Duration
@@ -34,7 +34,7 @@ class ArbeidsforholdTest {
 
     @Test
     fun `Skal gi valideringsfeil dersom arbeidIPeriode er feil`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Arbeidsforhold(
                 normalarbeidstid = NormalArbeidstid(
                     timerPerUkeISnitt = Duration.ofHours(32)
@@ -46,8 +46,8 @@ class ArbeidsforholdTest {
                         prosentAvNormalt = null
                     )
                 )
-            )
-        ).verifiserFeil(1, "Må være satt dersom type=PROSENT_AV_NORMALT")
+            ), 1, "Må være satt dersom type=PROSENT_AV_NORMALT"
+        )
     }
 
     @Test

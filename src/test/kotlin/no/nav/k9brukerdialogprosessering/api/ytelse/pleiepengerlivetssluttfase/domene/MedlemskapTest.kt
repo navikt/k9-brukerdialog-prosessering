@@ -1,8 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.domene
 
 import no.nav.k9.søknad.JsonUtils
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -20,7 +20,7 @@ class MedlemskapTest {
             utenlandsoppholdNeste12Mnd = listOf(
                 Utenlandsopphold(LocalDate.parse("2022-01-01"), LocalDate.parse("2022-01-01"), "NLD", "Nederland")
             )
-        ).valider().verifiserIngenFeil()
+        ).valider().verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -28,7 +28,7 @@ class MedlemskapTest {
         Medlemskap(
             harBoddIUtlandetSiste12Mnd = null,
             skalBoIUtlandetNeste12Mnd = null,
-        ).valider().verifiserFeil(
+        ).valider().verifiserValideringsFeil(
             2,
             listOf(
                 "medlemskap.harBoddIUtlandetSiste12Mnd kan ikke være null.",
@@ -49,7 +49,7 @@ class MedlemskapTest {
             utenlandsoppholdNeste12Mnd = listOf(
                 Utenlandsopphold(LocalDate.parse("2022-01-03"), LocalDate.parse("2022-01-01"), "NLD", "Nederland")
             )
-        ).valider().verifiserFeil(
+        ).valider().verifiserValideringsFeil(
             3,
             listOf(
                 "medlemskap.utenlandsoppholdSiste12Mnd[1].landkode/landnavn.landnavn kan ikke være tomt eller blankt.",

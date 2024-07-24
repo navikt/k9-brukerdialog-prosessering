@@ -5,8 +5,8 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Opphold
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -22,7 +22,7 @@ class BostedOgOppholdTest {
             landkode = "BE",
             landnavn = "Belgia",
             erEØSLand = true
-        ).valider("bosted").verifiserIngenFeil()
+        ).valider("bosted").verifiserIngenValideringsFeil()
     }
 
     @Test
@@ -33,7 +33,7 @@ class BostedOgOppholdTest {
             landkode = "BE",
             landnavn = "Belgia",
             erEØSLand = null
-        ).valider("bosted").verifiserFeil(1, listOf("bosted.erEØSLand må være satt"))
+        ).valider("bosted").verifiserValideringsFeil(1, listOf("bosted.erEØSLand må være satt"))
     }
 
     @Test
@@ -44,7 +44,7 @@ class BostedOgOppholdTest {
             landkode = "BE",
             landnavn = "Belgia",
             erEØSLand = true
-        ).valider("bosted").verifiserFeil(1, listOf("bosted.fraOgMed kan ikke være etter tilOgMed"))
+        ).valider("bosted").verifiserValideringsFeil(1, listOf("bosted.fraOgMed kan ikke være etter tilOgMed"))
     }
 
     @Test
@@ -55,7 +55,7 @@ class BostedOgOppholdTest {
             landkode = "BE",
             landnavn = " ",
             erEØSLand = true
-        ).valider("bosted").verifiserFeil(1, listOf("bosted.landnavn kan ikke være blankt eller tomt. landnavn=' '"))
+        ).valider("bosted").verifiserValideringsFeil(1, listOf("bosted.landnavn kan ikke være blankt eller tomt. landnavn=' '"))
     }
 
     @Test
@@ -66,7 +66,7 @@ class BostedOgOppholdTest {
             landkode = " ",
             landnavn = "Belgia",
             erEØSLand = true
-        ).valider("bosted").verifiserFeil(1, listOf("bosted.landkode kan ikke være blankt eller tomt. landkode=' '"))
+        ).valider("bosted").verifiserValideringsFeil(1, listOf("bosted.landkode kan ikke være blankt eller tomt. landkode=' '"))
     }
 
     @Test

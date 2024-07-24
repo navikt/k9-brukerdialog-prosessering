@@ -2,9 +2,9 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.dom
 
 import no.nav.k9.søknad.JsonUtils
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.VALIDATOR
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserFeil
-import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -58,7 +58,7 @@ class OmsorgsdagerAleneomsorgBarnTest {
 
     @Test
     fun `Skal kunne registrere fosterbarn uten aktørId`() {
-        VALIDATOR.validate(
+        Validator.verifiserIngenValideringsFeil(
             Barn(
                 navn = "Barn uten identifikator",
                 type = TypeBarn.FOSTERBARN,
@@ -66,20 +66,19 @@ class OmsorgsdagerAleneomsorgBarnTest {
                 identitetsnummer = "02119970078",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
             )
-        ).verifiserIngenFeil()
+        )
     }
 
     @Test
     fun `Forvent valideringsfeil dersom norskIdentifikator er ugyldig`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Barn(
                 navn = "Barn",
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = "123",
                 identitetsnummer = "ABC123",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
-            )
-        ).verifiserFeil(
+            ),
             2,
             "'ABC123' matcher ikke tillatt pattern '^\\d+$'",
             "size must be between 11 and 11"
@@ -88,33 +87,33 @@ class OmsorgsdagerAleneomsorgBarnTest {
 
     @Test
     fun `Forvent valideringsfeil dersom navn er blank`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Barn(
                 navn = " ",
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = "123",
                 identitetsnummer = "02119970078",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
-            )
-        ).verifiserFeil(1, "Kan ikke være tomt eller blankt")
+            ), 1, "Kan ikke være tomt eller blankt"
+        )
     }
 
     @Test
     fun `Forvent valideringsfeil dersom navn er 101 tegn`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Barn(
                 navn = "barnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnb",
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = "123",
                 identitetsnummer = "02119970078",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
-            )
-        ).verifiserFeil(1, "Kan ikke være mer enn 100 tegn")
+            ), 1, "Kan ikke være mer enn 100 tegn"
+        )
     }
 
     @Test
     fun `Forvent valideringsfeil dersom fødselsdato er null og barnet er fosterbarn`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Barn(
                 navn = "Navnesen",
                 type = TypeBarn.FOSTERBARN,
@@ -122,13 +121,13 @@ class OmsorgsdagerAleneomsorgBarnTest {
                 aktørId = "123",
                 identitetsnummer = "02119970078",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
-            )
-        ).verifiserFeil(1, "Må være satt når 'type' er annet enn 'FRA_OPPSLAG'")
+            ), 1, "Må være satt når 'type' er annet enn 'FRA_OPPSLAG'"
+        )
     }
 
     @Test
     fun `Skal feile dersom tidspunktForAleneomsorg er siste 2 år, men dato er ikke satt`() {
-        VALIDATOR.validate(
+        Validator.verifiserValideringsFeil(
             Barn(
                 navn = "Barnesen",
                 type = TypeBarn.FRA_OPPSLAG,
@@ -136,7 +135,7 @@ class OmsorgsdagerAleneomsorgBarnTest {
                 identitetsnummer = "02119970078",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.SISTE_2_ÅRENE,
                 dato = null
-            )
-        ).verifiserFeil(1, "Må være satt når 'tidspunktForAleneomsorg' er 'SISTE_2_ÅRENE'")
+            ), 1, "Må være satt når 'tidspunktForAleneomsorg' er 'SISTE_2_ÅRENE'"
+        )
     }
 }
