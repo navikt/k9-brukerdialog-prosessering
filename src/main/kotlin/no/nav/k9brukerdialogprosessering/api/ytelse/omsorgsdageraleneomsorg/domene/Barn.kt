@@ -18,13 +18,13 @@ enum class TypeBarn {
     ANNET
 }
 
-class Barn(
+data class Barn(
     @field:Size(min = 11, max = 11)
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     var identitetsnummer: String? = null,
 
     @field:NotBlank(message = "Kan ikke være tomt eller blankt")
-    @field:Size(min = 1, max = 100, message = "Kan ikke være mer enn 100 tegn")
+    @field:Size(max = 100, message = "Kan ikke være mer enn 100 tegn")
     val navn: String,
 
     val type: TypeBarn,

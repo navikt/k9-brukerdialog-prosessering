@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene
 
 import no.nav.k9.søknad.JsonUtils
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.SøknadUtils
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
@@ -188,11 +189,10 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                 ),
             )
         ).verifiserFeil(
-            8,
+            7,
             "Må være satt når 'tidspunktForAleneomsorg' er 'SISTE_2_ÅRENE'",
             "'ABC123' matcher ikke tillatt pattern '^\\d+$'",
             "Kan ikke være tomt eller blankt",
-            "Kan ikke være mer enn 100 tegn",
             "Må være satt når 'type' er annet enn 'FRA_OPPSLAG'",
             "Kan ikke være i fremtiden",
             "Kan ikke være mer enn 100 tegn",

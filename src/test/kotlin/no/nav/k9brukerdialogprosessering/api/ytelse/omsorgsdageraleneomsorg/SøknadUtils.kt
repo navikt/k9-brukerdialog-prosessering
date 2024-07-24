@@ -1,5 +1,9 @@
-package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg
 
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.Barn
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.OmsorgsdagerAleneOmOmsorgenSøknad
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.TypeBarn
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
 import java.time.LocalDate
 import java.time.ZonedDateTime
