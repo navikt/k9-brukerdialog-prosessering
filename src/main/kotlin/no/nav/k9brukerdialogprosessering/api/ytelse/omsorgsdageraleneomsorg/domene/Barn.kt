@@ -1,12 +1,14 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene
 
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg.SISTE_2_ÅRENE
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg.TIDLIGERE
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
-import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
@@ -17,15 +19,20 @@ enum class TypeBarn {
 }
 
 class Barn(
-    @Size(max = 11)
-    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-    private var identitetsnummer: String? = null,
-    private val navn: String,
-    private val type: TypeBarn,
-    private val aktørId: String? = null,
-    private val tidspunktForAleneomsorg: TidspunktForAleneomsorg,
-    private val dato: LocalDate? = null,
-    private val fødselsdato: LocalDate? = null,
+    @field:Size(min = 11, max = 11)
+    @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    var identitetsnummer: String? = null,
+
+    @field:NotBlank(message = "Kan ikke være tomt eller blankt")
+    @field:Size(min = 1, max = 100, message = "Kan ikke være mer enn 100 tegn")
+    val navn: String,
+
+    val type: TypeBarn,
+    val aktørId: String? = null,
+    val tidspunktForAleneomsorg: TidspunktForAleneomsorg,
+    val dato: LocalDate? = null,
+
+    @field:PastOrPresent(message = "Kan ikke være i fremtiden") val fødselsdato: LocalDate? = null,
 ) {
     internal fun manglerIdentifikator() = identitetsnummer.isNullOrBlank()
     internal fun somK9Barn() = K9Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of(identitetsnummer))
@@ -42,14 +49,21 @@ class Barn(
 
     private fun LocalDate.startenAvÅret() = LocalDate.parse("${year}-01-01")
 
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        krever(navn.isNotBlank(), "$felt.navn kan ikke være tomt/blankt.")
-        krever(navn.length <= 100, "$felt.navn kan ikke være over 100 tegn.")
-        if (type != TypeBarn.FRA_OPPSLAG) krever(
-            fødselsdato != null,
-            "$felt.fødselsdato må være satt når type!=FRA_OPPSLAG."
-        )
-        if (tidspunktForAleneomsorg == SISTE_2_ÅRENE) krever(dato != null, "$felt.dato må være satt.")
+
+    @AssertTrue(message = "Må være satt når 'type' er annet enn 'FRA_OPPSLAG'")
+    fun isFødselsdato(): Boolean {
+        if (type != TypeBarn.FRA_OPPSLAG) {
+            return fødselsdato != null
+        }
+        return true
+    }
+
+    @AssertTrue(message = "Må være satt når 'tidspunktForAleneomsorg' er 'SISTE_2_ÅRENE'")
+    fun isDato(): Boolean {
+        if (tidspunktForAleneomsorg == SISTE_2_ÅRENE) {
+            return dato != null
+        }
+        return true
     }
 }
 

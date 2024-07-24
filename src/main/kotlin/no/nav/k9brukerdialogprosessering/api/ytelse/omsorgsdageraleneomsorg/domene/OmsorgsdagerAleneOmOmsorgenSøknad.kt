@@ -1,5 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotEmpty
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -14,23 +17,30 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
-import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
-class OmsorgsdagerAleneOmOmsorgenSøknad(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") internal val søknadId: String = UUID.randomUUID().toString(),
-    private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    private val språk: String,
-    private val barn: List<Barn> = listOf(),
-    private val harForståttRettigheterOgPlikter: Boolean,
-    private val harBekreftetOpplysninger: Boolean,
-    private val dataBruktTilUtledningAnnetData: String? = null
+data class OmsorgsdagerAleneOmOmsorgenSøknad(
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    val søknadId: String = UUID.randomUUID().toString(),
+
+    val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    val språk: String,
+
+    @field:Valid
+    @field:NotEmpty(message = "Kan ikke være en tom liste")
+    val barn: List<Barn> = listOf(),
+
+    @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
+    val harBekreftetOpplysninger: Boolean,
+
+    @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
+    val harForståttRettigheterOgPlikter: Boolean,
+
+    val dataBruktTilUtledningAnnetData: String? = null,
 ) : Innsending {
     internal fun gjelderFlereBarn() = barn.size > 1
     internal fun manglerIdentifikatorPåBarn() = barn.any { it.manglerIdentifikator() }
@@ -75,14 +85,7 @@ class OmsorgsdagerAleneOmOmsorgenSøknad(
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)
         .medAnnetData(dataBruktTilUtledningAnnetData)
 
-    override fun valider() = mutableListOf<String>().apply {
-        krever(harBekreftetOpplysninger, "harBekreftetOpplysninger må være true")
-        krever(harForståttRettigheterOgPlikter, "harForståttRettigheterOgPlikter må være true")
-        krever(barn.isNotEmpty(), "barn kan ikke være en tom liste.")
-        barn.forEachIndexed { index, barn -> addAll(barn.valider("barn[$index]")) }
-
-        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
-    }
+    override fun valider() = mutableListOf<String>()
 
     override fun somKomplettSøknad(
         søker: Søker,
