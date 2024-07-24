@@ -1,5 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotEmpty
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -14,26 +17,32 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Barn
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
-import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
-class OmsorgspengerMidlertidigAleneSøknad(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
-    private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    private val id: String,
-    private val språk: String,
-    private val annenForelder: AnnenForelder,
-    private val barn: List<Barn> = listOf(),
-    private val harForståttRettigheterOgPlikter: Boolean,
-    private val harBekreftetOpplysninger: Boolean,
-    private val dataBruktTilUtledningAnnetData: String? = null
-): Innsending {
+data class OmsorgspengerMidlertidigAleneSøknad(
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    val søknadId: String = UUID.randomUUID().toString(),
+    val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    val id: String,
+    val språk: String,
+    @field:Valid val annenForelder: AnnenForelder,
+
+    @field:Valid
+    @field:NotEmpty
+    val barn: List<Barn> = listOf(),
+
+    @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
+    val harBekreftetOpplysninger: Boolean,
+
+    @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
+    val harForståttRettigheterOgPlikter: Boolean,
+
+    val dataBruktTilUtledningAnnetData: String? = null,
+) : Innsending {
 
     companion object {
         private val k9FormatVersjon = Versjon.of("1.0.0")
@@ -59,7 +68,11 @@ class OmsorgspengerMidlertidigAleneSøknad(
         .medSoknadDialogCommitSha(metadata.soknadDialogCommitSha)
         .medAnnetData(dataBruktTilUtledningAnnetData)
 
-    override fun somKomplettSøknad(søker: Søker, k9Format: no.nav.k9.søknad.Innsending?, titler: List<String>): OmsorgspengerMdlertidigAleneKomplettSøknad {
+    override fun somKomplettSøknad(
+        søker: Søker,
+        k9Format: no.nav.k9.søknad.Innsending?,
+        titler: List<String>,
+    ): OmsorgspengerMdlertidigAleneKomplettSøknad {
         requireNotNull(k9Format)
         return OmsorgspengerMdlertidigAleneKomplettSøknad(
             mottatt = mottatt,
@@ -81,18 +94,11 @@ class OmsorgspengerMidlertidigAleneSøknad(
         }
     }
 
-    override fun valider() = mutableListOf<String>().apply {
-        krever(harForståttRettigheterOgPlikter, "harForståttRettigheterOgPlikter må være true")
-        krever(harBekreftetOpplysninger, "harBekreftetOpplysninger må være true")
-        krever(barn.isNotEmpty(), "Listen over barn kan ikke være tom")
-        addAll(annenForelder.valider("annenForelder"))
-        barn.forEachIndexed { index, barn -> addAll(barn.valider("barn[$index]")) }
-
-        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
-    }
+    override fun valider() = mutableListOf<String>()
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE
     override fun søknadId(): String = søknadId
     override fun vedlegg(): List<URL> = listOf()
-    override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = OmsorgspengerMidlertidigAleneSøknadValidator()
+    override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> =
+        OmsorgspengerMidlertidigAleneSøknadValidator()
 }

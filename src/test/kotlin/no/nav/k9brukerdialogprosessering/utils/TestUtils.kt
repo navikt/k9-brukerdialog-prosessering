@@ -147,7 +147,7 @@ object TestUtils {
         vararg valideringsfeil: String,
     ) {
         assertThat(size).isEqualTo(antallFeil)
-        assertThat(this.map { it.message }).contains(*valideringsfeil)
+        assertThat(this.map { it.message }).containsOnly(*valideringsfeil)
     }
 
     private fun <E> MutableSet<ConstraintViolation<E>>.verifiserIngenValideringsFeil() {

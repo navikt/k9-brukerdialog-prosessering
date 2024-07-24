@@ -1,6 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
@@ -12,23 +14,27 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalen
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.UTØVER_VERNEPLIKT
 import no.nav.k9brukerdialogprosessering.utils.StringUtils
 import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 import java.time.LocalDate
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder as K9AnnenForelder
 
-class AnnenForelder(
-    @Size(max = 11)
-    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-    private val fnr: String,
-    private val navn: String,
-    private val situasjon: Situasjon,
-    private val situasjonBeskrivelse: String? = null,
-    private val periodeOver6Måneder: Boolean? = null,
+data class AnnenForelder(
+    @field:Size(min = 11, max = 11)
+    @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    val fnr: String,
+
+    @field:NotBlank(message = "Kan ikke være tomt eller blankt") val navn: String,
+    val situasjon: Situasjon,
+
+    @field:Pattern(regexp = StringUtils.FritekstPattern, message = "Matcher ikke tillatt mønster: '{regexp}'")
+    val situasjonBeskrivelse: String? = null,
+
+    val periodeOver6Måneder: Boolean? = null,
+
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private val periodeFraOgMed: LocalDate,
+    val periodeFraOgMed: LocalDate,
+
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private val periodeTilOgMed: LocalDate? = null,
+    val periodeTilOgMed: LocalDate? = null,
 ) {
 
     internal fun somK9AnnenForelder(): K9AnnenForelder {
@@ -40,38 +46,44 @@ class AnnenForelder(
             }
     }
 
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        krever(navn.isNotBlank(), "$felt.navn kan ikke være tomt eller blank.")
-        periodeTilOgMed?.let {
-            krever(
-                periodeTilOgMed.erLikEllerEtter(periodeFraOgMed),
-                "$felt.periodeTilOgMed må være lik eller etter periodeFraOgMed."
-            )
+    @AssertTrue(message = "Derom 'periodeTilOgMed' er satt må den være lik eller etter 'periodeFraOgMed'")
+    fun isPeriodeTilOgMed(): Boolean {
+        if (periodeTilOgMed != null) {
+            return periodeTilOgMed.erLikEllerEtter(periodeFraOgMed)
         }
+        return true
+    }
 
-        when (situasjon) {
-            INNLAGT_I_HELSEINSTITUSJON -> validerGyldigPeriodeSatt(felt, situasjon)
-            UTØVER_VERNEPLIKT, FENGSEL -> validerVærnepliktEllerFengsel(felt)
-            SYKDOM, ANNET -> {
-                validerGyldigPeriodeSatt(felt, situasjon)
-                krever(
-                    !situasjonBeskrivelse.isNullOrBlank(),
-                    "$felt.situasjonBeskrivelse kan ikke være null eller tom dersom situasjon er $situasjon"
-                )
+    @AssertTrue(message = "Derom 'situasjon' er 'INNLAGT_I_HELSEINSTITUSJON', 'SYKDOM', eller 'ANNET' må 'periodeTilOgMed' eller 'periodeOver6Måneder' være satt")
+    fun isSituasjon_innlagt_i_helseinstitusjon_sykdom_eller_annet(): Boolean {
+        return when (situasjon) {
+            INNLAGT_I_HELSEINSTITUSJON, SYKDOM, ANNET -> {
+                periodeTilOgMed != null || periodeOver6Måneder != null
             }
+
+            else -> true
         }
     }
 
-    private fun MutableList<String>.validerVærnepliktEllerFengsel(felt: String) =
-        kreverIkkeNull(
-            periodeTilOgMed,
-            "$felt.periodeTilOgMed kan ikke være null dersom situasjonen er $FENGSEL eller $UTØVER_VERNEPLIKT"
-        )
+    @AssertTrue(message = "Derom 'situasjon' er 'SYKDOM', eller 'ANNET' må 'situasjonBeskrivelse' være satt")
+    fun isSituasjon_sykdom_eller_annet(): Boolean {
+        return when (situasjon) {
+            SYKDOM, ANNET -> {
+                !situasjonBeskrivelse.isNullOrBlank()
+            }
 
-    private fun MutableList<String>.validerGyldigPeriodeSatt(felt: String, situasjon: Situasjon) {
-        krever(
-            periodeTilOgMed != null || periodeOver6Måneder != null,
-            "$felt.periodeTilOgMed eller periodeOver6Måneder må være satt dersom situasjonen er $situasjon"
-        )
+            else -> true
+        }
+    }
+
+    @AssertTrue(message = "Derom 'situasjon' er 'UTØVER_VERNEPLIKT', 'SYKDOM', 'ANNET' eller 'FENGSEL' må 'periodeTilOgMed' være satt")
+    fun isSituasjon_utøver_verneplikt_eller_fengsel(): Boolean {
+        return when (situasjon) {
+            UTØVER_VERNEPLIKT, FENGSEL -> {
+                periodeTilOgMed != null
+            }
+
+            else -> true
+        }
     }
 }
