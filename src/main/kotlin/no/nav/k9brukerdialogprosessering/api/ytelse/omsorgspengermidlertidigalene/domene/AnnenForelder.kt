@@ -23,6 +23,7 @@ data class AnnenForelder(
     val fnr: String,
 
     @field:NotBlank(message = "Kan ikke være tomt eller blankt") val navn: String,
+
     val situasjon: Situasjon,
 
     @field:Pattern(regexp = StringUtils.FritekstPattern, message = "Matcher ikke tillatt mønster: '{regexp}'")
@@ -66,7 +67,7 @@ data class AnnenForelder(
     }
 
     @AssertTrue(message = "Derom 'situasjon' er 'SYKDOM', eller 'ANNET' må 'situasjonBeskrivelse' være satt")
-    fun isSituasjon_sykdom_eller_annet(): Boolean {
+    fun isSituasjonBeskrivelse(): Boolean {
         return when (situasjon) {
             SYKDOM, ANNET -> {
                 !situasjonBeskrivelse.isNullOrBlank()

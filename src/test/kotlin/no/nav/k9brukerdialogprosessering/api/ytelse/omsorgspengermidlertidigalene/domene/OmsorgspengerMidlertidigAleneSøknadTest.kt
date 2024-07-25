@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene
 
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Barn
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.SøknadUtils
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.søker

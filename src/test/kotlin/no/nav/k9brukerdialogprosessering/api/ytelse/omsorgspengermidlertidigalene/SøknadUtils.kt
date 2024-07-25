@@ -1,6 +1,9 @@
-package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene
 
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Barn
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.AnnenForelder
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.OmsorgspengerMidlertidigAleneSøknad
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
 import java.time.LocalDate
 import java.time.ZonedDateTime
