@@ -28,7 +28,7 @@ data class Virksomhet(
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     val organisasjonsnummer: String? = null,
     @field:NotNull(message = "Kan ikke være null.")
-    val registrertINorge: Boolean? = null,
+    val registrertINorge: Boolean,
     @field:Valid val registrertIUtlandet: Land? = null,
     val yrkesaktivSisteTreFerdigliknedeÅrene: YrkesaktivSisteTreFerdigliknedeArene? = null,
     val varigEndring: VarigEndring? = null,
@@ -54,7 +54,7 @@ data class Virksomhet(
         return true
     }
 
-    @AssertTrue(message = "Må være lik eller etter fraOgMed.")
+    @AssertTrue(message = "Må være lik eller etter fraOgMed")
     fun isTilOgMed(): Boolean {
         if (tilOgMed != null) {
             return tilOgMed.erLikEllerEtter(fraOgMed)
@@ -70,7 +70,7 @@ data class Virksomhet(
         return true
     }
 
-    @AssertTrue(message = "Når nyoppstartet er true, må fraOgMed være maks 4 år siden.")
+    @AssertTrue(message = "Når nyoppstartet er true, må fraOgMed være maks 4 år siden")
     fun isErNyoppstartet(): Boolean {
         val fireÅrSiden = LocalDate.now().minusYears(4)
         if (erNyoppstartet) {
@@ -79,7 +79,7 @@ data class Virksomhet(
         return true
     }
 
-    @AssertTrue(message = "Når nyoppstartet er false, må fraOgMed må være over 4 år siden.")
+    @AssertTrue(message = "Når nyoppstartet er false, må fraOgMed må være over 4 år siden")
     fun isErIkkeNyoppstartet(): Boolean {
         val fireÅrSiden = LocalDate.now().minusYears(4)
         if (!erNyoppstartet) {

@@ -11,7 +11,7 @@ data class Land(
     @field:ValidLandkode
     val landkode: String,
 
-    @field:NotBlank val landnavn: String,
+    @field:NotBlank(message = "Kan ikke være tomt eller blankt") val landnavn: String,
 ) {
     companion object {
         // ISO 3166 alpha-3 landkode - https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3

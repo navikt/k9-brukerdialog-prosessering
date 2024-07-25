@@ -1,23 +1,13 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene
 
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Size
 
-class SpørsmålOgSvar(
-    private val spørsmål: String,
-    private val svar: Boolean?,
-) {
-    companion object {
-        private const val MAX_FRITEKST_TEGN = 1000
+data class SpørsmålOgSvar(
+    @field:NotBlank(message = "Kan ikke være tomt eller blankt")
+    @field:Size(max = 1000, message = "Kan ikke være mer enn 1000 tegn")
+    val spørsmål: String,
 
-        internal fun List<SpørsmålOgSvar>.valider(felt: String) = this.flatMapIndexed { index, spørsmålOgSvar ->
-            spørsmålOgSvar.valider("$felt[$index]")
-        }
-    }
-
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        kreverIkkeNull(svar, "$felt.svar kan ikke være null. Må være true/false.")
-        krever(spørsmål.isNotBlank(), "$felt.spørsmål kan ikke være tomt eller blankt.")
-        krever(spørsmål.length <= MAX_FRITEKST_TEGN, "$felt.spørsmål kan ikke være mer enn $MAX_FRITEKST_TEGN tegn.")
-    }
-}
+    @field:NotNull(message = "Kan ikke være null") val svar: Boolean?,
+)

@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
+import jakarta.validation.Valid
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -42,7 +43,7 @@ class OmsorgspengerutbetalingArbeidstakerSøknad(
     internal val vedlegg: List<URL>,
     private val bosteder: List<Bosted>,
     private val opphold: List<Opphold>,
-    private val bekreftelser: Bekreftelser,
+    @field:Valid private val bekreftelser: Bekreftelser,
     private val arbeidsgivere: List<Arbeidsgiver>,
     private val dineBarn: DineBarn,
     private val hjemmePgaSmittevernhensyn: Boolean,
@@ -53,7 +54,6 @@ class OmsorgspengerutbetalingArbeidstakerSøknad(
         krever(arbeidsgivere.isNotEmpty(), "Må ha minst en arbeidsgiver satt.")
         addAll(bosteder.valider("bosteder"))
         addAll(opphold.valider("opphold"))
-        addAll(bekreftelser.valider("bekreftelser"))
         addAll(arbeidsgivere.valider("arbeidsgivere"))
 
         if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))

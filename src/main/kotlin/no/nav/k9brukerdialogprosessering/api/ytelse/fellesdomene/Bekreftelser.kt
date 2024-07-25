@@ -1,13 +1,11 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene
 
-import no.nav.k9brukerdialogprosessering.utils.krever
+import jakarta.validation.constraints.AssertTrue
 
 class Bekreftelser(
-    val harBekreftetOpplysninger: Boolean? = null,
-    val harForståttRettigheterOgPlikter: Boolean? = null
-){
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        krever(harBekreftetOpplysninger, "$felt.harBekreftetOpplysninger må være true")
-        krever(harForståttRettigheterOgPlikter, "$felt.harForståttRettigheterOgPlikter må være true")
-    }
-}
+    @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
+    val harBekreftetOpplysninger: Boolean,
+
+    @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
+    val harForståttRettigheterOgPlikter: Boolean,
+)

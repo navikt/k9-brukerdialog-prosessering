@@ -87,6 +87,7 @@ class SelvstendigNæringsdrivendeTest {
                 næringstype = DAGMAMMA,
                 navnPåVirksomheten = "Kiwi ASA",
                 erNyoppstartet = true,
+                registrertINorge = true,
             ),
             arbeidsforhold = Arbeidsforhold(37.5, ArbeidIPeriode(HELT_FRAVÆR, enkeltDagerMedFulltFravær))
         ).somK9ArbeidstidInfo(mandag, fredag)

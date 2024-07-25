@@ -1,9 +1,11 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.NotBlank
 import no.nav.fpsak.tidsserie.LocalDateTimeline
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdPeriodeInfo
 import no.nav.k9.søknad.felles.type.Landkode
+import no.nav.k9brukerdialogprosessering.api.validering.landkode.ValidLandkode
 import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
 import no.nav.k9brukerdialogprosessering.utils.krever
 import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
@@ -15,7 +17,11 @@ import no.nav.k9.søknad.felles.type.Periode as K9Periode
 data class Utenlandsopphold(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
+
+    @field:NotBlank
+    @field:ValidLandkode
     val landkode: String,
+
     val landnavn: String,
     val erUtenforEøs: Boolean?,
     val erSammenMedBarnet: Boolean?,

@@ -130,7 +130,8 @@ class SelvstendigArbeidsforholdTest {
                 næringstype = Næringstype.JORDBRUK_SKOGBRUK,
                 navnPåVirksomheten = "TullOgTøys",
                 organisasjonsnummer = "101010",
-                erNyoppstartet = true
+                erNyoppstartet = true,
+                registrertINorge = true
             ),
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
@@ -153,7 +154,8 @@ class SelvstendigArbeidsforholdTest {
                 næringstype = Næringstype.JORDBRUK_SKOGBRUK,
                 navnPåVirksomheten = "TullOgTøys",
                 organisasjonsnummer = "101010",
-                erNyoppstartet = true
+                erNyoppstartet = true,
+                registrertINorge = true
             ),
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
@@ -176,7 +178,8 @@ class SelvstendigArbeidsforholdTest {
                 næringstype = Næringstype.JORDBRUK_SKOGBRUK,
                 navnPåVirksomheten = "TullOgTøys",
                 organisasjonsnummer = "101010",
-                erNyoppstartet = true
+                erNyoppstartet = true,
+                registrertINorge = true
             ),
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
@@ -199,7 +202,8 @@ class SelvstendigArbeidsforholdTest {
                 næringstype = Næringstype.JORDBRUK_SKOGBRUK,
                 navnPåVirksomheten = "TullOgTøys",
                 organisasjonsnummer = "101010",
-                erNyoppstartet = true
+                erNyoppstartet = true,
+                registrertINorge = true
             ),
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
@@ -221,7 +225,8 @@ class SelvstendigArbeidsforholdTest {
                 næringstype = Næringstype.JORDBRUK_SKOGBRUK,
                 navnPåVirksomheten = "TullOgTøys",
                 organisasjonsnummer = "101010",
-                erNyoppstartet = true
+                erNyoppstartet = true,
+                registrertINorge = true
             ),
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
@@ -244,7 +249,8 @@ class SelvstendigArbeidsforholdTest {
                 næringstype = Næringstype.JORDBRUK_SKOGBRUK,
                 navnPåVirksomheten = "TullOgTøys",
                 organisasjonsnummer = "101010",
-                erNyoppstartet = true
+                erNyoppstartet = true,
+                registrertINorge = true
             ),
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )

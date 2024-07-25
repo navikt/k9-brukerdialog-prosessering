@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene
 
+import jakarta.validation.Valid
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -23,7 +24,6 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperi
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Virksomhet
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene.Barn.Companion.kunFosterbarn
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene.Barn.Companion.somK9BarnListe
-import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene.Barn.Companion.valider
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
@@ -36,25 +36,27 @@ import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
-class OmsorgspengerutbetalingSnfSøknad(
-    internal val søknadId: SøknadId = SøknadId(UUID.randomUUID().toString()),
-    private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    private val språk: String,
-    private val bosteder: List<Bosted>,
-    private val opphold: List<Opphold>,
-    private val spørsmål: List<SpørsmålOgSvar>,
-    private val harDekketTiFørsteDagerSelv: Boolean? = null,
-    private val harSyktBarn: Boolean? = null,
-    private val harAleneomsorg: Boolean? = null,
-    private val bekreftelser: Bekreftelser,
-    private val utbetalingsperioder: List<Utbetalingsperiode>,
-    private val erArbeidstakerOgså: Boolean,
-    private val barn: List<Barn>,
-    private val frilans: Frilans? = null,
-    private val selvstendigNæringsdrivende: Virksomhet? = null,
-    internal val vedlegg: List<URL> = listOf(),
-    private val dataBruktTilUtledningAnnetData: String? = null
-): Innsending {
+data class OmsorgspengerutbetalingSnfSøknad(
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    internal val søknadId: String = UUID.randomUUID().toString(),
+
+    val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    val språk: String,
+    val bosteder: List<Bosted>,
+    val opphold: List<Opphold>,
+    val spørsmål: List<SpørsmålOgSvar>,
+    val harDekketTiFørsteDagerSelv: Boolean? = null,
+    val harSyktBarn: Boolean? = null,
+    val harAleneomsorg: Boolean? = null,
+    @field:Valid val bekreftelser: Bekreftelser,
+    val utbetalingsperioder: List<Utbetalingsperiode>,
+    val erArbeidstakerOgså: Boolean,
+    @field:Valid val barn: List<Barn>,
+    @field:Valid val frilans: Frilans? = null,
+    @field:Valid val selvstendigNæringsdrivende: Virksomhet? = null,
+    val vedlegg: List<URL> = listOf(),
+    val dataBruktTilUtledningAnnetData: String? = null,
+) : Innsending {
 
     companion object {
         private val k9FormatVersjon = Versjon.of("1.1.0")
@@ -63,10 +65,7 @@ class OmsorgspengerutbetalingSnfSøknad(
     override fun valider() = mutableListOf<String>().apply {
         addAll(bosteder.valider("bosteder"))
         addAll(opphold.valider("opphold"))
-        addAll(bekreftelser.valider("bekreftelser"))
         addAll(utbetalingsperioder.valider("utbetalingsperioder"))
-        addAll(barn.valider("barn"))
-        frilans?.let { addAll(it.valider("frilans")) }
 
         if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
     }
@@ -77,7 +76,7 @@ class OmsorgspengerutbetalingSnfSøknad(
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Søknad {
         return K9Søknad(
-            søknadId,
+            SøknadId.of(søknadId),
             k9FormatVersjon,
             mottatt,
             søker.somK9Søker(),
@@ -110,7 +109,7 @@ class OmsorgspengerutbetalingSnfSøknad(
     ): OmsorgspengerutbetalingSnfKomplettSøknad {
         requireNotNull(k9Format)
         return OmsorgspengerutbetalingSnfKomplettSøknad(
-            søknadId = søknadId,
+            søknadId = SøknadId.of(søknadId),
             mottatt = mottatt,
             språk = språk,
             søker = søker,
@@ -133,7 +132,7 @@ class OmsorgspengerutbetalingSnfSøknad(
     }
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTBETALING_SNF
-    override fun søknadId(): String = søknadId.id
+    override fun søknadId(): String = søknadId
     override fun vedlegg(): List<URL> = vedlegg
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = OmsorgspengerUtbetalingSøknadValidator()
 }

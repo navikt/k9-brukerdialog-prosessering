@@ -52,7 +52,7 @@ class OmsorgspengerUtbetalingSnfController(
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
-        logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId.id, "mottatt."))
+        logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
         val registrerteBarn = barnService.hentBarn()
         søknad.leggTilIdentifikatorPåBarnHvisMangler(registrerteBarn)
 

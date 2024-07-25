@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 @Constraint(validatedBy = [LandkodeValidator::class])
 annotation class ValidLandkode(
-    val message: String = "{landkode} er ikke en gyldig ISO 3166-1 alpha-3 kode.",
+    val message: String = "{landkode} er ikke en gyldig ISO 3166-1 alpha-3 kode",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )

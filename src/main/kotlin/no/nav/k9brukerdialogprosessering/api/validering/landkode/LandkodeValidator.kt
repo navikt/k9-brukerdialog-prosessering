@@ -20,7 +20,7 @@ class LandkodeValidator : ConstraintValidator<ValidLandkode, String> {
         val isValid = LANDKODER.contains(value)
         if (!isValid) {
             context.disableDefaultConstraintViolation()
-            context.buildConstraintViolationWithTemplate("$value er ikke en gyldig ISO 3166-1 alpha-3 kode.")
+            context.buildConstraintViolationWithTemplate("$value er ikke en gyldig ISO 3166-1 alpha-3 kode")
                 .addConstraintViolation()
         }
         return isValid

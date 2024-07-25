@@ -47,12 +47,17 @@ class VirksomhetTest {
     }
 
     @Test
+    fun `Gyldig virksomhet gir ingen valideringsfeil`() {
+        Validator.verifiserIngenValideringsFeil(gyldigVirksomhet())
+    }
+
+    @Test
     fun `FraOgMed kan ikke være før tilOgMed, validate skal returnere en violation`() {
         Validator.verifiserValideringsFeil(
             gyldigVirksomhet(
                 fraOgMed = LocalDate.now(),
                 tilOgMed = LocalDate.now().minusDays(1),
-            ), 1, "Må være lik eller etter fraOgMed."
+            ), 1, "Må være lik eller etter fraOgMed"
         )
     }
 
@@ -123,7 +128,7 @@ class VirksomhetTest {
                     landnavn = "Tyskland",
                     landkode = "NO"
                 )
-            ), 1, "NO er ikke en gyldig ISO 3166-1 alpha-3 kode."
+            ), 1, "NO er ikke en gyldig ISO 3166-1 alpha-3 kode"
         )
     }
 
@@ -146,6 +151,26 @@ class VirksomhetTest {
             gyldigVirksomhet(
                 harFlereAktiveVirksomheter = null
             ), 1, "Kan ikke være null"
+        )
+    }
+
+    @Test
+    fun `Hvis erNyoppstartet=true men fraOgMed som er over 4 år gammel gir valideringsfeil`() {
+        Validator.verifiserValideringsFeil(
+            gyldigVirksomhet().copy(
+                fraOgMed = LocalDate.parse("2015-01-01"),
+                erNyoppstartet = true
+            ), 1, "Når nyoppstartet er true, må fraOgMed være maks 4 år siden"
+        )
+    }
+
+    @Test
+    fun `Hvis erNyoppstartet=false men fraOgMed som er over 4 år gammel gir valideringsfeil`() {
+        Validator.verifiserValideringsFeil(
+            gyldigVirksomhet().copy(
+                fraOgMed = LocalDate.parse("2022-01-01"),
+                erNyoppstartet = false
+            ), 1, "Når nyoppstartet er false, må fraOgMed må være over 4 år siden"
         )
     }
 }

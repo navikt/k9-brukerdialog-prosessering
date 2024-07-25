@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.felles
 
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bekreftelser
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Test
@@ -9,41 +10,23 @@ class BekreftelserTest {
 
     @Test
     fun `Gyldig Bekreftelser gir ingen feil`() {
-        Bekreftelser(
-            harBekreftetOpplysninger = true,
-            harForståttRettigheterOgPlikter = true
-        ).valider("bekreftelser").verifiserIngenValideringsFeil()
+        Validator.verifiserIngenValideringsFeil(
+            Bekreftelser(
+                harBekreftetOpplysninger = true,
+                harForståttRettigheterOgPlikter = true
+            )
+        )
     }
 
     @Test
-    fun `Feiler om man sender harBekreftetOpplysninger som false`() {
-        Bekreftelser(
-            harBekreftetOpplysninger = false,
-            harForståttRettigheterOgPlikter = true
-        ).valider("bekreftelser").verifiserValideringsFeil(1, listOf("bekreftelser.harBekreftetOpplysninger må være true"))
-    }
-
-    @Test
-    fun `Feiler om man sender harBekreftetOpplysninger som null`() {
-        Bekreftelser(
-            harBekreftetOpplysninger = null,
-            harForståttRettigheterOgPlikter = true
-        ).valider("bekreftelser").verifiserValideringsFeil(1, listOf("bekreftelser.harBekreftetOpplysninger må være true"))
-    }
-
-    @Test
-    fun `Feiler om man sender harForståttRettigheterOgPlikter som false`() {
-        Bekreftelser(
-            harBekreftetOpplysninger = true,
-            harForståttRettigheterOgPlikter = false
-        ).valider("bekreftelser").verifiserValideringsFeil(1, listOf("bekreftelser.harForståttRettigheterOgPlikter må være true"))
-    }
-
-    @Test
-    fun `Feiler om man sender harForståttRettigheterOgPlikter som null`() {
-        Bekreftelser(
-            harBekreftetOpplysninger = true,
-            harForståttRettigheterOgPlikter = null
-        ).valider("bekreftelser").verifiserValideringsFeil(1, listOf("bekreftelser.harForståttRettigheterOgPlikter må være true"))
+    fun `Feiler om man sender bekreftelser med verdier false`() {
+        Validator.verifiserValideringsFeil(
+            Bekreftelser(
+                harBekreftetOpplysninger = false,
+                harForståttRettigheterOgPlikter = false
+            ), 2,
+            "Opplysningene må bekreftes for å sende inn søknad",
+            "Må ha forstått rettigheter og plikter for å sende inn søknad"
+        )
     }
 }
