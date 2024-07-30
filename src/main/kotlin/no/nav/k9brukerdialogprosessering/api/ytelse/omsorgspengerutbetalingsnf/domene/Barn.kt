@@ -2,6 +2,7 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.
 
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
@@ -14,8 +15,12 @@ class Barn(
     @field:Size(min = 11, max = 11)
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private var identitetsnummer: String? = null,
+
     @field:NotBlank(message = "Kan ikke være tomt eller blankt") private val navn: String,
+
+    @field:PastOrPresent(message = "Kan ikke være i fremtiden")
     private val fødselsdato: LocalDate,
+
     private val type: TypeBarn,
     private val aktørId: String? = null,
 ) {

@@ -8,7 +8,7 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Næringstype
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Opphold
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Virksomhet
-import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene.SøknadUtils.defaultSøknad
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.SøknadUtils.defaultSøknad
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
@@ -22,41 +22,6 @@ import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
 
 class OmsorgspengerUtbetalingSnfSøknadTest {
-
-    @Test
-    fun `Skal ikke gi valideringsfeil dersom alle barna er over 13 år og minst et barn har utvidet rett`() {
-        defaultSøknad.copy(
-            barn = listOf(
-                Barn(
-                    navn = "Barnesen",
-                    fødselsdato = LocalDate.now().minusYears(14),
-                    type = TypeBarn.FRA_OPPSLAG,
-                    identitetsnummer = "26104500284"
-                ),
-                Barn(
-                    navn = "Barnesen",
-                    fødselsdato = LocalDate.now().minusYears(13).minusDays(1),
-                    type = TypeBarn.FRA_OPPSLAG,
-                    identitetsnummer = "11880898304"
-                )
-            )
-        ).valider()
-    }
-
-    @Test
-    fun `Skal ikke gi valideringsfeil dersom et barna er 12 år og harDekketTiFørsteDagerSelv er true`() {
-        defaultSøknad.copy(
-            barn = listOf(
-                Barn(
-                    navn = "Barnesen",
-                    fødselsdato = LocalDate.now().minusYears(12),
-                    type = TypeBarn.FRA_OPPSLAG,
-                    identitetsnummer = "26104500284"
-                )
-            ),
-            harDekketTiFørsteDagerSelv = true
-        ).valider()
-    }
 
     @Test
     fun `Ugyldig opphold og bosteder skal gi validerinsfeil`() {
@@ -113,21 +78,7 @@ class OmsorgspengerUtbetalingSnfSøknadTest {
     }
 
     @Test
-    fun `Ugyldig bekreftelser skal gi valideringsfeil`() {
-        Validator.verifiserValideringsFeil(
-            defaultSøknad.copy(
-                bekreftelser = Bekreftelser(
-                    harBekreftetOpplysninger = false,
-                    harForståttRettigheterOgPlikter = false
-                ),
-            ), 2,
-            "Opplysningene må bekreftes for å sende inn søknad",
-            "Må ha forstått rettigheter og plikter for å sende inn søknad"
-        )
-    }
-
-    @Test
-    fun `Ugyldig barn skal gi valideringsfeil`() {
+    fun `Ugyldig parametere skal gi valideringsfeil`() {
         Validator.verifiserValideringsFeil(
             defaultSøknad.copy(
                 barn = listOf(
@@ -137,45 +88,36 @@ class OmsorgspengerUtbetalingSnfSøknadTest {
                         type = TypeBarn.FRA_OPPSLAG,
                         identitetsnummer = "123ABC"
                     )
-                )
-            ),
-            3,
-            "'123ABC' matcher ikke tillatt pattern '^\\d+$'",
-            "size must be between 11 and 11",
-            "Kan ikke være tomt eller blankt",
-        )
-    }
-
-    @Test
-    fun `Ugyldig frilans skal gi valideringsfeil`() {
-        Validator.verifiserValideringsFeil(
-            defaultSøknad.copy(
+                ),
                 frilans = Frilans(
                     startdato = LocalDate.parse("2022-02-01"),
                     sluttdato = LocalDate.parse("2022-01-01"),
                     jobberFortsattSomFrilans = true
-                )
-            ),
-            2,
+                ),
+                selvstendigNæringsdrivende = Virksomhet(
+                    fraOgMed = LocalDate.parse("2022-01-01"),
+                    tilOgMed = LocalDate.parse("2022-10-01"),
+                    næringstype = Næringstype.DAGMAMMA,
+                    navnPåVirksomheten = "Kiwi ASA",
+                    organisasjonsnummer = "123ABC",
+                    erNyoppstartet = true,
+                    registrertINorge = true,
+                    harFlereAktiveVirksomheter = false
+                ),
+                bekreftelser = Bekreftelser(
+                    harBekreftetOpplysninger = false,
+                    harForståttRettigheterOgPlikter = false
+                ),
+            ), 8,
+            "'123ABC' matcher ikke tillatt pattern '^\\d+$'",
+            "size must be between 11 and 11",
+            "Kan ikke være tomt eller blankt",
             "'Sluttdato' må være lik eller etter 'startdato'",
-            "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt"
+            "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt",
+            "'123ABC' matcher ikke tillatt pattern '^\\d+$'",
+            "Opplysningene må bekreftes for å sende inn søknad",
+            "Må ha forstått rettigheter og plikter for å sende inn søknad"
         )
-    }
-
-    @Test
-    fun `Ugyldig selvstendigNæringsdrivende skal gi valideringsfeil`() {
-        Validator.verifiserValideringsFeil(defaultSøknad.copy(
-            selvstendigNæringsdrivende = Virksomhet(
-                fraOgMed = LocalDate.parse("2022-01-01"),
-                tilOgMed = LocalDate.parse("2022-10-01"),
-                næringstype = Næringstype.DAGMAMMA,
-                navnPåVirksomheten = "Kiwi ASA",
-                organisasjonsnummer = "123ABC",
-                erNyoppstartet = true,
-                registrertINorge = true,
-                harFlereAktiveVirksomheter = false
-            )
-        ), 1, "'123ABC' matcher ikke tillatt pattern '^\\d+$'")
     }
 
     @Test

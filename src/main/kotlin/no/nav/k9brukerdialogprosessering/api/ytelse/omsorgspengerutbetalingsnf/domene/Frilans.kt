@@ -14,7 +14,7 @@ class Frilans(
 ) {
 
     @AssertTrue(message = "'Sluttdato' må være lik eller etter 'startdato'")
-    fun isSluttdatoEtterStartdato(): Boolean {
+    fun isStartdato(): Boolean {
         if (sluttdato != null) {
             return sluttdato.erLikEllerEtter(startdato)
         }
