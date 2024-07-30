@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
 import jakarta.validation.Valid
+import jakarta.validation.constraints.NotEmpty
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -16,18 +17,13 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
-import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Opphold
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver.Companion.somK9Fraværsperiode
-import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Barn.Companion.somK9BarnListe
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
-import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -36,28 +32,28 @@ import no.nav.k9.søknad.Søknad as K9Søknad
 
 private val k9FormatVersjon = Versjon.of("1.1.0")
 
-class OmsorgspengerutbetalingArbeidstakerSøknad(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") internal val søknadId: String = UUID.randomUUID().toString(),
-    private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    private val språk: String,
-    internal val vedlegg: List<URL>,
-    private val bosteder: List<Bosted>,
-    private val opphold: List<Opphold>,
+data class OmsorgspengerutbetalingArbeidstakerSøknad(
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    val søknadId: String = UUID.randomUUID().toString(),
+    val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    val språk: String,
+    val vedlegg: List<URL>,
+
+    @field:Valid val bosteder: List<Bosted>,
+    @field:Valid val opphold: List<Opphold>,
+
     @field:Valid private val bekreftelser: Bekreftelser,
+
+    @field:NotEmpty(message = "Må ha minst en arbeidsgiver satt")
+    @field:Valid
     private val arbeidsgivere: List<Arbeidsgiver>,
-    private val dineBarn: DineBarn,
+
+    @field:Valid private val dineBarn: DineBarn,
     private val hjemmePgaSmittevernhensyn: Boolean,
     private val hjemmePgaStengtBhgSkole: Boolean? = null,
     private val dataBruktTilUtledningAnnetData: String? = null,
-): Innsending {
-    override fun valider() = mutableListOf<String>().apply {
-        krever(arbeidsgivere.isNotEmpty(), "Må ha minst en arbeidsgiver satt.")
-        addAll(bosteder.valider("bosteder"))
-        addAll(opphold.valider("opphold"))
-        addAll(arbeidsgivere.valider("arbeidsgivere"))
-
-        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
-    }
+) : Innsending {
+    override fun valider() = mutableListOf<String>()
 
     override fun somKomplettSøknad(
         søker: Søker,

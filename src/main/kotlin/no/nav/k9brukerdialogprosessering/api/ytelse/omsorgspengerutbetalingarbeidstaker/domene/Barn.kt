@@ -1,43 +1,33 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
+import no.nav.k9brukerdialogprosessering.api.validering.alder.ValidAlder
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
-import no.nav.k9brukerdialogprosessering.utils.erFørEllerLik
-import no.nav.k9brukerdialogprosessering.utils.erLikEllerEtter
-import no.nav.k9brukerdialogprosessering.utils.krever
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
 class Barn(
-    @Size(max = 11)
-    @Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
+    @field:Size(max = 11)
+    @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private var identitetsnummer: String? = null,
     private val aktørId: String? = null,
+
+    @field:PastOrPresent(message = "Kan ikke være i fremtiden")
+    @field:ValidAlder(alder = 19, message = "Kan ikke være eldre enn 19 år")
     @JsonFormat(pattern = "yyyy-MM-dd") private val fødselsdato: LocalDate,
-    private val navn: String,
+
+    @field:NotBlank(message = "Kan ikke være tomt eller blankt") private val navn: String,
+
     private val type: TypeBarn,
 ) {
     companion object {
         internal fun List<Barn>.somK9BarnListe() = kunFosterbarn().map { it.somK9Barn() }
         private fun List<Barn>.kunFosterbarn() = this.filter { it.type == TypeBarn.FOSTERBARN }
-        internal fun List<Barn>.valider(felt: String) = this.flatMapIndexed { index, barn ->
-            barn.valider("$felt[$index]")
-        }
-    }
-
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        krever(navn.isNotBlank(), "$felt.navn kan ikke være tomt eller blankt.")
-        krever(
-            fødselsdato.erLikEllerEtter(LocalDate.now().minusYears(19)),
-            "$felt.fødselsdato kan ikke være mer enn 19 år siden."
-        )
-        krever(
-            fødselsdato.erFørEllerLik(LocalDate.now()),
-            "$felt.fødselsdato kan ikke være i fremtiden."
-        )
     }
 
     internal fun leggTilIdentifikatorHvisMangler(barnFraOppslag: List<BarnOppslag>) {

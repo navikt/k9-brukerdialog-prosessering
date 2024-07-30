@@ -1,46 +1,64 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
+import jakarta.validation.Valid
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.fravær.SøknadÅrsak
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
-import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Utbetalingsårsak.KONFLIKT_MED_ARBEIDSGIVER
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER
-import no.nav.k9brukerdialogprosessering.utils.krever
-import no.nav.k9brukerdialogprosessering.utils.kreverIkkeNull
 
 class Arbeidsgiver(
+    @field:NotBlank(message = "Kan ikke være blankt eller tomt")
     private val navn: String,
+
+    @field:NotBlank(message = "Kan ikke være blankt eller tomt")
+    @field:Size(max = 20, message = "Kan ikke være lengre enn 20 tegn")
+    @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private val organisasjonsnummer: String,
+
     private val utbetalingsårsak: Utbetalingsårsak,
+
+    @field:Valid
+    @field:NotEmpty(message = "Kan ikke være tom")
     private val perioder: List<Utbetalingsperiode>,
+
     private val konfliktForklaring: String? = null,
     private val årsakNyoppstartet: ÅrsakNyoppstartet? = null,
-    private val arbeidsgiverHarUtbetaltLønn: Boolean? = null,
-    private val harHattFraværHosArbeidsgiver: Boolean? = null
+
+    @field:NotNull(message = "Kan ikke være null")
+    private val arbeidsgiverHarUtbetaltLønn: Boolean,
+
+    @field:NotNull(message = "Kan ikke være null")
+    private val harHattFraværHosArbeidsgiver: Boolean,
 ) {
     companion object {
         internal fun List<Arbeidsgiver>.somK9Fraværsperiode() = this.flatMap { it.somK9Fraværsperiode() }
-        internal fun List<Arbeidsgiver>.valider(felt: String) = this.flatMapIndexed { index, arbeidsgiver ->
-            arbeidsgiver.valider("$felt[$index]")
+    }
+
+    @AssertTrue(message = "årsakNyoppstartet må være satt dersom Utbetalingsårsak=NYOPPSTARTET_HOS_ARBEIDSGIVER")
+    fun isÅrsakNyoppstartet(): Boolean {
+        return when (utbetalingsårsak) {
+            NYOPPSTARTET_HOS_ARBEIDSGIVER -> årsakNyoppstartet != null
+            else -> true
         }
     }
 
-    internal fun valider(felt: String) = mutableListOf<String>().apply {
-        addAll(perioder.valider("$felt.perioder"))
-        krever(perioder.isNotEmpty(), "$felt.periode kan ikke være tom")
-        krever(navn.isNotBlank(), "$felt.navn kan ikke være blankt eller tomt. navn='$navn'")
-        krever(organisasjonsnummer.isNotBlank(), "$felt.organisasjonsnummer kan ikke være blankt eller tomt. organisasjonsnummer='$organisasjonsnummer'")
-        kreverIkkeNull(arbeidsgiverHarUtbetaltLønn, "$felt.arbeidsgiverHarUtbetaltLønn må være satt")
-        kreverIkkeNull(harHattFraværHosArbeidsgiver, "$felt.harHattFraværHosArbeidsgiver må være satt")
-        when(utbetalingsårsak){
-            NYOPPSTARTET_HOS_ARBEIDSGIVER -> kreverIkkeNull(årsakNyoppstartet, "$felt.årsakNyoppstartet må være satt dersom Utbetalingsårsak=NYOPPSTARTET_HOS_ARBEIDSGIVER")
-            KONFLIKT_MED_ARBEIDSGIVER -> krever(!konfliktForklaring.isNullOrBlank(), "$felt.konfliktForklaring må være satt dersom Utbetalingsårsak=KONFLIKT_MED_ARBEIDSGIVER")
-            Utbetalingsårsak.ARBEIDSGIVER_KONKURS -> {}
+    @AssertTrue(message = "konfliktForklaring må være satt dersom Utbetalingsårsak=KONFLIKT_MED_ARBEIDSGIVER")
+    fun isKonfliktForklaring(): Boolean {
+        return when (utbetalingsårsak) {
+            KONFLIKT_MED_ARBEIDSGIVER -> !konfliktForklaring.isNullOrBlank()
+            else -> true
         }
     }
 
-    internal fun somK9Fraværsperiode() = perioder.somK9FraværPeriode(utbetalingsårsak.somSøknadÅrsak(), organisasjonsnummer)
+    internal fun somK9Fraværsperiode() =
+        perioder.somK9FraværPeriode(utbetalingsårsak.somSøknadÅrsak(), organisasjonsnummer)
 }
 
 enum class Utbetalingsårsak {
@@ -48,7 +66,7 @@ enum class Utbetalingsårsak {
     NYOPPSTARTET_HOS_ARBEIDSGIVER,
     KONFLIKT_MED_ARBEIDSGIVER;
 
-    fun somSøknadÅrsak() = when(this){
+    fun somSøknadÅrsak() = when (this) {
         ARBEIDSGIVER_KONKURS -> SøknadÅrsak.ARBEIDSGIVER_KONKURS
         NYOPPSTARTET_HOS_ARBEIDSGIVER -> SøknadÅrsak.NYOPPSTARTET_HOS_ARBEIDSGIVER
         KONFLIKT_MED_ARBEIDSGIVER -> SøknadÅrsak.KONFLIKT_MED_ARBEIDSGIVER
@@ -56,7 +74,7 @@ enum class Utbetalingsårsak {
 
 }
 
-enum class ÅrsakNyoppstartet{
+enum class ÅrsakNyoppstartet {
     JOBBET_HOS_ANNEN_ARBEIDSGIVER,
     VAR_FRILANSER,
     VAR_SELVSTENDIGE,

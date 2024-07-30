@@ -1,6 +1,8 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
+import jakarta.validation.Valid
+
 class DineBarn(
-    var barn: List<Barn>,
-    val harDeltBosted: Boolean
+    @field:Valid var barn: List<Barn>,
+    val harDeltBosted: Boolean,
 )
