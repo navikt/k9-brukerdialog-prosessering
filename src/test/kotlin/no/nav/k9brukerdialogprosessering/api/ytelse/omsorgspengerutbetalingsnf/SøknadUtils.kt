@@ -38,7 +38,7 @@ object SøknadUtils {
             Bosted(
                 fraOgMed = LocalDate.parse("2022-02-01"),
                 tilOgMed = LocalDate.parse("2022-02-10"),
-                landkode = "BE",
+                landkode = "BEL",
                 landnavn = "Belgia",
                 erEØSLand = true
             )

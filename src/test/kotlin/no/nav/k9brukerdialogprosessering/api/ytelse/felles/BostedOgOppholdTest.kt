@@ -5,6 +5,7 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Opphold
+import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,57 +17,55 @@ class BostedOgOppholdTest {
 
     @Test
     fun `Gyldig bosted gir ingen feil`() {
-        Bosted(
-            fraOgMed = LocalDate.now(),
-            tilOgMed = LocalDate.now().plusDays(2),
-            landkode = "BE",
-            landnavn = "Belgia",
-            erEØSLand = true
-        ).valider("bosted").verifiserIngenValideringsFeil()
-    }
-
-    @Test
-    fun `Bosted hvor erEØSLand er null gir feil`() {
-        Bosted(
-            fraOgMed = LocalDate.now(),
-            tilOgMed = LocalDate.now().plusDays(2),
-            landkode = "BE",
-            landnavn = "Belgia",
-            erEØSLand = null
-        ).valider("bosted").verifiserValideringsFeil(1, listOf("bosted.erEØSLand må være satt"))
+        Validator.verifiserIngenValideringsFeil(
+            Bosted(
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now().plusDays(2),
+                landkode = "BEL",
+                landnavn = "Belgia",
+                erEØSLand = true
+            )
+        )
     }
 
     @Test
     fun `Bosted hvor fraOgMed er etter tilOgMed gir feil`() {
-        Bosted(
-            fraOgMed = LocalDate.now(),
-            tilOgMed = LocalDate.now().minusDays(2),
-            landkode = "BE",
-            landnavn = "Belgia",
-            erEØSLand = true
-        ).valider("bosted").verifiserValideringsFeil(1, listOf("bosted.fraOgMed kan ikke være etter tilOgMed"))
+        Validator.verifiserValideringsFeil(
+            Bosted(
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now().minusDays(2),
+                landkode = "BEL",
+                landnavn = "Belgia",
+                erEØSLand = true
+            ), 1, "'tilOgMed' må være lik eller etter 'fraOgMed'"
+        )
     }
 
     @Test
     fun `Bosted hvor landnavn er blank gir feil`() {
-        Bosted(
-            fraOgMed = LocalDate.now(),
-            tilOgMed = LocalDate.now().plusDays(2),
-            landkode = "BE",
-            landnavn = " ",
-            erEØSLand = true
-        ).valider("bosted").verifiserValideringsFeil(1, listOf("bosted.landnavn kan ikke være blankt eller tomt. landnavn=' '"))
+        Validator.verifiserValideringsFeil(
+            Bosted(
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now().plusDays(2),
+                landkode = "BEL",
+                landnavn = " ",
+                erEØSLand = true
+            ), 1, "Kan ikke være tomt eller blankt"
+        )
     }
 
     @Test
     fun `Bosted hvor landkode er blank gir feil`() {
-        Bosted(
-            fraOgMed = LocalDate.now(),
-            tilOgMed = LocalDate.now().plusDays(2),
-            landkode = " ",
-            landnavn = "Belgia",
-            erEØSLand = true
-        ).valider("bosted").verifiserValideringsFeil(1, listOf("bosted.landkode kan ikke være blankt eller tomt. landkode=' '"))
+        Validator.verifiserValideringsFeil(
+            Bosted(
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now().plusDays(2),
+                landkode = " ",
+                landnavn = "Belgia",
+                erEØSLand = true
+            ), 2, "  er ikke en gyldig ISO 3166-1 alpha-3 kode",
+            "Kan ikke være tomt eller blankt"
+        )
     }
 
     @Test

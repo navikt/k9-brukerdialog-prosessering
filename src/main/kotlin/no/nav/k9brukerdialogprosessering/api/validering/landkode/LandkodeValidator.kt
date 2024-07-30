@@ -14,7 +14,7 @@ class LandkodeValidator : ConstraintValidator<ValidLandkode, String> {
 
     override fun isValid(value: String?, context: ConstraintValidatorContext): Boolean {
         if (value == null) {
-            return true // @NotBlank will handle null case
+            return true
         }
 
         val isValid = LANDKODER.contains(value)

@@ -14,26 +14,24 @@ import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.Validator
 import no.nav.k9brukerdialogprosessering.utils.TestUtils.verifiserValideringsFeil
-import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.skyscreamer.jsonassert.JSONAssert
+import java.time.Duration
 import java.time.LocalDate
 
 class OmsorgspengerUtbetalingSnfSøknadTest {
 
     @Test
     fun `Ugyldig opphold og bosteder skal gi validerinsfeil`() {
-        assertThrows<ValidationErrorResponseException> {
+        Validator.verifiserValideringsFeil(
             defaultSøknad.copy(
                 bosteder = listOf(
                     Bosted(
                         fraOgMed = LocalDate.now(),
-                        tilOgMed = LocalDate.now().plusDays(2),
+                        tilOgMed = LocalDate.now().minusDays(2),
                         landkode = "BEL",
                         landnavn = "Belgia",
-                        erEØSLand = null
+                        erEØSLand = true
                     )
                 ),
                 opphold = listOf(
@@ -45,36 +43,38 @@ class OmsorgspengerUtbetalingSnfSøknadTest {
                         erEØSLand = true
                     )
                 )
-            ).valider()
-        }.also {
-            assertTrue { it.message.contains("bosteder[0].erEØSLand må være satt") }
-            assertTrue { it.message.contains("opphold[0].landnavn kan ikke være blankt eller tomt. landnavn=' '") }
-        }
+            ), 2, "'tilOgMed' må være lik eller etter 'fraOgMed'",
+            "Kan ikke være tomt eller blankt"
+        )
     }
 
     @Test
     fun `Ugyldig utbetalingsperioder skal gi valideringsfeil`() {
-        assertThrows<ValidationErrorResponseException> {
+        Validator.verifiserValideringsFeil(
             defaultSøknad.copy(
                 utbetalingsperioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = LocalDate.parse("2022-01-20"),
                         tilOgMed = LocalDate.parse("2022-01-19"),
                         årsak = FraværÅrsak.ORDINÆRT_FRAVÆR,
-                        aktivitetFravær = listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET)
+                        aktivitetFravær = listOf(AktivitetFravær.SELVSTENDIG_VIRKSOMHET),
+                        antallTimerPlanlagt = Duration.ofHours(5),
+                        antallTimerBorte = null
                     ),
                     Utbetalingsperiode(
                         fraOgMed = LocalDate.parse("2022-01-20"),
                         tilOgMed = LocalDate.parse("2022-01-24"),
                         årsak = FraværÅrsak.ORDINÆRT_FRAVÆR,
-                        aktivitetFravær = listOf()
+                        aktivitetFravær = listOf(),
+                        antallTimerPlanlagt = null,
+                        antallTimerBorte = Duration.ofHours(5)
                     )
                 )
-            ).valider()
-        }.also {
-            assertTrue { it.message.contains("utbetalingsperioder[0].tilOgMed må være lik eller etter fraOgMed.") }
-            assertTrue { it.message.contains("utbetalingsperioder[1].aktivitetFravær kan ikke være tom.") }
-        }
+            ), 4, "Kan ikke være tom",
+            "'tilOgMed' må være lik eller etter 'fraOgMed'",
+            "Dersom antallTimerPlanlagt er satt må antallTimerBorte være satt",
+            "Dersom antallTimerBorte er satt må antallTimerPlanlagt være satt"
+        )
     }
 
     @Test
@@ -210,7 +210,7 @@ class OmsorgspengerUtbetalingSnfSøknadTest {
                 "utenlandsopphold": {
                   "perioder": {
                     "2022-02-01/2022-02-10": {
-                      "land": "BE",
+                      "land": "BEL",
                       "årsak": null,
                       "erSammenMedBarnet": true
                     }

@@ -16,11 +16,9 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
-import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Opphold
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
-import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode.Companion.valider
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Virksomhet
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene.Barn.Companion.kunFosterbarn
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingsnf.domene.Barn.Companion.somK9BarnListe
@@ -28,8 +26,6 @@ import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.dokumentId
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
-import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
-import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -39,21 +35,20 @@ import no.nav.k9.søknad.Søknad as K9Søknad
 data class OmsorgspengerutbetalingSnfSøknad(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
     internal val søknadId: String = UUID.randomUUID().toString(),
-
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: String,
-    val bosteder: List<Bosted>,
-    val opphold: List<Opphold>,
+    @field:Valid val bosteder: List<Bosted>,
+    @field:Valid val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
     val harDekketTiFørsteDagerSelv: Boolean? = null,
     val harSyktBarn: Boolean? = null,
     val harAleneomsorg: Boolean? = null,
     @field:Valid val bekreftelser: Bekreftelser,
-    val utbetalingsperioder: List<Utbetalingsperiode>,
-    val erArbeidstakerOgså: Boolean,
+    @field:Valid val utbetalingsperioder: List<Utbetalingsperiode>,
     @field:Valid val barn: List<Barn>,
     @field:Valid val frilans: Frilans? = null,
     @field:Valid val selvstendigNæringsdrivende: Virksomhet? = null,
+    val erArbeidstakerOgså: Boolean,
     val vedlegg: List<URL> = listOf(),
     val dataBruktTilUtledningAnnetData: String? = null,
 ) : Innsending {
@@ -62,13 +57,7 @@ data class OmsorgspengerutbetalingSnfSøknad(
         private val k9FormatVersjon = Versjon.of("1.1.0")
     }
 
-    override fun valider() = mutableListOf<String>().apply {
-        addAll(bosteder.valider("bosteder"))
-        addAll(opphold.valider("opphold"))
-        addAll(utbetalingsperioder.valider("utbetalingsperioder"))
-
-        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
-    }
+    override fun valider() = mutableListOf<String>()
 
     internal fun leggTilIdentifikatorPåBarnHvisMangler(barnFraOppslag: List<BarnOppslag>) {
         barn.forEach { it.leggTilIdentifikatorHvisMangler(barnFraOppslag) }
