@@ -12,7 +12,7 @@ import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
 class Barn(
-    @field:Size(max = 11)
+    @field:Size(min = 11, max = 11)
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private var identitetsnummer: String? = null,
     private val aktørId: String? = null,

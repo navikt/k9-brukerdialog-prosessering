@@ -1,10 +1,16 @@
-package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
+package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker
 
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.AktivitetFravær
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bosted
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.FraværÅrsak
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Barn
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.DineBarn
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.OmsorgspengerutbetalingArbeidstakerSøknad
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.TypeBarn
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Utbetalingsårsak
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
 import java.time.LocalDate
 import java.time.ZonedDateTime

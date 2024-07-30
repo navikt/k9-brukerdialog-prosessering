@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.SøknadUtils
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.søker
