@@ -1,9 +1,5 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
 
-import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.AktivitetFravær.ARBEIDSTAKER
-import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Bekreftelser
-import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.FraværÅrsak.SMITTEVERNHENSYN
-import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Utbetalingsperiode
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.somJson
 import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.søker
@@ -88,48 +84,7 @@ class OmsorgspengerUtbetalingArbeidstakerSøknadTest {
 
     @Test
     fun `Gyldig søknad gir ingen feil`() {
-        OmsorgspengerutbetalingArbeidstakerSøknad(
-            språk = "nb",
-            vedlegg = listOf(),
-            bosteder = listOf(),
-            opphold = listOf(),
-            bekreftelser = Bekreftelser(
-                harBekreftetOpplysninger = true,
-                harForståttRettigheterOgPlikter = true
-            ),
-            dineBarn = DineBarn(
-                harDeltBosted = false,
-                barn = listOf(
-                    Barn(
-                        identitetsnummer = "11223344567",
-                        aktørId = "1234567890",
-                        LocalDate.now(),
-                        "Barn Barnesen",
-                        TypeBarn.FRA_OPPSLAG
-                    )
-                ),
-            ),
-            arbeidsgivere = listOf(
-                Arbeidsgiver(
-                    navn = "Kiwi AS",
-                    organisasjonsnummer = "825905162",
-                    utbetalingsårsak = Utbetalingsårsak.KONFLIKT_MED_ARBEIDSGIVER,
-                    konfliktForklaring = "Fordi blablabla",
-                    harHattFraværHosArbeidsgiver = true,
-                    arbeidsgiverHarUtbetaltLønn = true,
-                    perioder = listOf(
-                        Utbetalingsperiode(
-                            fraOgMed = LocalDate.parse("2022-01-25"),
-                            tilOgMed = LocalDate.parse("2022-01-28"),
-                            årsak = SMITTEVERNHENSYN,
-                            aktivitetFravær = listOf(ARBEIDSTAKER)
-                        )
-                    )
-                )
-            ),
-            hjemmePgaSmittevernhensyn = true,
-            hjemmePgaStengtBhgSkole = true
-        ).valider()
+        Validator.verifiserIngenValideringsFeil(SøknadUtils.defaultSøknad)
     }
 
     @Test
