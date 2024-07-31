@@ -12,6 +12,7 @@ data class KafkaProperties(
     val retries: Int,
     val retryBackoffMs: Int,
     val replicationFactor: Int,
+    val producer: KafkaProducerProperties,
     val streams: Map<String, KafkaStreamsProperties>,
     val security: KafkaSecurityProperties? = null,
 ) {
@@ -19,6 +20,14 @@ data class KafkaProperties(
         return streams[streamPropertyKey.value] ?: throw IllegalStateException("Mangler konfiguration for ${streamPropertyKey.value} streams")
     }
 }
+
+data class KafkaProducerProperties(
+    val clientId: String,
+    val keySerializer: String,
+    val valueSerializer: String,
+    val retries: Int,
+    val transactionIdPrefix: String
+)
 
 data class KafkaStreamsProperties(
     val applicationIdSuffix: String,

@@ -1,78 +1,35 @@
 package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
-import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.utils.EndringsmeldingUtils
-import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.K9DokumentMellomlagringService
-import no.nav.k9brukerdialogprosessering.utils.KafkaIntegrationTest
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
-import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaConsumer
-import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaProducer
-import org.apache.kafka.clients.consumer.Consumer
-import org.apache.kafka.clients.producer.Producer
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.kafka.test.EmbeddedKafkaBroker
 import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
 
-@KafkaIntegrationTest
-class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
+class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest() {
 
-    @Autowired
-    private lateinit var mapper: ObjectMapper
-
-    @Autowired
-    private lateinit var testRestTemplate: TestRestTemplate
-
-    @MockkBean
-    private lateinit var k9DokumentMellomlagringService: K9DokumentMellomlagringService
-
-    @MockkBean(relaxed = true)
-    private lateinit var k9JoarkService: K9JoarkService
-
-    @Autowired
-    private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
-
-    lateinit var producer: Producer<String, Any> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om endringsmelding
-    lateinit var consumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om endringsmelding
-
-    @BeforeAll
-    fun setUp() {
-        producer = embeddedKafkaBroker.opprettKafkaProducer()
-        consumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "pleiepenger-sykt-barn-endringsmelding", topics = listOf(
-                PSB_ENDRINGSMELDING_MOTTATT_TOPIC,
-                PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC,
-                PSB_ENDRINGSMELDING_CLEANUP_TOPIC
-            )
-        )
-    }
-
-    @AfterAll
-    fun tearDown() {
-        producer.close()
-        consumer.close()
-    }
+    override val consumerGroupPrefix = "pleiepenger-sykt-barn-endringsmelding"
+    override val consumerGroupTopics = listOf(
+        PSB_ENDRINGSMELDING_MOTTATT_TOPIC,
+        PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC,
+        PSB_ENDRINGSMELDING_CLEANUP_TOPIC
+    )
 
     @Test
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
@@ -83,10 +40,14 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
-        val topicEntryJson = mapper.writeValueAsString(topicEntry)
+        val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
         val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
+        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map {
+            URI(
+                "http://localhost:8080/dokument/$it"
+            )
+        })
         coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
@@ -106,7 +67,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
-        val topicEntryJson = mapper.writeValueAsString(topicEntry)
+        val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
         coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
@@ -116,10 +77,15 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest {
             .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
-        val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
+
+        val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertEndringsmeldingSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(
+            preprosessertEndringsmeldingSomJson(søknadId, mottattString),
+            preprosessertSøknadJson,
+            true
+        )
     }
 
     @Language("JSON")

@@ -105,6 +105,14 @@ no.nav:
     retries: 2147483647 # Max int
     retry-backoff-ms: 5000 # 5 seconds
     replication-factor: 3
+
+    producer:
+      client-id: ${HOSTNAME}-${random.uuid}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      transaction-id-prefix: tx-${HOSTNAME}-${random.uuid}
+      retries: 3
+
     streams:
       psb-soknad-preprosessering:
         application-id-suffix: psb-soknad-preprosessering

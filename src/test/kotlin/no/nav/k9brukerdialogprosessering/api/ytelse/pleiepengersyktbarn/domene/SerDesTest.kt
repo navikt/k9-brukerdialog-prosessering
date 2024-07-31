@@ -290,19 +290,19 @@ internal class SerDesTest {
                 "ukedager" : null,
                 "enkeltdager" : [
                       {
-                        "dato": "2022-01-01",
+                        "dato": "2021-01-01",
                         "tid": "PT4H"
                       },
                       {
-                        "dato": "2022-01-02",
+                        "dato": "2021-01-02",
                         "tid": "PT4H"
                       },
                       {
-                        "dato": "2022-01-03",
+                        "dato": "2021-01-03",
                         "tid": "PT4H"
                       },
                       {
-                        "dato": "2022-01-04",
+                        "dato": "2021-01-04",
                         "tid": "PT4H"
                       }
                     ]

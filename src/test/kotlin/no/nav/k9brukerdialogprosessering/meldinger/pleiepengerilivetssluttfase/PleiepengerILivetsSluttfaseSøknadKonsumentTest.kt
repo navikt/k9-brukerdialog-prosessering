@@ -1,100 +1,59 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetssluttfase
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengerlivetssluttfase.SøknadUtils
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
-import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration
+import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
-import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
-import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetssluttfase.utils.PilsSøknadUtils
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.PILSTopologyConfiguration.Companion.PILS_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.PILSTopologyConfiguration.Companion.PILS_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengerilivetsslutttfase.PILSTopologyConfiguration.Companion.PILS_PREPROSESSERT_TOPIC
-import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.K9DokumentMellomlagringService
-import no.nav.k9brukerdialogprosessering.utils.KafkaIntegrationTest
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
-import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaConsumer
-import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaProducer
-import org.apache.kafka.clients.consumer.Consumer
-import org.apache.kafka.clients.producer.Producer
+import no.nav.k9brukerdialogprosessering.utils.MockMvcUtils.sendInnSøknad
+import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
+import no.nav.k9brukerdialogprosessering.utils.TokenTestUtils.hentToken
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.kafka.test.EmbeddedKafkaBroker
 import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
 
-@KafkaIntegrationTest
-class PleiepengerILivetsSluttfasePleiepengerSyktBarnSøknadKonsumentTest {
 
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
+class PleiepengerILivetsSluttfaseSøknadKonsumentTest : AbstractIntegrationTest() {
 
-    @Autowired
-    private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
-
-    @MockkBean(relaxed = true)
-    private lateinit var k9DokumentMellomlagringService: K9DokumentMellomlagringService
-
-    @MockkBean(relaxed = true)
-    private lateinit var k9JoarkService: K9JoarkService
-
-    lateinit var producer: Producer<String, Any> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
-    lateinit var consumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
-    lateinit var k9DittnavVarselConsumer: Consumer<String, String> // Kafka producer som brukes til å legge på kafka meldinger. Mer spesifikk, Hendelser om pp-sykt-barn
-
-    @BeforeAll
-    fun setUp() {
-        producer = embeddedKafkaBroker.opprettKafkaProducer()
-        consumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "pleiepenger-i-livets-sluttfase", topics = listOf(
-                PILS_MOTTATT_TOPIC,
-                PILS_PREPROSESSERT_TOPIC,
-                PILS_CLEANUP_TOPIC
-            )
-        )
-        k9DittnavVarselConsumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "k9-dittnav-varsel",
-            topics = listOf(DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC)
-        )
-    }
-
-    @AfterAll
-    fun tearDown() {
-        producer.close()
-        consumer.close()
-        k9DittnavVarselConsumer.close()
-    }
+    override val consumerGroupPrefix = "pleiepenger-i-livets-sluttfase"
+    override val consumerGroupTopics = listOf(
+        PILS_MOTTATT_TOPIC,
+        PILS_PREPROSESSERT_TOPIC,
+        PILS_CLEANUP_TOPIC
+    )
 
     @Test
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
+        val søker = mockSøker()
+        mockBarn()
+        mockLagreDokument()
+        mockJournalføring()
+
         val søknadId = UUID.randomUUID().toString()
-        val mottattString = "2020-01-01T10:30:15.000Z"
-        val mottatt = ZonedDateTime.parse(mottattString, zonedDateTimeFormatter)
-        val søknadMottatt = PilsSøknadUtils.gyldigSøknad(søknadId = søknadId, mottatt = mottatt)
-        val correlationId = UUID.randomUUID().toString()
-        val metadata = MetaInfo(version = 1, correlationId = correlationId)
-        val topicEntry = TopicEntry(metadata, søknadMottatt)
-        val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
+        val søknad = SøknadUtils.defaultSøknad.copy(
+            søknadId = søknadId,
+            vedleggUrls = listOf(),
+            opplastetIdVedleggUrls = listOf()
+        )
 
-        val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
+        mockMvc.sendInnSøknad(søknad, mockOAuth2Server.hentToken())
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PILS_MOTTATT_TOPIC)
         verify(exactly = 1, timeout = 120 * 1000) {
             runBlocking {
                 k9DokumentMellomlagringService.slettDokumenter(any(), any())
@@ -103,8 +62,7 @@ class PleiepengerILivetsSluttfasePleiepengerSyktBarnSøknadKonsumentTest {
 
         k9DittnavVarselConsumer.lesMelding(
             key = søknadId,
-            topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC,
-            maxWaitInSeconds = 40
+            topic = K9_DITTNAV_VARSEL_TOPIC
         ).value().assertDittnavVarsel(
             K9Beskjed(
                 metadata = metadata,
@@ -112,7 +70,7 @@ class PleiepengerILivetsSluttfasePleiepengerSyktBarnSøknadKonsumentTest {
                 tekst = "Søknad om pleiepenger i livets sluttfase er mottatt",
                 link = null,
                 dagerSynlig = 7,
-                søkerFødselsnummer = søknadMottatt.søkerFødselsnummer(),
+                søkerFødselsnummer = søker.fødselsnummer,
                 eventId = "testes ikke",
                 ytelse = "PLEIEPENGER_LIVETS_SLUTTFASE",
             )
@@ -139,7 +97,7 @@ class PleiepengerILivetsSluttfasePleiepengerSyktBarnSøknadKonsumentTest {
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PILS_MOTTATT_TOPIC)
         val lesMelding =
-            consumer.lesMelding(key = søknadId, topic = PILS_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40)
+            consumer.lesMelding(key = søknadId, topic = PILS_PREPROSESSERT_TOPIC)
                 .value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()

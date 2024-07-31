@@ -15,7 +15,6 @@ import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.K9DokumentMellom
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.valider
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import no.nav.k9brukerdialogprosessering.oppslag.soker.SøkerService
-import no.nav.k9brukerdialogprosessering.utils.ObjectMapperUtils.somJson
 import no.nav.k9brukerdialogprosessering.validation.ParameterType
 import no.nav.k9brukerdialogprosessering.validation.ValidationErrorResponseException
 import no.nav.k9brukerdialogprosessering.validation.ValidationProblemDetails
@@ -64,7 +63,7 @@ class InnsendingService(
             val komplettInnsending = innsending.somKomplettSøknad(søker, k9Format)
             kafkaProdusent.produserKafkaMelding(
                 metadata,
-                JSONObject(objectMapper.somJson(komplettInnsending)),
+                JSONObject(objectMapper.writeValueAsString(komplettInnsending)),
                 innsending.ytelse()
             )
         } catch (exception: Exception) {
@@ -90,7 +89,7 @@ class InnsendingService(
             val komplettInnsending = innsending.somKomplettSøknad(søker, k9Format, vedlegg.map { it.title })
             kafkaProdusent.produserKafkaMelding(
                 metadata,
-                JSONObject(objectMapper.somJson(komplettInnsending)),
+                JSONObject(objectMapper.writeValueAsString(komplettInnsending)),
                 innsending.ytelse()
             )
         } catch (exception: Exception) {

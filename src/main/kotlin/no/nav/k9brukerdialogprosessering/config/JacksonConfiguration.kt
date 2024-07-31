@@ -49,7 +49,6 @@ class JacksonConfiguration {
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .registerModule(kotlinModule)
             .registerModule(javaTimeModule)
-            .findAndRegisterModules()
     }
 
     @Bean

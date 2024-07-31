@@ -13,7 +13,7 @@ import java.io.File
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
-class OMPUTVKroniskSyktBarnPleiepengerSyktBarnSøknadPdfGeneratorTest {
+class OMPUTVKroniskSyktBarnSøknadPdfGeneratorTest {
 
     @Test
     fun `generering av oppsummerings-PDF fungerer`() {

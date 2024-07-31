@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.utils
 
+import no.nav.security.token.support.core.jwt.JwtToken
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 
 object TokenUtils {
@@ -13,8 +14,12 @@ object TokenUtils {
         val jwtToken = getTokenValidationContext().firstValidToken
             ?: throw IllegalStateException("Ingen gyldige tokens i Authorization headeren")
 
-        val pid = jwtToken.jwtTokenClaims.getStringClaim(CLAIM_PID)
-        val sub = jwtToken.jwtTokenClaims.getStringClaim(CLAIM_SUB)
+        return jwtToken.personIdent()
+    }
+
+    fun JwtToken.personIdent(): String {
+        val pid = jwtTokenClaims.getStringClaim(CLAIM_PID)
+        val sub = jwtTokenClaims.getStringClaim(CLAIM_SUB)
 
         return when {
             !pid.isNullOrBlank() -> pid

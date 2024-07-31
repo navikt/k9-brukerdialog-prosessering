@@ -84,6 +84,11 @@ no.nav:
     application-id: k9-brukerdialog-prosessering
     retries: 5
     retry-backoff-ms: 100 # 100 ms
+
+    producer:
+      client-id: k9-brukerdialog-prosessering-${random.uuid}
+      transaction-id-prefix: tx-k9-brukerdialog-prosessering-${random.uuid}
+
     streams:
       psb-soknad-preprosessering:
         auto-offset-reset: earliest

@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.kafka
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
@@ -23,7 +24,10 @@ import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 
 @Service
-class KafkaProducerService(val kafkaTemplate: KafkaTemplate<String, TopicEntry<JSONObject>>) : ReactiveHealthIndicator {
+class KafkaProducerService(
+    val aivenKafkaTemplate: KafkaTemplate<String, String>,
+    val objectMapper: ObjectMapper,
+) : ReactiveHealthIndicator {
     private val NAME = "KafkaProducer"
     private val logger = LoggerFactory.getLogger(KafkaProducer::class.java)
 
@@ -45,32 +49,34 @@ class KafkaProducerService(val kafkaTemplate: KafkaTemplate<String, TopicEntry<J
         val producerRecord = ProducerRecord(
             topic,
             komplettSøknadSomJson.getString("søknadId"),
-            TopicEntry(
+            JSONObject(TopicEntry(
                 metadata = metadata,
                 data = komplettSøknadSomJson
-            )
+            )).toString()
         )
-        val result = kafkaTemplate.send(producerRecord).get()
+        val result = aivenKafkaTemplate.executeInTransaction {
+            it.send(producerRecord).get()
+        }
         logger.info(
             formaterStatuslogging(
                 ytelse,
                 komplettSøknadSomJson.getString("søknadId"),
-                "sendes til topic ${topic} med offset '${result.recordMetadata.offset()}' til partition '${result.recordMetadata.offset()}'"
+                "sendes til topic $topic med offset '${result.recordMetadata.offset()}' til partition '${result.recordMetadata.offset()}'"
             )
         )
     }
 
     override fun health(): Mono<Health> {
         return try {
-            kafkaTemplate.partitionsFor(OMSORGSPENGER_UTVIDET_RETT_TOPIC)
-            kafkaTemplate.partitionsFor(OMSORGSPENGER_MIDLERTIDIG_ALENE_TOPIC)
-            kafkaTemplate.partitionsFor(ETTERSENDING_TOPIC)
-            kafkaTemplate.partitionsFor(OMSORGSDAGER_ALENEOMSORG_TOPIC)
-            kafkaTemplate.partitionsFor(OMSORGSPENGER_UTBETALING_ARBEIDSTAKER_TOPIC)
-            kafkaTemplate.partitionsFor(OMSORGSPENGER_UTBETALING_SNF_TOPIC)
-            kafkaTemplate.partitionsFor(PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC)
-            kafkaTemplate.partitionsFor(MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC)
-            kafkaTemplate.partitionsFor(PLEIEPENGER_SYKT_BARN_TOPIC)
+            aivenKafkaTemplate.partitionsFor(OMSORGSPENGER_UTVIDET_RETT_TOPIC)
+            aivenKafkaTemplate.partitionsFor(OMSORGSPENGER_MIDLERTIDIG_ALENE_TOPIC)
+            aivenKafkaTemplate.partitionsFor(ETTERSENDING_TOPIC)
+            aivenKafkaTemplate.partitionsFor(OMSORGSDAGER_ALENEOMSORG_TOPIC)
+            aivenKafkaTemplate.partitionsFor(OMSORGSPENGER_UTBETALING_ARBEIDSTAKER_TOPIC)
+            aivenKafkaTemplate.partitionsFor(OMSORGSPENGER_UTBETALING_SNF_TOPIC)
+            aivenKafkaTemplate.partitionsFor(PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC)
+            aivenKafkaTemplate.partitionsFor(MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC)
+            aivenKafkaTemplate.partitionsFor(PLEIEPENGER_SYKT_BARN_TOPIC)
 
             Mono.just(Health.up().withDetail(NAME, "Tilkobling til Kafka OK!").build())
         } catch (cause: Throwable) {

@@ -135,19 +135,19 @@ class SøknadUtils {
                 erLiktHverUke = false,
                 enkeltdager = listOf(
                     Enkeltdag(
-                        LocalDate.parse("2022-01-01"),
+                        LocalDate.parse("2021-01-01"),
                         Duration.ofHours(4)
                     ),
                     Enkeltdag(
-                        LocalDate.parse("2022-01-02"),
+                        LocalDate.parse("2021-01-02"),
                         Duration.ofHours(4)
                     ),
                     Enkeltdag(
-                        LocalDate.parse("2022-01-03"),
+                        LocalDate.parse("2021-01-03"),
                         Duration.ofHours(4)
                     ),
                     Enkeltdag(
-                        LocalDate.parse("2022-01-04"),
+                        LocalDate.parse("2021-01-04"),
                         Duration.ofHours(4)
                     )
                 )
