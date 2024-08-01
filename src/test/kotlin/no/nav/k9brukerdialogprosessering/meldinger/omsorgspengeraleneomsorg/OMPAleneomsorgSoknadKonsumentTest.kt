@@ -4,11 +4,14 @@ import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.SøknadUtils
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.Barn
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.TypeBarn
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
-import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.OMPAleneomsorgTopologyConfiguration.Companion.OMP_AO_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.OMPAleneomsorgTopologyConfiguration.Companion.OMP_AO_MOTTATT_TOPIC
@@ -16,6 +19,9 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.OMPA
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengeraleneomsorg.utils.OMPAleneomsorgSoknadUtils
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
+import no.nav.k9brukerdialogprosessering.utils.MockMvcUtils.sendInnSøknad
+import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
+import no.nav.k9brukerdialogprosessering.utils.TokenTestUtils.hentToken
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -34,28 +40,27 @@ class OMPAleneomsorgSoknadKonsumentTest : AbstractIntegrationTest() {
 
     @Test
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
+        val søker = mockSøker()
+        mockBarn()
+        mockLagreDokument()
+        mockJournalføring()
+
         val søknadId = UUID.randomUUID().toString()
-        val mottattString = "2020-01-01T10:30:15.000Z"
-        val mottatt = ZonedDateTime.parse(mottattString, zonedDateTimeFormatter)
-        val søknadMottatt = OMPAleneomsorgSoknadUtils.defaultSøknad(
-            søknadId = søknadId,
-            mottatt = mottatt
+        mockMvc.sendInnSøknad(
+            SøknadUtils.defaultSøknad.copy(
+                søknadId = søknadId,
+                barn = listOf(
+                    Barn(
+                        navn = "Barn1",
+                        type = TypeBarn.FRA_OPPSLAG,
+                        aktørId = "123",
+                        identitetsnummer = "25058118020",
+                        tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
+                    )
+                )
+            ), mockOAuth2Server.hentToken()
         )
 
-        val correlationId = UUID.randomUUID().toString()
-        val metadata = MetaInfo(version = 1, correlationId = correlationId)
-        val topicEntry = TopicEntry(metadata, søknadMottatt)
-        val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
-
-        val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map {
-            URI(
-                "http://localhost:8080/dokument/$it"
-            )
-        })
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
-
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_AO_MOTTATT_TOPIC)
         verify(exactly = 1, timeout = 120 * 1000) {
             runBlocking {
                 k9DokumentMellomlagringService.slettDokumenter(any(), any())
@@ -72,7 +77,7 @@ class OMPAleneomsorgSoknadKonsumentTest : AbstractIntegrationTest() {
                 tekst = "Vi har mottatt søknad fra deg om ekstra omsorgsdager ved aleneomsorg.",
                 link = null,
                 dagerSynlig = 7,
-                søkerFødselsnummer = søknadMottatt.søkerFødselsnummer(),
+                søkerFødselsnummer = søker.fødselsnummer,
                 eventId = "testes ikke",
                 ytelse = "OMSORGSDAGER_ALENEOMSORG",
             )
