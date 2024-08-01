@@ -1,8 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.ettersendelse
 
 import io.mockk.coEvery
-import io.mockk.verify
-import kotlinx.coroutines.runBlocking
+import io.mockk.coVerify
 import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
 import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.EttersendelseUtils.defaultEttersendelse
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
@@ -40,10 +39,8 @@ class EttersendelseKonsumentTest : AbstractIntegrationTest() {
 
         mockMvc.sendInnSøknad(defaultEttersendelse, mockOAuth2Server.hentToken())
 
-        verify(exactly = 1, timeout = 120 * 1000) {
-            runBlocking {
-                k9DokumentMellomlagringService.slettDokumenter(any(), any())
-            }
+        coVerify(exactly = 1, timeout = 120 * 1000) {
+            k9DokumentMellomlagringService.slettDokumenter(any(), any())
         }
     }
 

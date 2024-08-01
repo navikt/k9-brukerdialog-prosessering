@@ -1,8 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerutbetalingat
 
 import io.mockk.coEvery
-import io.mockk.verify
-import kotlinx.coroutines.runBlocking
+import io.mockk.coVerify
 import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
@@ -56,10 +55,8 @@ class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
         coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTB_AT_MOTTATT_TOPIC)
-        verify(exactly = 1, timeout = 120 * 1000) {
-            runBlocking {
-                k9DokumentMellomlagringService.slettDokumenter(any(), any())
-            }
+        coVerify(exactly = 1, timeout = 120 * 1000) {
+            k9DokumentMellomlagringService.slettDokumenter(any(), any())
         }
 
         k9DittnavVarselConsumer.lesMelding(

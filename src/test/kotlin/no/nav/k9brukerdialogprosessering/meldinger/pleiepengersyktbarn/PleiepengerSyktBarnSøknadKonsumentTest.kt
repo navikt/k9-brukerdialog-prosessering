@@ -1,8 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn
 
 import io.mockk.coEvery
-import io.mockk.verify
-import kotlinx.coroutines.runBlocking
+import io.mockk.coVerify
 import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.SøknadUtils
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
@@ -45,10 +44,8 @@ class PleiepengerSyktBarnSøknadKonsumentTest : AbstractIntegrationTest() {
 
         mockMvc.sendInnSøknad(defaultSøknad, mockOAuth2Server.hentToken())
 
-        verify(exactly = 1, timeout = 120 * 1000) {
-            runBlocking {
-                k9DokumentMellomlagringService.slettDokumenter(any(), any())
-            }
+        coVerify(exactly = 1, timeout = 120 * 1000) {
+            k9DokumentMellomlagringService.slettDokumenter(any(), any())
         }
     }
 

@@ -1,8 +1,7 @@
 package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding
 
 import io.mockk.coEvery
-import io.mockk.verify
-import kotlinx.coroutines.runBlocking
+import io.mockk.coVerify
 import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
@@ -51,10 +50,8 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
         coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
-        verify(exactly = 1, timeout = 120 * 1000) {
-            runBlocking {
+        coVerify(exactly = 1, timeout = 120 * 1000) {
                 k9DokumentMellomlagringService.slettDokumenter(any(), any())
-            }
         }
     }
 
