@@ -4,9 +4,9 @@ import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
+import no.nav.k9brukerdialogprosessering.api.ytelse.ettersending.EttersendelseUtils.defaultEttersendelse
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
-import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_MOTTATT_TOPIC
@@ -14,6 +14,8 @@ import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.EttersendelseTo
 import no.nav.k9brukerdialogprosessering.meldinger.ettersendelse.utils.EttersendingUtils
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
+import no.nav.k9brukerdialogprosessering.utils.MockMvcUtils.sendInnSøknad
+import no.nav.k9brukerdialogprosessering.utils.TokenTestUtils.hentToken
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
@@ -30,24 +32,14 @@ class EttersendelseKonsumentTest : AbstractIntegrationTest() {
 
     @Test
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
-        val søknadId = UUID.randomUUID().toString()
-        val mottattString = "2020-01-01T10:30:15.000Z"
-        val mottatt = ZonedDateTime.parse(mottattString, zonedDateTimeFormatter)
-        val ettersendelseMottatt = EttersendingUtils.defaultEttersendelse(søknadId = søknadId, mottatt = mottatt)
-        val correlationId = UUID.randomUUID().toString()
-        val metadata = MetaInfo(version = 1, correlationId = correlationId)
-        val topicEntry = TopicEntry(metadata, ettersendelseMottatt)
-        val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
+        mockSøker()
+        mockBarn()
+        mockHentDokumenter()
+        mockLagreDokument()
+        mockJournalføring()
 
-        val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map {
-            URI(
-                "http://localhost:8080/dokument/$it"
-            )
-        })
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
+        mockMvc.sendInnSøknad(defaultEttersendelse, mockOAuth2Server.hentToken())
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = ETTERSENDELSE_MOTTATT_TOPIC)
         verify(exactly = 1, timeout = 120 * 1000) {
             runBlocking {
                 k9DokumentMellomlagringService.slettDokumenter(any(), any())

@@ -6,6 +6,8 @@ import io.mockk.coEvery
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.Dokument
+import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.DokumentEier
 import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.K9DokumentMellomlagringService
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnOppslag
 import no.nav.k9brukerdialogprosessering.oppslag.barn.BarnService
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.http.MediaType
 import org.springframework.kafka.test.EmbeddedKafkaBroker
 import org.springframework.test.web.servlet.MockMvc
 import java.net.URI
@@ -94,6 +97,17 @@ abstract class AbstractIntegrationTest {
                 "http://localhost:8080/dokument/$it"
             )
         })
+    }
+
+    protected fun mockHentDokumenter() {
+        coEvery { k9DokumentMellomlagringService.hentDokumenter(any(), any()) } returns listOf(
+            Dokument(
+                eier = DokumentEier("123"),
+                content = "some value".toByteArray(),
+                contentType = MediaType.APPLICATION_PDF_VALUE,
+                title = "PDF fil"
+            )
+        )
     }
 
     protected fun mockBarn(aktørId: String = "11111111111", fnr: String = "05119970078") {
