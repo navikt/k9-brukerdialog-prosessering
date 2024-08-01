@@ -3,11 +3,11 @@ package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerutbetalingat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.SøknadUtils
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
-import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_MOTTATT_TOPIC
@@ -15,6 +15,9 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPU
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerutbetalingat.utils.OMPUtbetalingATSøknadUtils
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
+import no.nav.k9brukerdialogprosessering.utils.MockMvcUtils.sendInnSøknad
+import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
+import no.nav.k9brukerdialogprosessering.utils.TokenTestUtils.hentToken
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -33,28 +36,14 @@ class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
 
     @Test
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
+        val søker = mockSøker()
+        mockBarn()
+        mockLagreDokument()
+        mockJournalføring()
+
         val søknadId = UUID.randomUUID().toString()
-        val mottattString = "2020-01-01T10:30:15.000Z"
-        val mottatt = ZonedDateTime.parse(mottattString, zonedDateTimeFormatter)
-        val søknadMottatt = OMPUtbetalingATSøknadUtils.defaultSøknad(
-            søknadId = søknadId,
-            mottatt = mottatt
-        )
+        mockMvc.sendInnSøknad(SøknadUtils.defaultSøknad.copy(søknadId = søknadId), mockOAuth2Server.hentToken())
 
-        val correlationId = UUID.randomUUID().toString()
-        val metadata = MetaInfo(version = 1, correlationId = correlationId)
-        val topicEntry = TopicEntry(metadata, søknadMottatt)
-        val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
-
-        val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map {
-            URI(
-                "http://localhost:8080/dokument/$it"
-            )
-        })
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
-
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTB_AT_MOTTATT_TOPIC)
         coVerify(exactly = 1, timeout = 120 * 1000) {
             k9DokumentMellomlagringService.slettDokumenter(any(), any())
         }
@@ -69,7 +58,7 @@ class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
                 tekst = "Søknad om utbetaling av omsorgspenger er mottatt.",
                 link = null,
                 dagerSynlig = 7,
-                søkerFødselsnummer = søknadMottatt.søkerFødselsnummer(),
+                søkerFødselsnummer = søker.fødselsnummer,
                 eventId = "testes ikke",
                 ytelse = "OMSORGSPENGER_UT_ARBEIDSTAKER",
             )
