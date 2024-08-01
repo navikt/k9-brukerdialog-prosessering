@@ -47,7 +47,8 @@ class FrilansTest {
                 startdato = LocalDate.parse("2022-01-01"),
                 sluttdato = LocalDate.parse("2021-01-01"),
                 jobberFortsattSomFrilans = true
-            ), 1, "frilans.sluttdato må være lik eller etter startdato."
+            ), 2, "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt",
+            "'Sluttdato' må være lik eller etter 'startdato'"
         )
     }
 
@@ -58,7 +59,7 @@ class FrilansTest {
                 startdato = LocalDate.parse("2022-01-01"),
                 sluttdato = null,
                 jobberFortsattSomFrilans = false
-            ), 1, "frilans.sluttdato kan ikke være null dersom jobberFortsattSomFrilans=false."
+            ), 1, "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt"
         )
     }
 }
