@@ -20,7 +20,7 @@ spec:
       application: k9-brukerdialog-api
     - team: dusseldorf
       application: k9-brukerdialog-prosessering
-      access: read
+      access: readwrite
 
 ---
 

@@ -19,11 +19,8 @@ spec:
       application: k9-brukerdialog-api
       access: write
     - team: dusseldorf
-      application: pleiepengesoknad-prosessering
-      access: read
-    - team: dusseldorf
       application: k9-brukerdialog-prosessering
-      access: read
+      access: readwrite
 
 ---
 
@@ -70,9 +67,6 @@ spec:
     retentionBytes: -1  # -1 means unlimited
     retentionHours: 730
   acl:
-    - team: dusseldorf
-      application: pleiepengesoknad-prosessering
-      access: readwrite
     - team: dusseldorf
       application: k9-brukerdialog-prosessering
       access: readwrite
