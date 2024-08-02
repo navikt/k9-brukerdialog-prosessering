@@ -20,6 +20,16 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: omsorgspengesoknad
+        - application: ekstra-omsorgsdager-andre-forelder-ikke-tilsyn
+        - application: sif-ettersending
+        - application: omsorgspengerutbetaling-arbeidstaker-soknad
+        - application: omsorgsdager-aleneomsorg-dialog
+        - application: omsorgspengerutbetaling-soknad
+        - application: pleiepenger-i-livets-sluttfase-soknad
+        - application: pleiepengesoknad
+        - application: endringsmelding-pleiepenger
+        - application: dine-pleiepenger
       {{#each inboundRules}}
         - application: {{app}}
           namespace: {{namespace}}
