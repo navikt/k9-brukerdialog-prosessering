@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
+import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse.Companion.somYtelse
 import no.nav.k9brukerdialogprosessering.utils.CallIdGenerator
 import no.nav.k9brukerdialogprosessering.utils.Constants
 import no.nav.k9brukerdialogprosessering.utils.MDCUtil
@@ -37,7 +38,7 @@ class HeadersToMDCFilterBean(
         try {
             MDCUtil.toMDC(Constants.NAV_CONSUMER_ID, req.getHeader(Constants.NAV_CONSUMER_ID), applicationName)
             MDCUtil.toMDC(Constants.CORRELATION_ID, req.getHeader(NavHeaders.X_CORRELATION_ID), generator.create())
-            MDCUtil.toMDC(Constants.YTELSE, req.getHeader(NavHeaders.BRUKERDIALOG_YTELSE))
+            MDCUtil.toMDC(Constants.YTELSE, req.getHeader(NavHeaders.BRUKERDIALOG_YTELSE).somYtelse())
         } catch (e: Exception) {
             LOG.warn("Feil ved setting av MDC-verdier for {}, MDC-verdier er inkomplette", req.requestURI, e)
         }

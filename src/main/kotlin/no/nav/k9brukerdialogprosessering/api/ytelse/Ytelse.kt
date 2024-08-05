@@ -54,6 +54,14 @@ enum class Ytelse(val dialog: String) {
                     )
                 }
         }
+
+        fun String.somYtelse(): Ytelse {
+
+            return runCatching { Ytelse.entries.first { it.dialog == substringAfterLast(":") } }
+                .onSuccess { return it }
+                .onFailure { throw IllegalArgumentException("Ukjent dialog $this") }
+                .getOrThrow()
+        }
     }
 
     fun somHttpHeader(): HttpHeaders {

@@ -4,7 +4,6 @@ import jakarta.validation.Valid
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
-import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgsdageraleneomsorg.domene.OmsorgsdagerAleneOmOmsorgenSøknad
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
@@ -47,7 +46,7 @@ class OmsorgsdagerAleneomsorgController(
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
     suspend fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: Ytelse,
+        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @Valid @RequestBody søknad: OmsorgsdagerAleneOmOmsorgenSøknad,
     ) {

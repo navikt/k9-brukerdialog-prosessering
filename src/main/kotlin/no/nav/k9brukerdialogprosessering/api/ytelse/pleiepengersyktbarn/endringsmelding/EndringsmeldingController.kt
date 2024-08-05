@@ -5,7 +5,6 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
-import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.endringsmelding.domene.Endringsmelding
 import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.formaterStatuslogging
@@ -48,7 +47,7 @@ class EndringsmeldingController(
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
     suspend fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: Ytelse,
+        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @RequestBody @Valid endringsmelding: Endringsmelding,
     ) {
