@@ -88,6 +88,9 @@ class K9BrukerdialogCacheService(
             onSuccess = { true },
             onFailure = { error: Throwable ->
                 if (error is RestClientException) {
+                    if (error is HttpClientErrorException.NotFound) {
+                        return true
+                    }
                     logger.error("Feil ved sletting av mellomlagret søknad. Feilmelding: ${error.message}")
                 }
                 throw RuntimeException("Feil ved sletting av mellomlagret søknad.", error)
