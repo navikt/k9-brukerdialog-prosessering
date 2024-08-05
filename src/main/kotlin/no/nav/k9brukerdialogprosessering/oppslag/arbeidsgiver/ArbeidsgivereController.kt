@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
 
 @RestController
-@RequestMapping("/arbeidsgiver")
+@RequestMapping("/oppslag/arbeidsgiver")
 @RequiredIssuers(
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
