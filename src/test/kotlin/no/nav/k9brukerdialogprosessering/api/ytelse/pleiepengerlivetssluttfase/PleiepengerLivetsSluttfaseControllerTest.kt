@@ -142,6 +142,7 @@ class PleiepengerLivetsSluttfaseControllerTest {
         }
             .andExpect {
                 status { isBadRequest() }
+                header { exists(NavHeaders.PROBLEM_DETAILS) }
                 content {
                     json(
                         """

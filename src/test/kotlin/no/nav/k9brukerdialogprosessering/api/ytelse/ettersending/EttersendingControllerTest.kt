@@ -110,6 +110,7 @@ class EttersendingControllerTest {
         }
             .andExpect {
                 status { isBadRequest() }
+                header { exists(NavHeaders.PROBLEM_DETAILS) }
                 content {
                     json(
                         """
