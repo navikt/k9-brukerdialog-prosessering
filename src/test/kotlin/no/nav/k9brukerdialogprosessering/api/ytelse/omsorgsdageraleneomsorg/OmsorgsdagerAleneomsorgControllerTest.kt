@@ -72,7 +72,7 @@ class OmsorgsdagerAleneomsorgControllerTest {
 
         mockMvc.post("/omsorgsdager-aleneomsorg/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSDAGER_ALENEOMSORG.name)
+                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSDAGER_ALENEOMSORG.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -119,7 +119,7 @@ class OmsorgsdagerAleneomsorgControllerTest {
         )
         mockMvc.post("/omsorgsdager-aleneomsorg/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSDAGER_ALENEOMSORG.name)
+                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSDAGER_ALENEOMSORG.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON

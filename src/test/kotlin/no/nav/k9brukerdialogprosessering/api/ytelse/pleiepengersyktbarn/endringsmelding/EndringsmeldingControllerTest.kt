@@ -122,7 +122,7 @@ class EndringsmeldingControllerTest {
 
         mockMvc.post("/pleiepenger-sykt-barn/endringsmelding/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN.name)
+                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -174,7 +174,7 @@ class EndringsmeldingControllerTest {
 
         mockMvc.post("/pleiepenger-sykt-barn/endringsmelding/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN.name)
+                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON

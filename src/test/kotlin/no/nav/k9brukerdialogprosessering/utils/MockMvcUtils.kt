@@ -30,7 +30,7 @@ object MockMvcUtils {
 
         post("$ytelseUrl/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, ytelse.name)
+                set(NavHeaders.BRUKERDIALOG_YTELSE, ytelse.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
                 setBearerAuth(token.serialize())
             }

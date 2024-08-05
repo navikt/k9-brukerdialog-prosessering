@@ -75,7 +75,7 @@ class PleiepengerLivetsSluttfaseControllerTest {
 
         mockMvc.post("/pleiepenger-livets-sluttfase/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE.name)
+                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -134,7 +134,7 @@ class PleiepengerLivetsSluttfaseControllerTest {
         )
         mockMvc.post("/pleiepenger-livets-sluttfase/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_SYKT_BARN.name)
+                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
