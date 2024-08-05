@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
@@ -12,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder
 
 @Service
 class K9BrukerdialogCacheService(
-    private val k9BrukerdialogCacheRestTemplate: RestTemplate
+    private val k9BrukerdialogCacheRestTemplate: RestTemplate,
 ) {
 
     private companion object {
@@ -51,6 +52,9 @@ class K9BrukerdialogCacheService(
             onSuccess = { cacheResponse: CacheResponse? -> cacheResponse },
             onFailure = { error: Throwable ->
                 if (error is RestClientException) {
+                    if (error is HttpClientErrorException.NotFound) {
+                        return null
+                    }
                     logger.error("Feil ved henting av mellomlagret søknad. Feilmelding: ${error.message}")
                 }
                 throw RuntimeException("Feil ved henting av mellomlagret søknad.", error)
