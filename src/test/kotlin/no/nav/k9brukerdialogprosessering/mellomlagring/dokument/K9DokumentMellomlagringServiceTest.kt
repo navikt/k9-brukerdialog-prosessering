@@ -1,12 +1,9 @@
-package no.nav.k9brukerdialogprosessering.mellomlagring
+package no.nav.k9brukerdialogprosessering.mellomlagring.dokument
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import kotlinx.coroutines.runBlocking
-import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.Dokument
-import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.DokumentEier
-import no.nav.k9brukerdialogprosessering.mellomlagring.dokument.K9DokumentMellomlagringService
 import no.nav.k9brukerdialogprosessering.utils.WireMockServerUtils.stubLagreDokument
 import no.nav.k9brukerdialogprosessering.utils.WireMockServerUtils.stubSlettDokument
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
