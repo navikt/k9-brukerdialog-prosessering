@@ -25,6 +25,7 @@ class K9BrukerdialogCacheService(
     }
 
     fun mellomlagreSøknad(cacheRequest: CacheRequest): CacheResponse {
+        logger.info("DEBUG: POST $cacheUrl. Body: {}", cacheRequest)
         return kotlin.runCatching {
             k9BrukerdialogCacheRestTemplate.postForEntity(
                 cacheUrl.path,
