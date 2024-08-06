@@ -1,16 +1,21 @@
 package no.nav.k9brukerdialogprosessering.mellomlagring.soknad
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
+import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
 import no.nav.k9brukerdialogprosessering.http.HeadersToMDCFilterBean
 import no.nav.k9brukerdialogprosessering.utils.TokenTestUtils.mockContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
+import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.ComponentScan
@@ -36,6 +41,9 @@ import java.util.*
 class MellomlagringControllerTest {
 
     @Autowired
+    private lateinit var objectMapper: ObjectMapper
+
+    @Autowired
     private lateinit var mockMvc: MockMvc
 
     @MockkBean
@@ -43,6 +51,10 @@ class MellomlagringControllerTest {
 
     @MockkBean
     private lateinit var springTokenValidationContextHolder: SpringTokenValidationContextHolder
+
+    private companion object {
+        private val logger = LoggerFactory.getLogger(MellomlagringControllerTest::class.java)
+    }
 
     @BeforeEach
     fun setUp() {
@@ -212,6 +224,22 @@ class MellomlagringControllerTest {
         }.andExpect {
             status { isAccepted() }
         }
+    }
+
+    @Test
+    fun name() {
+        val deserialized = objectMapper.readValue<Map<String, Any>>("{}")
+        val serialized = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(
+            CacheRequest(
+                nøkkelPrefiks = "psb_123",
+                verdi = JSONObject(deserialized).toString(),
+                ytelse = Ytelse.ETTERSENDING,
+                utløpsdato = ZonedDateTime.now(),
+                opprettet = ZonedDateTime.now(),
+                endret = null
+            )
+        )
+        logger.info("Deserialized: {}. Serialized: {}", deserialized, serialized)
     }
 }
 
