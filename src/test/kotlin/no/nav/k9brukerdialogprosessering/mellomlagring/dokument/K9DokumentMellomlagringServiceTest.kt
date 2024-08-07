@@ -37,7 +37,7 @@ class K9DokumentMellomlagringServiceTest {
     fun `lagreDokument`(): Unit = runBlocking {
         val dokument = Dokument(
             eier = DokumentEier(eiersFødselsnummer = "123456"),
-            content = "som etext as bytearray".encodeToByteArray(),
+            content = "some text as bytearray".encodeToByteArray(),
             contentType = MediaType.APPLICATION_PDF_VALUE,
             title = "some pdf-file"
         )

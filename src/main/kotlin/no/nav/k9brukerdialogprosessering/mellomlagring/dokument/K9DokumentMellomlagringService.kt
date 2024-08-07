@@ -8,6 +8,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
+import org.springframework.http.RequestEntity
 import org.springframework.stereotype.Service
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestClientException
@@ -130,11 +131,11 @@ class K9DokumentMellomlagringService(
             .toUri()
 
         kotlin.runCatching {
-            k9MellomlagringRestTemplate.postForEntity(
-                persisterVedleggUrl.path,
-                HttpEntity(eier),
-                Unit::class.java
-            )
+            val requestEntity = RequestEntity
+                .put(persisterVedleggUrl)
+                .body(eier)
+
+            k9MellomlagringRestTemplate.exchange(requestEntity, Unit::class.java)
         }
             .fold(
                 { _ -> logger.info("Vellykket persistering av vedlegg") },
@@ -172,10 +173,12 @@ class K9DokumentMellomlagringService(
             .toUri()
 
         kotlin.runCatching {
+            val requestEntity = RequestEntity
+                .put(fjernHoldPåPersisterteDokumentUrl)
+                .body(dokumentEier)
+
             k9MellomlagringRestTemplate.exchange(
-                fjernHoldPåPersisterteDokumentUrl.path,
-                HttpMethod.PUT,
-                HttpEntity(dokumentEier),
+                requestEntity,
                 Unit::class.java
             )
 
