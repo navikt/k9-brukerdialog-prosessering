@@ -132,7 +132,7 @@ class K9DokumentMellomlagringService(
 
         kotlin.runCatching {
             val requestEntity = RequestEntity
-                .put(persisterVedleggUrl)
+                .put(persisterVedleggUrl.path)
                 .body(eier)
 
             k9MellomlagringRestTemplate.exchange(requestEntity, Unit::class.java)
@@ -174,7 +174,7 @@ class K9DokumentMellomlagringService(
 
         kotlin.runCatching {
             val requestEntity = RequestEntity
-                .put(fjernHoldPåPersisterteDokumentUrl)
+                .put(fjernHoldPåPersisterteDokumentUrl.path)
                 .body(dokumentEier)
 
             k9MellomlagringRestTemplate.exchange(
