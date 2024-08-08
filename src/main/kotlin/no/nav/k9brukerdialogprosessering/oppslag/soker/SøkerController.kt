@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.oppslag.soker
 
+import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.config.Issuers
 import no.nav.k9brukerdialogprosessering.utils.NavHeaders
 import no.nav.security.token.support.core.api.ProtectedWithClaims
@@ -17,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController
 class SøkerController(private val søkerService: SøkerService) {
 
     @GetMapping
-    suspend fun hentSøker(
+    fun hentSøker(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
-    ): Søker {
-        return søkerService.hentSøker()
+    ): Søker = runBlocking {
+        søkerService.hentSøker()
     }
 }
