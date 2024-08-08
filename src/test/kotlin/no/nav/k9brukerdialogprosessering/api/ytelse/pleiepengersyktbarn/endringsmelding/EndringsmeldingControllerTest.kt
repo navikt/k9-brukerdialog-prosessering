@@ -2,11 +2,16 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.endring
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.coEvery
+import io.mockk.every
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
 import no.nav.k9brukerdialogprosessering.api.ytelse.Ytelse
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.SøknadUtils.Companion.defaultK9FormatPSB
+import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.SøknadUtils.Companion.defaultK9SakInnsynSøknad
 import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration
+import no.nav.k9brukerdialogprosessering.innsyn.Barn
 import no.nav.k9brukerdialogprosessering.innsyn.InnsynService
 import no.nav.k9brukerdialogprosessering.utils.CallIdGenerator
 import no.nav.k9brukerdialogprosessering.utils.NavHeaders
@@ -23,6 +28,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -70,6 +76,21 @@ class EndringsmeldingControllerTest {
 
     @Test
     fun `Endringsmelding med endringer innenfor eksisterende perioder er OK`() {
+        coEvery { innsynService.hentSøknadsopplysningerForBarn(any()) } returns defaultK9SakInnsynSøknad(
+            barn = Barn(
+                fødselsdato = LocalDate.parse("2000-08-27"),
+                fornavn = "BARNESEN",
+                mellomnavn = "EN",
+                etternavn = "BARNESEN",
+                aktørId = "1000000000001",
+                identitetsnummer = barnIdentitetsnummer
+            ),
+            søknad = defaultK9FormatPSB()
+        )
+        every { innsendingCache.put(any()) } returns Unit
+        coEvery { innsendingService.registrer(any(), any()) } returns Unit
+        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+
         val søknadId = UUID.randomUUID().toString()
         val mottattDato = ZonedDateTime.parse("2021-11-03T07:12:05.530Z")
 

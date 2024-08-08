@@ -1,5 +1,18 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn
 
+import no.nav.k9.søknad.Søknad
+import no.nav.k9.søknad.felles.Versjon
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer
+import no.nav.k9.søknad.felles.type.SøknadId
+import no.nav.k9.søknad.ytelse.psb.v1.ArbeiderIPeriodenSvar
+import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
+import no.nav.k9.søknad.ytelse.psb.v1.UkjentArbeidsforhold
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Land
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Næringstype
 import no.nav.k9brukerdialogprosessering.api.ytelse.fellesdomene.Regnskapsfører
@@ -34,6 +47,8 @@ import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.d
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.Arbeidsforhold
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.arbeid.NormalArbeidstid
 import no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad.domene.Årsak
+import no.nav.k9brukerdialogprosessering.innsyn.Barn
+import no.nav.k9brukerdialogprosessering.innsyn.K9SakInnsynSøknad
 import no.nav.k9brukerdialogprosessering.oppslag.soker.Søker
 import java.net.URI
 import java.time.Duration
@@ -268,6 +283,74 @@ class SøknadUtils {
             utenlandskNæring = listOf(),
             harVærtEllerErVernepliktig = true,
             dataBruktTilUtledningAnnetData = "{\"string\": \"tekst\", \"boolean\": false, \"number\": 1, \"array\": [1,2,3], \"object\": {\"key\": \"value\"}}"
+        )
+
+        fun defaultK9FormatPSB(
+            søknadId: UUID = UUID.randomUUID(),
+            søknadsPeriode: List<no.nav.k9.søknad.felles.type.Periode> = listOf(
+                no.nav.k9.søknad.felles.type.Periode(
+                    LocalDate.parse("2021-01-01"),
+                    LocalDate.parse("2021-01-01")
+                )
+            ),
+            arbeidstid: Arbeidstid = Arbeidstid().medArbeidstaker(
+                listOf(
+                    Arbeidstaker()
+                        .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("12345678910"))
+                        .medOrganisasjonsnummer(Organisasjonsnummer.of("926032925"))
+                        .medArbeidstidInfo(
+                            ArbeidstidInfo().medPerioder(
+                                mapOf(
+                                    no.nav.k9.søknad.felles.type.Periode(
+                                        LocalDate.parse("2018-01-01"),
+                                        LocalDate.parse("2020-01-05")
+                                    ) to ArbeidstidPeriodeInfo()
+                                        .medJobberNormaltTimerPerDag(Duration.ofHours(8))
+                                        .medFaktiskArbeidTimerPerDag(Duration.ofHours(4)),
+                                    no.nav.k9.søknad.felles.type.Periode(
+                                        LocalDate.parse("2020-01-06"),
+                                        LocalDate.parse("2020-01-10")
+                                    ) to ArbeidstidPeriodeInfo()
+                                        .medJobberNormaltTimerPerDag(Duration.ofHours(8))
+                                        .medFaktiskArbeidTimerPerDag(Duration.ofHours(2))
+                                )
+                            )
+                        )
+                )
+            ),
+        ) = Søknad(
+
+            SøknadId.of(søknadId.toString()),
+            Versjon.of("1.0.0"),
+            ZonedDateTime.parse("2020-01-01T10:00:00Z"),
+            no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of("12345678910")),
+            PleiepengerSyktBarn()
+                .medSøknadsperiode(søknadsPeriode)
+                .medSøknadInfo(
+                    DataBruktTilUtledning(
+                        true, true, true, true, null, true,
+                        listOf(
+                            UkjentArbeidsforhold()
+                                .medOrganisasjonsnummer(Organisasjonsnummer.of("926032925"))
+                                .medErAnsatt(true)
+                                .medArbeiderIPerioden(ArbeiderIPeriodenSvar.HELT_FRAVÆR)
+                                .medNormalarbeidstid(
+                                    no.nav.k9.søknad.ytelse.psb.v1.NormalArbeidstid()
+                                        .medTimerPerUke(Duration.ofHours(8))
+                                )
+                        )
+                    )
+                )
+                .medBarn(
+                    no.nav.k9.søknad.felles.personopplysninger.Barn()
+                        .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("02119970079"))
+                )
+                .medArbeidstid(arbeidstid)
+        )
+
+        fun defaultK9SakInnsynSøknad(barn: Barn, søknad: Søknad) = K9SakInnsynSøknad(
+            barn = barn,
+            søknad = søknad
         )
     }
 }

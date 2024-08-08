@@ -1,6 +1,7 @@
 package no.nav.k9brukerdialogprosessering.api.ytelse.ettersending
 
 import jakarta.validation.Valid
+import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
@@ -45,11 +46,11 @@ class EttersendingController(
 
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    suspend fun innsending(
+    fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @Valid @RequestBody ettersendelse: Ettersendelse,
-    ) {
+    ) = runBlocking {
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${ettersendelse.ytelse()}"
 

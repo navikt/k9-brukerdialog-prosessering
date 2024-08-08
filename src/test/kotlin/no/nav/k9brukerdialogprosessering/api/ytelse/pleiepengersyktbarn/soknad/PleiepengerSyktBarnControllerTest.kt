@@ -2,6 +2,8 @@ package no.nav.k9brukerdialogprosessering.api.ytelse.pleiepengersyktbarn.soknad
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.coEvery
+import io.mockk.every
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingCache
 import no.nav.k9brukerdialogprosessering.api.innsending.InnsendingService
 import no.nav.k9brukerdialogprosessering.api.ytelse.MetrikkService
@@ -77,6 +79,11 @@ class PleiepengerSyktBarnControllerTest {
 
     @Test
     fun `Innsending av søknad er OK`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        every { innsendingCache.put(any()) } returns Unit
+        coEvery { innsendingService.registrer(any(), any()) } returns Unit
+        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+
         val defaultSøknad = SøknadUtils.defaultSøknad()
 
         mockMvc.post("/pleiepenger-sykt-barn/innsending") {

@@ -1,5 +1,6 @@
 package no.nav.k9brukerdialogprosessering.oppslag.barn
 
+import kotlinx.coroutines.runBlocking
 import no.nav.k9brukerdialogprosessering.config.Issuers
 import no.nav.k9brukerdialogprosessering.utils.NavHeaders
 import no.nav.security.token.support.core.api.ProtectedWithClaims
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 class BarnController(private val barnService: BarnService) {
 
     @GetMapping
-    suspend fun hentBarn(@RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String): List<BarnOppslag> {
-        return barnService.hentBarn()
+    fun hentBarn(@RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String): List<BarnOppslag>  = runBlocking {
+        barnService.hentBarn()
     }
 }
