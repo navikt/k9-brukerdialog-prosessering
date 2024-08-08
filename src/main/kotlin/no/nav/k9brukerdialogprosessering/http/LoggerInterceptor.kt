@@ -19,8 +19,9 @@ class LoggerInterceptor(private val tokenValidationContextHolder: TokenValidatio
 
         val method = request.method
         val requestURI = request.requestURI
-        val issuer = jwtToken?.let { "[${jwtToken.issuer}]" }
-        logger.info("Request $method $requestURI $issuer")
+        val issuer = jwtToken?.let { "[${jwtToken.issuer}]" } ?: ""
+        val requestMessage = "--> Request $method $requestURI $issuer"
+        logger.info(requestMessage)
         return super.preHandle(request, response, handler)
     }
 
@@ -33,7 +34,7 @@ class LoggerInterceptor(private val tokenValidationContextHolder: TokenValidatio
         val status = response.status
         val method = request.method
         val requestURI = request.requestURI
-        logger.info("Response $status $method $requestURI")
+        logger.info("<-- Response $status $method $requestURI")
         super.postHandle(request, response, handler, modelAndView)
     }
 }
