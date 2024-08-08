@@ -21,6 +21,7 @@ import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.dom
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Bekreftelser
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Bosted
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.FraværÅrsak
+import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Frilans
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.JaNei
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.Næringstyper
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingsnf.domene.OMPUtbetalingSNFSoknadMottatt
@@ -151,6 +152,11 @@ internal object OMPUtbetalingSNFSøknadUtils {
         bekreftelser = Bekreftelser(
             harBekreftetOpplysninger = JaNei.Ja,
             harForståttRettigheterOgPlikter = JaNei.Ja
+        ),
+        frilans = Frilans(
+            startdato = LocalDate.parse("2022-01-01"),
+            sluttdato = LocalDate.parse("2022-10-01"),
+            jobberFortsattSomFrilans = false
         ),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
             næringstype = Næringstyper.FISKE,

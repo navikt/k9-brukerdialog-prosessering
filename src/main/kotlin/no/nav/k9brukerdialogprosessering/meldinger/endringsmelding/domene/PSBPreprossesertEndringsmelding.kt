@@ -1,11 +1,11 @@
 package no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.domene
 
 import no.nav.k9.søknad.Søknad
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
-import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Navn
 import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import java.time.ZonedDateTime
@@ -47,5 +47,5 @@ data class PSBPreprossesertEndringsmelding(
         dokumentId = dokumenter()
     )
 
-    override fun tilK9DittnavVarsel(metadata: Metadata): K9Beskjed? = null
+    override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed? = null
 }

@@ -1,32 +1,94 @@
 KAFKA_BROKERS: localhost:9092 # placeholder
 K9_MELLOMLAGRING_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-mellomlagring-mock
 K9_JOARK_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-joark-mock
+K9_SAK_INNSYN_API_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-sak-innsyn-api-mock
+K9_BRUKERDIALOG_CACHE_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-brukerdialog-cache-mock
+K9_SELVBETJENING_OPPSLAG_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-selvbetjening-oppslag-mock
 
 no.nav:
   security.jwt:
-      client:
-        registration:
-          azure-k9-joark:
-            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
-            grant-type: client_credentials
-            scope: api://dev-gcp.k9-joark/.default
-            authentication:
-              client-auth-method: private_key_jwt
-              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
-              client-jwk: src/test/resources/private-jwk.json
-          azure-k9-mellomlagring:
-            token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
-            grant-type: client_credentials
-            scope: api://dev-gcp.k9-mellomlagring/.default
-            authentication:
-              client-auth-method: private_key_jwt
-              client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
-              client-jwk: src/test/resources/private-jwk.json
+    issuer:
+      tokenx:
+        discoveryurl: http://localhost:${mock-oauth2-server.port}/tokenx/.well-known/openid-configuration
+        accepted_audience: aud-localhost
+    client:
+      registration:
+        azure-k9-joark:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: client_credentials
+          scope: api://dev-gcp.k9-joark/.default
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+
+        azure-k9-mellomlagring:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: client_credentials
+          scope: api://dev-gcp.k9-mellomlagring/.default
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+        tokenx-k9-mellomlagring:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: k9-mellomlagring
+
+        tokenx-k9-sak-innsyn-api:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: k9-sak-innsyn-api
+
+        tokenx-k9-selvbetjening-oppslag:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: k9-selvbetjening-oppslag
+
+        tokenx-k9-brukerdialog-cache:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: k9-brukerdialog-cache
+
+  cache:
+    barn:
+      max-size: 10
+      expiry-in-minutes: 0
+    innsending:
+      expiry-in-seconds: 1
+
+  mellomlagring:
+    søknad_tid_timer: 1
 
   kafka:
     application-id: k9-brukerdialog-prosessering
     retries: 5
     retry-backoff-ms: 100 # 100 ms
+
+    producer:
+      client-id: k9-brukerdialog-prosessering-${random.uuid}
+      transaction-id-prefix: tx-k9-brukerdialog-prosessering-${random.uuid}
+
     streams:
       psb-soknad-preprosessering:
         auto-offset-reset: earliest

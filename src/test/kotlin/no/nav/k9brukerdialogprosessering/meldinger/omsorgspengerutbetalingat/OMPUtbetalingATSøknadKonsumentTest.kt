@@ -1,111 +1,56 @@
 package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerutbetalingat
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
-import io.mockk.verify
-import kotlinx.coroutines.runBlocking
-import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration
+import io.mockk.coVerify
+import no.nav.k9brukerdialogprosessering.AbstractIntegrationTest
+import no.nav.k9brukerdialogprosessering.api.ytelse.omsorgspengerutbetalingarbeidstaker.SøknadUtils
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
+import no.nav.k9brukerdialogprosessering.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
+import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
-import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsResponse
-import no.nav.k9brukerdialogprosessering.journalforing.K9JoarkService
-import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.kafka.types.TopicEntry
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_CLEANUP_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_PREPROSESSERT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.omsorgspengerutbetalingat.utils.OMPUtbetalingATSøknadUtils
-import no.nav.k9brukerdialogprosessering.mellomlagring.K9MellomlagringService
-import no.nav.k9brukerdialogprosessering.utils.KafkaIntegrationTest
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.leggPåTopic
 import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.lesMelding
-import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaConsumer
-import no.nav.k9brukerdialogprosessering.utils.KafkaUtils.opprettKafkaProducer
-import org.apache.kafka.clients.consumer.Consumer
-import org.apache.kafka.clients.producer.Producer
+import no.nav.k9brukerdialogprosessering.utils.MockMvcUtils.sendInnSøknad
+import no.nav.k9brukerdialogprosessering.utils.SøknadUtils.Companion.metadata
+import no.nav.k9brukerdialogprosessering.utils.TokenTestUtils.hentToken
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
-import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.kafka.test.EmbeddedKafkaBroker
 import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
 
-@KafkaIntegrationTest
-class OMPUtbetalingATSøknadKonsumentTest {
+class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
 
-    @Autowired
-    private lateinit var mapper: ObjectMapper
-
-    @Autowired
-    private lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
-
-    @MockkBean(relaxed = true)
-    private lateinit var k9MellomlagringService: K9MellomlagringService
-
-    @MockkBean(relaxed = true)
-    private lateinit var k9JoarkService: K9JoarkService
-
-    lateinit var producer: Producer<String, Any>
-    lateinit var consumer: Consumer<String, String>
-    lateinit var k9DittnavVarselConsumer: Consumer<String, String>
-
-    @BeforeAll
-    fun setUp() {
-        producer = embeddedKafkaBroker.opprettKafkaProducer()
-        consumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "omsorgspengerutbetaling-arbeidstaker", topics = listOf(
-                OMP_UTB_AT_MOTTATT_TOPIC, OMP_UTB_AT_PREPROSESSERT_TOPIC, OMP_UTB_AT_CLEANUP_TOPIC
-            )
-        )
-        k9DittnavVarselConsumer = embeddedKafkaBroker.opprettKafkaConsumer(
-            groupPrefix = "k9-dittnav-varsel",
-            topics = listOf(DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC)
-        )
-    }
-
-    @AfterAll
-    fun tearDown() {
-        producer.close()
-        consumer.close()
-        k9DittnavVarselConsumer.close()
-    }
+    override val consumerGroupPrefix = "omsorgspengerutbetaling-arbeidstaker"
+    override val consumerGroupTopics = listOf(
+        OMP_UTB_AT_MOTTATT_TOPIC, OMP_UTB_AT_PREPROSESSERT_TOPIC, OMP_UTB_AT_CLEANUP_TOPIC
+    )
 
     @Test
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
+        val søker = mockSøker()
+        mockBarn()
+        mockLagreDokument()
+        mockJournalføring()
+
         val søknadId = UUID.randomUUID().toString()
-        val mottattString = "2020-01-01T10:30:15.000Z"
-        val mottatt = ZonedDateTime.parse(mottattString)
-        val søknadMottatt = OMPUtbetalingATSøknadUtils.defaultSøknad(
-            søknadId = søknadId,
-            mottatt = mottatt
-        )
+        mockMvc.sendInnSøknad(SøknadUtils.defaultSøknad.copy(søknadId = søknadId), mockOAuth2Server.hentToken())
 
-        val correlationId = UUID.randomUUID().toString()
-        val metadata = Metadata(version = 1, correlationId = correlationId)
-        val topicEntry = TopicEntry(metadata, søknadMottatt)
-        val topicEntryJson = mapper.writeValueAsString(topicEntry)
-
-        val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { k9MellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map { URI("http://localhost:8080/dokument/$it") })
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
-
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTB_AT_MOTTATT_TOPIC)
-        verify(exactly = 1, timeout = 120 * 1000) {
-            runBlocking {
-                k9MellomlagringService.slettDokumenter(any(), any())
-            }
+        coVerify(exactly = 1, timeout = 120 * 1000) {
+            k9DokumentMellomlagringService.slettDokumenter(any(), any())
         }
 
         k9DittnavVarselConsumer.lesMelding(
             key = søknadId,
-            topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC,
-            maxWaitInSeconds = 40
+            topic = K9_DITTNAV_VARSEL_TOPIC
         ).value().assertDittnavVarsel(
             K9Beskjed(
                 metadata = metadata,
@@ -113,7 +58,7 @@ class OMPUtbetalingATSøknadKonsumentTest {
                 tekst = "Søknad om utbetaling av omsorgspenger er mottatt.",
                 link = null,
                 dagerSynlig = 7,
-                søkerFødselsnummer = søknadMottatt.søkerFødselsnummer(),
+                søkerFødselsnummer = søker.fødselsnummer,
                 eventId = "testes ikke",
                 ytelse = "OMSORGSPENGER_UT_ARBEIDSTAKER",
             )
@@ -123,18 +68,18 @@ class OMPUtbetalingATSøknadKonsumentTest {
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val søknadId = UUID.randomUUID().toString()
-        val mottattString = "2020-01-01T10:30:15.000Z"
-        val mottatt = ZonedDateTime.parse(mottattString)
+        val mottattString = "2020-01-01T10:30:15Z"
+        val mottatt = ZonedDateTime.parse(mottattString, zonedDateTimeFormatter)
         val søknadMottatt = OMPUtbetalingATSøknadUtils.defaultSøknad(
             søknadId = søknadId,
             mottatt = mottatt
         )
         val correlationId = UUID.randomUUID().toString()
-        val metadata = Metadata(version = 1, correlationId = correlationId)
+        val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
-        val topicEntryJson = mapper.writeValueAsString(topicEntry)
+        val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
-        coEvery { k9MellomlagringService.lagreDokument(any()) }
+        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
@@ -143,7 +88,7 @@ class OMPUtbetalingATSøknadKonsumentTest {
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_UTB_AT_MOTTATT_TOPIC)
         val lesMelding =
-            consumer.lesMelding(key = søknadId, topic = OMP_UTB_AT_PREPROSESSERT_TOPIC, maxWaitInSeconds = 40).value()
+            consumer.lesMelding(key = søknadId, topic = OMP_UTB_AT_PREPROSESSERT_TOPIC).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)

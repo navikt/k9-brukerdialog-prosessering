@@ -1,11 +1,11 @@
 package no.nav.k9brukerdialogprosessering.meldinger.omsorgspengermidlertidigalene.domene
 
 import no.nav.k9.søknad.Søknad
+import no.nav.k9brukerdialogprosessering.common.MetaInfo
 import no.nav.k9brukerdialogprosessering.common.Ytelse
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.K9Beskjed
 import no.nav.k9brukerdialogprosessering.innsending.Preprosessert
 import no.nav.k9brukerdialogprosessering.journalforing.JournalføringsRequest
-import no.nav.k9brukerdialogprosessering.kafka.types.Metadata
 import no.nav.k9brukerdialogprosessering.meldinger.felles.domene.Søker
 import java.time.ZonedDateTime
 import java.util.*
@@ -58,7 +58,7 @@ data class OMPMidlertidigAleneSoknadPreprosessert(
         dokumentId = dokumenter()
     )
 
-    override fun tilK9DittnavVarsel(metadata: Metadata): K9Beskjed = K9Beskjed(
+    override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,
         grupperingsId = søknadId,
         tekst = "Vi har mottatt søknad fra deg om ekstra omsorgsdager når den andre forelderen ikke kan ha tilsyn med barn.",

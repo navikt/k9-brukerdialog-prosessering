@@ -6,15 +6,39 @@
   "minReplicas": "1",
   "maxReplicas": "2",
   "kafkaPool": "nav-dev",
+  "ingresses": [
+    "https://k9-brukerdialog-prosessering.intern.dev.nav.no"
+  ],
+  "inboundRules": [
+    {
+      "app": "tokenx-token-generator",
+      "namespace": "aura",
+      "cluster": "dev-gcp"
+    }
+  ],
   "env": {
     "SERVER_PORT": "8080",
     "SPRING_APPLICATION_NAME": "k9-brukerdialog-prosessering",
     "SPRING_PROFILES_ACTIVE": "dev-gcp",
+
     "K9_JOARK_BASE_URL": "http://k9-joark",
     "K9_JOARK_SCOPE": "api://dev-gcp.dusseldorf.k9-joark/.default",
+
     "K9_MELLOMLAGRING_BASE_URL": "http://k9-mellomlagring",
     "K9_MELLOMLAGRING_SCOPE": "api://dev-gcp.dusseldorf.k9-mellomlagring/.default",
-    "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering"
+    "K9_MELLOMLAGRING_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-mellomlagring",
+
+    "K9_SAK_INNSYN_API_BASE_URL": "http://k9-sak-innsyn-api",
+    "K9_SAK_INNSYN_API_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-sak-innsyn-api",
+
+    "K9_BRUKERDIALOG_CACHE_BASE_URL": "http://k9-brukerdialog-cache",
+    "K9_BRUKERDIALOG_CACHE_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-brukerdialog-cache",
+
+    "K9_SELVBETJENING_OPPSLAG_BASE_URL": "http://k9-selvbetjening-oppslag",
+    "K9_SELVBETJENING_OPPSLAG_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-selvbetjening-oppslag",
+
+    "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
+    "SWAGGER_ENABLED": "true"
   },
   "slack-channel": "sif-alerts-dev",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "
