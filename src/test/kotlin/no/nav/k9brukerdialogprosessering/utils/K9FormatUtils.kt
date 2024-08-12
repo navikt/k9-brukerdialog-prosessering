@@ -203,11 +203,11 @@ object K9FormatUtils {
                         Periode(
                             LocalDate.parse("2020-01-01"),
                             LocalDate.parse("2020-01-05")
-                        ) to LovbestemtFerie.LovbestemtFeriePeriodeInfo(),
+                        ) to LovbestemtFerie.LovbestemtFeriePeriodeInfo().medSkalHaFerie(true),
                         Periode(
                             LocalDate.parse("2020-01-06"),
                             LocalDate.parse("2020-01-10")
-                        ) to LovbestemtFerie.LovbestemtFeriePeriodeInfo()
+                        ) to LovbestemtFerie.LovbestemtFeriePeriodeInfo().medSkalHaFerie(true)
                     )
                 )
             )

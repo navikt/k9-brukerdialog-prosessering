@@ -56,4 +56,20 @@ object WireMockServerUtils {
                 )
         )
     }
+
+    fun WireMockServer.stubOpprettMellomlagring(
+        urlPathMatching: String,
+        requestBodyJson: String,
+        responseStatus: HttpStatus,
+        responseBodyJson: String,
+    ) {
+        stubFor(
+            WireMock.post(WireMock.urlPathMatching(".*$urlPathMatching"))
+                .withRequestBody(WireMock.equalToJson(requestBodyJson)).willReturn(
+                    WireMock.aResponse().withHeader("Content-Type", "application/json")
+                        .withStatus(responseStatus.value())
+                        .withBody(responseBodyJson)
+                )
+        )
+    }
 }

@@ -43,15 +43,20 @@ val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.6"
 val awailitilityKotlinVersion = "4.2.1"
 val springCloudContractVersion = "4.1.3"
+val orgJsonVersion = "20240303"
+val springdocVersion = "2.5.0"
 
 dependencies {
 	implementation("org.yaml:snakeyaml:2.2") {
 		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
 	}
 
-	implementation("no.nav.security:token-validation-core:$tokenSupportVersion")
+	implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
 	testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
+
+	// Swagger (openapi 3)
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
 
 	// K9-format
 	implementation("no.nav.k9:soknad:$k9FormatVersion")
@@ -88,11 +93,15 @@ dependencies {
 
 	// Jackson
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:$springCloudContractVersion")
 	testImplementation("org.awaitility:awaitility-kotlin:$awailitilityKotlinVersion")
+
+	// Diverse
+	implementation("org.json:json:$orgJsonVersion")
 
 }
 

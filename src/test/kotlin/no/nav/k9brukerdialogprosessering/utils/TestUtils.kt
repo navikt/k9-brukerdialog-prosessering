@@ -1,5 +1,8 @@
 package no.nav.k9brukerdialogprosessering.utils
 
+import jakarta.validation.ConstraintViolation
+import jakarta.validation.Validation
+import jakarta.validation.Validator
 import no.nav.k9brukerdialogprosessering.K9brukerdialogprosesseringApplication
 import no.nav.k9brukerdialogprosessering.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
@@ -30,6 +33,9 @@ import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopolo
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
 import no.nav.k9brukerdialogprosessering.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -117,7 +123,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
         K9_DITTNAV_VARSEL_TOPIC
     ]
 )
-@DirtiesContext
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension::class)
 @EnableMockOAuth2Server
@@ -127,3 +132,40 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 annotation class KafkaIntegrationTest
+
+object TestUtils {
+    val Validator: Validator = Validation.buildDefaultValidatorFactory().validator
+
+    fun Validator.verifiserIngenValideringsFeil(objct: Any) = validate(objct).verifiserIngenValideringsFeil()
+
+    fun Validator.verifiserValideringsFeil(data: Any, antallFeil: Int, vararg valideringsfeil: String) =
+        validate(data).verifiserValideringsFeil(antallFeil, *valideringsfeil)
+
+    private fun <E> MutableSet<ConstraintViolation<E>>.verifiserValideringsFeil(
+        antallFeil: Int,
+        vararg valideringsfeil: String,
+    ) {
+        assertThat(size).isEqualTo(antallFeil)
+        assertThat(this.map { it.message }).containsOnly(*valideringsfeil)
+    }
+
+    private fun <E> MutableSet<ConstraintViolation<E>>.verifiserIngenValideringsFeil() {
+        assertTrue(isEmpty())
+    }
+
+    fun List<String>.verifiserValideringsFeil(antallFeil: Int, valideringsfeil: List<String> = listOf()) {
+        assertEquals(antallFeil, this.size)
+        assertThat(this).contains(*valideringsfeil.toTypedArray())
+    }
+
+    fun List<String>.verifiserIngenValideringsFeil() {
+        assertTrue(isEmpty())
+    }
+
+    internal fun MutableList<String>.assertFeilPå(reason: List<String> = emptyList()) {
+        println(this)
+        assertEquals(reason.size, size)
+
+        forEach { reason.contains(it) }
+    }
+}
