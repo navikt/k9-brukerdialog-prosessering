@@ -123,7 +123,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
         K9_DITTNAV_VARSEL_TOPIC
     ]
 )
-@DirtiesContext
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension::class)
 @EnableMockOAuth2Server
