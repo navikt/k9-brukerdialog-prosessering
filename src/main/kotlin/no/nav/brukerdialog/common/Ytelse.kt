@@ -24,9 +24,9 @@ import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.OMPMidlertidi
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.PILSTopologyConfiguration.Companion.PILS_CLEANUP_TOPIC
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.PILSTopologyConfiguration.Companion.PILS_MOTTATT_TOPIC
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.PILSTopologyConfiguration.Companion.PILS_PREPROSESSERT_TOPIC
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
+import no.nav.brukerdialog.pleiepengersyktbarn.kafka.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
+import no.nav.brukerdialog.pleiepengersyktbarn.kafka.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
+import no.nav.brukerdialog.pleiepengersyktbarn.kafka.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
 
 enum class Ytelse(val tittel: String) {
     OMSORGSPENGER_UTVIDET_RETT("Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning"),
