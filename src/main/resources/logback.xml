@@ -31,7 +31,7 @@
         <appender-ref ref="stdout_json"/>
     </root>
 
-    <logger name="no.nav.k9brukerdialogprosessering" level="trace"/>
+    <logger name="no.nav.brukerdialog" level="trace"/>
     <logger name="org.apache" level="ERROR"/>
 
 </configuration>
