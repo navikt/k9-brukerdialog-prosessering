@@ -45,7 +45,7 @@ abstract class AbstractIntegrationTest {
     @MockkBean(relaxed = true)
     protected lateinit var k9DokumentMellomlagringService: K9DokumentMellomlagringService
 
-    @MockkBean(relaxed = true)
+    @MockkBean(relaxed = false)
     protected lateinit var k9JoarkService: K9JoarkService
 
     @MockkBean

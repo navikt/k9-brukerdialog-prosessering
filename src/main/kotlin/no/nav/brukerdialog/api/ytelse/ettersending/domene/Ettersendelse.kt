@@ -14,7 +14,7 @@ import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.mellomlagring.dokument.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.pleiepengersyktbarn.api.domene.hentIdentitetsnummerForBarn
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.api.domene.hentIdentitetsnummerForBarn
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
