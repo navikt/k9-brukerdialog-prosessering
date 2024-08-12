@@ -25,7 +25,6 @@ import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
 
-@KafkaIntegrationTest
 class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
 
     override val consumerGroupPrefix = "omsorgspenger-midlertidig-alene"
