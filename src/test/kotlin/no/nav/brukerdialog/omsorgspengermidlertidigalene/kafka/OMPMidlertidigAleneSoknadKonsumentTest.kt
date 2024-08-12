@@ -1,27 +1,23 @@
-package no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene
+package no.nav.brukerdialog.omsorgspengermidlertidigalene.kafka
 
 import io.mockk.coEvery
 import io.mockk.coVerify
 import no.nav.brukerdialog.AbstractIntegrationTest
-import no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.SøknadUtils
+import no.nav.brukerdialog.omsorgspengermidlertidigalene.utils.SøknadUtils
 import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
-import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
+import no.nav.brukerdialog.config.JacksonConfiguration
+import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_CLEANUP_TOPIC
-import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_MOTTATT_TOPIC
-import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_PREPROSESSERT_TOPIC
 import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.utils.OMPMidlertidigAleneSoknadUtils
 import no.nav.brukerdialog.utils.KafkaIntegrationTest
 import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
 import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
-import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.net.URI
@@ -33,7 +29,9 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
 
     override val consumerGroupPrefix = "omsorgspenger-midlertidig-alene"
     override val consumerGroupTopics = listOf(
-        OMP_MA_MOTTATT_TOPIC, OMP_MA_PREPROSESSERT_TOPIC, OMP_MA_CLEANUP_TOPIC
+        OMPMidlertidigAleneTopologyConfiguration.OMP_MA_MOTTATT_TOPIC,
+        OMPMidlertidigAleneTopologyConfiguration.OMP_MA_PREPROSESSERT_TOPIC,
+        OMPMidlertidigAleneTopologyConfiguration.OMP_MA_CLEANUP_TOPIC
     )
 
     @Test
@@ -52,10 +50,10 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
 
         k9DittnavVarselConsumer.lesMelding(
             key = søknadId,
-            topic = K9_DITTNAV_VARSEL_TOPIC
+            topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC
         ).value().assertDittnavVarsel(
             K9Beskjed(
-                metadata = metadata,
+                metadata = no.nav.brukerdialog.utils.SøknadUtils.metadata,
                 grupperingsId = søknadId,
                 tekst = "Vi har mottatt søknad fra deg om ekstra omsorgsdager når den andre forelderen ikke kan ha tilsyn med barn.",
                 link = null,
@@ -71,7 +69,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val søknadId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15Z"
-        val mottatt = ZonedDateTime.parse(mottattString, zonedDateTimeFormatter)
+        val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
         val søknadMottatt = OMPMidlertidigAleneSoknadUtils.defaultSøknad(
             søknadId = søknadId,
             mottatt = mottatt
@@ -88,9 +86,9 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
 
-        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMP_MA_MOTTATT_TOPIC)
+        producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OMPMidlertidigAleneTopologyConfiguration.OMP_MA_MOTTATT_TOPIC)
         val lesMelding =
-            consumer.lesMelding(key = søknadId, topic = OMP_MA_PREPROSESSERT_TOPIC).value()
+            consumer.lesMelding(key = søknadId, topic = OMPMidlertidigAleneTopologyConfiguration.OMP_MA_PREPROSESSERT_TOPIC).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
@@ -173,12 +171,11 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
         }
         """.trimIndent()
 
-}
-
-private fun String.assertDittnavVarsel(k9Beskjed: K9Beskjed) {
-    val k9BeskjedJson = JSONObject(this)
-    assertEquals(k9Beskjed.grupperingsId, k9BeskjedJson.getString("grupperingsId"))
-    assertEquals(k9Beskjed.tekst, k9BeskjedJson.getString("tekst"))
-    assertEquals(k9Beskjed.ytelse, k9BeskjedJson.getString("ytelse"))
-    assertEquals(k9Beskjed.dagerSynlig, k9BeskjedJson.getLong("dagerSynlig"))
+    private fun String.assertDittnavVarsel(k9Beskjed: K9Beskjed) {
+        val k9BeskjedJson = JSONObject(this)
+        Assertions.assertEquals(k9Beskjed.grupperingsId, k9BeskjedJson.getString("grupperingsId"))
+        Assertions.assertEquals(k9Beskjed.tekst, k9BeskjedJson.getString("tekst"))
+        Assertions.assertEquals(k9Beskjed.ytelse, k9BeskjedJson.getString("ytelse"))
+        Assertions.assertEquals(k9Beskjed.dagerSynlig, k9BeskjedJson.getLong("dagerSynlig"))
+    }
 }

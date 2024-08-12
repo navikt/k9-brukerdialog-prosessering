@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene
+package no.nav.brukerdialog.omsorgspengermidlertidigalene.pdf
 
 import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.utils.OMPMidlertidigAleneSoknadUtils
 import no.nav.brukerdialog.pdf.PDFGenerator

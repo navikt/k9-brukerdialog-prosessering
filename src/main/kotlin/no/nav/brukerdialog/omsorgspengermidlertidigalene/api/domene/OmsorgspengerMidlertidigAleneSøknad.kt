@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene
+package no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue

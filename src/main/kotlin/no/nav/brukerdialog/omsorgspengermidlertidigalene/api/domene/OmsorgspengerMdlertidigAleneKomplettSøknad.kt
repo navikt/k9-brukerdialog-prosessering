@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene
+package no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.api.innsending.KomplettInnsending

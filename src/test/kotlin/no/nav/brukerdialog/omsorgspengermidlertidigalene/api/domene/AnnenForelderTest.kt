@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene
+package no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene
 
 import no.nav.k9.søknad.JsonUtils
 import no.nav.brukerdialog.utils.TestUtils.Validator

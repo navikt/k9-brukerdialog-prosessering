@@ -1,7 +1,7 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene
+package no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene
 
 import no.nav.brukerdialog.api.ytelse.fellesdomene.Barn
-import no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.SøknadUtils
+import no.nav.brukerdialog.omsorgspengermidlertidigalene.utils.SøknadUtils
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker

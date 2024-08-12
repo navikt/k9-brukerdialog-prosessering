@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene
+package no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.constraints.AssertTrue
@@ -7,11 +7,11 @@ import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.ANNET
-import no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.FENGSEL
-import no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.INNLAGT_I_HELSEINSTITUSJON
-import no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.SYKDOM
-import no.nav.brukerdialog.api.ytelse.omsorgspengermidlertidigalene.domene.Situasjon.UTØVER_VERNEPLIKT
+import no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene.Situasjon.ANNET
+import no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene.Situasjon.FENGSEL
+import no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene.Situasjon.INNLAGT_I_HELSEINSTITUSJON
+import no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene.Situasjon.SYKDOM
+import no.nav.brukerdialog.omsorgspengermidlertidigalene.api.domene.Situasjon.UTØVER_VERNEPLIKT
 import no.nav.brukerdialog.utils.StringUtils
 import no.nav.brukerdialog.utils.erLikEllerEtter
 import java.time.LocalDate

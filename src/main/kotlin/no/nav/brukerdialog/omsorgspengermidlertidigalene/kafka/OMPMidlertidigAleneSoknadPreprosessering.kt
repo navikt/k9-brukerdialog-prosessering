@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene
+package no.nav.brukerdialog.omsorgspengermidlertidigalene.kafka
 
 import no.nav.brukerdialog.innsending.PreprosesseringsService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
@@ -6,7 +6,7 @@ import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor
 import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_PREPROSESSERING_STREAMS_BUILDER_NAME
+import no.nav.brukerdialog.omsorgspengermidlertidigalene.kafka.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_PREPROSESSERING_STREAMS_BUILDER_NAME
 import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.domene.OMPMidlertidigAleneSoknadMottatt
 import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.domene.OMPMidlertidigAleneSoknadPreprosessert
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
