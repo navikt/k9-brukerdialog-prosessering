@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.ettersendelse
+package no.nav.brukerdialog.ytelse.ettersendelse.kafka
 
 import no.nav.brukerdialog.innsending.CleanupService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
@@ -7,7 +7,7 @@ import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor
 import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.meldinger.ettersendelse.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_CLEANUP_STREAMS_BUILDER_NAME
+import no.nav.brukerdialog.ytelse.ettersendelse.kafka.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_CLEANUP_STREAMS_BUILDER_NAME
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.PreprosessertEttersendelse
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
 import org.apache.kafka.streams.StreamsBuilder

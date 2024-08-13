@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.ettersending.domene
+package no.nav.brukerdialog.ytelse.ettersendelse.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.constraints.PastOrPresent

@@ -4,7 +4,7 @@ import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.innsending.MottattMelding
 import no.nav.brukerdialog.innsending.PreprosesseringsData
-import no.nav.brukerdialog.meldinger.ettersendelse.EttersendelsePdfData
+import no.nav.brukerdialog.ytelse.ettersendelse.pdf.EttersendelsePdfData
 import no.nav.brukerdialog.meldinger.felles.domene.Søker
 import no.nav.brukerdialog.pdf.PdfData
 import java.time.ZonedDateTime

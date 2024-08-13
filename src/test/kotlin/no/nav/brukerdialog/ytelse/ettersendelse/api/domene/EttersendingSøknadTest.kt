@@ -1,13 +1,13 @@
-package no.nav.brukerdialog.api.ytelse.ettersending.domene
+package no.nav.brukerdialog.ytelse.ettersendelse.api.domene
 
 import no.nav.k9.ettersendelse.EttersendelseType
-import no.nav.brukerdialog.api.ytelse.ettersending.EttersendelseUtils.defaultEttersendelse
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
+import no.nav.brukerdialog.ytelse.ettersendelse.utils.EttersendingUtils.defaultEttersendelse
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 

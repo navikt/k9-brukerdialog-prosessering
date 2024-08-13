@@ -1,7 +1,7 @@
-package no.nav.brukerdialog.meldinger.ettersendelse
+package no.nav.brukerdialog.ytelse.ettersendelse.pdf
 
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.Søknadstype
-import no.nav.brukerdialog.meldinger.ettersendelse.utils.EttersendingUtils
+import no.nav.brukerdialog.ytelse.ettersendelse.utils.EttersendingUtils
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Assertions
@@ -33,7 +33,8 @@ class EttersendelsePdfGeneratorTest {
 
     @Test
     fun `informasjon om barn inkluderes ikke i pdf om det ikke er pleietrengende`() {
-        val html = generator.genererHTML(EttersendingUtils.defaultEttersendelse().copy(
+        val html = generator.genererHTML(
+            EttersendingUtils.defaultEttersendelse().copy(
                 pleietrengende = null
         ).pdfData())
         Assertions.assertFalse(html.contains("Pleietrengende"))

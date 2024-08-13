@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.ettersending.domene
+package no.nav.brukerdialog.ytelse.ettersendelse.api.domene
 
 import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.ettersendelse.EttersendelseType

@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.ettersending
+package no.nav.brukerdialog.ytelse.ettersendelse.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
@@ -9,12 +9,13 @@ import no.nav.brukerdialog.api.innsending.InnsendingCache
 import no.nav.brukerdialog.api.innsending.InnsendingService
 import no.nav.brukerdialog.api.ytelse.MetrikkService
 import no.nav.brukerdialog.api.ytelse.Ytelse
-import no.nav.brukerdialog.api.ytelse.ettersending.domene.Pleietrengende
+import no.nav.brukerdialog.ytelse.ettersendelse.api.domene.Pleietrengende
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.oppslag.barn.BarnService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
+import no.nav.brukerdialog.ytelse.ettersendelse.utils.EttersendingUtils.defaultEttersendelse
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -74,7 +75,7 @@ class EttersendingControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattSøknad(any()) } returns Unit
 
-        val ettersendelse = EttersendelseUtils.defaultEttersendelse
+        val ettersendelse = defaultEttersendelse
 
         mockMvc.post("/ettersending/innsending") {
             headers {
@@ -92,7 +93,7 @@ class EttersendingControllerTest {
 
     @Test
     fun `Innsending av ettersendelse med feile verdier responderer med bad request`() {
-        val ettersendelse = EttersendelseUtils.defaultEttersendelse
+        val ettersendelse = defaultEttersendelse
 
         val fødselsdatoIFremtiden = LocalDate.now().plusDays(1)
         val jsonPayload = objectMapper.writeValueAsString(
