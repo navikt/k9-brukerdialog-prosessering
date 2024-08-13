@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene
+package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene
 
 import no.nav.k9.søknad.JsonUtils
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag

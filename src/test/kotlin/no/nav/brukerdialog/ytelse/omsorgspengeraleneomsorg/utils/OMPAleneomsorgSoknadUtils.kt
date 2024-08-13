@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgspengeraleneomsorg.utils
+package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.utils
 
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon

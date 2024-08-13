@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene
+package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene
 
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
@@ -6,8 +6,8 @@ import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg.SISTE_2_ÅRENE
-import no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg.TIDLIGERE
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TidspunktForAleneomsorg.SISTE_2_ÅRENE
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TidspunktForAleneomsorg.TIDLIGERE
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn

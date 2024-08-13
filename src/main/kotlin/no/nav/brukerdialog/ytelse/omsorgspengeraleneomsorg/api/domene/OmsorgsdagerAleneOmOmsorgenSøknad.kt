@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene
+package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue

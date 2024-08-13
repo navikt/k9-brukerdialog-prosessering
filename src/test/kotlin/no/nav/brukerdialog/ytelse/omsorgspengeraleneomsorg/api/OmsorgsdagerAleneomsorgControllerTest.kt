@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg
+package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
@@ -8,9 +8,10 @@ import no.nav.brukerdialog.api.innsending.InnsendingCache
 import no.nav.brukerdialog.api.innsending.InnsendingService
 import no.nav.brukerdialog.api.ytelse.MetrikkService
 import no.nav.brukerdialog.api.ytelse.Ytelse
-import no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene.Barn
-import no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg
-import no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene.TypeBarn
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.utils.SøknadUtils
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.Barn
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TidspunktForAleneomsorg
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TypeBarn
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.oppslag.barn.BarnService
 import no.nav.brukerdialog.utils.CallIdGenerator

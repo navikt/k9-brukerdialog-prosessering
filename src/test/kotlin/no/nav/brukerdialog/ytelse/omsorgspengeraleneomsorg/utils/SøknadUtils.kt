@@ -1,9 +1,9 @@
-package no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg
+package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.utils
 
-import no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene.Barn
-import no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene.OmsorgsdagerAleneOmOmsorgenSøknad
-import no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene.TidspunktForAleneomsorg
-import no.nav.brukerdialog.api.ytelse.omsorgsdageraleneomsorg.domene.TypeBarn
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.Barn
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.OmsorgsdagerAleneOmOmsorgenSøknad
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TidspunktForAleneomsorg
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TypeBarn
 import no.nav.brukerdialog.config.JacksonConfiguration
 import java.time.LocalDate
 import java.time.ZonedDateTime

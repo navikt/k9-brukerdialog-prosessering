@@ -1,9 +1,9 @@
-package no.nav.brukerdialog.meldinger.omsorgspengeraleneomsorg
+package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.pdf
 
 import no.nav.brukerdialog.meldinger.omsorgspengeraleneomsorg.domene.Barn
 import no.nav.brukerdialog.meldinger.omsorgspengeraleneomsorg.domene.TidspunktForAleneomsorg
 import no.nav.brukerdialog.meldinger.omsorgspengeraleneomsorg.domene.TypeBarn
-import no.nav.brukerdialog.meldinger.omsorgspengeraleneomsorg.utils.OMPAleneomsorgSoknadUtils
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.utils.OMPAleneomsorgSoknadUtils
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Test

@@ -5,7 +5,7 @@ import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.innsending.MottattMelding
 import no.nav.brukerdialog.innsending.PreprosesseringsData
 import no.nav.brukerdialog.meldinger.felles.domene.Søker
-import no.nav.brukerdialog.meldinger.omsorgspengeraleneomsorg.OMPAleneomsorgSoknadPDFData
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.pdf.OMPAleneomsorgSoknadPDFData
 import java.time.ZonedDateTime
 
 data class OMPAleneomsorgSoknadMottatt(
