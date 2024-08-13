@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker
+package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
@@ -9,14 +9,16 @@ import no.nav.brukerdialog.api.innsending.InnsendingService
 import no.nav.brukerdialog.api.ytelse.MetrikkService
 import no.nav.brukerdialog.api.ytelse.Ytelse
 import no.nav.brukerdialog.api.ytelse.fellesdomene.Bekreftelser
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Barn
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.DineBarn
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.TypeBarn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.OmsorgspengerUtbetalingArbeidstakerController
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.DineBarn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.TypeBarn
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.oppslag.barn.BarnService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

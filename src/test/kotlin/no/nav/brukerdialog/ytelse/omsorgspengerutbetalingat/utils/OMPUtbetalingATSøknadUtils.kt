@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgspengerutbetalingat.utils
+package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.utils
 
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon

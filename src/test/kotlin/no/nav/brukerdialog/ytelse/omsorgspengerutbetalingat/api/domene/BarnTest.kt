@@ -1,6 +1,9 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
+package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.api.domene
 
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Barn.Companion.somK9BarnListe
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn.Companion.somK9BarnListe
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.DineBarn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.TypeBarn
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil

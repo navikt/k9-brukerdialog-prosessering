@@ -1,6 +1,9 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
+package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.api.domene
 
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.SøknadUtils
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.DineBarn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.TypeBarn
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.utils.SøknadUtils
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker

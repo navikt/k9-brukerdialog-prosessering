@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat
+package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.kafka
 
 import no.nav.brukerdialog.innsending.PreprosesseringsService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
@@ -6,7 +6,7 @@ import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor
 import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_PREPROSESSERING_STREAMS_BUILDER_NAME
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.kafka.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_PREPROSESSERING_STREAMS_BUILDER_NAME
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadPreprosessert
 import no.nav.brukerdialog.utils.HealthIndicatorUtils

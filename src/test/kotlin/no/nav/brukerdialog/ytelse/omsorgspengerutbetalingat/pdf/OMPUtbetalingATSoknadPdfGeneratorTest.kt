@@ -1,6 +1,6 @@
-package no.nav.brukerdialog.meldinger.omsorgspengerutbetalingat
+package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.pdf
 
-import no.nav.brukerdialog.meldinger.omsorgspengerutbetalingat.utils.OMPUtbetalingATSøknadUtils
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.utils.OMPUtbetalingATSøknadUtils
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Test

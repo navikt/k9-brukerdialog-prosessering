@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat
+package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.pdf
 
 import com.fasterxml.jackson.core.type.TypeReference
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID

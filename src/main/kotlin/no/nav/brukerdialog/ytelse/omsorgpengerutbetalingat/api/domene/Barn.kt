@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
+package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.constraints.NotBlank

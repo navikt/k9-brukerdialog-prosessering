@@ -8,7 +8,7 @@ import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.innsending.MottattMelding
 import no.nav.brukerdialog.innsending.PreprosesseringsData
 import no.nav.brukerdialog.meldinger.felles.domene.Søker
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATSoknadPDFData
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.pdf.OMPUtbetalingATSoknadPDFData
 import no.nav.brukerdialog.pdf.PdfData
 import java.time.Duration
 import java.time.LocalDate

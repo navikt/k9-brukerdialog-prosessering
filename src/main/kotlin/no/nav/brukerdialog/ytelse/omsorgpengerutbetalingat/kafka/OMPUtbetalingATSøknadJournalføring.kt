@@ -1,14 +1,13 @@
-package no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat
+package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.kafka
 
-import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
-import no.nav.brukerdialog.innsending.CleanupService
+import no.nav.brukerdialog.innsending.JournalføringsService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
 import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor
 import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_CLEANUP_STREAMS_BUILDER_NAME
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.kafka.OMPUtbetalingATTopologyConfiguration.Companion.OMP_UTB_AT_JOURNALFØRING_STREAMS_BUILDER_NAME
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadPreprosessert
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
 import org.apache.kafka.streams.StreamsBuilder
@@ -24,35 +23,35 @@ import org.springframework.retry.support.RetryTemplate
 import org.springframework.stereotype.Component
 
 @Component
-class OMPUtbetalingATSøknadCleanup(
-    private val cleanupService: CleanupService<OMPUtbetalingATSoknadPreprosessert>,
+class OMPUtbetalingATSøknadJournalføring(
+    private val journalføringsService: JournalføringsService,
+    private val ompUtbetalingAtPreprosessertTopic: Topic<TopicEntry<OMPUtbetalingATSoknadPreprosessert>>,
     private val ompUtbetalingAtCleanupTopic: Topic<TopicEntry<Cleanup<OMPUtbetalingATSoknadPreprosessert>>>,
-    private val k9DittnavVarselTopic: Topic<TopicEntry<K9Beskjed>>,
     private val retryTemplate: RetryTemplate,
-    @Qualifier(OMP_UTB_AT_CLEANUP_STREAMS_BUILDER_NAME) private val streamsBuilder: StreamsBuilder,
-    @Qualifier(OMP_UTB_AT_CLEANUP_STREAMS_BUILDER_NAME) private val streamsBuilderFactoryBean: StreamsBuilderFactoryBean
+    @Qualifier(OMP_UTB_AT_JOURNALFØRING_STREAMS_BUILDER_NAME) private val streamsBuilder: StreamsBuilder,
+    @Qualifier(OMP_UTB_AT_JOURNALFØRING_STREAMS_BUILDER_NAME) private val streamsBuilderFactoryBean: StreamsBuilderFactoryBean,
 ): HealthIndicator {
 
     private companion object {
-        private val STREAM_NAME = KafkaStreamName.OMP_UTB_AT_CLEANUP
-        private val logger = LoggerFactory.getLogger(OMPUtbetalingATSøknadCleanup::class.java)
+        private val STREAM_NAME = KafkaStreamName.OMP_UTB_AT_JOURNALFØRING
+        private val logger = LoggerFactory.getLogger(OMPUtbetalingATSøknadJournalføring::class.java)
     }
 
     @Bean
-    fun omsorgspengerUtbetalingArbeidstakerCleanupStream(): KStream<String, TopicEntry<Cleanup<OMPUtbetalingATSoknadPreprosessert>>> {
-        val stream: KStream<String, TopicEntry<Cleanup<OMPUtbetalingATSoknadPreprosessert>>> = streamsBuilder.stream(ompUtbetalingAtCleanupTopic.name, ompUtbetalingAtCleanupTopic.consumedWith)
+    fun omsorgspengerUtbetalingArbeidstakerJournalføringsStream(): KStream<String, TopicEntry<OMPUtbetalingATSoknadPreprosessert>> {
+        val stream = streamsBuilder
+            .stream(ompUtbetalingAtPreprosessertTopic.name, ompUtbetalingAtPreprosessertTopic.consumedWith)
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
-            .mapValues { _: String, value: TopicEntry<Cleanup<OMPUtbetalingATSoknadPreprosessert>> ->
+            .mapValues { _: String, value: TopicEntry<OMPUtbetalingATSoknadPreprosessert> ->
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
-                    val cleanup = cleanupService.cleanup(value.data)
-
-                    logger.info("Sender K9Beskjed viderer til ${k9DittnavVarselTopic.name}")
-                    cleanup.melding.tilK9DittnavVarsel(value.metadata)
+                    val preprosessertSøknad = value.data
+                    val journalførSøknad = journalføringsService.journalfør(preprosessertSøknad)
+                    Cleanup(value.metadata, preprosessertSøknad, journalførSøknad)
                 }
             }
-            .to(k9DittnavVarselTopic.name, k9DittnavVarselTopic.producedWith)
+            .to(ompUtbetalingAtCleanupTopic.name, ompUtbetalingAtCleanupTopic.producedWith)
 
         return stream
     }

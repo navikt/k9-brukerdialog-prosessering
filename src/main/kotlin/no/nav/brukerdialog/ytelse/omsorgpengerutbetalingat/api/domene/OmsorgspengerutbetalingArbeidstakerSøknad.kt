@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
+package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
@@ -18,8 +18,8 @@ import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted
 import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
 import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
 import no.nav.brukerdialog.api.ytelse.fellesdomene.Opphold
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Arbeidsgiver.Companion.somK9Fraværsperiode
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene.Barn.Companion.somK9BarnListe
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Arbeidsgiver.Companion.somK9Fraværsperiode
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn.Companion.somK9BarnListe
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.mellomlagring.dokument.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag

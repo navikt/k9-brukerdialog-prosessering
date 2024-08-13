@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutbetalingarbeidstaker.domene
+package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.api.innsending.KomplettInnsending
