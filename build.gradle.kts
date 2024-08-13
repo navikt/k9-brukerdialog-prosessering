@@ -2,10 +2,10 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.3.1"
-	id("io.spring.dependency-management") version "1.1.5"
-	kotlin("jvm") version "2.0.0"
-	kotlin("plugin.spring") version "2.0.0"
+	id("org.springframework.boot") version "3.3.2"
+	id("io.spring.dependency-management") version "1.1.6"
+	kotlin("jvm") version "2.0.10"
+	kotlin("plugin.spring") version "2.0.10"
 }
 
 group = "no.nav"
@@ -31,21 +31,21 @@ repositories {
 }
 
 val tokenSupportVersion = "5.0.1"
-val jsonassertVersion = "1.5.2"
+val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "9.4.0"
 val springMockkVersion = "4.0.2"
 val confluentVersion = "7.3.0"
-val logstashLogbackEncoderVersion = "7.4"
-val slf4jVersion = "2.0.13"
-val jacksonVersion = "2.17.1"
+val logstashLogbackEncoderVersion = "8.0"
+val slf4jVersion = "2.0.16"
+val jacksonVersion = "2.17.2"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.4.0"
-val retryVersion = "2.0.6"
-val awailitilityKotlinVersion = "4.2.1"
-val springCloudContractVersion = "4.1.3"
+val retryVersion = "2.0.7"
+val awailitilityKotlinVersion = "4.2.2"
+val springCloudContractVersion = "4.1.4"
 val orgJsonVersion = "20240303"
-val springdocVersion = "2.5.0"
+val springdocVersion = "2.6.0"
 
 dependencies {
 	implementation("org.yaml:snakeyaml:2.2") {
