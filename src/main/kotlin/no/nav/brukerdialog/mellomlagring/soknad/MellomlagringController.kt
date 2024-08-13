@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.mellomlagring.soknad
 
 import kotlinx.coroutines.runBlocking
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.config.Issuers
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers

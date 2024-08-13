@@ -16,7 +16,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.Uttak
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak.UttakPeriodeInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import no.nav.brukerdialog.api.innsending.Innsending
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.SYV_OG_EN_HALV_TIME
 import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsgiver.Companion.somK9Arbeidstaker

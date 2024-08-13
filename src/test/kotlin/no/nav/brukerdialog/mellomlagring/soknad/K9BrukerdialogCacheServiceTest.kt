@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.utils.WireMockServerUtils.stubOpprettMellomlagring
 import no.nav.security.mock.oauth2.MockOAuth2Server

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.api.innsending.Innsending
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.mellomlagring.dokument.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag

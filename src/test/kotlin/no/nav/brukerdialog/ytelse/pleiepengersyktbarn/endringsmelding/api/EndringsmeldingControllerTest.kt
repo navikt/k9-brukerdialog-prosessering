@@ -6,8 +6,8 @@ import io.mockk.coEvery
 import io.mockk.every
 import no.nav.brukerdialog.api.innsending.InnsendingCache
 import no.nav.brukerdialog.api.innsending.InnsendingService
-import no.nav.brukerdialog.api.ytelse.MetrikkService
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.metrikk.MetrikkService
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9FormatPSB
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9SakInnsynSøknad
 import no.nav.brukerdialog.config.JacksonConfiguration

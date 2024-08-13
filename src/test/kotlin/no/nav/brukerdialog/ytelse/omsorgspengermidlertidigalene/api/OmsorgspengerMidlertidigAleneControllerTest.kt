@@ -6,8 +6,8 @@ import io.mockk.coEvery
 import io.mockk.every
 import no.nav.brukerdialog.api.innsending.InnsendingCache
 import no.nav.brukerdialog.api.innsending.InnsendingService
-import no.nav.brukerdialog.api.ytelse.MetrikkService
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.metrikk.MetrikkService
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.AnnenForelder
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.Situasjon
@@ -17,7 +17,6 @@ import no.nav.brukerdialog.oppslag.barn.BarnService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
-import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.OmsorgspengerMidlertidigAleneController
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

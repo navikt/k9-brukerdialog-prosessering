@@ -9,7 +9,7 @@ import no.nav.k9.ettersendelse.EttersendelseValidator
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.brukerdialog.api.innsending.Innsending
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.mellomlagring.dokument.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag

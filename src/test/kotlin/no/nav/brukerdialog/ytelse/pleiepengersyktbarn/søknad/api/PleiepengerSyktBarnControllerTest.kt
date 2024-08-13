@@ -6,14 +6,13 @@ import io.mockk.coEvery
 import io.mockk.every
 import no.nav.brukerdialog.api.innsending.InnsendingCache
 import no.nav.brukerdialog.api.innsending.InnsendingService
-import no.nav.brukerdialog.api.ytelse.MetrikkService
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.metrikk.MetrikkService
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.oppslag.barn.BarnService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.PleiepengerSyktBarnController
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.BarnRelasjon
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Nattevåk

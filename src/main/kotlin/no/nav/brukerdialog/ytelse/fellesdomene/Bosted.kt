@@ -8,7 +8,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
 import no.nav.k9.søknad.felles.type.Landkode
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.brukerdialog.api.validering.landkode.ValidLandkode
+import no.nav.brukerdialog.validation.landkode.ValidLandkode
 import no.nav.brukerdialog.utils.erLikEllerEtter
 import java.time.LocalDate
 

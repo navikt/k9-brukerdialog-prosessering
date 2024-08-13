@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.validering.alder
+package no.nav.brukerdialog.validation.alder
 
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext

@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
-import no.nav.brukerdialog.api.ytelse.Ytelse.Companion.somYtelse
+import no.nav.brukerdialog.ytelse.Ytelse.Companion.somYtelse
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.Constants
 import no.nav.brukerdialog.utils.MDCUtil

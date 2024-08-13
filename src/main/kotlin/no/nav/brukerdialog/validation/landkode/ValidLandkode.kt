@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.validering.landkode
+package no.nav.brukerdialog.validation.landkode
 
 import jakarta.validation.Constraint
 import jakarta.validation.Payload

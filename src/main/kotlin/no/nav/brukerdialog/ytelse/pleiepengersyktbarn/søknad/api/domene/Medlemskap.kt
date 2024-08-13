@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.constraints.NotBlank
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.type.Landkode
-import no.nav.brukerdialog.api.validering.landkode.ValidLandkode
+import no.nav.brukerdialog.validation.landkode.ValidLandkode
 import no.nav.brukerdialog.utils.erFørEllerLik
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.utils.kreverIkkeNull

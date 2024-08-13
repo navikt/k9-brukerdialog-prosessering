@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.common
 
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 
 //Brukes når man logger status i flyten. Formaterer slik at loggen er mer lesbar
 internal fun formaterStatuslogging(ytelse: Ytelse, id: String, melding: String): String {

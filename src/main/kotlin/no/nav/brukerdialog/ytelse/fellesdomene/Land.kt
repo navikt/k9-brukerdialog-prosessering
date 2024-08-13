@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.fellesdomene
 
 import jakarta.validation.constraints.NotBlank
 import no.nav.k9.søknad.felles.type.Landkode
-import no.nav.brukerdialog.api.validering.landkode.ValidLandkode
+import no.nav.brukerdialog.validation.landkode.ValidLandkode
 import no.nav.brukerdialog.utils.krever
 import java.util.*
 

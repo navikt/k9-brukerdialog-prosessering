@@ -5,7 +5,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.brukerdialog.api.innsending.InnsendingCache
 import no.nav.brukerdialog.api.innsending.InnsendingService
-import no.nav.brukerdialog.api.ytelse.MetrikkService
+import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api.domene.Endringsmelding
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.brukerdialog.api.validering.alder.ValidAlder
+import no.nav.brukerdialog.validation.alder.ValidAlder
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn

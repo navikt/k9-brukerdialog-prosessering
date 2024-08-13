@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse
+package no.nav.brukerdialog.ytelse
 
 import no.nav.brukerdialog.utils.Constants
 import no.nav.brukerdialog.utils.MDCUtil

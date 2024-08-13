@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.kafka
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.kafka.Topics.ETTERSENDING_TOPIC

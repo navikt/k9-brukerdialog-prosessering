@@ -14,7 +14,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
 import no.nav.brukerdialog.api.innsending.Innsending
 import no.nav.brukerdialog.api.innsending.KomplettInnsending
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.net.URL

@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.mellomlagring.soknad
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.web.ErrorResponseException

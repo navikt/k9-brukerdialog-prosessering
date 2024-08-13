@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.oppslag.arbeidsgiver
 
 import no.nav.k9brukerdialogapi.oppslag.arbeidsgiver.ArbeidsgivereOppslagRespons
-import no.nav.brukerdialog.api.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.oppslag.TilgangNektetException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

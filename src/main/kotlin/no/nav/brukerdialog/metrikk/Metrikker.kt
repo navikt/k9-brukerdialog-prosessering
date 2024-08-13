@@ -1,7 +1,8 @@
-package no.nav.brukerdialog.api.ytelse
+package no.nav.brukerdialog.metrikk
 
 import io.micrometer.core.instrument.Counter
 import io.micrometer.core.instrument.MeterRegistry
+import no.nav.brukerdialog.ytelse.Ytelse
 import org.springframework.stereotype.Service
 
 @Service
