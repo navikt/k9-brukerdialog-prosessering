@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Barn
+import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.utils.SøknadUtils.defaultSøknad
 import no.nav.brukerdialog.utils.StringUtils.FritekstPattern
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata

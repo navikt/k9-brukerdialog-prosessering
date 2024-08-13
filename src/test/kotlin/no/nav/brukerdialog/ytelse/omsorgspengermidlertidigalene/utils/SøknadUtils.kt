@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.utils
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Barn
+import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.AnnenForelder
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.OmsorgspengerMidlertidigAleneSøknad
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.Situasjon

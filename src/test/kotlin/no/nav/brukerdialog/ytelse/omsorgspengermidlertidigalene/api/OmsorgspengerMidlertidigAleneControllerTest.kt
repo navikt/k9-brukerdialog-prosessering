@@ -8,7 +8,7 @@ import no.nav.brukerdialog.api.innsending.InnsendingCache
 import no.nav.brukerdialog.api.innsending.InnsendingService
 import no.nav.brukerdialog.api.ytelse.MetrikkService
 import no.nav.brukerdialog.api.ytelse.Ytelse
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Barn
+import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.AnnenForelder
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.Situasjon
 import no.nav.brukerdialog.config.JacksonConfiguration

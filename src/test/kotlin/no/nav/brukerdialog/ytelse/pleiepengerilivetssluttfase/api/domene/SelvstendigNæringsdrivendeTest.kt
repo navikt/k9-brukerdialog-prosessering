@@ -1,11 +1,11 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.api.domene
 
 import no.nav.k9.søknad.JsonUtils
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Næringstype.DAGMAMMA
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Regnskapsfører
-import no.nav.brukerdialog.api.ytelse.fellesdomene.VarigEndring
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Virksomhet
-import no.nav.brukerdialog.api.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
+import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype.DAGMAMMA
+import no.nav.brukerdialog.ytelse.fellesdomene.Regnskapsfører
+import no.nav.brukerdialog.ytelse.fellesdomene.VarigEndring
+import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
+import no.nav.brukerdialog.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.JobberIPeriodeSvar.HELT_FRAVÆR
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.JobberIPeriodeSvar.REDUSERT
 import no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.api.domene.PILSTestUtils.enkeltDagerMedFulltFravær

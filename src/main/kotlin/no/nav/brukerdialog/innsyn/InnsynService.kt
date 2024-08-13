@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.innsyn
 
-import no.nav.brukerdialog.api.ytelse.pleiepengersyktbarn.endringsmelding.domene.Endringsmelding
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api.domene.Endringsmelding
 import org.springframework.stereotype.Service
 
 @Service

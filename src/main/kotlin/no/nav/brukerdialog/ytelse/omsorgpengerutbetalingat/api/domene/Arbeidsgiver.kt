@@ -8,8 +8,8 @@ import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.fravær.SøknadÅrsak
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Utbetalingsperiode
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
+import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode
+import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Utbetalingsårsak.KONFLIKT_MED_ARBEIDSGIVER
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER
 

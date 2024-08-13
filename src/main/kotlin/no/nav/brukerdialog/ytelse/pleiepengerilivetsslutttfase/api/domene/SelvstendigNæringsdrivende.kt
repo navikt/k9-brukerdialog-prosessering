@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene
 
 import jakarta.validation.Valid
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Virksomhet
+import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsforhold.Companion.somK9ArbeidstidInfo
 import java.time.LocalDate
 

@@ -13,11 +13,11 @@ import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetalingSøknadValidator
 import no.nav.brukerdialog.api.innsending.Innsending
 import no.nav.brukerdialog.api.ytelse.Ytelse
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bekreftelser
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Opphold
+import no.nav.brukerdialog.ytelse.fellesdomene.Bekreftelser
+import no.nav.brukerdialog.ytelse.fellesdomene.Bosted
+import no.nav.brukerdialog.ytelse.fellesdomene.Bosted.Companion.somK9Bosteder
+import no.nav.brukerdialog.ytelse.fellesdomene.Bosted.Companion.somK9Utenlandsopphold
+import no.nav.brukerdialog.ytelse.fellesdomene.Opphold
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Arbeidsgiver.Companion.somK9Fraværsperiode
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn.Companion.somK9BarnListe
 import no.nav.brukerdialog.common.MetaInfo

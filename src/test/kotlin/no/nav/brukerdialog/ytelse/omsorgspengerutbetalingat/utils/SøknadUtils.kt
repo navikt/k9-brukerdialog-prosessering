@@ -1,10 +1,10 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.utils
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.AktivitetFravær
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bekreftelser
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted
-import no.nav.brukerdialog.api.ytelse.fellesdomene.FraværÅrsak
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Utbetalingsperiode
+import no.nav.brukerdialog.ytelse.fellesdomene.AktivitetFravær
+import no.nav.brukerdialog.ytelse.fellesdomene.Bekreftelser
+import no.nav.brukerdialog.ytelse.fellesdomene.Bosted
+import no.nav.brukerdialog.ytelse.fellesdomene.FraværÅrsak
+import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.DineBarn

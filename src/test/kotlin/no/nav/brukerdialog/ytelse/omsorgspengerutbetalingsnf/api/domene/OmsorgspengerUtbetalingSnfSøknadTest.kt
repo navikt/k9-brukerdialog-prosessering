@@ -1,13 +1,13 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.api.domene
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.AktivitetFravær
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bekreftelser
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted
-import no.nav.brukerdialog.api.ytelse.fellesdomene.FraværÅrsak
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Næringstype
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Opphold
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Utbetalingsperiode
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Virksomhet
+import no.nav.brukerdialog.ytelse.fellesdomene.AktivitetFravær
+import no.nav.brukerdialog.ytelse.fellesdomene.Bekreftelser
+import no.nav.brukerdialog.ytelse.fellesdomene.Bosted
+import no.nav.brukerdialog.ytelse.fellesdomene.FraværÅrsak
+import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
+import no.nav.brukerdialog.ytelse.fellesdomene.Opphold
+import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode
+import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Barn
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Frilans
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.TypeBarn

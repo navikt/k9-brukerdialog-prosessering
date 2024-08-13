@@ -2,9 +2,9 @@ package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene
 
 import jakarta.validation.Valid
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
-import no.nav.brukerdialog.api.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
-import no.nav.brukerdialog.api.ytelse.fellesdomene.ArbeidUtils.tilDuration
-import no.nav.brukerdialog.api.ytelse.fellesdomene.ArbeidUtils.tilTimerPerDag
+import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
+import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.tilDuration
+import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.tilTimerPerDag
 import java.time.LocalDate
 
 class Arbeidsforhold(

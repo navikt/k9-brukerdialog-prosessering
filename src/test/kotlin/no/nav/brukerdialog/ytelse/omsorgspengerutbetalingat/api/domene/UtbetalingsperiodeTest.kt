@@ -2,12 +2,12 @@ package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.api.domene
 
 import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.felles.fravær.SøknadÅrsak
-import no.nav.brukerdialog.api.ytelse.fellesdomene.AktivitetFravær
-import no.nav.brukerdialog.api.ytelse.fellesdomene.AktivitetFravær.SELVSTENDIG_VIRKSOMHET
-import no.nav.brukerdialog.api.ytelse.fellesdomene.FraværÅrsak.ORDINÆRT_FRAVÆR
-import no.nav.brukerdialog.api.ytelse.fellesdomene.FraværÅrsak.SMITTEVERNHENSYN
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Utbetalingsperiode
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
+import no.nav.brukerdialog.ytelse.fellesdomene.AktivitetFravær
+import no.nav.brukerdialog.ytelse.fellesdomene.AktivitetFravær.SELVSTENDIG_VIRKSOMHET
+import no.nav.brukerdialog.ytelse.fellesdomene.FraværÅrsak.ORDINÆRT_FRAVÆR
+import no.nav.brukerdialog.ytelse.fellesdomene.FraværÅrsak.SMITTEVERNHENSYN
+import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode
+import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil

@@ -8,9 +8,9 @@ import no.nav.brukerdialog.api.innsending.InnsendingCache
 import no.nav.brukerdialog.api.innsending.InnsendingService
 import no.nav.brukerdialog.api.ytelse.MetrikkService
 import no.nav.brukerdialog.api.ytelse.Ytelse
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bekreftelser
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Næringstype
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Virksomhet
+import no.nav.brukerdialog.ytelse.fellesdomene.Bekreftelser
+import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
+import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.OmsorgspengerUtbetalingSnfController
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Barn
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Frilans

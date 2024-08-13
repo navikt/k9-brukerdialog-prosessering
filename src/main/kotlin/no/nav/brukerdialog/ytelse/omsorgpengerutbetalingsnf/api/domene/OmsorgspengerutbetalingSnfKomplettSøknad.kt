@@ -3,11 +3,11 @@ package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.brukerdialog.api.innsending.KomplettInnsending
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bekreftelser
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Opphold
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Utbetalingsperiode
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Virksomhet
+import no.nav.brukerdialog.ytelse.fellesdomene.Bekreftelser
+import no.nav.brukerdialog.ytelse.fellesdomene.Bosted
+import no.nav.brukerdialog.ytelse.fellesdomene.Opphold
+import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode
+import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZoneOffset
 import java.time.ZonedDateTime

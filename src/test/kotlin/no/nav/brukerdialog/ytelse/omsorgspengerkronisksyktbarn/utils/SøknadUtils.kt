@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.utils
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Barn
+import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene.BarnSammeAdresse
 import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene.OmsorgspengerKroniskSyktBarnSøknad
 import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene.SøkerBarnRelasjon

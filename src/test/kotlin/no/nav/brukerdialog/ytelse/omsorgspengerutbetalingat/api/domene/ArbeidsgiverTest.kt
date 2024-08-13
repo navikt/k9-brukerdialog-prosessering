@@ -1,8 +1,8 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.api.domene
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.AktivitetFravær
-import no.nav.brukerdialog.api.ytelse.fellesdomene.FraværÅrsak
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Utbetalingsperiode
+import no.nav.brukerdialog.ytelse.fellesdomene.AktivitetFravær
+import no.nav.brukerdialog.ytelse.fellesdomene.FraværÅrsak
+import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Arbeidsgiver.Companion.somK9Fraværsperiode
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Utbetalingsårsak

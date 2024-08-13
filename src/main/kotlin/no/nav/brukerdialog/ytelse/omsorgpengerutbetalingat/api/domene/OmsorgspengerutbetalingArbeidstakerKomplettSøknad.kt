@@ -2,9 +2,9 @@ package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.api.innsending.KomplettInnsending
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bekreftelser
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Bosted
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Opphold
+import no.nav.brukerdialog.ytelse.fellesdomene.Bekreftelser
+import no.nav.brukerdialog.ytelse.fellesdomene.Bosted
+import no.nav.brukerdialog.ytelse.fellesdomene.Opphold
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZonedDateTime
 

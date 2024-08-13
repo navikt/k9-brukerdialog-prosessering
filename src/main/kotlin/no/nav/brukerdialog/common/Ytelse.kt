@@ -1,8 +1,8 @@
 package no.nav.brukerdialog.common
 
-import no.nav.brukerdialog.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
-import no.nav.brukerdialog.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC
-import no.nav.brukerdialog.meldinger.endringsmelding.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC
 import no.nav.brukerdialog.ytelse.ettersendelse.kafka.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.ettersendelse.kafka.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.ettersendelse.kafka.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_PREPROSESSERT_TOPIC
@@ -24,9 +24,9 @@ import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.kafka.OMPMidlert
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.PILSTopologyConfiguration.Companion.PILS_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.PILSTopologyConfiguration.Companion.PILS_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.PILSTopologyConfiguration.Companion.PILS_PREPROSESSERT_TOPIC
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.kafka.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.kafka.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.kafka.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
 
 enum class Ytelse(val tittel: String) {
     OMSORGSPENGER_UTVIDET_RETT("Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning"),

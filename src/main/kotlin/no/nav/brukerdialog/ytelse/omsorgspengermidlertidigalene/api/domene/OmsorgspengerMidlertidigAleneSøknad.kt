@@ -13,7 +13,7 @@ import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidler
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerMidlertidigAleneSøknadValidator
 import no.nav.brukerdialog.api.innsending.Innsending
 import no.nav.brukerdialog.api.ytelse.Ytelse
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Barn
+import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker

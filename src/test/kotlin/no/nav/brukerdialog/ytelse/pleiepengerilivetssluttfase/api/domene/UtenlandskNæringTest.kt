@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.api.domene
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Land
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Næringstype.FISKE
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
+import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype.FISKE
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.UtenlandskNæring
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.UtenlandskNæring.Companion.valider
 import no.nav.brukerdialog.utils.TestUtils.verifiserIngenValideringsFeil

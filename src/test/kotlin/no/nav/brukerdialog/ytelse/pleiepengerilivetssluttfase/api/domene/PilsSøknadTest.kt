@@ -1,8 +1,8 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.api.domene
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Land
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Næringstype
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Virksomhet
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
+import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
+import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.ArbeidIPeriode
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsforhold

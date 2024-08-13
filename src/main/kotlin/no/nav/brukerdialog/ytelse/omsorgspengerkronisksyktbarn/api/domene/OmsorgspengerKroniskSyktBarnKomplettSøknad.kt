@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.api.innsending.KomplettInnsending
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Barn
+import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZoneOffset
 import java.time.ZonedDateTime

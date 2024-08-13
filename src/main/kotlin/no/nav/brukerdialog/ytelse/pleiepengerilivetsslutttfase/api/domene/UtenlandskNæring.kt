@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Land
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Næringstype
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
+import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
 import no.nav.brukerdialog.utils.erLikEllerEtter
 import no.nav.brukerdialog.utils.krever
 import java.time.LocalDate

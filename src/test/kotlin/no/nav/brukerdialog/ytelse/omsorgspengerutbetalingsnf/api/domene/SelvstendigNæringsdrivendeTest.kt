@@ -1,12 +1,12 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.api.domene
 
 import no.nav.k9.søknad.JsonUtils
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Land
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Næringstype.DAGMAMMA
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Regnskapsfører
-import no.nav.brukerdialog.api.ytelse.fellesdomene.VarigEndring
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Virksomhet
-import no.nav.brukerdialog.api.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
+import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype.DAGMAMMA
+import no.nav.brukerdialog.ytelse.fellesdomene.Regnskapsfører
+import no.nav.brukerdialog.ytelse.fellesdomene.VarigEndring
+import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
+import no.nav.brukerdialog.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate

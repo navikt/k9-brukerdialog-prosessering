@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.api.domene
 
-import no.nav.brukerdialog.api.ytelse.fellesdomene.Land
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.OpptjeningIUtlandet.Companion.valider
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.OpptjeningType.ARBEIDSTAKER
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.OpptjeningIUtlandet
