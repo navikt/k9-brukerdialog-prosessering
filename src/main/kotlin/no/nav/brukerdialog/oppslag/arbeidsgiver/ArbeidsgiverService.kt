@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.oppslag.arbeidsgiver
 
+import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.ArbeidsgivereOppslagsService
 import no.nav.k9brukerdialogapi.oppslag.arbeidsgiver.Arbeidsgivere
 import no.nav.brukerdialog.oppslag.TilgangNektetException
 import org.slf4j.Logger

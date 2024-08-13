@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene
 
-import no.nav.brukerdialog.api.innsending.KomplettInnsending
+import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.LocalDate
 import java.time.ZonedDateTime

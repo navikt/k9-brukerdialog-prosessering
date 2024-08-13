@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.ettersendelse.api.domene
 
 import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.ettersendelse.EttersendelseType
-import no.nav.brukerdialog.api.innsending.KomplettInnsending
+import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZonedDateTime
 

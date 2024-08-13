@@ -4,8 +4,8 @@ import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
-import no.nav.brukerdialog.innsending.Preprosessert
-import no.nav.brukerdialog.journalforing.JournalføringsRequest
+import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
+import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
 import no.nav.brukerdialog.meldinger.felles.domene.Navn
 import no.nav.brukerdialog.meldinger.felles.domene.Søker
 import java.time.ZonedDateTime

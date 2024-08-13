@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.kafka
 
-import no.nav.brukerdialog.innsending.PreprosesseringsService
+import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
 import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor

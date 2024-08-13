@@ -2,8 +2,8 @@ package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api
 
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
-import no.nav.brukerdialog.api.innsending.InnsendingCache
-import no.nav.brukerdialog.api.innsending.InnsendingService
+import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.PleiepengerILivetsSluttfaseSøknad
 import no.nav.brukerdialog.common.MetaInfo

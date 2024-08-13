@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
 import no.nav.k9.søknad.Søknad
-import no.nav.brukerdialog.api.innsending.KomplettInnsending
+import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.LocalDate
 import java.time.ZonedDateTime

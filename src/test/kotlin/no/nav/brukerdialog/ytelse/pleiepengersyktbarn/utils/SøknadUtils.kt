@@ -6,8 +6,8 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Regnskapsfører
 import no.nav.brukerdialog.ytelse.fellesdomene.VarigEndring
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
-import no.nav.brukerdialog.innsyn.Barn
-import no.nav.brukerdialog.innsyn.K9SakInnsynSøknad
+import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.Barn
+import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynSøknad
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.BarnDetaljer

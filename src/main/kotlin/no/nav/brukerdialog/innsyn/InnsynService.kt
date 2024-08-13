@@ -1,5 +1,7 @@
 package no.nav.brukerdialog.innsyn
 
+import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynApiService
+import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynSøknad
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api.domene.Endringsmelding
 import org.springframework.stereotype.Service
 

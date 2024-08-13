@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.kafka
 
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
-import no.nav.brukerdialog.innsending.CleanupService
+import no.nav.brukerdialog.domenetjenester.mottak.CleanupService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
 import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor

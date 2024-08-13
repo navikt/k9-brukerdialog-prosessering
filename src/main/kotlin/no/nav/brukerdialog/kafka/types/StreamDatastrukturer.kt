@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import no.nav.k9.søknad.Innsending
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.innsending.Preprosessert
+import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 
 data class TopicEntry<V>(val metadata: MetaInfo, val data: V)
 

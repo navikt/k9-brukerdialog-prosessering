@@ -1,5 +1,7 @@
 package no.nav.brukerdialog.mellomlagring.dokument
 
+import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
+import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
 import org.springframework.stereotype.Service
 
 @Service

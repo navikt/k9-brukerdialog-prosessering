@@ -2,14 +2,14 @@ package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api
 
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
-import no.nav.brukerdialog.api.innsending.InnsendingCache
-import no.nav.brukerdialog.api.innsending.InnsendingService
+import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene.OmsorgspengerKroniskSyktBarnSøknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
-import no.nav.brukerdialog.oppslag.barn.BarnService
+import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenUtils.personIdent

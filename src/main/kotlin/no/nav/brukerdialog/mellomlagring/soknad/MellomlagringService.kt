@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.mellomlagring.soknad
 
+import no.nav.brukerdialog.integrasjon.k9brukerdialogcache.K9BrukerdialogCacheService
 import no.nav.brukerdialog.ytelse.Ytelse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service

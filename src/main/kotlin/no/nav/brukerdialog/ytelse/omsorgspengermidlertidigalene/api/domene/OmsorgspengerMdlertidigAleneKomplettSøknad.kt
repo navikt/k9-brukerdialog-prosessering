@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene
 
 import no.nav.k9.søknad.Søknad
-import no.nav.brukerdialog.api.innsending.KomplettInnsending
+import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZonedDateTime

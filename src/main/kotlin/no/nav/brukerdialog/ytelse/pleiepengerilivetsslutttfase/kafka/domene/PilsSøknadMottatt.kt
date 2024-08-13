@@ -2,8 +2,8 @@ package no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.Ytelse
-import no.nav.brukerdialog.innsending.MottattMelding
-import no.nav.brukerdialog.innsending.PreprosesseringsData
+import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
+import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.meldinger.felles.domene.Søker
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.PilsSøknadPdfData
 import no.nav.brukerdialog.pdf.PdfData

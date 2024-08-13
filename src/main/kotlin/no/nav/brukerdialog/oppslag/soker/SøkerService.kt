@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.oppslag.soker
 
+import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.SøkerOppslagsService
 import no.nav.brukerdialog.utils.TokenUtils.personIdent
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.springframework.stereotype.Service

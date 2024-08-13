@@ -12,7 +12,7 @@ import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneOmsorg
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.OmsorgspengerAleneOmsorgSøknadValidator
-import no.nav.brukerdialog.api.innsending.Innsending
+import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag

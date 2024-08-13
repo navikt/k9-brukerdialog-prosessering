@@ -4,14 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
-import no.nav.brukerdialog.api.innsending.InnsendingCache
-import no.nav.brukerdialog.api.innsending.InnsendingService
+import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9FormatPSB
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9SakInnsynSøknad
 import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.innsyn.Barn
+import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.Barn
 import no.nav.brukerdialog.innsyn.InnsynService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders

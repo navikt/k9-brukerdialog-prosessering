@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.utils
 
 import com.nimbusds.jwt.SignedJWT
-import no.nav.brukerdialog.api.innsending.Innsending
+import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.config.JacksonConfiguration
 import org.springframework.http.MediaType

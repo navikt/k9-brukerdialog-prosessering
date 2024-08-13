@@ -2,6 +2,7 @@ package no.nav.brukerdialog.oppslag.barn
 
 import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.config.Issuers
+import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers

@@ -2,8 +2,8 @@ package no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.Ytelse
-import no.nav.brukerdialog.innsending.MottattMelding
-import no.nav.brukerdialog.innsending.PreprosesseringsData
+import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
+import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.meldinger.felles.domene.Søker
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.pdf.OMPMidlertidigAleneSoknadPDFData
 import no.nav.brukerdialog.utils.DateUtils.NO_LOCALE

@@ -5,7 +5,7 @@ import io.mockk.coVerify
 import no.nav.brukerdialog.AbstractIntegrationTest
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
-import no.nav.brukerdialog.journalforing.JournalføringsResponse
+import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsResponse
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC

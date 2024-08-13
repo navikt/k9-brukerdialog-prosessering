@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.ettersendelse.kafka
 
-import no.nav.brukerdialog.innsending.JournalføringsService
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
 import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor

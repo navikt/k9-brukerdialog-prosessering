@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
-import no.nav.brukerdialog.journalforing.JournalføringsResponse
-import no.nav.brukerdialog.journalforing.K9JoarkService
+import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsResponse
+import no.nav.brukerdialog.integrasjon.k9joark.K9JoarkService
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
-import no.nav.brukerdialog.mellomlagring.dokument.K9DokumentMellomlagringService
+import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
-import no.nav.brukerdialog.oppslag.barn.BarnService
+import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.oppslag.soker.SøkerService
 import no.nav.brukerdialog.utils.KafkaIntegrationTest
