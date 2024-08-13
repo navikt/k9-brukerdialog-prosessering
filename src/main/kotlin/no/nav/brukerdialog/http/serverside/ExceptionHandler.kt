@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.http
+package no.nav.brukerdialog.http.serverside
 
 import jakarta.validation.ConstraintViolationException
 import no.nav.brukerdialog.validation.ParameterType
@@ -36,7 +36,7 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
 
     companion object {
         private val log: Logger =
-            LoggerFactory.getLogger(no.nav.brukerdialog.http.ExceptionHandler::class.java)
+            LoggerFactory.getLogger(no.nav.brukerdialog.http.serverside.ExceptionHandler::class.java)
     }
 
 

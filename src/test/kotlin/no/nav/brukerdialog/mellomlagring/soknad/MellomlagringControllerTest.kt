@@ -5,7 +5,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import no.nav.brukerdialog.ytelse.Ytelse
-import no.nav.brukerdialog.http.HeadersToMDCFilterBean
+import no.nav.brukerdialog.http.serverside.HeadersToMDCFilterBean
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.json.JSONObject

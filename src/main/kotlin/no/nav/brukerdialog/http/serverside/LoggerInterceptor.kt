@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.http
+package no.nav.brukerdialog.http.serverside
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

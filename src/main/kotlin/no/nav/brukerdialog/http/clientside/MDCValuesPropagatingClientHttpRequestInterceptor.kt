@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.http
+package no.nav.brukerdialog.http.clientside
 
 import no.nav.brukerdialog.utils.Constants.CALL_ID
 import no.nav.brukerdialog.utils.Constants.CORRELATION_ID

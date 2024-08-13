@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.http
+package no.nav.brukerdialog.http.serverside
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException

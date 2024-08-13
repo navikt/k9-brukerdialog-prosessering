@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.config
 
-import no.nav.brukerdialog.http.LoggerInterceptor
+import no.nav.brukerdialog.http.serverside.LoggerInterceptor
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer

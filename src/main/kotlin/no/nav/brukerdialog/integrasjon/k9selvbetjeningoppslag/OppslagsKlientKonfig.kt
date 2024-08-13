@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag
 
-import no.nav.brukerdialog.http.MDCValuesPropagatingClientHttpRequestInterceptor
+import no.nav.brukerdialog.http.clientside.MDCValuesPropagatingClientHttpRequestInterceptor
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import no.nav.security.token.support.client.spring.ClientConfigurationProperties
 import org.slf4j.Logger

@@ -1,6 +1,5 @@
-package no.nav.sifinnsynapi.filter
+package no.nav.brukerdialog.http.serverside
 
-import no.nav.brukerdialog.http.HeadersToMDCFilterBean
 import org.slf4j.LoggerFactory
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.stereotype.Component
