@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
-import no.nav.brukerdialog.ytelse.Ytelse
-import no.nav.brukerdialog.http.serverside.HeadersToMDCFilterBean
+import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
@@ -18,8 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.FilterType
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
@@ -31,12 +30,8 @@ import java.time.ZonedDateTime
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
-@WebMvcTest(
-    controllers = [MellomlagringController::class],
-    excludeFilters = [
-        ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [HeadersToMDCFilterBean::class])
-    ]
-)
+@WebMvcTest(controllers = [MellomlagringController::class])
+@Import(CallIdGenerator::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MellomlagringControllerTest {
 
@@ -66,7 +61,12 @@ class MellomlagringControllerTest {
     fun `Innsending av tom mellomlagring`() {
         val mellomlagringSøknad = "{}"
 
-        coEvery { mellomlagringService.settMellomlagring(any(), any()) } returns mockCacheResponse("mellomlagring_OMSORGSDAGER_ALENEOMSORG", mellomlagringSøknad)
+        coEvery {
+            mellomlagringService.settMellomlagring(
+                any(),
+                any()
+            )
+        } returns mockCacheResponse("mellomlagring_OMSORGSDAGER_ALENEOMSORG", mellomlagringSøknad)
 
         mockMvc.post("/mellomlagring/OMSORGSDAGER_ALENEOMSORG") {
             contentType = MediaType.APPLICATION_JSON
@@ -108,7 +108,10 @@ class MellomlagringControllerTest {
         val url = "/mellomlagring/$ytelse"
         val nøkkelPrefix = "mellomlagring_${ytelse}_${UUID.randomUUID()}"
 
-        coEvery { mellomlagringService.settMellomlagring(any(), any()) } returns mockCacheResponse(nøkkelPrefix, mellomlagring)
+        coEvery { mellomlagringService.settMellomlagring(any(), any()) } returns mockCacheResponse(
+            nøkkelPrefix,
+            mellomlagring
+        )
 
         // Post request
         mockMvc.post(url) {
@@ -128,7 +131,10 @@ class MellomlagringControllerTest {
             content { json(mellomlagring) }
         }
 
-        coEvery { mellomlagringService.oppdaterMellomlagring(any(), any()) } returns mockCacheResponse(nøkkelPrefix, oppdatertMellomlagringSøknad)
+        coEvery { mellomlagringService.oppdaterMellomlagring(any(), any()) } returns mockCacheResponse(
+            nøkkelPrefix,
+            oppdatertMellomlagringSøknad
+        )
 
         // Put request
         mockMvc.put(url) {
@@ -178,7 +184,7 @@ class MellomlagringControllerTest {
 
     @Test
     fun `gitt mellomlagring ikke eksisterer, forvent tomt objekt`() {
-       coEvery { mellomlagringService.hentMellomlagring(any()) } returns null
+        coEvery { mellomlagringService.hentMellomlagring(any()) } returns null
         mockMvc.get("/mellomlagring/OMSORGSDAGER_ALENEOMSORG") {
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {

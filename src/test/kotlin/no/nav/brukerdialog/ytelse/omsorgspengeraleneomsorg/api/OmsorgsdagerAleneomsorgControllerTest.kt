@@ -34,9 +34,7 @@ import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension::class)
-@WebMvcTest(
-    controllers = [OmsorgsdagerAleneomsorgController::class]
-)
+@WebMvcTest(controllers = [OmsorgsdagerAleneomsorgController::class])
 @Import(
     JacksonConfiguration::class,
     CallIdGenerator::class

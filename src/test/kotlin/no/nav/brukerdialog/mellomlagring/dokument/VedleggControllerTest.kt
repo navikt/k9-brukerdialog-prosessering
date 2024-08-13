@@ -2,7 +2,7 @@ package no.nav.brukerdialog.mellomlagring.dokument
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
-import no.nav.brukerdialog.http.serverside.HeadersToMDCFilterBean
+import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.FilterType
+import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -22,12 +21,8 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.multipart
 import org.springframework.web.client.HttpClientErrorException
 
-@WebMvcTest(
-    controllers = [VedleggController::class],
-    excludeFilters = [
-        ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [HeadersToMDCFilterBean::class])
-    ]
-)
+@WebMvcTest(controllers = [VedleggController::class])
+@Import(CallIdGenerator::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VedleggControllerTest {
 
