@@ -1,11 +1,11 @@
-package no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.pdf
 
 import no.nav.brukerdialog.meldinger.felles.domene.Søker
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.Barn
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.BarnSammeAdresse
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.SøkerBarnRelasjon
-import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.utils.SøknadUtils
+import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.utils.OMPKSSøknadUtils
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Test
@@ -58,7 +58,7 @@ class OMPUTVKroniskSyktBarnSøknadPdfGeneratorTest {
             sammeAdresse = BarnSammeAdresse.JA_DELT_BOSTED,
             høyereRisikoForFravær = true,
             høyereRisikoForFraværBeskrivelse = "Beskrivelse av høyere risiko for fravær",
-            k9FormatSøknad = SøknadUtils.defaultK9Format(soknadsId, ZonedDateTime.now())
+            k9FormatSøknad = OMPKSSøknadUtils.defaultK9Format(soknadsId, ZonedDateTime.now())
         )
     }
 

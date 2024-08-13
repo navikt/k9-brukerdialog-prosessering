@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.kafka
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue

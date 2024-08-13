@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.kafka
 
 import no.nav.brukerdialog.innsending.PreprosesseringsService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
@@ -6,7 +6,7 @@ import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor
 import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_PREPROSESSERING_STREAMS_BUILDER_NAME
+import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.kafka.OMPKSTopologyConfiguration.Companion.OMP_UTV_KS_PREPROSESSERING_STREAMS_BUILDER_NAME
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadPreprosesssert
 import no.nav.brukerdialog.utils.HealthIndicatorUtils

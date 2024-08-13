@@ -1,9 +1,9 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutvidetrett
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.utils
 
 import no.nav.brukerdialog.api.ytelse.fellesdomene.Barn
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutvidetrett.domene.BarnSammeAdresse
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutvidetrett.domene.OmsorgspengerKroniskSyktBarnSøknad
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutvidetrett.domene.SøkerBarnRelasjon
+import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene.BarnSammeAdresse
+import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene.OmsorgspengerKroniskSyktBarnSøknad
+import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene.SøkerBarnRelasjon
 import no.nav.brukerdialog.config.JacksonConfiguration
 import java.time.ZonedDateTime
 

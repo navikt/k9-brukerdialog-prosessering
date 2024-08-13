@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutvidetrett.domene
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.api.innsending.KomplettInnsending

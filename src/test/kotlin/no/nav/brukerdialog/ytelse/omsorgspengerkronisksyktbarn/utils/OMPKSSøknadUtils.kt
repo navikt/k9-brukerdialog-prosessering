@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.utils
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.utils
 
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
@@ -13,7 +13,7 @@ import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.SøkerB
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
-object SøknadUtils {
+object OMPKSSøknadUtils {
     val søker = Søker(
         aktørId = "12345",
         fødselsdato = LocalDate.parse("2000-01-01"),

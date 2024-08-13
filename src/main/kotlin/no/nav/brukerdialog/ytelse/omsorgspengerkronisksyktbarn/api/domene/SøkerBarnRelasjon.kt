@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutvidetrett.domene
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
 import com.fasterxml.jackson.annotation.JsonAlias
 

@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.pdf
 
 import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID

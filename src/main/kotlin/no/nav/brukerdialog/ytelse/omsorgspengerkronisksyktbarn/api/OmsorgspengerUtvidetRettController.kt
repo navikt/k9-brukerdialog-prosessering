@@ -1,11 +1,11 @@
-package no.nav.brukerdialog.api.ytelse.omsorgspengerutvidetrett
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api
 
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.api.innsending.InnsendingCache
 import no.nav.brukerdialog.api.innsending.InnsendingService
 import no.nav.brukerdialog.api.ytelse.MetrikkService
-import no.nav.brukerdialog.api.ytelse.omsorgspengerutvidetrett.domene.OmsorgspengerKroniskSyktBarnSøknad
+import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene.OmsorgspengerKroniskSyktBarnSøknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
