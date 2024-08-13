@@ -19,7 +19,7 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import org.junit.jupiter.api.Test

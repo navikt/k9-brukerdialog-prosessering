@@ -16,7 +16,7 @@ import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.felles.type.VirksomhetType
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.AktivitetFravær
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Bekreftelser
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Bosted

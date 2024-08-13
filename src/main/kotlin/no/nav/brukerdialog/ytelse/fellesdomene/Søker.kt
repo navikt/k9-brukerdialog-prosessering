@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.felles.domene
+package no.nav.brukerdialog.ytelse.fellesdomene
 
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
 import java.time.LocalDate

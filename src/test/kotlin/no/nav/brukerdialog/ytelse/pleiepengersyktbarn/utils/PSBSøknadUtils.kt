@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils
 
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType

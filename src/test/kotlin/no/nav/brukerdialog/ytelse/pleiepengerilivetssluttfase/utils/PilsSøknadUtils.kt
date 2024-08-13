@@ -11,7 +11,7 @@ import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.pls.v1.PleipengerLivetsSluttfase
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.ArbeidIPeriode
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.Arbeidsforhold
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.Arbeidsgiver

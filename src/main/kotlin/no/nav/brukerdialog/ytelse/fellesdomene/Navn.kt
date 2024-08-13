@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.felles.domene
+package no.nav.brukerdialog.ytelse.fellesdomene
 
 data class Navn(
     val fornavn: String,

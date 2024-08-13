@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import no.nav.brukerdialog.common.Constants.X_CORRELATION_ID
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.Søknadstype
-import no.nav.brukerdialog.meldinger.felles.domene.Navn
+import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders

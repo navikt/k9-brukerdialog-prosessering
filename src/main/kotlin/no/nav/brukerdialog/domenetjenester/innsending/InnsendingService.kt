@@ -5,7 +5,6 @@ import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
 import no.nav.brukerdialog.ytelse.Ytelse
-import no.nav.brukerdialog.common.MeldingRegistreringFeiletException
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.kafka.KafkaProducerService

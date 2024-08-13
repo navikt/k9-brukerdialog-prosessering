@@ -5,7 +5,7 @@ import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.ytelse.ettersendelse.pdf.EttersendelsePdfData
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.pdf.PdfData
 import java.time.ZonedDateTime
 

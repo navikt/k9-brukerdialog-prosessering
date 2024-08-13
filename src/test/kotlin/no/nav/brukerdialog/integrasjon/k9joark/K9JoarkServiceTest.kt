@@ -4,12 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.WireMockServer
 import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.common.Ytelse
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsResponse
-import no.nav.brukerdialog.integrasjon.k9joark.K9JoarkService
-import no.nav.brukerdialog.integrasjon.k9joark.toUri
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.Søknadstype
-import no.nav.brukerdialog.meldinger.felles.domene.Navn
+import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.utils.WireMockServerUtils.stubJournalføring
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat

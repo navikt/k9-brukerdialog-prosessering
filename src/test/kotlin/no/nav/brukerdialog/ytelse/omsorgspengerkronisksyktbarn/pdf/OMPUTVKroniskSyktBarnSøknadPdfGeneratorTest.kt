@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.pdf
 
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.Barn
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.BarnSammeAdresse
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt

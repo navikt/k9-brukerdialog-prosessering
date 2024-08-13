@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.common
+package no.nav.brukerdialog.domenetjenester.innsending
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail

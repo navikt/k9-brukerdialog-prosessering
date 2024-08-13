@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.utils
 
 import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.utils.K9FormatUtils.defaultK9FormatPSB
 import java.time.LocalDate
 import java.time.ZonedDateTime

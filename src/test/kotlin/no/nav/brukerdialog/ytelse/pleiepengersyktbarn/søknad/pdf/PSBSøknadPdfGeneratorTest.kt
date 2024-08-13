@@ -5,7 +5,7 @@ import no.nav.helse.felles.Omsorgstilbud
 import no.nav.helse.felles.OmsorgstilbudSvarFortid
 import no.nav.helse.felles.OmsorgstilbudSvarFremtid
 import no.nav.helse.felles.PlanUkedager
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType

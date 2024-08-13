@@ -4,7 +4,7 @@ import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.Ettersendelse
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.Pleietrengende
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.Søknadstype
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9.ettersendelse.Ytelse
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer

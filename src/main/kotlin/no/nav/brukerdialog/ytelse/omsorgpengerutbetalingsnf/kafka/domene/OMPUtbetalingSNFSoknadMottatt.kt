@@ -7,7 +7,7 @@ import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
-import no.nav.brukerdialog.meldinger.felles.domene.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.pdf.OMPUtbetalingSNFSoknadPDFData
 import java.time.Duration
 import java.time.LocalDate
