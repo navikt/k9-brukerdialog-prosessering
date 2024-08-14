@@ -2,6 +2,7 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+      max-request-size: 10MB
   rest:
     retry:
       multiplier: 2

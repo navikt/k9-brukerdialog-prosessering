@@ -9,6 +9,7 @@ import no.nav.security.token.support.core.exceptions.JwtTokenValidatorException
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.FORBIDDEN
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.context.request.WebRequest
+import org.springframework.web.multipart.MaxUploadSizeExceededException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.net.URI
 import java.net.URLDecoder
@@ -32,7 +34,9 @@ import java.nio.charset.Charset
 import java.util.stream.Collectors
 
 @RestControllerAdvice
-class ExceptionHandler : ResponseEntityExceptionHandler() {
+class ExceptionHandler(
+    @Value("\${spring.servlet.multipart.max-file-size}") private val maxFileSize: String,
+) : ResponseEntityExceptionHandler() {
 
     companion object {
         private val log: Logger =
@@ -154,6 +158,24 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
         )
 
         log.error("Valideringsfeil: {}", problemDetails)
+        return ResponseEntity(problemDetails, headers, status)
+    }
+
+    override fun handleMaxUploadSizeExceededException(
+        ex: MaxUploadSizeExceededException,
+        headers: HttpHeaders,
+        status: HttpStatusCode,
+        request: WebRequest,
+    ): ResponseEntity<Any> {
+        val servletWebRequest = request as ServletWebRequest
+
+        val problemDetails = servletWebRequest.respondProblemDetails(
+            status = HttpStatus.PAYLOAD_TOO_LARGE,
+            title = "Størrelse på opplastet fil er for stor",
+            type = URI("/problem-details/opplastet-fil-for-stor"),
+            detail = "Størrelsen på opplastet fil er over tillatt grense på $maxFileSize",
+        )
+        log.debug("{}", problemDetails)
         return ResponseEntity(problemDetails, headers, status)
     }
 
