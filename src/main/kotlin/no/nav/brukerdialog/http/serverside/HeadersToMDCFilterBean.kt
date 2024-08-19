@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.Constants
+import no.nav.brukerdialog.utils.IgnoredPathUtils
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.ytelse.Ytelse.Companion.somYtelse
@@ -51,7 +52,9 @@ class HeadersToMDCFilterBean(
     ) {
         val status = response.status
         val method = request.method
-        logger.info("<-- Response $status $method ${request.requestURI}")
+        if (!IgnoredPathUtils.isIgnoredPath(request.requestURI)) {
+            logger.info("<-- Response $status $method ${request.requestURI}")
+        }
     }
 
     private fun logRequest(request: HttpServletRequest) {
@@ -61,7 +64,10 @@ class HeadersToMDCFilterBean(
         val requestURI = request.requestURI
         val issuer = jwtToken?.let { "[${jwtToken.issuer}]" } ?: ""
         val requestMessage = "--> Request $reqMethod $requestURI $issuer"
-        logger.info(requestMessage)
+
+        if (!IgnoredPathUtils.isIgnoredPath(requestURI)) {
+            logger.info(requestMessage)
+        }
     }
 
     private fun putHeadersToMDC(req: HttpServletRequest) {
