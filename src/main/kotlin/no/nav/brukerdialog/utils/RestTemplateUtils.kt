@@ -20,8 +20,7 @@ object RestTemplateUtils {
     ): ClientHttpRequestInterceptor {
         return ClientHttpRequestInterceptor { request: HttpRequest, body: ByteArray, execution: ClientHttpRequestExecution ->
             val accessToken: String = accessToken(clientProperties, oAuth2AccessTokenService)
-            request.headers[HttpHeaders.AUTHORIZATION] =
-                "Bearer $accessToken"
+            request.headers[HttpHeaders.AUTHORIZATION] = "Bearer $accessToken"
             execution.execute(request, body)
         }
     }

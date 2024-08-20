@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag
 
-import no.nav.brukerdialog.http.clientside.MDCValuesPropagatingClientHttpRequestInterceptor
+import no.nav.brukerdialog.utils.RestTemplateUtils
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import no.nav.security.token.support.client.spring.ClientConfigurationProperties
 import org.slf4j.Logger
@@ -35,17 +35,18 @@ class OppslagsKlientKonfig(
             ?: throw RuntimeException("could not find oauth2 client config for $TOKEN_X_K9_SELVBETJENING_OPPSLAG")
 
     @Bean(name = ["k9OppslagsKlient"])
-    fun restTemplate(
-        builder: RestTemplateBuilder,
-        mdcInterceptor: MDCValuesPropagatingClientHttpRequestInterceptor,
-    ): RestTemplate {
+    fun restTemplate(builder: RestTemplateBuilder): RestTemplate {
         return builder
             .setConnectTimeout(Duration.ofSeconds(20))
             .setReadTimeout(Duration.ofSeconds(20))
             .defaultHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .rootUri(oppslagsUrl)
             .defaultMessageConverters()
-            .interceptors(bearerTokenInterceptor(), mdcInterceptor)
+            .additionalInterceptors(
+                bearerTokenInterceptor(),
+                RestTemplateUtils.requestLoggerInterceptor(logger),
+                RestTemplateUtils.requestTracingInterceptor()
+            )
             .build()
     }
 
