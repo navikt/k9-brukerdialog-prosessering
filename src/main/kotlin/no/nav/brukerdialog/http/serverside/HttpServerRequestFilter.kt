@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.http.serverside
 
+import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.ServletRequest
@@ -18,19 +19,18 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
-import org.springframework.web.filter.GenericFilterBean
 import java.io.IOException
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-class HeadersToMDCFilterBean(
+class HttpServerRequestFilter(
     private val generator: CallIdGenerator,
     private val tokenValidationContextHolder: TokenValidationContextHolder,
     @Value("\${spring.application.name:k9-brukerdialog-prosessering}") private val applicationName: String,
-) : GenericFilterBean() {
+) : Filter {
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(HeadersToMDCFilterBean::class.java)
+        private val logger = LoggerFactory.getLogger(HttpServerRequestFilter::class.java)
     }
 
     @Throws(IOException::class, ServletException::class)
@@ -76,7 +76,7 @@ class HeadersToMDCFilterBean(
             MDCUtil.toMDC(Constants.CORRELATION_ID, req.getHeader(NavHeaders.X_CORRELATION_ID), generator.create())
             MDCUtil.toMDC(Constants.YTELSE, req.getHeader(NavHeaders.BRUKERDIALOG_YTELSE)?.somYtelse())
         } catch (e: Exception) {
-            LOG.warn("Feil ved setting av MDC-verdier for {}, MDC-verdier er inkomplette", req.requestURI, e)
+            logger.warn("Feil ved setting av MDC-verdier for {}, MDC-verdier er inkomplette", req.requestURI, e)
         }
     }
 
