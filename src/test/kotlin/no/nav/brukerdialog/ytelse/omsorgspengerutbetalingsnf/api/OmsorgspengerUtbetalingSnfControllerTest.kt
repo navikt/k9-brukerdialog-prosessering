@@ -183,7 +183,6 @@ class OmsorgspengerUtbetalingSnfControllerTest {
                               "reason": "'Sluttdato' må være lik eller etter 'startdato'"
                             },
                             {
-                              "invalidValue": "123ABC",
                               "parameterName": "omsorgspengerutbetalingSnfSøknad.selvstendigNæringsdrivende.organisasjonsnummer",
                               "parameterType": "ENTITY",
                               "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
