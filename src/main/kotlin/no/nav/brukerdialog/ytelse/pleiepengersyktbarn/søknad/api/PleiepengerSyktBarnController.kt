@@ -42,7 +42,7 @@ class PleiepengerSyktBarnController(
     private val metrikkService: MetrikkService,
 ) {
     private companion object {
-        private val logger: Logger = LoggerFactory.getLogger(no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.PleiepengerSyktBarnController::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(PleiepengerSyktBarnController::class.java)
     }
 
     @PostMapping("/innsending", consumes = [MediaType.APPLICATION_JSON_VALUE])
@@ -55,7 +55,7 @@ class PleiepengerSyktBarnController(
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
-        no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.PleiepengerSyktBarnController.Companion.logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
+        logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
         søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn())
 
         innsendingCache.put(cacheKey)

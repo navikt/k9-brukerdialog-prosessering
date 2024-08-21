@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
+import no.nav.brukerdialog.utils.krever
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import org.slf4j.Logger
@@ -50,18 +51,19 @@ data class BarnDetaljer(
 
     @AssertTrue(message = "Må være satt dersom fødselsnummer er null.")
     fun isFødselsDato(): Boolean {
-        if(fødselsnummer.isNullOrEmpty()) {
+        if (fødselsnummer.isNullOrEmpty()) {
             return fødselsdato != null
         }
         return true
     }
 
-    @AssertTrue(message = "Må være satt dersom fødselsnummer er null.")
-    fun isÅrsakManglerIdentitetsnummer(): Boolean {
-        if(fødselsnummer.isNullOrEmpty()) {
-            return årsakManglerIdentitetsnummer != null
+    fun valider(felt: String) = mutableListOf<String>().apply {
+        if (fødselsnummer.isNullOrEmpty()) {
+            krever(
+                årsakManglerIdentitetsnummer != null,
+                "$felt.årsakManglerIdentitetsnummer må være satt dersom fødselsnummer er null."
+            )
         }
-        return true
     }
 }
 
