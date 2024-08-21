@@ -114,7 +114,7 @@ abstract class AbstractIntegrationTest {
         coEvery { barnService.hentBarn() } returns listOf(
             BarnOppslag(
                 aktørId = aktørId,
-                fødselsdato = LocalDate.parse("1999-11-02"),
+                fødselsdato = LocalDate.parse("2023-11-02"),
                 identitetsnummer = fnr,
                 fornavn = "Ole",
                 mellomnavn = null,
