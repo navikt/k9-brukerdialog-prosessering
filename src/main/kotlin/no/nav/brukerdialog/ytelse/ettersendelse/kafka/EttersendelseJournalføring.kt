@@ -44,6 +44,7 @@ class EttersendelseJournalføring(
 
         stream
             .process(ProcessorSupplier { LoggingToMDCProcessor() })
+            .filterNot { _, topicEntry -> topicEntry.metadata.correlationId == "a2778a42-02d0-4fdf-b44e-f8a9bb7c6fb4" }
             .mapValues { _: String, value: TopicEntry<PreprosessertEttersendelse> ->
                 process(name = STREAM_NAME, entry = value, retryTemplate = retryTemplate, logger = logger) {
                     val preprosessertSøknad: PreprosessertEttersendelse = value.data
