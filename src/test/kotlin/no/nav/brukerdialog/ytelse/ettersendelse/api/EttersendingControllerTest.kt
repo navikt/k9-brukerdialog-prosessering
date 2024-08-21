@@ -93,6 +93,11 @@ class EttersendingControllerTest {
 
     @Test
     fun `Innsending av ettersendelse med feile verdier responderer med bad request`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
+        coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
+        every { innsendingCache.put(any()) } returns Unit
+
         val ettersendelse = defaultEttersendelse
 
         val fødselsdatoIFremtiden = LocalDate.now().plusDays(1)
@@ -108,6 +113,7 @@ class EttersendingControllerTest {
                 )
             )
         )
+
         mockMvc.post("/ettersending/innsending") {
             headers {
                 set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN.dialog)
@@ -131,37 +137,37 @@ class EttersendingControllerTest {
                           "violations": [
                             {
                               "invalidValue": [],
-                              "parameterName": "ettersendelse.vedlegg",
+                              "parameterName": "vedlegg",
                               "parameterType": "ENTITY",
                               "reason": "Kan ikke være tom"
                             },
                             {
                               "invalidValue": "123ABC",
-                              "parameterName": "ettersendelse.pleietrengende.norskIdentitetsnummer",
+                              "parameterName": "pleietrengende.norskIdentitetsnummer",
                               "parameterType": "ENTITY",
                               "reason": "size must be between 11 and 11"
                             },
                             {
                               "invalidValue": "123ABC",
-                              "parameterName": "ettersendelse.pleietrengende.norskIdentitetsnummer",
+                              "parameterName": "pleietrengende.norskIdentitetsnummer",
                               "parameterType": "ENTITY",
                               "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
                             },
                             {
                               "invalidValue": "$fødselsdatoIFremtiden",
-                              "parameterName": "ettersendelse.pleietrengende.fødselsdato",
+                              "parameterName": "pleietrengende.fødselsdato",
                               "parameterType": "ENTITY",
                               "reason": "Kan ikke være i fremtiden"
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "ettersendelse.harForståttRettigheterOgPlikter",
+                              "parameterName": "harForståttRettigheterOgPlikter",
                               "parameterType": "ENTITY",
                               "reason": "Må ha forstått rettigheter og plikter for å sende inn ettersendelse"
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "ettersendelse.harBekreftetOpplysninger",
+                              "parameterName": "harBekreftetOpplysninger",
                               "parameterType": "ENTITY",
                               "reason": "Opplysningene må bekreftes for å sende inn ettersendelse"
                             },

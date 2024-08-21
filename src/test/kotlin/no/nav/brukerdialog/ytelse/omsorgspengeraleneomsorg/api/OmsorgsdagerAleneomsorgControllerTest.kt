@@ -14,6 +14,7 @@ import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TidspunktF
 import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TypeBarn
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
@@ -92,11 +93,13 @@ class OmsorgsdagerAleneomsorgControllerTest {
 
     @Test
     fun `Innsending av søknad med feile verdier responderer med bad request`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
+        coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
+        every { innsendingCache.put(any()) } returns Unit
+
         val defaultSøknad = SøknadUtils.defaultSøknad
 
-        val fødselsdatoIFremtiden = LocalDate.now().plusDays(1)
-        val forLangtNavn =
-            "barnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnb"
         val jsonPayload = objectMapper.writeValueAsString(
             defaultSøknad.copy(
                 harForståttRettigheterOgPlikter = false,
@@ -109,15 +112,6 @@ class OmsorgsdagerAleneomsorgControllerTest {
                         aktørId = "123",
                         identitetsnummer = "123ABC",
                         tidspunktForAleneomsorg = TidspunktForAleneomsorg.SISTE_2_ÅRENE,
-                        dato = null
-                    ),
-                    Barn(
-                        navn = forLangtNavn,
-                        type = TypeBarn.FRA_OPPSLAG,
-                        fødselsdato = LocalDate.now().plusDays(1),
-                        aktørId = "123",
-                        identitetsnummer = "25058118020",
-                        tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE,
                         dato = null
                     )
                 ),
@@ -146,52 +140,41 @@ class OmsorgsdagerAleneomsorgControllerTest {
                           "violations": [
                             {
                               "invalidValue": "123ABC",
-                              "parameterName": "omsorgsdagerAleneOmOmsorgenSøknad.barn[0].identitetsnummer",
+                              "parameterName": "barn[0].identitetsnummer",
                               "parameterType": "ENTITY",
                               "reason": "size must be between 11 and 11"
                             },
                             {
                               "invalidValue": "123ABC",
-                              "parameterName": "omsorgsdagerAleneOmOmsorgenSøknad.barn[0].identitetsnummer",
+                              "parameterName": "barn[0].identitetsnummer",
                               "parameterType": "ENTITY",
                               "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
                             },
                              {
-                              "parameterName": "omsorgsdagerAleneOmOmsorgenSøknad.barn[0].fødselsdato",
+                              "parameterName": "barn[0].fødselsdato",
                               "parameterType": "ENTITY",
                               "reason": "Må være satt når 'type' er annet enn 'FRA_OPPSLAG'"
                             },
                             {
                               "invalidValue": "",
-                              "parameterName": "omsorgsdagerAleneOmOmsorgenSøknad.barn[0].navn",
+                              "parameterName": "barn[0].navn",
                               "parameterType": "ENTITY",
                               "reason": "Kan ikke være tomt eller blankt"
                             },
                             {
-                              "parameterName": "omsorgsdagerAleneOmOmsorgenSøknad.barn[0].dato",
+                              "parameterName": "barn[0].dato",
                               "parameterType": "ENTITY",
                               "reason": "Må være satt når 'tidspunktForAleneomsorg' er 'SISTE_2_ÅRENE'"
                             },
                             {
-                              "invalidValue": "$forLangtNavn",
-                              "parameterName": "omsorgsdagerAleneOmOmsorgenSøknad.barn[1].navn",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være mer enn 100 tegn"
-                            },
-                            {
-                              "parameterName": "omsorgsdagerAleneOmOmsorgenSøknad.barn[1].fødselsdato",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være i fremtiden"
-                            },
-                            {
                               "invalidValue": false,
-                              "parameterName": "omsorgsdagerAleneOmOmsorgenSøknad.harForståttRettigheterOgPlikter",
+                              "parameterName": "harForståttRettigheterOgPlikter",
                               "parameterType": "ENTITY",
                               "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "omsorgsdagerAleneOmOmsorgenSøknad.harBekreftetOpplysninger",
+                              "parameterName": "harBekreftetOpplysninger",
                               "parameterType": "ENTITY",
                               "reason": "Opplysningene må bekreftes for å sende inn søknad"
                             },

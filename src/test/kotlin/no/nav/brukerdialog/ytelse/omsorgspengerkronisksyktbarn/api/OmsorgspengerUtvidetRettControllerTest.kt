@@ -89,6 +89,11 @@ class OmsorgspengerUtvidetRettControllerTest {
 
     @Test
     fun `Innsending av søknad med feile verdier responderer med bad request`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
+        coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
+        every { innsendingCache.put(any()) } returns Unit
+
         val defaultSøknad = SøknadUtils.defaultSøknad
 
         val fødselsdatoIFremtiden = LocalDate.now().plusDays(1)
@@ -128,43 +133,43 @@ class OmsorgspengerUtvidetRettControllerTest {
                           "violations": [
                             {
                               "invalidValue": "123ABC",
-                              "parameterName": "omsorgspengerKroniskSyktBarnSøknad.barn.norskIdentifikator",
+                              "parameterName": "barn.norskIdentifikator",
                               "parameterType": "ENTITY",
                               "reason": "size must be between 11 and 11"
                             },
                             {
                               "invalidValue": "123ABC",
-                              "parameterName": "omsorgspengerKroniskSyktBarnSøknad.barn.norskIdentifikator",
+                              "parameterName": "barn.norskIdentifikator",
                               "parameterType": "ENTITY",
                               "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
                             },
                              {
                               "invalidValue": "$fødselsdatoIFremtiden",
-                              "parameterName": "omsorgspengerKroniskSyktBarnSøknad.barn.fødselsdato",
+                              "parameterName": "barn.fødselsdato",
                               "parameterType": "ENTITY",
                               "reason": "Kan ikke være i fremtiden"
                             },
                             {
                               "invalidValue": "",
-                              "parameterName": "omsorgspengerKroniskSyktBarnSøknad.barn.navn",
+                              "parameterName": "barn.navn",
                               "parameterType": "ENTITY",
                               "reason": "Kan ikke være tomt eller blankt"
                             },
                             {
                               "invalidValue": "¨ er ikke tillatt",
-                              "parameterName": "omsorgspengerKroniskSyktBarnSøknad.høyereRisikoForFraværBeskrivelse",
+                              "parameterName": "høyereRisikoForFraværBeskrivelse",
                               "parameterType": "ENTITY",
                               "reason": "Matcher ikke tillatt mønster: '^[\\p{Punct}\\p{L}\\p{M}\\p{N}\\p{Sc}\\p{Space}«»–§�\\u2018\\u2019\\u201a\\u201b\\u201c\\u201d\\u201e\\u201f\\u00b4\\u2026]*${'$'}'"
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "omsorgspengerKroniskSyktBarnSøknad.harForståttRettigheterOgPlikter",
+                              "parameterName": "harForståttRettigheterOgPlikter",
                               "parameterType": "ENTITY",
                               "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "omsorgspengerKroniskSyktBarnSøknad.harBekreftetOpplysninger",
+                              "parameterName": "harBekreftetOpplysninger",
                               "parameterType": "ENTITY",
                               "reason": "Opplysningene må bekreftes for å sende inn søknad"
                             },

@@ -96,6 +96,11 @@ class OmsorgspengerUtbetalingSnfControllerTest {
 
     @Test
     fun `Innsending av søknad med feile verdier responderer med bad request`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
+        coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
+        every { innsendingCache.put(any()) } returns Unit
+
         val fødselsdatoIFremtiden = LocalDate.now().plusDays(1)
         val jsonPayload = objectMapper.writeValueAsString(
             SøknadUtils.defaultSøknad.copy(
@@ -150,52 +155,52 @@ class OmsorgspengerUtbetalingSnfControllerTest {
                           "detail": "Forespørselen inneholder valideringsfeil",
                           "violations": [
                             {
-                              "parameterName": "omsorgspengerutbetalingSnfSøknad.barn[0].identitetsnummer",
+                              "parameterName": "barn[0].identitetsnummer",
                               "parameterType": "ENTITY",
                               "reason": "size must be between 11 and 11"
                             },
                             {
-                              "parameterName": "omsorgspengerutbetalingSnfSøknad.barn[0].identitetsnummer",
+                              "parameterName": "barn[0].identitetsnummer",
                               "parameterType": "ENTITY",
                               "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
                             },
                              {
-                              "parameterName": "omsorgspengerutbetalingSnfSøknad.barn[0].fødselsdato",
+                              "parameterName": "barn[0].fødselsdato",
                               "parameterType": "ENTITY",
                               "reason": "Kan ikke være i fremtiden"
                             },
                             {
                               "invalidValue": "",
-                              "parameterName": "omsorgspengerutbetalingSnfSøknad.barn[0].navn",
+                              "parameterName": "barn[0].navn",
                               "parameterType": "ENTITY",
                               "reason": "Kan ikke være tomt eller blankt"
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "omsorgspengerutbetalingSnfSøknad.frilans.sluttdato",
+                              "parameterName": "frilans.sluttdato",
                               "parameterType": "ENTITY",
                               "reason": "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt"
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "omsorgspengerutbetalingSnfSøknad.frilans.startdato",
+                              "parameterName": "frilans.startdato",
                               "parameterType": "ENTITY",
                               "reason": "'Sluttdato' må være lik eller etter 'startdato'"
                             },
                             {
-                              "parameterName": "omsorgspengerutbetalingSnfSøknad.selvstendigNæringsdrivende.organisasjonsnummer",
+                              "parameterName": "selvstendigNæringsdrivende.organisasjonsnummer",
                               "parameterType": "ENTITY",
                               "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "omsorgspengerutbetalingSnfSøknad.bekreftelser.harBekreftetOpplysninger",
+                              "parameterName": "bekreftelser.harBekreftetOpplysninger",
                               "parameterType": "ENTITY",
                               "reason": "Opplysningene må bekreftes for å sende inn søknad"
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "omsorgspengerutbetalingSnfSøknad.bekreftelser.harForståttRettigheterOgPlikter",
+                              "parameterName": "bekreftelser.harForståttRettigheterOgPlikter",
                               "parameterType": "ENTITY",
                               "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
                             },

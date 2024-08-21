@@ -1,12 +1,12 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.PastOrPresent
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
-import no.nav.brukerdialog.utils.krever
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import org.slf4j.Logger
@@ -57,13 +57,12 @@ data class BarnDetaljer(
         return true
     }
 
-    fun valider(felt: String) = mutableListOf<String>().apply {
+    @AssertTrue(message = "Må være satt dersom fødselsnummer er null.")
+    fun isÅrsakManglerIdentitetsnummer(): Boolean {
         if (fødselsnummer.isNullOrEmpty()) {
-            krever(
-                årsakManglerIdentitetsnummer != null,
-                "$felt.årsakManglerIdentitetsnummer må være satt dersom fødselsnummer er null."
-            )
+            return årsakManglerIdentitetsnummer != null
         }
+        return true
     }
 }
 

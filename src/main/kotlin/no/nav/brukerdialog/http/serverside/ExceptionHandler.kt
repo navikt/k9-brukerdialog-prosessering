@@ -119,7 +119,9 @@ class ExceptionHandler(
                     reason = it.message,
                     invalidValue = it.invalidValue,
                 )
-            }.toSortedSet { o1, o2 -> o1.parameterName.compareTo(o2.parameterName) }
+            }.toSortedSet { o1: Violation, o2: Violation ->
+                compareValuesBy(o1, o2, Violation::parameterName, Violation::reason)
+            }
         val validationProblemDetails = ValidationProblemDetails(violations)
 
         val problemDetails = request.respondProblemDetails(

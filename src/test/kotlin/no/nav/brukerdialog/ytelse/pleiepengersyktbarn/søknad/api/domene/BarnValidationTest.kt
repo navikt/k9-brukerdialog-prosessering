@@ -36,18 +36,13 @@ class BarnValidationTest {
 
     @Test
     fun `Skal gi feil dersom fødselsnummer ikke settes og man ikke har satt fødsesldato og årsak`() {
-        val ugyldigBarn = gyldigBarn.copy(
-            fødselsnummer = null,
-            årsakManglerIdentitetsnummer = null,
-            fødselsdato = null
-        )
         Validator.verifiserValideringsFeil(
-            ugyldigBarn, 1, "Må være satt dersom fødselsnummer er null."
+            gyldigBarn.copy(
+                fødselsnummer = null,
+                årsakManglerIdentitetsnummer = null,
+                fødselsdato = null
+            ), 2, "Må være satt dersom fødselsnummer er null.", "Må være satt dersom fødselsnummer er null."
         )
-
-        ugyldigBarn.valider("barn").verifiserValideringsFeil(1, listOf(
-            "barn.årsakManglerIdentitetsnummer må være satt dersom fødselsnummer er null."
-        ))
     }
 
     @Test

@@ -1,16 +1,14 @@
 package no.nav.brukerdialog.domenetjenester.innsending
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.nav.k9.ettersendelse.Ettersendelse
-import no.nav.k9.søknad.Søknad
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
-import no.nav.brukerdialog.ytelse.Ytelse
+import jakarta.validation.ConstraintViolationException
+import jakarta.validation.Validation
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
+import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.kafka.KafkaProducerService
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.mellomlagring.dokument.valider
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.oppslag.soker.SøkerService
@@ -18,25 +16,35 @@ import no.nav.brukerdialog.validation.ParameterType
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetails
 import no.nav.brukerdialog.validation.Violation
+import no.nav.brukerdialog.ytelse.Ytelse
+import no.nav.k9.ettersendelse.Ettersendelse
+import no.nav.k9.søknad.Søknad
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.validation.annotation.Validated
 
 @Service
+@Validated
 class InnsendingService(
     private val søkerService: SøkerService,
     private val kafkaProdusent: KafkaProducerService,
     private val objectMapper: ObjectMapper,
     private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
 ) {
+    companion object {
+        private val logger: Logger = LoggerFactory.getLogger(this::class.java)
+        val validator = Validation.buildDefaultValidatorFactory().validator
+    }
 
     internal suspend fun registrer(
         innsending: Innsending,
         metadata: MetaInfo
     ) {
+        forsikreValidert(innsending)
         val søker = søkerService.hentSøker()
-
         logger.info(formaterStatuslogging(innsending.ytelse(), innsending.søknadId(), "registreres."))
 
         innsending.valider()
@@ -50,6 +58,15 @@ class InnsendingService(
             metadata
         )
         else registrerSøknadUtenVedlegg(innsending, søker, k9Format, metadata)
+    }
+
+    fun forsikreValidert(innsending: Innsending) {
+        logger.info("Validerer innsending...")
+        val violations = validator.validate(innsending)
+        if (violations.isNotEmpty()) {
+            throw ConstraintViolationException(violations)
+        }
+        logger.info("Innsending validert")
     }
 
     private fun registrerSøknadUtenVedlegg(
@@ -152,9 +169,5 @@ class InnsendingService(
             logger.info("Fjerner hold på persisterte vedlegg")
             k9DokumentMellomlagringService.fjernHoldPåPersisterteDokumenter(innsending.vedlegg(), eier)
         }
-    }
-
-    companion object {
-        private val logger: Logger = LoggerFactory.getLogger(this::class.java)
     }
 }

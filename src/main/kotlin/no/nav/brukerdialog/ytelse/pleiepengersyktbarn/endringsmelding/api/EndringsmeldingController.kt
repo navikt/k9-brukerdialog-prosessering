@@ -2,25 +2,24 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api
 
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
-import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api.domene.Endringsmelding
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
+import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.innsyn.InnsynService
+import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenUtils.personIdent
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api.domene.Endringsmelding
+import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequiredIssuers(
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
-@Validated
 class EndringsmeldingController(
     private val innsendingService: InnsendingService,
     private val innsendingCache: InnsendingCache,
