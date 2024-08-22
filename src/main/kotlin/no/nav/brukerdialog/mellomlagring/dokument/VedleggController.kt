@@ -58,16 +58,15 @@ class VedleggController(
     }
 
     @GetMapping("/{vedleggId}")
-    fun hentVedlegg(@NotBlank @PathVariable vedleggId: String): ResponseEntity<ByteArrayResource> = runBlocking {
+    fun hentVedlegg(@NotBlank @PathVariable vedleggId: String): ResponseEntity<ByteArray> = runBlocking {
         val personIdent = tokenValidationContextHolder.personIdent()
         kotlin.runCatching {
             vedleggService.hentVedlegg(vedleggId, personIdent).let {
-                val resource = ByteArrayResource(it.content)
+                val content = it.content
                 ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=${it.title}")
                     .contentType(MediaType.parseMediaType(it.contentType))
-                    .contentLength(resource.byteArray.size.toLong())
-                    .body(resource)
+                    .contentLength(content.size.toLong())
+                    .body(content)
             }
         }.fold(
             onSuccess = { it },

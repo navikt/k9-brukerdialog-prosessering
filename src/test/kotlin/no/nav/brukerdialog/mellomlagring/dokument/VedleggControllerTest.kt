@@ -203,11 +203,7 @@ class VedleggControllerTest {
                     contentType(fileContentType)
                     bytes(fileContent)
                 }
-                header {
-                    exists(HttpHeaders.CONTENT_DISPOSITION)
-                    string(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=${file.name}")
-                }
-            }
+            }.andDo { print() }
     }
 }
 
