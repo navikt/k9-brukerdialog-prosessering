@@ -8,6 +8,7 @@ import no.nav.brukerdialog.utils.TokenUtils.personIdent
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
+import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -57,13 +58,16 @@ class VedleggController(
     }
 
     @GetMapping("/{vedleggId}")
-    fun hentVedlegg(@NotBlank @PathVariable vedleggId: String): ResponseEntity<ByteArray> = runBlocking {
+    fun hentVedlegg(@NotBlank @PathVariable vedleggId: String): ResponseEntity<ByteArrayResource> = runBlocking {
         val personIdent = tokenValidationContextHolder.personIdent()
         kotlin.runCatching {
             vedleggService.hentVedlegg(vedleggId, personIdent).let {
+                val resource = ByteArrayResource(it.content)
                 ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=${it.title}")
                     .contentType(MediaType.parseMediaType(it.contentType))
-                    .body(it.content)
+                    .contentLength(resource.byteArray.size.toLong())
+                    .body(resource)
             }
         }.fold(
             onSuccess = { it },

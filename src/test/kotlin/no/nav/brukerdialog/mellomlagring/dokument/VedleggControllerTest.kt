@@ -190,6 +190,10 @@ class VedleggControllerTest {
                     contentType(MediaType.APPLICATION_PDF_VALUE)
                     bytes("test-content".toByteArray())
                 }
+                header {
+                    exists(HttpHeaders.CONTENT_DISPOSITION)
+                    string(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=test-file.pdf")
+                }
             }
     }
 }
