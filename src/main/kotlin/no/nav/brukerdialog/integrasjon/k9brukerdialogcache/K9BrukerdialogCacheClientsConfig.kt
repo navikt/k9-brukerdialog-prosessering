@@ -39,7 +39,7 @@ class K9BrukerdialogCacheClientsConfig(
             .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .additionalInterceptors(
-                RestTemplateUtils.authorizationInterceptor(tokenxK9MellomlagringClientProperties, oAuth2AccessTokenService),
+                RestTemplateUtils.exchangeBearerTokenInterceptor(tokenxK9MellomlagringClientProperties, oAuth2AccessTokenService),
                 RestTemplateUtils.requestLoggerInterceptor(logger),
                 RestTemplateUtils.requestTracingInterceptor()
             )

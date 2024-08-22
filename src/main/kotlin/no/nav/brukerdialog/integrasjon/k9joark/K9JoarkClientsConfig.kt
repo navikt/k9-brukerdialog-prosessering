@@ -35,7 +35,7 @@ class K9JoarkClientsConfig(
             .rootUri(baseUrl)
             .setReadTimeout(Duration.ofSeconds(120))
             .additionalInterceptors(
-                RestTemplateUtils.authorizationInterceptor(azureK9JoarkClientProperties, oAuth2AccessTokenService),
+                RestTemplateUtils.exchangeBearerTokenInterceptor(azureK9JoarkClientProperties, oAuth2AccessTokenService),
                 RestTemplateUtils.requestLoggerInterceptor(logger),
                 RestTemplateUtils.requestTracingInterceptor()
             )

@@ -14,7 +14,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor
 import java.util.*
 
 object RestTemplateUtils {
-    fun authorizationInterceptor(
+    fun exchangeBearerTokenInterceptor(
         clientProperties: ClientProperties,
         oAuth2AccessTokenService: OAuth2AccessTokenService,
     ): ClientHttpRequestInterceptor {
