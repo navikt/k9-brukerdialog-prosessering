@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.oppslag.barn
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
 data class BarnOppslag(
@@ -23,7 +24,7 @@ data class BarnOppslagRespons(
     val fornavn: String,
     val mellomnavn: String? = null,
     val etternavn: String,
-    val aktør_id: String,
+    @JsonProperty("aktør_id") val aktørId: String,
 ) {
     fun tilBarnOppslag() = BarnOppslag(
         identitetsnummer = identitetsnummer,
@@ -31,7 +32,7 @@ data class BarnOppslagRespons(
         fornavn = fornavn,
         mellomnavn = mellomnavn,
         etternavn = etternavn,
-        aktørId = aktør_id
+        aktørId = aktørId
     )
 }
 

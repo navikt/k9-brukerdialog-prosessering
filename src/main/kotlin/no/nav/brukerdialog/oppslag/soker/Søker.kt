@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.oppslag.soker
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import java.time.LocalDate
@@ -21,14 +22,14 @@ data class Søker (
 }
 
 data class SøkerOppslagRespons(
-    val aktør_id: String,
+    @JsonProperty("aktør_id") val aktørId: String,
     val fornavn: String,
     val mellomnavn: String?,
     val etternavn: String,
     val fødselsdato: LocalDate
 ) {
     fun tilSøker(fødselsnummer: String) = Søker(
-        aktørId = aktør_id,
+        aktørId = aktørId,
         fødselsnummer = fødselsnummer,
         fødselsdato = fødselsdato,
         fornavn = fornavn,
