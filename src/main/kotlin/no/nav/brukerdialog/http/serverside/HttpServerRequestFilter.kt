@@ -14,6 +14,7 @@ import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.ytelse.Ytelse.Companion.somYtelse
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
+import no.nav.security.token.support.core.jwt.JwtToken
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.Ordered
@@ -36,9 +37,11 @@ class HttpServerRequestFilter(
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val httpServletRequest = request as HttpServletRequest
-        putHeadersToMDC(httpServletRequest)
+        val jwtToken = tokenValidationContextHolder.getTokenValidationContext().firstValidToken
 
-        logRequest(httpServletRequest)
+        putHeadersToMDC(httpServletRequest, jwtToken)
+
+        logRequest(httpServletRequest, jwtToken)
 
         chain.doFilter(request, response)
 
@@ -57,9 +60,7 @@ class HttpServerRequestFilter(
         }
     }
 
-    private fun logRequest(request: HttpServletRequest) {
-        val jwtToken = tokenValidationContextHolder.getTokenValidationContext().firstValidToken
-
+    private fun logRequest(request: HttpServletRequest, jwtToken: JwtToken?) {
         val reqMethod = request.method
         val requestURI = request.requestURI
         val issuer = jwtToken?.let { "[${jwtToken.issuer}]" } ?: ""
@@ -70,11 +71,12 @@ class HttpServerRequestFilter(
         }
     }
 
-    private fun putHeadersToMDC(req: HttpServletRequest) {
+    private fun putHeadersToMDC(req: HttpServletRequest, jwtToken: JwtToken?) {
         try {
             MDCUtil.toMDC(Constants.NAV_CONSUMER_ID, req.getHeader(Constants.NAV_CONSUMER_ID), applicationName)
             MDCUtil.toMDC(Constants.CORRELATION_ID, req.getHeader(NavHeaders.X_CORRELATION_ID), generator.create())
             MDCUtil.toMDC(Constants.YTELSE, req.getHeader(NavHeaders.BRUKERDIALOG_YTELSE)?.somYtelse())
+            MDCUtil.toMDC(Constants.CALLER_CLIENT_ID, jwtToken?.jwtClaimsSet?.getClaim("client_id"))
         } catch (e: Exception) {
             logger.warn("Feil ved setting av MDC-verdier for {}, MDC-verdier er inkomplette", req.requestURI, e)
         }
