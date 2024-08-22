@@ -203,7 +203,7 @@ class VedleggControllerTest {
                     contentType(fileContentType)
                     bytes(fileContent)
                 }
-            }.andDo { print() }
+            }
     }
 }
 
