@@ -8,6 +8,8 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
@@ -19,7 +21,9 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.multipart
+import org.springframework.util.ResourceUtils
 import org.springframework.web.client.HttpClientErrorException
+import java.nio.file.Files
 
 @WebMvcTest(controllers = [VedleggController::class])
 @Import(CallIdGenerator::class)
@@ -175,24 +179,33 @@ class VedleggControllerTest {
             }
     }
 
-    @Test
-    fun `Henting av vedlegg som lykkes returnerer 200 og vedlegget`() {
+    @ParameterizedTest
+    @ValueSource(strings = [
+        "Bilde_3_MB.jpg",
+        "test.pdf",
+        "nav-logo.png"
+    ])
+    fun `Henting av vedlegg som lykkes returnerer 200 og vedlegget`(filnavn: String) {
+        val file = ResourceUtils.getFile("classpath:filer/$filnavn")
+        val fileContent = file.readBytes()
+        val fileContentType = Files.probeContentType(file.toPath())
+
         coEvery { vedleggService.hentVedlegg(any(), any()) } returns Vedlegg(
-            content = "test-content".toByteArray(),
-            contentType = MediaType.APPLICATION_PDF_VALUE,
-            title = "test-file.pdf"
+            content = fileContent,
+            contentType = fileContentType,
+            title = file.name
         )
 
         mockMvc.get("/vedlegg/12345")
             .andExpect {
                 status { isOk() }
                 content {
-                    contentType(MediaType.APPLICATION_PDF_VALUE)
-                    bytes("test-content".toByteArray())
+                    contentType(fileContentType)
+                    bytes(fileContent)
                 }
                 header {
                     exists(HttpHeaders.CONTENT_DISPOSITION)
-                    string(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=test-file.pdf")
+                    string(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=${file.name}")
                 }
             }
     }

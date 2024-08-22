@@ -39,7 +39,7 @@ class VedleggControllerIntegrationTest {
     fun `Opplasting av vedlegg større enn 1MB feiler ikke`() {
         coEvery { vedleggService.lagreVedlegg(any(), any()) } returns "12345"
 
-        val file = ResourceUtils.getFile("classpath:images/Bilde_3_MB.jpg")
+        val file = ResourceUtils.getFile("classpath:filer/Bilde_3_MB.jpg")
         val fileContent = file.readBytes()
         println("---> File size: ${DataSize.ofBytes(fileContent.size.toLong()).toMegabytes()} MB")
 
