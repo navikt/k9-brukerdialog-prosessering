@@ -1,4 +1,4 @@
-package no.nav.brukerdialog
+package no.nav.brukerdialog.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

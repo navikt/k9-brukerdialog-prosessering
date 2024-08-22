@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.utils
 
-import no.nav.brukerdialog.RetryTemplateConfiguration.Companion.MAX_ATTEMPTS
+import no.nav.brukerdialog.config.RetryTemplateConfiguration.Companion.MAX_ATTEMPTS
 import org.slf4j.Logger
 import org.springframework.retry.RetryContext
 

@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.kafka.processors
 
 import io.mockk.every
-import no.nav.brukerdialog.RetryTemplateConfiguration
+import no.nav.brukerdialog.config.RetryTemplateConfiguration
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
 import no.nav.brukerdialog.kafka.types.TopicEntry
