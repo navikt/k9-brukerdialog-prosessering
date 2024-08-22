@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag
 
-import no.nav.k9brukerdialogapi.oppslag.arbeidsgiver.ArbeidsgivereOppslagRespons
+import no.nav.brukerdialog.oppslag.arbeidsgiver.ArbeidsgivereOppslagResponsDto
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.oppslag.TilgangNektetException
 import org.slf4j.Logger
@@ -61,7 +61,7 @@ class ArbeidsgivereOppslagsService(
         tilOgMed: LocalDate,
         skalHentePrivateArbeidsgivere: Boolean,
         skalHenteFrilansoppdrag: Boolean
-    ): ArbeidsgivereOppslagRespons {
+    ): ArbeidsgivereOppslagResponsDto {
         val ytelse = Ytelse.fraMDC()
         val url = UriComponentsBuilder.fromUri(arbeidsgivereUrl.toUri())
             .queryParam("fom", DateTimeFormatter.ISO_LOCAL_DATE.format(fraOgMed))
@@ -74,7 +74,7 @@ class ArbeidsgivereOppslagsService(
             url.toUriString(),
             HttpMethod.GET,
             HttpEntity(null, ytelse.somHttpHeader()),
-            ArbeidsgivereOppslagRespons::class.java
+            ArbeidsgivereOppslagResponsDto::class.java
         )
         logger.info("Fikk response {} for oppslag av arbeidsgivere.", exchange.statusCode)
 
@@ -82,13 +82,13 @@ class ArbeidsgivereOppslagsService(
     }
 
     @Recover
-    private fun recoverArbeidsgivere(error: HttpServerErrorException): ArbeidsgivereOppslagRespons {
+    private fun recoverArbeidsgivere(error: HttpServerErrorException): ArbeidsgivereOppslagResponsDto {
         logger.error("Error response = '${error.responseBodyAsString}' fra '${arbeidsgivereUrl.toUriString()}'")
         throw IllegalStateException("Feil ved henting av arbeidsgivere")
     }
 
     @Recover
-    private fun recoverArbeidsgivere(error: HttpClientErrorException): ArbeidsgivereOppslagRespons {
+    private fun recoverArbeidsgivere(error: HttpClientErrorException): ArbeidsgivereOppslagResponsDto {
         logger.error("Error response = '${error.responseBodyAsString}' fra '${arbeidsgivereUrl.toUriString()}'")
         if(error.statusCode == HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS) {
             throw TilgangNektetException("Tilgang nektet til arbeidsgivere.", HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS)
@@ -97,7 +97,7 @@ class ArbeidsgivereOppslagsService(
     }
 
     @Recover
-    private fun recoverArbeidsgivere(error: ResourceAccessException): ArbeidsgivereOppslagRespons {
+    private fun recoverArbeidsgivere(error: ResourceAccessException): ArbeidsgivereOppslagResponsDto {
         logger.error("{}", error.message)
         throw IllegalStateException("Timeout ved henting av arbeidsgivere")
     }

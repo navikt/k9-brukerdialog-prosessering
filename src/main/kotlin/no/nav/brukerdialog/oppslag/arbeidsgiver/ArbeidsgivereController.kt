@@ -1,7 +1,6 @@
 package no.nav.brukerdialog.oppslag.arbeidsgiver
 
 import kotlinx.coroutines.runBlocking
-import no.nav.k9brukerdialogapi.oppslag.arbeidsgiver.Arbeidsgivere
 import no.nav.brukerdialog.config.Issuers
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
@@ -29,7 +28,7 @@ class ArbeidsgivereController(private val arbeidsgiverService: ArbeidsgiverServi
         @RequestParam("til_og_med", required = true) tilOgMed: String,
         @RequestParam("frilansoppdrag", required = false, defaultValue = "false") frilansoppdrag: Boolean,
         @RequestParam("private_arbeidsgivere", required = false, defaultValue = "false") privateArbeidsgivere: Boolean,
-    ): Arbeidsgivere = runBlocking {
+    ): ArbeidsgivereDto = runBlocking {
 
         val valideringsfeil = FraOgMedTilOgMedValidator.valider(fraOgMed, tilOgMed)
         if (valideringsfeil.isNotEmpty()) throw ValidationErrorResponseException(
