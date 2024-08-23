@@ -9,6 +9,7 @@ import java.net.URL
 import no.nav.k9.søknad.felles.type.Periode as K9Periode
 
 interface Innsending {
+    fun søkerNorskIdent(): String?
     fun ytelse(): Ytelse
     fun søknadId(): String
     fun inneholderVedlegg(): Boolean = vedlegg().isNotEmpty()

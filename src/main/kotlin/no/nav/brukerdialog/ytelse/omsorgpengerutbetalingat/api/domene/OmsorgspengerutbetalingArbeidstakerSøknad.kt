@@ -38,6 +38,7 @@ data class OmsorgspengerutbetalingArbeidstakerSøknad(
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: String,
     val vedlegg: List<URL>,
+    val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
 
     @field:Valid val bosteder: List<Bosted>,
     @field:Valid val opphold: List<Opphold>,
@@ -119,6 +120,8 @@ data class OmsorgspengerutbetalingArbeidstakerSøknad(
         .medAnnetData(dataBruktTilUtledningAnnetData)
 
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = OmsorgspengerUtbetalingSøknadValidator()
+    override fun søkerNorskIdent(): String? = søkerNorskIdent
+
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
     override fun søknadId(): String = søknadId
     override fun vedlegg(): List<URL> = vedlegg

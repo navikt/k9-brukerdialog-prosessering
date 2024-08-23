@@ -60,6 +60,7 @@ internal class SerDesTest {
               "søknadId" : "$søknadsId",
               "mottatt" : "$mottatt",
               "språk": "nb",
+              "søkerNorskIdent": null,
               "barn": {
                 "fødselsnummer": "03028104560",
                 "navn": "Barn Barnesen",

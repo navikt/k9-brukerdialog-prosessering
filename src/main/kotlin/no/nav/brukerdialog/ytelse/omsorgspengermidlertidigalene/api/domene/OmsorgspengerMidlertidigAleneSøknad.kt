@@ -29,6 +29,7 @@ data class OmsorgspengerMidlertidigAleneSøknad(
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val id: String,
     val språk: String,
+    val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val annenForelder: AnnenForelder,
 
     @field:Valid
@@ -95,6 +96,7 @@ data class OmsorgspengerMidlertidigAleneSøknad(
     }
 
     override fun valider() = mutableListOf<String>()
+    override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE
     override fun søknadId(): String = søknadId

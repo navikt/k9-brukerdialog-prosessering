@@ -12,6 +12,7 @@ import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import no.nav.brukerdialog.mellomlagring.dokument.valider
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.oppslag.soker.SøkerService
+import no.nav.brukerdialog.utils.TokenUtils.personIdent
 import no.nav.brukerdialog.validation.ParameterType
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetails
@@ -20,11 +21,15 @@ import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
+import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.ErrorResponseException
 
 @Service
 @Validated
@@ -33,6 +38,7 @@ class InnsendingService(
     private val kafkaProdusent: KafkaProducerService,
     private val objectMapper: ObjectMapper,
     private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
+    private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
 ) {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(this::class.java)
@@ -41,7 +47,7 @@ class InnsendingService(
 
     internal suspend fun registrer(
         innsending: Innsending,
-        metadata: MetaInfo
+        metadata: MetaInfo,
     ) {
         forsikreValidert(innsending)
         val søker = søkerService.hentSøker()
@@ -62,11 +68,28 @@ class InnsendingService(
 
     fun forsikreValidert(innsending: Innsending) {
         logger.info("Validerer innsending...")
+
+        forsikreInnloggetBrukerErSøker(innsending)
+
         val violations = validator.validate(innsending)
         if (violations.isNotEmpty()) {
             throw ConstraintViolationException(violations)
         }
         logger.info("Innsending validert")
+    }
+
+    fun forsikreInnloggetBrukerErSøker(innsending: Innsending) {
+        val søkerNorskIdent = innsending.søkerNorskIdent()
+        if (!søkerNorskIdent.isNullOrBlank()) { // TODO: fjern isNullOrBlank() når søkerNorskIdent() returnerer String
+            val innloggetPersonIdent = springTokenValidationContextHolder.personIdent()
+            if (innloggetPersonIdent != søkerNorskIdent) {
+                logger.error("Innsendingen er ikke gyldig for innlogget bruker.")
+                val problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED)
+                problemDetail.title = "Innsendingen er ikke gyldig for innlogget bruker."
+                problemDetail.detail = "Innlogget bruker er ikke samme person som innsendingen er registrert på."
+                throw ErrorResponseException(HttpStatus.UNAUTHORIZED, problemDetail, null)
+            }
+        }
     }
 
     private fun registrerSøknadUtenVedlegg(

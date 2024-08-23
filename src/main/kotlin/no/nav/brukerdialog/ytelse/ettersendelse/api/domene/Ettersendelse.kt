@@ -28,6 +28,7 @@ data class Ettersendelse(
     val beskrivelse: String? = null,
     val søknadstype: Søknadstype,
     val ettersendelsesType: EttersendelseType,
+    val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val pleietrengende: Pleietrengende? = null,
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn ettersendelse")
@@ -81,6 +82,8 @@ data class Ettersendelse(
         pleietrengende?.let { ettersendelse.pleietrengende(it.tilK9Pleietrengende()) }
         return ettersendelse.build()
     }
+
+    override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.ETTERSENDING
 

@@ -29,6 +29,7 @@ data class Endringsmelding(
     val språk: String,
     var pleietrengendeNavn: String? = null,
     var gyldigeEndringsPerioder: List<Periode>? = null,
+    val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn endringsmelding")
     val harBekreftetOpplysninger: Boolean,
@@ -38,6 +39,8 @@ data class Endringsmelding(
 
     @field:Valid val ytelse: PleiepengerSyktBarn,
 ) : Innsending {
+    override fun søkerNorskIdent(): String? = søkerNorskIdent
+
     override fun ytelse(): Ytelse = Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN
 
     override fun søknadId(): String = søknadId
