@@ -96,6 +96,7 @@ class EttersendingControllerTest {
         coEvery { barnService.hentBarn() } returns emptyList()
         coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
+        coEvery { innsendingService.forsikreInnloggetBrukerErSøker(any()) } returns Unit
         every { innsendingCache.put(any()) } returns Unit
 
         val ettersendelse = defaultEttersendelse
@@ -171,6 +172,53 @@ class EttersendingControllerTest {
                               "parameterType": "ENTITY",
                               "reason": "Opplysningene må bekreftes for å sende inn ettersendelse"
                             },
+                          ]
+                        }
+                        """.trimIndent(),
+                        false,
+                    )
+                }
+            }
+    }
+
+    @Test
+    fun `Innsending der søker ikke er innlogget bruker gir unauthorized`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
+        coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
+        every { innsendingService.forsikreInnloggetBrukerErSøker(any()) } answers { callOriginal() }
+        every { innsendingCache.put(any()) } returns Unit
+        springTokenValidationContextHolder.mockContext()
+
+        val jsonPayload = objectMapper.writeValueAsString(defaultEttersendelse.copy(søkerNorskIdent = "98765"))
+
+        mockMvc.post("/ettersending/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN.dialog)
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            content = jsonPayload.trimIndent()
+        }
+            .andExpect {
+                status { isUnauthorized() }
+                header { exists(NavHeaders.PROBLEM_DETAILS) }
+                content {
+                    json(
+                        """
+                        {
+                          "type": "/problem-details/invalid-request-parameters",
+                          "instance": "http://localhost/ettersending/innsending",
+                          "title": "invalid-request-parameters",
+                          "status": 400,
+                          "detail": "Forespørselen inneholder valideringsfeil",
+                          "violations": [
+                            {
+                              "invalidValue": [],
+                              "parameterName": "vedlegg",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tom"
+                            }
                           ]
                         }
                         """.trimIndent(),

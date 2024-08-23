@@ -98,6 +98,7 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
         coEvery { barnService.hentBarn() } returns emptyList()
         coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
+        coEvery { innsendingService.forsikreInnloggetBrukerErSøker(any()) } returns Unit
         every { innsendingCache.put(any()) } returns Unit
 
         val over19ÅrGammel = LocalDate.now().minusYears(20)

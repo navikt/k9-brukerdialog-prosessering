@@ -99,6 +99,7 @@ class OmsorgspengerUtbetalingSnfControllerTest {
         coEvery { barnService.hentBarn() } returns emptyList()
         coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
+        coEvery { innsendingService.forsikreInnloggetBrukerErSøker(any()) } returns Unit
         every { innsendingCache.put(any()) } returns Unit
 
         val fødselsdatoIFremtiden = LocalDate.now().plusDays(1)
