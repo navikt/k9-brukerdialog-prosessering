@@ -76,10 +76,10 @@ spec:
           expr: floor(increase(http_server_requests_seconds_count{status=~"5.*", app="{{app}}"}[3m])) > 1
           for: 1m
           annotations:
-            summary: "Følgende request feilet: `Status \{{ $labels.status }} - \{{ $labels.method }} \{{ $labels.route }}`.\n
+            summary: "Følgende request feilet: `Status \{{ $labels.status }} - \{{ $labels.method }} \{{ $labels.uri }}`.\n
                       Grunn:\n ```\{{ $labels.problem_details }}```\n
                       Sjekk loggene for å se hvorfor dette feiler."
-            action: "`kubectl logs \{{ $labels.kubernetes_pod_name }} -n \{{ $labels.kubernetes_namespace }} -c \{{ $labels.app }}`"
+            action: "`kubectl logs \{{ $labels.pod }} -n \{{ $labels.namespace }} -c \{{ $labels.app }}`"
           labels:
             namespace: {{namespace}}
             severity: critical
@@ -88,10 +88,10 @@ spec:
           expr: floor(increase(http_server_requests_seconds_count{status=~"4.*", status!~"404|401|403", app="{{app}}"}[3m])) > 0
           for: 1m
           annotations:
-            summary: "Følgende request feilet: `Status \{{ $labels.status }} - \{{ $labels.method }} \{{ $labels.route }}`.\n
+            summary: "Følgende request feilet: `Status \{{ $labels.status }} - \{{ $labels.method }} \{{ $labels.uri }}`.\n
                       Grunn:\n ```\{{ $labels.problem_details }}```\n
                       Sjekk loggene for å se hvorfor dette feiler."
-            action: "`kubectl logs \{{ $labels.kubernetes_pod_name }} -n \{{ $labels.kubernetes_namespace }} -c \{{ $labels.app }}`"
+            action: "`kubectl logs \{{ $labels.pod }} -n \{{ $labels.namespace }} -c \{{ $labels.app }}`"
           labels:
             namespace: {{namespace}}
             severity: critical
