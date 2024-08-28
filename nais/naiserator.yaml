@@ -66,8 +66,12 @@ spec:
     max: {{maxReplicas}}
     cpuThresholdPercentage: 90
   prometheus:
-    enabled: true
+    enabled: {{observabilityEnabled}}
     path: /metrics
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
   env:
   {{#each env}}
    - name: {{@key}}

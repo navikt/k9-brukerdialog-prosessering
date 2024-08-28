@@ -8,6 +8,7 @@
   "kafkaPool": "nav-prod",
   "ingresses": [],
   "inboundRules": [],
+  "observabilityEnabled": "false",
   "env": {
     "SERVER_PORT": "8080",
     "SPRING_APPLICATION_NAME": "k9-brukerdialog-prosessering",
