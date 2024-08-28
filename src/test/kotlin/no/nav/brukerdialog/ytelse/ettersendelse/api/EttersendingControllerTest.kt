@@ -88,6 +88,7 @@ class EttersendingControllerTest {
         }
             .andExpect {
                 status { isAccepted() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
             }
     }
 
@@ -125,6 +126,7 @@ class EttersendingControllerTest {
         }
             .andExpect {
                 status { isBadRequest() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
                 header { exists(NavHeaders.PROBLEM_DETAILS) }
                 content {
                     json(
@@ -134,7 +136,7 @@ class EttersendingControllerTest {
                           "instance": "http://localhost/ettersending/innsending",
                           "title": "invalid-request-parameters",
                           "status": 400,
-                          "detail": "Forespørselen inneholder valideringsfeil",
+                          "detail": "Forespørselen inneholder XXX",
                           "violations": [
                             {
                               "invalidValue": [],

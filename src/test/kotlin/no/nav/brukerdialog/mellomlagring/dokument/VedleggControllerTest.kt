@@ -3,6 +3,7 @@ package no.nav.brukerdialog.mellomlagring.dokument
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import no.nav.brukerdialog.utils.CallIdGenerator
+import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
@@ -65,6 +66,7 @@ class VedleggControllerTest {
             status { isCreated() }
             header { string(HttpHeaders.LOCATION, "http://localhost/vedlegg/12345") }
             header { string(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.LOCATION) }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
         }
     }
 
@@ -88,6 +90,7 @@ class VedleggControllerTest {
                 .contentType(MediaType.MULTIPART_FORM_DATA)
         }.andExpect {
             status { isBadRequest() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
             content {
                 json(
                     """
@@ -124,6 +127,7 @@ class VedleggControllerTest {
         mockMvc.delete("/vedlegg/12345")
             .andExpect {
                 status { isInternalServerError() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
                 content {
                     json(
                         """
@@ -147,6 +151,7 @@ class VedleggControllerTest {
         mockMvc.delete("/vedlegg/12345")
             .andExpect {
                 status { isNoContent() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
             }
     }
 
@@ -163,6 +168,7 @@ class VedleggControllerTest {
         mockMvc.get("/vedlegg/12345")
             .andExpect {
                 status { isNotFound() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
                 content {
                     json(
                         """
@@ -199,6 +205,7 @@ class VedleggControllerTest {
         mockMvc.get("/vedlegg/12345")
             .andExpect {
                 status { isOk() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
                 content {
                     contentType(fileContentType)
                     bytes(fileContent)

@@ -84,6 +84,7 @@ class OmsorgspengerUtvidetRettControllerTest {
         }
             .andExpect {
                 status { isAccepted() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
             }
     }
 
@@ -122,6 +123,7 @@ class OmsorgspengerUtvidetRettControllerTest {
             .andExpect {
                 status { isBadRequest() }
                 header { exists(NavHeaders.PROBLEM_DETAILS) }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
                 content {
                     json(
                         """

@@ -87,6 +87,7 @@ class OmsorgspengerMidlertidigAleneControllerTest {
         }
             .andExpect {
                 status { isAccepted() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
             }
     }
 
@@ -127,6 +128,7 @@ class OmsorgspengerMidlertidigAleneControllerTest {
             .andExpect {
                 status { isBadRequest() }
                 header { exists(NavHeaders.PROBLEM_DETAILS) }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
                 content {
                     json(
                         """

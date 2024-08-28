@@ -40,6 +40,7 @@ object MockMvcUtils {
         }.andExpect {
             status {
                 isAccepted()
+                header { exists(NavHeaders.X_CORRELATION_ID) }
             }
         }
     }

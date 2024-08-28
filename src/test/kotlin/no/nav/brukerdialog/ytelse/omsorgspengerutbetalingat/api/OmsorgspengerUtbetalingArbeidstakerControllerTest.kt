@@ -90,6 +90,7 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
         }
             .andExpect {
                 status { isAccepted() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
             }
     }
 
@@ -132,6 +133,7 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
             .andExpect {
                 status { isBadRequest() }
                 header { exists(NavHeaders.PROBLEM_DETAILS) }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
                 content {
                     json(
                         """

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import no.nav.brukerdialog.utils.CallIdGenerator
+import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
@@ -73,6 +74,7 @@ class MellomlagringControllerTest {
             content = mellomlagringSøknad
         }.andExpect {
             status { isCreated() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
         }
 
         coEvery { mellomlagringService.hentMellomlagring(any()) } returns mellomlagringSøknad
@@ -81,6 +83,7 @@ class MellomlagringControllerTest {
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
             content { json(mellomlagringSøknad) }
         }
     }
@@ -119,6 +122,7 @@ class MellomlagringControllerTest {
             content = mellomlagring
         }.andExpect {
             status { isCreated() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
         }
 
         coEvery { mellomlagringService.hentMellomlagring(any()) } returns mellomlagring
@@ -129,6 +133,7 @@ class MellomlagringControllerTest {
         }.andExpect {
             status { isOk() }
             content { json(mellomlagring) }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
         }
 
         coEvery { mellomlagringService.oppdaterMellomlagring(any(), any()) } returns mockCacheResponse(
@@ -142,6 +147,7 @@ class MellomlagringControllerTest {
             content = oppdatertMellomlagringSøknad
         }.andExpect {
             status { isNoContent() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
         }
 
         coEvery { mellomlagringService.hentMellomlagring(any()) } returns oppdatertMellomlagringSøknad
@@ -151,6 +157,7 @@ class MellomlagringControllerTest {
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
             content { json(oppdatertMellomlagringSøknad) }
         }
 
@@ -161,6 +168,7 @@ class MellomlagringControllerTest {
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isAccepted() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
         }
 
         coEvery { mellomlagringService.hentMellomlagring(any()) } returns null
@@ -170,6 +178,7 @@ class MellomlagringControllerTest {
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
             content { json("{}") }
         }
     }
@@ -189,6 +198,7 @@ class MellomlagringControllerTest {
             contentType = MediaType.APPLICATION_JSON
         }.andExpect {
             status { isOk() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
             content { json("{}") }
         }
     }
@@ -203,6 +213,7 @@ class MellomlagringControllerTest {
             content = mellomlagringSøknad
         }.andExpect {
             status { isConflict() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
             content {
                 json(
                     """
@@ -229,6 +240,7 @@ class MellomlagringControllerTest {
             content = mellomlagringSøknad
         }.andExpect {
             status { isAccepted() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
         }
     }
 

@@ -96,6 +96,7 @@ class PleiepengerSyktBarnControllerTest {
         }
             .andExpect {
                 status { isAccepted() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
             }
     }
 
@@ -213,6 +214,7 @@ class PleiepengerSyktBarnControllerTest {
         }
             .andExpect {
                 status { isBadRequest() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
                 header { exists(NavHeaders.PROBLEM_DETAILS) }
                 content {
                     json(

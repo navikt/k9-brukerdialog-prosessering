@@ -6,7 +6,10 @@ import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import no.nav.brukerdialog.utils.Constants.CORRELATION_ID
+import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders.PROBLEM_DETAILS
+import no.nav.brukerdialog.utils.NavHeaders.X_CORRELATION_ID
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.Ordered
@@ -59,6 +62,8 @@ class ResponseDecoratorFilter : Filter {
         val requestWrapper = ContentCachingRequestWrapper(request as HttpServletRequest)
         val responseWrapper = ContentCachingResponseWrapper(response as HttpServletResponse)
         chain.doFilter(requestWrapper, responseWrapper)
+
+        MDCUtil.fromMDC(CORRELATION_ID)?.let { response.addHeader(X_CORRELATION_ID, it) }
 
         when (response.status) {
             200, 201, 202, 204, 401, 403, 404 -> {
