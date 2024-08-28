@@ -29,6 +29,7 @@ data class OmsorgsdagerAleneOmOmsorgenSøknad(
 
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: String,
+    val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
 
     @field:Valid
     @field:NotEmpty(message = "Kan ikke være en tom liste")
@@ -105,6 +106,8 @@ data class OmsorgsdagerAleneOmOmsorgenSøknad(
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter
         )
     }
+
+    override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSDAGER_ALENEOMSORG
     override fun søknadId(): String = søknadId

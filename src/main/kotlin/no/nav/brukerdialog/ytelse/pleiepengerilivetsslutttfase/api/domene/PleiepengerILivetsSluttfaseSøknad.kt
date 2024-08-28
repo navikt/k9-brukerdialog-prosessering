@@ -55,6 +55,7 @@ data class PleiepengerILivetsSluttfaseSøknad(
     val utenlandskNæring: List<UtenlandskNæring>,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val pleierDuDenSykeHjemme: Boolean? = null,
+    val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
     val harBekreftetOpplysninger: Boolean,
@@ -167,6 +168,8 @@ data class PleiepengerILivetsSluttfaseSøknad(
             else -> medFrilanserArbeidstid(frilans.somK9Arbeidstid(fraOgMed, tilOgMed))
         }
     }
+
+    override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 

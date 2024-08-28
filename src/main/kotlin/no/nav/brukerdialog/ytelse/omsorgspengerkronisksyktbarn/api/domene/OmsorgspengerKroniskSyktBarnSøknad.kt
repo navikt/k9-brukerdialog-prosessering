@@ -36,6 +36,7 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
     val samværsavtale: List<URL>? = null,
     val relasjonTilBarnet: SøkerBarnRelasjon? = null,
     val kroniskEllerFunksjonshemming: Boolean,
+    val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
 
     @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
     val harForståttRettigheterOgPlikter: Boolean,
@@ -118,6 +119,8 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
 
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> =
         OmsorgspengerKroniskSyktBarnSøknadValidator()
+
+    override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTVIDET_RETT
     override fun søknadId(): String = søknadId

@@ -37,6 +37,7 @@ data class OmsorgspengerutbetalingSnfSøknad(
     internal val søknadId: String = UUID.randomUUID().toString(),
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: String,
+    val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val bosteder: List<Bosted>,
     @field:Valid val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
@@ -119,6 +120,8 @@ data class OmsorgspengerutbetalingSnfSøknad(
             k9FormatSøknad = k9Format as Søknad
         )
     }
+
+    override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTBETALING_SNF
     override fun søknadId(): String = søknadId

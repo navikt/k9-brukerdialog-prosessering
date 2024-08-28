@@ -49,6 +49,7 @@ data class PleiepengerSyktBarnSøknad(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: Språk? = null,
+    val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val barn: BarnDetaljer,
     @field:Valid val arbeidsgivere: List<Arbeidsgiver>,
     val vedlegg: List<URL> = listOf(), // TODO: Fjern listof() når krav om legeerklæring er påkrevd igjen.
@@ -124,6 +125,8 @@ data class PleiepengerSyktBarnSøknad(
             k9FormatSøknad = k9Format as K9Søknad
         )
     }
+
+    override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
 
