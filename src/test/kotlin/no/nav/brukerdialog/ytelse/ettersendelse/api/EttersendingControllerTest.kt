@@ -136,7 +136,7 @@ class EttersendingControllerTest {
                           "instance": "http://localhost/ettersending/innsending",
                           "title": "invalid-request-parameters",
                           "status": 400,
-                          "detail": "Forespørselen inneholder XXX",
+                          "detail": "Forespørselen inneholder valideringsfeil",
                           "violations": [
                             {
                               "invalidValue": [],
