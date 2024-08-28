@@ -83,11 +83,12 @@ class InnsendingService(
         if (!søkerNorskIdent.isNullOrBlank()) { // TODO: fjern isNullOrBlank() når søkerNorskIdent() returnerer String
             val innloggetPersonIdent = springTokenValidationContextHolder.personIdent()
             if (innloggetPersonIdent != søkerNorskIdent) {
-                logger.error("Innsendingen er ikke gyldig for innlogget bruker.")
                 val problemDetail = ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED)
                 problemDetail.title = "Innsendingen er ikke gyldig for innlogget bruker."
                 problemDetail.detail = "Innlogget bruker er ikke samme person som innsendingen er registrert på."
-                throw ErrorResponseException(HttpStatus.UNAUTHORIZED, problemDetail, null)
+                val exception = ErrorResponseException(HttpStatus.UNAUTHORIZED, problemDetail, null)
+                logger.error("Innsendingen er ikke gyldig for innlogget bruker.", exception)
+                throw exception
             }
         }
     }
