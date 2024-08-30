@@ -56,7 +56,7 @@ internal fun hentTopicForYtelse(ytelse: Ytelse) = when (ytelse) {
     PLEIEPENGER_SYKT_BARN -> PLEIEPENGER_SYKT_BARN_TOPIC
     ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN -> MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
     DINE_PLEIEPENGER -> throw IllegalArgumentException("$ytelse er ikke en gyldig ytelse for denne operasjonen")
-    Ytelse.OPPLÆRINGSPENGER -> TODO("Må opprette topic. Se nais/topics i rot av repo")
+    Ytelse.OPPLARINGSPENGER -> TODO("Må opprette topic. Se nais/topics i rot av repo")
 }
 
 internal class SøknadSerializer : Serializer<TopicEntry<JSONObject>> {
