@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
+import org.junit.jupiter.params.provider.EnumSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -89,22 +89,8 @@ class MellomlagringControllerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(
-        strings = [
-            "PLEIEPENGER_SYKT_BARN",
-            "OMSORGSPENGER_UTVIDET_RETT",
-            "OMSORGSPENGER_MIDLERTIDIG_ALENE",
-            "ETTERSENDING",
-            "OMSORGSDAGER_ALENEOMSORG",
-            "OMSORGSPENGER_UTBETALING_ARBEIDSTAKER",
-            "OMSORGSPENGER_UTBETALING_SNF",
-            "PLEIEPENGER_LIVETS_SLUTTFASE",
-            "ETTERSENDING_PLEIEPENGER_SYKT_BARN",
-            "ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE",
-            "ETTERSENDING_OMP"
-        ]
-    )
-    fun `Sende inn, hente, oppdatere og slette mellomlagring`(ytelse: String) {
+    @EnumSource(Ytelse::class)
+    fun `Sende inn, hente, oppdatere og slette mellomlagring`(ytelse: Ytelse) {
         val mellomlagring = """{"formData":{"noe":"no"},"metadata":{"noeAnnet":"ABC"}}"""
         val oppdatertMellomlagringSøknad = """{"mellomlagring": "oppdatert soknad"}"""
 

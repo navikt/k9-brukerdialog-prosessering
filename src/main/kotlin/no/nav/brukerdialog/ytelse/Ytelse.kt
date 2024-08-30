@@ -22,7 +22,8 @@ enum class Ytelse(val dialog: String) {
     ETTERSENDING_OMP("sif-ettersending"),
     PLEIEPENGER_SYKT_BARN("pleiepengesoknad"),
     ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN("endringsmelding-pleiepenger"),
-    DINE_PLEIEPENGER("dine-pleiepenger");
+    DINE_PLEIEPENGER("dine-pleiepenger"),
+    OPPLÆRINGSPENGER("opplaringspenger-soknad");
 
     companion object {
         fun fraMDC(): Ytelse {
