@@ -32,6 +32,7 @@ spec:
         - application: pleiepengesoknad
         - application: endringsmelding-pleiepenger
         - application: dine-pleiepenger
+        - application: opplaringspenger-soknad
       {{#each inboundRules}}
         - application: {{app}}
           namespace: {{namespace}}
