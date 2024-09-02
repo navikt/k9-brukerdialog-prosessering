@@ -16,9 +16,6 @@ spec:
     retentionHours: 730 # 30 dager
   acl:
     - team: dusseldorf
-      access: write
-      application: k9-brukerdialog-api
-    - team: dusseldorf
       application: k9-brukerdialog-prosessering
       access: readwrite
 
