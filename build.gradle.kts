@@ -48,7 +48,7 @@ val orgJsonVersion = "20240303"
 val springdocVersion = "2.6.0"
 
 dependencies {
-	implementation("org.yaml:snakeyaml:2.2") {
+	implementation("org.yaml:snakeyaml:2.3") {
 		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
 	}
 
