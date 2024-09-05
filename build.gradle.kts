@@ -30,7 +30,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.3"
+val tokenSupportVersion = "5.0.5"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "9.5.2"
 val springMockkVersion = "4.0.2"
@@ -48,7 +48,7 @@ val orgJsonVersion = "20240303"
 val springdocVersion = "2.6.0"
 
 dependencies {
-	implementation("org.yaml:snakeyaml:2.2") {
+	implementation("org.yaml:snakeyaml:2.3") {
 		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
 	}
 
