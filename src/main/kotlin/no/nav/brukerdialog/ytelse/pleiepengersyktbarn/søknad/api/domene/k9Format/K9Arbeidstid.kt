@@ -5,7 +5,6 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Pleiepe
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
-
 import java.time.LocalDate
 
 internal fun PleiepengerSyktBarnSøknad.byggK9Arbeidstid(): Arbeidstid {
@@ -13,7 +12,9 @@ internal fun PleiepengerSyktBarnSøknad.byggK9Arbeidstid(): Arbeidstid {
 
         if(arbeidsgivere.isNotEmpty()) medArbeidstaker(arbeidsgivere.tilK9Arbeidstaker(fraOgMed, tilOgMed))
 
-        medFrilanserArbeidstid(frilans.k9ArbeidstidInfo(fraOgMed, tilOgMed))
+        if (frilans.arbeidsforhold != null) {
+            medFrilanserArbeidstid(frilans.k9ArbeidstidInfo(fraOgMed, tilOgMed))
+        }
         selvstendigNæringsdrivende.arbeidsforhold?.let {
             medSelvstendigNæringsdrivendeArbeidstidInfo(selvstendigNæringsdrivende.k9ArbeidstidInfo(fraOgMed, tilOgMed))
         }
