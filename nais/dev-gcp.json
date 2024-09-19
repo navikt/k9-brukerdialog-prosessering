@@ -14,6 +14,11 @@
       "app": "tokenx-token-generator",
       "namespace": "aura",
       "cluster": "dev-gcp"
+    },
+    {
+      "app": "sif-demo-app",
+      "namespace": "duseldorf",
+      "cluster": "dev-gcp"
     }
   ],
   "observabilityEnabled": "true",
