@@ -1,4 +1,4 @@
-name: Deploy ettersendelse topics
+name: Deploy ungdomsytelsesøknad topics
 
 env:
   TOPICS_PATH: 'nais/topics/ungdomsytelse-soknad-topics.yml'
