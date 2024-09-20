@@ -108,6 +108,11 @@ class K9JoarkService(
             .fromPath("/v1/omsorgsdager/aleneomsorg/journalforing")
             .build()
             .toUri()
+
+        Ytelse.UNGDOMSYTELSE -> UriComponentsBuilder
+            .fromPath("/v1/ungdomsytelse/soknad/journalforing")
+            .build()
+            .toUri()
     }
 }
 

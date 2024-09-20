@@ -165,6 +165,13 @@ no.nav:
         application-id-suffix: omp-ao-cleanup
         auto-offset-reset: earliest
 
+      ungdomsytelse-soknad-preprosessering:
+        auto-offset-reset: earliest
+      ungdomsytelse-soknad-journalforing:
+        auto-offset-reset: earliest
+      ungdomsytelse-soknad-cleanup:
+        auto-offset-reset: earliest
+
 wiremock:
   reset-mappings-after-each-test: true
   server:
