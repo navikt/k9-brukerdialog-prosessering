@@ -17,7 +17,7 @@
     },
     {
       "app": "sif-demo-app",
-      "namespace": "duseldorf",
+      "namespace": "dusseldorf",
       "cluster": "dev-gcp"
     }
   ],
