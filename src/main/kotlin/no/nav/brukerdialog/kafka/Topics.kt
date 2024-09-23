@@ -38,7 +38,7 @@ object Topics {
     const val PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC = "dusseldorf.pp-i-livets-sluttfase-soknad-mottatt"
     const val PLEIEPENGER_SYKT_BARN_TOPIC = "dusseldorf.pp-sykt-barn-soknad-mottatt"
     const val MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC = "dusseldorf.privat-endringsmelding-pleiepenger-sykt-barn-mottatt"
-    const val UNGDOMSYTELSE_SOKNAD_TOPIC = "dusseldorf.privat-ungdomsytelse-soknad-mottatt"
+    const val UNGDOMSYTELSE_SOKNAD_TOPIC = "dusseldorf.ungdomsytelse-soknad-mottatt"
 }
 
 data class TopicEntry<V>(

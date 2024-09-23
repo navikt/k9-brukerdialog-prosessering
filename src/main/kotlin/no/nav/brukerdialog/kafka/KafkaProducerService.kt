@@ -13,6 +13,7 @@ import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTBETALING_SNF_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTVIDET_RETT_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_SYKT_BARN_TOPIC
+import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_SOKNAD_TOPIC
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.json.JSONObject
@@ -77,6 +78,7 @@ class KafkaProducerService(
             aivenKafkaTemplate.partitionsFor(PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC)
             aivenKafkaTemplate.partitionsFor(MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC)
             aivenKafkaTemplate.partitionsFor(PLEIEPENGER_SYKT_BARN_TOPIC)
+            aivenKafkaTemplate.partitionsFor(UNGDOMSYTELSE_SOKNAD_TOPIC)
 
             Mono.just(Health.up().withDetail(NAME, "Tilkobling til Kafka OK!").build())
         } catch (cause: Throwable) {
