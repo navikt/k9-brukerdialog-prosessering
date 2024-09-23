@@ -20,7 +20,7 @@ import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class Ungdomsytelsesøknad(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") internal val søknadId: String = UUID.randomUUID()
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID()
         .toString(),
     val språk: String,
     val mottatt: ZonedDateTime,
