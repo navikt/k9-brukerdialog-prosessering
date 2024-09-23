@@ -11,7 +11,6 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Samtykke" href="#samtykke"/>
-        <bookmark name="vedlegg" href="#vedlegg"/>
     </bookmarks>
     {{#block 'style-common' }}
     {{/block}}
@@ -26,17 +25,6 @@
 <div class="innholdscontainer">
     {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
-    <section id="vedlegg">
-        <h2>Vedlegg</h2>
-        {{#if pleietrengende.manglerNorskIdentitetsnummer}}
-            {{#if harLastetOppId}}
-                <p>Har lastet opp kopi av ID til pleietrengende.</p>
-            {{else}}
-                <p>Har ikke lastet opp kopi av ID til pleietrengende.</p>
-            {{/if}}
-        {{/if}}
-    </section>
-
     <!-- SAMTYKKE -->
     <section id="samtykke">
         <h2>Samtykke fra deg</h2>
@@ -46,7 +34,6 @@
         <p class="sporsmalstekst">Har du bekreftet at opplysninger du har gitt er riktige?</p>
         <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
     </section>
-
 </div>
 
 <!-- FOOTER -->
