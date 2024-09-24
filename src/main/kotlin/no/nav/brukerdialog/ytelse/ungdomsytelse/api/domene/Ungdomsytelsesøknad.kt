@@ -15,6 +15,7 @@ import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
 import java.net.URL
 import java.time.LocalDate
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
@@ -23,7 +24,7 @@ data class Ungdomsytelsesøknad(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID()
         .toString(),
     val språk: String,
-    val mottatt: ZonedDateTime,
+    val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val fraOgMed: LocalDate,
     val tilOgMed: LocalDate,
 
