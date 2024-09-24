@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.http.serverside
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import jakarta.validation.ConstraintViolationException
 import no.nav.brukerdialog.validation.ParameterType
 import no.nav.brukerdialog.validation.ValidationProblemDetails
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -134,6 +136,51 @@ class ExceptionHandler(
 
         log.error("Validerigsfeil: {}", problemDetails)
         return problemDetails
+    }
+
+    override fun handleHttpMessageNotReadable(
+        ex: HttpMessageNotReadableException,
+        headers: HttpHeaders,
+        status: HttpStatusCode,
+        request: WebRequest,
+    ): ResponseEntity<Any>? {
+        request as ServletWebRequest
+        if (ex.cause is MismatchedInputException) {
+            return handleMismatchedInputException(ex, request, headers, status)
+        }
+        return super.handleHttpMessageNotReadable(ex, headers, status, request)
+    }
+
+    private fun handleMismatchedInputException(
+        ex: HttpMessageNotReadableException,
+        request: ServletWebRequest,
+        headers: HttpHeaders,
+        status: HttpStatusCode,
+    ): ResponseEntity<Any> {
+        val violations = (ex.cause as MismatchedInputException).path
+            .map {
+                val feltNavn = "${it.from.toString().substringAfterLast(".")}.${it.fieldName}"
+                Violation(
+                    parameterName = feltNavn,
+                    parameterType = ParameterType.ENTITY,
+                    reason = "$feltNavn er påkrevd, men var ikke satt",
+                    invalidValue = null,
+                )
+            }.toSortedSet { o1: Violation, o2: Violation ->
+                compareValuesBy(o1, o2, Violation::parameterName, Violation::reason)
+            }
+        val validationProblemDetails = ValidationProblemDetails(violations)
+
+        val problemDetails = request.respondProblemDetails(
+            status = HttpStatus.valueOf(validationProblemDetails.status),
+            title = validationProblemDetails.title!!,
+            type = validationProblemDetails.type,
+            violations = validationProblemDetails.violations,
+            detail = validationProblemDetails.detail!!
+        )
+
+        log.error("Validerigsfeil: {}", problemDetails)
+        return ResponseEntity(problemDetails, headers, status)
     }
 
     override fun handleMethodArgumentNotValid(
