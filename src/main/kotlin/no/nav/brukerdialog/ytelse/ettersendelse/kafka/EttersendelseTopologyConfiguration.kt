@@ -11,7 +11,7 @@ import no.nav.brukerdialog.kafka.config.SerDes
 import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.meldinger.ettersendelse.domene.Ettersendelse
+import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Ettersendelse
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.PreprosessertEttersendelse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

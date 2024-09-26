@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsResponse
-import no.nav.brukerdialog.integrasjon.k9joark.K9JoarkService
+import no.nav.brukerdialog.integrasjon.dokarkiv.DokarkivService
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.DokarkivJournalpostResponse
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
@@ -46,7 +46,7 @@ abstract class AbstractIntegrationTest {
     protected lateinit var k9DokumentMellomlagringService: K9DokumentMellomlagringService
 
     @MockkBean(relaxed = false)
-    protected lateinit var k9JoarkService: K9JoarkService
+    protected lateinit var dokarkivService: DokarkivService
 
     @MockkBean
     protected lateinit var barnService: BarnService
@@ -87,7 +87,7 @@ abstract class AbstractIntegrationTest {
     }
 
     protected fun mockJournalføring(journalpostId: String = "123456789") {
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse(journalpostId)
+        coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse(journalpostId, false, listOf())
     }
 
     protected fun mockLagreDokument(forventedeDokumenterForSletting: List<String> = listOf("123456789", "987654321")) {

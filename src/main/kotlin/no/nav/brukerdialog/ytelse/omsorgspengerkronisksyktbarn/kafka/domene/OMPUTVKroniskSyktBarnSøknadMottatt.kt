@@ -8,6 +8,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.pdf.OMPUTVKroniskSyktBarnSøknadPdfData
 import no.nav.brukerdialog.pdf.PdfData
+import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.kafka.domene.OMPUTVKroniskSyktBarnSøknadPreprosesssert
 import java.time.LocalDate
 import java.time.ZonedDateTime
 

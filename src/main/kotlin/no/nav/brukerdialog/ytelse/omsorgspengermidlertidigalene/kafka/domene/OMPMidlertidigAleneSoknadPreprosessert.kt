@@ -1,11 +1,15 @@
-package no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.domene
+package no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.kafka.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.domene.AnnenForelder
+import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.domene.Barn
+import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.domene.OMPMidlertidigAleneSoknadMottatt
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import java.time.ZonedDateTime
 import java.util.*
@@ -50,8 +54,8 @@ data class OMPMidlertidigAleneSoknadPreprosessert(
 
     override fun dokumenter(): List<List<String>> = dokumentId
 
-    override fun tilJournaførigsRequest() = JournalføringsRequest(
-        ytelse = ytelse(),
+    override fun tilJournaførigsRequest() = JournalføringsService.JournalføringsRequest(
+        ytelseType = YtelseType.OMSORGSPENGESØKNAD_MIDLERTIDIG_ALENE,
         norskIdent = søkerFødselsnummer(),
         sokerNavn = søkerNavn(),
         mottatt = mottattDato(),

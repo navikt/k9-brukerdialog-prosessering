@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka
 
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_JOURNALFØRING_STREAMS_BUILDER_NAME
-import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBPreprossesertEndringsmelding
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.domene.PSBPreprossesertEndringsmelding
 import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
 import no.nav.brukerdialog.kafka.config.Topic

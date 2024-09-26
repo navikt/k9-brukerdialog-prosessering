@@ -1,11 +1,16 @@
-package no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene
+package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.kafka.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.Barn
+import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.BarnSammeAdresse
+import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
+import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.SøkerBarnRelasjon
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import java.time.ZonedDateTime
@@ -59,13 +64,14 @@ data class OMPUTVKroniskSyktBarnSøknadPreprosesssert(
 
     override fun dokumenter(): List<List<String>> = dokumentId
 
-    override fun tilJournaførigsRequest(): JournalføringsRequest = JournalføringsRequest(
-        mottatt = mottattDato(),
-        norskIdent = søkerFødselsnummer(),
-        sokerNavn = søkerNavn(),
-        ytelse = ytelse(),
-        dokumentId = dokumenter()
-    )
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest =
+        JournalføringsService.JournalføringsRequest(
+            mottatt = mottattDato(),
+            norskIdent = søkerFødselsnummer(),
+            sokerNavn = søkerNavn(),
+            ytelseType = YtelseType.OMSORGSPENGESØKNAD,
+            dokumentId = dokumenter()
+        )
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,

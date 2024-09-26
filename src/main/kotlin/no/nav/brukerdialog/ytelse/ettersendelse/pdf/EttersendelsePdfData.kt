@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.ettersendelse.pdf
 import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
 import no.nav.brukerdialog.common.Ytelse
-import no.nav.brukerdialog.meldinger.ettersendelse.domene.Ettersendelse
+import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Ettersendelse
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.Pleietrengende
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag

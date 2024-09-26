@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.ettersendelse.domene
+package no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene
 
 enum class Søknadstype(val tittel: String) {
     PLEIEPENGER_SYKT_BARN("Ettersendelse av dokumentasjon til søknad om pleiepenger"),

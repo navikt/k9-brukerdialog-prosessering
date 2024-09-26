@@ -20,6 +20,7 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Selvstend
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.domene.PSBPreprosessertSøknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 

@@ -1,11 +1,19 @@
-package no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene
+package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.kafka.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.ArbeidsgiverDetaljer
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.Bekreftelser
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.Bosted
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.DineBarn
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.Fosterbarn
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.OMPUtbetalingATSoknadMottatt
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.Opphold
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import java.time.ZonedDateTime
 import java.util.*
@@ -60,13 +68,14 @@ data class OMPUtbetalingATSoknadPreprosessert(
 
     override fun dokumenter(): List<List<String>> = dokumentId
 
-    override fun tilJournaførigsRequest(): JournalføringsRequest = JournalføringsRequest(
-        ytelse = Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER,
-        norskIdent = søkerFødselsnummer(),
-        sokerNavn = søkerNavn(),
-        mottatt = mottattDato(),
-        dokumentId = dokumenter()
-    )
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest =
+        JournalføringsService.JournalføringsRequest(
+            ytelseType = YtelseType.OMSORGSPENGESØKNAD_UTBETALING_ARBEIDSTAKER,
+            norskIdent = søkerFødselsnummer(),
+            sokerNavn = søkerNavn(),
+            mottatt = mottattDato(),
+            dokumentId = dokumenter()
+        )
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,

@@ -7,6 +7,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.PilsSøknadPdfData
 import no.nav.brukerdialog.pdf.PdfData
+import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.domene.PilsPreprosessertSøknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 

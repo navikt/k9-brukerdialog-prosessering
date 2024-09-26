@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.ettersendelse.pdf
 
-import no.nav.brukerdialog.meldinger.ettersendelse.domene.Søknadstype
+import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Søknadstype
 import no.nav.brukerdialog.ytelse.ettersendelse.utils.EttersendingUtils
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath

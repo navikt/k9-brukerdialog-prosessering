@@ -10,6 +10,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.pdf.OMPUtbetalingATSoknadPDFData
 import no.nav.brukerdialog.pdf.PdfData
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.kafka.domene.OMPUtbetalingATSoknadPreprosessert
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
