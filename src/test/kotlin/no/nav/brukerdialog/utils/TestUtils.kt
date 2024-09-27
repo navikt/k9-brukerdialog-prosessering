@@ -32,6 +32,9 @@ import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.PILSTopolog
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -118,6 +121,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
         OMP_AO_MOTTATT_TOPIC,
         OMP_AO_PREPROSESSERT_TOPIC,
         OMP_AO_CLEANUP_TOPIC,
+
+        // Ungdomsytelse
+        UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC,
+        UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC,
+        UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC,
 
         // K9 Dittnav varsel
         K9_DITTNAV_VARSEL_TOPIC

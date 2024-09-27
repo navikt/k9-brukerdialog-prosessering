@@ -26,6 +26,7 @@ object MockMvcUtils {
             Ytelse.ETTERSENDING_OMP -> "/ettersending-omp"
             Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN -> "/endringsmelding-pleiepenger-sykt-barn"
             Ytelse.DINE_PLEIEPENGER -> "/dine-pleiepenger"
+            Ytelse.UNGDOMSYTELSE -> "/ungdomsytelse/soknad"
             Ytelse.OPPLARINGSPENGER -> TODO("Trenger endepunkt for opplæringspenger. Se K9-joark.")
         }
 

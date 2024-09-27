@@ -4,6 +4,7 @@ K9_JOARK_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-joark-mock
 K9_SAK_INNSYN_API_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-sak-innsyn-api-mock
 K9_BRUKERDIALOG_CACHE_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-brukerdialog-cache-mock
 K9_SELVBETJENING_OPPSLAG_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-selvbetjening-oppslag-mock
+ENABLE_UNDOMSYTELSE: true
 
 no.nav:
   security.jwt:
@@ -163,6 +164,13 @@ no.nav:
         auto-offset-reset: earliest
       omp-ao-cleanup:
         application-id-suffix: omp-ao-cleanup
+        auto-offset-reset: earliest
+
+      ungdomsytelse-soknad-preprosessering:
+        auto-offset-reset: earliest
+      ungdomsytelse-soknad-journalforing:
+        auto-offset-reset: earliest
+      ungdomsytelse-soknad-cleanup:
         auto-offset-reset: earliest
 
 wiremock:

@@ -24,6 +24,7 @@ import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTBETALING_SNF_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTVIDET_RETT_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_SYKT_BARN_TOPIC
+import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_SOKNAD_TOPIC
 import org.apache.kafka.common.serialization.Serializer
 import org.json.JSONObject
 
@@ -36,8 +37,8 @@ object Topics {
     const val OMSORGSPENGER_UTBETALING_SNF_TOPIC = "dusseldorf.omp-utbetaling-snf-soknad-mottatt"
     const val PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC = "dusseldorf.pp-i-livets-sluttfase-soknad-mottatt"
     const val PLEIEPENGER_SYKT_BARN_TOPIC = "dusseldorf.pp-sykt-barn-soknad-mottatt"
-    const val MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC =
-        "dusseldorf.privat-endringsmelding-pleiepenger-sykt-barn-mottatt"
+    const val MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC = "dusseldorf.privat-endringsmelding-pleiepenger-sykt-barn-mottatt"
+    const val UNGDOMSYTELSE_SOKNAD_TOPIC = "dusseldorf.ungdomsytelse-soknad-mottatt"
 }
 
 data class TopicEntry<V>(
@@ -56,6 +57,7 @@ internal fun hentTopicForYtelse(ytelse: Ytelse) = when (ytelse) {
     PLEIEPENGER_SYKT_BARN -> PLEIEPENGER_SYKT_BARN_TOPIC
     ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN -> MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
     DINE_PLEIEPENGER -> throw IllegalArgumentException("$ytelse er ikke en gyldig ytelse for denne operasjonen")
+    Ytelse.UNGDOMSYTELSE -> UNGDOMSYTELSE_SOKNAD_TOPIC
     Ytelse.OPPLARINGSPENGER -> TODO("Må opprette topic. Se nais/topics i rot av repo")
 }
 

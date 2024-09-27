@@ -241,5 +241,6 @@ abstract class PdfData {
         Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspenger-utbetaling-arbeidstaker-soknad"
         Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspenger-utbetaling-snf-soknad"
         Ytelse.ETTERSENDELSE -> "ettersendelse"
+        Ytelse.UNGDOMSYTELSE -> "ungdomsytelse-soknad"
     }
 }
