@@ -28,7 +28,7 @@ object JournalPostRequestV1Factory {
         val vedlegg = mutableListOf<JoarkDokument>()
 
         dokumenter.forEach { dokumentBolk ->
-                vedlegg.add(mapDokument(dokumentBolk, ytelseType.brevkode))
+            if (dokumentBolk.isNotEmpty()) vedlegg.add(mapDokument(dokumentBolk, ytelseType.brevkode))
         }
 
         return DokarkivJournalpostRequest(
