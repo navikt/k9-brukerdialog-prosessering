@@ -44,9 +44,7 @@
     "K9_SELVBETJENING_OPPSLAG_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-selvbetjening-oppslag",
 
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
-    "SWAGGER_ENABLED": "true",
-
-    "ENABLE_UNDOMSYTELSE": "true"
+    "SWAGGER_ENABLED": "true"
   },
   "slack-channel": "sif-alerts-dev",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "
