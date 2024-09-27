@@ -17,7 +17,9 @@ import no.nav.security.token.support.core.api.RequiredIssuers
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
+import org.springframework.web.ErrorResponseException
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -45,8 +47,13 @@ class UngdomsytelsesøknadController(
     fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
+        @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
         @Valid @RequestBody søknad: Ungdomsytelsesøknad,
     ) = runBlocking {
+        if (enabled != true) {
+            logger.info("Ungdomsytelse er ikke aktivert.")
+            throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
+        }
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 

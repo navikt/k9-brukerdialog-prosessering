@@ -38,7 +38,11 @@ import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension::class)
-@WebMvcTest(controllers = [UngdomsytelsesøknadController::class])
+@WebMvcTest(
+    controllers = [UngdomsytelsesøknadController::class],
+    properties = [
+        "ENABLE_UNDOMSYTELSE=true",
+    ])
 @Import(
     JacksonConfiguration::class,
     CallIdGenerator::class
