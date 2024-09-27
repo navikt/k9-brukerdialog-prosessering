@@ -220,6 +220,16 @@ no.nav:
         application-id-suffix: omp-ao-cleanup
         auto-offset-reset: earliest
 
+      ungdomsytelse-soknad-preprosessering:
+        application-id-suffix: ungdomsytelse-soknad-preprosessering
+        auto-offset-reset: earliest
+      ungdomsytelse-soknad-journalforing:
+        application-id-suffix: ungdomsytelse-soknad-journalforing
+        auto-offset-reset: earliest
+      ungdomsytelse-soknad-cleanup:
+        application-id-suffix: ungdomsytelse-soknad-cleanup-stream
+        auto-offset-reset: earliest
+
 management:
   endpoint:
     health:

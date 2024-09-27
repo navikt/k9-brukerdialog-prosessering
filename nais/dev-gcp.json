@@ -50,7 +50,9 @@
     "DOKARKIV_SCOPE": "api://dev-fss.teamdokumenthandtering.dokarkiv-q1/.default",
 
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
-    "SWAGGER_ENABLED": "true"
+    "SWAGGER_ENABLED": "true",
+
+    "ENABLE_UNDOMSYTELSE": "true"
   },
   "slack-channel": "sif-alerts-dev",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "

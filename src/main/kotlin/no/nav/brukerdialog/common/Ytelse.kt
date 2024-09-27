@@ -27,6 +27,9 @@ import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.PILSTopolog
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC
 
 enum class Ytelse(val tittel: String) {
     OMSORGSPENGER_UTVIDET_RETT("Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning"),
@@ -37,7 +40,9 @@ enum class Ytelse(val tittel: String) {
     OMSORGSPENGER_UTBETALING_SNF("Søknad om utbetaling av omsorgspenger for selvstendig næringsdrivende og frilansere"),
     PLEIEPENGER_LIVETS_SLUTTFASE("Søknad om pleiepenger i livets sluttfase"),
     PLEIEPENGER_SYKT_BARN("Søknad om pleiepenger for sykt barn"),
-    PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING("Endringsmelding for pleiepenger sykt barn");
+    PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING("Endringsmelding for pleiepenger sykt barn"),
+    UNGDOMSYTELSE("Søknad om ungdomsytelse")
+    ;
 
     companion object {
         fun fraTopic(topic: String): Ytelse = when (topic) {
@@ -50,6 +55,7 @@ enum class Ytelse(val tittel: String) {
             OMP_UTB_SNF_MOTTATT_TOPIC, OMP_UTB_SNF_PREPROSESSERT_TOPIC, OMP_UTB_SNF_CLEANUP_TOPIC -> OMSORGSPENGER_UTBETALING_SNF
             OMP_MA_MOTTATT_TOPIC, OMP_MA_PREPROSESSERT_TOPIC, OMP_MA_CLEANUP_TOPIC -> OMSORGSPENGER_MIDLERTIDIG_ALENE
             OMP_AO_MOTTATT_TOPIC, OMP_AO_PREPROSESSERT_TOPIC, OMP_AO_CLEANUP_TOPIC -> OMSORGSDAGER_ALENEOMSORG
+            UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC, UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC, UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC -> UNGDOMSYTELSE
             else -> {
                 throw IllegalArgumentException("Kan ikke finne ytelse for topic: $topic")
             }
