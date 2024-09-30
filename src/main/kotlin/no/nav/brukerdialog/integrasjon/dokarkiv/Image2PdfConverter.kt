@@ -9,13 +9,13 @@ import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory
 import org.apache.pdfbox.util.Matrix
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Service
 import java.awt.geom.AffineTransform
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
-private val logger: Logger = LoggerFactory.getLogger(Image2PDFConverter::class.java)
-
+@Service
 class Image2PDFConverter {
     fun convertToPDF(bytes: ByteArray, contentType: String): ByteArray {
         runCatching {
@@ -28,11 +28,12 @@ class Image2PDFConverter {
                 }
             }
         }.getOrElse { cause: Throwable ->
-            throw  IllegalStateException("Klarte ikke å gjøre om $contentType bilde til PDF", cause)
+            throw IllegalStateException("Klarte ikke å gjøre om $contentType bilde til PDF", cause)
         }
     }
 
     companion object {
+        private val logger: Logger = LoggerFactory.getLogger(Image2PDFConverter::class.java)
 
         private val A4 = PDRectangle.A4
         private fun pdfFraBilde(doc: PDDocument, bilde: ByteArray) {

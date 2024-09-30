@@ -1,9 +1,11 @@
 package no.nav.brukerdialog.domenetjenester.mottak
 
 import no.nav.brukerdialog.integrasjon.dokarkiv.DokarkivService
+import no.nav.brukerdialog.integrasjon.dokarkiv.Image2PDFConverter
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.AvsenderMottakerIdType
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.JournalPostRequestV1Factory
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.integrasjon.k9mellomlagring.ContentTypeService
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.kafka.types.Journalfort
 import no.nav.brukerdialog.kafka.types.JournalfortEttersendelse
@@ -22,6 +24,8 @@ import no.nav.k9.ettersendelse.Ettersendelse as K9Ettersendelse
 class JournalføringsService(
     private val dokarkivService: DokarkivService,
     private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
+    private val contentTypeService: ContentTypeService,
+    private val image2PDFConverter: Image2PDFConverter
 ) {
     private companion object {
         private val logger = org.slf4j.LoggerFactory.getLogger(JournalføringsService::class.java)
@@ -34,12 +38,12 @@ class JournalføringsService(
         val alleDokumenter = mutableListOf<List<Dokument>>()
         journalføringsRequest.dokumentId.forEach { dokumentId: List<String> ->
             logger.info("Henter dokumenter basert på dokumentId")
-            alleDokumenter.add(
-                k9DokumentMellomlagringService.hentDokumenterMedString(
-                    dokumentIder = dokumentId,
-                    dokumentEier = DokumentEier(journalføringsRequest.norskIdent)
-                )
+            val dokumenter = k9DokumentMellomlagringService.hentDokumenterMedString(
+                dokumentIder = dokumentId,
+                dokumentEier = DokumentEier(journalføringsRequest.norskIdent)
             )
+            val pdfDokumenter = håndterOgKonverterTilPDF(dokumenter)
+            alleDokumenter.add(pdfDokumenter)
         }
 
         val correlationId = journalføringsRequest.correlationId ?: MDCUtil.callIdOrNew()
@@ -56,6 +60,35 @@ class JournalføringsService(
 
         val dokarkivJournalpostResponse = dokarkivService.journalfør(journalPostRequest)
         return resolve(preprosessertSøknad, JournalføringsResponse(dokarkivJournalpostResponse.journalpostId))
+    }
+
+    fun håndterOgKonverterTilPDF(dokumenter: List<Dokument>): List<Dokument> {
+        logger.trace("Alle dokumenter hentet.")
+        val bildeDokumenter = dokumenter.filter { contentTypeService.isSupportedImage(it.contentType) }
+        logger.trace("${bildeDokumenter.size} bilder.")
+        val applicationDokumenter = dokumenter.filter { contentTypeService.isSupportedApplication(it.contentType) }
+        logger.trace("${applicationDokumenter.size} andre støttede dokumenter.")
+        val ikkeSupporterteDokumenter = dokumenter.filter { !contentTypeService.isSupported(it.contentType) }
+        if (ikkeSupporterteDokumenter.isNotEmpty()) {
+            logger.warn("${ikkeSupporterteDokumenter.size} dokumenter som ikke støttes. Disse vil utelates fra journalføring.")
+        }
+
+        val supporterteDokumenter = applicationDokumenter.toMutableList()
+
+        logger.trace("Gjør om de ${bildeDokumenter.size} bildene til PDF.")
+        bildeDokumenter.forEach {
+            supporterteDokumenter.add(
+                Dokument(
+                    title = it.title,
+                    contentType = "application/pdf",
+                    content = image2PDFConverter.convertToPDF(bytes = it.content, contentType = it.contentType)
+                )
+            )
+        }
+
+        logger.trace("Endringer fra bilde til PDF gjennomført.")
+
+        return supporterteDokumenter
     }
 
     private fun resolve(
