@@ -38,3 +38,5 @@ out/
 
 *-pdf-*.pdf
 /.kotlin/
+
+scaled-image-*
