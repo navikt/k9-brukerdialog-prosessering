@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.3.3"
+	id("org.springframework.boot") version "3.3.4"
 	id("io.spring.dependency-management") version "1.1.6"
 	kotlin("jvm") version "2.0.20"
 	kotlin("plugin.spring") version "2.0.20"
@@ -30,7 +30,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.3"
+val tokenSupportVersion = "5.0.5"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "9.6.0"
 val springMockkVersion = "4.0.2"
@@ -41,14 +41,14 @@ val jacksonVersion = "2.17.2"
 val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.0.10"
 val handlebarsVersion = "4.4.0"
-val retryVersion = "2.0.8"
+val retryVersion = "2.0.9"
 val awailitilityKotlinVersion = "4.2.2"
 val springCloudContractVersion = "4.1.4"
 val orgJsonVersion = "20240303"
 val springdocVersion = "2.6.0"
 
 dependencies {
-	implementation("org.yaml:snakeyaml:2.2") {
+	implementation("org.yaml:snakeyaml:2.3") {
 		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
 	}
 
