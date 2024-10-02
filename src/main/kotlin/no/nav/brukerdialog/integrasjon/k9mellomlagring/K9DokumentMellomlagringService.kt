@@ -67,6 +67,17 @@ class K9DokumentMellomlagringService(
         }
     }
 
+    internal suspend fun hentDokumenter(dokumentIder: List<String>, dokumentEier: DokumentEier): List<Dokument> {
+        return coroutineScope {
+            val deferred = dokumentIder.map { dokumentId: String ->
+                async {
+                    hentDokument(dokumentId, dokumentEier)
+                }
+            }
+            deferred.awaitAll()
+        }
+    }
+
     internal suspend fun hentDokumenterMedString(dokumentIder: List<String>, dokumentEier: DokumentEier): List<Dokument> {
         val uris: List<URL> = dokumentIder.map { URI.create(it).toURL() }
         return hentDokumenter(uris, dokumentEier)
