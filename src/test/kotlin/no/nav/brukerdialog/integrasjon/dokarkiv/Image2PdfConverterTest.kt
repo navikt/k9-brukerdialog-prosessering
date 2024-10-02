@@ -29,8 +29,8 @@ class Image2PdfConverterTest {
     ) {
         val fileResource = ResourceUtils.getFile("classpath:filer/$resourceName")
         val image = Image2PDFConverter().convertToPDF(fileResource.readBytes(), format)
-        val path = "${System.getProperty("user.dir")}/scaled-image-$name.pdf"
-        val file = File(path)
+        val pathToWrite = "${System.getProperty("user.dir")}/scaled-image-$name.pdf"
+        val file = File(pathToWrite)
         file.writeBytes(image)
     }
 }
