@@ -67,7 +67,7 @@ class K9DokumentMellomlagringService(
         }
     }
 
-    internal suspend fun hentDokumenter(dokumentIder: List<String>, dokumentEier: DokumentEier): List<Dokument> {
+    internal suspend fun hentDokumenterMedId(dokumentIder: List<String>, dokumentEier: DokumentEier): List<Dokument> {
         return coroutineScope {
             val deferred = dokumentIder.map { dokumentId: String ->
                 async {

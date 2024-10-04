@@ -38,7 +38,7 @@ class JournalføringsService(
         val alleDokumenter = mutableListOf<List<Dokument>>()
         journalføringsRequest.dokumentId.forEach { dokumentId: List<String> ->
             logger.info("Henter dokumenter basert på dokumentId")
-            val dokumenter = k9DokumentMellomlagringService.hentDokumenter(
+            val dokumenter = k9DokumentMellomlagringService.hentDokumenterMedId(
                 dokumentIder = dokumentId,
                 dokumentEier = DokumentEier(journalføringsRequest.norskIdent)
             )
