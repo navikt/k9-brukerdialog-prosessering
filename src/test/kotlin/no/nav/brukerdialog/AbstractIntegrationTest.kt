@@ -100,7 +100,7 @@ abstract class AbstractIntegrationTest {
     }
 
     protected fun mockHentDokumenter() {
-        coEvery { k9DokumentMellomlagringService.hentDokumenterMedId(any(), any()) } returns listOf(
+        coEvery { k9DokumentMellomlagringService.hentDokumenter(any(), any()) } returns listOf(
             Dokument(
                 eier = DokumentEier("123"),
                 content = "some value".toByteArray(),
