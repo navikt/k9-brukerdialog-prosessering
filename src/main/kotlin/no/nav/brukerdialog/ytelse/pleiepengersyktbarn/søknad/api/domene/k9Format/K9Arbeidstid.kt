@@ -12,9 +12,7 @@ internal fun PleiepengerSyktBarnSøknad.byggK9Arbeidstid(): Arbeidstid {
 
         if(arbeidsgivere.isNotEmpty()) medArbeidstaker(arbeidsgivere.tilK9Arbeidstaker(fraOgMed, tilOgMed))
 
-        if (frilans.arbeidsforhold != null) {
-            medFrilanserArbeidstid(frilans.k9ArbeidstidInfo(fraOgMed, tilOgMed))
-        }
+        medFrilanserArbeidstid(frilans.k9ArbeidstidInfo(fraOgMed, tilOgMed))
         selvstendigNæringsdrivende.arbeidsforhold?.let {
             medSelvstendigNæringsdrivendeArbeidstidInfo(selvstendigNæringsdrivende.k9ArbeidstidInfo(fraOgMed, tilOgMed))
         }
