@@ -5,7 +5,6 @@ import no.nav.brukerdialog.integrasjon.dokarkiv.Image2PDFConverter
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.AvsenderMottakerIdType
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.JournalPostRequestV1Factory
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.ContentTypeService
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.kafka.types.Journalfort
 import no.nav.brukerdialog.kafka.types.JournalfortEttersendelse
@@ -24,7 +23,6 @@ import no.nav.k9.ettersendelse.Ettersendelse as K9Ettersendelse
 class JournalføringsService(
     private val dokarkivService: DokarkivService,
     private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
-    private val contentTypeService: ContentTypeService,
     private val image2PDFConverter: Image2PDFConverter
 ) {
     private companion object {
@@ -64,20 +62,11 @@ class JournalføringsService(
 
     fun håndterOgKonverterTilPDF(dokumenter: List<Dokument>): List<Dokument> {
         logger.trace("Alle dokumenter hentet.")
-        val bildeDokumenter = dokumenter.filter { contentTypeService.isSupportedImage(it.contentType) }
-        logger.trace("${bildeDokumenter.size} bilder.")
-        val applicationDokumenter = dokumenter.filter { contentTypeService.isSupportedApplication(it.contentType) }
-        logger.trace("${applicationDokumenter.size} andre støttede dokumenter.")
-        val ikkeSupporterteDokumenter = dokumenter.filter { !contentTypeService.isSupported(it.contentType) }
-        if (ikkeSupporterteDokumenter.isNotEmpty()) {
-            logger.warn("${ikkeSupporterteDokumenter.size} dokumenter som ikke støttes. Disse vil utelates fra journalføring.")
-        }
 
-        val supporterteDokumenter = applicationDokumenter.toMutableList()
-
-        logger.trace("Gjør om de ${bildeDokumenter.size} bildene til PDF.")
-        bildeDokumenter.forEach {
-            supporterteDokumenter.add(
+        val konverterteDokumenter = mutableListOf<Dokument>()
+        logger.trace("Gjør om de ${dokumenter.size} filene til PDF.")
+        dokumenter.forEach {
+            konverterteDokumenter.add(
                 Dokument(
                     title = it.title,
                     contentType = "application/pdf",
@@ -87,8 +76,7 @@ class JournalføringsService(
         }
 
         logger.trace("Endringer fra bilde til PDF gjennomført.")
-
-        return supporterteDokumenter
+        return konverterteDokumenter
     }
 
     private fun resolve(

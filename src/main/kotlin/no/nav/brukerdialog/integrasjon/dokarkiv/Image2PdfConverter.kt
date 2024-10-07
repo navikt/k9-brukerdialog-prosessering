@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory
 import org.apache.pdfbox.util.Matrix
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import java.awt.geom.AffineTransform
 import java.io.ByteArrayInputStream
@@ -20,6 +21,10 @@ class Image2PDFConverter {
     fun convertToPDF(bytes: ByteArray, contentType: String): ByteArray {
         runCatching {
             logger.trace("Konverterer fra $contentType til PDF.")
+            if (contentType.contains("pdf")) {
+                logger.trace("Ingen konvertering nødvendig, er allerede PDF.")
+                return bytes
+            }
             PDDocument(IOUtils.createTempFileOnlyStreamCache()).use { doc: PDDocument ->
                 ByteArrayOutputStream().use { os ->
                     pdfFraBilde(doc, bytes)
