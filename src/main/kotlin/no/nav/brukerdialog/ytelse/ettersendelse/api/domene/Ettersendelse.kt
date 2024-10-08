@@ -38,14 +38,6 @@ data class Ettersendelse(
     val harForståttRettigheterOgPlikter: Boolean,
 ) : Innsending {
 
-    @AssertTrue(message = "Pleietrengende må være satt dersom ettersendelsen gjelder legeerklæring")
-    fun isPleietrengende(): Boolean {
-        if (ettersendelsesType == EttersendelseType.LEGEERKLÆRING) {
-            return pleietrengende != null
-        }
-        return true
-    }
-
     override fun valider() = mutableListOf<String>()
 
     override fun somKomplettSøknad(
