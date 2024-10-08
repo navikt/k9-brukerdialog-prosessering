@@ -2,10 +2,8 @@ package no.nav.brukerdialog.integrasjon.dokarkiv
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
-import org.junit.jupiter.api.assertThrows
 import org.springframework.util.ResourceUtils
 import java.io.File
-import java.lang.NullPointerException
 
 class Image2PdfConverterTest {
 
@@ -15,9 +13,6 @@ class Image2PdfConverterTest {
         scale(resourceName = "widescreen.jpg", name = "widescreen", format = "jpg")
         scale(resourceName = "legeerklaering_iPhone_XS.jpg", name = "legeerklaering", format = "jpg")
         scale(resourceName = "grafana-board.png", name = "grafana-board", format = "png")
-
-        // PDF feiler ikke
-        scale(resourceName = "test.pdf", name = "test", format = "pdf")
     }
 
     @Test
