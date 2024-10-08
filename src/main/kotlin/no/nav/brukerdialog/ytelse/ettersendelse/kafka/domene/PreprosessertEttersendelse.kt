@@ -5,8 +5,11 @@ import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Ettersendelse
+import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Søknadstype
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import java.time.ZonedDateTime
 
@@ -57,15 +60,25 @@ data class PreprosessertEttersendelse(
 
     override fun dokumenter(): List<List<String>> = vedleggId
 
-    override fun tilJournaførigsRequest(): JournalføringsRequest {
-        return JournalføringsRequest(
-            ytelse = ytelse(),
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest {
+        return JournalføringsService.JournalføringsRequest(
+            ytelseType = søknadstype.somYtelseType(),
             søknadstype = søknadstype,
             norskIdent = søkerFødselsnummer(),
             sokerNavn = søkerNavn(),
             mottatt = mottattDato(),
             dokumentId = dokumenter()
         )
+    }
+
+    fun Søknadstype.somYtelseType(): YtelseType = when(søknadstype) {
+        Søknadstype.PLEIEPENGER_SYKT_BARN -> YtelseType.PLEIEPENGESØKNAD_ETTERSENDING
+        Søknadstype.PLEIEPENGER_LIVETS_SLUTTFASE -> YtelseType.PLEIEPENGESØKNAD_LIVETS_SLUTTFASE_ETTERSENDING
+        Søknadstype.OMP_UTV_KS -> YtelseType.OMSORGSPENGESØKNAD_ETTERSENDING
+        Søknadstype.OMP_UT_SNF -> YtelseType.OMSORGSPENGESØKNAD_UTBETALING_FRILANSER_SELVSTENDIG_ETTERSENDING
+        Søknadstype.OMP_UT_ARBEIDSTAKER -> YtelseType.OMSORGSPENGESØKNAD_UTBETALING_ARBEIDSTAKER_ETTERSENDING
+        Søknadstype.OMP_UTV_MA -> YtelseType.OMSORGSPENGESØKNAD_MIDLERTIDIG_ALENE_ETTERSENDING
+        Søknadstype.OMP_UTV_AO -> YtelseType.OMSORGSDAGER_ALENEOMSORG_ETTERSENDING
     }
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed? = null

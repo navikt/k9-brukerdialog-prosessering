@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene
+package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.helse.felles.Omsorgstilbud
@@ -6,8 +6,10 @@ import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Barn
@@ -98,9 +100,9 @@ data class PSBPreprosessertSøknad(
     override fun k9FormatSøknad(): Søknad = k9FormatSøknad
 
     override fun dokumenter(): List<List<String>> = dokumentId
-    override fun tilJournaførigsRequest(): JournalføringsRequest {
-        return JournalføringsRequest(
-            ytelse = ytelse(),
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest {
+        return JournalføringsService.JournalføringsRequest(
+            ytelseType = YtelseType.PLEIEPENGESØKNAD,
             norskIdent = søkerFødselsnummer(),
             sokerNavn = søkerNavn(),
             mottatt = mottattDato(),

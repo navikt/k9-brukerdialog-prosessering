@@ -5,7 +5,7 @@ import io.mockk.coVerify
 import no.nav.brukerdialog.AbstractIntegrationTest
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsResponse
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.DokarkivJournalpostResponse
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC
@@ -47,7 +47,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
                 "http://localhost:8080/dokument/$it"
             )
         })
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
+        coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse("123456789", false, listOf())
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
         coVerify(exactly = 1, timeout = 120 * 1000) {

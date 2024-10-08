@@ -9,7 +9,7 @@ import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.PILSTopologyConfiguration.Companion.PILS_CLEANUP_STREAMS_BUILDER_NAME
-import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.PilsPreprosessertSøknad
+import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.domene.PilsPreprosessertSøknad
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream

@@ -1,11 +1,13 @@
-package no.nav.brukerdialog.meldinger.endringsmelding.domene
+package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import java.time.ZonedDateTime
@@ -39,13 +41,14 @@ data class PSBPreprossesertEndringsmelding(
 
     override fun dokumenter(): List<List<String>> = dokumentId
 
-    override fun tilJournaførigsRequest(): JournalføringsRequest = JournalføringsRequest(
-        ytelse = ytelse(),
-        norskIdent = søkerFødselsnummer(),
-        sokerNavn = søkerNavn(),
-        mottatt = mottattDato(),
-        dokumentId = dokumenter()
-    )
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest =
+        JournalføringsService.JournalføringsRequest(
+            ytelseType = YtelseType.PLEIEPENGESØKNAD_ENDRINGSMELDING,
+            norskIdent = søkerFødselsnummer(),
+            sokerNavn = søkerNavn(),
+            mottatt = mottattDato(),
+            dokumentId = dokumenter()
+        )
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed? = null
 }

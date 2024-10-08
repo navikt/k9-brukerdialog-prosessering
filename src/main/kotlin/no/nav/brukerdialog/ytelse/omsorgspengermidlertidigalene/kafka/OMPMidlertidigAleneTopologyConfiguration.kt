@@ -12,7 +12,7 @@ import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.domene.OMPMidlertidigAleneSoknadMottatt
-import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.domene.OMPMidlertidigAleneSoknadPreprosessert
+import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.kafka.domene.OMPMidlertidigAleneSoknadPreprosessert
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.KafkaStreamsConfiguration

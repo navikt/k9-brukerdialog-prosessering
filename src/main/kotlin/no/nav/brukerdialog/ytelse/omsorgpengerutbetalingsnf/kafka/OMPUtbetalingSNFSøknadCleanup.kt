@@ -9,7 +9,7 @@ import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.kafka.OMPUtbetalingSNFTopologyConfiguration.Companion.OMP_UTB_SNF_CLEANUP_STREAMS_BUILDER_NAME
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.OMPUtbetalingSNFSoknadPreprosessert
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.kafka.domene.OMPUtbetalingSNFSoknadPreprosessert
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream

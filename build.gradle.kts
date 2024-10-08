@@ -39,13 +39,15 @@ val logstashLogbackEncoderVersion = "8.0"
 val slf4jVersion = "2.0.16"
 val jacksonVersion = "2.17.2"
 val kotlinxCoroutinesVersion = "1.6.4"
-val openhtmltopdfVersion = "1.0.10"
+val openhtmltopdfVersion = "1.1.4"
 val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.9"
 val awailitilityKotlinVersion = "4.2.2"
 val springCloudContractVersion = "4.1.4"
 val orgJsonVersion = "20240303"
 val springdocVersion = "2.6.0"
+val pdfBoxVersion = "3.0.3"
+val imageIOVersion = "3.11.0"
 
 dependencies {
 	implementation("org.yaml:snakeyaml:2.3") {
@@ -78,10 +80,14 @@ dependencies {
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 
 	// PDF
-	implementation("com.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion")
-	implementation("com.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
+	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion")
+	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
 	implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
 	implementation("com.github.jknack:handlebars:$handlebarsVersion")
+
+	// Bilde til PDF
+	implementation("org.apache.pdfbox:pdfbox-io:$pdfBoxVersion")
+	implementation("com.twelvemonkeys.imageio:imageio-jpeg:$imageIOVersion")
 
 	// kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

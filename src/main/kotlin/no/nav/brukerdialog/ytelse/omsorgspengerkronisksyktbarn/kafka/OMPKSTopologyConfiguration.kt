@@ -12,7 +12,7 @@ import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
-import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadPreprosesssert
+import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.kafka.domene.OMPUTVKroniskSyktBarnSøknadPreprosesssert
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.KafkaStreamsConfiguration

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.micrometer.core.instrument.MeterRegistry
 import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
-import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBPreprossesertEndringsmelding
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.domene.PSBPreprossesertEndringsmelding
 import no.nav.brukerdialog.kafka.config.KafkaProperties
 import no.nav.brukerdialog.kafka.config.KafkaStreamsConfigUtils.commonStreamsConfigProperties
 import no.nav.brukerdialog.kafka.config.KafkaStreamsConfigUtils.configure

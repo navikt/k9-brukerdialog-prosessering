@@ -8,7 +8,7 @@ import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_CLEANUP_STREAMS_BUILDER_NAME
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBPreprosessertSøknad
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.domene.PSBPreprosessertSøknad
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream
