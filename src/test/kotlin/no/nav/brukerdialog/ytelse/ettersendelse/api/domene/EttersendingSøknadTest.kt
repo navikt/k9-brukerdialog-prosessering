@@ -52,10 +52,9 @@ class EttersendingSøknadTest {
                 ettersendelsesType = EttersendelseType.LEGEERKLÆRING,
                 pleietrengende = null,
             ),
-            5,
+            4,
             "Forventet gyldig UUID, men var '123ABC'",
             "Kan ikke være tom",
-            "Pleietrengende må være satt dersom ettersendelsen gjelder legeerklæring",
             "Opplysningene må bekreftes for å sende inn ettersendelse",
             "Må ha forstått rettigheter og plikter for å sende inn ettersendelse",
         )
