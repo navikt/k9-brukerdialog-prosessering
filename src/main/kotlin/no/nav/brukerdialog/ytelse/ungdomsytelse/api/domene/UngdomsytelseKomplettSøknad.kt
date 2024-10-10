@@ -11,7 +11,7 @@ class UngdomsytelseKomplettSøknad(
     private val søker: Søker,
     private val språk: String,
     private val fraOgMed: LocalDate,
-    private val tilOgMed: LocalDate,
+    private val tilOgMed: LocalDate? = null,
     private val mottatt: ZonedDateTime,
     private val harForståttRettigheterOgPlikter: Boolean,
     private val harBekreftetOpplysninger: Boolean,

@@ -20,7 +20,7 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
     val språk: String?,
     val søker: Søker,
     val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate,
+    val tilOgMed: LocalDate? = null,
     val dokumentId: List<List<String>>,
     val k9Format: K9Søknad,
     val harForståttRettigheterOgPlikter: Boolean,

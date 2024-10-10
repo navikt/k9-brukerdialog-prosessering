@@ -16,7 +16,7 @@ data class UngdomsytelsesøknadMottatt(
     val språk: String? = "nb",
     val søker: Søker,
     val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate,
+    val tilOgMed: LocalDate ?= null,
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,

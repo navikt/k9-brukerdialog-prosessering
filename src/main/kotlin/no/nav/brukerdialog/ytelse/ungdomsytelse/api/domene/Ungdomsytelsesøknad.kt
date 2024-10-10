@@ -26,7 +26,7 @@ data class Ungdomsytelsesøknad(
     val språk: String,
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate,
+    val tilOgMed: LocalDate? = null,
 
     val søkerNorskIdent: String,
 
