@@ -21,6 +21,7 @@ import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.utils.StringUtils.FritekstPattern
+import no.nav.k9.søknad.felles.type.Språk
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -68,6 +69,7 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
             k9FormatVersjon,
             mottatt,
             søker.somK9Søker(),
+            Språk.of(språk),
             OmsorgspengerKroniskSyktBarn(
                 barn.somK9Barn(),
                 kroniskEllerFunksjonshemming
