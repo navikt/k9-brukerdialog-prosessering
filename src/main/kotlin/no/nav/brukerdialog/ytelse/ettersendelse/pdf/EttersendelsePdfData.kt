@@ -8,9 +8,12 @@ import no.nav.brukerdialog.meldinger.ettersendelse.domene.Pleietrengende
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
+import no.nav.k9.søknad.felles.type.Språk
 
 class EttersendelsePdfData(private val ettersendelse: Ettersendelse) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.ETTERSENDELSE
+
+    override fun språk(): Språk = Språk.NORSK_BOKMÅL
 
     override fun pdfData(): Map<String, Any?> = mapOf(
         "tittel" to ettersendelse.søknadstype.tittel,

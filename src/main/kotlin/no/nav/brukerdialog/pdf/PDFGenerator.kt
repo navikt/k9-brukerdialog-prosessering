@@ -16,6 +16,7 @@ import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.FraværÅrsak
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.AktivitetFravær
 import no.nav.brukerdialog.utils.DurationUtils.tilString
+import no.nav.k9.søknad.felles.type.Språk
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import java.io.ByteArrayInputStream
@@ -230,17 +231,24 @@ class PDFGenerator {
 
 abstract class PdfData {
     abstract fun ytelse(): Ytelse
+    abstract fun språk(): Språk
     abstract fun pdfData(): Map<String, Any?>
-    fun resolveTemplate(): String = when (ytelse()) {
-        Ytelse.PLEIEPENGER_SYKT_BARN -> "pleiepenger-sykt-barn-soknad"
-        Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> "pleiepenger-sykt-barn-endringsmelding"
-        Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> "pleiepenger-i-livets-sluttfase-soknad"
-        Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-kronisk-sykt-barn-soknad"
-        Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad"
-        Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad"
-        Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspenger-utbetaling-arbeidstaker-soknad"
-        Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspenger-utbetaling-snf-soknad"
-        Ytelse.ETTERSENDELSE -> "ettersendelse"
-        Ytelse.UNGDOMSYTELSE -> "ungdomsytelse-soknad"
+    fun resolveTemplate(): String {
+        val språkSuffix = when (språk()) {
+            Språk.NORSK_NYNORSK -> ".nn"
+            else -> "" // Default bokmål
+        }
+        return when (ytelse()) {
+            Ytelse.PLEIEPENGER_SYKT_BARN -> "pleiepenger-sykt-barn-soknad$språkSuffix"
+            Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> "pleiepenger-sykt-barn-endringsmelding$språkSuffix"
+            Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> "pleiepenger-i-livets-sluttfase-soknad$språkSuffix"
+            Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-kronisk-sykt-barn-soknad$språkSuffix"
+            Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad$språkSuffix"
+            Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad$språkSuffix"
+            Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspenger-utbetaling-arbeidstaker-soknad$språkSuffix"
+            Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspenger-utbetaling-snf-soknad$språkSuffix"
+            Ytelse.ETTERSENDELSE -> "ettersendelse$språkSuffix"
+            Ytelse.UNGDOMSYTELSE -> "ungdomsytelse-soknad$språkSuffix"
+        }
     }
 }

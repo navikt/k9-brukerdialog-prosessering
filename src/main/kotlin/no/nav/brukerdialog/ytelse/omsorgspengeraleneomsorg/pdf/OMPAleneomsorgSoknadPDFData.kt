@@ -8,9 +8,12 @@ import no.nav.brukerdialog.meldinger.omsorgspengeraleneomsorg.domene.somMapTilPd
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
+import no.nav.k9.søknad.felles.type.Språk
 
 class OMPAleneomsorgSoknadPDFData(private val melding: OMPAleneomsorgSoknadMottatt): PdfData() {
     override fun ytelse() = Ytelse.OMSORGSDAGER_ALENEOMSORG
+
+    override fun språk(): Språk = Språk.NORSK_BOKMÅL
 
     override fun pdfData(): Map<String, Any?> =  mapOf(
         "tittel" to ytelse().tittel,

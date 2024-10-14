@@ -8,9 +8,14 @@ import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
+import no.nav.k9.søknad.felles.type.Språk
 
 class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSyktBarnSøknadMottatt) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTVIDET_RETT
+
+    override fun språk(): Språk {
+        return søknad.k9FormatSøknad.språk
+    }
 
     override fun pdfData(): Map<String, Any?> = mapOf(
         "tittel" to ytelse().tittel,

@@ -38,6 +38,7 @@ import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.DurationUtils.tilString
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
+import no.nav.k9.søknad.felles.type.Språk
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
@@ -47,6 +48,9 @@ import java.time.temporal.WeekFields
 
 class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
+
+    override fun språk(): Språk = Språk.NORSK_BOKMÅL
+
     override fun pdfData(): Map<String, Any?> = mapOf(
         "tittel" to ytelse().tittel,
         "soknad_id" to søknad.søknadId,

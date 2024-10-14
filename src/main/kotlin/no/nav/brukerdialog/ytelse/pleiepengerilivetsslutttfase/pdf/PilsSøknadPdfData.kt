@@ -32,6 +32,7 @@ import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
 import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
+import no.nav.k9.søknad.felles.type.Språk
 import java.time.LocalDate
 import java.time.Month
 import java.time.ZoneId
@@ -40,6 +41,8 @@ import java.time.temporal.WeekFields
 
 class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
+
+    override fun språk(): Språk = Språk.NORSK_BOKMÅL
 
     override fun pdfData(): Map<String, Any?> = mapOf(
         "tittel" to ytelse().tittel,
