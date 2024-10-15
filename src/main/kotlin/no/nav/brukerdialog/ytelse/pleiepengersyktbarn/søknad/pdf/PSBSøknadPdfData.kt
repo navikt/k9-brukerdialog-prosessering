@@ -51,60 +51,67 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
 
     override fun språk(): Språk = Språk.NORSK_BOKMÅL
 
-    override fun pdfData(): Map<String, Any?> = mapOf(
-        "tittel" to ytelse().tittel,
-        "soknad_id" to søknad.søknadId,
-        "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(Constants.OSLO_ZONE_ID).somNorskDag(),
-        "soknad_mottatt" to Constants.DATE_TIME_FORMATTER.format(søknad.mottatt),
-        "harIkkeVedlegg" to søknad.sjekkOmHarIkkeVedlegg(),
-        "harLastetOppFødselsattest" to !søknad.fødselsattestVedleggId.isNullOrEmpty(),
-        "soker" to søknad.søker.somMap(),
-        "barn" to søknad.barn.somMap(),
-        "periode" to mapOf(
-            "fra_og_med" to Constants.DATE_FORMATTER.format(søknad.fraOgMed),
-            "til_og_med" to Constants.DATE_FORMATTER.format(søknad.tilOgMed),
-            "virkedager" to DateUtils.antallVirkedager(søknad.fraOgMed, søknad.tilOgMed)
-        ),
-        "medlemskap" to mapOf(
-            "har_bodd_i_utlandet_siste_12_mnd" to søknad.medlemskap.harBoddIUtlandetSiste12Mnd,
-            "utenlandsopphold_siste_12_mnd" to søknad.medlemskap.utenlandsoppholdSiste12Mnd.somMapBosted(),
-            "skal_bo_i_utlandet_neste_12_mnd" to søknad.medlemskap.skalBoIUtlandetNeste12Mnd,
-            "utenlandsopphold_neste_12_mnd" to søknad.medlemskap.utenlandsoppholdNeste12Mnd.somMapBosted()
-        ),
-        "samtykke" to mapOf(
-            "har_forstatt_rettigheter_og_plikter" to søknad.harForståttRettigheterOgPlikter,
-            "har_bekreftet_opplysninger" to søknad.harBekreftetOpplysninger
-        ),
-        "hjelp" to mapOf(
-            "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
-            "sprak" to søknad.språk?.språkTilTekst()
-        ),
-        "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
-        "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
-        "omsorgstilbud" to søknad.omsorgstilbud?.somMap(),
-        "nattevaak" to nattevåk(søknad.nattevåk),
-        "beredskap" to beredskap(søknad.beredskap),
-        "utenlandsoppholdIPerioden" to mapOf(
-            "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
-            "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
-        ),
-        "ferieuttakIPerioden" to mapOf(
-            "skalTaUtFerieIPerioden" to søknad.ferieuttakIPerioden?.skalTaUtFerieIPerioden,
-            "ferieuttak" to søknad.ferieuttakIPerioden?.ferieuttak?.somMapFerieuttak()
-        ),
-        "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
-        "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
-        "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
-        "frilans" to søknad.frilans.somMap(søknad.fraOgMed),
-        "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
-        "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
-        "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
-        "hjelper" to mapOf(
-            "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
-            "harVærtEllerErVernepliktigErSatt" to erBooleanSatt(søknad.harVærtEllerErVernepliktig),
-            "ingen_arbeidsforhold" to !søknad.harMinstEtArbeidsforhold()
+    override fun pdfData(): Map<String, Any?> {
+        val tittel = when (språk()) {
+            Språk.NORSK_NYNORSK -> ytelse().nynorskTittel
+            else -> ytelse().tittel
+        }
+
+        return mapOf(
+            "tittel" to tittel,
+            "soknad_id" to søknad.søknadId,
+            "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(Constants.OSLO_ZONE_ID).somNorskDag(),
+            "soknad_mottatt" to Constants.DATE_TIME_FORMATTER.format(søknad.mottatt),
+            "harIkkeVedlegg" to søknad.sjekkOmHarIkkeVedlegg(),
+            "harLastetOppFødselsattest" to !søknad.fødselsattestVedleggId.isNullOrEmpty(),
+            "soker" to søknad.søker.somMap(),
+            "barn" to søknad.barn.somMap(),
+            "periode" to mapOf(
+                "fra_og_med" to Constants.DATE_FORMATTER.format(søknad.fraOgMed),
+                "til_og_med" to Constants.DATE_FORMATTER.format(søknad.tilOgMed),
+                "virkedager" to DateUtils.antallVirkedager(søknad.fraOgMed, søknad.tilOgMed)
+            ),
+            "medlemskap" to mapOf(
+                "har_bodd_i_utlandet_siste_12_mnd" to søknad.medlemskap.harBoddIUtlandetSiste12Mnd,
+                "utenlandsopphold_siste_12_mnd" to søknad.medlemskap.utenlandsoppholdSiste12Mnd.somMapBosted(),
+                "skal_bo_i_utlandet_neste_12_mnd" to søknad.medlemskap.skalBoIUtlandetNeste12Mnd,
+                "utenlandsopphold_neste_12_mnd" to søknad.medlemskap.utenlandsoppholdNeste12Mnd.somMapBosted()
+            ),
+            "samtykke" to mapOf(
+                "har_forstatt_rettigheter_og_plikter" to søknad.harForståttRettigheterOgPlikter,
+                "har_bekreftet_opplysninger" to søknad.harBekreftetOpplysninger
+            ),
+            "hjelp" to mapOf(
+                "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
+                "sprak" to søknad.språk?.språkTilTekst()
+            ),
+            "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
+            "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
+            "omsorgstilbud" to søknad.omsorgstilbud?.somMap(),
+            "nattevaak" to nattevåk(søknad.nattevåk),
+            "beredskap" to beredskap(søknad.beredskap),
+            "utenlandsoppholdIPerioden" to mapOf(
+                "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
+                "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
+            ),
+            "ferieuttakIPerioden" to mapOf(
+                "skalTaUtFerieIPerioden" to søknad.ferieuttakIPerioden?.skalTaUtFerieIPerioden,
+                "ferieuttak" to søknad.ferieuttakIPerioden?.ferieuttak?.somMapFerieuttak()
+            ),
+            "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
+            "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
+            "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
+            "frilans" to søknad.frilans.somMap(søknad.fraOgMed),
+            "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
+            "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
+            "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
+            "hjelper" to mapOf(
+                "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
+                "harVærtEllerErVernepliktigErSatt" to erBooleanSatt(søknad.harVærtEllerErVernepliktig),
+                "ingen_arbeidsforhold" to !søknad.harMinstEtArbeidsforhold()
+            )
         )
-    )
+    }
 
     private fun Barn.somMap() = mapOf<String, Any?>(
         "manglerNorskIdentitetsnummer" to (fødselsnummer == null),

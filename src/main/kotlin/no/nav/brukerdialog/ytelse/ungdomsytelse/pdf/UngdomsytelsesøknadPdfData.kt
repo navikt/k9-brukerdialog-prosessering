@@ -15,22 +15,29 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
 
     override fun språk(): Språk = Språk.NORSK_BOKMÅL
 
-    override fun pdfData(): Map<String, Any?> = mapOf(
-        "tittel" to ytelse().tittel,
-        "søknadId" to søknad.søknadId,
-        "søknadMottattDag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
-        "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
-        "periode" to mapOf(
-            "fraOgMed" to DATE_FORMATTER.format(søknad.fraOgMed),
-            "tilOgMed" to søknad.tilOgMed?.let { DATE_FORMATTER.format(it) }
-        ),
-        "søker" to søknad.søker.somMap(),
-        "samtykke" to mapOf(
-            "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,
-            "harBekreftetOpplysninger" to søknad.harBekreftetOpplysninger
-        ),
-        "hjelp" to mapOf(
-            "språk" to søknad.språk?.språkTilTekst()
+    override fun pdfData(): Map<String, Any?> {
+        val tittel = when (språk()) {
+            Språk.NORSK_NYNORSK -> ytelse().nynorskTittel
+            else -> ytelse().tittel
+        }
+
+        return mapOf(
+            "tittel" to tittel,
+            "søknadId" to søknad.søknadId,
+            "søknadMottattDag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
+            "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
+            "periode" to mapOf(
+                "fraOgMed" to DATE_FORMATTER.format(søknad.fraOgMed),
+                "tilOgMed" to søknad.tilOgMed?.let { DATE_FORMATTER.format(it) }
+            ),
+            "søker" to søknad.søker.somMap(),
+            "samtykke" to mapOf(
+                "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,
+                "harBekreftetOpplysninger" to søknad.harBekreftetOpplysninger
+            ),
+            "hjelp" to mapOf(
+                "språk" to søknad.språk?.språkTilTekst()
+            )
         )
-    )
+    }
 }

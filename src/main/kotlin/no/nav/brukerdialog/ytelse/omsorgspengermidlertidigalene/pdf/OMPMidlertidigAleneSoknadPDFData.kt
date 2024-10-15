@@ -16,24 +16,31 @@ class OMPMidlertidigAleneSoknadPDFData(private val melding: OMPMidlertidigAleneS
 
     override fun språk(): Språk = Språk.NORSK_BOKMÅL
 
-    override fun pdfData(): Map<String, Any?> = mapOf(
-        "tittel" to ytelse().tittel,
-        "søknadId" to melding.søknadId,
-        "søknadMottattDag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
-        "søknadMottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),
-        "søker" to melding.søker.somMap(),
-        "barn" to melding.barn.somMapTilPdf(),
-        "annenForelder" to melding.annenForelder.somMapTilPdf(),
-        "samtykke" to mapOf(
-            "harForståttRettigheterOgPlikter" to melding.harForståttRettigheterOgPlikter,
-            "harBekreftetOpplysninger" to melding.harBekreftetOpplysninger
-        ),
-        "hjelp" to mapOf(
-            "språk" to melding.språk?.språkTilTekst(),
-            "periodeOver6MånederSatt" to melding.annenForelder.periodeOver6Måneder.erSatt(),
-            "erPeriodenOver6Måneder" to melding.erPeriodeOver6Mnd()
+    override fun pdfData(): Map<String, Any?> {
+        val tittel = when (språk()) {
+            Språk.NORSK_NYNORSK -> ytelse().nynorskTittel
+            else -> ytelse().tittel
+        }
+
+        return mapOf(
+            "tittel" to tittel,
+            "søknadId" to melding.søknadId,
+            "søknadMottattDag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
+            "søknadMottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),
+            "søker" to melding.søker.somMap(),
+            "barn" to melding.barn.somMapTilPdf(),
+            "annenForelder" to melding.annenForelder.somMapTilPdf(),
+            "samtykke" to mapOf(
+                "harForståttRettigheterOgPlikter" to melding.harForståttRettigheterOgPlikter,
+                "harBekreftetOpplysninger" to melding.harBekreftetOpplysninger
+            ),
+            "hjelp" to mapOf(
+                "språk" to melding.språk?.språkTilTekst(),
+                "periodeOver6MånederSatt" to melding.annenForelder.periodeOver6Måneder.erSatt(),
+                "erPeriodenOver6Måneder" to melding.erPeriodeOver6Mnd()
+            )
         )
-    )
+    }
 
     private fun Boolean?.erSatt() = this != null
 

@@ -15,19 +15,25 @@ class OMPAleneomsorgSoknadPDFData(private val melding: OMPAleneomsorgSoknadMotta
 
     override fun språk(): Språk = Språk.NORSK_BOKMÅL
 
-    override fun pdfData(): Map<String, Any?> =  mapOf(
-        "tittel" to ytelse().tittel,
-        "søknadId" to melding.søknadId,
-        "søknadMottattDag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
-        "søknadMottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),
-        "søker" to melding.søker.somMap(),
-        "barn" to melding.barn.somMapTilPdf(),
-        "samtykke" to mapOf(
-            "harForståttRettigheterOgPlikter" to melding.harForståttRettigheterOgPlikter,
-            "harBekreftetOpplysninger" to melding.harBekreftetOpplysninger
-        ),
-        "hjelp" to mapOf(
-            "språk" to melding.språk?.språkTilTekst()
+    override fun pdfData(): Map<String, Any?> {
+        val tittel = when (språk()) {
+            Språk.NORSK_NYNORSK -> ytelse().nynorskTittel
+            else -> ytelse().tittel
+        }
+        return mapOf(
+            "tittel" to tittel,
+            "søknadId" to melding.søknadId,
+            "søknadMottattDag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
+            "søknadMottatt" to DATE_TIME_FORMATTER.format(melding.mottatt),
+            "søker" to melding.søker.somMap(),
+            "barn" to melding.barn.somMapTilPdf(),
+            "samtykke" to mapOf(
+                "harForståttRettigheterOgPlikter" to melding.harForståttRettigheterOgPlikter,
+                "harBekreftetOpplysninger" to melding.harBekreftetOpplysninger
+            ),
+            "hjelp" to mapOf(
+                "språk" to melding.språk?.språkTilTekst()
+            )
         )
-    )
+    }
 }
