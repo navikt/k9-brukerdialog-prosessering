@@ -31,8 +31,11 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopolo
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC
 
-enum class Ytelse(val tittel: String) {
-    OMSORGSPENGER_UTVIDET_RETT("Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning"),
+enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
+    OMSORGSPENGER_UTVIDET_RETT(
+        "Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning",
+        "Søknad om ekstra omsorgsdagar for barn som har kronisk/langvarig sjukdom eller funksjonshemning"
+    ),
     OMSORGSPENGER_MIDLERTIDIG_ALENE("Søknad om ekstra omsorgsdager når den andre forelderen ikke kan ha tilsyn med barn"),
     ETTERSENDELSE("Ettersendelse av dokumentasjon"),
     OMSORGSDAGER_ALENEOMSORG("Søknad om ekstra omsorgsdager ved aleneomsorg"),
