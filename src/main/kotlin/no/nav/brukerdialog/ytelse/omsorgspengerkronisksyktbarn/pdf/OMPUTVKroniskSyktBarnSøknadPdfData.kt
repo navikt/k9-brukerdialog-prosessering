@@ -19,6 +19,7 @@ class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSykt
 
     override fun pdfData(): Map<String, Any?> = mapOf(
         "tittel" to ytelse().tittel,
+        "tittelNynorsk" to ytelse().nynorskTittel,
         "soknad_id" to søknad.søknadId,
         "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "soknad_mottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
