@@ -17,9 +17,9 @@ class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSykt
         return søknad.k9FormatSøknad.språk
     }
 
-    override fun pdfData(): Map<String, Any?> = {
+    override fun pdfData(): Map<String, Any?> {
         val tittel = when (språk()) {
-            "nn" -> ytelse().nynorskTittel
+            "nn" -> ytelse().tittelNynorsk
             else -> ytelse().tittel
         }
         return mapOf(
@@ -46,10 +46,10 @@ class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSykt
                 "språk" to søknad.språk?.språkTilTekst()
             ),
             "harIkkeLastetOppLegeerklæring" to søknad.harIkkeLastetOppLegeerklæring()
-        );
+        )
     }
 
     private fun OMPUTVKroniskSyktBarnSøknadMottatt.harIkkeLastetOppLegeerklæring(): Boolean =
         !legeerklæringVedleggId.isNotEmpty()
-
+        
 }
