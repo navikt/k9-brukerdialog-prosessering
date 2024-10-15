@@ -19,7 +19,7 @@ class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSykt
 
     override fun pdfData(): Map<String, Any?> = {
         val tittel = when (språk()) {
-            "nn" -> ytelse().tittelNynorsk
+            "nn" -> ytelse().nynorskTittel
             else -> ytelse().tittel
         }
         return mapOf(
