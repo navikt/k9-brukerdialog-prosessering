@@ -36,6 +36,7 @@ import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 import no.nav.k9.søknad.felles.type.Periode as K9Periode
+import no.nav.k9.søknad.felles.type.Språk as K9Språk
 
 enum class Språk { nb, nn }
 
@@ -198,6 +199,7 @@ data class PleiepengerSyktBarnSøknad(
 
         return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), psb)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
+            .medSpråk(K9Språk.of(språk?.name ?: "nb"))
     }
 
     fun byggK9Uttak(periode: K9Periode): Uttak {
