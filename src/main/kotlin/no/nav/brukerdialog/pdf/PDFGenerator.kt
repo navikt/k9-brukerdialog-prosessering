@@ -239,16 +239,16 @@ abstract class PdfData {
             else -> "" // Default bokmål
         }
         return when (ytelse()) {
-            Ytelse.PLEIEPENGER_SYKT_BARN -> "pleiepenger-sykt-barn-soknad$språkSuffix"
-            Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> "pleiepenger-sykt-barn-endringsmelding$språkSuffix"
-            Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> "pleiepenger-i-livets-sluttfase-soknad$språkSuffix"
-            Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-kronisk-sykt-barn-soknad$språkSuffix"
-            Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad$språkSuffix"
-            Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad$språkSuffix"
-            Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspenger-utbetaling-arbeidstaker-soknad$språkSuffix"
-            Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspenger-utbetaling-snf-soknad$språkSuffix"
-            Ytelse.ETTERSENDELSE -> "ettersendelse$språkSuffix"
-            Ytelse.UNGDOMSYTELSE -> "ungdomsytelse-soknad$språkSuffix"
+            Ytelse.PLEIEPENGER_SYKT_BARN -> "pleiepenger-sykt-barn-soknad$språkSuffix".trimEnd()
+            Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> "pleiepenger-sykt-barn-endringsmelding$språkSuffix".trimEnd()
+            Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> "pleiepenger-i-livets-sluttfase-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-kronisk-sykt-barn-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspenger-utbetaling-arbeidstaker-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspenger-utbetaling-snf-soknad$språkSuffix".trimEnd()
+            Ytelse.ETTERSENDELSE -> "ettersendelse$språkSuffix".trimEnd()
+            Ytelse.UNGDOMSYTELSE -> "ungdomsytelse-soknad$språkSuffix".trimEnd()
         }
     }
 }

@@ -10,6 +10,7 @@ import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.type.Periode
+import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
@@ -69,6 +70,7 @@ data class Ungdomsytelsesøknad(
         return K9Søknad()
             .medVersjon(K9_SØKNAD_VERSJON)
             .medMottattDato(mottatt)
+            .medSpråk(Språk.of(språk))
             .medSøknadId(SøknadId(søknadId))
             .medSøker(søker.somK9Søker())
             .medYtelse(ytelse)
