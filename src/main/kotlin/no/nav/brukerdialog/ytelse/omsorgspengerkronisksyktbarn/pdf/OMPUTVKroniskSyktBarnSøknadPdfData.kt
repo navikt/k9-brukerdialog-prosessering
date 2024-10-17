@@ -18,12 +18,8 @@ class OMPUTVKroniskSyktBarnSøknadPdfData(private val søknad: OMPUTVKroniskSykt
     }
 
     override fun pdfData(): Map<String, Any?> {
-        val tittel = when (språk()) {
-            Språk.NORSK_NYNORSK -> ytelse().nynorskTittel
-            else -> ytelse().tittel
-        }
         return mapOf(
-            "tittel" to tittel,
+            "tittel" to ytelse().utledTittel(språk()),
             "soknad_id" to søknad.søknadId,
             "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "soknad_mottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),

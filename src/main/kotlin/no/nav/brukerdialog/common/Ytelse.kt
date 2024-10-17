@@ -30,6 +30,7 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyC
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC
+import no.nav.k9.søknad.felles.type.Språk
 
 enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
     OMSORGSPENGER_UTVIDET_RETT(
@@ -46,6 +47,11 @@ enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
     PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING("Endringsmelding for pleiepenger sykt barn"),
     UNGDOMSYTELSE("Søknad om ungdomsytelse")
     ;
+
+    fun utledTittel(språk: Språk): String = when (språk) {
+        Språk.NORSK_NYNORSK -> nynorskTittel ?: tittel
+        else -> tittel
+    }
 
     companion object {
         fun fraTopic(topic: String): Ytelse = when (topic) {
