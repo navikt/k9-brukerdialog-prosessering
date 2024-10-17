@@ -28,6 +28,7 @@ import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetailsString
+import no.nav.k9.søknad.felles.type.Språk
 import java.net.URL
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -130,6 +131,7 @@ data class PleiepengerILivetsSluttfaseSøknad(
 
         return K9Søknad()
             .medVersjon(K9_SØKNAD_VERSJON)
+            .medSpråk(Språk.of(språk))
             .medMottattDato(mottatt)
             .medSøknadId(SøknadId(søknadId))
             .medSøker(søker.somK9Søker())

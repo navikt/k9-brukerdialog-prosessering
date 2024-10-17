@@ -308,7 +308,7 @@ class PSBSøknadPdfGeneratorTest {
 
             id = "2-utenSpråk"
             pdf = generator.genererPDF(
-                pdfData = fullGyldigMelding(id).copy(språk = null).pdfData()
+                pdfData = fullGyldigMelding(id).copy(språk = "nb").pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 

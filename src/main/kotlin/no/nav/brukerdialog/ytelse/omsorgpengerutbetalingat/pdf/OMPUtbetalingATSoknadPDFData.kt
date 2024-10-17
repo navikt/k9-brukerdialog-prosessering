@@ -8,6 +8,7 @@ import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.*
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
+import no.nav.k9.søknad.felles.type.Språk
 import java.time.Duration
 
 class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMottatt) : PdfData() {
@@ -19,10 +20,12 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
 
+    override fun språk(): Språk = Språk.NORSK_BOKMÅL
+
     override fun pdfData(): Map<String, Any?> {
         val mottatt = melding.mottatt.toLocalDate()
         return mapOf(
-            "tittel" to ytelse().tittel,
+            "tittel" to ytelse().utledTittel(språk()),
             "søknad" to melding.somMap(),
             "språk" to melding.språk.språkTilTekst(),
             "mottaksUkedag" to melding.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),

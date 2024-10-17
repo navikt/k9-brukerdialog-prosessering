@@ -10,6 +10,7 @@ import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.Barn
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.BarnSammeAdresse
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.OMPUTVKroniskSyktBarnSøknadMottatt
 import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.SøkerBarnRelasjon
+import no.nav.k9.søknad.felles.type.Språk
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -29,7 +30,7 @@ object OMPKSSøknadUtils {
         aktørId = "123456",
         fødselsdato = LocalDate.parse("2020-01-01")
     )
-    fun defaultK9Format(søknadId: String, mottatt: ZonedDateTime) = Søknad(
+    fun defaultK9Format(søknadId: String, mottatt: ZonedDateTime, språk: Språk = Språk.NORSK_BOKMÅL) = Søknad(
         SøknadId.of(søknadId),
         Versjon.of("1.0.0"),
         mottatt,
@@ -41,7 +42,7 @@ object OMPKSSøknadUtils {
                 .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("02119970078")),
             true
         )
-    )
+    ).medSpråk(språk)
 
     fun defaultSøknad(søknadId: String, mottatt: ZonedDateTime) = OMPUTVKroniskSyktBarnSøknadMottatt(
         nyVersjon = false,
