@@ -29,7 +29,7 @@ import java.time.ZonedDateTime
 
 data class PSBPreprosessertSøknad(
     val apiDataVersjon: String? = null,
-    val språk: String?,
+    val språk: String,
     val søknadId: String,
     val dokumentId: List<List<String>>,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")

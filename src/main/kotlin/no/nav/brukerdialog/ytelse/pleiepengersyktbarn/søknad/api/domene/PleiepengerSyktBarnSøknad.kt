@@ -49,7 +49,7 @@ data class PleiepengerSyktBarnSøknad(
         .toString(),
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    val språk: Språk? = null,
+    val språk: Språk,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val barn: BarnDetaljer,
     @field:Valid val arbeidsgivere: List<Arbeidsgiver>,

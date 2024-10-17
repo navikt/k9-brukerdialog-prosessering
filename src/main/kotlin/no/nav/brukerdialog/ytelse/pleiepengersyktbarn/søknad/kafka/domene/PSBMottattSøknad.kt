@@ -28,7 +28,7 @@ data class PSBMottattSøknad(
     val søknadId: String,
     val mottatt: ZonedDateTime,
     val apiDataVersjon: String? = null,
-    val språk: String? = null,
+    val språk: String,
     val fraOgMed : LocalDate,
     val tilOgMed : LocalDate,
     val søker : Søker,
