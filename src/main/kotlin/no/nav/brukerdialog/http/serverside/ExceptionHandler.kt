@@ -179,7 +179,7 @@ class ExceptionHandler(
             detail = validationProblemDetails.detail!!
         )
 
-        log.error("Validerigsfeil: {}", problemDetails)
+        log.error("Validerigsfeil: {}", problemDetails, ex)
         return ResponseEntity(problemDetails, headers, status)
     }
 
