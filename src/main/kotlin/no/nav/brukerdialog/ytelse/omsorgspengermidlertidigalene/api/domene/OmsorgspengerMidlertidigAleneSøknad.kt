@@ -17,6 +17,7 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.k9.søknad.felles.type.Språk
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -55,6 +56,7 @@ data class OmsorgspengerMidlertidigAleneSøknad(
             k9FormatVersjon,
             mottatt,
             søker.somK9Søker(),
+            Språk.of(språk),
             OmsorgspengerMidlertidigAlene(
                 barn.map { it.somK9Barn() },
                 annenForelder.somK9AnnenForelder(),

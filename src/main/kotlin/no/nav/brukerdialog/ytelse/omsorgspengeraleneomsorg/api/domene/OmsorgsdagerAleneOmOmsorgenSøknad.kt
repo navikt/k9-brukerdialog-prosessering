@@ -17,6 +17,7 @@ import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.k9.søknad.felles.type.Språk
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -71,6 +72,7 @@ data class OmsorgsdagerAleneOmOmsorgenSøknad(
             .medMottattDato(mottatt)
             .medVersjon(Versjon.of("1.0.0"))
             .medSøker(søker.somK9Søker())
+            .medSpråk(Språk.of(språk))
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
             .medYtelse(
                 OmsorgspengerAleneOmsorg(

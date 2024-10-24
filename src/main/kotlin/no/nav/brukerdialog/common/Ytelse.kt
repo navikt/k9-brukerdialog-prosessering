@@ -30,9 +30,13 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyC
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC
+import no.nav.k9.søknad.felles.type.Språk
 
-enum class Ytelse(val tittel: String) {
-    OMSORGSPENGER_UTVIDET_RETT("Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning"),
+enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
+    OMSORGSPENGER_UTVIDET_RETT(
+        "Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning",
+        "Søknad om ekstra omsorgsdagar for barn som har kronisk/langvarig sjukdom eller funksjonshemming"
+    ),
     OMSORGSPENGER_MIDLERTIDIG_ALENE("Søknad om ekstra omsorgsdager når den andre forelderen ikke kan ha tilsyn med barn"),
     ETTERSENDELSE("Ettersendelse av dokumentasjon"),
     OMSORGSDAGER_ALENEOMSORG("Søknad om ekstra omsorgsdager ved aleneomsorg"),
@@ -43,6 +47,11 @@ enum class Ytelse(val tittel: String) {
     PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING("Endringsmelding for pleiepenger sykt barn"),
     UNGDOMSYTELSE("Søknad om ungdomsytelse")
     ;
+
+    fun utledTittel(språk: Språk): String = when (språk) {
+        Språk.NORSK_NYNORSK -> nynorskTittel ?: tittel
+        else -> tittel
+    }
 
     companion object {
         fun fraTopic(topic: String): Ytelse = when (topic) {

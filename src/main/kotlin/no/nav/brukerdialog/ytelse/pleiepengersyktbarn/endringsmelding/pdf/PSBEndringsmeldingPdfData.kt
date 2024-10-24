@@ -18,6 +18,7 @@ import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMo
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.DurationUtils.somTekst
+import no.nav.k9.søknad.felles.type.Språk
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.ZoneOffset.UTC
@@ -25,13 +26,16 @@ import java.time.temporal.WeekFields
 
 class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingMottatt) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING
+
+    override fun språk(): Språk = Språk.NORSK_BOKMÅL
+
     override fun pdfData(): Map<String, Any?> {
 
         val k9Format = endringsmelding.k9Format
         val ytelse = k9Format.getYtelse<PleiepengerSyktBarn>()
         val dataBruktTilUtledning = ytelse.søknadInfo.orElse(null)
         return mapOf(
-            "tittel" to ytelse().tittel,
+            "tittel" to ytelse().utledTittel(språk()),
             "søknadId" to k9Format.søknadId.id,
             "soknadDialogCommitSha" to dataBruktTilUtledning?.soknadDialogCommitSha,
             "mottattDag" to k9Format.mottattDato.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
