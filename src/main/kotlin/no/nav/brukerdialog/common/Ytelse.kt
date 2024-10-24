@@ -35,7 +35,7 @@ import no.nav.k9.søknad.felles.type.Språk
 enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
     OMSORGSPENGER_UTVIDET_RETT(
         "Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning",
-        "Søknad om ekstra omsorgsdagar for barn som har kronisk/langvarig sjukdom eller funksjonshemning"
+        "Søknad om ekstra omsorgsdagar for barn som har kronisk/langvarig sjukdom eller funksjonshemming"
     ),
     OMSORGSPENGER_MIDLERTIDIG_ALENE("Søknad om ekstra omsorgsdager når den andre forelderen ikke kan ha tilsyn med barn"),
     ETTERSENDELSE("Ettersendelse av dokumentasjon"),
