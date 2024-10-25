@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="NO">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>{{tittel}}</title>
+    <meta name="subject" content="{{tittel}}"/>
+    <meta name="author" content="nav.no"/>
+    <meta name="description" content="{{tittel}} mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}"/>
+    <bookmarks>
+        <bookmark name="Søker" href="#søker"/>
+        <bookmark name="Barn" href="#barn"/>
+        <bookmark name="Om barnet" href="#omBarnet"/>
+        {{#if harIkkeLastetOppLegeerklæring}}
+            <bookmark name="Legeerklæring" href="#legeerklæring"/>
+        {{/if}}
+        <bookmark name="Samtykke" href="#samtykke"/>
+    </bookmarks>
+    {{#block 'style-common' }}
+    {{/block}}
+</head>
+
+<body>
+<h1 id="header">{{tittel}}</h1>
+<p class="nokkelinfo">
+    <strong>Sendt til NAV</strong>
+    {{soknad_mottatt_dag}} {{ soknad_mottatt }}
+</p>
+
+<div class="innholdscontainer">
+    {{> partial/felles/personPartial.nn id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
+    {{> partial/felles/personPartial.nn id="barn" title="Barn" navn=barn.navn fødselsdato=barn.fødselsdato fødselsnummer=barn.id }}
+
+    <section id="omBarnet">
+        <h2>Om barnet</h2>
+
+        <p class="sporsmalstekst">Bur du saman med barnet?</p>
+        {{#eq sammeAddresse "JA" }}
+            <p>Ja</p>
+        {{/eq}}
+        {{#eq sammeAddresse "JA_DELT_BOSTED" }}
+            <p>Ja, barnet har delt bustad</p>
+        {{/eq}}
+        {{#eq sammeAddresse "NEI" }}
+            <p>Nei</p>
+        {{/eq}}
+
+        <p class="sporsmalstekst">Har barnet kronisk/langvarig sjukdom eller funksjonshemming?</p>
+        <p>{{ jaNeiSvar kroniskEllerFunksjonshemming }}</p>
+
+        {{#if kroniskEllerFunksjonshemming}}
+            <p class="sporsmalstekst">Har du høgare risiko for fråvær på jobb på grunn av sjukdommen eller funksjonshemminga til barnet?</p>
+            <p>{{ jaNeiSvar høyereRisikoForFravær }}</p>
+
+            {{#if høyereRisikoForFravær}}
+                <div class="fritekst">
+                    <p class="sporsmalstekst">Skildring av korleis barnet sin sjukdom eller funksjonshemming gjer det meir sannsynleg at du må vera borte frå jobb.</p>
+                    <p class="fritekst_textarea">{{fritekst høyereRisikoForFraværBeskrivelse}}</p>
+                </div>
+            {{/if}}
+        {{/if}}
+
+        {{#if relasjonTilBarnet}}
+            <p class="sporsmalstekst">Din relasjon til barnet:</p>
+            <p>{{relasjonTilBarnet}}</p>
+        {{/if}}
+
+    </section>
+
+    <!-- Info om har ikke lastet opp vedlegg -->
+    <section id="legeerklæring">
+        {{#if harIkkeLastetOppLegeerklæring}}
+            <h2>Legeerklæring</h2>
+            <p>Ingen vedlegg er lasta opp.</p>
+        {{/if}}
+    </section>
+
+    <!-- Samtykke -->
+    <section id="samtykke">
+        <h2>Samtykke frå deg</h2>
+        <p class="sporsmalstekst">Har du forstått rettigheter og plikter?</p>
+        <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
+        <hr/>
+        <p class="sporsmalstekst">Har du stadfesta at opplysningar som er gitt er rette?</p>
+        <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
+    </section>
+</div>
+
+<!-- FOOTER -->
+{{> partial/footerPartial søknadId=soknad_id gitSha=soknadDialogCommitSha}}
+</body>
+
+</html>
