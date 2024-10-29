@@ -18,7 +18,7 @@ internal class DokarkivResponseTransformer : ResponseTransformer() {
             YtelseType.OMSORGSPENGESØKNAD_UTBETALING_ARBEIDSTAKER to "4",
             YtelseType.OMSORGSPENGESØKNAD_OVERFØRING_AV_DAGER to "5",
             YtelseType.OMSORGSPENGEMELDING_DELING_AV_DAGER to "5",
-            YtelseType.OPPLÆRINGSPENGESØKNAD to "6",
+            YtelseType.OPPLÆRINGSPENGERSØKNAD to "6",
             YtelseType.FRISINNSØKNAD to "7",
             YtelseType.OMSORGSPENGESØKNAD_MIDLERTIDIG_ALENE to "8",
             YtelseType.PLEIEPENGESØKNAD_ETTERSENDING to "9",

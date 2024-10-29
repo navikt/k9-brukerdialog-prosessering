@@ -45,7 +45,8 @@ enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
     PLEIEPENGER_LIVETS_SLUTTFASE("Søknad om pleiepenger i livets sluttfase"),
     PLEIEPENGER_SYKT_BARN("Søknad om pleiepenger for sykt barn"),
     PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING("Endringsmelding for pleiepenger sykt barn"),
-    UNGDOMSYTELSE("Søknad om ungdomsytelse")
+    UNGDOMSYTELSE("Søknad om ungdomsytelse"),
+    OPPLÆRINGSPENGER("Søknad om opplæringspenger")
     ;
 
     fun utledTittel(språk: Språk): String = when (språk) {
