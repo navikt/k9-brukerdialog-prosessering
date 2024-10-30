@@ -33,7 +33,7 @@ spec:
         - application: endringsmelding-pleiepenger
         - application: dine-pleiepenger
         - application: opplaringspenger-soknad
-        - application: ungdomsytelse-soknad
+        - application: ungdomsytelse-deltaker
       {{#each inboundRules}}
         - application: {{app}}
           namespace: {{namespace}}
