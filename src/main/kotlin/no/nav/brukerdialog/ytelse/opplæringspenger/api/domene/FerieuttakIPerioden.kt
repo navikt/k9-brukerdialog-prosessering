@@ -1,7 +1,6 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
-//TODO fix imports for riktig søknad ytelse
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie
 import no.nav.brukerdialog.utils.erFørEllerLik
 import no.nav.brukerdialog.utils.krever

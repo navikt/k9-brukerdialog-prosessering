@@ -1,7 +1,6 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 
 import no.nav.k9.søknad.felles.type.Periode
-//TODO fix imports for riktig søknad ytelse
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo
 import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning
 import no.nav.brukerdialog.utils.DateUtils.ukedagerTilOgMed

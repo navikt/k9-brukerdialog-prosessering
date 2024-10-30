@@ -3,7 +3,6 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.k9Format
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.OpplæringspengerSøknad
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer
-//TODO fix imports
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import java.time.LocalDate

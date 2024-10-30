@@ -7,7 +7,6 @@ import no.nav.brukerdialog.utils.DateUtils.månedStart
 import no.nav.brukerdialog.utils.erFørEllerLik
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.utils.kreverIkkeNull
-//TODO fix imports for riktig søknad ytelse
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import java.time.LocalDate

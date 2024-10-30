@@ -5,7 +5,6 @@ import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.Arbeidsforhold
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende
-//TODO fix imports for riktig søknad ytelse
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import java.time.LocalDate

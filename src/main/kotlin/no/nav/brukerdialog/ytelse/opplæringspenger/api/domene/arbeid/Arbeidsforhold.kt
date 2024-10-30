@@ -2,7 +2,6 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid
 
 import jakarta.validation.Valid
 import no.nav.k9.søknad.felles.type.Periode
-//TODO fix imports
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import no.nav.brukerdialog.utils.DateUtils.ikkeErHelg
