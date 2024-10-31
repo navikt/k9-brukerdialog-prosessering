@@ -5,30 +5,30 @@ import no.nav.helse.felles.Omsorgstilbud
 import no.nav.helse.felles.PlanUkedager
 import no.nav.brukerdialog.common.Constants
 import no.nav.brukerdialog.common.Ytelse
-//TODO fix imports for riktig meldinger ytelse
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsRedusert
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsUke
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Barn
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Beredskap
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Bosted
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Ferieuttak
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Land
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.NormalArbeidstid
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Periode
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Regnskapsfører
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Utenlandsopphold
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.VarigEndring
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Virksomhet
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.YrkesaktivSisteTreFerdigliknedeÅrene
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.ArbeidIPeriode
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.ArbeidsRedusert
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.ArbeidsUke
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsforhold
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsgiver
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Barn
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Beredskap
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Bosted
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Ferieuttak
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Frilans
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Land
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Nattevåk
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.NormalArbeidstid
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.OpptjeningIUtlandet
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Periode
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Regnskapsfører
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.SelvstendigNæringsdrivende
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.StønadGodtgjørelse
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.UtenlandskNæring
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Utenlandsopphold
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.VarigEndring
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Virksomhet
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.YrkesaktivSisteTreFerdigliknedeÅrene
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPMottattSøknad
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
@@ -38,7 +38,6 @@ import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.DurationUtils.tilString
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPMottattSøknad
 import no.nav.k9.søknad.felles.type.Språk
 import java.time.DayOfWeek
 import java.time.Duration
@@ -83,9 +82,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             ),
             "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
             "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
-            "omsorgstilbud" to søknad.omsorgstilbud?.somMap(),
-            "nattevaak" to nattevåk(søknad.nattevåk),
-            "beredskap" to beredskap(søknad.beredskap),
             "utenlandsoppholdIPerioden" to mapOf(
                 "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
                 "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()

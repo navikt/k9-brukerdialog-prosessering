@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene
 
-import no.nav.helse.felles.Omsorgstilbud
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
@@ -9,11 +8,9 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Barn
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.BarnRelasjon
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Beredskap
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.FerieuttakIPerioden
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Frilans
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Medlemskap
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Nattevåk
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.OpptjeningIUtlandet
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.StønadGodtgjørelse
@@ -41,9 +38,6 @@ data class OLPMottattSøknad(
     val utenlandskNæring: List<UtenlandskNæring>,
     val harForståttRettigheterOgPlikter : Boolean,
     val harBekreftetOpplysninger : Boolean,
-    val omsorgstilbud: Omsorgstilbud? = null,
-    val beredskap: Beredskap?,
-    val nattevåk: Nattevåk?,
     val frilans: Frilans,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,

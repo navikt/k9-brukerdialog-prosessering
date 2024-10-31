@@ -22,13 +22,10 @@ import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning
-//TODO fix imports for riktig søknad ytelse
+import no.nav.k9.søknad.ytelse.olp.v1.Opplæringspenger
+import no.nav.k9.søknad.ytelse.olp.v1.OpplæringspengerSøknadValidator
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning
 import java.net.URL
 import java.time.Duration
 import java.time.LocalDate
@@ -72,9 +69,6 @@ data class OpplæringspengerSøknad(
     @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
     val harForståttRettigheterOgPlikter: Boolean,
 
-    val omsorgstilbud: Omsorgstilbud? = null,
-    @field:Valid val nattevåk: Nattevåk? = null,
-    val beredskap: Beredskap? = null,
     @field:Valid val frilans: Frilans,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
     @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,
@@ -115,9 +109,6 @@ data class OpplæringspengerSøknad(
             utenlandsoppholdIPerioden = utenlandsoppholdIPerioden,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
-            omsorgstilbud = omsorgstilbud,
-            nattevåk = nattevåk,
-            beredskap = beredskap,
             frilans = frilans,
             stønadGodtgjørelse = stønadGodtgjørelse,
             selvstendigNæringsdrivende = selvstendigNæringsdrivende,
@@ -154,9 +145,7 @@ data class OpplæringspengerSøknad(
         addAll(medlemskap.valider("medlemskap"))
         addAll(utenlandsoppholdIPerioden.valider("utenlandsoppholdIPerioden"))
 
-        omsorgstilbud?.let { addAll(it.valider("omsorgstilbud")) }
         ferieuttakIPerioden?.let { addAll(it.valider(("ferieuttakIPerioden"))) }
-        beredskap?.let { addAll(it.valider("beredskap")) }
 
         vedlegg.mapIndexed { index, url ->
             krever(url.path.matches(Regex("/vedlegg/.*")), "vedlegg[$index] inneholder ikke gyldig url")
@@ -166,39 +155,32 @@ data class OpplæringspengerSøknad(
 
     }
 
-    override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = PleiepengerSyktBarnSøknadValidator()
+    override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> =  OpplæringspengerSøknadValidator()
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Innsending {
         val søknadsperiode = K9Periode(fraOgMed, tilOgMed)
-        val psb = PleiepengerSyktBarn()
+        val olp = Opplæringspenger()
             .medSøknadsperiode(søknadsperiode)
             .medBarn(barn.tilK9Barn())
             .medOpptjeningAktivitet(byggK9OpptjeningAktivitet())
             .medArbeidstid(byggK9Arbeidstid())
             .medUttak(byggK9Uttak(søknadsperiode))
             .medBosteder(medlemskap.tilK9Bosteder())
-            .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as PleiepengerSyktBarn
+            .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as Opplæringspenger
 
-        barnRelasjon?.let { psb.medOmsorg(byggK9Omsorg()) }
-        beredskap?.let { if (it.beredskap) psb.medBeredskap(beredskap.tilK9Beredskap(søknadsperiode)) }
-        nattevåk?.let { if (it.harNattevåk == true) psb.medNattevåk(nattevåk.tilK9Nattevåk(søknadsperiode)) }
-
-        when (omsorgstilbud) {
-            null -> psb.medTilsynsordning(tilK9Tilsynsordning0Timer(søknadsperiode))
-            else -> psb.medTilsynsordning(omsorgstilbud.tilK9Tilsynsordning(søknadsperiode))
-        }
+        barnRelasjon?.let { olp.medOmsorg(byggK9Omsorg()) }
 
         ferieuttakIPerioden?.let {
             if (it.ferieuttak.isNotEmpty() && it.skalTaUtFerieIPerioden) {
-                psb.medLovbestemtFerie(ferieuttakIPerioden.tilK9LovbestemtFerie())
+                olp.medLovbestemtFerie(ferieuttakIPerioden.tilK9LovbestemtFerie())
             }
         }
 
         if (utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden == true) {
-            psb.medUtenlandsopphold(utenlandsoppholdIPerioden.tilK9Utenlandsopphold())
+            olp.medUtenlandsopphold(utenlandsoppholdIPerioden.tilK9Utenlandsopphold())
         }
 
-        return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), psb)
+        return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), olp)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
             .medSpråk(K9Språk.of(språk?.name ?: "nb"))
     }
@@ -250,15 +232,6 @@ data class OpplæringspengerSøknad(
         result = 31 * result + tilOgMed.hashCode()
         return result
     }
-}
-
-fun tilK9Tilsynsordning0Timer(periode: no.nav.k9.søknad.felles.type.Periode) = Tilsynsordning().apply {
-    leggeTilPeriode(
-        periode,
-        TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(
-            Duration.ZERO
-        )
-    )
 }
 
 fun List<BarnOppslag>.hentIdentitetsnummerForBarn(aktørId: String?): String? {
