@@ -11,14 +11,16 @@ import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenUtils.personIdent
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.PleiepengerSyktBarnSøknad
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.OpplæringspengerSøknad
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.web.ErrorResponseException
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/pleiepenger-sykt-barn")
+@RequestMapping("/opplaeringspenger")
 @RequiredIssuers(
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
@@ -47,8 +49,14 @@ class OpplæringspengerController(
     fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @RequestBody søknad: PleiepengerSyktBarnSøknad,
+        @Value("\${ENABLE_OPPLÆRINGSPENGER:false}") enabled: Boolean? = null,
+        @RequestBody søknad: OpplæringspengerSøknad,
     ) = runBlocking {
+        if (enabled != true) {
+            logger.info("Opplæringspenger er ikke aktivert.")
+            throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
+        }
+
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 

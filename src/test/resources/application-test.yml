@@ -6,6 +6,7 @@ K9_BRUKERDIALOG_CACHE_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9
 K9_SELVBETJENING_OPPSLAG_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-selvbetjening-oppslag-mock
 DOKARKIV_BASE_URL: http://localhost:${wiremock.server.port:8083}/dokarkiv-mock
 ENABLE_UNDOMSYTELSE: true
+ENABLE_OPPLÆRINGSPENGER: true
 
 no.nav:
   security.jwt:
