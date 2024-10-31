@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequiredIssuers(
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
-class OpplæringspengerController(
+class OpplæringspengerSøknadController(
     private val innsendingService: InnsendingService,
     private val innsendingCache: InnsendingCache,
     private val barnService: BarnService,
@@ -41,10 +41,10 @@ class OpplæringspengerController(
     private val metrikkService: MetrikkService,
 ) {
     private companion object {
-        private val logger: Logger = LoggerFactory.getLogger(OpplæringspengerController::class.java)
+        private val logger: Logger = LoggerFactory.getLogger(OpplæringspengerSøknadController::class.java)
     }
 
-    @PostMapping("/innsending", consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping("/soknad/innsending", consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,

@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.Arbeidsforhold
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold
 import no.nav.k9.søknad.felles.opptjening.SelvstendigNæringsdrivende
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
