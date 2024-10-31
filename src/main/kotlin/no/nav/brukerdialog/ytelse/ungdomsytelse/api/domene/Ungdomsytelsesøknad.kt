@@ -14,6 +14,7 @@ import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
+import java.math.BigDecimal
 import java.net.URL
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -30,6 +31,8 @@ data class Ungdomsytelsesøknad(
     val tilOgMed: LocalDate? = null,
 
     val søkerNorskIdent: String,
+
+    val inntekt: Double = 0.0,
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
     val harBekreftetOpplysninger: Boolean,
@@ -55,6 +58,7 @@ data class Ungdomsytelsesøknad(
             språk = språk,
             fraOgMed = fraOgMed,
             tilOgMed = tilOgMed,
+            inntekt = inntekt,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
             k9Format = k9Format as Søknad
@@ -66,6 +70,7 @@ data class Ungdomsytelsesøknad(
     override fun somK9Format(søker: Søker, metadata: MetaInfo): K9Søknad {
         val ytelse = Ungdomsytelse()
             .medSøknadsperiode(Periode(fraOgMed, tilOgMed))
+            .medInntekt(BigDecimal.valueOf(inntekt))
 
         return K9Søknad()
             .medVersjon(K9_SØKNAD_VERSJON)

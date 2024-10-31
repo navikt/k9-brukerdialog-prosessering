@@ -13,6 +13,7 @@ object SøknadUtils {
         søkerNorskIdent = "12345678910",
         fraOgMed = LocalDate.parse("2021-01-01"),
         tilOgMed = LocalDate.parse("2021-01-10"),
+        inntekt = 15000.0,
         harForståttRettigheterOgPlikter = true,
         harBekreftetOpplysninger = true
     )
