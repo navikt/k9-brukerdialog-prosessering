@@ -12,7 +12,7 @@ class UngdomsytelseKomplettSøknad(
     private val språk: String,
     private val fraOgMed: LocalDate,
     private val tilOgMed: LocalDate? = null,
-    inntekt: Double,
+    private val inntekt: Double,
     private val mottatt: ZonedDateTime,
     private val harForståttRettigheterOgPlikter: Boolean,
     private val harBekreftetOpplysninger: Boolean,
