@@ -110,6 +110,7 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
           },
           "fraOgMed": "2022-01-01",
           "tilOgMed": "2022-02-01",
+          "inntekt": 15000.0,
           "språk": "nb",
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
@@ -128,8 +129,9 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
               "norskIdentitetsnummer": "02119970078"
             },
             "ytelse": {
-              "søknadsperiode": [],
-              "type": "UNGDOMSYTELSE"
+              "type": "UNGDOMSYTELSE",
+              "søknadsperiode": ["2022-01-01/2022-02-01"],
+              "inntekt": 15000.0
             },
             "journalposter": [],
             "begrunnelseForInnsending": {
