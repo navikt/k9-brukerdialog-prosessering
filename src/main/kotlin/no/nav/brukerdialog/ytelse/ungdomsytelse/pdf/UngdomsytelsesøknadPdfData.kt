@@ -28,7 +28,6 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
                 "fraOgMed" to DATE_FORMATTER.format(søknad.fraOgMed),
                 "tilOgMed" to søknad.tilOgMed?.let { DATE_FORMATTER.format(it) }
             ),
-            // Format as currency
             "inntekt" to søknad.inntekt.formaterSomValuta(),
             "søker" to søknad.søker.somMap(),
             "samtykke" to mapOf(
