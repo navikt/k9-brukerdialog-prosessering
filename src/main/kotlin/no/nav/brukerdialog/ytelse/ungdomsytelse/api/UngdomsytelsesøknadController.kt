@@ -62,25 +62,4 @@ class UngdomsytelsesøknadController(
         innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
-
-    @PostMapping("/soknad/rapportering")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    fun rapportering(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
-        @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
-        @Valid @RequestBody søknad: Ungdomsytelsesøknad,
-    ) = runBlocking {
-        if (enabled != true) {
-            logger.info("Ungdomsytelse er ikke aktivert.")
-            throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
-        }
-        val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
-        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
-
-        logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
-        innsendingCache.put(cacheKey)
-        innsendingService.registrer(søknad, metadata)
-        metrikkService.registrerMottattSøknad(søknad.ytelse())
-    }
 }
