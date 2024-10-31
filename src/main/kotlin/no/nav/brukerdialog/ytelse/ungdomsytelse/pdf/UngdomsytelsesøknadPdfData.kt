@@ -41,7 +41,7 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
     }
 
     fun Double.formaterSomValuta(): String {
-        val valutaFormat = NumberFormat.getCurrencyInstance(Locale.of("no", "NO")) // Norwegian locale
+        val valutaFormat = NumberFormat.getCurrencyInstance(Locale.of("no", "NO"))
         return valutaFormat.format(this)
     }
 }
