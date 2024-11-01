@@ -121,7 +121,7 @@ data class OpplæringspengerSøknad(
 
     override fun søkerNorskIdent(): String? = søkerNorskIdent
 
-    override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
+    override fun ytelse(): Ytelse = Ytelse.OPPLARINGSPENGER
 
     override fun søknadId(): String = søknadId
 
