@@ -26,7 +26,7 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
             "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
             "periode" to mapOf(
                 "fraOgMed" to DATE_FORMATTER.format(søknad.fraOgMed),
-                "tilOgMed" to søknad.tilOgMed?.let { DATE_FORMATTER.format(it) }
+                "tilOgMed" to DATE_FORMATTER.format(søknad.tilOgMed)
             ),
             "inntekt" to søknad.inntekt.formaterSomValuta(),
             "søker" to søknad.søker.somMap(),
