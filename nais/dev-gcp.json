@@ -54,7 +54,7 @@
 
     "ENABLE_UNDOMSYTELSE": "true",
 
-    "ENABLE_OPPLÆRINGSPENGER": "true"
+    "ENABLE_OPPLAERINGSPENGER": "true"
   },
   "slack-channel": "sif-alerts-dev",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "

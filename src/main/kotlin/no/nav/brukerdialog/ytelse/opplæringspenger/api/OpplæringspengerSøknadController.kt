@@ -49,7 +49,7 @@ class OpplæringspengerSøknadController(
     fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @Value("\${ENABLE_OPPLÆRINGSPENGER:false}") enabled: Boolean? = null,
+        @Value("\${ENABLE_OPPLAERINGSPENGER:false}") enabled: Boolean? = null,
         @RequestBody søknad: OpplæringspengerSøknad,
     ) = runBlocking {
         if (enabled != true) {

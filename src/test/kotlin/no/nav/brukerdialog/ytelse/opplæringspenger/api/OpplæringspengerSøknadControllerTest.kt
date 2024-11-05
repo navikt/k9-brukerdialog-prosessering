@@ -38,7 +38,7 @@ import java.util.*
 @WebMvcTest(
     controllers = [OpplæringspengerSøknadController::class],
     properties = [
-        "ENABLE_OPPLÆRINGSPENGER=true",
+        "ENABLE_OPPLAERINGSPENGER=true",
     ])
 @Import(
     JacksonConfiguration::class,
