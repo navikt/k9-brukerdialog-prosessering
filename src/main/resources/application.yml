@@ -232,13 +232,13 @@ no.nav:
 
       olp-soknad-preprosessering:
         application-id-suffix: olp-soknad-preprosessering
-        auto-offset-reset: none
+        auto-offset-reset: earliest
       olp-soknad-journalforing:
         application-id-suffix: olp-soknad-journalforing
-        auto-offset-reset: none
+        auto-offset-reset: earliest
       olp-soknad-cleanup:
         application-id-suffix: olp-soknad-cleanup
-        auto-offset-reset: none
+        auto-offset-reset: earliest
 
 management:
   endpoint:
