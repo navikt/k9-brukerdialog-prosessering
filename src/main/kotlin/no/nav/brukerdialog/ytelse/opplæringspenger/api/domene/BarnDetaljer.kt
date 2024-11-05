@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 private val logger: Logger =
-    LoggerFactory.getLogger("no.nav.k9brukerdialogapi.ytelse.pleiepengersyktbarn.soknad.BarnDetaljer")
+    LoggerFactory.getLogger("no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.BarnDetaljer")
 
 data class BarnDetaljer(
     @field:Size(min = 11, max = 11)

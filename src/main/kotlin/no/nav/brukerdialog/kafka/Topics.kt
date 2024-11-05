@@ -17,6 +17,7 @@ import no.nav.brukerdialog.ytelse.Ytelse.PLEIEPENGER_SYKT_BARN
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.kafka.Topics.ETTERSENDING_TOPIC
 import no.nav.brukerdialog.kafka.Topics.MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
+import no.nav.brukerdialog.kafka.Topics.OLP_MOTTATT_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSDAGER_ALENEOMSORG_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_MIDLERTIDIG_ALENE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER_TOPIC
@@ -39,6 +40,7 @@ object Topics {
     const val PLEIEPENGER_SYKT_BARN_TOPIC = "dusseldorf.pp-sykt-barn-soknad-mottatt"
     const val MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC = "dusseldorf.privat-endringsmelding-pleiepenger-sykt-barn-mottatt"
     const val UNGDOMSYTELSE_SOKNAD_TOPIC = "dusseldorf.ungdomsytelse-soknad-mottatt"
+    const val OLP_MOTTATT_TOPIC = "dusseldorf.olp-soknad-mottatt"
 }
 
 data class TopicEntry<V>(
@@ -58,7 +60,7 @@ internal fun hentTopicForYtelse(ytelse: Ytelse) = when (ytelse) {
     ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN -> MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
     DINE_PLEIEPENGER -> throw IllegalArgumentException("$ytelse er ikke en gyldig ytelse for denne operasjonen")
     Ytelse.UNGDOMSYTELSE -> UNGDOMSYTELSE_SOKNAD_TOPIC
-    Ytelse.OPPLARINGSPENGER -> TODO("Må opprette topic. Se nais/topics i rot av repo")
+    Ytelse.OPPLARINGSPENGER -> OLP_MOTTATT_TOPIC
 }
 
 internal class SøknadSerializer : Serializer<TopicEntry<JSONObject>> {

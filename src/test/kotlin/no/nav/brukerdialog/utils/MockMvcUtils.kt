@@ -27,7 +27,7 @@ object MockMvcUtils {
             Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN -> "/endringsmelding-pleiepenger-sykt-barn"
             Ytelse.DINE_PLEIEPENGER -> "/dine-pleiepenger"
             Ytelse.UNGDOMSYTELSE -> "/ungdomsytelse/soknad"
-            Ytelse.OPPLARINGSPENGER -> TODO("Trenger endepunkt for opplæringspenger. Se K9-joark.")
+            Ytelse.OPPLARINGSPENGER -> "/opplaeringspenger"
         }
 
         post("$ytelseUrl/innsending") {

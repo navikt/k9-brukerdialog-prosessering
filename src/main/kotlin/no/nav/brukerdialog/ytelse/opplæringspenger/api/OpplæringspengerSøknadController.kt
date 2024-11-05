@@ -44,7 +44,7 @@ class OpplæringspengerSøknadController(
         private val logger: Logger = LoggerFactory.getLogger(OpplæringspengerSøknadController::class.java)
     }
 
-    @PostMapping("/soknad/innsending", consumes = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping("/innsending", consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,

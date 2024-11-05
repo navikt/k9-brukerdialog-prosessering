@@ -237,7 +237,7 @@ no.nav:
         application-id-suffix: olp-soknad-journalforing
         auto-offset-reset: none
       olp-soknad-cleanup:
-        application-id-suffix: olp-soknad-cleanup-stream
+        application-id-suffix: olp-soknad-cleanup
         auto-offset-reset: none
 
 management:

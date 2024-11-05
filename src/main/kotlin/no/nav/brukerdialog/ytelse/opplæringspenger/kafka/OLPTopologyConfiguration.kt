@@ -70,7 +70,7 @@ class OLPTopologyConfiguration(
     }
 
     @Bean
-    fun psbPreprosessertTopic(): Topic<TopicEntry<OLPPreprosessertSøknad>> {
+    fun olpPreprosessertTopic(): Topic<TopicEntry<OLPPreprosessertSøknad>> {
         return Topic(
             name = OLP_PREPROSESSERT_TOPIC,
             serDes = OLPPreprosessertSøknadSerdes(objectMapper)
@@ -78,7 +78,7 @@ class OLPTopologyConfiguration(
     }
 
     @Bean
-    fun psbCleanupTopic(): Topic<TopicEntry<Cleanup<OLPPreprosessertSøknad>>> {
+    fun olpCleanupTopic(): Topic<TopicEntry<Cleanup<OLPPreprosessertSøknad>>> {
         return Topic(
             name = OLP_CLEANUP_TOPIC,
             serDes = CleanupSøknadSerdes(objectMapper)

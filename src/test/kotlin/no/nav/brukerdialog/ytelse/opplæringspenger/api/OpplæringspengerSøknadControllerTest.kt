@@ -67,7 +67,7 @@ class OpplæringspengerSøknadControllerTest {
     @MockkBean
     private lateinit var metrikkService: MetrikkService
 
-    private val OLP_INNSEND_SØKNAD_URL = "/opplaeringspenger/soknad/innsending"
+    private val OLP_INNSEND_SØKNAD_URL = "/opplaeringspenger/innsending"
 
     @BeforeEach
     fun setUp() {
@@ -199,7 +199,7 @@ class OpplæringspengerSøknadControllerTest {
                         """
                         {
                           "type": "/problem-details/invalid-request-parameters",
-                          "instance": "http://localhost/opplaeringspenger/soknad/innsending",
+                          "instance": "http://localhost/opplaeringspenger/innsending",
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",

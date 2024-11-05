@@ -38,7 +38,7 @@ class OLPSøknadJournalføring(
     }
 
     @Bean
-    fun pleiepengerSyktBarnJournalføringsStream(): KStream<String, TopicEntry<OLPPreprosessertSøknad>> {
+    fun opplæringspengerJournalføringsStream(): KStream<String, TopicEntry<OLPPreprosessertSøknad>> {
         val stream = streamsBuilder
             .stream(olpPreprosesertTopic.name, olpPreprosesertTopic.consumedWith)
 
