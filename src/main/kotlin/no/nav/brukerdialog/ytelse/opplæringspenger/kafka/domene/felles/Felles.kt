@@ -36,15 +36,6 @@ data class Medlemskap(
     val utenlandsoppholdNeste12Mnd: List<Bosted> = listOf()
 )
 
-data class Nattevåk(
-    val harNattevåk: Boolean,
-    val tilleggsinformasjon: String?
-) {
-    override fun toString(): String {
-        return "Nattevåk(harNattevåk=$harNattevåk)"
-    }
-}
-
 data class Frilans(
     val harInntektSomFrilanser: Boolean,
     val startetFørSisteTreHeleMåneder: Boolean? = null,
@@ -60,15 +51,6 @@ data class Frilans(
 
 enum class FrilansType {
     FRILANS, FRILANS_HONORAR, HONORAR
-}
-
-data class Beredskap(
-    val beredskap: Boolean,
-    val tilleggsinformasjon: String?
-) {
-    override fun toString(): String {
-        return "Beredskap(beredskap=$beredskap)"
-    }
 }
 
 data class Bosted(

@@ -5,6 +5,7 @@ import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Kurs
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Barn
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.BarnRelasjon
@@ -45,6 +46,7 @@ data class OLPMottattSøknad(
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
+    val kurs: Kurs? = null,
     val k9FormatSøknad: Søknad
 ): MottattMelding {
     override fun ytelse(): Ytelse = Ytelse.OPPLÆRINGSPENGER

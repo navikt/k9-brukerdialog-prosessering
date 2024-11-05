@@ -117,6 +117,7 @@ data class OpplæringspengerSøknad(
             barnRelasjon = barnRelasjon,
             barnRelasjonBeskrivelse = barnRelasjonBeskrivelse,
             harVærtEllerErVernepliktig = harVærtEllerErVernepliktig,
+            kurs = kurs,
             k9FormatSøknad = k9Format as K9Søknad
         )
     }

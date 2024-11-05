@@ -1,50 +1,20 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.pdf
 
-import no.nav.helse.felles.Enkeltdag
-import no.nav.helse.felles.Omsorgstilbud
-import no.nav.helse.felles.PlanUkedager
 import no.nav.brukerdialog.common.Constants
 import no.nav.brukerdialog.common.Ytelse
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.ArbeidIPeriode
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.ArbeidsRedusert
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.ArbeidsUke
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsforhold
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Barn
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Beredskap
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Bosted
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Ferieuttak
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Frilans
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Land
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Nattevåk
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.NormalArbeidstid
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.OpptjeningIUtlandet
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Periode
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Regnskapsfører
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.StønadGodtgjørelse
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.UtenlandskNæring
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Utenlandsopphold
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.VarigEndring
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Virksomhet
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.YrkesaktivSisteTreFerdigliknedeÅrene
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPMottattSøknad
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
-import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
 import no.nav.brukerdialog.utils.DateUtils.ukeNummer
-import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.DurationUtils.tilString
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
 import no.nav.k9.søknad.felles.type.Språk
-import java.time.DayOfWeek
-import java.time.Duration
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.WeekFields
 
 class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.OPPLÆRINGSPENGER
@@ -66,6 +36,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "til_og_med" to Constants.DATE_FORMATTER.format(søknad.tilOgMed),
                 "virkedager" to DateUtils.antallVirkedager(søknad.fraOgMed, søknad.tilOgMed)
             ),
+            "kurs" to søknad.kurs?.somMap(),
             "medlemskap" to mapOf(
                 "har_bodd_i_utlandet_siste_12_mnd" to søknad.medlemskap.harBoddIUtlandetSiste12Mnd,
                 "utenlandsopphold_siste_12_mnd" to søknad.medlemskap.utenlandsoppholdSiste12Mnd.somMapBosted(),
@@ -113,6 +84,23 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
         "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst
     )
 
+    private fun Kurs.somMap() = mapOf<String, Any?>(
+        "institusjonsnavn" to kursholder.navn,
+        "institusjosId" to kursholder.id,
+        "kursperioder" to perioder.somMapPerioderMedReiseTid()
+    )
+
+    private fun List<KursPerioderMedReiseTid>.somMapPerioderMedReiseTid(): List<Map<String, Any?>> {
+        return map {
+            mapOf<String, Any?>(
+                "fraOgMed" to Constants.DATE_FORMATTER.format(it.fraOgMed.toLocalDate()),
+                "tilOgMed" to Constants.DATE_FORMATTER.format(it.tilOgMed.toLocalDate()),
+                "avreise" to Constants.DATE_FORMATTER.format(it.avreise),
+                "hjemkomst" to Constants.DATE_FORMATTER.format(it.hjemkomst)
+            )
+        }
+    }
+
     private fun OLPMottattSøknad.harMinstEtArbeidsforhold(): Boolean {
         if (frilans.arbeidsforhold != null) return true
 
@@ -127,80 +115,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
         (this.selvstendigNæringsdrivende.virksomhet?.harFlereAktiveVirksomheter != null)
 
     private fun erBooleanSatt(verdi: Boolean?) = verdi != null
-
-    private fun nattevåk(nattevaak: Nattevåk?) = when {
-        nattevaak == null -> null
-        else -> {
-            mapOf(
-                "har_nattevaak" to nattevaak.harNattevåk,
-                "tilleggsinformasjon" to nattevaak.tilleggsinformasjon
-            )
-        }
-    }
-
-    private fun beredskap(beredskap: Beredskap?) = when {
-        beredskap == null -> null
-        else -> {
-            mapOf(
-                "i_beredskap" to beredskap.beredskap,
-                "tilleggsinformasjon" to beredskap.tilleggsinformasjon
-            )
-        }
-    }
-
-    private fun Omsorgstilbud.somMap(): Map<String, Any?> {
-        return mapOf(
-            "svarFortid" to svarFortid?.pdfTekst,
-            "svarFremtid" to svarFremtid?.pdfTekst,
-            "erLiktHverUkeErSatt" to (erLiktHverUke != null),
-            "erLiktHverUke" to erLiktHverUke,
-            "enkeltdagerPerMnd" to enkeltdager?.somMapPerMnd(),
-            "ukedager" to ukedager?.somMap()
-        )
-    }
-
-    private fun List<Enkeltdag>.somMapEnkeltdag(): List<Map<String, Any?>> {
-        return map {
-            mapOf<String, Any?>(
-                "dato" to Constants.DATE_FORMATTER.format(it.dato),
-                "dag" to it.dato.dayOfWeek.somNorskDag(),
-                "tid" to it.tid.somTekst(avkort = false)
-            )
-        }
-    }
-
-    fun List<Enkeltdag>.somMapPerMnd(): List<Map<String, Any>> {
-        val omsorgsdagerPerMnd = this.groupBy { it.dato.month }
-
-        return omsorgsdagerPerMnd.map {
-            mapOf(
-                "år" to it.value.first().dato.year,
-                "måned" to it.key.somNorskMåned().storForbokstav(),
-                "enkeltdagerPerUke" to it.value.somMapPerUke()
-            )
-        }
-    }
-
-    private fun List<Enkeltdag>.somMapPerUke(): List<Map<String, Any>> {
-        val omsorgsdagerPerUke = this.groupBy {
-            val uketall = it.dato.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear())
-            if (uketall == 0) 53 else uketall
-        }
-        return omsorgsdagerPerUke.map {
-            mapOf(
-                "uke" to it.key,
-                "dager" to it.value.somMapEnkeltdag()
-            )
-        }
-    }
-
-    private fun PlanUkedager.somMap(avkort: Boolean = true) = mapOf<String, Any?>(
-        "mandag" to if (mandag.harGyldigVerdi()) mandag!!.somTekst(avkort) else null,
-        "tirsdag" to if (tirsdag.harGyldigVerdi()) tirsdag!!.somTekst(avkort) else null,
-        "onsdag" to if (onsdag.harGyldigVerdi()) onsdag!!.somTekst(avkort) else null,
-        "torsdag" to if (torsdag.harGyldigVerdi()) torsdag!!.somTekst(avkort) else null,
-        "fredag" to if (fredag.harGyldigVerdi()) fredag!!.somTekst(avkort) else null,
-    )
 
     private fun List<OpptjeningIUtlandet>.somMapOpptjeningIUtlandet(): List<Map<String, Any?>>? {
         if (isEmpty()) return null
@@ -228,8 +142,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             )
         }
     }
-
-    private fun Duration?.harGyldigVerdi() = this != null && this != Duration.ZERO
 
     private fun Arbeidsforhold.somMap(): Map<String, Any?> = mapOf(
         "data" to this.toString(),

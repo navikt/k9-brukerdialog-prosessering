@@ -11,15 +11,13 @@
         <bookmark name="Barn" href="#barn"/>
         <bookmark name="Relasjon til barnet" href="#relasjonTilBarnet"/>
         <bookmark name="Perioder" href="#perioder"/>
+        <bookmark name="Opplæring" href="#opplæring"/>
         <bookmark name="Utenlandsopphold" href="#utenlandsopphold"/>
         <bookmark name="Arbeidsgivere" href="#arbeidsgivere"/>
         <bookmark name="Jobb i søknadsperioden" href="#jobbISøknadsperioden"/>
         <bookmark name="Opptjening i utlandet" href="#opptjeningIUtlandet"/>
         <bookmark name="Utenlandsk næring" href="#utenlandskNæring"/>
-        <bookmark name="Omsorgstilbud" href="#omsorgstilbud"/>
         <bookmark name="Verneplikt" href="#verneplikt"/>
-        <bookmark name="Nattevåk" href="#nattevaak"/>
-        <bookmark name="Beredskap" href="#beredskap"/>
         <bookmark name="Omsorgsstønad" href="#omsorgsstønad"/>
         <bookmark name="Frilans" href="#frilans"/>
         <bookmark name="Selvstendig" href="#selvstendig"/>
@@ -52,12 +50,30 @@
     </section>
 
     <section id="perioder">
-        <h2>Perioder du søker om pleiepenger</h2>
+        <h2>Perioder du søker om opplæringspenger</h2>
         <ul>
             <li>
                 <strong>{{ periode.fra_og_med }} - {{ periode.til_og_med }}</strong><br/>
             </li>
         </ul>
+    </section>
+
+    <section id="opplæring">
+        {{# if kurs }}
+            <h2>Opplæringsinstitusjon og kursperiode med avreise- og hjemreisedag</h2>
+            <p class="sporsmalstekst">Hvilken institusjon har du vært på opplæring hos?</p>
+            <p>Navn på opplæringssted: {{ kurs.institusjonsnavn }}</p>
+            <p>ID for opplæringssted: {{ kurs.institusjosId }}</p>
+            <ul>
+                {{#each kurs.kursperioder }}
+                    <li>
+                        <p>Periode: {{ fraOgMed }} - {{ tilOgMed }}</p>
+                        <p>Avreisedag: {{ avreise }}</p>
+                        <p>Hjemreisedag: {{ hjemkomst }}</p>
+                    </li>
+                {{/each}}
+            </ul>
+        {{/ if }}
     </section>
 
     <section id="arbeidsgivere">
@@ -189,9 +205,11 @@
                 {{/unless}}
 
                 {{#if frilans.misterHonorar}}
-                    <br/><p class="sporsmalstekst">Jeg mister honorar i søknadsperioden</p>
+                    <br/>
+                    <p class="sporsmalstekst">Jeg mister honorar i søknadsperioden</p>
                 {{else}}
-                    <br/><p class="sporsmalstekst">Jeg mister ikke honorar i søknadsperioden</p>
+                    <br/>
+                    <p class="sporsmalstekst">Jeg mister ikke honorar i søknadsperioden</p>
                 {{/if}}
             {{/eq}}
 
@@ -297,7 +315,7 @@
                 <ul class="ul-no-indent">
                     {{#if arbeidsgiver.arbeidsforhold}}
                         <li><b>{{arbeidsgiver.navn}} (orgnr: {{arbeidsgiver.organisasjonsnummer}})</b></li>
-                        {{> partial/arbeid/arbeidsforholdPartial arbeidsforhold=arbeidsgiver.arbeidsforhold}}
+                        {{> partial/olp/arbeidsforholdPartial arbeidsforhold=arbeidsgiver.arbeidsforhold}}
                     {{/if}}
                 </ul>
             {{/each}}
@@ -364,117 +382,14 @@
     <section id="verneplikt">
         {{# if hjelper.harVærtEllerErVernepliktigErSatt}}
             <h2>Verneplikt</h2>
-            <p class="sporsmalstekst">Utøvde du verneplikt på tidspunktet du søker pleiepenger fra?</p>
+            <p class="sporsmalstekst">Utøvde du verneplikt på tidspunktet du søker opplæringspenger fra?</p>
             <p>{{ jaNeiSvar harVærtEllerErVernepliktig }}</p>
-        {{/if}}
-    </section>
-
-    <section id="omsorgstilbud">
-        <h2>Omsorgstilbud</h2>
-        {{#if omsorgstilbud}}
-            {{#if omsorgstilbud.svarFortid}}
-                <p class="sporsmalstekst">Har barnet vært fast og regelmessig i et omsorgstilbud?</p>
-                <p>{{omsorgstilbud.svarFortid}}</p>
-            {{/if}}
-
-            {{#if omsorgstilbud.svarFremtid}}
-                <p class="sporsmalstekst">Skal barnet være fast og regelmessig i et omsorgstilbud?</p>
-                <p>{{omsorgstilbud.svarFremtid}}</p>
-            {{/if}}
-
-            {{#if omsorgstilbud.erLiktHverUkeErSatt}}
-                <p class="sporsmalstekst">Er tiden i omsorgstilbudet lik hver uke?</p>
-                <p>{{ jaNeiSvar omsorgstilbud.erLiktHverUke}}</p>
-            {{/if}}
-
-            {{#if omsorgstilbud.enkeltdagerPerMnd}}
-                <p><b>Tid barnet er i omsorgstilbud:</b></p>
-                <ul class="ul-no-indent">
-                    {{#each omsorgstilbud.enkeltdagerPerMnd as |enkeltdagerPerMnd|~}}
-                        <li>
-                            <p><b>{{enkeltdagerPerMnd.måned}} {{enkeltdagerPerMnd.år}}</b></p>
-                            <ul class="ul-no-indent">
-                                {{#each enkeltdagerPerMnd.enkeltdagerPerUke as |enkeltdagerPerUke|~}}
-                                    <li>
-                                        <p>Uke {{enkeltdagerPerUke.uke}}</p>
-                                        <ul>
-                                            {{#each enkeltdagerPerUke.dager as |enkeltdag|~}}
-                                                <li>
-                                                    <p>{{enkeltdag.dato}}: {{enkeltdag.tid}}</p>
-                                                </li>
-                                            {{/each}}
-                                        </ul>
-                                    </li>
-                                {{/each}}
-                            </ul>
-                        </li>
-                    {{/each}}
-                </ul>
-            {{/if}}
-
-            {{#if omsorgstilbud.ukedager}}
-                <p><b>Faste dager barnet er i omsorgstilbud:</b></p>
-                {{#if omsorgstilbud.ukedager}}
-                    {{#if omsorgstilbud.ukedager.mandag}}
-                        <p><b>Mandager:</b> {{omsorgstilbud.ukedager.mandag}}</p>
-                    {{/if}}
-
-                    {{#if omsorgstilbud.ukedager.tirsdag}}
-                        <p><b>Tirsdager:</b> {{omsorgstilbud.ukedager.tirsdag}}</p>
-                    {{/if}}
-
-                    {{#if omsorgstilbud.ukedager.onsdag}}
-                        <p><b>Onsdager:</b> {{omsorgstilbud.ukedager.onsdag}}</p>
-                    {{/if}}
-
-                    {{#if omsorgstilbud.ukedager.torsdag}}
-                        <p><b>Torsdager:</b> {{omsorgstilbud.ukedager.torsdag}}</p>
-                    {{/if}}
-
-                    {{#if omsorgstilbud.ukedager.fredag}}
-                        <p><b>Fredager:</b> {{omsorgstilbud.ukedager.fredag}}</p>
-                    {{/if}}
-                    <br/>
-                {{/if}}
-            {{/if}}
-
-        {{else}}
-            <p>Nei</p>
-        {{/if}}
-    </section>
-
-    <section id="nattevaak">
-        {{# if nattevaak }}
-            <h2>Nattevåk</h2>
-            <p class="sporsmalstekst">Må du være våken om natten for å pleie barnet, og derfor må være borte fra jobb
-                dagen etter?</p>
-            <p>{{ jaNeiSvar nattevaak.har_nattevaak }}</p>
-            {{# if nattevaak.tilleggsinformasjon }}
-                <div class="fritekst">
-                    <p class="sporsmalstekst">Dine tilleggsopplysninger:</p>
-                    <p class="fritekst_textarea">{{fritekst nattevaak.tilleggsinformasjon}}</p>
-                </div>
-            {{/if}}
-        {{/if}}
-    </section>
-
-    <section id="beredskap">
-        {{# if beredskap }}
-            <h2>Beredskap</h2>
-            <p class="sporsmalstekst">Må du være i beredskap også når barnet er i et omsorgstilbud?</p>
-            <p>{{ jaNeiSvar beredskap.i_beredskap }}</p>
-            {{# if beredskap.tilleggsinformasjon }}
-                <div class="fritekst">
-                    <p class="sporsmalstekst">Dine tilleggsopplysninger:</p>
-                    <p class="fritekst_textarea">{{fritekst beredskap.tilleggsinformasjon}}</p>
-                </div>
-            {{/if}}
         {{/if}}
     </section>
 
     <section id="utenlandsopphold">
         <h2>Perioder med utenlandsopphold og ferie</h2>
-        <p class="sporsmalstekst">Skal du reise til utlandet i perioden du søker om pleiepenger?</p>
+        <p class="sporsmalstekst">Skal du reise til utlandet i perioden du søker om opplæringspenger?</p>
         {{# if utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}
             <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}</p>
             <ul>
@@ -507,7 +422,7 @@
             <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}</p>
         {{/if}}
 
-        <p class="sporsmalstekst">Skal du ha ferie i perioden du søker om pleiepenger?</p>
+        <p class="sporsmalstekst">Skal du ha ferie i perioden du søker om opplæringspenger?</p>
         {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
             <p>Du opplyser at du skal ha ferie</p>
             <ul>

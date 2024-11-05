@@ -210,7 +210,7 @@ class SøknadUtils {
                 )
             ),
             kurs = Kurs(
-                kursholder = Kursholder(navn = "Kiwi AS", id = "0edb9541-dda5-4dc4-bfaf-587d01448a6a"),
+                kursholder = Kursholder(navn = "Opplæring for kurs AS", id = "0edb9541-dda5-4dc4-bfaf-587d01448a6a"),
                 perioder = listOf(
                     KursPerioderMedReiseTid(
                         fraOgMed = LocalDate.parse("2022-01-01").atStartOfDay(),
