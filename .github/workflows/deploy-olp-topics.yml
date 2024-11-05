@@ -1,0 +1,21 @@
+name: Deploy pleiepenger sykt barn topics
+
+env:
+  TOPICS_PATH: 'nais/topics/opplaeringspenger-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-olp-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/opplaeringspenger-topics.yml'
+
+jobs:
+  deploy-psb-topics:
+    permissions:
+      id-token: write
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: psb-topics
+      topics-path: 'nais/topics/opplaeringspenger-topics.yml'
+    secrets: inherit
