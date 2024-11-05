@@ -16,6 +16,7 @@ import no.nav.brukerdialog.utils.StringUtils
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetailsString
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kurs.Companion.tilK9Format
 import no.nav.fpsak.tidsserie.LocalDateInterval
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -76,6 +77,7 @@ data class OpplæringspengerSøknad(
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val dataBruktTilUtledningAnnetData: String? = null,
+    val kurs: Kurs? = null
 ) : Innsending {
 
     internal fun leggTilIdentifikatorPåBarnHvisMangler(barnFraOppslag: List<BarnOppslag>) {
@@ -178,6 +180,10 @@ data class OpplæringspengerSøknad(
 
         if (utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden == true) {
             olp.medUtenlandsopphold(utenlandsoppholdIPerioden.tilK9Utenlandsopphold())
+        }
+
+        if (kurs != null) {
+            olp.medKurs(kurs.tilK9Format())
         }
 
         return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), olp)

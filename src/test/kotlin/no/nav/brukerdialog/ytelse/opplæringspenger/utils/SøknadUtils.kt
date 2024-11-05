@@ -6,50 +6,14 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Regnskapsfører
 import no.nav.brukerdialog.ytelse.fellesdomene.VarigEndring
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
-import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.Barn
-import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynSøknad
 import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.OpplæringspengerSøknad
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.BarnDetaljer
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.BarnRelasjon
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Bosted
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Ferieuttak
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.FerieuttakIPerioden
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Frilans
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.FrilansType
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Medlemskap
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.OpptjeningIUtlandet
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.OpptjeningType
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Periode
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Språk
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.StønadGodtgjørelse
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Utenlandsopphold
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.UtenlandsoppholdIPerioden
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.*
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriodeType
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.NormalArbeidstid
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Årsak
-import no.nav.k9.søknad.Søknad
-import no.nav.k9.søknad.felles.Versjon
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer
-import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9.søknad.ytelse.psb.v1.ArbeiderIPeriodenSvar
-import no.nav.k9.søknad.ytelse.psb.v1.DataBruktTilUtledning
-import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
-import no.nav.k9.søknad.ytelse.psb.v1.UkjentArbeidsforhold
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import java.net.URI
-import java.time.Duration
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.*
 import java.util.*
 
 
@@ -243,6 +207,17 @@ class SøknadUtils {
                     ),
                     fraOgMed = LocalDate.parse("2022-01-01"),
                     tilOgMed = LocalDate.parse("2022-01-10")
+                )
+            ),
+            kurs = Kurs(
+                kursholder = Kursholder(navn = "Kiwi AS", id = "0edb9541-dda5-4dc4-bfaf-587d01448a6a"),
+                perioder = listOf(
+                    KursPerioderMedReiseTid(
+                        fraOgMed = LocalDate.parse("2022-01-01").atStartOfDay(),
+                        tilOgMed = LocalDate.parse("2022-01-10").atStartOfDay(),
+                        avreise = LocalDate.parse("2022-01-01"),
+                        hjemkomst = LocalDate.parse("2022-01-10"),
+                    )
                 )
             ),
             utenlandskNæring = listOf(),
