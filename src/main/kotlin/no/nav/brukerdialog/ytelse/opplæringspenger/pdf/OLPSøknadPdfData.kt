@@ -1,20 +1,30 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.pdf
 
 import no.nav.brukerdialog.common.Constants
+import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Ytelse
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.ArbeidIPeriode
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsforhold
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Enkeltdag
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Frilans
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.SelvstendigNæringsdrivende
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.YrkesaktivSisteTreFerdigliknedeArene
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPMottattSøknad
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils
+import no.nav.brukerdialog.utils.DateUtils.NO_LOCALE
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
-import no.nav.brukerdialog.utils.DateUtils.ukeNummer
-import no.nav.brukerdialog.utils.DurationUtils.tilString
+import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
+import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.capitalizeName
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
 import no.nav.k9.søknad.felles.type.Språk
-import java.time.LocalDate
+import java.time.Month
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.WeekFields
 
 class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.OPPLÆRINGSPENGER
@@ -49,7 +59,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             ),
             "hjelp" to mapOf(
                 "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
-                "sprak" to søknad.språk?.språkTilTekst()
+                "sprak" to søknad.språk.språkTilTekst()
             ),
             "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
             "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
@@ -64,7 +74,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
             "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
             "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
-            "frilans" to søknad.frilans.somMap(søknad.fraOgMed),
+            "frilans" to søknad.frilans.somMap(),
             "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
             "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
             "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
@@ -112,7 +122,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     }
 
     private fun OLPMottattSøknad.harFlereAktiveVirksomehterSatt() =
-        (this.selvstendigNæringsdrivende.virksomhet?.harFlereAktiveVirksomheter != null)
+        this.selvstendigNæringsdrivende.virksomhet.harFlereAktiveVirksomheter
 
     private fun erBooleanSatt(verdi: Boolean?) = verdi != null
 
@@ -144,52 +154,75 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     }
 
     private fun Arbeidsforhold.somMap(): Map<String, Any?> = mapOf(
-        "data" to this.toString(),
-        "normalarbeidstid" to this.normalarbeidstid.somMap(),
-        "arbeidIPeriode" to this.arbeidIPeriode.somMap()
+        "jobberNormaltTimer" to jobberNormaltTimer,
+        "arbeidIPeriode" to arbeidIPeriode.somMap()
     )
 
     private fun ArbeidIPeriode.somMap(): Map<String, Any?> = mapOf(
-        "type" to this.type.name,
-        "redusertArbeid" to this.redusertArbeid?.somMap()
+        "jobberIPerioden" to jobberIPerioden.pdfTekst,
+        "enkeltdagerPerMnd" to enkeltdager?.somMapPerMnd()
     )
 
-    private fun ArbeidsRedusert.somMap() = mapOf(
-        "type" to this.type.name,
-        "timerPerUke" to this.timerPerUke?.tilString(),
-        "prosentAvNormalt" to this.prosentAvNormalt?.somString(),
-        "arbeidsuker" to this.arbeidsuker?.somMap()
-    )
-
-    @JvmName("somMapArbeidsUke")
-    private fun List<ArbeidsUke>.somMap() = sortedBy { it: ArbeidsUke -> it.periode.fraOgMed }
-        .map {
-            val fraOgMed = it.periode.fraOgMed
-            mapOf(
-                "uke" to fraOgMed.ukeNummer(),
-                "faktiskTimerPerUke" to it.timer?.tilString()
+    private fun List<Enkeltdag>.somMapEnkeltdag(): List<Map<String, Any?>> {
+        return map {
+            mapOf<String, Any?>(
+                "dato" to DATE_FORMATTER.format(it.dato),
+                "dag" to it.dato.dayOfWeek.somNorskDag(),
+                "tid" to it.tid.somTekst(avkort = false)
             )
         }
+    }
 
-    private fun NormalArbeidstid.somMap(): Map<String, Any?> = mapOf(
-        "timerPerUkeISnitt" to this.timerPerUkeISnitt.tilString()
-    )
+    private fun List<Enkeltdag>.somMapPerUke(): List<Map<String, Any>> {
+        val perUke = grupperPerUke()
+        return perUke.map {
+            mapOf(
+                "uke" to it.key,
+                "dager" to it.value.somMapEnkeltdag()
+            )
+        }
+    }
 
-    private fun Frilans.somMap(søknadsperiodeStartdato: LocalDate): Map<String, Any?> = mapOf(
-        "harInntektSomFrilanser" to harInntektSomFrilanser,
-        "startetFørSisteTreHeleMåneder" to startetFørSisteTreHeleMåneder,
-        "sisteTreMånederFørSøknadsperiodeStart" to Constants.DATE_FORMATTER.format(søknadsperiodeStartdato.minusMonths(3)),
-        "startdato" to if (startdato != null) Constants.DATE_FORMATTER.format(startdato) else null,
-        "sluttdato" to if (sluttdato != null) Constants.DATE_FORMATTER.format(sluttdato) else null,
+    private fun List<Enkeltdag>.grupperPerUke() = groupBy {
+        val uketall = it.dato.get(WeekFields.of(NO_LOCALE).weekOfYear())
+        if (uketall == 0) 53 else uketall
+    }
+
+    private fun List<Enkeltdag>.grupperPerMåned() = groupBy { it.dato.month }
+
+    fun List<Enkeltdag>.somMapPerMnd(): List<Map<String, Any>> {
+        val perMåned: Map<Month, List<Enkeltdag>> = grupperPerMåned()
+
+        return perMåned.map {
+            mapOf(
+                "år" to it.value.first().dato.year,
+                "måned" to it.key.somNorskMåned().capitalizeName(),
+                "enkeltdagerPerUke" to it.value.somMapPerUke()
+            )
+        }
+    }
+
+    private fun List<Arbeidsgiver>.somMapAnsatt() = map {
+        mapOf<String, Any?>(
+            "navn" to it.navn,
+            "organisasjonsnummer" to it.organisasjonsnummer,
+            "erAnsatt" to it.erAnsatt,
+            "arbeidsforhold" to it.arbeidsforhold?.somMap(),
+            "sluttetFørSøknadsperiodeErSatt" to (it.sluttetFørSøknadsperiode != null),
+            "sluttetFørSøknadsperiode" to it.sluttetFørSøknadsperiode
+        )
+    }
+
+    private fun Frilans.somMap() = mapOf<String, Any?>(
+        "startdato" to DATE_FORMATTER.format(startdato),
+        "sluttdato" to if (sluttdato != null) DATE_FORMATTER.format(sluttdato) else null,
         "jobberFortsattSomFrilans" to jobberFortsattSomFrilans,
-        "type" to type?.name,
-        "misterHonorar" to misterHonorar,
-        "arbeidsforhold" to arbeidsforhold?.somMap()
+        "arbeidsforhold" to arbeidsforhold?.somMap(),
+        "harHattInntektSomFrilanser" to harHattInntektSomFrilanser
     )
 
-    private fun SelvstendigNæringsdrivende.somMap(): Map<String, Any?> = mapOf(
-        "harInntektSomSelvstendig" to harInntektSomSelvstendig,
-        "virksomhet" to virksomhet?.somMap(),
+    private fun SelvstendigNæringsdrivende.somMap() = mapOf<String, Any?>(
+        "virksomhet" to virksomhet.somMap(),
         "arbeidsforhold" to arbeidsforhold?.somMap()
     )
 
@@ -219,7 +252,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
         "landkode" to landkode
     )
 
-    private fun YrkesaktivSisteTreFerdigliknedeÅrene.somMap(): Map<String, Any?> = mapOf(
+    private fun YrkesaktivSisteTreFerdigliknedeArene.somMap(): Map<String, Any?> = mapOf(
         "oppstartsdato" to Constants.DATE_FORMATTER.format(oppstartsdato)
     )
 
@@ -228,17 +261,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
         "inntektEtterEndring" to inntektEtterEndring,
         "forklaring" to forklaring
     )
-
-    private fun List<Arbeidsgiver>.somMapAnsatt() = map {
-        mapOf(
-            "navn" to it.navn,
-            "organisasjonsnummer" to it.organisasjonsnummer,
-            "erAnsatt" to it.erAnsatt,
-            "arbeidsforhold" to it.arbeidsforhold?.somMap(),
-            "sluttetFørSøknadsperiodeErSatt" to (it.sluttetFørSøknadsperiode != null),
-            "sluttetFørSøknadsperiode" to it.sluttetFørSøknadsperiode
-        )
-    }
 
     private fun List<Bosted>.somMapBosted(): List<Map<String, Any?>> {
         return map {

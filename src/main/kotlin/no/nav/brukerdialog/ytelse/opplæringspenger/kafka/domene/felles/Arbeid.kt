@@ -1,51 +1,40 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles
 
 import java.time.Duration
+import java.time.LocalDate
 
 data class Arbeidsgiver(
     val navn: String? = null,
     val organisasjonsnummer: String,
     val erAnsatt: Boolean,
-    val arbeidsforhold: Arbeidsforhold? = null,
-    val sluttetFørSøknadsperiode: Boolean? = null
-)
-
-data class NormalArbeidstid (
-    val timerPerUkeISnitt: Duration
+    val sluttetFørSøknadsperiode: Boolean? = null,
+    val arbeidsforhold: Arbeidsforhold? = null
 )
 
 data class Arbeidsforhold(
-    val normalarbeidstid: NormalArbeidstid,
+    val jobberNormaltTimer: Double,
     val arbeidIPeriode: ArbeidIPeriode
 )
 
 data class ArbeidIPeriode(
-    val type: ArbeidIPeriodeType,
-    val redusertArbeid: ArbeidsRedusert? = null,
+    val jobberIPerioden: JobberIPeriodeSvar,
+    val enkeltdager: List<Enkeltdag>? = null
 )
 
-data class ArbeidsRedusert(
-    val type: RedusertArbeidstidType,
-    val prosentAvNormalt: Double? = null,
-    val timerPerUke: Duration? = null,
-    val arbeidsuker: List<ArbeidsUke>? = null
-)
+enum class JobberIPeriodeSvar(val pdfTekst: String) {
+    SOM_VANLIG("Jeg jobber som normalt, og har ikke fravær"),
+    REDUSERT("Jeg kombinerer delvis jobb med pleiepenger"),
+    HELT_FRAVÆR("Jeg jobber ikke her de dagene jeg pleier");
 
-enum class ArbeidIPeriodeType {
-    ARBEIDER_VANLIG,
-    ARBEIDER_REDUSERT,
-    ARBEIDER_IKKE;
-
-    fun jobber() = this != ARBEIDER_IKKE
+    fun tilBoolean(): Boolean{
+        return when(this){
+            SOM_VANLIG, REDUSERT -> true
+            HELT_FRAVÆR -> false
+        }
+    }
 }
 
-enum class RedusertArbeidstidType {
-    PROSENT_AV_NORMALT,
-    TIMER_I_SNITT_PER_UKE,
-    ULIKE_UKER_TIMER
-}
-
-data class ArbeidsUke(
-    val periode: Periode,
-    val timer: Duration? = null
+data class Enkeltdag(
+    val dato: LocalDate,
+    val tid: Duration
 )

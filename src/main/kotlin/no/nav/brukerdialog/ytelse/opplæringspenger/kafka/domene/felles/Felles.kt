@@ -36,23 +36,6 @@ data class Medlemskap(
     val utenlandsoppholdNeste12Mnd: List<Bosted> = listOf()
 )
 
-data class Frilans(
-    val harInntektSomFrilanser: Boolean,
-    val startetFørSisteTreHeleMåneder: Boolean? = null,
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    val startdato: LocalDate? = null,
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    val sluttdato: LocalDate? = null,
-    val jobberFortsattSomFrilans: Boolean? = null,
-    val misterHonorar: Boolean? = null,
-    val type: FrilansType? = null,
-    val arbeidsforhold: Arbeidsforhold? = null
-)
-
-enum class FrilansType {
-    FRILANS, FRILANS_HONORAR, HONORAR
-}
-
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd")
     val fraOgMed: LocalDate,

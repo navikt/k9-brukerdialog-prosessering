@@ -76,3 +76,10 @@ data class OLPMottattSøknad(
         pdfData = pdfData()
     )
 }
+
+fun String.capitalizeName(): String = split(" ").joinToString(" ") { s ->
+    s.lowercase()
+        .replaceFirstChar {
+            it.titlecase()
+        }
+}
