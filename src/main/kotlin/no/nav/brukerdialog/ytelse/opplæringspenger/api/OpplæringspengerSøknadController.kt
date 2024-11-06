@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/opplaeringspenger")
+@RequestMapping("/opplaringspenger")
 @RequiredIssuers(
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
