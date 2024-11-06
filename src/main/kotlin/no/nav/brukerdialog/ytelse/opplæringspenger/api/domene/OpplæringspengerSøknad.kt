@@ -10,23 +10,24 @@ import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.UtenlandskNæring.Companion.valider
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.k9Format.byggK9Arbeidstid
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.k9Format.byggK9OpptjeningAktivitet
 import no.nav.brukerdialog.utils.StringUtils
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetailsString
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Arbeidsgiver.Companion.somK9Arbeidstaker
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kurs.Companion.tilK9Format
 import no.nav.fpsak.tidsserie.LocalDateInterval
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
+import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.olp.v1.Opplæringspenger
 import no.nav.k9.søknad.ytelse.olp.v1.OpplæringspengerSøknadValidator
 import no.nav.k9.søknad.ytelse.psb.v1.Omsorg
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import java.net.URL
 import java.time.Duration
 import java.time.LocalDate
@@ -144,7 +145,9 @@ data class OpplæringspengerSøknad(
     override fun valider(): List<String> = mutableListOf<String>().apply {
         addAll(opptjeningIUtlandet.valider())
         addAll(utenlandskNæring.valider("utenlandskNæring"))
-        addAll(frilans.valider("frilans", fraOgMed))
+
+        //TODO: har vi en annen måte å validere dette på?
+        //addAll(frilans.valider("frilans", fraOgMed))
         addAll(medlemskap.valider("medlemskap"))
         addAll(utenlandsoppholdIPerioden.valider("utenlandsoppholdIPerioden"))
 
@@ -198,6 +201,20 @@ data class OpplæringspengerSøknad(
         perioder[periode] = Uttak.UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))
 
         return Uttak().medPerioder(perioder)
+    }
+
+    private fun byggK9OpptjeningAktivitet() = OpptjeningAktivitet().apply {
+        frilans.let { medFrilanser(it.somK9Frilanser()) }
+        this@OpplæringspengerSøknad.selvstendigNæringsdrivende.let { medSelvstendigNæringsdrivende(it.somK9SelvstendigNæringsdrivende()) }
+    }
+
+    private fun byggK9Arbeidstid() = Arbeidstid().apply {
+        if (arbeidsgivere.isNotEmpty()) {
+            medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(fraOgMed, tilOgMed))
+        }
+
+        medSelvstendigNæringsdrivendeArbeidstidInfo(selvstendigNæringsdrivende.somK9ArbeidstidInfo(fraOgMed, tilOgMed))
+        medFrilanserArbeidstid(frilans.somK9Arbeidstid(fraOgMed, tilOgMed))
     }
 
     fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()
