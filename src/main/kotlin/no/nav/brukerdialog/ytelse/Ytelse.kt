@@ -23,7 +23,7 @@ enum class Ytelse(val dialog: String) {
     PLEIEPENGER_SYKT_BARN("pleiepengesoknad"),
     ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN("endringsmelding-pleiepenger"),
     DINE_PLEIEPENGER("dine-pleiepenger"),
-    OPPLARINGSPENGER("opplaeringspenger-soknad"),
+    OPPLARINGSPENGER("opplaringspenger-soknad"),
     UNGDOMSYTELSE("ungdomsytelse-deltaker")
     ;
 
