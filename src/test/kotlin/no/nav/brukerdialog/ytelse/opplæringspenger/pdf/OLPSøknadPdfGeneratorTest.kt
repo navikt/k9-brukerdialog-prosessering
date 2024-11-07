@@ -6,6 +6,7 @@ import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPMottattSøknad
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
+import no.nav.k9.søknad.felles.type.Periode as K9Periode
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.Duration
@@ -210,10 +211,14 @@ class OLPSøknadPdfGeneratorTest {
                     ),
                     perioder = listOf(
                         KursPerioderMedReiseTid(
-                            fraOgMed = LocalDate.parse("2020-01-01").atStartOfDay(),
-                            tilOgMed = LocalDate.parse("2020-01-10").atStartOfDay(),
                             avreise = LocalDate.parse("2020-01-01"),
-                            hjemkomst = LocalDate.parse("2020-01-10")
+                            hjemkomst = LocalDate.parse("2020-01-10"),
+                            kursperiode = K9Periode(
+                                LocalDate.parse("2020-01-01"),
+                                LocalDate.parse("2020-01-10")
+                            ),
+                            beskrivelseReisetidTil = "Reisetid til kurs",
+                            beskrivelseReisetidHjem = "Reisetid hjem fra kurs"
                         )
                     )
                 ),

@@ -11,6 +11,7 @@ import no.nav.brukerdialog.ytelse.fellesdomene.*
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.*
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Bosted
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
+import no.nav.k9.søknad.felles.type.Periode as K9Periode
 
 import java.net.URI
 import java.time.*
@@ -209,10 +210,14 @@ class SøknadUtils {
                 kursholder = Kursholder(navn = "Opplæring for kurs AS", id = "0edb9541-dda5-4dc4-bfaf-587d01448a6a"),
                 perioder = listOf(
                     KursPerioderMedReiseTid(
-                        fraOgMed = LocalDate.parse("2022-01-01").atStartOfDay(),
-                        tilOgMed = LocalDate.parse("2022-01-10").atStartOfDay(),
                         avreise = LocalDate.parse("2022-01-01"),
                         hjemkomst = LocalDate.parse("2022-01-10"),
+                        kursperiode = K9Periode(
+                            LocalDate.parse("2022-01-01"),
+                            LocalDate.parse("2022-01-10")
+                        ),
+                        beskrivelseReisetidTil = "Reisetid til kurs",
+                        beskrivelseReisetidHjem = "Reisetid hjem fra kurs"
                     )
                 )
             ),

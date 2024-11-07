@@ -3,12 +3,11 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.KursPerioderMedReiseTid.Companion.tilK9Format
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kursholder.Companion.tilK9Format
+import no.nav.k9.søknad.felles.type.Periode
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kursholder as K9Kursholder
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriodeMedReisetid as K9KursPeriodeMedReisetid
-import no.nav.k9.søknad.felles.type.Periode as K9Periode
 
 data class Kurs(
     val kursholder: Kursholder,
@@ -38,13 +37,13 @@ data class Kursholder(
 data class KursPerioderMedReiseTid(
     @JsonFormat(pattern = "yyyy-MM-dd") val avreise: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val hjemkomst: LocalDate,
-    val fraOgMed: LocalDateTime,
-    val tilOgMed: LocalDateTime,
+    val kursperiode: Periode,
+    val beskrivelseReisetidTil: String?,
+    val beskrivelseReisetidHjem: String?
 ){
     companion object {
         fun KursPerioderMedReiseTid.tilK9Format(): K9KursPeriodeMedReisetid {
-            val periode = K9Periode(fraOgMed.toLocalDate(), tilOgMed.toLocalDate())
-            return K9KursPeriodeMedReisetid(periode, avreise, hjemkomst, null, null)
+            return K9KursPeriodeMedReisetid(kursperiode, avreise, hjemkomst, beskrivelseReisetidTil, beskrivelseReisetidHjem)
         }
     }
 }

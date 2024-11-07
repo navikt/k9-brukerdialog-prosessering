@@ -196,8 +196,8 @@ class K9FormatTest {
                 },
                 "kursperioder" : [ {
                   "avreise" : "2022-01-01",
-                  "begrunnelseReisetidHjem" : null,
-                  "begrunnelseReisetidTil" : null,
+                  "begrunnelseReisetidHjem" : "Reisetid hjem fra kurs",
+                  "begrunnelseReisetidTil" : "Reisetid til kurs",
                   "hjemkomst" : "2022-01-10",
                   "periode" : "2022-01-01/2022-01-10"
                 } ]

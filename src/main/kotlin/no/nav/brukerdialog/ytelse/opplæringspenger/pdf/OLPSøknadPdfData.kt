@@ -103,8 +103,8 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     private fun List<KursPerioderMedReiseTid>.somMapPerioderMedReiseTid(): List<Map<String, Any?>> {
         return map {
             mapOf<String, Any?>(
-                "fraOgMed" to Constants.DATE_FORMATTER.format(it.fraOgMed.toLocalDate()),
-                "tilOgMed" to Constants.DATE_FORMATTER.format(it.tilOgMed.toLocalDate()),
+                "fraOgMed" to Constants.DATE_FORMATTER.format(it.kursperiode.fraOgMed),
+                "tilOgMed" to Constants.DATE_FORMATTER.format(it.kursperiode.tilOgMed),
                 "avreise" to Constants.DATE_FORMATTER.format(it.avreise),
                 "hjemkomst" to Constants.DATE_FORMATTER.format(it.hjemkomst)
             )
