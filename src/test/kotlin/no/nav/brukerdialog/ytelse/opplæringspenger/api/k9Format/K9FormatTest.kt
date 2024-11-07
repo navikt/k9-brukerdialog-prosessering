@@ -44,187 +44,244 @@ class K9FormatTest {
             //language=json
             """
             {
-              "søknadId": "$søknadId",
-              "versjon": "1.0.0",
-              "mottattDato": "2020-01-02T03:04:05Z",
-              "søker": {
-                "norskIdentitetsnummer": "123456789"
-              },
-              "ytelse": {
-                "type": "OPPLÆRINGSPENGER",
-                "barn": {
-                  "norskIdentitetsnummer": "03028104560",
-                  "fødselsdato": null
-                },
-                "søknadsperiode": [
-                  "2021-01-01/2021-01-10"
-                ],
-                "trekkKravPerioder": [],
-                "opptjeningAktivitet": {
-                  "selvstendigNæringsdrivende": [
-                    {
-                      "perioder": {
-                        "2021-01-01/..": {
-                          "virksomhetstyper": [
-                            "ANNEN"
-                          ],
-                          "regnskapsførerNavn": "Kjell Regnskap",
-                          "regnskapsførerTlf": "123456789",
-                          "erVarigEndring": true,
-                          "erNyIArbeidslivet" : true,
-                          "endringDato": "2020-01-01",
-                          "endringBegrunnelse": "Korona",
-                          "bruttoInntekt": 9999,
-                          "erNyoppstartet": true,
-                          "registrertIUtlandet": true,
-                          "landkode": "DEU"
-                        }
+            "mottattDato" : "2020-01-02T03:04:05Z",
+            "språk" : "nb",
+            "søker" : {
+              "norskIdentitetsnummer" : "123456789"
+            },
+            "søknadId": "$søknadId",
+            "versjon" : "1.0.0",
+            "ytelse" : {
+              "type" : "OPPLÆRINGSPENGER",
+              "arbeidstid" : {
+                "arbeidstakerList" : [ {
+                  "arbeidstidInfo" : {
+                    "perioder" : {
+                      "2021-01-01/2021-01-01" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
                       },
-                      "virksomhetNavn": "TullOgTøys"
-                    }
-                  ],
-                  "frilanser": {
-                    "startdato": "2018-01-01",
-                    "sluttdato": null
-                  }
-                },
-                "bosteder": {
-                  "perioder": {
-                    "2017-01-01/2017-01-10": {
-                      "land": "DEU"
-                    },
-                    "2018-01-01/2018-01-10": {
-                      "land": "DEU"
-                    }
-                  },
-                  "perioderSomSkalSlettes": {}
-                },
-                "utenlandsopphold" : {
-                  "perioder" : {
-                    "2019-10-10/2019-10-14" : {
-                      "land" : "SE",
-                      "årsak" : null,
-                      "erSammenMedBarnet": false
-                    },
-                    "2019-10-15/2019-10-20" : {
-                      "land" : "SE",
-                      "årsak" : "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd",
-                      "erSammenMedBarnet": false
-                    },
-                    "2019-10-21/2019-11-10" : {
-                      "land" : "SE",
-                      "årsak" : null,
-                      "erSammenMedBarnet": false
-                    },
-                    "2020-11-10/2020-11-12" : {
-                      "land" : "SE",
-                      "årsak" : "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning",
-                      "erSammenMedBarnet": false
-                    },
-                    "2020-11-13/2020-11-15" : {
-                      "land" : "SE",
-                      "årsak" : null,
-                      "erSammenMedBarnet": false
-                    },
-                    "2022-12-10/2022-12-20" : {
-                      "land" : "SE",
-                      "årsak" : null,
-                      "erSammenMedBarnet": false
-                    }
-                  },
-                  "perioderSomSkalSlettes" : { }
-                },
-                "lovbestemtFerie": {
-                  "perioder": {
-                    "$fraOgMed/${fraOgMed.plusDays(1)}": {
-                      "skalHaFerie": true
-                    }
-                  }
-                },
-                "arbeidstid": {
-                  "arbeidstakerList": [
-                    {
-                      "norskIdentitetsnummer": null,
-                      "organisasjonsnummer": "917755736",
-                      "organisasjonsnavn": "Org",
-                      "arbeidstidInfo": {
-                         "perioder": {
-                           "2021-01-01/2021-01-10": {
-                             "jobberNormaltTimerPerDag": "PT7H30M",
-                             "faktiskArbeidTimerPerDag": "PT7H30M"
-                           }
-                         }
-                       }
-                    },
-                    {
-                      "norskIdentitetsnummer": null,
-                      "organisasjonsnummer": "977155436",
-                      "organisasjonsnavn": "JobberIkkeHerLenger",
-                      "arbeidstidInfo": {
-                        "perioder": {
-                          "2021-01-01/2021-01-10": {
-                            "jobberNormaltTimerPerDag": "PT0S",
-                            "faktiskArbeidTimerPerDag": "PT0S"
-                          }
-                        }
+                      "2021-01-02/2021-01-02" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
+                      },
+                      "2021-01-03/2021-01-03" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
+                      },
+                      "2021-01-04/2021-01-04" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
+                      },
+                      "2021-01-05/2021-01-05" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
+                      },
+                      "2021-01-06/2021-01-06" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
+                      },
+                      "2021-01-07/2021-01-07" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
+                      },
+                      "2021-01-08/2021-01-08" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
+                      },
+                      "2021-01-09/2021-01-09" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
+                      },
+                      "2021-01-10/2021-01-10" : {
+                        "faktiskArbeidTimerPerDag" : "PT4H",
+                        "jobberNormaltTimerPerDag" : "PT8H"
                       }
                     }
-                  ],
-                  "frilanserArbeidstidInfo": {
-                    "perioder": {
-                          "2021-01-01/2021-01-10": {
-                            "jobberNormaltTimerPerDag": "PT7H30M",
-                            "faktiskArbeidTimerPerDag": "PT7H30M"
-                          }
-                     }
                   },
-                  "selvstendigNæringsdrivendeArbeidstidInfo": {
-                    "perioder": {
-                          "2021-01-01/2021-01-10": {
-                            "jobberNormaltTimerPerDag": "PT7H30M",
-                            "faktiskArbeidTimerPerDag": "PT7H30M"
-                          }
-                     }
-                  }
-                },
-                "uttak": {
-                  "perioder": {
-                    "2021-01-01/2021-01-10": {
-                      "timerPleieAvBarnetPerDag": "PT7H30M"
+                  "norskIdentitetsnummer" : null,
+                  "organisasjonsnavn" : "Org",
+                  "organisasjonsnummer" : "917755736"
+                }, {
+                  "arbeidstidInfo" : {
+                    "perioder" : {
+                      "2021-01-01/2021-01-10" : {
+                        "faktiskArbeidTimerPerDag" : "PT0S",
+                        "jobberNormaltTimerPerDag" : "PT0S"
+                      }
+                    }
+                  },
+                  "norskIdentitetsnummer" : null,
+                  "organisasjonsnavn" : "JobberIkkeHerLenger",
+                  "organisasjonsnummer" : "977155436"
+                } ],
+                "frilanserArbeidstidInfo" : {
+                  "perioder" : {
+                    "2021-01-01/2021-01-10" : {
+                      "faktiskArbeidTimerPerDag" : "PT0S",
+                      "jobberNormaltTimerPerDag" : "PT0S"
                     }
                   }
                 },
-                "omsorg": {
-                  "relasjonTilBarnet": "ANNET",
-                  "beskrivelseAvOmsorgsrollen": "Gudfar til barnet"
-                },
-                "kurs" : {
-                  "kursholder" : {
-                    "holder" : null,
-                    "institusjonsidentifikator" : "0edb9541-dda5-4dc4-bfaf-587d01448a6a"
-                  },
-                  "kursperioder" : [ {
-                    "avreise" : "2022-01-01",
-                    "begrunnelseReisetidHjem" : null,
-                    "begrunnelseReisetidTil" : null,
-                    "hjemkomst" : "2022-01-10",
-                    "periode" : "2022-01-01/2022-01-10"
-                  } ]
-                },
-                "dataBruktTilUtledning": {
-                    "harBekreftetOpplysninger": true,
-                    "harForståttRettigheterOgPlikter": true,
-                    "soknadDialogCommitSha": "abc-123",
-                    "annetData": "{\"string\": \"tekst\", \"boolean\": false, \"number\": 1, \"array\": [1,2,3], \"object\": {\"key\": \"value\"}}"
+                "selvstendigNæringsdrivendeArbeidstidInfo" : {
+                  "perioder" : {
+                    "2021-01-01/2021-01-01" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    },
+                    "2021-01-02/2021-01-02" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    },
+                    "2021-01-03/2021-01-03" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    },
+                    "2021-01-04/2021-01-04" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    },
+                    "2021-01-05/2021-01-05" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    },
+                    "2021-01-06/2021-01-06" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    },
+                    "2021-01-07/2021-01-07" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    },
+                    "2021-01-08/2021-01-08" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    },
+                    "2021-01-09/2021-01-09" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    },
+                    "2021-01-10/2021-01-10" : {
+                      "faktiskArbeidTimerPerDag" : "PT7H30M",
+                      "jobberNormaltTimerPerDag" : "PT7H30M"
+                    }
+                  }
                 }
               },
-              "språk": "nb",
-              "journalposter": [],
-              "begrunnelseForInnsending": {
-                "tekst": null
+              "barn" : {
+                "fødselsdato" : null,
+                "norskIdentitetsnummer" : "03028104560"
               },
-              "kildesystem": "søknadsdialog"
-            }
+              "bosteder" : {
+                "perioder" : {
+                  "2017-01-01/2017-01-10" : {
+                    "land" : "DEU"
+                  },
+                  "2018-01-01/2018-01-10" : {
+                    "land" : "DEU"
+                  }
+                },
+                "perioderSomSkalSlettes" : { }
+              },
+              "dataBruktTilUtledning" : {
+                "annetData" : "{\"string\": \"tekst\", \"boolean\": false, \"number\": 1, \"array\": [1,2,3], \"object\": {\"key\": \"value\"}}",
+                "harBekreftetOpplysninger" : true,
+                "harForståttRettigheterOgPlikter" : true,
+                "soknadDialogCommitSha" : "abc-123"
+              },
+              "kurs" : {
+                "kursholder" : {
+                  "holder" : null,
+                  "institusjonsidentifikator" : "0edb9541-dda5-4dc4-bfaf-587d01448a6a"
+                },
+                "kursperioder" : [ {
+                  "avreise" : "2022-01-01",
+                  "begrunnelseReisetidHjem" : null,
+                  "begrunnelseReisetidTil" : null,
+                  "hjemkomst" : "2022-01-10",
+                  "periode" : "2022-01-01/2022-01-10"
+                } ]
+              },
+              "lovbestemtFerie" : {
+                "perioder" : {
+                  "2021-01-01/2021-01-02" : {
+                    "skalHaFerie" : true
+                  }
+                }
+              },
+              "omsorg" : {
+                "beskrivelseAvOmsorgsrollen" : "Gudfar til barnet",
+                "relasjonTilBarnet" : "ANNET"
+              },
+              "opptjeningAktivitet" : {
+                "frilanser" : {
+                  "sluttdato" : "2021-05-01",
+                  "startdato" : "2019-01-01"
+                },
+                "selvstendigNæringsdrivende" : [ {
+                  "perioder" : {
+                    "2015-01-01/2021-01-01" : {
+                      "bruttoInntekt" : 9656876,
+                      "erNyoppstartet" : false,
+                      "landkode" : "CUB",
+                      "registrertIUtlandet" : true,
+                      "virksomhetstyper" : [ "ANNEN" ]
+                    }
+                  },
+                  "virksomhetNavn" : "Bjarnes Bakeri"
+                } ]
+              },
+              "søknadsperiode" : [ "2021-01-01/2021-01-10" ],
+              "trekkKravPerioder" : [ ],
+              "utenlandsopphold" : {
+                "perioder" : {
+                  "2019-10-10/2019-10-14" : {
+                    "erSammenMedBarnet" : false,
+                    "land" : "SE",
+                    "årsak" : null
+                  },
+                  "2019-10-15/2019-10-20" : {
+                    "erSammenMedBarnet" : false,
+                    "land" : "SE",
+                    "årsak" : "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
+                  },
+                  "2019-10-21/2019-11-10" : {
+                    "erSammenMedBarnet" : false,
+                    "land" : "SE",
+                    "årsak" : null
+                  },
+                  "2020-11-10/2020-11-12" : {
+                    "erSammenMedBarnet" : false,
+                    "land" : "SE",
+                    "årsak" : "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
+                  },
+                  "2020-11-13/2020-11-15" : {
+                    "erSammenMedBarnet" : false,
+                    "land" : "SE",
+                    "årsak" : null
+                  },
+                  "2022-12-10/2022-12-20" : {
+                    "erSammenMedBarnet" : false,
+                    "land" : "SE",
+                    "årsak" : null
+                  }
+                },
+                "perioderSomSkalSlettes" : { }
+              },
+              "uttak" : {
+                "perioder" : {
+                  "2021-01-01/2021-01-10" : {
+                    "timerPleieAvBarnetPerDag" : "PT7H30M"
+                  }
+                }
+              }
+            },
+            "begrunnelseForInnsending" : {
+              "tekst" : null
+            },
+            "journalposter" : [ ],
+            "kildesystem" : "søknadsdialog"
+          }
         """.trimIndent()
 
         println(JsonUtils.toString(k9Format))
