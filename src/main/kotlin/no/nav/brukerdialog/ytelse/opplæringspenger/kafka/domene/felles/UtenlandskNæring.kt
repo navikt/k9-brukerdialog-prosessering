@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles
 import java.time.LocalDate
 
 class UtenlandskNæring(
-    val næringstype: Næringstyper,
+    val næringstype: Næringstype,
     val navnPåVirksomheten: String,
     val land: Land,
     val organisasjonsnummer: String? = null,

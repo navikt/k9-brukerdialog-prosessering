@@ -71,9 +71,9 @@ data class OpplæringspengerSøknad(
     @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
     val harForståttRettigheterOgPlikter: Boolean,
 
-    @field:Valid val frilans: Frilans,
+    @field:Valid val frilans: Frilans? = null,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
-    @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,
+    @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
@@ -204,8 +204,8 @@ data class OpplæringspengerSøknad(
     }
 
     private fun byggK9OpptjeningAktivitet() = OpptjeningAktivitet().apply {
-        frilans.let { medFrilanser(it.somK9Frilanser()) }
-        this@OpplæringspengerSøknad.selvstendigNæringsdrivende.let { medSelvstendigNæringsdrivende(it.somK9SelvstendigNæringsdrivende()) }
+        frilans.let { medFrilanser(it?.somK9Frilanser()) }
+        this@OpplæringspengerSøknad.selvstendigNæringsdrivende.let { medSelvstendigNæringsdrivende(it?.somK9SelvstendigNæringsdrivende()) }
     }
 
     private fun byggK9Arbeidstid() = Arbeidstid().apply {
@@ -213,8 +213,8 @@ data class OpplæringspengerSøknad(
             medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(fraOgMed, tilOgMed))
         }
 
-        medSelvstendigNæringsdrivendeArbeidstidInfo(selvstendigNæringsdrivende.somK9ArbeidstidInfo(fraOgMed, tilOgMed))
-        medFrilanserArbeidstid(frilans.somK9Arbeidstid(fraOgMed, tilOgMed))
+        medSelvstendigNæringsdrivendeArbeidstidInfo(selvstendigNæringsdrivende?.somK9ArbeidstidInfo(fraOgMed, tilOgMed))
+        medFrilanserArbeidstid(frilans?.somK9Arbeidstid(fraOgMed, tilOgMed))
     }
 
     fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()

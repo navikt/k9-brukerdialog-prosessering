@@ -14,10 +14,12 @@ import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.SøknadUtils
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.BarnRelasjon
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.NormalArbeidsdag
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.*
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Arbeidsgiver
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.JobberIPeriodeSvar
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Frilans
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -126,56 +128,24 @@ class OpplæringspengerSøknadControllerTest {
                     navn = "", // Tomt navn
                     erAnsatt = false,
                     arbeidsforhold = Arbeidsforhold(
-                        normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag),
+                        jobberNormaltTimer = 40.0,
                         arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                            redusertArbeid = null // Kan ikke være null om type = ARBEIDER_REDUSERT
-                        )
+                            jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
+                            enkeltdager = emptyList() // Kan ikke være tom liste
+                        ),
                     )
-                ),
-                Arbeidsgiver(
-                    organisasjonsnummer = "12345678910987654321",
-                    navn = "AG 1",
-                    erAnsatt = false,
-                    arbeidsforhold = Arbeidsforhold(
-                        normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag),
-                        arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                            redusertArbeid = ArbeidsRedusert(
-                                type = RedusertArbeidstidType.PROSENT_AV_NORMALT,
-                                prosentAvNormalt = null // Kan ikke være null om type = PROSENT_AV_NORMALT
-                            )
-                        )
-                    )
-                ),
-                Arbeidsgiver(
-                    organisasjonsnummer = "12345678910987654321",
-                    navn = "AG 2",
-                    erAnsatt = false,
-                    arbeidsforhold = Arbeidsforhold(
-                        normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag),
-                        arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                            redusertArbeid = ArbeidsRedusert(
-                                type = RedusertArbeidstidType.TIMER_I_SNITT_PER_UKE,
-                                timerPerUke = null // Kan ikke være null om type = TIMER_I_SNITT_PER_UKE
-                            )
-                        )
-                    )
-                ),
-                Arbeidsgiver(
-                    organisasjonsnummer = "12345678910987654321",
-                    navn = "AG 3",
-                    erAnsatt = false,
-                    arbeidsforhold = Arbeidsforhold(
-                        normalarbeidstid = NormalArbeidstid(timerPerUkeISnitt = NormalArbeidsdag),
-                        arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                            redusertArbeid = ArbeidsRedusert(
-                                type = RedusertArbeidstidType.ULIKE_UKER_TIMER,
-                                arbeidsuker = null // Kan ikke være null om type = ULIKE_UKER_TIMER
-                            )
-                        )
+                )
+            ),
+            frilans = Frilans(
+                harHattInntektSomFrilanser = null, // Kan ikke være null,
+                startdato = LocalDate.parse("2024-07-22"),
+                sluttdato = null, // Må være satt om jobberFortsattSomFrilans er false
+                jobberFortsattSomFrilans = false,
+                arbeidsforhold = Arbeidsforhold(
+                    jobberNormaltTimer = 40.0,
+                    arbeidIPeriode = ArbeidIPeriode(
+                        jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
+                        enkeltdager = emptyList() // Kan ikke være tom liste
                     )
                 )
             )
@@ -229,12 +199,6 @@ class OpplæringspengerSøknadControllerTest {
                               "reason": "Opplysningene må bekreftes for å sende inn søknad"
                             },
                             {
-                              
-                              "parameterName": "arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.arbeiderRedusert",
-                              "parameterType": "ENTITY",
-                              "reason": "Må være satt dersom type=ARBEIDER_REDUSERT"
-                            },
-                            {
                               "invalidValue": "123ABC",
                               "parameterName": "arbeidsgivere[0].organisasjonsnummer",
                               "parameterType": "ENTITY",
@@ -247,19 +211,28 @@ class OpplæringspengerSøknadControllerTest {
                               "reason": "navn kan ikke være tomt eller blankt"
                             },
                             {
-                              "parameterName": "arbeidsgivere[1].arbeidsforhold.arbeidIPeriode.redusertArbeid.prosentAvNormalt",
+                              "invalidValue": [],
+                              "parameterName": "arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.enkeltdager",
                               "parameterType": "ENTITY",
-                              "reason": "Må være satt dersom type=PROSENT_AV_NORMALT"
+                              "reason": "Kan ikke være tom liste"
                             },
                             {
-                              "parameterName": "arbeidsgivere[2].arbeidsforhold.arbeidIPeriode.redusertArbeid.timerPerUke",
+                              "invalidValue": null,
+                              "parameterName": "frilans.harHattInntektSomFrilanser",
                               "parameterType": "ENTITY",
-                              "reason": "Må være satt dersom type=TIMER_I_SNITT_PER_UKE"
+                              "reason": "Kan ikke være null"
                             },
                             {
-                              "parameterName": "arbeidsgivere[3].arbeidsforhold.arbeidIPeriode.redusertArbeid.arbeidsuker",
+                              "invalidValue": false,
+                              "parameterName": "frilans.jobberFortsattSomFrilans",
                               "parameterType": "ENTITY",
-                              "reason": "Må være satt dersom type=ULIKE_UKER_TIMER"
+                              "reason": "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt"
+                            },
+                            {
+                              "invalidValue": [],
+                              "parameterName": "frilans.arbeidsforhold.arbeidIPeriode.enkeltdager",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tom liste"
                             },
                             {
                               "invalidValue": "$fødselsdatoIFremtiden",

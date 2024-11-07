@@ -33,8 +33,8 @@ class OLPSøknadPdfGeneratorTest {
                 språk = "nb",
                 søknadId = soknadsId,
                 mottatt = mottatt,
-                fraOgMed = LocalDate.now().plusDays(6),
-                tilOgMed = LocalDate.now().plusDays(35),
+                fraOgMed = LocalDate.parse("2022-01-01"),
+                tilOgMed = LocalDate.parse("2022-02-01"),
                 søker = Søker(
                     aktørId = "123456",
                     fornavn = "Ærling",
@@ -121,106 +121,83 @@ class OLPSøknadPdfGeneratorTest {
                 ),
                 utenlandskNæring = listOf(
                     UtenlandskNæring(
-                        næringstype = Næringstyper.FISKE,
+                        næringstype = Næringstype.FISKE,
                         navnPåVirksomheten = "Fiskeriet AS",
                         land = Land(landkode = "NDL", landnavn = "Nederland"),
                         organisasjonsnummer = "123ABC",
                         fraOgMed = LocalDate.parse("2020-01-09")
                     )
                 ),
-                frilans = Frilans(
-                    harInntektSomFrilanser = true,
-                    startdato = LocalDate.now().minusYears(3),
-                    sluttdato = LocalDate.now(),
-                    jobberFortsattSomFrilans = false,
-                    type = FrilansType.FRILANS,
-                    misterHonorar = true,
-                    arbeidsforhold = Arbeidsforhold(
-                        normalarbeidstid = NormalArbeidstid(
-                            timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                        ),
-                        arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.ARBEIDER_VANLIG
-                        )
-                    )
-                ),
+
                 stønadGodtgjørelse = StønadGodtgjørelse(
                     mottarStønadGodtgjørelse = true,
                     startdato = LocalDate.now().minusDays(10),
                     sluttdato = LocalDate.now().plusDays(10)
                 ),
-                selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
-                    harInntektSomSelvstendig = true,
-                    virksomhet = Virksomhet(
-                        næringstype = Næringstyper.FISKE,
-                        fiskerErPåBladB = true,
-                        fraOgMed = LocalDate.now(),
-                        næringsinntekt = 1111,
-                        navnPåVirksomheten = "Tull Og Tøys",
-                        registrertINorge = false,
-                        registrertIUtlandet = Land(
-                            landkode = "DEU",
-                            landnavn = "Tyskland"
-                        ),
-                        yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
-                        varigEndring = VarigEndring(
-                            dato = LocalDate.now().minusDays(20),
-                            inntektEtterEndring = 234543,
-                            forklaring = "Forklaring som handler om varig endring"
-                        ),
-                        regnskapsfører = Regnskapsfører(
-                            navn = "Bjarne Regnskap",
-                            telefon = "65484578"
-                        ),
-                        harFlereAktiveVirksomheter = true
-                    ),
-                    arbeidsforhold = Arbeidsforhold(
-                        normalarbeidstid = NormalArbeidstid(
-                            timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                        ),
-                        arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.ARBEIDER_VANLIG
-                        )
-                    )
-                ),
                 arbeidsgivere = listOf(
                     Arbeidsgiver(
-                        navn = "Peppes",
+                        navn = "Org",
                         organisasjonsnummer = "917755736",
                         erAnsatt = true,
                         arbeidsforhold = Arbeidsforhold(
-                            normalarbeidstid = NormalArbeidstid(
-                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                            ),
+                            jobberNormaltTimer = 40.0,
                             arbeidIPeriode = ArbeidIPeriode(
-                                type = ArbeidIPeriodeType.ARBEIDER_VANLIG
-                            )
-                        )
-                    ),
-                    Arbeidsgiver(
-                        navn = "Pizzabakeren",
-                        organisasjonsnummer = "917755736",
-                        erAnsatt = true,
-                        arbeidsforhold = Arbeidsforhold(
-                            normalarbeidstid = NormalArbeidstid(
-                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                            ),
-                            arbeidIPeriode = ArbeidIPeriode(
-                                type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                                redusertArbeid = ArbeidsRedusert(
-                                    type = RedusertArbeidstidType.TIMER_I_SNITT_PER_UKE,
-                                    timerPerUke = Duration.ofHours(37).plusMinutes(30)
+                                jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
+                                enkeltdager = listOf(
+                                    Enkeltdag(LocalDate.parse("2022-01-01"), Duration.ofHours(4)),
+                                    Enkeltdag(LocalDate.parse("2022-01-02"), Duration.ofHours(4)),
+                                    Enkeltdag(LocalDate.parse("2022-01-03"), Duration.ofHours(4)),
+                                    Enkeltdag(LocalDate.parse("2022-01-04"), Duration.ofHours(4)),
+                                    Enkeltdag(LocalDate.parse("2022-02-01"), Duration.ofHours(4)),
+                                    Enkeltdag(LocalDate.parse("2022-02-02"), Duration.ofHours(4)),
+                                    Enkeltdag(LocalDate.parse("2022-04-10"), Duration.ofHours(4)),
                                 )
                             )
                         )
                     ),
                     Arbeidsgiver(
-                        navn = "Sluttaaaa",
-                        organisasjonsnummer = "917755736",
+                        navn = "JobberIkkeHerLenger",
+                        organisasjonsnummer = "977155436",
                         erAnsatt = false,
-                        arbeidsforhold = null,
-                        sluttetFørSøknadsperiode = true
+                        sluttetFørSøknadsperiode = false
                     )
+                ),
+                frilans = Frilans(
+                    startdato = LocalDate.parse("2019-01-01"),
+                    jobberFortsattSomFrilans = false,
+                    sluttdato = LocalDate.parse("2021-05-01"),
+                    harHattInntektSomFrilanser = false
+                ),
+                selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
+                    virksomhet = Virksomhet(
+                        fraOgMed = LocalDate.parse("2015-01-01"),
+                        tilOgMed = LocalDate.parse("2021-01-01"),
+                        næringstype = Næringstype.ANNEN,
+                        fiskerErPåBladB = true,
+                        navnPåVirksomheten = "Bjarnes Bakeri",
+                        registrertINorge = false,
+                        registrertIUtlandet = Land("CUB", "Cuba"),
+                        næringsinntekt = 9656876,
+                        erNyoppstartet = false,
+                        harFlereAktiveVirksomheter = false
+                    ),
+                    arbeidsforhold = Arbeidsforhold(
+                        37.5, ArbeidIPeriode(
+                            JobberIPeriodeSvar.HELT_FRAVÆR,
+                            listOf(
+                                Enkeltdag(LocalDate.parse("2021-01-01"), Duration.ofHours(7).plusMinutes(30)),
+                                Enkeltdag(LocalDate.parse("2021-01-02"), Duration.ofHours(7).plusMinutes(30)),
+                                Enkeltdag(LocalDate.parse("2021-01-03"), Duration.ofHours(7).plusMinutes(30)),
+                                Enkeltdag(LocalDate.parse("2021-01-04"), Duration.ofHours(7).plusMinutes(30)),
+                                Enkeltdag(LocalDate.parse("2021-01-05"), Duration.ofHours(7).plusMinutes(30)),
+                                Enkeltdag(LocalDate.parse("2021-01-06"), Duration.ofHours(7).plusMinutes(30)),
+                                Enkeltdag(LocalDate.parse("2021-01-07"), Duration.ofHours(7).plusMinutes(30)),
+                                Enkeltdag(LocalDate.parse("2021-01-08"), Duration.ofHours(7).plusMinutes(30)),
+                                Enkeltdag(LocalDate.parse("2021-01-09"), Duration.ofHours(7).plusMinutes(30)),
+                                Enkeltdag(LocalDate.parse("2021-01-10"), Duration.ofHours(7).plusMinutes(30)),
+                            )
+                        )
+                    ),
                 ),
                 harVærtEllerErVernepliktig = true,
                 barnRelasjon = BarnRelasjon.ANNET,
@@ -303,7 +280,7 @@ class OLPSøknadPdfGeneratorTest {
             id = "6-kun-frilans-arbeidsforhold"
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
-                    selvstendigNæringsdrivende = SelvstendigNæringsdrivende(harInntektSomSelvstendig = false),
+                    selvstendigNæringsdrivende = null,
                     arbeidsgivere = listOf()
                 ).pdfData()
             )
@@ -345,19 +322,19 @@ class OLPSøknadPdfGeneratorTest {
             id = "9-med-utenlandsk-næring"
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
-                    selvstendigNæringsdrivende = SelvstendigNæringsdrivende(false),
-                    frilans = Frilans(false),
+                    selvstendigNæringsdrivende = null,
+                    frilans = null,
                     arbeidsgivere = listOf(),
                     utenlandskNæring = listOf(
                         UtenlandskNæring(
-                            næringstype = Næringstyper.FISKE,
+                            næringstype = Næringstype.FISKE,
                             navnPåVirksomheten = "Fiskeriet AS",
                             land = Land(landkode = "NDL", landnavn = "Nederland"),
                             organisasjonsnummer = "123ABC",
                             fraOgMed = LocalDate.parse("2020-01-09")
                         ),
                         UtenlandskNæring(
-                            næringstype = Næringstyper.DAGMAMMA,
+                            næringstype = Næringstype.DAGMAMMA,
                             navnPåVirksomheten = "Dagmamma AS",
                             land = Land(landkode = "NDL", landnavn = "Nederland"),
                             organisasjonsnummer = null,
@@ -399,171 +376,19 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "12-ulike-uker_ulike_timer"
+            id = "4-sluttet-som-frilans-før-søknadsperioden"
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
-                    arbeidsgivere = listOf(
-                        Arbeidsgiver(
-                            navn = "Varierende frisør",
-                            organisasjonsnummer = "917755736",
-                            erAnsatt = true,
-                            arbeidsforhold = Arbeidsforhold(
-                                normalarbeidstid = NormalArbeidstid(
-                                    timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                                ),
-                                arbeidIPeriode = ArbeidIPeriode(
-                                    type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                                    redusertArbeid = ArbeidsRedusert(
-                                        type = RedusertArbeidstidType.ULIKE_UKER_TIMER,
-                                        arbeidsuker = listOf(
-                                            ArbeidsUke(
-                                                periode = Periode(
-                                                    fraOgMed = LocalDate.parse("2022-10-24"),
-                                                    tilOgMed = LocalDate.parse("2022-10-30")
-                                                ),
-                                                timer = Duration.ofHours(25).plusMinutes(30)
-                                            ),
-                                            ArbeidsUke(
-                                                periode = Periode(
-                                                    fraOgMed = LocalDate.parse("2022-10-31"),
-                                                    tilOgMed = LocalDate.parse("2022-11-06")
-                                                ),
-                                                timer = Duration.ofHours(15).plusMinutes(30)
-                                            ),
-                                            ArbeidsUke(
-                                                periode = Periode(
-                                                    fraOgMed = LocalDate.parse("2022-10-17"),
-                                                    tilOgMed = LocalDate.parse("2022-10-23")
-                                                ),
-                                                timer = Duration.ofHours(37).plusMinutes(30)
-                                            ),
-                                            ArbeidsUke(
-                                                periode = Periode(
-                                                    fraOgMed = LocalDate.parse("2022-11-14"),
-                                                    tilOgMed = LocalDate.parse("2022-11-20")
-                                                ),
-                                                timer = Duration.ofHours(5).plusMinutes(30)
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                ).pdfData()
-            )
-            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-            id = "13-frilanser-med-honorarer"
-            pdf = generator.genererPDF(
-                pdfData = fullGyldigMelding(id).copy(
+                    opptjeningIUtlandet = listOf(),
+                    utenlandskNæring = listOf(),
+                    fraOgMed = LocalDate.parse("2022-01-05"),
+                    tilOgMed = LocalDate.parse("2022-01-10"),
                     frilans = Frilans(
-                        harInntektSomFrilanser = true,
-                        type = FrilansType.FRILANS_HONORAR,
-                        startdato = LocalDate.parse("2021-01-01"),
-                        sluttdato = LocalDate.parse("2021-01-31"),
+                        startdato = LocalDate.parse("2000-01-01"),
                         jobberFortsattSomFrilans = false,
-                        misterHonorar = null,
-                        arbeidsforhold = Arbeidsforhold(
-                            normalarbeidstid = NormalArbeidstid(
-                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                            ),
-                            arbeidIPeriode = ArbeidIPeriode(
-                                type = ArbeidIPeriodeType.ARBEIDER_VANLIG
-                            )
-                        )
-                    )
-                ).pdfData()
-            )
-            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-            id = "14-kun-honorarer"
-            pdf = generator.genererPDF(
-                pdfData = fullGyldigMelding(id).copy(
-                    frilans = Frilans(
-                        harInntektSomFrilanser = true,
-                        type = FrilansType.HONORAR,
-                        startdato = LocalDate.parse("2021-01-01"),
-                        sluttdato = LocalDate.parse("2021-01-31"),
-                        jobberFortsattSomFrilans = false,
-                        misterHonorar = true,
-                        arbeidsforhold = Arbeidsforhold(
-                            normalarbeidstid = NormalArbeidstid(
-                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                            ),
-                            arbeidIPeriode = ArbeidIPeriode(
-                                type = ArbeidIPeriodeType.ARBEIDER_IKKE
-                            )
-                        )
-                    )
-                ).pdfData()
-            )
-            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-            id = "15-frilanser-starter-tre-måneder-før-søknadsperiode"
-            pdf = generator.genererPDF(
-                pdfData = fullGyldigMelding(id).copy(
-                    fraOgMed = LocalDate.parse("2023-08-31"),
-                    frilans = Frilans(
-                        harInntektSomFrilanser = true,
-                        startetFørSisteTreHeleMåneder = true,
-                        type = FrilansType.FRILANS,
-                        startdato = LocalDate.parse("2023-05-30"),
-                        jobberFortsattSomFrilans = true,
-                        misterHonorar = false,
-                        arbeidsforhold = Arbeidsforhold(
-                            normalarbeidstid = NormalArbeidstid(
-                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                            ),
-                            arbeidIPeriode = ArbeidIPeriode(
-                                type = ArbeidIPeriodeType.ARBEIDER_IKKE
-                            )
-                        )
-                    )
-                ).pdfData()
-            )
-            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-            id = "16-uke-53"
-            pdf = generator.genererPDF(
-                pdfData = fullGyldigMelding(id).copy(
-                    fraOgMed = LocalDate.parse("2024-12-30"),
-                    tilOgMed = LocalDate.parse("2025-01-02"),
-                    arbeidsgivere = listOf(
-                        Arbeidsgiver(
-                            navn = "Varierende frisør",
-                            organisasjonsnummer = "917755736",
-                            erAnsatt = true,
-                            arbeidsforhold = Arbeidsforhold(
-                                normalarbeidstid = NormalArbeidstid(
-                                    timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                                ),
-                                arbeidIPeriode = ArbeidIPeriode(
-                                    type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
-                                    redusertArbeid = ArbeidsRedusert(
-                                        type = RedusertArbeidstidType.ULIKE_UKER_TIMER,
-                                        arbeidsuker = listOf(
-                                            // Uke 52
-                                            ArbeidsUke(
-                                                periode = Periode(
-                                                    fraOgMed = LocalDate.parse("2024-12-23"),
-                                                    tilOgMed = LocalDate.parse("2024-12-27")
-                                                ),
-                                                timer = Duration.ofHours(25).plusMinutes(30)
-                                            ),
-                                            // Uke 53 -> 1
-                                            ArbeidsUke(
-                                                periode = Periode(
-                                                    fraOgMed = LocalDate.parse("2024-12-30"),
-                                                    tilOgMed = LocalDate.parse("2025-01-03")
-                                                ),
-                                                timer = Duration.ofHours(15).plusMinutes(30)
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
+                        sluttdato = LocalDate.parse("2022-01-04"),
+                        arbeidsforhold = null,
+                        harHattInntektSomFrilanser = false
                     )
                 ).pdfData()
             )

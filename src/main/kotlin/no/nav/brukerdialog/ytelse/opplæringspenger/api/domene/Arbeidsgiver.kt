@@ -15,7 +15,7 @@ class Arbeidsgiver(
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private val organisasjonsnummer: String,
 
-    @field:NotBlank(message = "Kan ikke være tomt eller blankt")
+    @field:NotBlank(message = "navn kan ikke være tomt eller blankt")
     private val navn: String,
     //TODO: skal erAnsatt og sluttetFørSøknadsperiode disse verdiene brukes til noe?
     private val erAnsatt: Boolean,

@@ -1,17 +1,17 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.utils
 
-import no.nav.brukerdialog.ytelse.fellesdomene.Land
-import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
-import no.nav.brukerdialog.ytelse.fellesdomene.Regnskapsfører
-import no.nav.brukerdialog.ytelse.fellesdomene.VarigEndring
-import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
-import no.nav.brukerdialog.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
-import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.*
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriodeType
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.NormalArbeidstid
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Arbeidsgiver
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Enkeltdag
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Frilans
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.JobberIPeriodeSvar
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.SelvstendigNæringsdrivende
+import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.brukerdialog.ytelse.fellesdomene.*
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.*
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Bosted
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
+
 import java.net.URI
 import java.time.*
 import java.util.*
@@ -46,11 +46,21 @@ class SøknadUtils {
                     organisasjonsnummer = "917755736",
                     erAnsatt = true,
                     arbeidsforhold = Arbeidsforhold(
-                        normalarbeidstid = NormalArbeidstid(
-                            timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                        ),
+                        jobberNormaltTimer = 40.0,
                         arbeidIPeriode = ArbeidIPeriode(
-                            type = ArbeidIPeriodeType.ARBEIDER_VANLIG
+                            jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
+                            enkeltdager = listOf(
+                                Enkeltdag(LocalDate.parse("2021-01-01"), Duration.ofHours(4)),
+                                Enkeltdag(LocalDate.parse("2021-01-02"), Duration.ofHours(4)),
+                                Enkeltdag(LocalDate.parse("2021-01-03"), Duration.ofHours(4)),
+                                Enkeltdag(LocalDate.parse("2021-01-04"), Duration.ofHours(4)),
+                                Enkeltdag(LocalDate.parse("2021-01-05"), Duration.ofHours(4)),
+                                Enkeltdag(LocalDate.parse("2021-01-06"), Duration.ofHours(4)),
+                                Enkeltdag(LocalDate.parse("2021-01-07"), Duration.ofHours(4)),
+                                Enkeltdag(LocalDate.parse("2021-01-08"), Duration.ofHours(4)),
+                                Enkeltdag(LocalDate.parse("2021-01-09"), Duration.ofHours(4)),
+                                Enkeltdag(LocalDate.parse("2021-01-10"), Duration.ofHours(4)),
+                            )
                         )
                     )
                 ),
@@ -61,45 +71,47 @@ class SøknadUtils {
                     sluttetFørSøknadsperiode = false
                 )
             ),
+            frilans = Frilans(
+                startdato = LocalDate.parse("2019-01-01"),
+                jobberFortsattSomFrilans = false,
+                sluttdato = LocalDate.parse("2021-05-01"),
+                harHattInntektSomFrilanser = false
+            ),
+            selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
+                virksomhet = Virksomhet(
+                    fraOgMed = LocalDate.parse("2015-01-01"),
+                    tilOgMed = LocalDate.parse("2021-01-01"),
+                    næringstype = Næringstype.ANNEN,
+                    fiskerErPåBladB = true,
+                    navnPåVirksomheten = "Bjarnes Bakeri",
+                    registrertINorge = false,
+                    registrertIUtlandet = Land("CUB", "Cuba"),
+                    næringsinntekt = 9656876,
+                    erNyoppstartet = false,
+                    harFlereAktiveVirksomheter = false
+                ),
+                arbeidsforhold = Arbeidsforhold(
+                    37.5, ArbeidIPeriode(
+                        JobberIPeriodeSvar.HELT_FRAVÆR,
+                        listOf(
+                            Enkeltdag(LocalDate.parse("2021-01-01"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-02"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-03"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-04"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-05"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-06"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-07"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-08"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-09"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-10"), Duration.ofHours(7).plusMinutes(30)),
+                        )
+                    )
+                ),
+            ),
             vedlegg = listOf(URI.create("http://localhost:8080/vedlegg/1").toURL()),
             fødselsattestVedleggUrls = listOf(URI.create("http://localhost:8080/vedlegg/2").toURL()),
             fraOgMed = LocalDate.parse("2021-01-01"),
             tilOgMed = LocalDate.parse("2021-10-01"),
-            selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
-                harInntektSomSelvstendig = true,
-                virksomhet = Virksomhet(
-                    næringstype = Næringstype.ANNEN,
-                    fiskerErPåBladB = false,
-                    fraOgMed = LocalDate.parse("2021-01-01"),
-                    næringsinntekt = 1111,
-                    navnPåVirksomheten = "TullOgTøys",
-                    registrertINorge = false,
-                    registrertIUtlandet = Land(
-                        landnavn = "Tyskland",
-                        landkode = "DEU"
-                    ),
-                    varigEndring = VarigEndring(
-                        inntektEtterEndring = 9999,
-                        dato = LocalDate.parse("2020-01-01"),
-                        forklaring = "Korona"
-                    ),
-                    regnskapsfører = Regnskapsfører(
-                        "Kjell Regnskap",
-                        "123456789"
-                    ),
-                    yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeArene(LocalDate.parse("2018-01-01")),
-                    harFlereAktiveVirksomheter = true,
-                    erNyoppstartet = true
-                ),
-                arbeidsforhold = Arbeidsforhold(
-                    normalarbeidstid = NormalArbeidstid(
-                        timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                    ),
-                    arbeidIPeriode = ArbeidIPeriode(
-                        type = ArbeidIPeriodeType.ARBEIDER_VANLIG
-                    )
-                )
-            ),
             medlemskap = Medlemskap(
                 harBoddIUtlandetSiste12Mnd = true,
                 skalBoIUtlandetNeste12Mnd = true,
@@ -173,22 +185,6 @@ class SøknadUtils {
                     Ferieuttak(
                         fraOgMed = LocalDate.parse("2021-01-01"),
                         tilOgMed = LocalDate.parse("2021-01-10")
-                    )
-                )
-            ),
-            frilans = Frilans(
-                jobberFortsattSomFrilans = true,
-                harInntektSomFrilanser = true,
-                startetFørSisteTreHeleMåneder = false,
-                startdato = LocalDate.parse("2018-01-01"),
-                misterHonorar = true,
-                type = FrilansType.FRILANS,
-                arbeidsforhold = Arbeidsforhold(
-                    normalarbeidstid = NormalArbeidstid(
-                        timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                    ),
-                    arbeidIPeriode = ArbeidIPeriode(
-                        type = ArbeidIPeriodeType.ARBEIDER_VANLIG
                     )
                 )
             ),

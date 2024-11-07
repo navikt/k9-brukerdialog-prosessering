@@ -74,9 +74,9 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
             "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
             "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
-            "frilans" to søknad.frilans.somMap(),
+            "frilans" to søknad.frilans?.somMap(),
             "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
-            "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
+            "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende?.somMap(),
             "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
             "hjelper" to mapOf(
                 "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
@@ -112,9 +112,9 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     }
 
     private fun OLPMottattSøknad.harMinstEtArbeidsforhold(): Boolean {
-        if (frilans.arbeidsforhold != null) return true
+        if (frilans?.arbeidsforhold != null) return true
 
-        if (selvstendigNæringsdrivende.arbeidsforhold != null) return true
+        if (selvstendigNæringsdrivende?.arbeidsforhold != null) return true
 
         if (arbeidsgivere.any() { it.arbeidsforhold != null }) return true
 
@@ -122,7 +122,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     }
 
     private fun OLPMottattSøknad.harFlereAktiveVirksomehterSatt() =
-        this.selvstendigNæringsdrivende.virksomhet.harFlereAktiveVirksomheter
+        this.selvstendigNæringsdrivende?.virksomhet?.harFlereAktiveVirksomheter
 
     private fun erBooleanSatt(verdi: Boolean?) = verdi != null
 
