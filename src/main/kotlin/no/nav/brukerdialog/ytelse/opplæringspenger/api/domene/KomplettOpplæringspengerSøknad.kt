@@ -31,7 +31,7 @@ data class KomplettOpplæringspengerSøknad(
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
-    val kurs: Kurs? = null,
+    val kurs: Kurs,
     val k9FormatSøknad: Søknad? = null,
 ) : KomplettInnsending {
     override fun equals(other: Any?): Boolean {

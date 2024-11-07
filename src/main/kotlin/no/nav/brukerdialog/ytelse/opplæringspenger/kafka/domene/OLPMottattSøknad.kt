@@ -46,7 +46,7 @@ data class OLPMottattSøknad(
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
-    val kurs: Kurs? = null,
+    val kurs: Kurs,
     val k9FormatSøknad: Søknad
 ): MottattMelding {
     override fun ytelse(): Ytelse = Ytelse.OPPLÆRINGSPENGER

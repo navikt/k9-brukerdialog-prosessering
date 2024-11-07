@@ -78,7 +78,7 @@ data class OpplæringspengerSøknad(
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val dataBruktTilUtledningAnnetData: String? = null,
-    val kurs: Kurs? = null
+    val kurs: Kurs
 ) : Innsending {
 
     internal fun leggTilIdentifikatorPåBarnHvisMangler(barnFraOppslag: List<BarnOppslag>) {
@@ -186,13 +186,11 @@ data class OpplæringspengerSøknad(
             olp.medUtenlandsopphold(utenlandsoppholdIPerioden.tilK9Utenlandsopphold())
         }
 
-        if (kurs != null) {
-            olp.medKurs(kurs.tilK9Format())
-        }
+        olp.medKurs(kurs.tilK9Format())
 
         return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), olp)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
-            .medSpråk(K9Språk.of(språk?.name ?: "nb"))
+            .medSpråk(K9Språk.of(språk.name ?: "nb"))
     }
 
     fun byggK9Uttak(periode: K9Periode): Uttak {
