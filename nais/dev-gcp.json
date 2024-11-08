@@ -30,9 +30,6 @@
     "SPRING_APPLICATION_NAME": "k9-brukerdialog-prosessering",
     "SPRING_PROFILES_ACTIVE": "dev-gcp",
 
-    "K9_JOARK_BASE_URL": "http://k9-joark",
-    "K9_JOARK_SCOPE": "api://dev-gcp.dusseldorf.k9-joark/.default",
-
     "K9_MELLOMLAGRING_BASE_URL": "http://k9-mellomlagring",
     "K9_MELLOMLAGRING_SCOPE": "api://dev-gcp.dusseldorf.k9-mellomlagring/.default",
     "K9_MELLOMLAGRING_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-mellomlagring",
