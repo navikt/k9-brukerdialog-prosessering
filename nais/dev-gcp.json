@@ -43,8 +43,8 @@
     "K9_SELVBETJENING_OPPSLAG_BASE_URL": "http://k9-selvbetjening-oppslag",
     "K9_SELVBETJENING_OPPSLAG_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-selvbetjening-oppslag",
 
-    "DOKARKIV_BASE_URL": "https://dokarkiv.dev-fss-pub.nais.io",
-    "DOKARKIV_SCOPE": "api://dev-fss.teamdokumenthandtering.dokarkiv-q1/.default",
+    "DOKARKIV_BASE_URL": "https://dokarkiv-q2.dev-fss-pub.nais.io",
+    "DOKARKIV_SCOPE": "api://dev-fss.teamdokumenthandtering.dokarkiv/.default",
 
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
     "SWAGGER_ENABLED": "true",
