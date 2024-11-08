@@ -14,6 +14,7 @@ import no.nav.brukerdialog.utils.StringUtils
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetailsString
+import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Arbeidsgiver.Companion.somK9Arbeidstaker
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kurs.Companion.tilK9Format
 import no.nav.fpsak.tidsserie.LocalDateInterval
@@ -203,7 +204,9 @@ data class OpplæringspengerSøknad(
 
     private fun byggK9OpptjeningAktivitet() = OpptjeningAktivitet().apply {
         frilans?.let { medFrilanser(it.somK9Frilanser()) }
-        this@OpplæringspengerSøknad.selvstendigNæringsdrivende?.let { medSelvstendigNæringsdrivende(it.somK9SelvstendigNæringsdrivende()) }
+        this@OpplæringspengerSøknad.selvstendigNæringsdrivende?.let {
+            medSelvstendigNæringsdrivende(it.somK9SelvstendigNæringsdrivende())
+        }
     }
 
     private fun byggK9Arbeidstid() = Arbeidstid().apply {
@@ -211,8 +214,14 @@ data class OpplæringspengerSøknad(
             medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(fraOgMed, tilOgMed))
         }
 
-        medSelvstendigNæringsdrivendeArbeidstidInfo(selvstendigNæringsdrivende?.somK9ArbeidstidInfo(fraOgMed, tilOgMed))
-        medFrilanserArbeidstid(frilans?.somK9Arbeidstid(fraOgMed, tilOgMed))
+        selvstendigNæringsdrivende?.let {
+            medSelvstendigNæringsdrivendeArbeidstidInfo(it.somK9ArbeidstidInfo(fraOgMed, tilOgMed))
+        }
+
+        when (frilans) {
+            null -> medFrilanserArbeidstid(arbeidstidInfoMedNullTimer(fraOgMed, tilOgMed))
+            else -> medFrilanserArbeidstid(frilans.somK9Arbeidstid(fraOgMed, tilOgMed))
+        }
     }
 
     fun byggK9DataBruktTilUtledning(metadata: MetaInfo): DataBruktTilUtledning = DataBruktTilUtledning()
