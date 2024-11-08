@@ -202,8 +202,8 @@ data class OpplæringspengerSøknad(
     }
 
     private fun byggK9OpptjeningAktivitet() = OpptjeningAktivitet().apply {
-        frilans.let { medFrilanser(it?.somK9Frilanser()) }
-        this@OpplæringspengerSøknad.selvstendigNæringsdrivende.let { medSelvstendigNæringsdrivende(it?.somK9SelvstendigNæringsdrivende()) }
+        frilans?.let { medFrilanser(it.somK9Frilanser()) }
+        this@OpplæringspengerSøknad.selvstendigNæringsdrivende?.let { medSelvstendigNæringsdrivende(it.somK9SelvstendigNæringsdrivende()) }
     }
 
     private fun byggK9Arbeidstid() = Arbeidstid().apply {
