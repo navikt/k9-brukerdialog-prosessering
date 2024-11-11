@@ -1,11 +1,11 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.utils
 
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Enkeltdag
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Frilans
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.FrilansOLP
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.JobberIPeriodeSvar
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivende
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivendeOLP
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.fellesdomene.*
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.*
@@ -46,7 +46,7 @@ class SøknadUtils {
                     navn = "Org",
                     organisasjonsnummer = "917755736",
                     erAnsatt = true,
-                    arbeidsforhold = Arbeidsforhold(
+                    arbeidsforhold = ArbeidsforholdOLP(
                         jobberNormaltTimer = 40.0,
                         arbeidIPeriode = ArbeidIPeriode(
                             jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
@@ -72,13 +72,13 @@ class SøknadUtils {
                     sluttetFørSøknadsperiode = false
                 )
             ),
-            frilans = Frilans(
+            frilans = FrilansOLP(
                 startdato = LocalDate.parse("2019-01-01"),
                 jobberFortsattSomFrilans = false,
                 sluttdato = LocalDate.parse("2021-05-01"),
                 harHattInntektSomFrilanser = false
             ),
-            selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
+            selvstendigNæringsdrivende = SelvstendigNæringsdrivendeOLP(
                 virksomhet = Virksomhet(
                     fraOgMed = LocalDate.parse("2015-01-01"),
                     tilOgMed = LocalDate.parse("2021-01-01"),
@@ -91,7 +91,7 @@ class SøknadUtils {
                     erNyoppstartet = false,
                     harFlereAktiveVirksomheter = false
                 ),
-                arbeidsforhold = Arbeidsforhold(
+                arbeidsforhold = ArbeidsforholdOLP(
                     37.5, ArbeidIPeriode(
                         JobberIPeriodeSvar.HELT_FRAVÆR,
                         listOf(

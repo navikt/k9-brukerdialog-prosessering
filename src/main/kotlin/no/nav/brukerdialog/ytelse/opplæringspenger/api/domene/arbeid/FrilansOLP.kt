@@ -5,17 +5,17 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotNull
 import no.nav.k9.søknad.felles.opptjening.Frilanser
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold.Companion.somK9ArbeidstidInfo
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
 import no.nav.brukerdialog.utils.erLikEllerEtter
 import java.time.LocalDate
 
-class Frilans(
+class FrilansOLP(
     @JsonFormat(pattern = "yyyy-MM-dd")
     val startdato: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd")
     val sluttdato: LocalDate? = null,
     val jobberFortsattSomFrilans: Boolean,
-    @field:Valid val arbeidsforhold: Arbeidsforhold? = null,
+    @field:Valid val arbeidsforhold: ArbeidsforholdOLP? = null,
     @field:NotNull(message = "Kan ikke være null") val harHattInntektSomFrilanser: Boolean? = null,
 ) {
 
@@ -44,8 +44,8 @@ class Frilans(
     }
 
     internal fun somK9Frilanser() = Frilanser().apply {
-        medStartdato(this@Frilans.startdato)
-        this@Frilans.sluttdato?.let { medSluttdato(this@Frilans.sluttdato) }
+        medStartdato(this@FrilansOLP.startdato)
+        this@FrilansOLP.sluttdato?.let { medSluttdato(this@FrilansOLP.sluttdato) }
     }
 
     internal fun somK9Arbeidstid(fraOgMed: LocalDate, tilOgMed: LocalDate) =

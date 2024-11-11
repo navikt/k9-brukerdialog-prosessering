@@ -4,8 +4,8 @@ import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Frilans
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivende
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.FrilansOLP
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivendeOLP
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -28,9 +28,9 @@ data class KomplettOpplæringspengerSøknad(
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,
-    val frilans: Frilans? = null,
+    val frilans: FrilansOLP? = null,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
-    val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
+    val selvstendigNæringsdrivende: SelvstendigNæringsdrivendeOLP? = null,
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,

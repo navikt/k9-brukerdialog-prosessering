@@ -18,8 +18,8 @@ import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNull
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver.Companion.somK9Arbeidstaker
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kurs.Companion.tilK9Format
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Frilans
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivende
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.FrilansOLP
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivendeOLP
 import no.nav.fpsak.tidsserie.LocalDateInterval
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -75,9 +75,9 @@ data class OpplæringspengerSøknad(
     @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
     val harForståttRettigheterOgPlikter: Boolean,
 
-    @field:Valid val frilans: Frilans? = null,
+    @field:Valid val frilans: FrilansOLP? = null,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
-    @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
+    @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivendeOLP? = null,
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,

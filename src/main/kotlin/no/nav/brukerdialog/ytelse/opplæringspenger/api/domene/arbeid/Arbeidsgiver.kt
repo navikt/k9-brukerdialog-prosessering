@@ -6,8 +6,7 @@ import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold.Companion.somK9ArbeidstidInfo
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
 import java.time.LocalDate
 
 class Arbeidsgiver(
@@ -22,7 +21,7 @@ class Arbeidsgiver(
     private val sluttetFørSøknadsperiode: Boolean? = null,
 
     @field:Valid
-    private val arbeidsforhold: Arbeidsforhold? = null,
+    private val arbeidsforhold: ArbeidsforholdOLP? = null,
 ) {
 
     companion object {

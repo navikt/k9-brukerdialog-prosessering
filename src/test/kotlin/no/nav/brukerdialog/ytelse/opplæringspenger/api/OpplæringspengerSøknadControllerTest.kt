@@ -16,10 +16,10 @@ import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.BarnRelasjon
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.JobberIPeriodeSvar
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Frilans
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.FrilansOLP
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -127,7 +127,7 @@ class OpplæringspengerSøknadControllerTest {
                     organisasjonsnummer = "123ABC", // Feil format
                     navn = "", // Tomt navn
                     erAnsatt = false,
-                    arbeidsforhold = Arbeidsforhold(
+                    arbeidsforhold = ArbeidsforholdOLP(
                         jobberNormaltTimer = 40.0,
                         arbeidIPeriode = ArbeidIPeriode(
                             jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
@@ -136,12 +136,12 @@ class OpplæringspengerSøknadControllerTest {
                     )
                 )
             ),
-            frilans = Frilans(
+            frilans = FrilansOLP(
                 harHattInntektSomFrilanser = null, // Kan ikke være null,
                 startdato = LocalDate.parse("2024-07-22"),
                 sluttdato = null, // Må være satt om jobberFortsattSomFrilans er false
                 jobberFortsattSomFrilans = false,
-                arbeidsforhold = Arbeidsforhold(
+                arbeidsforhold = ArbeidsforholdOLP(
                     jobberNormaltTimer = 40.0,
                     arbeidIPeriode = ArbeidIPeriode(
                         jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
