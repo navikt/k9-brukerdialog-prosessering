@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
+package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank

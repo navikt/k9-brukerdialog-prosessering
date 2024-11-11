@@ -1,11 +1,10 @@
-package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
+package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotNull
 import no.nav.k9.søknad.felles.opptjening.Frilanser
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold.Companion.somK9ArbeidstidInfo
 import no.nav.brukerdialog.utils.erLikEllerEtter
 import java.time.LocalDate

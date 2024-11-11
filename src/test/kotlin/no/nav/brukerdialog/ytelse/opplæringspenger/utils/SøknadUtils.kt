@@ -1,11 +1,11 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.utils
 
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsforhold
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Arbeidsgiver
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Enkeltdag
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Frilans
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Frilans
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.JobberIPeriodeSvar
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.SelvstendigNæringsdrivende
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.fellesdomene.*
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.*

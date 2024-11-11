@@ -3,6 +3,9 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Frilans
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivende
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
