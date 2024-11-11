@@ -31,7 +31,7 @@ data class Kursholder(
     val erAnnen: Boolean = false
 ) {
     @AssertTrue(message = "id og navn må være null for annen kursholder")
-    fun isUkjentKursholder(): Boolean {
+    private fun isUkjentKursholder(): Boolean {
         if (erAnnen) {
             return navn == null && id == null
         }
@@ -39,7 +39,7 @@ data class Kursholder(
     }
 
     @AssertTrue(message = "id og navn må være satt for kjent kursholder")
-    fun isKjentKursholder(): Boolean {
+    private fun isKjentKursholder(): Boolean {
         if (!erAnnen) {
             return navn != null && id != null
         }
