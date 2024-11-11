@@ -10,8 +10,9 @@ data class Kurs(
 )
 
 data class Kursholder(
-    val id: String,
-    val navn: String
+    val id: String? = null,
+    val navn: String? = null,
+    val erAnnen: Boolean = false
 )
 
 data class KursPerioderMedReiseTid(
