@@ -3,13 +3,6 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.pdf
 import no.nav.brukerdialog.common.Constants
 import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Ytelse
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.ArbeidIPeriode
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsforhold
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Enkeltdag
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Frilans
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.YrkesaktivSisteTreFerdigliknedeArene
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPMottattSøknad
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils
 import no.nav.brukerdialog.utils.DateUtils.NO_LOCALE
@@ -18,6 +11,7 @@ import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
 import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPMottattSøknad
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.capitalizeName
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
 import no.nav.k9.søknad.felles.type.Språk
@@ -46,7 +40,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "til_og_med" to Constants.DATE_FORMATTER.format(søknad.tilOgMed),
                 "virkedager" to DateUtils.antallVirkedager(søknad.fraOgMed, søknad.tilOgMed)
             ),
-            "kurs" to søknad.kurs?.somMap(),
+            "kurs" to søknad.kurs.somMap(),
             "medlemskap" to mapOf(
                 "har_bodd_i_utlandet_siste_12_mnd" to søknad.medlemskap.harBoddIUtlandetSiste12Mnd,
                 "utenlandsopphold_siste_12_mnd" to søknad.medlemskap.utenlandsoppholdSiste12Mnd.somMapBosted(),
@@ -97,6 +91,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     private fun Kurs.somMap() = mapOf<String, Any?>(
         "institusjonsnavn" to kursholder.navn,
         "institusjosId" to kursholder.id,
+        "erAnnen" to kursholder.erAnnen,
         "kursperioder" to perioder.somMapPerioderMedReiseTid()
     )
 
@@ -106,7 +101,9 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "fraOgMed" to Constants.DATE_FORMATTER.format(it.kursperiode.fraOgMed),
                 "tilOgMed" to Constants.DATE_FORMATTER.format(it.kursperiode.tilOgMed),
                 "avreise" to Constants.DATE_FORMATTER.format(it.avreise),
-                "hjemkomst" to Constants.DATE_FORMATTER.format(it.hjemkomst)
+                "hjemkomst" to Constants.DATE_FORMATTER.format(it.hjemkomst),
+                "beskrivelseReisetidTil" to it.beskrivelseReisetidTil,
+                "beskrivelseReisetidHjem" to it.beskrivelseReisetidHjem
             )
         }
     }

@@ -6,12 +6,12 @@ import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPMottattSøknad
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
-import no.nav.k9.søknad.felles.type.Periode as K9Periode
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
+import no.nav.k9.søknad.felles.type.Periode as K9Periode
 
 class OLPSøknadPdfGeneratorTest {
 
@@ -207,7 +207,7 @@ class OLPSøknadPdfGeneratorTest {
                 kurs = Kurs(
                     kursholder = Kursholder(
                         id = "0edb9541-dda5-4dc4-bfaf-587d01448a6a",
-                        navn = "Opplæring for kurs AS"
+                        navn = "Senter for Kurs AS"
                     ),
                     perioder = listOf(
                         KursPerioderMedReiseTid(
@@ -381,7 +381,7 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "4-sluttet-som-frilans-før-søknadsperioden"
+            id = "12-sluttet-som-frilans-før-søknadsperioden"
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
                     opptjeningIUtlandet = listOf(),
@@ -394,6 +394,30 @@ class OLPSøknadPdfGeneratorTest {
                         sluttdato = LocalDate.parse("2022-01-04"),
                         arbeidsforhold = null,
                         harHattInntektSomFrilanser = false
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "13-med-ukjent-kursholder"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    kurs = Kurs(
+                        kursholder = Kursholder(
+                            erAnnen = true
+                        ),
+                        perioder = listOf(
+                            KursPerioderMedReiseTid(
+                                avreise = LocalDate.parse("2020-01-01"),
+                                hjemkomst = LocalDate.parse("2020-01-10"),
+                                kursperiode = K9Periode(
+                                    LocalDate.parse("2020-01-01"),
+                                    LocalDate.parse("2020-01-10")
+                                ),
+                                beskrivelseReisetidTil = null,
+                                beskrivelseReisetidHjem = null
+                            )
+                        )
                     )
                 ).pdfData()
             )
