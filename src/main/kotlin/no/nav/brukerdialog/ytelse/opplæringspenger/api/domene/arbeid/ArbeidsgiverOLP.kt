@@ -16,7 +16,6 @@ class ArbeidsgiverOLP(
 
     @field:NotBlank(message = "navn kan ikke være tomt eller blankt")
     private val navn: String,
-    //TODO: skal erAnsatt og sluttetFørSøknadsperiode disse verdiene brukes til noe?
     private val erAnsatt: Boolean,
     private val sluttetFørSøknadsperiode: Boolean? = null,
 
