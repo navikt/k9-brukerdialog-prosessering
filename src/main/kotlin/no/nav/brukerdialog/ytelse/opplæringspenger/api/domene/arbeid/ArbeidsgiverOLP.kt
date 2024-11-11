@@ -4,12 +4,12 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
 import java.time.LocalDate
 
-class Arbeidsgiver(
+class ArbeidsgiverOLP(
     @field:Size(max = 20)
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private val organisasjonsnummer: String,
@@ -26,12 +26,12 @@ class Arbeidsgiver(
 
     companion object {
 
-        internal fun List<Arbeidsgiver>.somK9Arbeidstaker(fraOgMed: LocalDate, tilOgMed: LocalDate) =
+        internal fun List<ArbeidsgiverOLP>.somK9Arbeidstaker(fraOgMed: LocalDate, tilOgMed: LocalDate) =
             map { it.somK9Arbeidstaker(fraOgMed, tilOgMed) }
     }
 
     fun somK9Arbeidstaker(fraOgMed: LocalDate, tilOgMed: LocalDate) = Arbeidstaker().apply {
-        medOrganisasjonsnummer(Organisasjonsnummer.of(this@Arbeidsgiver.organisasjonsnummer))
+        medOrganisasjonsnummer(Organisasjonsnummer.of(this@ArbeidsgiverOLP.organisasjonsnummer))
         medOrganisasjonsnavn(navn)
         medArbeidstidInfo(arbeidsforhold.somK9ArbeidstidInfo(fraOgMed, tilOgMed))
     }

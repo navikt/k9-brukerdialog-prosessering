@@ -13,13 +13,9 @@ import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.Ytelse
-import no.nav.brukerdialog.ytelse.opplæringspenger.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.BarnRelasjon
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.JobberIPeriodeSvar
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.FrilansOLP
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.*
+import no.nav.brukerdialog.ytelse.opplæringspenger.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -123,7 +119,7 @@ class OpplæringspengerSøknadControllerTest {
             barnRelasjon = BarnRelasjon.ANNET,
             barnRelasjonBeskrivelse = null, // Må være satt dersom barnRelasjon = ANNET
             arbeidsgivere = listOf(
-                Arbeidsgiver(
+                ArbeidsgiverOLP(
                     organisasjonsnummer = "123ABC", // Feil format
                     navn = "", // Tomt navn
                     erAnsatt = false,

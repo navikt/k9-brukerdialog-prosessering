@@ -1,11 +1,11 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 
-import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsgiverOLP
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.FrilansOLP
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivendeOLP
+import no.nav.k9.søknad.Søknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -18,7 +18,7 @@ data class KomplettOpplæringspengerSøknad(
     val tilOgMed: LocalDate,
     val søker: Søker,
     val barn: BarnDetaljer,
-    val arbeidsgivere: List<Arbeidsgiver>,
+    val arbeidsgivere: List<ArbeidsgiverOLP>,
     var vedleggId: List<String> = listOf(),
     val fødselsattestVedleggId: List<String>,
     val medlemskap: Medlemskap,

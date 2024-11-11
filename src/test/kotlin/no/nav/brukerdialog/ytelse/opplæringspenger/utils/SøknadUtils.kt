@@ -1,21 +1,18 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.utils
 
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Enkeltdag
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.FrilansOLP
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.JobberIPeriodeSvar
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivendeOLP
 import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.ytelse.fellesdomene.*
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
+import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
+import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.*
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Bosted
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
-import no.nav.k9.søknad.felles.type.Periode as K9Periode
-
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.*
 import java.net.URI
-import java.time.*
+import java.time.Duration
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.*
+import no.nav.k9.søknad.felles.type.Periode as K9Periode
 
 
 class SøknadUtils {
@@ -42,7 +39,7 @@ class SøknadUtils {
             barnRelasjon = BarnRelasjon.ANNET,
             barnRelasjonBeskrivelse = "Gudfar til barnet",
             arbeidsgivere = listOf(
-                Arbeidsgiver(
+                ArbeidsgiverOLP(
                     navn = "Org",
                     organisasjonsnummer = "917755736",
                     erAnsatt = true,
@@ -65,7 +62,7 @@ class SøknadUtils {
                         )
                     )
                 ),
-                Arbeidsgiver(
+                ArbeidsgiverOLP(
                     navn = "JobberIkkeHerLenger",
                     organisasjonsnummer = "977155436",
                     erAnsatt = false,
