@@ -124,29 +124,8 @@
         {{/if}}
     </section>
 
-    {{#if stønadGodtgjørelse }}
-        <section id="omsorgsstønad">
-            <h2>Omsorgsstønad eller fosterhjemsgodtgjørelse</h2>
-
-            <p class="sporsmalstekst">Mottar du omsorgsstønad eller fosterhjemsgodtgjørelse?</p>
-            <p>{{ jaNeiSvar stønadGodtgjørelse.mottarStønadGodtgjørelse}}</p>
-
-            <p class="sporsmalstekst">Startet du å motta dette underveis i perioden du søker for?</p>
-            <p>
-                {{ jaNeiSvar stønadGodtgjørelse.startetIPerioden}}.
-                {{#if stønadGodtgjørelse.startdato}} Startet {{stønadGodtgjørelse.startdato}}{{/if}}
-            </p>
-
-            <p class="sporsmalstekst">Slutter du å motta dette underveis i perioden du søker for?</p>
-            <p>
-                {{ jaNeiSvar stønadGodtgjørelse.sluttetIPerioden}}.
-                {{#if stønadGodtgjørelse.sluttdato}} Sluttet {{stønadGodtgjørelse.sluttdato}}{{/if}}
-            </p>
-
-        </section>
-    {{/if}}
-
     <section id="frilans">
+        <h2>Frilans</h2>
         {{# if frilans.harHattInntektSomFrilanser }}
             <ul>
                 <li>Startet som frilanser {{frilans.startdato}}</li>
@@ -167,14 +146,13 @@
                 <p>{{frilans.sluttdato}}</p>
             {{/unless}}
         {{else}}
-            <h2>Frilans</h2>
             <p>Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.</p>
         {{/if}}
     </section>
 
     <section id="selvstendig">
         {{#if selvstendigNæringsdrivende}}
-            <h3>Selvstendig næringsdrivende</h3>
+            <h2>Selvstendig næringsdrivende</h2>
 
             <ul>
                 <li>Er selvstendig næringsdrivende i perioden</li>
@@ -353,6 +331,29 @@
             <p>Nei</p>
         {{/if}}
     </section>
+
+    {{#if stønadGodtgjørelse }}
+        <section id="omsorgsstønad">
+            <h2>Omsorgsstønad eller fosterhjemsgodtgjørelse</h2>
+
+            <p class="sporsmalstekst">Mottar du omsorgsstønad eller fosterhjemsgodtgjørelse?</p>
+            <p>{{ jaNeiSvar stønadGodtgjørelse.mottarStønadGodtgjørelse}}</p>
+
+            <p class="sporsmalstekst">Startet du å motta dette underveis i perioden du søker for?</p>
+            <p>
+                {{ jaNeiSvar stønadGodtgjørelse.startetIPerioden}}.
+                {{#if stønadGodtgjørelse.startdato}} Startet {{stønadGodtgjørelse.startdato}}{{/if}}
+            </p>
+
+            <p class="sporsmalstekst">Slutter du å motta dette underveis i perioden du søker for?</p>
+            <p>
+                {{ jaNeiSvar stønadGodtgjørelse.sluttetIPerioden}}.
+                {{#if stønadGodtgjørelse.sluttdato}} Sluttet {{stønadGodtgjørelse.sluttdato}}{{/if}}
+            </p>
+
+        </section>
+    {{/if}}
+
 
     <section id="verneplikt">
         {{# if hjelper.harVærtEllerErVernepliktigErSatt}}
