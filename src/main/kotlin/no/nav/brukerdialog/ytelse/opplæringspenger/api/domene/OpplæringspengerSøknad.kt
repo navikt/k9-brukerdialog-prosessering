@@ -159,9 +159,6 @@ data class OpplæringspengerSøknad(
     override fun valider(): List<String> = mutableListOf<String>().apply {
         addAll(opptjeningIUtlandet.valider())
         addAll(utenlandskNæring.valider("utenlandskNæring"))
-
-        //TODO: har vi en annen måte å validere dette på?
-        //addAll(frilans.valider("frilans", fraOgMed))
         addAll(medlemskap.valider("medlemskap"))
         addAll(utenlandsoppholdIPerioden.valider("utenlandsoppholdIPerioden"))
 
