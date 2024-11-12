@@ -22,7 +22,8 @@ data class BarnDetaljer(
     var fødselsnummer: String?,
 
     @field:PastOrPresent(message = "kan ikke være i fremtiden")
-    @JsonFormat(pattern = "yyyy-MM-dd") val fødselsdato: LocalDate?,
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    val fødselsdato: LocalDate?,
 
     val aktørId: String?,
 

@@ -49,18 +49,26 @@ private val k9FormatVersjon = Versjon.of("1.0.0")
 data class OpplæringspengerSøknad(
     val newVersion: Boolean?,
     val apiDataVersjon: String? = null,
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID()
-        .toString(),
+
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    val søknadId: String = UUID.randomUUID().toString(),
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: Språk,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
-    @field:Valid val barn: BarnDetaljer,
-    @field:Valid val arbeidsgivere: List<ArbeidsgiverOLP>,
+
+    @field:Valid
+    val barn: BarnDetaljer,
+
+    @field:Valid
+    val arbeidsgivere: List<ArbeidsgiverOLP>,
     val vedlegg: List<URL> = listOf(), // TODO: Fjern listof() når krav om legeerklæring er påkrevd igjen.
     val fødselsattestVedleggUrls: List<URL>? = listOf(),
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     val fraOgMed: LocalDate,
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     val tilOgMed: LocalDate,
     val medlemskap: Medlemskap,
@@ -75,9 +83,12 @@ data class OpplæringspengerSøknad(
     @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
     val harForståttRettigheterOgPlikter: Boolean,
 
-    @field:Valid val frilans: FrilansOLP? = null,
+    @field:Valid
+    val frilans: FrilansOLP? = null,
+
+    @field:Valid
+    val selvstendigNæringsdrivende: SelvstendigNæringsdrivendeOLP? = null,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
-    @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivendeOLP? = null,
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
