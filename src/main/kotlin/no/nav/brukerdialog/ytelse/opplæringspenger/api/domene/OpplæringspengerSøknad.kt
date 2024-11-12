@@ -14,7 +14,6 @@ import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetailsString
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kurs.Companion.tilK9Format
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.UtenlandskNæring.Companion.valider
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsgiverOLP
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsgiverOLP.Companion.somK9Arbeidstaker

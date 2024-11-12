@@ -3,8 +3,6 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotEmpty
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.KursPerioderMedReiseTid.Companion.tilK9Format
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kursholder.Companion.tilK9Format
 import no.nav.k9.søknad.felles.type.Periode
 import java.time.LocalDate
 import java.util.*
@@ -15,13 +13,11 @@ data class Kurs(
     val kursholder: Kursholder,
     @field:NotEmpty(message = "Kan ikke være tom liste") val perioder: List<KursPerioderMedReiseTid>
 ) {
-    companion object {
-        fun Kurs.tilK9Format(): no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs {
-            return no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs(
-                kursholder.tilK9Format(),
-                perioder.map { it.tilK9Format() }
-            )
-        }
+    fun tilK9Format(): no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs {
+        return no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs(
+            kursholder.tilK9Format(),
+            perioder.map { it.tilK9Format() }
+        )
     }
 }
 
@@ -47,13 +43,11 @@ data class Kursholder(
     }
 
 
-    companion object {
-        fun Kursholder.tilK9Format(): K9Kursholder {
-            if (id != null) {
-                return K9Kursholder(UUID.fromString(id))
-            }
-            return K9Kursholder(id)
+    fun tilK9Format(): K9Kursholder {
+        if (id != null) {
+            return K9Kursholder(UUID.fromString(id))
         }
+        return K9Kursholder(id)
     }
 }
 
@@ -64,15 +58,13 @@ data class KursPerioderMedReiseTid(
     val beskrivelseReisetidTil: String?,
     val beskrivelseReisetidHjem: String?
 ) {
-    companion object {
-        fun KursPerioderMedReiseTid.tilK9Format(): K9KursPeriodeMedReisetid {
-            return K9KursPeriodeMedReisetid(
-                kursperiode,
-                avreise,
-                hjemkomst,
-                beskrivelseReisetidTil,
-                beskrivelseReisetidHjem
-            )
-        }
+    fun tilK9Format(): K9KursPeriodeMedReisetid {
+        return K9KursPeriodeMedReisetid(
+            kursperiode,
+            avreise,
+            hjemkomst,
+            beskrivelseReisetidTil,
+            beskrivelseReisetidHjem
+        )
     }
 }

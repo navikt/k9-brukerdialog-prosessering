@@ -3,7 +3,6 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.api.k9Format
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kurs
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kurs.Companion.tilK9Format
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.KursPerioderMedReiseTid
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kursholder
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.fredag
