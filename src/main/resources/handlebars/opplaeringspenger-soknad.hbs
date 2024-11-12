@@ -31,8 +31,10 @@
 <body>
 <h1 id="header">{{tittel}}</h1>
 
-<p class="nokkelinfo"><strong>Sendt til NAV </strong>{{soknad_mottatt_dag}} {{ soknad_mottatt }}</p>
-
+<div class="nokkelinfo">
+    <p><strong>Sendt til NAV </strong>{{soknad_mottatt_dag}} {{ soknad_mottatt }}</p>
+    <p><strong>Språk:</strong> {{hjelp.språk}}</p>
+</div>
 <div class="innholdscontainer">
     {{> partial/felles/personPartial id="søker" title="Søker" navn=soker.navn fødselsnummer=soker.fødselsnummer }}
     {{> partial/felles/personPartial id="barn" title="Barn" navn=barn.navn fødselsnummer=barn.norskIdentitetsnummer fødselsdato=barn.fødselsdato årsakManglerIdentitetsnummer=barn.årsakManglerIdentitetsnummer }}

@@ -241,9 +241,9 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "2-utenSpråk"
+            id = "2-språk-nynorsk"
             pdf = generator.genererPDF(
-                pdfData = fullGyldigMelding(id).copy(språk = "nb").pdfData()
+                pdfData = fullGyldigMelding(id).copy(språk = "nn").pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 

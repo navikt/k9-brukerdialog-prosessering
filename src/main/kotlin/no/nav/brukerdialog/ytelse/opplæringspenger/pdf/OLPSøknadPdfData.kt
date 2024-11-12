@@ -53,7 +53,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             ),
             "hjelp" to mapOf(
                 "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
-                "sprak" to søknad.språk.språkTilTekst()
+                "språk" to søknad.språk.språkTilTekst()
             ),
             "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
             "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
