@@ -9,7 +9,7 @@ import java.time.LocalDate
 
 enum class JobberIPeriodeSvar { SOM_VANLIG, REDUSERT, HELT_FRAVÆR }
 
-class ArbeidIPeriode(
+data class ArbeidIPeriode(
     private val jobberIPerioden: JobberIPeriodeSvar,
     @field:NotEmpty(message = "Kan ikke være tom liste") private val enkeltdager: List<Enkeltdag>,
 ) {

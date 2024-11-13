@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid
 import java.time.Duration
 import java.time.LocalDate
 
-class Enkeltdag(
+data class Enkeltdag(
     val dato: LocalDate,
     val tid: Duration,
 ) {

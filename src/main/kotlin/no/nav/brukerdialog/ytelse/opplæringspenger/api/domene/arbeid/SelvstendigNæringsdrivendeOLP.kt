@@ -5,7 +5,7 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
 import java.time.LocalDate
 
-class SelvstendigNæringsdrivendeOLP(
+data class SelvstendigNæringsdrivendeOLP(
     @field:Valid val virksomhet: Virksomhet,
     @field:Valid val arbeidsforhold: ArbeidsforholdOLP,
 ) {

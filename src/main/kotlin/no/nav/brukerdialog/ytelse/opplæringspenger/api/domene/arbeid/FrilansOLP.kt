@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotNull
-import no.nav.k9.søknad.felles.opptjening.Frilanser
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
 import no.nav.brukerdialog.utils.erLikEllerEtter
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
+import no.nav.k9.søknad.felles.opptjening.Frilanser
 import java.time.LocalDate
 
-class FrilansOLP(
+data class FrilansOLP(
     @JsonFormat(pattern = "yyyy-MM-dd")
     val startdato: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd")

@@ -9,7 +9,7 @@ import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import java.time.LocalDate
 
-class ArbeidsgiverOLP(
+data class ArbeidsgiverOLP(
     @field:Size(max = 20)
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
     private val organisasjonsnummer: String,
