@@ -7,8 +7,8 @@ import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor
 import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.OLPTopologyConfiguration.Companion.OLP_CLEANUP_STREAMS_BUILDER_NAME
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.OLPTopologyConfiguration.Companion.OLP_CLEANUP_STREAMS_BUILDER_NAME
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPPreprosessertSøknad
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream
