@@ -71,6 +71,8 @@ data class OpplæringspengerSøknad(
     @JsonFormat(pattern = "yyyy-MM-dd")
     val tilOgMed: LocalDate,
     val medlemskap: Medlemskap,
+
+    @field:Valid
     val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
@@ -92,6 +94,8 @@ data class OpplæringspengerSøknad(
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val dataBruktTilUtledningAnnetData: String? = null,
+
+    @field:Valid
     val kurs: Kurs
 ) : Innsending {
 
@@ -201,7 +205,7 @@ data class OpplæringspengerSøknad(
 
         return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), olp)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
-            .medSpråk(K9Språk.of(språk.name ?: "nb"))
+            .medSpråk(K9Språk.of(språk.name))
     }
 
     fun byggK9Uttak(periode: K9Periode): Uttak {
