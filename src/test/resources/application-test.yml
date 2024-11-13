@@ -6,6 +6,7 @@ K9_BRUKERDIALOG_CACHE_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9
 K9_SELVBETJENING_OPPSLAG_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-selvbetjening-oppslag-mock
 DOKARKIV_BASE_URL: http://localhost:${wiremock.server.port:8083}/dokarkiv-mock
 ENABLE_UNDOMSYTELSE: true
+ENABLE_OPPLAERINGSPENGER: true
 
 no.nav:
   security.jwt:
@@ -181,6 +182,13 @@ no.nav:
       ungdomsytelse-soknad-journalforing:
         auto-offset-reset: earliest
       ungdomsytelse-soknad-cleanup:
+        auto-offset-reset: earliest
+
+      olp-soknad-preprosessering:
+        auto-offset-reset: earliest
+      olp-soknad-journalforing:
+        auto-offset-reset: earliest
+      olp-soknad-cleanup:
         auto-offset-reset: earliest
 
 wiremock:

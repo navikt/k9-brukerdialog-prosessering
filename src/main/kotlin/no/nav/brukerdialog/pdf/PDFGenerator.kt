@@ -249,6 +249,7 @@ abstract class PdfData {
             Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspenger-utbetaling-snf-soknad$språkSuffix".trimEnd()
             Ytelse.ETTERSENDELSE -> "ettersendelse$språkSuffix".trimEnd()
             Ytelse.UNGDOMSYTELSE -> "ungdomsytelse-soknad$språkSuffix".trimEnd()
+            Ytelse.OPPLÆRINGSPENGER -> "opplaeringspenger-soknad$språkSuffix".trimEnd()
         }
     }
 }

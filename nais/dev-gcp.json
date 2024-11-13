@@ -52,7 +52,9 @@
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
     "SWAGGER_ENABLED": "true",
 
-    "ENABLE_UNDOMSYTELSE": "true"
+    "ENABLE_UNDOMSYTELSE": "true",
+
+    "ENABLE_OPPLAERINGSPENGER": "true"
   },
   "slack-channel": "sif-alerts-dev",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "
