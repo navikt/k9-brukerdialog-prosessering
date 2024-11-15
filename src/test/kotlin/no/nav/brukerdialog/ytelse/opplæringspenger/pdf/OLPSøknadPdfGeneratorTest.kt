@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.pdf
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
-import no.nav.brukerdialog.ytelse.opplæringspenger.utils.PdfSøknadUtils
+import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OlpPdfSøknadUtils
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
@@ -30,25 +30,25 @@ class OLPSøknadPdfGeneratorTest {
         fun genererOppsummeringsPdfer(writeBytes: Boolean) {
             var id = "1-full-søknad"
             var pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(soknadsId = id, mottatt = ZonedDateTime.now()).pdfData()
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(soknadsId = id, mottatt = ZonedDateTime.now()).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
             id = "2-språk-nynorsk"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(språk = "nn").pdfData()
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(språk = "nn").pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
             id = "3-utenArbeidsgivere"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(arbeidsgivere = listOf()).pdfData()
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(arbeidsgivere = listOf()).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
             id = "4-flerePlanlagteUtenlandsopphold"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     medlemskap = Medlemskap(
                         harBoddIUtlandetSiste12Mnd = false,
                         utenlandsoppholdSiste12Mnd = listOf(),
@@ -71,13 +71,13 @@ class OLPSøknadPdfGeneratorTest {
 
             id = "5-har-lastet-opp-vedlegg"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(vedleggId = listOf("12345")).pdfData()
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(vedleggId = listOf("12345")).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
             id = "6-kun-frilans-arbeidsforhold"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     selvstendigNæringsdrivende = null,
                     arbeidsgivere = listOf()
                 ).pdfData()
@@ -86,7 +86,7 @@ class OLPSøknadPdfGeneratorTest {
 
             id = "7-barn-med-årsakManglerIdentitetsnummer"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     barn = Barn(
                         navn = "OLE DOLE",
                         fødselsdato = LocalDate.now(),
@@ -99,7 +99,7 @@ class OLPSøknadPdfGeneratorTest {
 
             id = "8-med-opptjening-i-utlandet"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     utenlandskNæring = listOf(),
                     opptjeningIUtlandet = listOf(
                         OpptjeningIUtlandet(
@@ -119,7 +119,7 @@ class OLPSøknadPdfGeneratorTest {
 
             id = "9-med-utenlandsk-næring"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     selvstendigNæringsdrivende = null,
                     frilans = null,
                     arbeidsgivere = listOf(),
@@ -146,7 +146,7 @@ class OLPSøknadPdfGeneratorTest {
 
             id = "10-har-lastet-opp-id-ved-manglende-norskIdentifikator"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     barn = Barn(
                         navn = "Barn uten norsk identifikasjonsnummer",
                         fødselsnummer = null,
@@ -161,7 +161,7 @@ class OLPSøknadPdfGeneratorTest {
 
             id = "11-har-ikke-lastet-opp-id-ved-manglende-norskIdentifikator"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     barn = Barn(
                         navn = "Barn uten norsk identifikasjonsnummer",
                         fødselsnummer = null,
@@ -176,7 +176,7 @@ class OLPSøknadPdfGeneratorTest {
 
             id = "12-sluttet-som-frilans-før-søknadsperioden"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     opptjeningIUtlandet = listOf(),
                     utenlandskNæring = listOf(),
                     fraOgMed = LocalDate.parse("2022-01-05"),
@@ -194,7 +194,7 @@ class OLPSøknadPdfGeneratorTest {
 
             id = "13-med-ukjent-kursholder"
             pdf = generator.genererPDF(
-                pdfData = PdfSøknadUtils.gyldigSøknad(id).copy(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     kurs = Kurs(
                         kursholder = Kursholder(
                             erAnnen = true

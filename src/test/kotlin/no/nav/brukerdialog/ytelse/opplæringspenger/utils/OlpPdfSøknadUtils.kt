@@ -10,7 +10,7 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 
 
-object PdfSøknadUtils {
+object OlpPdfSøknadUtils {
 
     fun gyldigSøknad(soknadsId: String, mottatt: ZonedDateTime = ZonedDateTime.now()): OLPMottattSøknad {
         return OLPMottattSøknad(
@@ -98,8 +98,8 @@ object PdfSøknadUtils {
 
             stønadGodtgjørelse = StønadGodtgjørelse(
                 mottarStønadGodtgjørelse = true,
-                startdato = LocalDate.now().minusDays(10),
-                sluttdato = LocalDate.now().plusDays(10)
+                startdato = LocalDate.parse("2021-01-01"),
+                sluttdato = LocalDate.parse("2021-01-21")
             ),
             arbeidsgivere = listOf(
                 Arbeidsgiver(
