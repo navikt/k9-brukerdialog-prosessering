@@ -13,7 +13,7 @@ import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.OLPTopologyConfiguration.Companion.OLP_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.OLPTopologyConfiguration.Companion.OLP_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.OLPTopologyConfiguration.Companion.OLP_PREPROSESSERT_TOPIC
-import no.nav.brukerdialog.ytelse.opplæringspenger.utils.PdfSøknadUtils
+import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OlpPdfSøknadUtils
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.SøknadUtils.Companion.defaultSøknad
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
@@ -51,7 +51,7 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val søknadId = UUID.randomUUID().toString()
         val mottatt = ZonedDateTime.parse("2024-07-19T08:36:49.490Z", zonedDateTimeFormatter)
-        val søknadMottatt = PdfSøknadUtils.gyldigSøknad(soknadsId = søknadId, mottatt = mottatt)
+        val søknadMottatt = OlpPdfSøknadUtils.gyldigSøknad(soknadsId = søknadId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
@@ -402,8 +402,8 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
             ],
             "stønadGodtgjørelse": {
               "mottarStønadGodtgjørelse": true,
-              "startdato": "2024-11-03",
-              "sluttdato": "2024-11-23"
+              "startdato": "2021-01-01",
+              "sluttdato": "2021-01-21"
             },
             "fraOgMed": "2022-01-01",
             "språk": "nb",
