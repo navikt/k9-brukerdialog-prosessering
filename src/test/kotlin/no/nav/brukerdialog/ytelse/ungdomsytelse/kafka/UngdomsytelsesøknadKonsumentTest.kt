@@ -89,8 +89,11 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             topic = UngdomsytelsesøknadTopologyConfiguration.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
         )
         val lesMelding =
-            consumer.lesMelding(key = søknadId, topic = UngdomsytelsesøknadTopologyConfiguration.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC)
-                .value()
+            consumer.lesMelding(
+                key = søknadId,
+                topic = UngdomsytelsesøknadTopologyConfiguration.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC,
+                maxWaitInSeconds = 120
+            ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
