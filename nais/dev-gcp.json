@@ -7,7 +7,7 @@
   "maxReplicas": "2",
   "kafkaPool": "nav-dev",
   "externalHosts": [
-    "dokarkiv.dev-fss-pub.nais.io"
+    "dokarkiv-q2.dev-fss-pub.nais.io"
   ],
   "ingresses": [
     "https://k9-brukerdialog-prosessering.intern.dev.nav.no"
@@ -30,9 +30,6 @@
     "SPRING_APPLICATION_NAME": "k9-brukerdialog-prosessering",
     "SPRING_PROFILES_ACTIVE": "dev-gcp",
 
-    "K9_JOARK_BASE_URL": "http://k9-joark",
-    "K9_JOARK_SCOPE": "api://dev-gcp.dusseldorf.k9-joark/.default",
-
     "K9_MELLOMLAGRING_BASE_URL": "http://k9-mellomlagring",
     "K9_MELLOMLAGRING_SCOPE": "api://dev-gcp.dusseldorf.k9-mellomlagring/.default",
     "K9_MELLOMLAGRING_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-mellomlagring",
@@ -46,8 +43,8 @@
     "K9_SELVBETJENING_OPPSLAG_BASE_URL": "http://k9-selvbetjening-oppslag",
     "K9_SELVBETJENING_OPPSLAG_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-selvbetjening-oppslag",
 
-    "DOKARKIV_BASE_URL": "https://dokarkiv.dev-fss-pub.nais.io",
-    "DOKARKIV_SCOPE": "api://dev-fss.teamdokumenthandtering.dokarkiv-q1/.default",
+    "DOKARKIV_BASE_URL": "https://dokarkiv-q2.dev-fss-pub.nais.io",
+    "DOKARKIV_SCOPE": "api://dev-fss.teamdokumenthandtering.dokarkiv/.default",
 
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
     "SWAGGER_ENABLED": "true",
