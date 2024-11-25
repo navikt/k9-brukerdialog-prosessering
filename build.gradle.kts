@@ -125,6 +125,7 @@ tasks {
 	}
 
 	withType<Test> {
+		jvmArgs("-Xmx6g") // 6GB er for å unngå OutOfMemoryError
 		useJUnitPlatform()
 		testLogging {
 			exceptionFormat = TestExceptionFormat.FULL
