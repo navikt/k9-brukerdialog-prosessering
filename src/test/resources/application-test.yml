@@ -14,6 +14,7 @@ no.nav:
         discoveryurl: http://localhost:${mock-oauth2-server.port}/tokenx/.well-known/openid-configuration
         accepted_audience: aud-localhost
     client:
+      registration:
         azure-k9-mellomlagring:
           token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
           grant-type: client_credentials

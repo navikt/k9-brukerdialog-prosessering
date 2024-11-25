@@ -17,6 +17,7 @@ no.nav:
         discoveryUrl: ${TOKEN_X_WELL_KNOWN_URL}
         accepted_audience: ${TOKEN_X_CLIENT_ID}
     client:
+      registration:
         ### K9 Mellomlagring
         azure-k9-mellomlagring:
           token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
