@@ -72,8 +72,6 @@ data class OpplæringspengerSøknad(
     val tilOgMed: LocalDate,
     val medlemskap: Medlemskap,
 
-    @field:Valid
-    val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
     val utenlandskNæring: List<UtenlandskNæring>,
@@ -127,7 +125,6 @@ data class OpplæringspengerSøknad(
             ferieuttakIPerioden = ferieuttakIPerioden,
             opptjeningIUtlandet = opptjeningIUtlandet,
             utenlandskNæring = utenlandskNæring,
-            utenlandsoppholdIPerioden = utenlandsoppholdIPerioden,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             frilans = frilans,
@@ -164,7 +161,6 @@ data class OpplæringspengerSøknad(
         addAll(opptjeningIUtlandet.valider())
         addAll(utenlandskNæring.valider("utenlandskNæring"))
         addAll(medlemskap.valider("medlemskap"))
-        addAll(utenlandsoppholdIPerioden.valider("utenlandsoppholdIPerioden"))
 
         ferieuttakIPerioden?.let { addAll(it.valider(("ferieuttakIPerioden"))) }
 
@@ -195,10 +191,6 @@ data class OpplæringspengerSøknad(
             if (it.ferieuttak.isNotEmpty() && it.skalTaUtFerieIPerioden) {
                 olp.medLovbestemtFerie(ferieuttakIPerioden.tilK9LovbestemtFerie())
             }
-        }
-
-        if (utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden == true) {
-            olp.medUtenlandsopphold(utenlandsoppholdIPerioden.tilK9Utenlandsopphold())
         }
 
         olp.medKurs(kurs.tilK9Format())

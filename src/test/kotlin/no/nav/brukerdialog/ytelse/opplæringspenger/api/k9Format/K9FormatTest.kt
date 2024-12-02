@@ -234,38 +234,7 @@ class K9FormatTest {
               "søknadsperiode" : [ "2021-01-01/2021-01-10" ],
               "trekkKravPerioder" : [ ],
               "utenlandsopphold" : {
-                "perioder" : {
-                  "2019-10-10/2019-10-14" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : null
-                  },
-                  "2019-10-15/2019-10-20" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
-                  },
-                  "2019-10-21/2019-11-10" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : null
-                  },
-                  "2020-11-10/2020-11-12" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
-                  },
-                  "2020-11-13/2020-11-15" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : null
-                  },
-                  "2022-12-10/2022-12-20" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : null
-                  }
-                },
+                "perioder" : { },
                 "perioderSomSkalSlettes" : { }
               },
               "uttak" : {
