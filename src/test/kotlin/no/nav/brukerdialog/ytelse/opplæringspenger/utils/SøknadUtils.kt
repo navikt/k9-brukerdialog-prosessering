@@ -204,7 +204,7 @@ class SøknadUtils {
                 )
             ),
             kurs = Kurs(
-                kursholder = Kursholder(navn = "Opplæring for kurs AS"),
+                kursholder = "Opplæring for kurs AS",
                 perioder = listOf(
                     KursPerioderMedReiseTid(
                         avreise = LocalDate.parse("2022-01-01"),

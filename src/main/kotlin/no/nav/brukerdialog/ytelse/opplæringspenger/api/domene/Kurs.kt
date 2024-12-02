@@ -8,23 +8,14 @@ import no.nav.k9.søknad.ytelse.olp.v1.kurs.KursPeriodeMedReisetid as K9KursPeri
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kursholder as K9Kursholder
 
 data class Kurs(
-    val kursholder: Kursholder,
+    val kursholder: String,
     @field:NotEmpty(message = "Kan ikke være tom liste") val perioder: List<KursPerioderMedReiseTid>
 ) {
     fun tilK9Format(): no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs {
         return no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs(
-            kursholder.tilK9Format(),
+            K9Kursholder(null),
             perioder.map { it.tilK9Format() }
         )
-    }
-}
-
-data class Kursholder(
-    val navn: String? = null
-) {
-
-    fun tilK9Format(): K9Kursholder {
-        return K9Kursholder(null)
     }
 }
 

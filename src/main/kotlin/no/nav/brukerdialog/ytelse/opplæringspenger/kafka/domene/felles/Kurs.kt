@@ -5,12 +5,8 @@ import no.nav.k9.søknad.felles.type.Periode
 import java.time.LocalDate
 
 data class Kurs(
-    val kursholder: Kursholder,
+    val kursholder: String,
     val perioder: List<KursPerioderMedReiseTid>
-)
-
-data class Kursholder(
-    val navn: String? = null
 )
 
 data class KursPerioderMedReiseTid(

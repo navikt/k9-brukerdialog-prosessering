@@ -172,9 +172,8 @@ object OlpPdfSøknadUtils {
             barnRelasjonBeskrivelse = "Blaabla annet",
             k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
             kurs = Kurs(
-                kursholder = Kursholder(
-                    navn = "Senter for Kurs AS"
-                ), perioder = listOf(
+                kursholder = "Senter for Kurs AS",
+                perioder = listOf(
                     KursPerioderMedReiseTid(
                         avreise = LocalDate.parse("2020-01-01"),
                         hjemkomst = LocalDate.parse("2020-01-10"),

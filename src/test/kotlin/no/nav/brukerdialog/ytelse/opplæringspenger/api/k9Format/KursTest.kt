@@ -4,7 +4,6 @@ import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kurs
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.KursPerioderMedReiseTid
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kursholder
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.fredag
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.mandag
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.onsdag
@@ -14,9 +13,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class KursTest {
-    private val KJENT_KURSHOLDER = Kursholder(
-        navn = "Kurssenter AS"
-    )
+    private val KJENT_KURSHOLDER = "Kurssenter AS"
 
     private val STANDARD_KURSPERIODE = KursPerioderMedReiseTid(
         avreise = mandag,
