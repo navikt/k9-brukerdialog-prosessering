@@ -1,23 +1,12 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene
 
-import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Kurs
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Barn
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.BarnRelasjon
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.FerieuttakIPerioden
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Frilans
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Medlemskap
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.OpptjeningIUtlandet
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.StønadGodtgjørelse
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.UtenlandskNæring
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.UtenlandsoppholdIPerioden
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
 import no.nav.brukerdialog.ytelse.opplæringspenger.pdf.OLPSøknadPdfData
+import no.nav.k9.søknad.Søknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -33,7 +22,6 @@ data class OLPMottattSøknad(
     var vedleggId : List<String> = listOf(),
     val fødselsattestVedleggId: List<String>? = listOf(), // TODO: Fjern nullabel etter lansering.
     val medlemskap: Medlemskap,
-    val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
     val utenlandskNæring: List<UtenlandskNæring>,

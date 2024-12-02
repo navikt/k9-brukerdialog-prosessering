@@ -12,7 +12,7 @@
         <bookmark name="Relasjon til barnet" href="#relasjonTilBarnet"/>
         <bookmark name="Perioder" href="#perioder"/>
         <bookmark name="Opplæring" href="#opplæring"/>
-        <bookmark name="Utenlandsopphold" href="#utenlandsopphold"/>
+        <bookmark name="Ferie" href="#ferie"/>
         <bookmark name="Arbeidsgivere" href="#arbeidsgivere"/>
         <bookmark name="Jobb i søknadsperioden" href="#jobbISøknadsperioden"/>
         <bookmark name="Opptjening i utlandet" href="#opptjeningIUtlandet"/>
@@ -362,41 +362,8 @@
         {{/if}}
     </section>
 
-    <section id="utenlandsopphold">
-        <h2>Perioder med utenlandsopphold og ferie</h2>
-        <p class="sporsmalstekst">Skal du reise til utlandet i perioden du søker om opplæringspenger?</p>
-        {{# if utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}
-            <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}</p>
-            <ul>
-                {{# each utenlandsoppholdIPerioden.opphold as |opphold|~}}
-                    <li>
-                        <p>{{opphold.landnavn}}{{#if opphold.erUtenforEØS}}
-                            (utenfor EØS) {{/if}}: {{opphold.fraOgMed}} - {{opphold.tilOgMed}}</p>
-                        {{#isNotNull opphold.erSammenMedBarnet }}
-                            <p><b>Er barnet sammen med deg?</b> {{ jaNeiSvar opphold.erSammenMedBarnet }}</p>
-                        {{/isNotNull}}
-                        {{#if opphold.erUtenforEØS}}
-                            {{#if opphold.erBarnetInnlagt}}
-                                <p><b>Er barnet innlagt?</b> {{ jaNeiSvar opphold.erBarnetInnlagt }}</p>
-                                <p><b>Perioder:</b>
-                                    {{# each opphold.perioderBarnetErInnlagt as |periode| }}
-                                        {{#if @last}}
-                                            {{periode.fraOgMed}} - {{periode.tilOgMed}}
-                                        {{else}}
-                                            {{periode.fraOgMed}} - {{periode.tilOgMed}},
-                                        {{/if}}
-                                    {{/each}}</p>
-                                <p>{{opphold.årsak}}</p>
-                            {{/if}}
-                        {{/if}}
-                        <br/>
-                    </li>
-                {{/each}}
-            </ul>
-        {{else}}
-            <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}</p>
-        {{/if}}
-
+    <section id="ferie">
+        <h2>Perioder med ferie</h2>
         <p class="sporsmalstekst">Skal du ha ferie i perioden du søker om opplæringspenger?</p>
         {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
             <p>Du opplyser at du skal ha ferie</p>

@@ -1,7 +1,6 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
@@ -9,17 +8,8 @@ import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Barn
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.BarnRelasjon
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.FerieuttakIPerioden
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Frilans
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.Medlemskap
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.OpptjeningIUtlandet
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.StønadGodtgjørelse
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.UtenlandskNæring
-import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.UtenlandsoppholdIPerioden
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
+import no.nav.k9.søknad.Søknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -35,7 +25,6 @@ data class OLPPreprosessertSøknad(
     val søker: Søker,
     val barn: Barn,
     val medlemskap: Medlemskap,
-    val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
     val utenlandskNæring: List<UtenlandskNæring>,
     val ferieuttakIPerioden: FerieuttakIPerioden?,
@@ -71,7 +60,6 @@ data class OLPPreprosessertSøknad(
         arbeidsgivere = melding.arbeidsgivere,
         harForstattRettigheterOgPlikter = melding.harForståttRettigheterOgPlikter,
         harBekreftetOpplysninger = melding.harBekreftetOpplysninger,
-        utenlandsoppholdIPerioden = melding.utenlandsoppholdIPerioden,
         ferieuttakIPerioden = melding.ferieuttakIPerioden,
         barnRelasjon = melding.barnRelasjon,
         barnRelasjonBeskrivelse = melding.barnRelasjonBeskrivelse,
