@@ -10,15 +10,13 @@ data class Kurs(
 )
 
 data class Kursholder(
-    val id: String? = null,
-    val navn: String? = null,
-    val erAnnen: Boolean = false
+    val navn: String? = null
 )
 
 data class KursPerioderMedReiseTid(
     @JsonFormat(pattern = "yyyy-MM-dd") val avreise: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val hjemkomst: LocalDate,
     val kursperiode: Periode,
-    val beskrivelseReisetidTil: String?,
-    val beskrivelseReisetidHjem: String?
+    val harTaptArbeidstid: Boolean,
+    val begrunnelseForReiseOverEnDag: String?
 )

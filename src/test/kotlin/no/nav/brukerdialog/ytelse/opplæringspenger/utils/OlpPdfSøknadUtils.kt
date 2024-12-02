@@ -173,7 +173,7 @@ object OlpPdfSøknadUtils {
             k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
             kurs = Kurs(
                 kursholder = Kursholder(
-                    id = "0edb9541-dda5-4dc4-bfaf-587d01448a6a", navn = "Senter for Kurs AS"
+                    navn = "Senter for Kurs AS"
                 ), perioder = listOf(
                     KursPerioderMedReiseTid(
                         avreise = LocalDate.parse("2020-01-01"),
@@ -181,8 +181,8 @@ object OlpPdfSøknadUtils {
                         kursperiode = Periode(
                             LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")
                         ),
-                        beskrivelseReisetidTil = "Reisetid til kurs",
-                        beskrivelseReisetidHjem = "Reisetid hjem fra kurs"
+                        harTaptArbeidstid = true,
+                        begrunnelseForReiseOverEnDag = "Reisetid til kurs tok mer enn en dag"
                     )
                 )
             ),

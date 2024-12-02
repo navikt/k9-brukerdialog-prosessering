@@ -90,8 +90,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
 
     private fun Kurs.somMap() = mapOf<String, Any?>(
         "institusjonsnavn" to kursholder.navn,
-        "institusjosId" to kursholder.id,
-        "erAnnen" to kursholder.erAnnen,
         "kursperioder" to perioder.somMapPerioderMedReiseTid()
     )
 
@@ -102,8 +100,8 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "tilOgMed" to Constants.DATE_FORMATTER.format(it.kursperiode.tilOgMed),
                 "avreise" to Constants.DATE_FORMATTER.format(it.avreise),
                 "hjemkomst" to Constants.DATE_FORMATTER.format(it.hjemkomst),
-                "beskrivelseReisetidTil" to it.beskrivelseReisetidTil,
-                "beskrivelseReisetidHjem" to it.beskrivelseReisetidHjem
+                "harTaptArbeidstid" to it.harTaptArbeidstid,
+                "begrunnelseForReiseOverEnDag" to it.begrunnelseForReiseOverEnDag
             )
         }
     }

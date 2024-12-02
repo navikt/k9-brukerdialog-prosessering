@@ -192,12 +192,12 @@ class K9FormatTest {
               "kurs" : {
                 "kursholder" : {
                   "holder" : null,
-                  "institusjonsidentifikator" : "0edb9541-dda5-4dc4-bfaf-587d01448a6a"
+                  "institusjonsidentifikator" : null
                 },
                 "kursperioder" : [ {
                   "avreise" : "2022-01-01",
-                  "begrunnelseReisetidHjem" : "Reisetid hjem fra kurs",
-                  "begrunnelseReisetidTil" : "Reisetid til kurs",
+                  "begrunnelseReisetidHjem" : null,
+                  "begrunnelseReisetidTil" : "Reisetid til kurs tok mer enn en dag",
                   "hjemkomst" : "2022-01-10",
                   "periode" : "2022-01-01/2022-01-10"
                 } ]
