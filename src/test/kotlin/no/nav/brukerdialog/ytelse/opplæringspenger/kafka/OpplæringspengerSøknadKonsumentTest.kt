@@ -502,56 +502,7 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
             ],
             "apiDataVersjon": null,
             "barnRelasjonBeskrivelse": "Blaabla annet",
-            "harBekreftetOpplysninger": true,
-            "utenlandsoppholdIPerioden": {
-              "opphold": [
-                {
-                  "årsak": "ANNET",
-                  "fraOgMed": "2020-01-01",
-                  "erBarnetInnlagt": true,
-                  "landkode": "BAH",
-                  "landnavn": "Bahamas",
-                  "erSammenMedBarnet": true,
-                  "tilOgMed": "2020-01-10",
-                  "erUtenforEøs": true,
-                  "perioderBarnetErInnlagt": [
-                    {
-                      "fraOgMed": "2020-01-01",
-                      "tilOgMed": "2020-01-01"
-                    },
-                    {
-                      "fraOgMed": "2020-01-03",
-                      "tilOgMed": "2020-01-04"
-                    }
-                  ]
-                },
-                {
-                  "årsak": "ANNET",
-                  "fraOgMed": "2020-01-01",
-                  "erBarnetInnlagt": true,
-                  "landkode": "BHS",
-                  "landnavn": "Sverige",
-                  "erSammenMedBarnet": true,
-                  "tilOgMed": "2020-01-10",
-                  "erUtenforEøs": false,
-                  "perioderBarnetErInnlagt": [
-                    {
-                      "fraOgMed": "2020-01-01",
-                      "tilOgMed": "2020-01-01"
-                    },
-                    {
-                      "fraOgMed": "2020-01-03",
-                      "tilOgMed": "2020-01-04"
-                    },
-                    {
-                      "fraOgMed": "2020-01-05",
-                      "tilOgMed": "2020-01-05"
-                    }
-                  ]
-                }
-              ],
-              "skalOppholdeSegIUtlandetIPerioden": true
-            }
+            "harBekreftetOpplysninger": true
           }
         """.trimIndent()
 

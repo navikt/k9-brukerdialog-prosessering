@@ -132,52 +132,6 @@ class SøknadUtils {
             ),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true,
-            utenlandsoppholdIPerioden = UtenlandsoppholdIPerioden(
-                skalOppholdeSegIUtlandetIPerioden = true, opphold = listOf(
-                    Utenlandsopphold(
-                        fraOgMed = LocalDate.parse("2019-10-10"),
-                        tilOgMed = LocalDate.parse("2019-11-10"),
-                        landkode = "SE",
-                        landnavn = "Sverige",
-                        erBarnetInnlagt = true,
-                        perioderBarnetErInnlagt = listOf(
-                            Periode(
-                                fraOgMed = LocalDate.parse("2019-10-15"),
-                                tilOgMed = LocalDate.parse("2019-10-20")
-                            )
-                        ),
-                        erUtenforEøs = false,
-                        erSammenMedBarnet = false,
-                        årsak = Årsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD
-                    ),
-                    Utenlandsopphold(
-                        fraOgMed = LocalDate.parse("2020-11-10"),
-                        tilOgMed = LocalDate.parse("2020-11-15"),
-                        landkode = "SE",
-                        landnavn = "Sverige",
-                        erBarnetInnlagt = true,
-                        perioderBarnetErInnlagt = listOf(
-                            Periode(
-                                fraOgMed = LocalDate.parse("2020-11-10"),
-                                tilOgMed = LocalDate.parse("2020-11-12")
-                            )
-                        ),
-                        erUtenforEøs = false,
-                        erSammenMedBarnet = false,
-                        årsak = Årsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING
-                    ),
-                    Utenlandsopphold(
-                        fraOgMed = LocalDate.parse("2022-12-10"),
-                        tilOgMed = LocalDate.parse("2022-12-20"),
-                        landkode = "SE",
-                        landnavn = "Sverige",
-                        erBarnetInnlagt = false,
-                        erUtenforEøs = false,
-                        erSammenMedBarnet = false,
-                        årsak = null
-                    )
-                )
-            ),
             ferieuttakIPerioden = FerieuttakIPerioden(
                 skalTaUtFerieIPerioden = true, ferieuttak = listOf(
                     Ferieuttak(
@@ -204,7 +158,7 @@ class SøknadUtils {
                 )
             ),
             kurs = Kurs(
-                kursholder = Kursholder(navn = "Opplæring for kurs AS", id = "0edb9541-dda5-4dc4-bfaf-587d01448a6a"),
+                kursholder = "Opplæring for kurs AS",
                 perioder = listOf(
                     KursPerioderMedReiseTid(
                         avreise = LocalDate.parse("2022-01-01"),
@@ -213,8 +167,8 @@ class SøknadUtils {
                             LocalDate.parse("2022-01-01"),
                             LocalDate.parse("2022-01-10")
                         ),
-                        beskrivelseReisetidTil = "Reisetid til kurs",
-                        beskrivelseReisetidHjem = "Reisetid hjem fra kurs"
+                        harTaptArbeidstid = true,
+                        beskrivelseReisetid = "Reisetid til kurs tok mer enn en dag",
                     )
                 )
             ),

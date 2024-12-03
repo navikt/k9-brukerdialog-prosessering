@@ -16,8 +16,6 @@ import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.capitalizeName
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
 import no.nav.k9.søknad.felles.type.Språk
 import java.time.Month
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 
 class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
@@ -57,10 +55,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             ),
             "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
             "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
-            "utenlandsoppholdIPerioden" to mapOf(
-                "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
-                "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
-            ),
             "ferieuttakIPerioden" to mapOf(
                 "skalTaUtFerieIPerioden" to søknad.ferieuttakIPerioden?.skalTaUtFerieIPerioden,
                 "ferieuttak" to søknad.ferieuttakIPerioden?.ferieuttak?.somMapFerieuttak()
@@ -89,9 +83,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     )
 
     private fun Kurs.somMap() = mapOf<String, Any?>(
-        "institusjonsnavn" to kursholder.navn,
-        "institusjosId" to kursholder.id,
-        "erAnnen" to kursholder.erAnnen,
+        "institusjonsnavn" to kursholder,
         "kursperioder" to perioder.somMapPerioderMedReiseTid()
     )
 
@@ -102,8 +94,8 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "tilOgMed" to Constants.DATE_FORMATTER.format(it.kursperiode.tilOgMed),
                 "avreise" to Constants.DATE_FORMATTER.format(it.avreise),
                 "hjemkomst" to Constants.DATE_FORMATTER.format(it.hjemkomst),
-                "beskrivelseReisetidTil" to it.beskrivelseReisetidTil,
-                "beskrivelseReisetidHjem" to it.beskrivelseReisetidHjem
+                "harTaptArbeidstid" to it.harTaptArbeidstid,
+                "beskrivelseReisetid" to it.beskrivelseReisetid
             )
         }
     }
@@ -269,23 +261,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
         }
     }
 
-    private fun List<Utenlandsopphold>.somMapUtenlandsopphold(): List<Map<String, Any?>> {
-        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZoneId.of("Europe/Oslo"))
-        return map {
-            mapOf(
-                "landnavn" to it.landnavn,
-                "landkode" to it.landkode,
-                "fraOgMed" to dateFormatter.format(it.fraOgMed),
-                "tilOgMed" to dateFormatter.format(it.tilOgMed),
-                "erUtenforEØS" to it.erUtenforEøs,
-                "erSammenMedBarnet" to it.erSammenMedBarnet,
-                "erBarnetInnlagt" to it.erBarnetInnlagt,
-                "perioderBarnetErInnlagt" to it.perioderBarnetErInnlagt.somMapPerioder(),
-                "årsak" to it.årsak?.beskrivelse
-            )
-        }
-    }
-
     private fun List<Ferieuttak>.somMapFerieuttak(): List<Map<String, Any?>> {
         return map {
             mapOf<String, Any?>(
@@ -293,21 +268,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "tilOgMed" to Constants.DATE_FORMATTER.format(it.tilOgMed)
             )
         }
-    }
-
-    private fun List<Periode>.somMapPerioder(): List<Map<String, Any?>> {
-        return map {
-            mapOf<String, Any?>(
-                "fraOgMed" to Constants.DATE_FORMATTER.format(it.fraOgMed),
-                "tilOgMed" to Constants.DATE_FORMATTER.format(it.tilOgMed)
-            )
-        }
-    }
-
-    private fun Double.somString(): String {
-        val split = toString().split(".")
-        return if (split[1] == "0") split[0]
-        else split.joinToString(".")
     }
 
     private fun OLPMottattSøknad.sjekkOmHarIkkeVedlegg(): Boolean = vedleggId.isEmpty()

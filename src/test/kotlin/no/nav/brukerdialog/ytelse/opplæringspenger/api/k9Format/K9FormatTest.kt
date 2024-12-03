@@ -192,12 +192,12 @@ class K9FormatTest {
               "kurs" : {
                 "kursholder" : {
                   "holder" : null,
-                  "institusjonsidentifikator" : "0edb9541-dda5-4dc4-bfaf-587d01448a6a"
+                  "institusjonsidentifikator" : null
                 },
                 "kursperioder" : [ {
                   "avreise" : "2022-01-01",
-                  "begrunnelseReisetidHjem" : "Reisetid hjem fra kurs",
-                  "begrunnelseReisetidTil" : "Reisetid til kurs",
+                  "begrunnelseReisetidHjem" : null,
+                  "begrunnelseReisetidTil" : "Reisetid til kurs tok mer enn en dag",
                   "hjemkomst" : "2022-01-10",
                   "periode" : "2022-01-01/2022-01-10"
                 } ]
@@ -234,38 +234,7 @@ class K9FormatTest {
               "søknadsperiode" : [ "2021-01-01/2021-01-10" ],
               "trekkKravPerioder" : [ ],
               "utenlandsopphold" : {
-                "perioder" : {
-                  "2019-10-10/2019-10-14" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : null
-                  },
-                  "2019-10-15/2019-10-20" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : "barnetInnlagtIHelseinstitusjonDekketEtterAvtaleMedEtAnnetLandOmTrygd"
-                  },
-                  "2019-10-21/2019-11-10" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : null
-                  },
-                  "2020-11-10/2020-11-12" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : "barnetInnlagtIHelseinstitusjonForNorskOffentligRegning"
-                  },
-                  "2020-11-13/2020-11-15" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : null
-                  },
-                  "2022-12-10/2022-12-20" : {
-                    "erSammenMedBarnet" : false,
-                    "land" : "SE",
-                    "årsak" : null
-                  }
-                },
+                "perioder" : { },
                 "perioderSomSkalSlettes" : { }
               },
               "uttak" : {

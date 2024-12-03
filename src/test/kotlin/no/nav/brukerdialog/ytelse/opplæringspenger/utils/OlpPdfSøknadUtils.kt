@@ -40,45 +40,6 @@ object OlpPdfSøknadUtils {
             ),
             harForståttRettigheterOgPlikter = true,
             harBekreftetOpplysninger = true,
-            utenlandsoppholdIPerioden = UtenlandsoppholdIPerioden(
-                skalOppholdeSegIUtlandetIPerioden = true, opphold = listOf(
-                    Utenlandsopphold(
-                        fraOgMed = LocalDate.parse("2020-01-01"),
-                        tilOgMed = LocalDate.parse("2020-01-10"),
-                        landnavn = "Bahamas",
-                        landkode = "BAH",
-                        erUtenforEøs = true,
-                        erBarnetInnlagt = true,
-                        erSammenMedBarnet = true,
-                        perioderBarnetErInnlagt = listOf(
-                            Periode(
-                                fraOgMed = LocalDate.parse("2020-01-01"), tilOgMed = LocalDate.parse("2020-01-01")
-                            ), Periode(
-                                fraOgMed = LocalDate.parse("2020-01-03"), tilOgMed = LocalDate.parse("2020-01-04")
-                            )
-                        ),
-                        årsak = Årsak.ANNET
-                    ), Utenlandsopphold(
-                        fraOgMed = LocalDate.parse("2020-01-01"),
-                        tilOgMed = LocalDate.parse("2020-01-10"),
-                        landnavn = "Sverige",
-                        landkode = "BHS",
-                        erUtenforEøs = false,
-                        erBarnetInnlagt = true,
-                        erSammenMedBarnet = true,
-                        perioderBarnetErInnlagt = listOf(
-                            Periode(
-                                fraOgMed = LocalDate.parse("2020-01-01"), tilOgMed = LocalDate.parse("2020-01-01")
-                            ), Periode(
-                                fraOgMed = LocalDate.parse("2020-01-03"), tilOgMed = LocalDate.parse("2020-01-04")
-                            ), Periode(
-                                fraOgMed = LocalDate.parse("2020-01-05"), tilOgMed = LocalDate.parse("2020-01-05")
-                            )
-                        ),
-                        årsak = Årsak.ANNET
-                    )
-                )
-            ),
             ferieuttakIPerioden = FerieuttakIPerioden(
                 skalTaUtFerieIPerioden = true, ferieuttak = listOf(
                     Ferieuttak(fraOgMed = LocalDate.parse("2020-01-01"), tilOgMed = LocalDate.parse("2020-01-05")),
@@ -172,17 +133,16 @@ object OlpPdfSøknadUtils {
             barnRelasjonBeskrivelse = "Blaabla annet",
             k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
             kurs = Kurs(
-                kursholder = Kursholder(
-                    id = "0edb9541-dda5-4dc4-bfaf-587d01448a6a", navn = "Senter for Kurs AS"
-                ), perioder = listOf(
+                kursholder = "Senter for Kurs AS",
+                perioder = listOf(
                     KursPerioderMedReiseTid(
                         avreise = LocalDate.parse("2020-01-01"),
                         hjemkomst = LocalDate.parse("2020-01-10"),
                         kursperiode = Periode(
                             LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")
                         ),
-                        beskrivelseReisetidTil = "Reisetid til kurs",
-                        beskrivelseReisetidHjem = "Reisetid hjem fra kurs"
+                        harTaptArbeidstid = true,
+                        beskrivelseReisetid = "Reisetid til kurs tok mer enn en dag"
                     )
                 )
             ),

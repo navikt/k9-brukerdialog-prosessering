@@ -49,39 +49,12 @@ data class Bosted(
     }
 }
 
-data class Utenlandsopphold(
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    val fraOgMed: LocalDate,
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    val tilOgMed: LocalDate,
-    val landkode: String,
-    val landnavn: String,
-    val erUtenforEøs: Boolean?,
-    val erSammenMedBarnet: Boolean?,
-    val erBarnetInnlagt: Boolean?,
-    val perioderBarnetErInnlagt: List<Periode> = listOf(),
-    val årsak: Årsak?
-) {
-    override fun toString(): String {
-        return "Utenlandsopphold(fraOgMed=$fraOgMed, tilOgMed=$tilOgMed, landkode='$landkode', landnavn='$landnavn', erUtenforEøs=$erUtenforEøs, erSammenMedBarnet=$erSammenMedBarnet, erBarnetInnlagt=$erBarnetInnlagt, årsak=$årsak)"
-    }
-}
-
-data class Periode(
-    val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate
-)
 
 enum class Årsak(val beskrivelse: String) {
     BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING("Barnet innlagt i helseinstitusjon for norsk offentlig regning"),
     BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD("Barnet innlagt i helseinstitusjon dekket etter avtale med et annet land om trygd"),
     ANNET("Innleggelsen dekkes av søker selv"),
 }
-
-data class UtenlandsoppholdIPerioden(
-    val skalOppholdeSegIUtlandetIPerioden: Boolean,
-    val opphold: List<Utenlandsopphold> = listOf()
-)
 
 data class FerieuttakIPerioden(
     val skalTaUtFerieIPerioden: Boolean,

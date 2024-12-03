@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
 import java.time.ZonedDateTime
-import no.nav.k9.søknad.felles.type.Periode as K9Periode
 
 class OLPSøknadPdfGeneratorTest {
 
@@ -187,30 +186,6 @@ class OLPSøknadPdfGeneratorTest {
                         sluttdato = LocalDate.parse("2022-01-04"),
                         arbeidsforhold = null,
                         harHattInntektSomFrilanser = false
-                    )
-                ).pdfData()
-            )
-            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-            id = "13-med-ukjent-kursholder"
-            pdf = generator.genererPDF(
-                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
-                    kurs = Kurs(
-                        kursholder = Kursholder(
-                            erAnnen = true
-                        ),
-                        perioder = listOf(
-                            KursPerioderMedReiseTid(
-                                avreise = LocalDate.parse("2020-01-01"),
-                                hjemkomst = LocalDate.parse("2020-01-10"),
-                                kursperiode = K9Periode(
-                                    LocalDate.parse("2020-01-01"),
-                                    LocalDate.parse("2020-01-10")
-                                ),
-                                beskrivelseReisetidTil = null,
-                                beskrivelseReisetidHjem = null
-                            )
-                        )
                     )
                 ).pdfData()
             )
