@@ -42,7 +42,7 @@ object RestTemplateUtils {
         }
 
     fun accessToken(clientProperties: ClientProperties, oAuth2AccessTokenService: OAuth2AccessTokenService): String {
-        val accessToken: String = oAuth2AccessTokenService.getAccessToken(clientProperties).accessToken
+        val accessToken: String = oAuth2AccessTokenService.getAccessToken(clientProperties).access_token
             ?: throw IllegalStateException("Access token mangler")
         return accessToken
     }
