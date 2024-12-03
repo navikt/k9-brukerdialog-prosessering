@@ -168,7 +168,7 @@ class SøknadUtils {
                             LocalDate.parse("2022-01-10")
                         ),
                         harTaptArbeidstid = true,
-                        begrunnelseForReiseOverEnDag = "Reisetid til kurs tok mer enn en dag",
+                        beskrivelseReisetid = "Reisetid til kurs tok mer enn en dag",
                     )
                 )
             ),

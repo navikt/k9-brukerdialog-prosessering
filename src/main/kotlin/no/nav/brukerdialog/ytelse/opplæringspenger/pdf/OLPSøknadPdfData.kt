@@ -95,7 +95,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "avreise" to Constants.DATE_FORMATTER.format(it.avreise),
                 "hjemkomst" to Constants.DATE_FORMATTER.format(it.hjemkomst),
                 "harTaptArbeidstid" to it.harTaptArbeidstid,
-                "begrunnelseForReiseOverEnDag" to it.begrunnelseForReiseOverEnDag
+                "beskrivelseReisetid" to it.beskrivelseReisetid
             )
         }
     }

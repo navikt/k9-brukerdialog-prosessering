@@ -24,14 +24,14 @@ data class KursPerioderMedReiseTid(
     @JsonFormat(pattern = "yyyy-MM-dd") val hjemkomst: LocalDate,
     val kursperiode: Periode,
     val harTaptArbeidstid: Boolean,
-    val begrunnelseForReiseOverEnDag: String? = null
+    val beskrivelseReisetid: String? = null
 ) {
     fun tilK9Format(): K9KursPeriodeMedReisetid {
         return K9KursPeriodeMedReisetid(
             kursperiode,
             avreise,
             hjemkomst,
-            begrunnelseForReiseOverEnDag,
+            beskrivelseReisetid,
             null
         )
     }

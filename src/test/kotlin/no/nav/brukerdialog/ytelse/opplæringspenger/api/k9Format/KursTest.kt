@@ -20,7 +20,7 @@ class KursTest {
         hjemkomst = fredag,
         kursperiode = Periode(onsdag, torsdag),
         harTaptArbeidstid = true,
-        begrunnelseForReiseOverEnDag = "Begrunnelse for reise over en dag"
+        beskrivelseReisetid = "Begrunnelse for reise over en dag"
     )
 
 
@@ -50,6 +50,6 @@ class KursTest {
         assertEquals(kurs.perioder[0].hjemkomst, k9Kurs.kursperioder[0].hjemkomst)
         assertEquals(kurs.perioder[0].kursperiode.tilOgMed, k9Kurs.kursperioder[0].periode.tilOgMed)
         assertEquals(kurs.perioder[0].kursperiode.fraOgMed, k9Kurs.kursperioder[0].periode.fraOgMed)
-        assertEquals(kurs.perioder[0].begrunnelseForReiseOverEnDag, k9Kurs.kursperioder[0].begrunnelseReisetidTil)
+        assertEquals(kurs.perioder[0].beskrivelseReisetid, k9Kurs.kursperioder[0].begrunnelseReisetidTil)
     }
 }

@@ -142,7 +142,7 @@ object OlpPdfSøknadUtils {
                             LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")
                         ),
                         harTaptArbeidstid = true,
-                        begrunnelseForReiseOverEnDag = "Reisetid til kurs tok mer enn en dag"
+                        beskrivelseReisetid = "Reisetid til kurs tok mer enn en dag"
                     )
                 )
             ),
