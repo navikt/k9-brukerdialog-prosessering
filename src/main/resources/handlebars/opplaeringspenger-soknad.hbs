@@ -10,9 +10,7 @@
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Barn" href="#barn"/>
         <bookmark name="Relasjon til barnet" href="#relasjonTilBarnet"/>
-        <bookmark name="Perioder" href="#perioder"/>
         <bookmark name="Opplæring" href="#opplæring"/>
-        <bookmark name="Ferie" href="#ferie"/>
         <bookmark name="Arbeidsgivere" href="#arbeidsgivere"/>
         <bookmark name="Jobb i søknadsperioden" href="#jobbISøknadsperioden"/>
         <bookmark name="Opptjening i utlandet" href="#opptjeningIUtlandet"/>
@@ -45,45 +43,50 @@
             <p class="sporsmalstekst">Hvilken relasjon har du til barnet?</p>
             <p>{{barnRelasjon}}</p>
             {{#if barnRelasjonBeskrivelse}}
-                <p class="sporsmalstekst">Din beskrivelse av relasjon og tilsynsrolle for barnet:</p>
+                <p class="sporsmalstekst">Beskrivelse av relasjon og tilsynsrolle for barnet:</p>
                 <p>{{barnRelasjonBeskrivelse}}</p>
             {{/if}}
         {{/if}}
     </section>
 
-    <section id="perioder">
-        <h2>Perioder du søker om opplæringspenger</h2>
-        <ul>
-            <li>
-                <strong>{{ periode.fra_og_med }} - {{ periode.til_og_med }}</strong><br/>
-            </li>
-        </ul>
-    </section>
-
     <section id="opplæring">
-        {{# if kurs }}
-            <h2>Om opplæringen</h2>
-            <p class="sporsmalstekst">Helseinstitusjon eller kompetansesenter som er ansvarlig for kurs eller opplæring</p>
-            <p>{{ kurs.institusjonsnavn }}</p>
-            <p class="sporsmalstekst">Perioder med opplæring</p>
+        <h2>Om opplæringen</h2>
+        <p class="sporsmalstekst">Hvor foregår opplæringen?</p>
+        <p>{{ kurs.institusjonsnavn }}</p>
+        <hr/>
+        <p class="sporsmalstekst">Perioder med opplæring</p>
+        <ul>
+            {{#each kurs.kursperioder }}
+                <li>
+                    <p class="sporsmalstekst">{{ fraOgMed }} - {{ tilOgMed }}</p>
+                    <p>Er borte fra jobb på grunn av reise til eller fra opplæringstedet: {{jaNeiSvar harTaptArbeidstid}}</p>
+                    <p>Avreise: {{ avreise }}</p>
+                    <p>Hjemkomst: {{ hjemkomst }}</p>
+                    {{# if beskrivelseReisetid}}
+                        <p>Beskrivelse av reisetid:</p>
+                        <p class="sitat">{{beskrivelseReisetid}}</p>
+                    {{/if}}
+                    <br/>
+                </li>
+            {{/each}}
+        </ul>
+        <hr/>
+
+        <p class="sporsmalstekst">Skal du ta ut ferie i perioden?</p>
+        {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
+            <p>Ja</p>
+            <hr/>
+            <p class="sporsmalstekst">Ferie i perioden</p>
             <ul>
-                {{#each kurs.kursperioder }}
+                {{# each ferieuttakIPerioden.ferieuttak as |ferieuttak|~}}
                     <li>
-                        <p class="sporsmalstekst">{{ fraOgMed }} - {{ tilOgMed }}</p>
-                        {{# if harTaptArbeidstid}}
-                            <p>Har tapt arbeidstid på grunn av reise til eller fra opplæringsstedet</p>
-                        {{ else}}
-                            <p>Har ikke tapt arbeidstid på grunn av reise til eller fra opplæringsstedet</p>
-                        {{/if}}
-                        <p>Avreise til opplæringsstedet: {{ avreise }}</p>
-                        <p>Hjemkomst fra opplæringsstedet: {{ hjemkomst }}</p>
-                        {{# if beskrivelseReisetid}}
-                            <p>Begrunnelse for reisetid over 1 dag: {{beskrivelseReisetid}}</p>
-                        {{/if}}
+                        {{ferieuttak.fraOgMed}} - {{ferieuttak.tilOgMed}}
                     </li>
                 {{/each}}
             </ul>
-        {{/ if }}
+        {{else}}
+            <p>Nei</p>
+        {{/if}}
     </section>
 
     <section id="arbeidsgivere">
@@ -102,12 +105,12 @@
                         <h3>{{arbeidsgiver.navn}} (orgnr: {{arbeidsgiver.organisasjonsnummer}})</h3>
                         <ul>
                             {{#if arbeidsgiver.erAnsatt}}
-                                <li>Er ansatt i perioden</li>
+                                <li>Er ansatt i perioden det søkes for</li>
                             {{else}}
-                                <li>Er ikke ansatt i perioden</li>
+                                <li>Er ikke ansatt i perioden det søkes for</li>
                                 {{#if arbeidsgiver.sluttetFørSøknadsperiodeErSatt}}
                                     <li>
-                                        <p>Sluttet du hos {{arbeidsgiver.navn}} før {{periode.fraOgMed}}?</p>
+                                        <p>Sluttet du hos {{arbeidsgiver.navn}} før {{periode.fra_og_med}}?</p>
                                         <p>{{ jaNeiSvar arbeidsgiver.sluttetFørSøknadsperiode }}</p>
                                     </li>
                                 {{/if}}
@@ -132,18 +135,14 @@
                     <li>Jobber normalt {{frilans.arbeidsforhold.jobberNormaltTimer}} timer per uke</li>
                 {{/if}}
 
-                {{#if frilans.jobberFortsattSomFrilans}}
-                    <li>Jobber fremdeles som frilanser</li>
-                {{/if}}
                 {{#unless frilans.jobberFortsattSomFrilans}}
                     <li>Sluttet som frilanser {{frilans.sluttdato}}</li>
                 {{/unless}}
-            </ul>
 
-            {{#unless frilans.jobberFortsattSomFrilans}}
-                <p><b>Når sluttet du som frilanser?</b></p>
-                <p>{{frilans.sluttdato}}</p>
-            {{/unless}}
+                {{#if frilans.jobberFortsattSomFrilans}}
+                    <li>Jobber fremdeles som frilanser</li>
+                {{/if}}
+            </ul>
         {{else}}
             <p>Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.</p>
         {{/if}}
@@ -362,23 +361,6 @@
         {{/if}}
     </section>
 
-    <section id="ferie">
-        <h2>Perioder med ferie</h2>
-        <p class="sporsmalstekst">Skal du ha ferie i perioden du søker om opplæringspenger?</p>
-        {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
-            <p>Du opplyser at du skal ha ferie</p>
-            <ul>
-                {{# each ferieuttakIPerioden.ferieuttak as |ferieuttak|~}}
-                    <li>
-                        {{ferieuttak.fraOgMed}} - {{ferieuttak.tilOgMed}}
-                    </li>
-                {{/each}}
-            </ul>
-        {{else}}
-            <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalTaUtFerieIPerioden }}</p>
-        {{/if}}
-    </section>
-
     <section id="medlemskap">
         <h2>Medlemskap i folketrygden</h2>
         <p class="sporsmalstekst">Har du bodd i utlandet de siste 12 månedene?</p>
@@ -410,9 +392,11 @@
 
     <section id="vedlegg">
         <!-- Info om har ikke lastet opp vedlegg -->
+        <h2>Dokumentasjon på nødvendig opplæring</h2>
         {{#if harIkkeVedlegg}}
-            <h2>Legeerklæring</h2>
-            <p>Ingen vedlegg er lastet opp.</p>
+            <p>Har ikke lastet opp dokumentasjon.</p>
+        {{else}}
+            <p>Har lastet opp dokumentasjon.</p>
         {{/if}}
 
         {{#if barn.manglerNorskIdentitetsnummer}}
