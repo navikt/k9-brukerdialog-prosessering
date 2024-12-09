@@ -75,8 +75,8 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     }
 
     private fun Barn.somMap() = mapOf<String, Any?>(
-        "manglerNorskIdentitetsnummer" to (fødselsnummer == null),
-        "norskIdentitetsnummer" to fødselsnummer,
+        "manglerNorskIdentitetsnummer" to (norskIdentifikator == null),
+        "norskIdentitetsnummer" to norskIdentifikator,
         "navn" to navn.storForbokstav(),
         "fødselsdato" to if (fødselsdato != null) Constants.DATE_FORMATTER.format(fødselsdato) else null,
         "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst
