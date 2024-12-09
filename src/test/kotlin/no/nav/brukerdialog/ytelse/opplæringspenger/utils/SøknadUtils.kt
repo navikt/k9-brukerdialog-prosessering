@@ -31,7 +31,7 @@ class SøknadUtils {
             mottatt = ZonedDateTime.of(2024, 1, 10, 3, 4, 5, 6, ZoneId.of("UTC")),
             språk = Språk.nb,
             barn = BarnDetaljer(  // check
-                fødselsnummer = "03028104560",
+                norskIdentifikator = "03028104560",
                 fødselsdato = LocalDate.parse("2018-01-01"),
                 navn = "Barn Barnesen",
                 aktørId = null
