@@ -11,7 +11,7 @@ import java.time.LocalDate
 class BarnTest {
     private companion object {
         val gyldigBarn = BarnDetaljer(
-            fødselsnummer = "02119970078",
+            norskIdentifikator = "02119970078",
             fødselsdato = LocalDate.parse("2021-01-01"),
             aktørId = "10000001",
             navn = "Barnesen",
@@ -28,7 +28,7 @@ class BarnTest {
     fun `Skal ikke gi feil selvom fødselsnummer er null så lenge fødselsdato og årsak er satt`() {
         Validator.verifiserIngenValideringsFeil(
             gyldigBarn.copy(
-                fødselsnummer = null,
+                norskIdentifikator = null,
                 fødselsdato = LocalDate.parse("2021-01-01"),
                 årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.NYFØDT
             )
@@ -39,10 +39,10 @@ class BarnTest {
     fun `Skal gi feil dersom fødselsnummer ikke settes og man ikke har satt fødsesldato og årsak`() {
         Validator.verifiserValideringsFeil(
             gyldigBarn.copy(
-                fødselsnummer = null,
+                norskIdentifikator = null,
                 årsakManglerIdentitetsnummer = null,
                 fødselsdato = null
-            ), 2, "Må være satt dersom fødselsnummer er null.", "Må være satt dersom fødselsnummer er null."
+            ), 2, "Må være satt dersom norskIdentifikator er null.", "Må være satt dersom norskIdentifikator er null."
         )
     }
 
@@ -58,7 +58,7 @@ class BarnTest {
     @Test
     fun `Forvent valideringsfeil dersom norskIdentifikator er ugyldig`() {
         Validator.verifiserValideringsFeil(
-            gyldigBarn.copy(fødselsnummer = "123ABC"),
+            gyldigBarn.copy(norskIdentifikator = "123ABC"),
             2,
             "'123ABC' matcher ikke tillatt pattern '^\\d+\$'",
             "size must be between 11 and 11"

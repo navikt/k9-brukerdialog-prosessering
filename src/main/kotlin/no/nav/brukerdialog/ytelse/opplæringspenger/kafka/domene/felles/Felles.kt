@@ -13,7 +13,7 @@ enum class BarnRelasjon(val utskriftsvennlig: String) {
 
 data class Barn(
     val navn : String,
-    val fødselsnummer: String? = null,
+    val norskIdentifikator: String? = null,
     val fødselsdato: LocalDate? = null,
     val aktørId: String? = null, // Brukes av sif-innsyn-api
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null

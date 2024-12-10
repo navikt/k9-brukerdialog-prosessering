@@ -1,17 +1,13 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import jakarta.validation.constraints.AssertTrue
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.PastOrPresent
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Size
+import jakarta.validation.constraints.*
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
+import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
 private val logger: Logger =
     LoggerFactory.getLogger("no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.BarnDetaljer")
@@ -19,7 +15,7 @@ private val logger: Logger =
 data class BarnDetaljer(
     @field:Size(min = 11, max = 11)
     @field:Pattern(regexp = "^\\d+$", message = "'\${validatedValue}' matcher ikke tillatt pattern '{regexp}'")
-    var fødselsnummer: String?,
+    var norskIdentifikator: String?,
 
     @field:PastOrPresent(message = "kan ikke være i fremtiden")
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -36,30 +32,30 @@ data class BarnDetaljer(
         return "BarnDetaljer(aktørId=***, navn=***, fodselsdato=***"
     }
 
-    fun manglerIdentitetsnummer(): Boolean = fødselsnummer.isNullOrEmpty()
+    fun manglerIdentitetsnummer(): Boolean = norskIdentifikator.isNullOrEmpty()
 
-    infix fun oppdaterFødselsnummer(fødselsnummer: String?) {
+    infix fun oppdaterNorskIdentifikator(norskIdentifikator: String?) {
         logger.info("Forsøker å oppdaterer fnr på barn")
-        this.fødselsnummer = fødselsnummer
+        this.norskIdentifikator = norskIdentifikator
     }
 
     fun tilK9Barn(): Barn = when {
-        fødselsnummer != null -> K9Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of(fødselsnummer))
+        norskIdentifikator != null -> K9Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of(norskIdentifikator))
         fødselsdato != null -> K9Barn().medFødselsdato(fødselsdato)
         else -> K9Barn()
     }
 
-    @AssertTrue(message = "Må være satt dersom fødselsnummer er null.")
+    @AssertTrue(message = "Må være satt dersom norskIdentifikator er null.")
     fun isFødselsDato(): Boolean {
-        if (fødselsnummer.isNullOrEmpty()) {
+        if (norskIdentifikator.isNullOrEmpty()) {
             return fødselsdato != null
         }
         return true
     }
 
-    @AssertTrue(message = "Må være satt dersom fødselsnummer er null.")
+    @AssertTrue(message = "Må være satt dersom norskIdentifikator er null.")
     fun isÅrsakManglerIdentitetsnummer(): Boolean {
-        if (fødselsnummer.isNullOrEmpty()) {
+        if (norskIdentifikator.isNullOrEmpty()) {
             return årsakManglerIdentitetsnummer != null
         }
         return true

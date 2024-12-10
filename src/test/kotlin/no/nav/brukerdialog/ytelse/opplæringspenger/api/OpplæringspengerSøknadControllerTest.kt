@@ -111,7 +111,7 @@ class OpplæringspengerSøknadControllerTest {
             harForståttRettigheterOgPlikter = false,
             harBekreftetOpplysninger = false,
             barn = defaultSøknad.barn.copy(
-                fødselsnummer = "123ABC", // Feil format
+                norskIdentifikator = "123ABC", // Feil format
                 navn = "", // Tomt navn
                 fødselsdato = fødselsdatoIFremtiden // Fødselsdato i fremtiden er ikke gyldig
 
@@ -172,7 +172,7 @@ class OpplæringspengerSøknadControllerTest {
                           "violations": [
                             {
                               "invalidValue": "123ABC",
-                              "parameterName": "barn.fødselsnummer",
+                              "parameterName": "barn.norskIdentifikator",
                               "parameterType": "ENTITY",
                               "reason": "size must be between 11 and 11"
                             },
@@ -238,7 +238,7 @@ class OpplæringspengerSøknadControllerTest {
                             },
                             {
                               "invalidValue": "123ABC",
-                              "parameterName": "barn.fødselsnummer",
+                              "parameterName": "barn.norskIdentifikator",
                               "parameterType": "ENTITY",
                               "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
                             },
