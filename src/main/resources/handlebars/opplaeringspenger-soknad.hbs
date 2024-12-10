@@ -16,7 +16,6 @@
         <bookmark name="Opptjening i utlandet" href="#opptjeningIUtlandet"/>
         <bookmark name="Utenlandsk næring" href="#utenlandskNæring"/>
         <bookmark name="Verneplikt" href="#verneplikt"/>
-        <bookmark name="Omsorgsstønad" href="#omsorgsstønad"/>
         <bookmark name="Frilans" href="#frilans"/>
         <bookmark name="Selvstendig" href="#selvstendig"/>
         <bookmark name="Medlemskap" href="#medlemskap"/>
@@ -144,7 +143,7 @@
                 {{/if}}
             </ul>
         {{else}}
-            <p>Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.</p>
+            <p>Har ikke vært frilanser i perioden det søkes om.</p>
         {{/if}}
     </section>
 
@@ -165,7 +164,15 @@
 
             <h3>Næringsvirksomhet som du har lagt inn</h3>
             <p>Navn: {{selvstendigNæringsdrivende.virksomhet.navnPåVirksomheten}}</p>
-            <p>Næringstye: {{selvstendigNæringsdrivende.virksomhet.næringstypeBeskrivelse}}</p>
+            <p>Næringstype: {{selvstendigNæringsdrivende.virksomhet.næringstypeBeskrivelse}}
+                {{#eq selvstendigNæringsdrivende.virksomhet.næringstypeBeskrivelse "Fiske"}}
+                    {{#if selvstendigNæringsdrivende.virksomhet.fiskerErPåBladB}}
+                        (blad B)
+                    {{else}}
+                        (ikke blad B)
+                    {{/if}}
+                {{/eq}}
+            </p>
             {{#if selvstendigNæringsdrivende.virksomhet.registrertINorge}}
                 <p>Registrert i Norge
                     (organisasjonsnummer: {{selvstendigNæringsdrivende.virksomhet.organisasjonsnummer}})</p>
@@ -184,15 +191,6 @@
                 <p>Avsluttet: {{selvstendigNæringsdrivende.virksomhet.tilOgMed}}</p>
             {{/if}}
 
-            <p>Næringstype: {{selvstendigNæringsdrivende.virksomhet.næringstypeBeskrivelse}}
-                {{#eq selvstendigNæringsdrivende.virksomhet.næringstypeBeskrivelse "Fiske"}}
-                    {{#if selvstendigNæringsdrivende.virksomhet.fiskerErPåBladB}}
-                        (blad B)
-                    {{else}}
-                        (ikke blad B)
-                    {{/if}}
-                {{/eq}}
-            </p>
             <br/>
 
             {{#if selvstendigNæringsdrivende.virksomhet.næringsinntekt}}
@@ -266,18 +264,18 @@
                 <ul class="ul-no-indent">
                     {{#if arbeidsgiver.arbeidsforhold}}
                         <li><b>{{arbeidsgiver.navn}} (orgnr: {{arbeidsgiver.organisasjonsnummer}})</b></li>
-                        {{> partial/olp/arbeidsforholdPartial arbeidsforhold=arbeidsgiver.arbeidsforhold}}
+                        {{> partial/pils/arbeidsforholdPartial arbeidsforhold=arbeidsgiver.arbeidsforhold}}
                     {{/if}}
                 </ul>
             {{/each}}
         {{/if}}
 
-        {{#if frilans.harInntektSomFrilanser}}
+        {{#if frilans.arbeidsforhold}}
             <ul class="ul-no-indent">
                 <li><b>Frilans</b></li>
 
                 {{#if frilans.arbeidsforhold}}
-                    {{> partial/olp/arbeidsforholdPartial arbeidsforhold=frilans.arbeidsforhold}}
+                    {{> partial/pils/arbeidsforholdPartial arbeidsforhold=frilans.arbeidsforhold}}
                 {{/if}}
             </ul>
         {{/if}}
@@ -285,7 +283,7 @@
         {{#if selvstendigNæringsdrivende.arbeidsforhold}}
             <ul class="ul-no-indent">
                 <li><b>Selvstendig næringsdrivende</b></li>
-                {{> partial/olp/arbeidsforholdPartial arbeidsforhold=selvstendigNæringsdrivende.arbeidsforhold}}
+                {{> partial/pils/arbeidsforholdPartial arbeidsforhold=selvstendigNæringsdrivende.arbeidsforhold}}
             </ul>
         {{/if}}
 
@@ -329,28 +327,6 @@
             <p>Nei</p>
         {{/if}}
     </section>
-
-    {{#if stønadGodtgjørelse }}
-        <section id="omsorgsstønad">
-            <h2>Omsorgsstønad eller fosterhjemsgodtgjørelse</h2>
-
-            <p class="sporsmalstekst">Mottar du omsorgsstønad eller fosterhjemsgodtgjørelse?</p>
-            <p>{{ jaNeiSvar stønadGodtgjørelse.mottarStønadGodtgjørelse}}</p>
-
-            <p class="sporsmalstekst">Startet du å motta dette underveis i perioden du søker for?</p>
-            <p>
-                {{ jaNeiSvar stønadGodtgjørelse.startetIPerioden}}.
-                {{#if stønadGodtgjørelse.startdato}} Startet {{stønadGodtgjørelse.startdato}}{{/if}}
-            </p>
-
-            <p class="sporsmalstekst">Slutter du å motta dette underveis i perioden du søker for?</p>
-            <p>
-                {{ jaNeiSvar stønadGodtgjørelse.sluttetIPerioden}}.
-                {{#if stønadGodtgjørelse.sluttdato}} Sluttet {{stønadGodtgjørelse.sluttdato}}{{/if}}
-            </p>
-
-        </section>
-    {{/if}}
 
 
     <section id="verneplikt">

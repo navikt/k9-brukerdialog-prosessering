@@ -374,17 +374,30 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
               "skalTaUtFerieIPerioden": true
             },
             "frilans": {
-              "harHattInntektSomFrilanser": true,
-              "jobberFortsattSomFrilans": false,
-              "startdato": "2019-01-01",
-              "arbeidsforhold": {
-                "arbeidIPeriode": {
-                  "enkeltdager": null,
-                  "jobberIPerioden": "HELT_FRAVÆR"
+                "harHattInntektSomFrilanser": true,
+                "jobberFortsattSomFrilans": true,
+                "startdato": "2019-01-01",
+                "arbeidsforhold": {
+                    "arbeidIPeriode": {
+                        "enkeltdager": [
+                            {
+                                "dato": "2021-01-01",
+                                "tid": "PT7H30M"
+                            },
+                            {
+                                "dato": "2021-01-02",
+                                "tid": "PT7H30M"
+                            },
+                            {
+                                "dato": "2021-01-03",
+                                "tid": "PT7H30M"
+                            }
+                        ],
+                        "jobberIPerioden": "HELT_FRAVÆR"
+                    },
+                    "jobberNormaltTimer": 7.5
                 },
-                "jobberNormaltTimer": 7.5
-              },
-              "sluttdato": "2021-05-01"
+                "sluttdato": null
             },
             "harVærtEllerErVernepliktig": true,
             "barnRelasjon": "ANNET",
