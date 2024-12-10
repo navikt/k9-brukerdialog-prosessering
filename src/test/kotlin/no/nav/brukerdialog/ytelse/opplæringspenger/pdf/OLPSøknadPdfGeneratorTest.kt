@@ -4,8 +4,10 @@ import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OlpPdfSøknadUtils
+import no.nav.k9.søknad.felles.type.Periode
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -45,7 +47,45 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "4-flerePlanlagteUtenlandsopphold"
+            id = "4-jobber-som-fisker"
+            pdf = generator.genererPDF(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
+                        virksomhet = Virksomhet(
+                            fraOgMed = LocalDate.parse("2015-01-01"),
+                            tilOgMed = LocalDate.parse("2021-01-01"),
+                            næringstype = Næringstype.FISKE,
+                            fiskerErPåBladB = true,
+                            navnPåVirksomheten = "Fisk Fiskeri",
+                            organisasjonsnummer = "123456789",
+                            registrertINorge = true,
+                            registrertIUtlandet = null,
+                            næringsinntekt = 9656876,
+                            erNyoppstartet = false,
+                            harFlereAktiveVirksomheter = false
+                        ),
+                        arbeidsforhold = Arbeidsforhold(
+                            37.5, ArbeidIPeriode(
+                                JobberIPeriodeSvar.HELT_FRAVÆR, listOf(
+                                    Enkeltdag(LocalDate.parse("2021-01-01"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-02"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-03"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-04"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-05"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-06"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-07"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-08"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-09"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-10"), Duration.ofHours(7).plusMinutes(30)),
+                                )
+                            )
+                        ),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "5-flerePlanlagteUtenlandsopphold"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     medlemskap = Medlemskap(
@@ -68,13 +108,13 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "5-har-lastet-opp-vedlegg"
+            id = "6-har-ikke-lastet-opp-vedlegg"
             pdf = generator.genererPDF(
-                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(vedleggId = listOf("12345")).pdfData()
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(vedleggId = listOf()).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "6-kun-frilans-arbeidsforhold"
+            id = "7-kun-frilans-arbeidsforhold"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     selvstendigNæringsdrivende = null,
@@ -83,7 +123,7 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "7-barn-med-årsakManglerIdentitetsnummer"
+            id = "8-barn-med-nyfødt-barn"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     barn = Barn(
@@ -96,7 +136,20 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "8-med-opptjening-i-utlandet"
+            id = "9-barn-med-barnet-bor-i-utlandet"
+            pdf = generator.genererPDF(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    barn = Barn(
+                        navn = "OLE DOLE",
+                        fødselsdato = LocalDate.now().minusYears(5),
+                        årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.BARNET_BOR_I_UTLANDET,
+                        aktørId = "11111111111"
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "10-med-opptjening-i-utlandet"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     utenlandskNæring = listOf(),
@@ -116,7 +169,7 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "9-med-utenlandsk-næring"
+            id = "11-med-utenlandsk-næring"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     selvstendigNæringsdrivende = null,
@@ -143,7 +196,7 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "10-har-lastet-opp-id-ved-manglende-norskIdentifikator"
+            id = "12-har-lastet-opp-id-ved-manglende-norskIdentifikator"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     barn = Barn(
@@ -158,7 +211,7 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "11-har-ikke-lastet-opp-id-ved-manglende-norskIdentifikator"
+            id = "13-har-ikke-lastet-opp-id-ved-manglende-norskIdentifikator"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     barn = Barn(
@@ -173,7 +226,7 @@ class OLPSøknadPdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "12-sluttet-som-frilans-før-søknadsperioden"
+            id = "14-sluttet-som-frilans-før-søknadsperioden"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     opptjeningIUtlandet = listOf(),
@@ -187,6 +240,46 @@ class OLPSøknadPdfGeneratorTest {
                         arbeidsforhold = null,
                         harHattInntektSomFrilanser = false
                     )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "15-med-2-perioder"
+            pdf = generator.genererPDF(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    kurs = Kurs(
+                        kursholder = "Senter for Kurs AS",
+                        perioder = listOf(
+                            KursPerioderMedReiseTid(
+                                avreise = LocalDate.parse("2020-01-01"),
+                                hjemkomst = LocalDate.parse("2020-01-10"),
+                                kursperiode = Periode(
+                                    LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")
+                                ),
+                                harTaptArbeidstid = true,
+                                beskrivelseReisetid = "Reisetid til kurs tok mer enn en dag. Det var en utrolig lang " +
+                                        "og utmattende reise over fjellet som viste seg å være stengt på grunn av snø."
+                            ),
+                            KursPerioderMedReiseTid(
+                                avreise = LocalDate.parse("2020-03-01"),
+                                hjemkomst = LocalDate.parse("2020-03-02"),
+                                kursperiode = Periode(
+                                    LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02")
+                                ),
+                                harTaptArbeidstid = false,
+                                beskrivelseReisetid = null
+                            )
+                        )
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "16-med-relasjon-medmor"
+            pdf = generator.genererPDF(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    barnRelasjon = BarnRelasjon.MEDMOR,
+                    barnRelasjonBeskrivelse = null
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)

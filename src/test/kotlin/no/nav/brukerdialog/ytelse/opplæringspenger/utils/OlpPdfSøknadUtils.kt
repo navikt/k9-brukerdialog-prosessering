@@ -89,12 +89,15 @@ object OlpPdfSøknadUtils {
             ),
             frilans = Frilans(
                 startdato = LocalDate.parse("2019-01-01"),
-                jobberFortsattSomFrilans = false,
+                jobberFortsattSomFrilans = true,
                 harHattInntektSomFrilanser = true,
-                sluttdato = LocalDate.parse("2021-05-01"),
+                sluttdato = null,
                 arbeidsforhold = Arbeidsforhold(
                     jobberNormaltTimer = 7.5, arbeidIPeriode = ArbeidIPeriode(
-                        jobberIPerioden = JobberIPeriodeSvar.HELT_FRAVÆR, enkeltdager = null
+                        jobberIPerioden = JobberIPeriodeSvar.HELT_FRAVÆR, enkeltdager = listOf(
+                            Enkeltdag(LocalDate.parse("2021-01-01"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-02"), Duration.ofHours(7).plusMinutes(30)),
+                            Enkeltdag(LocalDate.parse("2021-01-03"), Duration.ofHours(7).plusMinutes(30)))
                     )
                 )
             ),
@@ -112,8 +115,8 @@ object OlpPdfSøknadUtils {
                     harFlereAktiveVirksomheter = false
                 ),
                 arbeidsforhold = Arbeidsforhold(
-                    37.5, ArbeidIPeriode(
-                        JobberIPeriodeSvar.HELT_FRAVÆR, listOf(
+                    jobberNormaltTimer= 37.5, arbeidIPeriode = ArbeidIPeriode(
+                        jobberIPerioden = JobberIPeriodeSvar.HELT_FRAVÆR, enkeltdager = listOf(
                             Enkeltdag(LocalDate.parse("2021-01-01"), Duration.ofHours(7).plusMinutes(30)),
                             Enkeltdag(LocalDate.parse("2021-01-02"), Duration.ofHours(7).plusMinutes(30)),
                             Enkeltdag(LocalDate.parse("2021-01-03"), Duration.ofHours(7).plusMinutes(30)),

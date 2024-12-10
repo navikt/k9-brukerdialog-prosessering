@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDate
 
 enum class BarnRelasjon(val utskriftsvennlig: String) {
-    MOR("Du er mor til barnet"),
-    MEDMOR("Du er medmor til barnet"),
-    FAR("Du er far til barnet"),
-    FOSTERFORELDER("Du er fosterforelder til barnet"),
+    MOR("Mor"),
+    MEDMOR("Medmor"),
+    FAR("Far"),
+    FOSTERFORELDER("Fosterforelder"),
     ANNET("Annet")
 }
 
