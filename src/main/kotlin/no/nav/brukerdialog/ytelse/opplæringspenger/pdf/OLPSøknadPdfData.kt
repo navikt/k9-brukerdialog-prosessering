@@ -63,7 +63,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
             "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
             "frilans" to søknad.frilans?.somMap(),
-            "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
             "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende?.somMap(),
             "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
             "hjelper" to mapOf(
@@ -271,11 +270,4 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     }
 
     private fun OLPMottattSøknad.sjekkOmHarIkkeVedlegg(): Boolean = vedleggId.isEmpty()
-    private fun StønadGodtgjørelse.somMap() = mapOf(
-        "mottarStønadGodtgjørelse" to mottarStønadGodtgjørelse,
-        "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
-        "startetIPerioden" to (startdato != null),
-        "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
-        "sluttetIPerioden" to (sluttdato != null),
-    )
 }
