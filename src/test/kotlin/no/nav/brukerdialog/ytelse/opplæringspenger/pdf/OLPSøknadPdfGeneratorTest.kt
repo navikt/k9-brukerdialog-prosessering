@@ -201,7 +201,7 @@ class OLPSøknadPdfGeneratorTest {
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     barn = Barn(
                         navn = "Barn uten norsk identifikasjonsnummer",
-                        fødselsnummer = null,
+                        norskIdentifikator = null,
                         fødselsdato = LocalDate.now().minusDays(7),
                         aktørId = null,
                         årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.NYFØDT
@@ -216,7 +216,7 @@ class OLPSøknadPdfGeneratorTest {
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     barn = Barn(
                         navn = "Barn uten norsk identifikasjonsnummer",
-                        fødselsnummer = null,
+                        norskIdentifikator = null,
                         fødselsdato = LocalDate.now().minusYears(45),
                         aktørId = null,
                         årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.BARNET_BOR_I_UTLANDET

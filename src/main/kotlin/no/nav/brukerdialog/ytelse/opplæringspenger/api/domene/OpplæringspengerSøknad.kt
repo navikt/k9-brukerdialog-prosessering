@@ -99,7 +99,7 @@ data class OpplæringspengerSøknad(
 
     internal fun leggTilIdentifikatorPåBarnHvisMangler(barnFraOppslag: List<BarnOppslag>) {
         if (barn.manglerIdentitetsnummer()) {
-            barn oppdaterFødselsnummer barnFraOppslag.hentIdentitetsnummerForBarn(barn.aktørId)
+            barn oppdaterNorskIdentifikator barnFraOppslag.hentIdentitetsnummerForBarn(barn.aktørId)
         }
     }
 
