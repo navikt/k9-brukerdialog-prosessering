@@ -676,6 +676,32 @@ class PSBSøknadPdfGeneratorTest {
                 pdfData = fullGyldigMelding(id).copy(
                     fraOgMed = LocalDate.parse("2024-12-30"),
                     tilOgMed = LocalDate.parse("2025-01-02"),
+                    omsorgstilbud = Omsorgstilbud(
+                        svarFortid = OmsorgstilbudSvarFortid.JA,
+                        svarFremtid = OmsorgstilbudSvarFremtid.JA,
+                        erLiktHverUke = false,
+                        enkeltdager = listOf(
+                            // Uke 2
+                            Enkeltdag(LocalDate.parse("2025-01-06"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-07"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-08"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-09"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-10"), Duration.ofHours(5)),
+                            // Uke 3
+                            Enkeltdag(LocalDate.parse("2025-01-13"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-14"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-15"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-16"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-17"), Duration.ofHours(5)),
+                            // Uke 4
+                            Enkeltdag(LocalDate.parse("2025-01-20"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-21"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-22"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-23"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-24"), Duration.ofHours(5)),
+                        ),
+                        ukedager = null
+                    ),
                     arbeidsgivere = listOf(
                         Arbeidsgiver(
                             navn = "Varierende frisør",

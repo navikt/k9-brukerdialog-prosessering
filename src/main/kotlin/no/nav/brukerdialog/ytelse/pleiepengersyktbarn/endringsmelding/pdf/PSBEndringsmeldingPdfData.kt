@@ -17,6 +17,7 @@ import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
+import no.nav.brukerdialog.utils.DateUtils.ukeNummer
 import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.k9.søknad.felles.type.Språk
 import java.time.DayOfWeek
@@ -133,7 +134,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
         )
     }
 
-    fun Periode.uke(): Int = fraOgMed.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear())
+    fun Periode.uke(): Int = fraOgMed.ukeNummer()
 
     fun Periode.somMap(): Map<String, Any?> = mutableMapOf(
         "uke" to uke(),

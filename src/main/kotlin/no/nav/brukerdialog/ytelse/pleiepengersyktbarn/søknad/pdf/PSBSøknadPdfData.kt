@@ -185,11 +185,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     }
 
     private fun List<Enkeltdag>.somMapPerUke(): List<Map<String, Any>> {
-        val omsorgsdagerPerUke = this.groupBy {
-            val uketall = it.dato.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear())
-            if (uketall == 0) 53 else uketall
-        }
-        return omsorgsdagerPerUke.map {
+        val omsorgsdagerPerUke = this.groupBy { it.dato.ukeNummer() }
+        return omsorgsdagerPerUke.map { it: Map.Entry<Int, List<Enkeltdag>> ->
             mapOf(
                 "uke" to it.key,
                 "dager" to it.value.somMapEnkeltdag()
