@@ -8,6 +8,7 @@ import no.nav.brukerdialog.utils.DateUtils
 import no.nav.brukerdialog.utils.DateUtils.NO_LOCALE
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
+import no.nav.brukerdialog.utils.DateUtils.ukeNummer
 import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
@@ -171,10 +172,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
         }
     }
 
-    private fun List<Enkeltdag>.grupperPerUke() = groupBy {
-        val uketall = it.dato.get(WeekFields.of(NO_LOCALE).weekOfYear())
-        if (uketall == 0) 53 else uketall
-    }
+    private fun List<Enkeltdag>.grupperPerUke() = groupBy { it.dato.ukeNummer() }
 
     private fun List<Enkeltdag>.grupperPerMåned() = groupBy { it.dato.month }
 

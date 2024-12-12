@@ -30,6 +30,7 @@ import no.nav.brukerdialog.utils.DateUtils.grupperMedUker
 import no.nav.brukerdialog.utils.DateUtils.grupperSammenHengendeDatoer
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
+import no.nav.brukerdialog.utils.DateUtils.ukeNummer
 import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.k9.søknad.felles.type.Språk
@@ -173,10 +174,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
         }
     }
 
-    private fun List<Enkeltdag>.grupperPerUke() = groupBy {
-        val uketall = it.dato.get(WeekFields.of(NO_LOCALE).weekOfYear())
-        if (uketall == 0) 53 else uketall
-    }
+    private fun List<Enkeltdag>.grupperPerUke() = groupBy { it.dato.ukeNummer() }
 
     private fun List<Enkeltdag>.grupperPerMåned() = groupBy { it.dato.month }
 
