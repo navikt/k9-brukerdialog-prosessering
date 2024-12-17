@@ -1,18 +1,18 @@
 package no.nav.brukerdialog.domenetjenester.mottak
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.nav.k9.søknad.Innsending
-import no.nav.brukerdialog.mellomlagring.dokument.Dokument
-import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
-import no.nav.brukerdialog.pdf.PDFGenerator
+import no.nav.brukerdialog.mellomlagring.dokument.Dokument
+import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import no.nav.brukerdialog.pdf.PdfData
+import no.nav.brukerdialog.pdf.PdfService
+import no.nav.k9.søknad.Innsending
 import org.springframework.stereotype.Service
 
 @Service
 class PreprosesseringsService(
-    private val pdfGenerator: PDFGenerator,
+    private val pdfService: PdfService,
     private val mapper: ObjectMapper,
     private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
 ) {
@@ -28,7 +28,7 @@ class PreprosesseringsService(
         val dokumentEier = DokumentEier(søkerFødselsnummer)
 
         logger.info("Genererer Oppsummerings-PDF...")
-        val oppsummeringPdf = pdfGenerator.genererPDF(preprosesseringsData.pdfData)
+        val oppsummeringPdf = pdfService.genererPDF(preprosesseringsData.pdfData)
 
         logger.info("Mellomlagrer Oppsummerings-PDF...")
         val oppsummeringPdfDokumentId = k9DokumentMellomlagringService.lagreDokument(
