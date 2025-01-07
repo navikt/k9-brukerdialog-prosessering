@@ -135,7 +135,7 @@ internal class SerDesTest {
                     "landkode": "DEU",
                     "landnavn": "Tyskland"
                   },
-                  "erNyoppstartet": true,
+                  "erNyoppstartet": false,
                   "yrkesaktivSisteTreFerdigliknedeÅrene": {
                     "oppstartsdato": "2018-01-01"
                   },

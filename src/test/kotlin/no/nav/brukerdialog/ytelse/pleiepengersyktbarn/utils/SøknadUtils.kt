@@ -134,7 +134,7 @@ class SøknadUtils {
                     ),
                     yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeArene(LocalDate.parse("2018-01-01")),
                     harFlereAktiveVirksomheter = true,
-                    erNyoppstartet = true
+                    erNyoppstartet = false
                 ),
                 arbeidsforhold = Arbeidsforhold(
                     normalarbeidstid = NormalArbeidstid(

@@ -115,7 +115,7 @@ class K9FormatTest {
                           "endringDato": "2020-01-01",
                           "endringBegrunnelse": "Korona",
                           "bruttoInntekt": 9999,
-                          "erNyoppstartet": true,
+                          "erNyoppstartet": false,
                           "registrertIUtlandet": true,
                           "landkode": "DEU"
                         }
