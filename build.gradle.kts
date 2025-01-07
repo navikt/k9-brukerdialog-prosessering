@@ -2,8 +2,8 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.4.0"
-	id("io.spring.dependency-management") version "1.1.6"
+	id("org.springframework.boot") version "3.4.1"
+	id("io.spring.dependency-management") version "1.1.7"
 	kotlin("jvm") version "2.1.0"
 	kotlin("plugin.spring") version "2.1.0"
 }
@@ -30,7 +30,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.13"
+val tokenSupportVersion = "5.0.14"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "9.8.0"
 val springMockkVersion = "4.0.2"
@@ -44,8 +44,8 @@ val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.11"
 val awailitilityKotlinVersion = "4.2.2"
 val springCloudContractVersion = "4.2.0"
-val orgJsonVersion = "20240303"
-val springdocVersion = "2.7.0"
+val orgJsonVersion = "20241224"
+val springdocVersion = "2.8.1"
 val pdfBoxVersion = "3.0.3"
 val imageIOVersion = "3.12.0"
 
