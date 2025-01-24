@@ -26,6 +26,7 @@ class ArbeidsgivereController(private val arbeidsgiverService: ArbeidsgiverServi
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestParam("fra_og_med", required = true) fraOgMed: String,
         @RequestParam("til_og_med", required = true) tilOgMed: String,
+        @RequestParam("inkluderAlleAnsettelsesperioder", required = false) inkluderAlleAnsettelsesperioder: Boolean = false,
         @RequestParam("frilansoppdrag", required = false, defaultValue = "false") frilansoppdrag: Boolean,
         @RequestParam("private_arbeidsgivere", required = false, defaultValue = "false") privateArbeidsgivere: Boolean,
     ): ArbeidsgivereDto = runBlocking {
@@ -38,6 +39,7 @@ class ArbeidsgivereController(private val arbeidsgiverService: ArbeidsgiverServi
         val arbeidsgivere = arbeidsgiverService.hentArbedisgivere(
             fraOgMed = LocalDate.parse(fraOgMed),
             tilOgMed = LocalDate.parse(tilOgMed),
+            inkluderAlleAnsettelsesperioder = inkluderAlleAnsettelsesperioder,
             skalHentePrivateArbeidsgivere = privateArbeidsgivere,
             skalHenteFrilansoppdrag = frilansoppdrag
         )
