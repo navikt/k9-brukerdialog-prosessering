@@ -53,23 +53,34 @@
         <p class="sporsmalstekst">Hvor foregår opplæringen?</p>
         <p>{{ kurs.institusjonsnavn }}</p>
         <hr/>
-        <p class="sporsmalstekst">Perioder med opplæring</p>
+        <p class="sporsmalstekst">Hvilke dager søker du opplæringspenger?</p>
         <ul>
             {{#each kurs.kursperioder }}
                 <li>
-                    <p class="sporsmalstekst">{{ fraOgMed }} - {{ tilOgMed }}</p>
-                    <p>Er borte fra jobb på grunn av reise til eller fra opplæringstedet: {{jaNeiSvar harTaptArbeidstid}}</p>
-                    <p>Avreise: {{ avreise }}</p>
-                    <p>Hjemkomst: {{ hjemkomst }}</p>
-                    {{# if beskrivelseReisetid}}
-                        <p>Beskrivelse av reisetid:</p>
-                        <p class="sitat">{{beskrivelseReisetid}}</p>
-                    {{/if}}
-                    <br/>
+                    <p>{{ fraOgMed }} - {{ tilOgMed }}</p>
                 </li>
             {{/each}}
         </ul>
         <hr/>
+
+        <p class="sporsmalstekst">Reiser du på dager du ikke har kurs eller opplæring?</p>
+        <p>{{ jaNeiSvar kurs.reise.reiserUtenforKursdager }}</p>
+        <hr/>
+        {{# if kurs.reise.reiserUtenforKursdager}}
+            <p class="sporsmalstekst">Reisedager uten kurs eller opplæring</p>
+            <ul>
+                {{#each kurs.reise.reisedager as |reisedag|~}}
+                    <li>
+                        <p>{{reisedag}}</p>
+                    </li>
+                {{/each}}
+            </ul>
+            <hr/>
+
+            <p class="sporsmalstekst">Årsak til reisetid</p>
+            <p class="sitat">{{kurs.reise.reisedagerBeskrivelse}}</p>
+            <hr/>
+        {{/if}}
 
         <p class="sporsmalstekst">Skal du ta ut ferie i perioden?</p>
         {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
