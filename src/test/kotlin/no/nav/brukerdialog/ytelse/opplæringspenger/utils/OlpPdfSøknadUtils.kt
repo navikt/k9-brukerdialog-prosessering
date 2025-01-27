@@ -138,15 +138,17 @@ object OlpPdfSøknadUtils {
             kurs = Kurs(
                 kursholder = "Senter for Kurs AS",
                 perioder = listOf(
-                    KursPerioderMedReiseTid(
-                        avreise = LocalDate.parse("2020-01-01"),
-                        hjemkomst = LocalDate.parse("2020-01-10"),
-                        kursperiode = Periode(
-                            LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")
-                        ),
-                        harTaptArbeidstid = true,
-                        beskrivelseReisetid = "Reisetid til kurs tok mer enn en dag"
+                    Periode(
+                        LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")
                     )
+                ),
+                reise = Reise(
+                    reiserUtenforKursdager = true,
+                    reisedager = listOf(
+                        LocalDate.parse("2020-01-01"),
+                        LocalDate.parse("2020-01-10")
+                    ),
+                    reisedagerBeskrivelse = "Reisetid til kurs tok mer enn en dag"
                 )
             ),
             opptjeningIUtlandet = listOf(

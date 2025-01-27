@@ -250,25 +250,17 @@ class OLPSøknadPdfGeneratorTest {
                     kurs = Kurs(
                         kursholder = "Senter for Kurs AS",
                         perioder = listOf(
-                            KursPerioderMedReiseTid(
-                                avreise = LocalDate.parse("2020-01-01"),
-                                hjemkomst = LocalDate.parse("2020-01-10"),
-                                kursperiode = Periode(
-                                    LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")
-                                ),
-                                harTaptArbeidstid = true,
-                                beskrivelseReisetid = "Reisetid til kurs tok mer enn en dag. Det var en utrolig lang " +
-                                        "og utmattende reise over fjellet som viste seg å være stengt på grunn av snø."
+                            Periode(LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")),
+                            Periode(LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02"))
+                        ),
+                        reise = Reise(
+                            reiserUtenforKursdager = true,
+                            reisedager = listOf(
+                                LocalDate.parse("2020-01-01"),
+                                LocalDate.parse("2020-01-07")
                             ),
-                            KursPerioderMedReiseTid(
-                                avreise = LocalDate.parse("2020-03-01"),
-                                hjemkomst = LocalDate.parse("2020-03-02"),
-                                kursperiode = Periode(
-                                    LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02")
-                                ),
-                                harTaptArbeidstid = false,
-                                beskrivelseReisetid = null
-                            )
+                            reisedagerBeskrivelse = "Reisetid til kurs tok mer enn en dag. Det var en utrolig lang " +
+                                    "og utmattende reise over fjellet som viste seg å være stengt på grunn av snø."
                         )
                     )
                 ).pdfData()
