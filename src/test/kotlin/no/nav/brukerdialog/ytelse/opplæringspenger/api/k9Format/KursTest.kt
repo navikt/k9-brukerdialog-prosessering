@@ -24,7 +24,7 @@ class KursTest {
     fun `Forvent feil derom det sendes tom liste med enkeltdager`() {
         val kurs = Kurs(
             kursholder = KJENT_KURSHOLDER,
-            perioder = emptyList(),
+            kursperioder = emptyList(),
             reise = STANDARD_REISE
         )
 
@@ -35,7 +35,7 @@ class KursTest {
     fun `Forvent feil derom det ikke sendes med navn på kursholder`() {
         val kurs = Kurs(
             kursholder = "",
-            perioder = listOf(Periode(mandag, torsdag)),
+            kursperioder = listOf(Periode(mandag, torsdag)),
             reise = STANDARD_REISE
         )
 
@@ -46,7 +46,7 @@ class KursTest {
     fun `Forvent feil derom det ikke sendes med beskrivelse for reise`() {
         val kurs = Kurs(
             kursholder = KJENT_KURSHOLDER,
-            perioder = listOf(Periode(mandag, torsdag)),
+            kursperioder = listOf(Periode(mandag, torsdag)),
             reise = Reise(
                 reiserUtenforKursdager = true,
                 reisedager = listOf(mandag, torsdag),
@@ -61,7 +61,7 @@ class KursTest {
     fun `Forvent feil derom det ikke sendes med reisedager`() {
         val kurs = Kurs(
             kursholder = KJENT_KURSHOLDER,
-            perioder = listOf(Periode(mandag, torsdag)),
+            kursperioder = listOf(Periode(mandag, torsdag)),
             reise = Reise(
                 reiserUtenforKursdager = true,
                 reisedager = listOf(),
@@ -76,7 +76,7 @@ class KursTest {
     fun `Kurs med kursholder mappes riktig til k9Format`() {
         val kurs = Kurs(
             kursholder = KJENT_KURSHOLDER,
-            perioder = listOf(Periode(mandag, torsdag)),
+            kursperioder = listOf(Periode(mandag, torsdag)),
             reise = STANDARD_REISE
         )
 
@@ -85,9 +85,9 @@ class KursTest {
 
         assertEquals(kurs.kursholder, k9Kurs.kursholder.navn)
         assertEquals(null, k9Kurs.kursholder.institusjonUuid)
-        assertEquals(kurs.perioder.size, k9Kurs.kursperioder.size)
-        assertEquals(kurs.perioder[0].tilOgMed, k9Kurs.kursperioder[0].tilOgMed)
-        assertEquals(kurs.perioder[0].fraOgMed, k9Kurs.kursperioder[0].fraOgMed)
+        assertEquals(kurs.kursperioder.size, k9Kurs.kursperioder.size)
+        assertEquals(kurs.kursperioder[0].tilOgMed, k9Kurs.kursperioder[0].tilOgMed)
+        assertEquals(kurs.kursperioder[0].fraOgMed, k9Kurs.kursperioder[0].fraOgMed)
 
         assertEquals(kurs.reise.reiserUtenforKursdager, k9Reise.isReiserUtenforKursdager)
         assertEquals(kurs.reise.reisedagerBeskrivelse, k9Reise.reisedagerBeskrivelse)

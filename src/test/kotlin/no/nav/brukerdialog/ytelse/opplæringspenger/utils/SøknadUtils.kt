@@ -159,7 +159,7 @@ class SøknadUtils {
             ),
             kurs = Kurs(
                 kursholder = "Opplæring for kurs AS",
-                perioder = listOf(
+                kursperioder = listOf(
                     K9Periode(
                         LocalDate.parse("2022-01-01"),
                         LocalDate.parse("2022-01-10")
