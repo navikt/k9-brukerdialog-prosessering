@@ -13,13 +13,13 @@ import no.nav.k9.søknad.ytelse.olp.v1.kurs.Reise as K9Reise
 
 data class Kurs(
     @field:NotBlank(message = "Kan ikke være tom") val kursholder: String,
-    @field:NotEmpty(message = "Kan ikke være tom liste") val perioder: List<Periode>,
+    @field:NotEmpty(message = "Kan ikke være tom liste") val kursperioder: List<Periode>,
     @field:Valid val reise: Reise
 ) {
     fun tilK9Format(): K9Kurs {
         return K9Kurs(
             K9Kursholder(kursholder, null),
-            perioder,
+            kursperioder,
             reise.tilK9Format()
         )
     }

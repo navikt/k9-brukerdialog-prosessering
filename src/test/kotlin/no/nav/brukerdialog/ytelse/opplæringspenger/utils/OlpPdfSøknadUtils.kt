@@ -137,7 +137,7 @@ object OlpPdfSøknadUtils {
             k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
             kurs = Kurs(
                 kursholder = "Senter for Kurs AS",
-                perioder = listOf(
+                kursperioder = listOf(
                     Periode(
                         LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")
                     )

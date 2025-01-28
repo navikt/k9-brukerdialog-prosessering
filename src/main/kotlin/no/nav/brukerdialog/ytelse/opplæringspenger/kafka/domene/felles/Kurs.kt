@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 data class Kurs(
     val kursholder: String,
-    val perioder: List<Periode>,
+    val kursperioder: List<Periode>,
     val reise: Reise
 )
 

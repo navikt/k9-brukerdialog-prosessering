@@ -83,7 +83,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
 
     private fun Kurs.somMap() = mapOf<String, Any?>(
         "institusjonsnavn" to kursholder,
-        "kursperioder" to perioder.somMap(),
+        "kursperioder" to kursperioder.somMap(),
         "reise" to reise.somMap()
     )
 

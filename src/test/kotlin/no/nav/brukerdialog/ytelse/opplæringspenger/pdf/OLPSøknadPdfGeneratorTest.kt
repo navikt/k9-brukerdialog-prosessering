@@ -249,7 +249,7 @@ class OLPSøknadPdfGeneratorTest {
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     kurs = Kurs(
                         kursholder = "Senter for Kurs AS",
-                        perioder = listOf(
+                        kursperioder = listOf(
                             Periode(LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")),
                             Periode(LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02"))
                         ),
@@ -272,7 +272,7 @@ class OLPSøknadPdfGeneratorTest {
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     kurs = Kurs(
                         kursholder = "Senter for Kurs AS",
-                        perioder = listOf(
+                        kursperioder = listOf(
                             Periode(LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")),
                             Periode(LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02"))
                         ),
