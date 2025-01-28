@@ -5,7 +5,6 @@ import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils
-import no.nav.brukerdialog.utils.DateUtils.NO_LOCALE
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
 import no.nav.brukerdialog.utils.DateUtils.ukeNummer
@@ -15,9 +14,9 @@ import no.nav.brukerdialog.utils.StringUtils.storForbokstav
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.OLPMottattSøknad
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.capitalizeName
 import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
+import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.Språk
 import java.time.Month
-import java.time.temporal.WeekFields
 
 class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.OPPLÆRINGSPENGER
@@ -84,21 +83,24 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
 
     private fun Kurs.somMap() = mapOf<String, Any?>(
         "institusjonsnavn" to kursholder,
-        "kursperioder" to perioder.somMapPerioderMedReiseTid()
+        "kursperioder" to perioder.somMap(),
+        "reise" to reise.somMap()
     )
 
-    private fun List<KursPerioderMedReiseTid>.somMapPerioderMedReiseTid(): List<Map<String, Any?>> {
+    private fun List<Periode>.somMap(): List<Map<String, Any?>> {
         return map {
             mapOf<String, Any?>(
-                "fraOgMed" to Constants.DATE_FORMATTER.format(it.kursperiode.fraOgMed),
-                "tilOgMed" to Constants.DATE_FORMATTER.format(it.kursperiode.tilOgMed),
-                "avreise" to Constants.DATE_FORMATTER.format(it.avreise),
-                "hjemkomst" to Constants.DATE_FORMATTER.format(it.hjemkomst),
-                "harTaptArbeidstid" to it.harTaptArbeidstid,
-                "beskrivelseReisetid" to it.beskrivelseReisetid
+                "fraOgMed" to Constants.DATE_FORMATTER.format(it.fraOgMed),
+                "tilOgMed" to Constants.DATE_FORMATTER.format(it.tilOgMed)
             )
         }
     }
+
+    private fun Reise.somMap() = mapOf<String, Any?>(
+        "reiserUtenforKursdager" to reiserUtenforKursdager,
+        "reisedager" to reisedager?.map { Constants.DATE_FORMATTER.format(it) },
+        "reisedagerBeskrivelse" to reisedagerBeskrivelse
+    )
 
     private fun OLPMottattSøknad.harMinstEtArbeidsforhold(): Boolean {
         if (frilans?.arbeidsforhold != null) return true

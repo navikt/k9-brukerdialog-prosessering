@@ -160,16 +160,18 @@ class SøknadUtils {
             kurs = Kurs(
                 kursholder = "Opplæring for kurs AS",
                 perioder = listOf(
-                    KursPerioderMedReiseTid(
-                        avreise = LocalDate.parse("2022-01-01"),
-                        hjemkomst = LocalDate.parse("2022-01-10"),
-                        kursperiode = K9Periode(
-                            LocalDate.parse("2022-01-01"),
-                            LocalDate.parse("2022-01-10")
-                        ),
-                        harTaptArbeidstid = true,
-                        beskrivelseReisetid = "Reisetid til kurs tok mer enn en dag",
+                    K9Periode(
+                        LocalDate.parse("2022-01-01"),
+                        LocalDate.parse("2022-01-10")
                     )
+                ),
+                reise = Reise(
+                    reiserUtenforKursdager = true,
+                    reisedager = listOf(
+                        LocalDate.parse("2022-01-01"),
+                        LocalDate.parse("2022-01-10")
+                    ),
+                    reisedagerBeskrivelse = "Reise til kurs tok mer enn en dag"
                 )
             ),
             utenlandskNæring = listOf(),

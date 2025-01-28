@@ -191,16 +191,15 @@ class K9FormatTest {
               },
               "kurs" : {
                 "kursholder" : {
-                  "holder" : null,
-                  "institusjonsidentifikator" : null
+                  "institusjonsidentifikator" : null,
+                  "navn" : "Opplæring for kurs AS"
                 },
-                "kursperioder" : [ {
-                  "avreise" : "2022-01-01",
-                  "begrunnelseReisetidHjem" : null,
-                  "begrunnelseReisetidTil" : "Reisetid til kurs tok mer enn en dag",
-                  "hjemkomst" : "2022-01-10",
-                  "periode" : "2022-01-01/2022-01-10"
-                } ]
+                "kursperioder" : [ "2022-01-01/2022-01-10" ],
+                "reise" : {
+                  "reisedager" : [ "2022-01-01", "2022-01-10" ],
+                  "reisedagerBeskrivelse" : "Reise til kurs tok mer enn en dag",
+                  "reiserUtenforKursdager" : true
+                }
               },
               "lovbestemtFerie" : {
                 "perioder" : {
