@@ -111,9 +111,9 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             "fornavn": "Ola",
             "fødselsnummer": "02119970078"
           },
-          "fraOgMed": "2022-01-01",
-          "tilOgMed": "2022-02-01",
-          "inntekt": 15000.0,
+          "startdato": "2022-01-01",
+          "søknadstype": "DELTAKELSE_SØKNAD",
+          "inntektForPeriode": null,
           "språk": "nb",
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
@@ -133,8 +133,8 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             },
             "ytelse": {
               "type": "UNGDOMSYTELSE",
-              "søknadsperiode": ["2022-01-01/2022-02-01"],
-              "inntekt": 15000.0
+              "søknadsperiode": ["2022-01-01"],
+              "inntekter": null
             },
             "journalposter": [],
             "begrunnelseForInnsending": {

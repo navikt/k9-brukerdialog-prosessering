@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene
 
+import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
@@ -9,30 +10,30 @@ import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
-import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
+import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
-import java.math.BigDecimal
 import java.net.URL
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
-import no.nav.k9.søknad.Søknad as K9Søknad
+import no.nav.k9.søknad.Søknad as UngSøknad
 
 data class Ungdomsytelsesøknad(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
     val søknadId: String = UUID.randomUUID().toString(),
     val språk: String,
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate,
+    val startdato: LocalDate,
 
     val søkerNorskIdent: String,
 
-    val inntekt: Double = 0.0,
+    val søknadstype: UngSøknadstype,
+
+    @field:Valid val inntektForPeriode: OppgittInntektForPeriode? = null,
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
     val harBekreftetOpplysninger: Boolean,
@@ -56,9 +57,9 @@ data class Ungdomsytelsesøknad(
             mottatt = mottatt,
             søker = søker,
             språk = språk,
-            fraOgMed = fraOgMed,
-            tilOgMed = tilOgMed,
-            inntekt = inntekt,
+            startdato = startdato,
+            søknadstype = søknadstype,
+            inntektForPeriode = inntektForPeriode,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
             k9Format = k9Format as Søknad
@@ -67,12 +68,16 @@ data class Ungdomsytelsesøknad(
 
     override fun valider() = mutableListOf<String>()
 
-    override fun somK9Format(søker: Søker, metadata: MetaInfo): K9Søknad {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): UngSøknad {
         val ytelse = Ungdomsytelse()
-            .medSøknadsperiode(Periode(fraOgMed, tilOgMed))
-            .medInntekt(BigDecimal.valueOf(inntekt))
+            .medStartdato(startdato)
+            .medSøknadType(søknadstype)
 
-        return K9Søknad()
+            if (søknadstype == UngSøknadstype.RAPPORTERING_SØKNAD) {
+                ytelse.medInntekter(inntektForPeriode!!.somUngOppgittInntektForPeriode())
+            }
+
+        return UngSøknad()
             .medVersjon(K9_SØKNAD_VERSJON)
             .medMottattDato(mottatt)
             .medSpråk(Språk.of(språk))
@@ -87,4 +92,13 @@ data class Ungdomsytelsesøknad(
     override fun søknadId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf()
     override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()
+
+    @AssertTrue(message = "Inntekt for periode må være satt for rapporteringssøknader")
+    fun isInntektForPeriode(): Boolean {
+        return if (søknadstype == UngSøknadstype.RAPPORTERING_SØKNAD) {
+            inntektForPeriode != null
+        } else {
+            true
+        }
+    }
 }

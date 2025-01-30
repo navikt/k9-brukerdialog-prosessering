@@ -8,7 +8,9 @@ import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.OppgittInntektForPeriode
 import no.nav.k9.søknad.Søknad
+import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
@@ -19,9 +21,9 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
     val mottatt: ZonedDateTime,
     val språk: String?,
     val søker: Søker,
-    val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate,
-    val inntekt: Double = 0.0,
+    val startdato: LocalDate,
+    val søknadstype: UngSøknadstype,
+    val inntektForPeriode: OppgittInntektForPeriode? = null,
     val dokumentId: List<List<String>>,
     val k9Format: K9Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
@@ -35,16 +37,16 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
         søknadId = ungdomsytelseSøknadMottatt.søknadId,
         mottatt = ungdomsytelseSøknadMottatt.mottatt,
         søker = ungdomsytelseSøknadMottatt.søker,
-        fraOgMed = ungdomsytelseSøknadMottatt.fraOgMed,
-        tilOgMed = ungdomsytelseSøknadMottatt.tilOgMed,
-        inntekt = ungdomsytelseSøknadMottatt.inntekt,
+        startdato = ungdomsytelseSøknadMottatt.startdato,
+        søknadstype = ungdomsytelseSøknadMottatt.søknadstype,
+        inntektForPeriode = ungdomsytelseSøknadMottatt.inntektForPeriode,
         dokumentId = dokumentId,
         k9Format = ungdomsytelseSøknadMottatt.k9Format,
         harForståttRettigheterOgPlikter = ungdomsytelseSøknadMottatt.harForståttRettigheterOgPlikter,
         harBekreftetOpplysninger = ungdomsytelseSøknadMottatt.harBekreftetOpplysninger
     )
 
-    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE
+    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_DELTAKELSE_SØKNAD
 
     override fun mottattDato(): ZonedDateTime = mottatt
 
@@ -56,14 +58,16 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
 
     override fun dokumenter(): List<List<String>> = dokumentId
 
-    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest =
-        JournalføringsService.JournalføringsRequest(
-            ytelseType = YtelseType.UNGDOMSYTELSE_SØKNAD,
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest {
+
+        return JournalføringsService.JournalføringsRequest(
+            ytelseType = if (søknadstype == UngSøknadstype.DELTAKELSE_SØKNAD) YtelseType.UNGDOMSYTELSE_SØKNAD else YtelseType.UNGDOMSYTELSE_RAPPORTERING,
             norskIdent = søkerFødselsnummer(),
             sokerNavn = søkerNavn(),
             mottatt = mottatt,
             dokumentId = dokumenter()
         )
+    }
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,
