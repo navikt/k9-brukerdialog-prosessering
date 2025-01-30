@@ -1,7 +1,6 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene
 
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9.søknad.ytelse.ung.v1.OppgittInntekt
 import java.math.BigDecimal
 import java.time.LocalDate
 import no.nav.k9.søknad.ytelse.ung.v1.OppgittInntektForPeriode as UngOppgittInntektForPeriode
@@ -12,15 +11,11 @@ data class OppgittInntektForPeriode(
     val inntektFraYtelse: Double = 0.0,
     val periodeForInntekt: UngPeriode,
 ) {
-    fun somUngOppgittInntektForPeriode(): OppgittInntekt = OppgittInntekt(
-        mutableSetOf<UngOppgittInntektForPeriode>(
-            UngOppgittInntektForPeriode(
-                BigDecimal.valueOf(arbeidstakerOgFrilansInntekt),
-                BigDecimal.valueOf(næringsinntekt),
-                BigDecimal.valueOf(inntektFraYtelse),
-                periodeForInntekt.somUngPeriode(),
-            )
-        )
+    fun somUngOppgittInntektForPeriode(): UngOppgittInntektForPeriode = UngOppgittInntektForPeriode(
+        BigDecimal.valueOf(arbeidstakerOgFrilansInntekt),
+        BigDecimal.valueOf(næringsinntekt),
+        BigDecimal.valueOf(inntektFraYtelse),
+        periodeForInntekt.somUngPeriode(),
     )
 }
 

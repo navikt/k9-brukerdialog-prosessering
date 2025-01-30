@@ -43,7 +43,7 @@ object UngdomsytelsesøknadUtils {
             startdato = startdato,
             søknadstype = søknadstype,
             inntektForPeriode = oppgittInntekt,
-            k9Format = gyldigK9Format(søknadId, søknadstype, mottatt, startdato, oppgittInntekt?.somUngOppgittInntektForPeriode()),
+            k9Format = gyldigK9Format(søknadId, søknadstype, mottatt, startdato, oppgittInntekt?.let { OppgittInntekt(setOf(it.somUngOppgittInntektForPeriode())) }),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
         )
