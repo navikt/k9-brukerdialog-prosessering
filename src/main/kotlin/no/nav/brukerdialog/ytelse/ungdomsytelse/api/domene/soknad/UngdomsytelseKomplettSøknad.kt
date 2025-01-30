@@ -14,7 +14,6 @@ class UngdomsytelseKomplettSøknad(
     private val språk: String,
     private val startdato: LocalDate,
     private val søknadstype: UngSøknadstype,
-    private val inntektForPeriode: OppgittInntektForPeriode? = null,
     private val mottatt: ZonedDateTime,
     private val harForståttRettigheterOgPlikter: Boolean,
     private val harBekreftetOpplysninger: Boolean,

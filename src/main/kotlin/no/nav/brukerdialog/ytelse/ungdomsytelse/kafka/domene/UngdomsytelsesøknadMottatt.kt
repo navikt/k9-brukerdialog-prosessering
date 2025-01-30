@@ -19,7 +19,6 @@ data class UngdomsytelsesøknadMottatt(
     val søker: Søker,
     val startdato: LocalDate,
     val søknadstype: UngSøknadstype,
-    val inntektForPeriode: OppgittInntektForPeriode? = null,
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,
