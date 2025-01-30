@@ -133,7 +133,8 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             },
             "ytelse": {
               "type": "UNGDOMSYTELSE",
-              "søknadsperiode": ["2022-01-01"],
+              "søknadType": "DELTAKELSE_SØKNAD",
+              "søktFraDatoer": ["2022-01-01"],
               "inntekter": null
             },
             "journalposter": [],
