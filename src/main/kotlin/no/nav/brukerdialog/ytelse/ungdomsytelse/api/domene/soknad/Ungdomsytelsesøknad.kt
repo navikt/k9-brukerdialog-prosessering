@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene
+package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad
 
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.common.MetaInfo

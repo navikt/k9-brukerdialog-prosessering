@@ -5,7 +5,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.Ungdomsytelsesøknad
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers

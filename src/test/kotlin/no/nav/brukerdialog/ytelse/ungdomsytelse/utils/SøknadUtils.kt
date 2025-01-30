@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.Ungdomsytelsesøknad
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import java.time.LocalDate
 import java.time.ZonedDateTime
