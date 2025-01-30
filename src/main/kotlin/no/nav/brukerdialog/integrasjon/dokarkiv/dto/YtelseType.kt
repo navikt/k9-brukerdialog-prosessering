@@ -161,9 +161,9 @@ enum class YtelseType(
         innsendingstype = Innsendingstype.SØKNAD
     ),
 
-    UNGDOMSYTELSE_RAPPORTERING(
-        brevkode = BrevKode(brevKode = "UNG Rapportering", dokumentKategori = "SOK"),
-        tittel = "Rapporteringsmelding for ungdomsytelsen - UNG Rapportering",
+    UNGDOMSYTELSE_INNTEKTRAPPORTERING(
+        brevkode = BrevKode(brevKode = "UNG Inntektrapportering", dokumentKategori = "SOK"),
+        tittel = "Rapporteringsmelding for ungdomsytelsen - UNG Inntektrapportering",
         tema = Tema.K9_YTELSER, // TODO Bruk Tema.UNGDOMSYTELSE før lansering
         innsendingstype = Innsendingstype.SØKNAD
     )

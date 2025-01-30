@@ -61,7 +61,7 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
     override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest {
 
         return JournalføringsService.JournalføringsRequest(
-            ytelseType = if (søknadstype == UngSøknadstype.DELTAKELSE_SØKNAD) YtelseType.UNGDOMSYTELSE_SØKNAD else YtelseType.UNGDOMSYTELSE_RAPPORTERING,
+            ytelseType = if (søknadstype == UngSøknadstype.DELTAKELSE_SØKNAD) YtelseType.UNGDOMSYTELSE_SØKNAD else YtelseType.UNGDOMSYTELSE_INNTEKTRAPPORTERING,
             norskIdent = søkerFødselsnummer(),
             sokerNavn = søkerNavn(),
             mottatt = mottatt,
