@@ -13,8 +13,6 @@ object SøknadUtils {
         språk = "nb",
         søkerNorskIdent = "12345678910",
         startdato = LocalDate.parse("2021-01-01"),
-        søknadstype = UngSøknadstype.DELTAKELSE_SØKNAD,
-        inntektForPeriode = null,
         harForståttRettigheterOgPlikter = true,
         harBekreftetOpplysninger = true
     )
