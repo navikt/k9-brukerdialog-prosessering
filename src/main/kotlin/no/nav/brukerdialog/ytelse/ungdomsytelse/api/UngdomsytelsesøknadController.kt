@@ -63,7 +63,7 @@ class UngdomsytelsesøknadController(
         metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
 
-    @PostMapping("/inntekt/innsending")
+    @PostMapping("/inntektsrapportering/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun inntektrapportering(
         @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,

@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene
 
-import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
@@ -28,12 +27,7 @@ data class Ungdomsytelsesøknad(
     val språk: String,
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val startdato: LocalDate,
-
     val søkerNorskIdent: String,
-
-    val søknadstype: UngSøknadstype,
-
-    @field:Valid val inntektForPeriode: OppgittInntektForPeriode? = null,
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
     val harBekreftetOpplysninger: Boolean,
@@ -44,6 +38,7 @@ data class Ungdomsytelsesøknad(
     ) : Innsending {
     companion object {
         private val K9_SØKNAD_VERSJON = Versjon.of("1.0.0")
+        private val SØKNAD_TYPE = UngSøknadstype.DELTAKELSE_SØKNAD
     }
 
     override fun somKomplettSøknad(
@@ -58,11 +53,10 @@ data class Ungdomsytelsesøknad(
             søker = søker,
             språk = språk,
             startdato = startdato,
-            søknadstype = søknadstype,
-            inntektForPeriode = inntektForPeriode,
+            søknadstype = SØKNAD_TYPE,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
-            k9Format = k9Format as Søknad
+            k9Format = k9Format as UngSøknad
         )
     }
 
@@ -71,11 +65,7 @@ data class Ungdomsytelsesøknad(
     override fun somK9Format(søker: Søker, metadata: MetaInfo): UngSøknad {
         val ytelse = Ungdomsytelse()
             .medStartdato(startdato)
-            .medSøknadType(søknadstype)
-
-            if (søknadstype == UngSøknadstype.RAPPORTERING_SØKNAD) {
-                ytelse.medInntekter(inntektForPeriode!!.somUngOppgittInntektForPeriode())
-            }
+            .medSøknadType(SØKNAD_TYPE)
 
         return UngSøknad()
             .medVersjon(K9_SØKNAD_VERSJON)
@@ -92,13 +82,4 @@ data class Ungdomsytelsesøknad(
     override fun søknadId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf()
     override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()
-
-    @AssertTrue(message = "Inntekt for periode må være satt for rapporteringssøknader")
-    fun isInntektForPeriode(): Boolean {
-        return if (søknadstype == UngSøknadstype.RAPPORTERING_SØKNAD) {
-            inntektForPeriode != null
-        } else {
-            true
-        }
-    }
 }
