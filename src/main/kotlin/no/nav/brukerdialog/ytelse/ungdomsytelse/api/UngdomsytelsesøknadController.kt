@@ -71,7 +71,6 @@ class UngdomsytelsesøknadController(
         @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
         @Valid @RequestBody rapportetInntekt: UngdomsytelseInntektsrapportering,
     ) = runBlocking {
-        throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED, ProblemDetail.forStatusAndDetail(HttpStatus.NOT_IMPLEMENTED, "Ikke implementert fullt støtte enda."), null)
         if (enabled != true) {
             logger.info("Ungdomsytelse er ikke aktivert.")
             throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
