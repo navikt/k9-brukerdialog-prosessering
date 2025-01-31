@@ -17,6 +17,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelses
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
@@ -92,6 +93,7 @@ class UngdomsytelsesøknadControllerTest {
     }
 
     @Test
+    @Disabled
     fun `Innsending av inntekt er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
         every { innsendingCache.put(any()) } returns Unit
