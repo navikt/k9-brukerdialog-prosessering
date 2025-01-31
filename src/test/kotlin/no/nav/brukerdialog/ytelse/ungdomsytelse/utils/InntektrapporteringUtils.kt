@@ -12,9 +12,9 @@ object InntektrapporteringUtils {
         søknadId = "4e62f8de-1ff6-40e9-bdcd-10485c789094",
         mottatt = ZonedDateTime.parse("2025-01-01T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter),
         oppgittInntektForPeriode = OppgittInntektForPeriode(
-            arbeidstakerOgFrilansInntekt = 3000.0,
-            næringsinntekt = 0.0,
-            inntektFraYtelse = 0.0,
+            arbeidstakerOgFrilansInntekt = 3000,
+            næringsinntekt = null,
+            inntektFraYtelse = 0,
             periodeForInntekt = UngPeriode(
                 fraOgMed = LocalDate.parse("2025-01-01"),
                 tilOgMed = LocalDate.parse("2025-01-31")

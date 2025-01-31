@@ -6,15 +6,15 @@ import java.time.LocalDate
 import no.nav.k9.søknad.ytelse.ung.v1.OppgittInntektForPeriode as UngOppgittInntektForPeriode
 
 data class OppgittInntektForPeriode(
-    val arbeidstakerOgFrilansInntekt: Double = 0.0,
-    val næringsinntekt: Double = 0.0,
-    val inntektFraYtelse: Double = 0.0,
+    val arbeidstakerOgFrilansInntekt: Int? = null,
+    val næringsinntekt: Int? = null,
+    val inntektFraYtelse: Int? = null,
     val periodeForInntekt: UngPeriode,
 ) {
     fun somUngOppgittInntektForPeriode(): UngOppgittInntektForPeriode = UngOppgittInntektForPeriode(
-        BigDecimal.valueOf(arbeidstakerOgFrilansInntekt),
-        BigDecimal.valueOf(næringsinntekt),
-        BigDecimal.valueOf(inntektFraYtelse),
+        arbeidstakerOgFrilansInntekt?.let { BigDecimal.valueOf(it.toDouble()) },
+        næringsinntekt?.let { BigDecimal.valueOf(it.toDouble()) },
+        inntektFraYtelse?.let { BigDecimal.valueOf(it.toDouble()) },
         periodeForInntekt.somUngPeriode(),
     )
 }
