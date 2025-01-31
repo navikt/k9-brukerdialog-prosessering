@@ -34,7 +34,7 @@ enum class Ytelse {
         }
 
         fun String.somYtelse(): Ytelse {
-            return when(this) {
+            return when(this.substringAfterLast(":")) {
                 "omsorgspengesoknad" -> OMSORGSPENGER_UTVIDET_RETT
                 "ekstra-omsorgsdager-andre-forelder-ikke-tilsyn" -> OMSORGSPENGER_MIDLERTIDIG_ALENE
                 "sif-ettersending" -> ETTERSENDING
