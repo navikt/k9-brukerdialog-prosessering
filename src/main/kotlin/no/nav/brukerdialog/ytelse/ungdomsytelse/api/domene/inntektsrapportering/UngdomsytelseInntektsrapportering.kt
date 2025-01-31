@@ -14,6 +14,7 @@ import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
+import no.nav.k9.søknad.ytelse.ung.v1.OppgittInntekt
 import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
@@ -59,7 +60,9 @@ data class UngdomsytelseInntektsrapportering(
     override fun valider() = mutableListOf<String>()
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): UngSøknad {
-        val ytelse = Ungdomsytelse().medSøknadType(UngSøknadstype.RAPPORTERING_SØKNAD)
+        val ytelse = Ungdomsytelse()
+            .medSøknadType(UngSøknadstype.RAPPORTERING_SØKNAD)
+            .medInntekter(OppgittInntekt(setOf(oppgittInntektForPeriode.somUngOppgittInntektForPeriode())))
 
         return UngSøknad()
             .medVersjon(K9_SØKNAD_VERSJON)
