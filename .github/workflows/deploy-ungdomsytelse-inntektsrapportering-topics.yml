@@ -1,0 +1,21 @@
+name: Deploy ungdomsytelsesøknad topics
+
+env:
+  TOPICS_PATH: 'nais/topics/ungdomsytelse-inntektsrapportering-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-ungdomsytelse-inntektsrapportering-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/ungdomsytelse-inntektsrapportering-topics.yml'
+
+jobs:
+  deploy-ungdomsytelse-inntektsrapportering-topics:
+    permissions:
+      id-token: write
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: ungdomsytelse-inntektsrapportering-topics
+      topics-path: 'nais/topics/ungdomsytelse-inntektsrapportering-topics.yml'
+    secrets: inherit
