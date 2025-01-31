@@ -47,7 +47,6 @@ class UngdomsytelsesøknadController(
     @PostMapping("/soknad/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
         @Valid @RequestBody søknad: Ungdomsytelsesøknad,
@@ -68,7 +67,6 @@ class UngdomsytelsesøknadController(
     @PostMapping("/inntektsrapportering/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun inntektrapportering(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
         @Valid @RequestBody rapportetInntekt: UngdomsytelseInntektsrapportering,

@@ -81,7 +81,6 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
 
         mockMvc.post("/omsorgspenger-utbetaling-arbeidstaker/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -124,7 +123,6 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
         )
         mockMvc.post("/omsorgspenger-utbetaling-arbeidstaker/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON

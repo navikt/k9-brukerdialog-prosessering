@@ -75,7 +75,6 @@ class OmsorgspengerUtvidetRettControllerTest {
 
         mockMvc.post("/omsorgspenger-utvidet-rett/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSPENGER_UTVIDET_RETT.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -114,7 +113,6 @@ class OmsorgspengerUtvidetRettControllerTest {
         )
         mockMvc.post("/omsorgspenger-utvidet-rett/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSPENGER_UTVIDET_RETT.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON

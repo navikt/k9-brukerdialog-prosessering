@@ -47,7 +47,6 @@ class OpplæringspengerSøknadController(
     @PostMapping("/innsending", consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @Value("\${ENABLE_OPPLAERINGSPENGER:false}") enabled: Boolean? = null,
         @RequestBody søknad: OpplæringspengerSøknad,

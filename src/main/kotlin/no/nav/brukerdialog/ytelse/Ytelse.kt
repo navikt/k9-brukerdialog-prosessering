@@ -9,23 +9,23 @@ import no.nav.brukerdialog.validation.ValidationProblemDetails
 import no.nav.brukerdialog.validation.Violation
 import org.springframework.http.HttpHeaders
 
-enum class Ytelse(val dialog: String) {
-    OMSORGSPENGER_UTVIDET_RETT("omsorgspengesoknad"),
-    OMSORGSPENGER_MIDLERTIDIG_ALENE("ekstra-omsorgsdager-andre-forelder-ikke-tilsyn"),
-    ETTERSENDING("sif-ettersending"),
-    OMSORGSDAGER_ALENEOMSORG("omsorgsdager-aleneomsorg-dialog"),
-    OMSORGSPENGER_UTBETALING_ARBEIDSTAKER("omsorgspengerutbetaling-arbeidstaker-soknad"),
-    OMSORGSPENGER_UTBETALING_SNF("omsorgspengerutbetaling-soknad"),
-    PLEIEPENGER_LIVETS_SLUTTFASE("pleiepenger-i-livets-sluttfase-soknad"),
-    ETTERSENDING_PLEIEPENGER_SYKT_BARN("sif-ettersending"),
-    ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE("sif-ettersending"),
-    ETTERSENDING_OMP("sif-ettersending"),
-    PLEIEPENGER_SYKT_BARN("pleiepengesoknad"),
-    ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN("endringsmelding-pleiepenger"),
-    DINE_PLEIEPENGER("dine-pleiepenger"),
-    OPPLARINGSPENGER("opplaringspenger-soknad"),
-    UNGDOMSYTELSE("ungdomsytelse-deltaker"),
-    UNGDOMSYTELSE_INNTEKTSRAPPORTERING("ungdomsytelse-deltaker")
+enum class Ytelse {
+    OMSORGSPENGER_UTVIDET_RETT,
+    OMSORGSPENGER_MIDLERTIDIG_ALENE,
+    ETTERSENDING,
+    OMSORGSDAGER_ALENEOMSORG,
+    OMSORGSPENGER_UTBETALING_ARBEIDSTAKER,
+    OMSORGSPENGER_UTBETALING_SNF,
+    PLEIEPENGER_LIVETS_SLUTTFASE,
+    ETTERSENDING_PLEIEPENGER_SYKT_BARN,
+    ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE,
+    ETTERSENDING_OMP,
+    PLEIEPENGER_SYKT_BARN,
+    ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN,
+    DINE_PLEIEPENGER,
+    OPPLARINGSPENGER,
+    UNGDOMSYTELSE,
+    UNGDOMSYTELSE_INNTEKTSRAPPORTERING
     ;
 
     companion object {
@@ -57,14 +57,6 @@ enum class Ytelse(val dialog: String) {
                         )
                     )
                 }
-        }
-
-        fun String.somYtelse(): Ytelse {
-
-            return runCatching { Ytelse.entries.first { it.dialog == substringAfterLast(":") } }
-                .onSuccess { return it }
-                .onFailure { throw IllegalArgumentException("Ukjent dialog $this") }
-                .getOrThrow()
         }
     }
 

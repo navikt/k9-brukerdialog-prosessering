@@ -79,7 +79,6 @@ class EttersendingControllerTest {
 
         mockMvc.post("/ettersending/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -118,7 +117,6 @@ class EttersendingControllerTest {
 
         mockMvc.post("/ettersending/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON

@@ -87,7 +87,6 @@ class PleiepengerSyktBarnControllerTest {
 
         mockMvc.post("/pleiepenger-sykt-barn/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -206,7 +205,6 @@ class PleiepengerSyktBarnControllerTest {
         val jsonPayload = objectMapper.writeValueAsString(ugyldigSøknad)
         mockMvc.post("/pleiepenger-sykt-barn/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
