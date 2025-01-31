@@ -20,7 +20,7 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
     val mottatt: ZonedDateTime,
     val språk: String?,
     val søker: Søker,
-    val startdato: LocalDate,
+    val startdato: LocalDate? = null,
     val søknadstype: UngSøknadstype,
     val dokumentId: List<List<String>>,
     val k9Format: K9Søknad,

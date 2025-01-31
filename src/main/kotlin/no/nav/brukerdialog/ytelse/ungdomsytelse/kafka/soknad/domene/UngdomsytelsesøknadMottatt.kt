@@ -16,7 +16,7 @@ data class UngdomsytelsesøknadMottatt(
     val mottatt: ZonedDateTime,
     val språk: String? = "nb",
     val søker: Søker,
-    val startdato: LocalDate,
+    val startdato: LocalDate? = null,
     val søknadstype: UngSøknadstype,
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,

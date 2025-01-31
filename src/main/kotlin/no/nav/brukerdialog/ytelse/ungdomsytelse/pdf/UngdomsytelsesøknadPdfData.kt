@@ -21,7 +21,7 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
         "søknadId" to søknad.søknadId,
         "søknadMottattDag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
-        "startdato" to DATE_FORMATTER.format(søknad.startdato),
+        "startdato" to søknad.startdato?.let { DATE_FORMATTER.format(it) },
         "søker" to søknad.søker.somMap(),
         "samtykke" to mapOf(
             "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,
