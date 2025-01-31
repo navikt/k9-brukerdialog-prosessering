@@ -24,11 +24,10 @@ import java.util.*
 import no.nav.k9.søknad.Søknad as UngSøknad
 
 data class UngdomsytelseInntektsrapportering(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
-    @JsonIgnore
+    @get:JsonIgnore
     val søknadId: String = UUID.randomUUID().toString(),
 
-    @JsonIgnore val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    @get:JsonIgnore val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
     @field:Valid val oppgittInntektForPeriode: OppgittInntektForPeriode,
 
