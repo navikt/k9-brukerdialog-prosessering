@@ -47,6 +47,7 @@ enum class Ytelse {
                 "dine-pleiepenger" -> PLEIEPENGER_SYKT_BARN
                 "opplaringspenger-soknad" -> OPPLARINGSPENGER
                 "ungdomsytelse-deltaker" -> UNGDOMSYTELSE
+                "tokenx-token-generator" -> PLEIEPENGER_SYKT_BARN // Kun i dev
                 else -> throw ValidationErrorResponseException(
                     ValidationProblemDetails(
                         violations = setOf(
