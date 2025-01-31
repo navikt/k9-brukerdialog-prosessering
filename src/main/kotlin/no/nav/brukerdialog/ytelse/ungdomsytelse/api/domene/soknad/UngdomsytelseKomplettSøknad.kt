@@ -13,7 +13,6 @@ class UngdomsytelseKomplettSøknad(
     private val søker: Søker,
     private val språk: String,
     private val startdato: LocalDate,
-    private val søknadstype: UngSøknadstype,
     private val mottatt: ZonedDateTime,
     private val harForståttRettigheterOgPlikter: Boolean,
     private val harBekreftetOpplysninger: Boolean,

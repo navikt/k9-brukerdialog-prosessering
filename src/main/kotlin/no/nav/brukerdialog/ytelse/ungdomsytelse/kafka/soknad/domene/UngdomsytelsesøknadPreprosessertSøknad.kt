@@ -21,7 +21,6 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
     val språk: String?,
     val søker: Søker,
     val startdato: LocalDate? = null,
-    val søknadstype: UngSøknadstype,
     val dokumentId: List<List<String>>,
     val k9Format: K9Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
@@ -36,7 +35,6 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
         mottatt = ungdomsytelseSøknadMottatt.mottatt,
         søker = ungdomsytelseSøknadMottatt.søker,
         startdato = ungdomsytelseSøknadMottatt.startdato,
-        søknadstype = ungdomsytelseSøknadMottatt.søknadstype,
         dokumentId = dokumentId,
         k9Format = ungdomsytelseSøknadMottatt.k9Format,
         harForståttRettigheterOgPlikter = ungdomsytelseSøknadMottatt.harForståttRettigheterOgPlikter,
@@ -58,7 +56,7 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
     override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest {
 
         return JournalføringsService.JournalføringsRequest(
-            ytelseType = if (søknadstype == UngSøknadstype.DELTAKELSE_SØKNAD) YtelseType.UNGDOMSYTELSE_SØKNAD else YtelseType.UNGDOMSYTELSE_INNTEKTRAPPORTERING,
+            ytelseType = YtelseType.UNGDOMSYTELSE_SØKNAD,
             norskIdent = søkerFødselsnummer(),
             sokerNavn = søkerNavn(),
             mottatt = mottatt,

@@ -17,7 +17,6 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
 
     override fun pdfData(): Map<String, Any?> = mapOf(
         "tittel" to ytelse().utledTittel(språk()),
-        "søknadstype" to søknad.søknadstype.name,
         "søknadId" to søknad.søknadId,
         "søknadMottattDag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
         "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),

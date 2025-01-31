@@ -53,7 +53,6 @@ data class Ungdomsytelsesøknad(
             søker = søker,
             språk = språk,
             startdato = startdato,
-            søknadstype = SØKNAD_TYPE,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
             k9Format = k9Format as UngSøknad
