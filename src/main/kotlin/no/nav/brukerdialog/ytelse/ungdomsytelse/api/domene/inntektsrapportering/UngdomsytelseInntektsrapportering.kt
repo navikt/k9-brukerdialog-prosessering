@@ -1,8 +1,8 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
-import net.minidev.json.annotate.JsonIgnore
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.oppslag.soker.Søker
@@ -24,10 +24,11 @@ import java.util.*
 import no.nav.k9.søknad.Søknad as UngSøknad
 
 data class UngdomsytelseInntektsrapportering(
-    @get:JsonIgnore
+    @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
 
-    @get:JsonIgnore val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    @Schema(hidden = true)
+    mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
     @field:Valid val oppgittInntektForPeriode: OppgittInntektForPeriode,
 
