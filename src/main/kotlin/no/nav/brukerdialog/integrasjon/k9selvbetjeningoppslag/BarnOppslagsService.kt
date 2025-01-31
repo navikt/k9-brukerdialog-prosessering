@@ -51,7 +51,7 @@ class BarnOppslagsService(
     }
 
     fun hentBarn(): List<BarnOppslagRespons> {
-        val ytelse = Ytelse.fraMDC()
+        val ytelse = Ytelse.utledYtelseFraCallerIMDC()
         logger.info("Slår opp barn...")
         val exchange = k9OppslagsKlient.exchange(
             barnUrl.toUriString(),

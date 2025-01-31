@@ -29,34 +29,36 @@ enum class Ytelse {
     ;
 
     companion object {
-        fun fraMDC(): Ytelse {
-            val ytelse: String = MDCUtil.fromMDC(Constants.YTELSE)
-                ?: throw ValidationErrorResponseException(
+        fun utledYtelseFraCallerIMDC(): Ytelse {
+            return MDCUtil.fromMDC(Constants.CALLER_CLIENT_ID)?.somYtelse()!!
+        }
+
+        fun String.somYtelse(): Ytelse {
+            return when(this) {
+                "omsorgspengesoknad" -> OMSORGSPENGER_UTVIDET_RETT
+                "ekstra-omsorgsdager-andre-forelder-ikke-tilsyn" -> OMSORGSPENGER_MIDLERTIDIG_ALENE
+                "sif-ettersending" -> ETTERSENDING
+                "omsorgsdager-aleneomsorg-dialog" -> OMSORGSDAGER_ALENEOMSORG
+                "omsorgspengerutbetaling-arbeidstaker-soknad" -> OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
+                "omsorgspengerutbetaling-soknad" -> OMSORGSPENGER_UTBETALING_SNF
+                "pleiepenger-i-livets-sluttfase-soknad" -> PLEIEPENGER_LIVETS_SLUTTFASE
+                "pleiepengesoknad" -> PLEIEPENGER_SYKT_BARN
+                "endringsmelding-pleiepenger" -> ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN
+                "dine-pleiepenger" -> PLEIEPENGER_SYKT_BARN
+                "opplaringspenger-soknad" -> OPPLARINGSPENGER
+                "ungdomsytelse-deltaker" -> UNGDOMSYTELSE
+                else -> throw ValidationErrorResponseException(
                     ValidationProblemDetails(
                         violations = setOf(
                             Violation(
-                                parameterName = NavHeaders.X_K9_YTELSE,
+                                parameterName = this,
                                 parameterType = ParameterType.HEADER,
-                                reason = "Påkrevd Ytelse mangler i MDC. Sjekk at headeren '${NavHeaders.X_K9_YTELSE}' er satt."
+                                reason = "Ukjent dialog '$this'."
                             )
                         )
                     )
                 )
-
-            return runCatching { valueOf(ytelse) }
-                .getOrElse {
-                    throw ValidationErrorResponseException(
-                        ValidationProblemDetails(
-                            violations = setOf(
-                                Violation(
-                                    parameterName = NavHeaders.X_K9_YTELSE,
-                                    parameterType = ParameterType.HEADER,
-                                    reason = "Ukjent Ytelse '$ytelse'."
-                                )
-                            )
-                        )
-                    )
-                }
+            }
         }
     }
 
