@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene
+package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.Ytelse
@@ -7,7 +7,6 @@ import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelsesøknadPdfData
 import no.nav.brukerdialog.pdf.PdfData
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.OppgittInntektForPeriode
 import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import java.time.LocalDate
 import java.time.ZonedDateTime

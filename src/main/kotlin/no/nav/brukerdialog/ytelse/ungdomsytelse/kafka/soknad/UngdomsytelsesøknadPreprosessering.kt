@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka
+package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad
 
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
@@ -7,9 +7,8 @@ import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor
 import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERING_STREAMS_BUILDER_NAME
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene.UngdomsytelsesøknadMottatt
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene.UngdomsytelsesøknadPreprosessertSøknad
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadMottatt
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadPreprosessertSøknad
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.processor.api.ProcessorSupplier
@@ -28,8 +27,8 @@ class UngdomsytelsesøknadPreprosessering(
     private val ungdomsytelsesøknadMottattTopic: Topic<TopicEntry<UngdomsytelsesøknadMottatt>>,
     private val ungdomsytelsesøknadPreprosessertTopic: Topic<TopicEntry<UngdomsytelsesøknadPreprosessertSøknad>>,
     private val retryTemplate: RetryTemplate,
-    @Qualifier(UNGDOMSYTELSE_SØKNAD_PREPROSESSERING_STREAMS_BUILDER_NAME) private val streamsBuilder: StreamsBuilder,
-    @Qualifier(UNGDOMSYTELSE_SØKNAD_PREPROSESSERING_STREAMS_BUILDER_NAME) private val streamsBuilderFactoryBean: StreamsBuilderFactoryBean,
+    @Qualifier(UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERING_STREAMS_BUILDER_NAME) private val streamsBuilder: StreamsBuilder,
+    @Qualifier(UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERING_STREAMS_BUILDER_NAME) private val streamsBuilderFactoryBean: StreamsBuilderFactoryBean,
 ) : HealthIndicator {
 
     private companion object {
