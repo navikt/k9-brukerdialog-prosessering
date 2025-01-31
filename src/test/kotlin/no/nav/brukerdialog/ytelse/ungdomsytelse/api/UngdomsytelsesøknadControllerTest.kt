@@ -12,17 +12,12 @@ import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.ArbeidIPeriode
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsforhold
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Frilans
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.JobberIPeriodeSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.Ungdomsytelsesøknad
-import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelsesøknadUtils
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
+import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
@@ -33,7 +28,6 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
-import java.time.LocalDate
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -86,12 +80,34 @@ class UngdomsytelsesøknadControllerTest {
 
         mockMvc.post("/ungdomsytelse/soknad/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
             accept = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(defaultSøknad)
+        }
+            .andExpect {
+                status { isAccepted() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+            }
+    }
+
+    @Test
+    fun `Innsending av inntekt er OK`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        every { innsendingCache.put(any()) } returns Unit
+        coEvery { innsendingService.registrer(any(), any()) } returns Unit
+        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+
+        val defaultInntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering
+
+        mockMvc.post("/ungdomsytelse/inntektsrapportering/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(defaultInntektsrapportering)
         }
             .andExpect {
                 status { isAccepted() }
@@ -111,7 +127,6 @@ class UngdomsytelsesøknadControllerTest {
         )
         mockMvc.post("/ungdomsytelse/soknad/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.UNGDOMSYTELSE.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON

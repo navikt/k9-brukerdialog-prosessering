@@ -1,12 +1,12 @@
-package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene
+package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene
 
-import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
+import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelsesøknadPdfData
-import no.nav.brukerdialog.pdf.PdfData
+import no.nav.k9.søknad.Søknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -15,14 +15,12 @@ data class UngdomsytelsesøknadMottatt(
     val mottatt: ZonedDateTime,
     val språk: String? = "nb",
     val søker: Søker,
-    val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate,
-    val inntekt: Double = 0.0,
+    val startdato: LocalDate? = null,
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,
-): MottattMelding {
-    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE
+) : MottattMelding {
+    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_DELTAKELSE_SØKNAD
 
     override fun søkerFødselsnummer(): String = søker.fødselsnummer
 
