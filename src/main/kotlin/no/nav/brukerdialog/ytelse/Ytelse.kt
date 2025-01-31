@@ -24,7 +24,8 @@ enum class Ytelse(val dialog: String) {
     ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN("endringsmelding-pleiepenger"),
     DINE_PLEIEPENGER("dine-pleiepenger"),
     OPPLARINGSPENGER("opplaringspenger-soknad"),
-    UNGDOMSYTELSE("ungdomsytelse-deltaker")
+    UNGDOMSYTELSE("ungdomsytelse-deltaker"),
+    UNGDOMSYTELSE_INNTEKTSRAPPORTERING("ungdomsytelse-deltaker")
     ;
 
     companion object {
