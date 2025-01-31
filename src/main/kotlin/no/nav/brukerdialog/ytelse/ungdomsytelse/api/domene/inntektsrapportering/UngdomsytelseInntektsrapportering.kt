@@ -28,14 +28,14 @@ data class UngdomsytelseInntektsrapportering(
     val søknadId: String = UUID.randomUUID().toString(),
 
     @Schema(hidden = true)
-    mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
     @field:Valid val oppgittInntektForPeriode: OppgittInntektForPeriode,
 
     @field:AssertTrue(message = "Inntektsopplysningene må bekreftes for å kunne rapportere")
-    val harBekreftetInntekt: Boolean,
+    val harBekreftetInntekt: Boolean
 
-    ) : Innsending {
+    ): Innsending {
     companion object {
         private val K9_SØKNAD_VERSJON = Versjon.of("1.0.0")
     }
@@ -50,6 +50,7 @@ data class UngdomsytelseInntektsrapportering(
             søknadId = søknadId,
             mottatt = mottatt,
             søker = søker,
+            oppgittInntektForPeriode = oppgittInntektForPeriode,
             harBekreftetInntekt = harBekreftetInntekt,
             k9Format = k9Format as UngSøknad
         )
