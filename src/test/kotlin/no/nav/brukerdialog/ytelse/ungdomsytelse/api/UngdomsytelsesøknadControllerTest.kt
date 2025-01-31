@@ -93,7 +93,6 @@ class UngdomsytelsesøknadControllerTest {
     }
 
     @Test
-    @Disabled
     fun `Innsending av inntekt er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
         every { innsendingCache.put(any()) } returns Unit
