@@ -23,7 +23,6 @@ class ArbeidsgivereController(private val arbeidsgiverService: ArbeidsgiverServi
 
     @GetMapping
     fun hentArbeidsgivere(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestParam("fra_og_med", required = true) fraOgMed: String,
         @RequestParam("til_og_med", required = true) tilOgMed: String,
         @RequestParam("inkluderAlleAnsettelsesperioder", required = false) inkluderAlleAnsettelsesperioder: Boolean = false,

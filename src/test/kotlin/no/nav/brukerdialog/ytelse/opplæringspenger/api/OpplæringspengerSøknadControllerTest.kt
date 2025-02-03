@@ -83,7 +83,6 @@ class OpplæringspengerSøknadControllerTest {
 
         mockMvc.post(OLP_INNSEND_SØKNAD_URL) {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OPPLARINGSPENGER.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -150,7 +149,6 @@ class OpplæringspengerSøknadControllerTest {
         val jsonPayload = objectMapper.writeValueAsString(ugyldigSøknad)
         mockMvc.post(OLP_INNSEND_SØKNAD_URL) {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OPPLARINGSPENGER.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON

@@ -12,6 +12,7 @@ import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
 import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.UngdomsytelsesøknadTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelsesøknadUtils
 import org.intellij.lang.annotations.Language
@@ -111,9 +112,7 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             "fornavn": "Ola",
             "fødselsnummer": "02119970078"
           },
-          "fraOgMed": "2022-01-01",
-          "tilOgMed": "2022-02-01",
-          "inntekt": 15000.0,
+          "startdato": "2022-01-01",
           "språk": "nb",
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
@@ -133,8 +132,9 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             },
             "ytelse": {
               "type": "UNGDOMSYTELSE",
-              "søknadsperiode": ["2022-01-01/2022-02-01"],
-              "inntekt": 15000.0
+              "søknadType": "DELTAKELSE_SØKNAD",
+              "søktFraDatoer": ["2022-01-01"],
+              "inntekter": null
             },
             "journalposter": [],
             "begrunnelseForInnsending": {

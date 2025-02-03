@@ -218,6 +218,16 @@ no.nav:
         application-id-suffix: ungdomsytelse-soknad-cleanup-stream
         auto-offset-reset: earliest
 
+      ungdomsytelse-inntektsrapportering-preprosessering:
+        application-id-suffix: ungdomsytelse-inntektsrapportering-preprosessering
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-journalforing:
+        application-id-suffix: ungdomsytelse-inntektsrapportering-journalforing
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-cleanup:
+        application-id-suffix: ungdomsytelse-inntektsrapportering-cleanup-stream
+        auto-offset-reset: earliest
+
       olp-soknad-preprosessering:
         application-id-suffix: olp-soknad-preprosessering
         auto-offset-reset: earliest

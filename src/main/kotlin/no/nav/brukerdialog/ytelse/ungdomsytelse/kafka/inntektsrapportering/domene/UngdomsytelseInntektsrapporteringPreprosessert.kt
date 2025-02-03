@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene
+package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.domene
 
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
@@ -8,43 +8,35 @@ import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.OppgittInntektForPeriode
 import no.nav.k9.søknad.Søknad
-import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
-data class UngdomsytelsesøknadPreprosessertSøknad(
+data class UngdomsytelseInntektsrapporteringPreprosessert(
     val søknadId: String,
     val mottatt: ZonedDateTime,
-    val språk: String?,
     val søker: Søker,
-    val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate,
-    val inntekt: Double = 0.0,
+    val oppgittInntektForPeriode: OppgittInntektForPeriode,
+    val harBekreftetInntekt: Boolean,
     val dokumentId: List<List<String>>,
     val k9Format: K9Søknad,
-    val harForståttRettigheterOgPlikter: Boolean,
-    val harBekreftetOpplysninger: Boolean,
 ) : Preprosessert {
     internal constructor(
-        ungdomsytelseSøknadMottatt: UngdomsytelsesøknadMottatt,
+        ungdomsytelseInntektsrapporteringMottatt: UngdomsytelseInntektsrapporteringMottatt,
         dokumentId: List<List<String>>,
     ) : this(
-        språk = ungdomsytelseSøknadMottatt.språk,
-        søknadId = ungdomsytelseSøknadMottatt.søknadId,
-        mottatt = ungdomsytelseSøknadMottatt.mottatt,
-        søker = ungdomsytelseSøknadMottatt.søker,
-        fraOgMed = ungdomsytelseSøknadMottatt.fraOgMed,
-        tilOgMed = ungdomsytelseSøknadMottatt.tilOgMed,
-        inntekt = ungdomsytelseSøknadMottatt.inntekt,
+        søknadId = ungdomsytelseInntektsrapporteringMottatt.søknadId,
+        mottatt = ungdomsytelseInntektsrapporteringMottatt.mottatt,
+        søker = ungdomsytelseInntektsrapporteringMottatt.søker,
+        oppgittInntektForPeriode = ungdomsytelseInntektsrapporteringMottatt.oppgittInntektForPeriode,
         dokumentId = dokumentId,
-        k9Format = ungdomsytelseSøknadMottatt.k9Format,
-        harForståttRettigheterOgPlikter = ungdomsytelseSøknadMottatt.harForståttRettigheterOgPlikter,
-        harBekreftetOpplysninger = ungdomsytelseSøknadMottatt.harBekreftetOpplysninger
+        k9Format = ungdomsytelseInntektsrapporteringMottatt.k9Format,
+        harBekreftetInntekt = ungdomsytelseInntektsrapporteringMottatt.harBekreftetInntekt
     )
 
-    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE
+    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
 
     override fun mottattDato(): ZonedDateTime = mottatt
 
@@ -56,19 +48,21 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
 
     override fun dokumenter(): List<List<String>> = dokumentId
 
-    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest =
-        JournalføringsService.JournalføringsRequest(
-            ytelseType = YtelseType.UNGDOMSYTELSE_SØKNAD,
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest {
+
+        return JournalføringsService.JournalføringsRequest(
+            ytelseType = YtelseType.UNGDOMSYTELSE_INNTEKTRAPPORTERING,
             norskIdent = søkerFødselsnummer(),
             sokerNavn = søkerNavn(),
             mottatt = mottatt,
             dokumentId = dokumenter()
         )
+    }
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,
         grupperingsId = søknadId,
-        tekst = "Søknad om ungdomsytelse er mottatt",
+        tekst = "Rapportert inntenkt for ungdomsytelsen er mottatt",
         link = null,
         dagerSynlig = 7,
         søkerFødselsnummer = søkerFødselsnummer(),

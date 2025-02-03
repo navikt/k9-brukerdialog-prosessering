@@ -12,7 +12,6 @@ import no.nav.brukerdialog.utils.Constants
 import no.nav.brukerdialog.utils.IgnoredPathUtils
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders
-import no.nav.brukerdialog.ytelse.Ytelse.Companion.somYtelse
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.security.token.support.core.jwt.JwtToken
 import org.slf4j.LoggerFactory
@@ -75,7 +74,6 @@ class HttpServerRequestFilter(
         try {
             MDCUtil.toMDC(Constants.NAV_CONSUMER_ID, req.getHeader(Constants.NAV_CONSUMER_ID), applicationName)
             MDCUtil.toMDC(Constants.CORRELATION_ID, req.getHeader(NavHeaders.X_CORRELATION_ID), generator.create())
-            MDCUtil.toMDC(Constants.YTELSE, req.getHeader(NavHeaders.BRUKERDIALOG_YTELSE)?.somYtelse())
             MDCUtil.toMDC(Constants.CALLER_CLIENT_ID, jwtToken?.jwtClaimsSet?.getClaim("client_id"))
         } catch (e: Exception) {
             logger.warn("Feil ved setting av MDC-verdier for {}, MDC-verdier er inkomplette", req.requestURI, e)

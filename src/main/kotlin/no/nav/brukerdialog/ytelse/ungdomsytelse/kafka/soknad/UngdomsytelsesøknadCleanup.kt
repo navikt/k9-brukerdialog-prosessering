@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka
+package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad
 
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.domenetjenester.mottak.CleanupService
@@ -9,8 +9,7 @@ import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_CLEANUP_STREAMS_BUILDER_NAME
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene.UngdomsytelsesøknadPreprosessertSøknad
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadPreprosessertSøknad
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.processor.api.ProcessorSupplier
@@ -29,8 +28,8 @@ class UngdomsytelsesøknadCleanup(
     private val ungdomsytelsesøknadCleanupTopic: Topic<TopicEntry<Cleanup<UngdomsytelsesøknadPreprosessertSøknad>>>,
     private val k9DittnavVarselTopic: Topic<TopicEntry<K9Beskjed>>,
     private val retryTemplate: RetryTemplate,
-    @Qualifier(UNGDOMSYTELSE_SØKNAD_CLEANUP_STREAMS_BUILDER_NAME) private val streamsBuilder: StreamsBuilder,
-    @Qualifier(UNGDOMSYTELSE_SØKNAD_CLEANUP_STREAMS_BUILDER_NAME) private val streamsBuilderFactoryBean: StreamsBuilderFactoryBean,
+    @Qualifier(UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_CLEANUP_STREAMS_BUILDER_NAME) private val streamsBuilder: StreamsBuilder,
+    @Qualifier(UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_CLEANUP_STREAMS_BUILDER_NAME) private val streamsBuilderFactoryBean: StreamsBuilderFactoryBean,
 ) : HealthIndicator {
 
     private companion object {

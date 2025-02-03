@@ -10,8 +10,7 @@
           content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
-        <bookmark name="Startdato" href="#startdato"/>
-        <bookmark name="Samtykke" href="#samtykke"/>
+        <bookmark name="Inntekt" href="#inntekt"/>
     </bookmarks>
     {{#block 'style-common' }}
     {{/block}}
@@ -26,19 +25,16 @@
 <div class="innholdscontainer">
     {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
-    <section id="periode">
-        <h2>Deltar i ungdomsprogrammet:</h2>
-        <p><strong>Fra og med:</strong> {{startdato}}</p>
-    </section>
+    <!--inntekt-->
+    <section id="inntekt">
+        <h2>Inntekter</h2>
+        {{#each inntektForPeriode as inntekt}}
+            I perioden {{inntekt.periode.fraOgMed}} til {{inntekt.periode.tilOgMed}} har du oppgitt følgende inntekter:
 
-    <!-- SAMTYKKE -->
-    <section id="samtykke">
-        <h2>Samtykke fra deg</h2>
-        <p class="sporsmalstekst">Har du forstått dine rettigheter og plikter?</p>
-        <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
-        <hr/>
-        <p class="sporsmalstekst">Har du bekreftet at opplysninger du har gitt er riktige?</p>
-        <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
+            arbeidstakerOgFrilansInntekt: {{inntekt.arbeidstakerOgFrilansInntekt}}
+            næringsinntekt: {{inntekt.næringsinntekt}}
+            ytelse: {{inntekt.ytelse}}
+        {{/each}}
     </section>
 </div>
 
