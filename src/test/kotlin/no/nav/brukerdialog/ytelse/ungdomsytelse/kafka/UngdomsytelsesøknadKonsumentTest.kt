@@ -113,7 +113,6 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             "fødselsnummer": "02119970078"
           },
           "startdato": "2022-01-01",
-          "søknadstype": "DELTAKELSE_SØKNAD",
           "språk": "nb",
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
