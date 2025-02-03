@@ -40,8 +40,16 @@ object InntektrapporteringUtils {
         søkerFødselsnummer: String = "02119970078",
         søknadId: String = UUID.randomUUID().toString(),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
-        oppgittInntektForPeriode: OppgittInntektForPeriode,
-        ): UngdomsytelseInntektsrapporteringMottatt {
+        oppgittInntektForPeriode: OppgittInntektForPeriode = OppgittInntektForPeriode(
+            arbeidstakerOgFrilansInntekt = 6000,
+            næringsinntekt = 4000,
+            inntektFraYtelse = 2000,
+            periodeForInntekt = UngPeriode(
+                fraOgMed = LocalDate.parse("2025-01-01"),
+                tilOgMed = LocalDate.parse("2025-01-31")
+            )
+        ),
+    ): UngdomsytelseInntektsrapporteringMottatt {
 
         return UngdomsytelseInntektsrapporteringMottatt(
             søknadId = søknadId,
