@@ -46,6 +46,9 @@
     "DOKARKIV_BASE_URL": "https://dokarkiv-q2.dev-fss-pub.nais.io",
     "DOKARKIV_SCOPE": "api://dev-fss.teamdokumenthandtering.dokarkiv/.default",
 
+    "FAMILIE_PDF_BASE_URL": "http://familie-pdf",
+    "FAMILIE_PDF_SCOPE": "api://dev-gcp.teamfamilie.familie-pdf/.default",
+
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
     "SWAGGER_ENABLED": "true",
 

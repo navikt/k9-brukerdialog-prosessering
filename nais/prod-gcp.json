@@ -33,6 +33,9 @@
     "DOKARKIV_BASE_URL": "https://dokarkiv.prod-fss-pub.nais.io",
     "DOKARKIV_SCOPE": "api://prod-fss.teamdokumenthandtering.dokarkiv/.default",
 
+    "FAMILIE_PDF_BASE_URL": "http://familie-pdf",
+    "FAMILIE_PDF_SCOPE": "api://prod-gcp.teamfamilie.familie-pdf/.default",
+
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering"
   },
   "slack-channel": "sif-alerts",
