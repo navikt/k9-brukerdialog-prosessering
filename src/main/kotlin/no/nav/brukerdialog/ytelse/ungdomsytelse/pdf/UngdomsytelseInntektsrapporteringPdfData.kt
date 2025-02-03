@@ -44,9 +44,9 @@ class UngdomsytelseInntektsrapporteringPdfData(private val søknad: Ungdomsytels
     private fun OppgittInntekt.somMap(): List<Map<String, Any?>> = oppgittePeriodeinntekter.map {
             mapOf<String, Any?>(
                 "periode" to it.periode.somMap(),
-                "arbeidstakerOgFrilansInntekt" to it.arbeidstakerOgFrilansInntekt.formaterSomValuta(),
-                "næringsinntekt" to it.næringsinntekt.formaterSomValuta(),
-                "ytelse" to it.ytelse.formaterSomValuta()
+                "arbeidstakerOgFrilansInntekt" to it.arbeidstakerOgFrilansInntekt?.formaterSomValuta(),
+                "næringsinntekt" to it.næringsinntekt?.formaterSomValuta(),
+                "ytelse" to it.ytelse?.formaterSomValuta()
             )
     }
 
