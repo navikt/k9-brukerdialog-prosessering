@@ -75,7 +75,7 @@ data class UngdomsytelseInntektsrapportering(
     }
 
     override fun søkerNorskIdent(): String? = null
-    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE
+    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
     override fun søknadId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf()
     override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()
