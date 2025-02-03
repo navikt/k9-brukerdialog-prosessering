@@ -4,7 +4,7 @@ K9_SAK_INNSYN_API_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-sak
 K9_BRUKERDIALOG_CACHE_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-brukerdialog-cache-mock
 K9_SELVBETJENING_OPPSLAG_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-selvbetjening-oppslag-mock
 DOKARKIV_BASE_URL: http://localhost:${wiremock.server.port:8083}/dokarkiv-mock
-FAMILIE_PDF_URL: http://localhost:${wiremock.server.port:8083}/familie-pdf-mock
+FAMILIE_PDF_BASE_URL: http://localhost:${wiremock.server.port:8083}/familie-pdf-mock
 ENABLE_UNDOMSYTELSE: true
 ENABLE_OPPLAERINGSPENGER: true
 
