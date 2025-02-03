@@ -38,14 +38,30 @@ class FamiliePdfService(
                 onSuccess = { response: ResponseEntity<FamiliePdfPostResponse> ->
                     println(response)
                 },
-                { error: Throwable ->
+                onFailure = { error: Throwable ->
                     when (error) {
                         is HttpClientErrorException.Conflict -> {
-                            logger.info("Noe gikk galt")
+                            logger.info("Konfliktfeil: ${error.responseBodyAsString}")
+                        }
+
+                        is HttpClientErrorException.BadRequest -> {
+                            logger.warn("Feil i forespørsel: ${error.responseBodyAsString}")
+                        }
+
+                        is HttpClientErrorException.Unauthorized -> {
+                            logger.warn("Uautorisert feil: ${error.responseBodyAsString}")
+                        }
+
+                        is HttpClientErrorException.Forbidden -> {
+                            logger.warn("Forbudt feil: ${error.responseBodyAsString}")
+                        }
+
+                        is HttpClientErrorException.NotFound -> {
+                            logger.warn("Ikke funnet feil: ${error.responseBodyAsString}")
                         }
 
                         else -> {
-                            logger.error("Noe gikk galt")
+                            logger.error("Uventet feil: ${error.message}", error)
                         }
                     }
                     throw error
