@@ -40,7 +40,10 @@ class DokarkivClientsConfig(
             .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .additionalInterceptors(
-                RestTemplateUtils.exchangeBearerTokenInterceptor(azureDokarkivClientProperties, oAuth2AccessTokenService),
+                RestTemplateUtils.exchangeBearerTokenInterceptor(
+                    azureDokarkivClientProperties,
+                    oAuth2AccessTokenService
+                ),
                 RestTemplateUtils.requestLoggerInterceptor(logger),
                 RestTemplateUtils.requestTracingInterceptor()
             )
