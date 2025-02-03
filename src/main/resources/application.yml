@@ -92,6 +92,7 @@ no.nav:
     k9-sak-innsyn-api-base-url: ${K9_SAK_INNSYN_API_BASE_URL}
     k9-selvbetjening-oppslag-base-url: ${K9_SELVBETJENING_OPPSLAG_BASE_URL}
     dokarkiv-base-url: ${DOKARKIV_BASE_URL}
+    familie-pdf-base-url: ${FAMILIE_PDF_URL}
 
   cache:
     barn:
