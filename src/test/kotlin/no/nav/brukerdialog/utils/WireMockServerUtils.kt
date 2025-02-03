@@ -2,6 +2,7 @@ package no.nav.brukerdialog.utils
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
+import no.nav.brukerdialog.integrasjon.familiePdf.FamiliePdfResponseTransformer
 import org.springframework.http.HttpStatus
 
 object WireMockServerUtils {
@@ -19,6 +20,21 @@ object WireMockServerUtils {
                         .withStatus(status)
                         .withHeader("Content-Type", "application/json")
                         .withTransformers("dokarkiv")
+                )
+        )
+        return this
+    }
+
+    fun WireMockServer.stubFamiliePdf(status: Int = 200): WireMockServer{
+        WireMock.stubFor(
+            WireMock.post(
+                WireMock.urlMatching(".*/familie-pdf-mock/api/v1/pdf/opprett-pdf"))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/pdf")
+                        .withTransformers("familiePdf")
+                        .withBody("mocked-pdf-innhold".toByteArray())
                 )
         )
         return this
