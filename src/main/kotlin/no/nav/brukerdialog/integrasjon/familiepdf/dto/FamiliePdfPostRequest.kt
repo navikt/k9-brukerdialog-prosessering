@@ -1,10 +1,6 @@
 package no.nav.brukerdialog.integrasjon.familiepdf.dto
 
 data class FamiliePdfPostRequest(
-    val feltmap: FeltMap,
-)
-
-data class FeltMap(
     val label: String,
     val verdiliste: List<VerdilisteElement>,
     val pdfConfig: PdfConfig = PdfConfig(harInnholdsfortegnelse = true, "nb"),

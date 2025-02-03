@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.integrasjon.familiepdf
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.nav.brukerdialog.integrasjon.familiepdf.dto.FamiliePdfPostResponse
+import no.nav.brukerdialog.integrasjon.familiepdf.dto.FamiliePdfPostRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -18,30 +18,35 @@ class FamiliePdfService(
 ) {
     private companion object {
         private val logger = LoggerFactory.getLogger(FamiliePdfService::class.java)
-        val familiePdfUrl =
+        val familiePdfUri =
             UriComponentsBuilder
                 .fromPath("/api/v1/pdf/opprett-pdf")
                 .build()
                 .toUri()
     }
 
-    suspend fun lagPdfKvittering(request: Any): Any =
+    suspend fun lagPdfKvittering(request: FamiliePdfPostRequest): ByteArray =
         kotlin
             .runCatching {
                 familiePdfRestTemplate.exchange(
-                    familiePdfUrl.path,
+                    familiePdfUri.path,
                     HttpMethod.POST,
                     HttpEntity(request),
-                    FamiliePdfPostResponse::class.java,
+                    ByteArray::class.java,
                 )
             }.fold(
-                onSuccess = { response: ResponseEntity<FamiliePdfPostResponse> ->
+                onSuccess = { response: ResponseEntity<ByteArray> ->
                     println(response)
+                    return response.body ?: throw IllegalStateException("Response body er null")
                 },
                 onFailure = { error: Throwable ->
                     when (error) {
                         is HttpClientErrorException.Conflict -> {
                             logger.info("Konfliktfeil: ${error.responseBodyAsString}")
+                            return@fold objectMapper.readValue(
+                                error.responseBodyAsString,
+                                ByteArray::class.java
+                            )
                         }
 
                         is HttpClientErrorException.BadRequest -> {
