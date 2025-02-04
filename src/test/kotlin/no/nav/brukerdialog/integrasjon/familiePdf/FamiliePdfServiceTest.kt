@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.integrasjon.familiePdf
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -22,11 +21,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
-import org.springframework.cloud.contract.wiremock.WireMockConfigurationCustomizer
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
@@ -37,12 +32,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     classes = [K9brukerdialogprosesseringApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-//@Import(FamiliePdfServiceTest.FamiliePdfServiceTestConfig::class)
 @AutoConfigureWireMock
 class FamiliePdfServiceTest {
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
-
     @Autowired
     private lateinit var wireMockServer: WireMockServer
 
@@ -55,18 +46,9 @@ class FamiliePdfServiceTest {
     @MockkBean
     lateinit var oAuth2AccessTokenService: OAuth2AccessTokenService
 
-//    @TestConfiguration
-//    class FamiliePdfServiceTestConfig {
-//        @Bean
-//        fun optionsCustomizer(): WireMockConfigurationCustomizer {
-//            return WireMockConfigurationCustomizer { options -> options.extensions(FamiliePdfResponseTransformer()) }
-//        }
-//    }
-
     @BeforeEach
     fun setUp() {
         wireMockServer.stubFamiliePdf()
-
         val token =
             mockOAuth2Server.hentToken("123456789", audience = "dev-gcp:dusseldorf:k9-brukerdialog-cache").serialize()
         every { oAuth2AccessTokenService.getAccessToken(any()) } returns OAuth2AccessTokenResponse(token)

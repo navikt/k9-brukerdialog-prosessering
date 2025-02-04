@@ -2,7 +2,6 @@ package no.nav.brukerdialog.utils
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
-import no.nav.brukerdialog.integrasjon.familiePdf.FamiliePdfResponseTransformer
 import org.springframework.http.HttpStatus
 
 object WireMockServerUtils {
