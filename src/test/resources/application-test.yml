@@ -4,6 +4,7 @@ K9_SAK_INNSYN_API_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-sak
 K9_BRUKERDIALOG_CACHE_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-brukerdialog-cache-mock
 K9_SELVBETJENING_OPPSLAG_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-selvbetjening-oppslag-mock
 DOKARKIV_BASE_URL: http://localhost:${wiremock.server.port:8083}/dokarkiv-mock
+FAMILIE_PDF_BASE_URL: http://localhost:${wiremock.server.port:8083}/familie-pdf-mock
 ENABLE_UNDOMSYTELSE: true
 ENABLE_OPPLAERINGSPENGER: true
 
@@ -67,6 +68,15 @@ no.nav:
           token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
           grant-type: client_credentials
           scope: api://dev-fss.teamdokumenthandtering.dokarkiv-q1/.default
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+
+        azure-familie-pdf:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: client_credentials
+          scope: api://dev-gcp.teamfamilie.familie-pdf/.default
           authentication:
             client-auth-method: private_key_jwt
             client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
