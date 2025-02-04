@@ -32,7 +32,6 @@ object WireMockServerUtils {
                     WireMock.aResponse()
                         .withStatus(status)
                         .withHeader("Content-Type", "application/pdf")
-                        .withTransformers("familiePdf")
                         .withBody("mocked-pdf-innhold".toByteArray())
                 )
         )

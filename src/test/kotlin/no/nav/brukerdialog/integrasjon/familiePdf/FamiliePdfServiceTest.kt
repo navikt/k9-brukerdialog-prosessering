@@ -5,6 +5,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
+import no.nav.brukerdialog.config.Issuers
 import no.nav.brukerdialog.integrasjon.familiepdf.FamiliePdfService
 import no.nav.brukerdialog.integrasjon.familiepdf.dto.FamiliePdfPostRequest
 import no.nav.brukerdialog.integrasjon.familiepdf.dto.PdfConfig
@@ -50,7 +51,11 @@ class FamiliePdfServiceTest {
     fun setUp() {
         wireMockServer.stubFamiliePdf()
         val token =
-            mockOAuth2Server.hentToken("123456789", audience = "dev-gcp:dusseldorf:k9-brukerdialog-cache").serialize()
+            mockOAuth2Server.hentToken(
+                subject = "123456789",
+                audience = "api://dev-gcp.teamfamilie.familie-pdf/.default",
+                issuerId = Issuers.AZURE_AD
+            ).serialize()
         every { oAuth2AccessTokenService.getAccessToken(any()) } returns OAuth2AccessTokenResponse(token)
     }
 
