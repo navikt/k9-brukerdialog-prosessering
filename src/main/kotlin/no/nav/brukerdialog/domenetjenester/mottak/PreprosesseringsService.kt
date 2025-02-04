@@ -28,7 +28,7 @@ class PreprosesseringsService(
         val dokumentEier = DokumentEier(søkerFødselsnummer)
 
         logger.info("Genererer Oppsummerings-PDF...")
-        val oppsummeringPdf = pdfService.genererPDF(preprosesseringsData.pdfData)
+        val oppsummeringPdf = pdfService.genererPDF(preprosesseringsData.pdfData, true)
 
         logger.info("Mellomlagrer Oppsummerings-PDF...")
         val oppsummeringPdfDokumentId = k9DokumentMellomlagringService.lagreDokument(
