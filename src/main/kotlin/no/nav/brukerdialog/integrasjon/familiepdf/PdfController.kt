@@ -4,6 +4,8 @@ import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.integrasjon.familiepdf.dto.FamiliePdfPostRequest
 import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.context.annotation.Profile
+import org.springframework.core.io.ByteArrayResource
+import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,9 +22,15 @@ class PdfController(
     @PostMapping
     fun lagPdf(
         @RequestBody familiePdfRequestBody: FamiliePdfPostRequest,
-    ): ResponseEntity<ByteArray> =
+    ): ResponseEntity<ByteArrayResource> =
         runBlocking {
             val pdfBytes = familiePdfService.lagPdfKvittering(familiePdfRequestBody)
-            ResponseEntity.ok(pdfBytes)
+            val resource = ByteArrayResource(pdfBytes)
+            val filnavn = familiePdfRequestBody.label
+            ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=$filnavn.pdf")
+                .contentLength(resource.byteArray.size.toLong())
+                .body(resource)
         }
 }
