@@ -12,28 +12,28 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene.Ungdomsytelsesøkna
 object UngdomsytelsesøknadPdfDataMapper {
     fun mapUngdomsytelsesøknadPdfData(
         ytelseTittel: String,
-        ungdomsytelse: UngdomsytelsesøknadMottatt,
+        søknad: UngdomsytelsesøknadMottatt,
     ): FeltMap {
         val innsendingsdetaljer =
             mapInnsendingsdetaljer(
-                ungdomsytelse.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag() + DATE_TIME_FORMATTER.format(ungdomsytelse.mottatt),
-                ungdomsytelse.språk,
+                søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag() + DATE_TIME_FORMATTER.format(søknad.mottatt),
+                søknad.språk,
             )
         val søker =
             mapSøker(
-                ungdomsytelse.søker.formatertNavn(),
-                ungdomsytelse.søker.fødselsnummer,
+                søknad.søker.formatertNavn(),
+                søknad.søker.fødselsnummer,
             )
         val periode =
             mapPeriode(
-                DATE_FORMATTER.format(ungdomsytelse.fraOgMed),
-                DATE_FORMATTER.format(ungdomsytelse.tilOgMed),
-                ungdomsytelse.inntekt.toString(),
+                DATE_FORMATTER.format(søknad.fraOgMed),
+                DATE_FORMATTER.format(søknad.tilOgMed),
+                søknad.inntekt.toString(),
             )
         val samtykke =
             mapSamtykke(
-                ungdomsytelse.harForståttRettigheterOgPlikter.toString(),
-                ungdomsytelse.harBekreftetOpplysninger.toString(),
+                søknad.harForståttRettigheterOgPlikter.toString(),
+                søknad.harBekreftetOpplysninger.toString(),
             )
 
         return FeltMap(
