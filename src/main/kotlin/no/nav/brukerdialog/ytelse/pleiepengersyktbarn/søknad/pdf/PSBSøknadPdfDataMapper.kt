@@ -9,6 +9,7 @@ import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import java.time.LocalDate
@@ -34,8 +35,10 @@ object PSBSøknadPdfDataMapper {
         val relasjonTilBarnet = mapRelasjonTilBarnet(søknad.barnRelasjon, søknad.barnRelasjonBeskrivelse)
         val perioder = mapPerioder(søknad.fraOgMed, søknad.tilOgMed)
         val arbeidsgivere = mapArbeidsgivere(søknad.arbeidsgivere, søknad.fraOgMed)
+        val stønadGodtgjørelse = mapStønadGodtgjørelse(søknad.stønadGodtgjørelse)
+//        frilans,
+        val frilans = mapFrilans(søknad.frilans)
 
-//        stønadGodtgjørelse
 //        jobbISøknadsperioden,
 //        opptjeningIUtlandet,
 //        utenlandskNæring,
@@ -44,7 +47,7 @@ object PSBSøknadPdfDataMapper {
 //        nattevåk,
 //        beredskap,
 //        omsorgsstønad,
-//        frilans,
+
 //        selvstending,
 //        medlemskap,
 //        vedlegg,
@@ -173,9 +176,44 @@ object PSBSøknadPdfDataMapper {
                         VerdilisteElement(
                             label = "Startet du å motta dette underveis i perioden du søker for?",
                             verdi =
-                                stønadGodtgjørelse.startdato?.let { "${konverterBooleanTilSvar(true)} $it" }
+                                stønadGodtgjørelse.startdato?.let { "${konverterBooleanTilSvar(true)} Startet $it" }
                                     ?: konverterBooleanTilSvar(false),
                         ),
+                        VerdilisteElement(
+                            label = "Slutter du å motta dette underveis i perioden du søker for?",
+                            verdi =
+                                stønadGodtgjørelse.sluttdato?.let { "${konverterBooleanTilSvar(true)} Sluttet $it" }
+                                    ?: konverterBooleanTilSvar(false),
+                        ),
+                    ),
+            )
+        }
+
+    fun mapFrilans(frilans: Frilans?): VerdilisteElement? =
+        frilans?.takeIf { it.harInntektSomFrilanser }?.let {
+            VerdilisteElement(
+                label = "Frilans",
+                verdiliste =
+                    listOf(
+                        VerdilisteElement(
+                            label = "Jobber du som frilanser eller mottar du honorarer?",
+                            verdi = konverterBooleanTilSvar(frilans.harInntektSomFrilanser),
+                        ),
+                        VerdilisteElement(
+                            label = "Jobber du som frilanser?",
+                            verdi = konverterBooleanTilSvar(frilans.jobberFortsattSomFrilans == true),
+                        ),
+                        /*
+                        Startet på denne
+                        frilans.startetFørSisteTreHeleMåneder.takeIf { it == true }.let {
+                            VerdilisteElement(
+                                label = "Startet du som frilanser før siste tre hele måneder?",
+                                verdi = konverterBooleanTilSvar(it),
+                            )
+                        } ?: VerdilisteElement(
+                            label = "Startdato for frilansvirksomhet",
+                            verdi = frilans.startdato?.let { DATE_FORMATTER.format(it) } ?: "Ikke oppgitt",
+                        ),*/
                     ),
             )
         }
