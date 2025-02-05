@@ -6,6 +6,7 @@ import no.nav.security.token.support.core.api.Unprotected
 import org.springframework.context.annotation.Profile
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -30,6 +31,7 @@ class PdfController(
             ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=$filnavn.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
                 .contentLength(resource.byteArray.size.toLong())
                 .body(resource)
         }
