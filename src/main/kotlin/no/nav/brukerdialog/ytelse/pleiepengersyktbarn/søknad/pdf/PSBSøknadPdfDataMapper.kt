@@ -11,6 +11,7 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsfo
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
@@ -50,7 +51,7 @@ object PSBSøknadPdfDataMapper {
                 søknad.frilans,
                 søknad.selvstendigNæringsdrivende.arbeidsforhold,
             )
-
+        val opptjeningIUtlandet = mapOpptjeningIUtlandet(søknad.opptjeningIUtlandet)
 //        opptjeningIUtlandet,
 //        utenlandskNæring,
 //        omsorgstilbud,
@@ -517,6 +518,32 @@ object PSBSøknadPdfDataMapper {
                                                 .toString(),
                                     ),
                                 ),
+                        )
+                    },
+                ),
+        )
+
+    fun mapOpptjeningIUtlandet(opptjeningUtland: List<OpptjeningIUtlandet>): VerdilisteElement =
+        VerdilisteElement(
+            label = "Jobbet i annet EØS-land",
+            visningsVariant = "PUNKTLISTE",
+            verdiliste =
+
+                // Får feil her
+                listOf(
+                    if (opptjeningUtland.isNotEmpty()) {
+                        opptjeningUtland.map { opptjent ->
+                            VerdilisteElement(
+                                label =
+                                    "Jobbet i ${opptjent.land.landnavn} som ${opptjent.opptjeningType.pdfTekst} " +
+                                        "hos ${opptjent.navn}  ${DATE_TIME_FORMATTER.format(
+                                            opptjent.fraOgMed,
+                                        )} - ${DATE_TIME_FORMATTER.format(opptjent.tilOgMed)}",
+                            )
+                        }
+                    } else {
+                        VerdilisteElement(
+                            label = "Nei",
                         )
                     },
                 ),
