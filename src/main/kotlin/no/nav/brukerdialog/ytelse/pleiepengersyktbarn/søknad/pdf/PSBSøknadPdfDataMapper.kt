@@ -10,6 +10,7 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøkna
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import java.time.LocalDate
@@ -38,8 +39,8 @@ object PSBSøknadPdfDataMapper {
         val perioder = mapPerioder(søknad.fraOgMed, søknad.tilOgMed)
         val arbeidsgivere = mapArbeidsgivere(søknad.arbeidsgivere, søknad.fraOgMed)
         val stønadGodtgjørelse = mapStønadGodtgjørelse(søknad.stønadGodtgjørelse)
-//        frilans,
         val frilans = mapFrilans(søknad.frilans)
+        val selvstendig = mapSelvstendigNæringsdrivende(søknad.selvstendigNæringsdrivende)
 
 //        jobbISøknadsperioden,
 //        opptjeningIUtlandet,
@@ -49,8 +50,6 @@ object PSBSøknadPdfDataMapper {
 //        nattevåk,
 //        beredskap,
 //        omsorgsstønad,
-
-//        selvstending,
 //        medlemskap,
 //        vedlegg,
 //        samtykke,
@@ -315,6 +314,136 @@ object PSBSøknadPdfDataMapper {
             verdi = "Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.",
         )
     }
+
+    fun mapSelvstendigNæringsdrivende(selvstendigNæringsdrivende: SelvstendigNæringsdrivende): VerdilisteElement =
+        selvstendigNæringsdrivende.takeIf { it.harInntektSomSelvstendig }?.let {
+            VerdilisteElement(
+                label = "Selvstendig næringsdrivende",
+                verdiliste =
+                    listOfNotNull(
+                        selvstendigNæringsdrivende.virksomhet?.næringsinntekt.takeIf { it != null }?.let {
+                            VerdilisteElement(
+                                label = "Næringsinntekt: ${selvstendigNæringsdrivende.virksomhet?.næringsinntekt},-",
+                            )
+                        },
+                        selvstendigNæringsdrivende.virksomhet?.yrkesaktivSisteTreFerdigliknedeÅrene.takeIf { it != null }?.let {
+                            VerdilisteElement(
+                                label =
+                                    "Oppgi dato for når du ble yrkesaktiv:" +
+                                        "  ${selvstendigNæringsdrivende.virksomhet?.yrkesaktivSisteTreFerdigliknedeÅrene?.oppstartsdato}",
+                            )
+                        },
+                        selvstendigNæringsdrivende.arbeidsforhold.takeIf { it != null }?.let {
+                            VerdilisteElement(
+                                label = "Hvor mange timer jobber du normalt per uke?",
+                                verdi =
+                                    selvstendigNæringsdrivende.arbeidsforhold
+                                        ?.normalarbeidstid
+                                        ?.timerPerUkeISnitt
+                                        .toString(),
+                            )
+                        },
+                        selvstendigNæringsdrivende.virksomhet?.varigEndring.takeIf { it != null }?.let {
+                            VerdilisteElement(
+                                label = "Varig endring",
+                                visningsVariant = "PUNKTLISTE",
+                                verdiliste =
+                                    listOf(
+                                        VerdilisteElement(
+                                            label =
+                                                "Dato for når varig endring. oppsto: ${selvstendigNæringsdrivende.virksomhet?.varigEndring?.dato}",
+                                        ),
+                                        VerdilisteElement(
+                                            label =
+                                                "Næringsinntekt etter varig endring:" +
+                                                    " ${selvstendigNæringsdrivende.virksomhet?.varigEndring?.inntektEtterEndring}",
+                                        ),
+                                        VerdilisteElement(
+                                            label = "Din forklaring om varig endring:",
+                                            verdi = selvstendigNæringsdrivende.virksomhet?.varigEndring?.forklaring,
+                                        ),
+                                    ),
+                            )
+                        },
+                        selvstendigNæringsdrivende.virksomhet?.harFlereAktiveVirksomheter?.takeIf { it }.let {
+                            VerdilisteElement(
+                                label = "Har du flere enn én næringsvirksomhet som er aktiv?",
+                                verdi = konverterBooleanTilSvar(selvstendigNæringsdrivende.virksomhet?.harFlereAktiveVirksomheter!!),
+                            )
+                        },
+                        VerdilisteElement(
+                            label = "Næringsvirksomhet som du har lagt inn:",
+                            verdiliste =
+                                listOfNotNull(
+                                    selvstendigNæringsdrivende.virksomhet?.let { it1 ->
+                                        VerdilisteElement(
+                                            label = "${it1.navnPåVirksomheten} startet ${it1.fraOgMed}",
+                                            verdiliste =
+                                                listOfNotNull(
+                                                    if (it1.tilOgMed != null) {
+                                                        VerdilisteElement(
+                                                            label = "Avsluttet ${it1.tilOgMed}",
+                                                        )
+                                                    } else {
+                                                        VerdilisteElement(
+                                                            label = "Er pågående",
+                                                        )
+                                                    },
+                                                ),
+                                        )
+                                    },
+                                    VerdilisteElement(
+                                        label = "Næringstype: ${selvstendigNæringsdrivende.virksomhet?.næringstype?.beskrivelse}",
+                                        verdiliste =
+                                            listOfNotNull(
+                                                selvstendigNæringsdrivende.virksomhet?.næringstype?.let { it1 ->
+                                                    VerdilisteElement(
+                                                        label = it1.beskrivelse,
+                                                        verdi =
+                                                            if (selvstendigNæringsdrivende.virksomhet.fiskerErPåBladB == true
+                                                            ) {
+                                                                "Blad B"
+                                                            } else {
+                                                                "Ikke blad B"
+                                                            },
+                                                    )
+                                                },
+                                            ),
+                                    ),
+                                    if (selvstendigNæringsdrivende.virksomhet?.registrertINorge == true) {
+                                        VerdilisteElement(
+                                            label = "Registrert i Norge",
+                                            verdi = "Organisasjonsnummer: ${selvstendigNæringsdrivende.virksomhet.organisasjonsnummer}",
+                                        )
+                                    } else {
+                                        VerdilisteElement(
+                                            label = "Registrert i land: ${selvstendigNæringsdrivende.virksomhet?.organisasjonsnummer}",
+                                            verdi = selvstendigNæringsdrivende.virksomhet?.registrertIUtlandet?.landkode,
+                                        )
+                                    },
+                                    selvstendigNæringsdrivende.virksomhet?.regnskapsfører.takeIf { it != null }.let {
+                                        VerdilisteElement(
+                                            label = "Regnskapsfører",
+                                            visningsVariant = "PUNKTLISTE",
+                                            verdiliste =
+                                                listOf(
+                                                    VerdilisteElement(
+                                                        label = "Navn: ${it?.navn}",
+                                                    ),
+                                                    VerdilisteElement(
+                                                        label = "Telefonnummer: ${it?.telefon}",
+                                                    ),
+                                                ),
+                                        )
+                                    },
+                                ),
+                        ),
+                    ),
+            )
+        } ?: VerdilisteElement(
+            label = "Selvstendig næringsdrivende",
+            verdi = "Har ikke vært selvstendig næringsdrivende i perioden det søkes om.",
+        )
 
     fun konverterBooleanTilSvar(svar: Boolean) =
         if (svar) {
