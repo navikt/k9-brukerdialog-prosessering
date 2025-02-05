@@ -21,7 +21,9 @@ object PSBSøknadPdfDataMapper {
     ): FeltMap {
         val innsendingsdetaljer =
             mapInnsendingsdetaljer(
-                søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag() + DATE_TIME_FORMATTER.format(søknad.mottatt),
+                søknad.mottatt
+                    .withZoneSameInstant(OSLO_ZONE_ID)
+                    .somNorskDag() + DATE_TIME_FORMATTER.format(søknad.mottatt),
             )
 
         val søker =
@@ -105,9 +107,15 @@ object PSBSøknadPdfDataMapper {
                 label = "Relasjon til barnet",
                 verdiliste =
                     listOfNotNull(
-                        VerdilisteElement(label = "Hvilken relasjon har du til barnet?", verdi = barnRelasjon.toString()),
+                        VerdilisteElement(
+                            label = "Hvilken relasjon har du til barnet?",
+                            verdi = barnRelasjon.toString(),
+                        ),
                         barnRelasjonBeskrivelse?.takeIf { it.isNotBlank() }?.let {
-                            VerdilisteElement(label = "Din beskrivelse av relasjon og tilsynsrolle for barnet:", verdi = it)
+                            VerdilisteElement(
+                                label = "Din beskrivelse av relasjon og tilsynsrolle for barnet:",
+                                verdi = it,
+                            )
                         },
                     ),
             )
@@ -189,12 +197,13 @@ object PSBSøknadPdfDataMapper {
             )
         }
 
-    fun mapFrilans(frilans: Frilans?): VerdilisteElement? =
-        frilans?.takeIf { it.harInntektSomFrilanser }?.let {
+    fun mapFrilans(frilans: Frilans?): VerdilisteElement? {
+        val sisteTreMånederFørSøknadsperiodeStart = DATE_FORMATTER.format(frilans?.startdato?.minusMonths(3))
+        return frilans?.takeIf { it.harInntektSomFrilanser }?.let {
             VerdilisteElement(
                 label = "Frilans",
                 verdiliste =
-                    listOf(
+                    listOfNotNull(
                         VerdilisteElement(
                             label = "Jobber du som frilanser eller mottar du honorarer?",
                             verdi = konverterBooleanTilSvar(frilans.harInntektSomFrilanser),
@@ -203,20 +212,109 @@ object PSBSøknadPdfDataMapper {
                             label = "Jobber du som frilanser?",
                             verdi = konverterBooleanTilSvar(frilans.jobberFortsattSomFrilans == true),
                         ),
-                        /*
-                        Startet på denne
-                        frilans.startetFørSisteTreHeleMåneder.takeIf { it == true }.let {
+                        if (frilans.startetFørSisteTreHeleMåneder == true) {
                             VerdilisteElement(
-                                label = "Startet du som frilanser før siste tre hele måneder?",
-                                verdi = konverterBooleanTilSvar(it),
+                                label = "Startet du som frilanser før $sisteTreMånederFørSøknadsperiodeStart?",
+                                verdi = konverterBooleanTilSvar(true),
                             )
-                        } ?: VerdilisteElement(
-                            label = "Startdato for frilansvirksomhet",
-                            verdi = frilans.startdato?.let { DATE_FORMATTER.format(it) } ?: "Ikke oppgitt",
-                        ),*/
+                        } else {
+                            VerdilisteElement(
+                                label = "Når startet du som frilanser?",
+                                verdi = DATE_FORMATTER.format(frilans.startdato),
+                            )
+                        },
+                        VerdilisteElement(
+                            label = "Jobber du fremdeles som frilanser?",
+                            verdi = konverterBooleanTilSvar(frilans.jobberFortsattSomFrilans == true),
+                        ),
+                        frilans.jobberFortsattSomFrilans.takeIf { it == false }?.let {
+                            VerdilisteElement(
+                                label = "Når sluttet du som frilanser?",
+                                verdi = DATE_FORMATTER.format(frilans.sluttdato),
+                            )
+                        },
+                        VerdilisteElement(
+                            label = "Jeg jobber som frilanser og mottar honorar",
+                            verdiliste =
+                                listOfNotNull(
+                                    if (frilans.startetFørSisteTreHeleMåneder == true) {
+                                        VerdilisteElement(
+                                            label =
+                                                "Startet du som frilanser/startet å motta honorar " +
+                                                    "før $sisteTreMånederFørSøknadsperiodeStart?",
+                                            verdi = konverterBooleanTilSvar(frilans.startetFørSisteTreHeleMåneder),
+                                        )
+                                    } else {
+                                        VerdilisteElement(
+                                            label = "Når begynte du å jobbe som frilanser/startet å motta honorar?",
+                                            verdi = DATE_FORMATTER.format(frilans.startdato),
+                                        )
+                                    },
+                                    VerdilisteElement(
+                                        label = "Jobber du fremdeles som frilanser/mottar honorar?",
+                                        verdi = konverterBooleanTilSvar(frilans.jobberFortsattSomFrilans == true),
+                                    ),
+                                    frilans.jobberFortsattSomFrilans.takeIf { it == false }?.let {
+                                        VerdilisteElement(
+                                            label = "Når sluttet du som frilanser/sluttet å motta honorar?",
+                                            verdi = DATE_FORMATTER.format(frilans.sluttdato),
+                                        )
+                                    },
+                                ),
+                        ),
+                        VerdilisteElement(
+                            label = "Jeg mottar honorar",
+                            verdiliste =
+                                listOfNotNull(
+                                    if (frilans.startetFørSisteTreHeleMåneder == true) {
+                                        VerdilisteElement(
+                                            label =
+                                                "Startet du som frilanser/startet å motta honorar " +
+                                                    "før $sisteTreMånederFørSøknadsperiodeStart?",
+                                            verdi = konverterBooleanTilSvar(frilans.startetFørSisteTreHeleMåneder),
+                                        )
+                                    } else {
+                                        VerdilisteElement(
+                                            label = "Når begynte du å motta honorar?",
+                                            verdi = DATE_FORMATTER.format(frilans.startdato),
+                                        )
+                                    },
+                                    VerdilisteElement(
+                                        label = "Mottar du fortsatt honorarer?",
+                                        verdi = konverterBooleanTilSvar(frilans.jobberFortsattSomFrilans == true),
+                                    ),
+                                    frilans.jobberFortsattSomFrilans.takeIf { it == false }?.let {
+                                        VerdilisteElement(
+                                            label = "Når sluttet du å motta honorar?",
+                                            verdi = DATE_FORMATTER.format(frilans.sluttdato),
+                                        )
+                                    },
+                                    if (frilans.misterHonorar == true) {
+                                        VerdilisteElement(
+                                            label = "Jeg mister honorar i søknadsperioden",
+                                        )
+                                    } else {
+                                        VerdilisteElement(
+                                            label = "Jeg mister ikke honorar i søknadsperioden",
+                                        )
+                                    },
+                                ),
+                        ),
+                        VerdilisteElement(
+                            label = "Hvor mange timer jobber du normalt per uke?",
+                            verdi =
+                                frilans.arbeidsforhold
+                                    ?.normalarbeidstid
+                                    ?.timerPerUkeISnitt
+                                    .toString(),
+                        ),
                     ),
             )
-        }
+        } ?: VerdilisteElement(
+            label = "Frilans",
+            verdi = "Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.",
+        )
+    }
 
     fun konverterBooleanTilSvar(svar: Boolean) =
         if (svar) {
