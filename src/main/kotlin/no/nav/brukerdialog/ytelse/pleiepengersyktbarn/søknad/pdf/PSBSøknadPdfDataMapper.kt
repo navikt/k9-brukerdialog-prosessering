@@ -7,6 +7,7 @@ import no.nav.brukerdialog.common.FeltMap
 import no.nav.brukerdialog.common.PdfConfig
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
@@ -41,8 +42,15 @@ object PSBSøknadPdfDataMapper {
         val stønadGodtgjørelse = mapStønadGodtgjørelse(søknad.stønadGodtgjørelse)
         val frilans = mapFrilans(søknad.frilans)
         val selvstendig = mapSelvstendigNæringsdrivende(søknad.selvstendigNæringsdrivende)
-
 //        jobbISøknadsperioden,
+        val jobbISøknadsperioden =
+            mapJobbISøknadsperioden(
+                søknad.harMinstEtArbeidsforhold(),
+                søknad.arbeidsgivere,
+                søknad.frilans,
+                søknad.selvstendigNæringsdrivende.arbeidsforhold,
+            )
+
 //        opptjeningIUtlandet,
 //        utenlandskNæring,
 //        omsorgstilbud,
@@ -445,10 +453,89 @@ object PSBSøknadPdfDataMapper {
             verdi = "Har ikke vært selvstendig næringsdrivende i perioden det søkes om.",
         )
 
+    fun mapJobbISøknadsperioden(
+        ingenArbeidsforhold: Boolean,
+        arbeidsgivere: List<Arbeidsgiver>,
+        frilans: Frilans?,
+        selvstendigNæringsdrivendeArbeidsforhold: Arbeidsforhold?,
+    ): VerdilisteElement =
+        VerdilisteElement(
+            label = "Jobb i søknadsperioden",
+            verdiliste =
+                listOfNotNull(
+                    ingenArbeidsforhold.takeIf { it }?.let {
+                        VerdilisteElement(
+                            label = "Ingen arbeidsforhold er registrert i søknadsperioden",
+                        )
+                    },
+                    arbeidsgivere.takeIf { it.isNotEmpty() }.let {
+                        VerdilisteElement(
+                            label = "Arbeidsgivere",
+                            verdiliste =
+                                arbeidsgivere.map { arbeidsgiver ->
+                                    arbeidsgiver.arbeidsforhold.takeIf { it != null }.let {
+                                        VerdilisteElement(
+                                            label = "${arbeidsgiver.navn} Orgnr: ${arbeidsgiver.organisasjonsnummer}",
+                                            verdi =
+                                                "Hvor mange timer jobber du normalt per uke? " +
+                                                    "${arbeidsgiver.arbeidsforhold?.normalarbeidstid?.timerPerUkeISnitt}",
+                                        )
+                                    }
+                                },
+                        )
+                    },
+                    frilans?.harInntektSomFrilanser.takeIf { it == true }.let {
+                        VerdilisteElement(
+                            label = "Frilans",
+                            verdiliste =
+                                listOfNotNull(
+                                    frilans?.arbeidsforhold.takeIf { it != null }.let {
+                                        VerdilisteElement(
+                                            label = "Hvor mange timer jobber du normalt per uke?",
+                                            verdi =
+                                                frilans
+                                                    ?.arbeidsforhold
+                                                    ?.normalarbeidstid
+                                                    ?.timerPerUkeISnitt
+                                                    .toString(),
+                                        )
+                                    },
+                                ),
+                        )
+                    },
+                    selvstendigNæringsdrivendeArbeidsforhold?.let {
+                        VerdilisteElement(
+                            label = "Selvstendig næringsdrivende",
+                            verdiliste =
+                                listOfNotNull(
+                                    VerdilisteElement(
+                                        label = "Hvor mange timer jobber du normalt per uke?",
+                                        verdi =
+                                            selvstendigNæringsdrivendeArbeidsforhold
+                                                .normalarbeidstid
+                                                .timerPerUkeISnitt
+                                                .toString(),
+                                    ),
+                                ),
+                        )
+                    },
+                ),
+        )
+
     fun konverterBooleanTilSvar(svar: Boolean) =
         if (svar) {
             "Ja"
         } else {
             "Nei"
         }
+}
+
+private fun PSBMottattSøknad.harMinstEtArbeidsforhold(): Boolean {
+    if (frilans.arbeidsforhold != null) return true
+
+    if (selvstendigNæringsdrivende.arbeidsforhold != null) return true
+
+    if (arbeidsgivere.any { it.arbeidsforhold != null }) return true
+
+    return false
 }
