@@ -24,6 +24,20 @@ object WireMockServerUtils {
         return this
     }
 
+    fun WireMockServer.stubFamiliePdf(status: Int = 200): WireMockServer{
+        WireMock.stubFor(
+            WireMock.post(
+                WireMock.urlMatching(".*/familie-pdf-mock/api/v1/pdf/opprett-pdf"))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/pdf")
+                        .withBody("mocked-pdf-innhold".toByteArray())
+                )
+        )
+        return this
+    }
+
     fun WireMockServer.stubLagreDokument(
         urlPathMatching: String,
         requestBodyJson: String,

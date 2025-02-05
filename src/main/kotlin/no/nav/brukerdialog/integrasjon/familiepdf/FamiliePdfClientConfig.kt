@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.integrasjon.dokarkiv
+package no.nav.brukerdialog.integrasjon.familiepdf
 
 import no.nav.brukerdialog.utils.RestTemplateUtils
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
@@ -14,25 +14,25 @@ import org.springframework.web.client.RestTemplate
 import java.time.Duration
 
 @Configuration
-class DokarkivClientsConfig(
+class FamiliePdfClientConfig(
     oauth2Config: ClientConfigurationProperties,
-    @Value("\${no.nav.integration.dokarkiv-base-url}") private val baseUrl: String,
+    @Value("\${no.nav.integration.familie-pdf-base-url}") private val baseUrl: String,
 ) {
-
     private companion object {
-        private val logger = LoggerFactory.getLogger(DokarkivClientsConfig::class.java)
+        private val logger = LoggerFactory.getLogger(FamiliePdfClientConfig::class.java)
     }
 
-    private val azureDokarkivClientProperties = oauth2Config.registration["azure-dokarkiv"]
-        ?: throw RuntimeException("could not find oauth2 client config for azure-dokarkiv")
+    private val azureFamiliePdfClientProperties =
+        oauth2Config.registration["azure-familie-pdf"]
+            ?: throw RuntimeException("could not find oauth2 client config for azure-familie-pdf")
 
     @Bean
-    fun dokarkivRestTemplate(
+    fun familiePdfRestTemplate(
         restTemplateBuilder: RestTemplateBuilder,
         clientConfigurationProperties: ClientConfigurationProperties,
         oAuth2AccessTokenService: OAuth2AccessTokenService,
     ): RestTemplate {
-        logger.info("Konfigurerer opp azure klient for dokarkiv.")
+        logger.info("Konfigurerer opp azure klient for familie-pdf.")
         return restTemplateBuilder
             .rootUri(baseUrl)
             .setReadTimeout(Duration.ofSeconds(120))
@@ -40,13 +40,9 @@ class DokarkivClientsConfig(
             .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .additionalInterceptors(
-                RestTemplateUtils.exchangeBearerTokenInterceptor(
-                    azureDokarkivClientProperties,
-                    oAuth2AccessTokenService
-                ),
+                RestTemplateUtils.exchangeBearerTokenInterceptor(azureFamiliePdfClientProperties, oAuth2AccessTokenService),
                 RestTemplateUtils.requestLoggerInterceptor(logger),
-                RestTemplateUtils.requestTracingInterceptor()
-            )
-            .build()
+                RestTemplateUtils.requestTracingInterceptor(),
+            ).build()
     }
 }
