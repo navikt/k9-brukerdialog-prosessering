@@ -74,18 +74,32 @@ object PSBSøknadPdfDataMapper {
         return FeltMap(
             label = ytelseTittel,
             verdiliste =
-                listOf(
+                listOfNotNull(
                     innsendingsdetaljer,
                     søker,
+                    relasjonTilBarnet,
+                    perioder,
+                    arbeidsgivere,
+                    stønadGodtgjørelse,
+                    frilans,
+                    selvstendig,
+                    jobbISøknadsperioden,
+                    opptjeningIUtlandet,
+                    utenlandskNæring,
+                    verneplikt,
+                    omsorgstilbud,
+                    nattevåk,
+                    beredskap,
+                    utenlandsopphold,
+                    medlemskap,
+                    vedlegg,
+                    samtykke,
                 ),
             pdfConfig = PdfConfig(true, "nb"),
         )
     }
 
-    fun mapInnsendingsdetaljer(
-        tidspunkt: String,
-        språk: String? = "nb",
-    ): VerdilisteElement =
+    fun mapInnsendingsdetaljer(tidspunkt: String): VerdilisteElement =
         VerdilisteElement(
             label = "Innsendingsdetaljer",
             verdiliste =
@@ -540,9 +554,9 @@ object PSBSøknadPdfDataMapper {
                         VerdilisteElement(
                             label =
                                 "Jobbet i ${opptjent.land.landnavn} som ${opptjent.opptjeningType.pdfTekst} " +
-                                    "hos ${opptjent.navn}  ${DATE_TIME_FORMATTER.format(
+                                    "hos ${opptjent.navn}  ${DATE_FORMATTER.format(
                                         opptjent.fraOgMed,
-                                    )} - ${DATE_TIME_FORMATTER.format(opptjent.tilOgMed)}",
+                                    )} - ${DATE_FORMATTER.format(opptjent.tilOgMed)}",
                         )
                     }
                 } else {
