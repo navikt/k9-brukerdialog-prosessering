@@ -1,5 +1,4 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf
-
 import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
@@ -10,10 +9,13 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøkna
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Beredskap
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.helse.felles.Enkeltdag
 import no.nav.helse.felles.Omsorgstilbud
@@ -47,7 +49,6 @@ object PSBSøknadPdfDataMapper {
         val stønadGodtgjørelse = mapStønadGodtgjørelse(søknad.stønadGodtgjørelse)
         val frilans = mapFrilans(søknad.frilans)
         val selvstendig = mapSelvstendigNæringsdrivende(søknad.selvstendigNæringsdrivende)
-//        jobbISøknadsperioden,
         val jobbISøknadsperioden =
             mapJobbISøknadsperioden(
                 søknad.harMinstEtArbeidsforhold(),
@@ -56,21 +57,18 @@ object PSBSøknadPdfDataMapper {
                 søknad.selvstendigNæringsdrivende.arbeidsforhold,
             )
         val opptjeningIUtlandet = mapOpptjeningIUtlandet(søknad.opptjeningIUtlandet)
-        //        verneplikt,
-
         val verneplikt = mapVerneplikt(søknad.harVærtEllerErVernepliktig)
         val omsorgstilbud = mapOmsorgstilbud(søknad.omsorgstilbud)
+        val nattevåk = mapNattevåk(søknad.nattevåk)
+        val beredskap = mapBeredskap(søknad.beredskap)
+        val utenlandsopphold = mapUtenlandsopphold(søknad.utenlandsoppholdIPerioden)
 
 //        utenlandskNæring,
-//        omsorgstilbud,
 
-//        nattevåk,
-//        beredskap,
 //        omsorgsstønad,
 //        medlemskap,
 //        vedlegg,
 //        samtykke,
-        //        utenlandsopphold,
 
         return FeltMap(
             label = ytelseTittel,
@@ -647,6 +645,92 @@ object PSBSøknadPdfDataMapper {
                     )
                 },
         )
+
+    fun mapNattevåk(nattevåk: Nattevåk?): VerdilisteElement =
+        nattevåk.takeIf { it != null }.let {
+            VerdilisteElement(
+                label = "Nattevåk",
+                verdiliste =
+                    listOf(
+                        VerdilisteElement(
+                            label = "Må du være våken om natten for å pleie barnet, og derfor må være borte fra jobb dagen etter?",
+                            verdi = konverterBooleanTilSvar(nattevåk?.harNattevåk!!),
+                        ),
+                        nattevåk.tilleggsinformasjon.takeIf { it != null }.let {
+                            VerdilisteElement(
+                                label = "Dine tilleggsopplysninger:",
+                                verdi = nattevåk.tilleggsinformasjon,
+                            )
+                        },
+                    ),
+            )
+        }
+
+    fun mapBeredskap(beredskap: Beredskap?): VerdilisteElement? =
+        beredskap?.let {
+            VerdilisteElement(
+                label = "Beredskap",
+                verdiliste =
+                    listOfNotNull(
+                        VerdilisteElement(
+                            label = "Må du være i beredskap også når barnet er i et omsorgstilbud?",
+                            verdi = konverterBooleanTilSvar(beredskap.beredskap),
+                        ),
+                        beredskap.tilleggsinformasjon?.let {
+                            VerdilisteElement(
+                                label = "Dine tilleggsopplysninger:",
+                                verdi = beredskap.tilleggsinformasjon,
+                            )
+                        },
+                    ),
+            )
+        }
+
+    fun mapUtenlandsopphold(utenlandsopphold: UtenlandsoppholdIPerioden?): VerdilisteElement? =
+        utenlandsopphold?.let {
+            VerdilisteElement(
+                label = "Perioder med utenlandsopphold og ferie",
+                verdiliste =
+                    listOfNotNull(
+                        VerdilisteElement(
+                            label = "Skal du reise til utlandet i perioden du søker om pleiepenger?",
+                            verdi = konverterBooleanTilSvar(utenlandsopphold.skalOppholdeSegIUtlandetIPerioden),
+                            verdiliste =
+                                utenlandsopphold.skalOppholdeSegIUtlandetIPerioden.let {
+                                    utenlandsopphold.opphold.mapNotNull { opphold ->
+                                        VerdilisteElement(
+                                            label = opphold.landnavn + if (opphold.erUtenforEøs == true) " utenfor EØS" else "",
+                                        )
+                                        opphold.erSammenMedBarnet?.let {
+                                            VerdilisteElement(
+                                                label = "Er barnet sammen med deg?",
+                                                verdi = konverterBooleanTilSvar(opphold.erSammenMedBarnet),
+                                            )
+                                        }
+                                        opphold.erUtenforEøs?.let {
+                                            opphold.erBarnetInnlagt?.let {
+                                                VerdilisteElement(
+                                                    label = "Er barnet innlagt?",
+                                                    verdi = konverterBooleanTilSvar(opphold.erBarnetInnlagt),
+                                                    verdiliste =
+                                                        opphold.perioderBarnetErInnlagt.map {
+                                                            VerdilisteElement(
+                                                                label = "Perioder:",
+                                                                verdi = "${it.fraOgMed} - ${it.tilOgMed}",
+                                                            )
+                                                        },
+                                                )
+                                                opphold.årsak?.let {
+                                                    VerdilisteElement(label = "Årsak:", verdi = it.beskrivelse)
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                        ),
+                    ),
+            )
+        }
 
     fun konverterBooleanTilSvar(svar: Boolean) =
         if (svar) {
