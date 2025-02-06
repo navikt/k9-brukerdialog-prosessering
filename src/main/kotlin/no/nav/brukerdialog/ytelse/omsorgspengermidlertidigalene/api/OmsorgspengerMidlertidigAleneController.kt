@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api
 
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.OmsorgspengerMidlertidigAleneSøknad
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController
 class OmsorgspengerMidlertidigAleneController(
     private val innsendingService: InnsendingService,
     private val barnService: BarnService,
-    private val innsendingCache: InnsendingCache,
+    private val duplikatInnsendingSjekker: DuplikatInnsendingSjekker,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
     private val metrikkService: MetrikkService,
 ) {
@@ -54,7 +54,7 @@ class OmsorgspengerMidlertidigAleneController(
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
         søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn())
 
-        innsendingCache.put(cacheKey)
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattSøknad(søknad.ytelse())
     }
