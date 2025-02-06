@@ -1,46 +1,42 @@
-package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene
+package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering
 
+import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.OppgittInntektForPeriode
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
-import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
+import no.nav.k9.søknad.ytelse.ung.v1.OppgittInntekt
+import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
-import java.math.BigDecimal
 import java.net.URL
-import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
-import no.nav.k9.søknad.Søknad as K9Søknad
+import no.nav.k9.søknad.Søknad as UngSøknad
 
-data class Ungdomsytelsesøknad(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+data class UngdomsytelseInntektsrapportering(
+    @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
-    val språk: String,
+
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    val fraOgMed: LocalDate,
-    val tilOgMed: LocalDate,
 
-    val søkerNorskIdent: String,
+    @field:Valid val oppgittInntektForPeriode: OppgittInntektForPeriode,
 
-    val inntekt: Double = 0.0,
+    @field:AssertTrue(message = "Inntektsopplysningene må bekreftes for å kunne rapportere")
+    val harBekreftetInntekt: Boolean
 
-    @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
-    val harBekreftetOpplysninger: Boolean,
-
-    @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
-    val harForståttRettigheterOgPlikter: Boolean,
-
-    ) : Innsending {
+    ): Innsending {
     companion object {
         private val K9_SØKNAD_VERSJON = Versjon.of("1.0.0")
     }
@@ -49,41 +45,37 @@ data class Ungdomsytelsesøknad(
         søker: Søker,
         k9Format: no.nav.k9.søknad.Innsending?,
         titler: List<String>,
-    ): UngdomsytelseKomplettSøknad {
+    ): UngdomsytelseKomplettInntektsrapportering {
         requireNotNull(k9Format)
-        return UngdomsytelseKomplettSøknad(
+        return UngdomsytelseKomplettInntektsrapportering(
             søknadId = søknadId,
             mottatt = mottatt,
             søker = søker,
-            språk = språk,
-            fraOgMed = fraOgMed,
-            tilOgMed = tilOgMed,
-            inntekt = inntekt,
-            harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
-            harBekreftetOpplysninger = harBekreftetOpplysninger,
-            k9Format = k9Format as Søknad
+            oppgittInntektForPeriode = oppgittInntektForPeriode,
+            harBekreftetInntekt = harBekreftetInntekt,
+            k9Format = k9Format as UngSøknad
         )
     }
 
     override fun valider() = mutableListOf<String>()
 
-    override fun somK9Format(søker: Søker, metadata: MetaInfo): K9Søknad {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): UngSøknad {
         val ytelse = Ungdomsytelse()
-            .medSøknadsperiode(Periode(fraOgMed, tilOgMed))
-            .medInntekt(BigDecimal.valueOf(inntekt))
+            .medSøknadType(UngSøknadstype.RAPPORTERING_SØKNAD)
+            .medInntekter(OppgittInntekt(setOf(oppgittInntektForPeriode.somUngOppgittInntektForPeriode())))
 
-        return K9Søknad()
+        return UngSøknad()
             .medVersjon(K9_SØKNAD_VERSJON)
             .medMottattDato(mottatt)
-            .medSpråk(Språk.of(språk))
+            .medSpråk(Språk.NORSK_BOKMÅL)
             .medSøknadId(SøknadId(søknadId))
             .medSøker(søker.somK9Søker())
             .medYtelse(ytelse)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 
-    override fun søkerNorskIdent(): String? = søkerNorskIdent
-    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE
+    override fun søkerNorskIdent(): String? = null
+    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
     override fun søknadId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf()
     override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()

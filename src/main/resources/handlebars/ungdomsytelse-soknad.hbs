@@ -10,7 +10,7 @@
           content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
-        <bookmark name="Periode" href="#periode"/>
+        <bookmark name="Startdato" href="#startdato"/>
         <bookmark name="Samtykke" href="#samtykke"/>
     </bookmarks>
     {{#block 'style-common' }}
@@ -26,13 +26,9 @@
 <div class="innholdscontainer">
     {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
-    <!-- Periode -->
     <section id="periode">
-        <h2>Periode med deltakelse i ungdomsprogrammet</h2>
-        <p><strong>Fra og med:</strong> {{ periode.fraOgMed }}</p>
-        <p><strong>Til og med:</strong> {{ periode.tilOgMed }}</p>
-        <br/>
-        <p><strong>Rapportert inntekt i perioden:</strong> {{ inntekt }}</p>
+        <h2>Deltar i ungdomsprogrammet:</h2>
+        <p><strong>Fra og med:</strong> {{startdato}}</p>
     </section>
 
     <!-- SAMTYKKE -->

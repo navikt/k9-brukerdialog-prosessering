@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="NO">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>{{tittel}}</title>
+    <meta name="subject" content="{{tittel}}"/>
+    <meta name="author" content="nav.no"/>
+    <meta name="description"
+          content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
+    <bookmarks>
+        <bookmark name="Søker" href="#søker"/>
+        <bookmark name="Inntekt" href="#inntekt"/>
+    </bookmarks>
+    {{#block 'style-common' }}
+    {{/block}}
+</head>
+
+<body>
+<h1 id="header">{{tittel}}</h1>
+<div class="nokkelinfo">
+    <p><strong>Sendt til NAV</strong> {{søknadMottattDag}} {{ søknadMottatt }}</p>
+    <p><strong>Språk:</strong> {{hjelp.språk}}</p>
+</div>
+<div class="innholdscontainer">
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
+
+    <!--inntekt-->
+    <section id="inntekt">
+        <h2>Inntekter</h2>
+        <ul class="ul-no-indent">
+            {{#each inntektForPeriode as |inntekt|}}
+               <li class="li-style-none"> I perioden <strong>{{inntekt.periode.fraOgMed}} til {{inntekt.periode.tilOgMed}}</strong> har du oppgitt følgende
+                   inntekter:</li>
+                <br/>
+                {{#if inntekt.arbeidstakerOgFrilansInntekt}}
+                    <li class="li-style-none"><strong>Arbeidstaker / Frilanser:</strong> {{inntekt.arbeidstakerOgFrilansInntekt}}</li>
+                {{/if}}
+
+                {{#if inntekt.næringsinntekt}}
+                    <li class="li-style-none"><strong>Næringsinntekt:</strong> {{inntekt.næringsinntekt}}</li>
+                {{/if}}
+
+                {{#if inntekt.ytelse}}
+                    <li class="li-style-none"><strong>Ytelse:</strong> {{inntekt.ytelse}}</li>
+                {{/if}}
+
+            {{/each}}
+        </ul>
+    </section>
+</div>
+
+<!-- FOOTER -->
+<p id="footer">
+    <span class="soknadsid">{{ søknadId }}</span>
+    <span class="soknadsid">{{ id }}</span>
+    <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
+</p>
+</body>
+
+</html>

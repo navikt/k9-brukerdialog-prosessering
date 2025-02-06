@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.metrikk.MetrikkService
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController
 )
 class PleiepengerSyktBarnController(
     private val innsendingService: InnsendingService,
-    private val innsendingCache: InnsendingCache,
+    private val duplikatInnsendingSjekker: DuplikatInnsendingSjekker,
     private val barnService: BarnService,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
     private val metrikkService: MetrikkService,
@@ -45,7 +45,6 @@ class PleiepengerSyktBarnController(
     @PostMapping("/innsending", consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @RequestBody søknad: PleiepengerSyktBarnSøknad,
     ) = runBlocking {
@@ -55,7 +54,7 @@ class PleiepengerSyktBarnController(
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
         søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn())
 
-        innsendingCache.put(cacheKey)
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattSøknad(søknad.ytelse())
     }

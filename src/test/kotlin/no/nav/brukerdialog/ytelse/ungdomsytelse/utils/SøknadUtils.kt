@@ -1,7 +1,8 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.Ungdomsytelsesøknad
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
+import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -11,9 +12,7 @@ object SøknadUtils {
         mottatt = ZonedDateTime.parse("2022-01-02T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter),
         språk = "nb",
         søkerNorskIdent = "12345678910",
-        fraOgMed = LocalDate.parse("2021-01-01"),
-        tilOgMed = LocalDate.parse("2021-01-10"),
-        inntekt = 15000.0,
+        startdato = LocalDate.parse("2021-01-01"),
         harForståttRettigheterOgPlikter = true,
         harBekreftetOpplysninger = true
     )

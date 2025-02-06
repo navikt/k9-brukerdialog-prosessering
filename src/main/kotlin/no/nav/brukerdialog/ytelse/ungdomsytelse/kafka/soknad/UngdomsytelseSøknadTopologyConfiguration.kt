@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka
+package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -11,8 +11,8 @@ import no.nav.brukerdialog.kafka.config.SerDes
 import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene.UngdomsytelsesøknadMottatt
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene.UngdomsytelsesøknadPreprosessertSøknad
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadMottatt
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadPreprosessertSøknad
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.KafkaStreamsConfiguration

@@ -2,16 +2,17 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api
 
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.Ungdomsytelsesøknad
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenUtils.personIdent
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngdomsytelseInntektsrapportering
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
@@ -34,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController
 )
 class UngdomsytelsesøknadController(
     private val innsendingService: InnsendingService,
-    private val innsendingCache: InnsendingCache,
+    private val duplikatInnsendingSjekker: DuplikatInnsendingSjekker,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
     private val metrikkService: MetrikkService,
 ) {
@@ -45,7 +46,6 @@ class UngdomsytelsesøknadController(
     @PostMapping("/soknad/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
         @Valid @RequestBody søknad: Ungdomsytelsesøknad,
@@ -58,8 +58,28 @@ class UngdomsytelsesøknadController(
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
-        innsendingCache.put(cacheKey)
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattSøknad(søknad.ytelse())
+    }
+
+    @PostMapping("/inntektsrapportering/innsending")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun inntektrapportering(
+        @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
+        @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
+        @Valid @RequestBody rapportetInntekt: UngdomsytelseInntektsrapportering,
+    ) = runBlocking {
+        if (enabled != true) {
+            logger.info("Ungdomsytelse er ikke aktivert.")
+            throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
+        }
+        val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
+        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${rapportetInntekt.ytelse()}"
+
+        logger.info(formaterStatuslogging(rapportetInntekt.ytelse(), rapportetInntekt.søknadId, "mottatt."))
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
+        innsendingService.registrer(rapportetInntekt, metadata)
+        metrikkService.registrerMottattSøknad(rapportetInntekt.ytelse())
     }
 }

@@ -4,15 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
-import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Arbeidsgiver
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.BarnRelasjon
@@ -60,7 +58,7 @@ class PleiepengerSyktBarnControllerTest {
     private lateinit var innsendingService: InnsendingService
 
     @MockkBean
-    private lateinit var innsendingCache: InnsendingCache
+    private lateinit var duplikatInnsendingSjekker: DuplikatInnsendingSjekker
 
     @MockkBean
     private lateinit var barnService: BarnService
@@ -79,7 +77,7 @@ class PleiepengerSyktBarnControllerTest {
     @Test
     fun `Innsending av søknad er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattSøknad(any()) } returns Unit
 
@@ -87,7 +85,6 @@ class PleiepengerSyktBarnControllerTest {
 
         mockMvc.post("/pleiepenger-sykt-barn/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -106,7 +103,7 @@ class PleiepengerSyktBarnControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreInnloggetBrukerErSøker(any()) } returns Unit
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
 
         val defaultSøknad = SøknadUtils.defaultSøknad()
         val fødselsdatoIFremtiden = LocalDate.now().plusDays(1)
@@ -206,7 +203,6 @@ class PleiepengerSyktBarnControllerTest {
         val jsonPayload = objectMapper.writeValueAsString(ugyldigSøknad)
         mockMvc.post("/pleiepenger-sykt-barn/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON

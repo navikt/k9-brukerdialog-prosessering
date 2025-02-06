@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 class SøkerController(private val søkerService: SøkerService) {
 
     @GetMapping
-    fun hentSøker(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
-    ): Søker = runBlocking {
+    fun hentSøker(): Søker = runBlocking {
         søkerService.hentSøker()
     }
 }

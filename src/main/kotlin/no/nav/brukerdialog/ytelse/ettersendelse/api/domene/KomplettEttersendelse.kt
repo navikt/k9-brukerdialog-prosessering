@@ -6,7 +6,7 @@ import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZonedDateTime
 
-class KomplettEttersendelse(
+data class KomplettEttersendelse(
     private val søknadId: String,
     private val søker: Søker,
     private val språk: String,
