@@ -15,7 +15,11 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Opptjenin
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
+import no.nav.helse.felles.Enkeltdag
+import no.nav.helse.felles.Omsorgstilbud
 import java.time.LocalDate
+import java.time.temporal.WeekFields
+import java.util.Locale
 
 object PSBSøknadPdfDataMapper {
     fun mapPSBSøknadPdfData(
@@ -52,10 +56,14 @@ object PSBSøknadPdfDataMapper {
                 søknad.selvstendigNæringsdrivende.arbeidsforhold,
             )
         val opptjeningIUtlandet = mapOpptjeningIUtlandet(søknad.opptjeningIUtlandet)
-//        opptjeningIUtlandet,
+        //        verneplikt,
+
+        val verneplikt = mapVerneplikt(søknad.harVærtEllerErVernepliktig)
+        val omsorgstilbud = mapOmsorgstilbud(søknad.omsorgstilbud)
+
 //        utenlandskNæring,
 //        omsorgstilbud,
-//        verneplikt,
+
 //        nattevåk,
 //        beredskap,
 //        omsorgsstønad,
@@ -528,25 +536,116 @@ object PSBSøknadPdfDataMapper {
             label = "Jobbet i annet EØS-land",
             visningsVariant = "PUNKTLISTE",
             verdiliste =
-
-                // Får feil her
-                listOf(
-                    if (opptjeningUtland.isNotEmpty()) {
-                        opptjeningUtland.map { opptjent ->
-                            VerdilisteElement(
-                                label =
-                                    "Jobbet i ${opptjent.land.landnavn} som ${opptjent.opptjeningType.pdfTekst} " +
-                                        "hos ${opptjent.navn}  ${DATE_TIME_FORMATTER.format(
-                                            opptjent.fraOgMed,
-                                        )} - ${DATE_TIME_FORMATTER.format(opptjent.tilOgMed)}",
-                            )
-                        }
-                    } else {
+                if (opptjeningUtland.isNotEmpty()) {
+                    opptjeningUtland.map { opptjent ->
+                        VerdilisteElement(
+                            label =
+                                "Jobbet i ${opptjent.land.landnavn} som ${opptjent.opptjeningType.pdfTekst} " +
+                                    "hos ${opptjent.navn}  ${DATE_TIME_FORMATTER.format(
+                                        opptjent.fraOgMed,
+                                    )} - ${DATE_TIME_FORMATTER.format(opptjent.tilOgMed)}",
+                        )
+                    }
+                } else {
+                    listOf(
                         VerdilisteElement(
                             label = "Nei",
-                        )
-                    },
-                ),
+                        ),
+                    )
+                },
+        )
+
+    fun mapVerneplikt(verneplikt: Boolean?): VerdilisteElement? =
+        verneplikt?.let {
+            VerdilisteElement(
+                label = "Verneplikt",
+                verdiliste =
+                    listOf(
+                        VerdilisteElement(
+                            label = "Utøvde du verneplikt på tidspunktet du søker pleiepenger fra?",
+                            verdi = konverterBooleanTilSvar(verneplikt),
+                        ),
+                    ),
+            )
+        }
+
+    fun mapOmsorgstilbud(omsorgstilbud: Omsorgstilbud?): VerdilisteElement =
+        VerdilisteElement(
+            label = "Omsorgtilbud",
+            verdiliste =
+                if (omsorgstilbud != null) {
+                    listOf(
+                        omsorgstilbud.svarFortid.takeIf { it != null }.let {
+                            VerdilisteElement(
+                                label = "Har barnet vært fast og regelmessig i et omsorgstilbud?",
+                                verdi = omsorgstilbud.svarFortid.toString(),
+                            )
+                        },
+                        omsorgstilbud.svarFremtid.takeIf { it != null }.let {
+                            VerdilisteElement(
+                                label = "Skal barnet være fast og regelmessig i et omsorgstilbud?",
+                                verdi = omsorgstilbud.svarFremtid.toString(),
+                            )
+                        },
+                        omsorgstilbud.erLiktHverUke.takeIf { it == true }.let {
+                            VerdilisteElement(
+                                label = "Er tiden i omsorgstilbudet lik hver uke?",
+                                verdi = omsorgstilbud.svarFremtid.toString(),
+                            )
+                        },
+                        omsorgstilbud.enkeltdager.takeIf { it != null }.let {
+                            VerdilisteElement(
+                                label = "Tid barnet er i omsorgstilbud:",
+                                verdiliste =
+                                    mapEnkeltdagToVerdilisteElement(omsorgstilbud.enkeltdager!!),
+                            )
+                        },
+                        omsorgstilbud.ukedager.takeIf { it != null }.let { ukedag ->
+                            VerdilisteElement(
+                                label = "Faste dager barnet er i omsorgtilbud: ",
+                                verdiliste =
+                                    listOfNotNull(
+                                        ukedag?.mandag.takeIf { it != null }.let {
+                                            VerdilisteElement(
+                                                label = "Mandager: ",
+                                                verdi = omsorgstilbud.ukedager?.mandag.toString(),
+                                            )
+                                        },
+                                        ukedag?.tirsdag.takeIf { it != null }.let {
+                                            VerdilisteElement(
+                                                label = "Tirsdager: ",
+                                                verdi = omsorgstilbud.ukedager?.tirsdag.toString(),
+                                            )
+                                        },
+                                        ukedag?.onsdag.takeIf { it != null }.let {
+                                            VerdilisteElement(
+                                                label = "Onsdager: ",
+                                                verdi = omsorgstilbud.ukedager?.onsdag.toString(),
+                                            )
+                                        },
+                                        ukedag?.torsdag.takeIf { it != null }.let {
+                                            VerdilisteElement(
+                                                label = "Torsdager: ",
+                                                verdi = omsorgstilbud.ukedager?.torsdag.toString(),
+                                            )
+                                        },
+                                        ukedag?.fredag.takeIf { it != null }.let {
+                                            VerdilisteElement(
+                                                label = "Fredager: ",
+                                                verdi = omsorgstilbud.ukedager?.fredag.toString(),
+                                            )
+                                        },
+                                    ),
+                            )
+                        },
+                    )
+                } else {
+                    listOf(
+                        VerdilisteElement(
+                            label = "Nei",
+                        ),
+                    )
+                },
         )
 
     fun konverterBooleanTilSvar(svar: Boolean) =
@@ -565,4 +664,27 @@ private fun PSBMottattSøknad.harMinstEtArbeidsforhold(): Boolean {
     if (arbeidsgivere.any { it.arbeidsforhold != null }) return true
 
     return false
+}
+
+fun mapEnkeltdagToVerdilisteElement(enkeltdager: List<Enkeltdag>): List<VerdilisteElement> {
+    val weekFields = WeekFields.of(Locale.getDefault())
+
+    return enkeltdager
+        .groupBy { it.dato.monthValue }
+        .flatMap { (month, daysInMonth) ->
+            daysInMonth
+                .groupBy { it.dato.get(weekFields.weekOfMonth()) }
+                .map { (week, daysInWeek) ->
+                    VerdilisteElement(
+                        label = "Month: $month, Week: $week",
+                        verdiliste =
+                            daysInWeek.map { day ->
+                                VerdilisteElement(
+                                    label = "Day: ${day.dato}",
+                                    verdi = day.tid.toString(),
+                                )
+                            },
+                    )
+                }
+        }
 }
