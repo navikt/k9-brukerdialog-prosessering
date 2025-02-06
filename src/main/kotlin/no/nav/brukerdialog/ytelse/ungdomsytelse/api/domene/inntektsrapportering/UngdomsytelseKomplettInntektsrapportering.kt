@@ -6,7 +6,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.OppgittInntektForPeri
 import no.nav.k9.søknad.Søknad
 import java.time.ZonedDateTime
 
-class UngdomsytelseKomplettInntektsrapportering(
+data class UngdomsytelseKomplettInntektsrapportering(
     private val søknadId: String,
     private val søker: Søker,
     private val oppgittInntektForPeriode: OppgittInntektForPeriode,

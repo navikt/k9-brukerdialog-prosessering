@@ -8,7 +8,7 @@ import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
-class UngdomsytelseKomplettSøknad(
+data class UngdomsytelseKomplettSøknad(
     private val søknadId: String,
     private val søker: Søker,
     private val språk: String,
