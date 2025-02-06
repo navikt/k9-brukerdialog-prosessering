@@ -8,14 +8,17 @@ import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Barn
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Beredskap
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.FerieuttakIPerioden
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Medlemskap
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.helse.felles.Enkeltdag
@@ -59,17 +62,14 @@ object PSBSøknadPdfDataMapper {
             )
         val opptjeningIUtlandet = mapOpptjeningIUtlandet(søknad.opptjeningIUtlandet)
         val verneplikt = mapVerneplikt(søknad.harVærtEllerErVernepliktig)
+        val utenlandskNæring = maputenlandskNæring(søknad.utenlandskNæring)
         val omsorgstilbud = mapOmsorgstilbud(søknad.omsorgstilbud)
         val nattevåk = mapNattevåk(søknad.nattevåk)
         val beredskap = mapBeredskap(søknad.beredskap)
         val utenlandsopphold = mapUtenlandsopphold(søknad.utenlandsoppholdIPerioden, søknad.ferieuttakIPerioden)
-
-//        utenlandskNæring,
-
-//        omsorgsstønad,
-//        medlemskap,
-//        vedlegg,
-//        samtykke,
+        val medlemskap = mapMedlemskap(søknad.medlemskap)
+        val vedlegg = mapVedlegg(søknad.vedleggId, søknad.barn, søknad.fødselsattestVedleggId)
+        val samtykke = mapSamtykke(søknad.harForståttRettigheterOgPlikter, søknad.harBekreftetOpplysninger)
 
         return FeltMap(
             label = ytelseTittel,
@@ -554,6 +554,23 @@ object PSBSøknadPdfDataMapper {
                 },
         )
 
+    fun maputenlandskNæring(utenlandskNæring: List<UtenlandskNæring>): VerdilisteElement? =
+        VerdilisteElement(
+            label = "Utenlandsk næring",
+            verdiliste =
+                utenlandskNæring.map { næring ->
+                    VerdilisteElement(
+                        label = næring.navnPåVirksomheten,
+                        verdi = "${næring.fraOgMed} - ${næring.tilOgMed}",
+                    )
+                    VerdilisteElement(
+                        label = "Land:",
+                        verdi = "${næring.land.landnavn} ${næring.land.landkode}",
+                    )
+                    VerdilisteElement(label = "Næringstype:", verdi = næring.næringstype.beskrivelse)
+                },
+        )
+
     fun mapVerneplikt(verneplikt: Boolean?): VerdilisteElement? =
         verneplikt?.let {
             VerdilisteElement(
@@ -762,6 +779,84 @@ object PSBSøknadPdfDataMapper {
                     ),
             )
         }
+
+    fun mapMedlemskap(medlemskap: Medlemskap): VerdilisteElement =
+        VerdilisteElement(
+            label = "Medlemskap i folketrygden",
+            verdiliste =
+                listOfNotNull(
+                    VerdilisteElement(
+                        label = "Har du bodd i utlandet de siste 12 månedene?",
+                        verdi = konverterBooleanTilSvar(medlemskap.harBoddIUtlandetSiste12Mnd),
+                        verdiliste =
+                            medlemskap.utenlandsoppholdSiste12Mnd.takeIf { it.isNotEmpty() }?.map { opphold ->
+                                VerdilisteElement(
+                                    label = opphold.landnavn,
+                                    verdi = "${opphold.fraOgMed} - ${opphold.tilOgMed}",
+                                )
+                            },
+                    ),
+                    VerdilisteElement(
+                        label = "Skal du bo i utlandet de neste 12 månedene?",
+                        verdi = konverterBooleanTilSvar(medlemskap.skalBoIUtlandetNeste12Mnd),
+                        verdiliste =
+                            medlemskap.utenlandsoppholdNeste12Mnd.takeIf { it.isNotEmpty() }?.map { opphold ->
+                                VerdilisteElement(
+                                    label = opphold.landnavn,
+                                    verdi = "${opphold.fraOgMed} - ${opphold.tilOgMed}",
+                                )
+                            },
+                    ),
+                ),
+        )
+
+    fun mapVedlegg(
+        vedlegg: List<String>,
+        barn: Barn,
+        fødselsattestVedleggId: List<String>?,
+    ): VerdilisteElement =
+        VerdilisteElement(
+            label = "Vedlegg",
+            verdiliste =
+                listOfNotNull(
+                    vedlegg.takeIf { it.isEmpty() }.let {
+                        VerdilisteElement(
+                            label = "Legeerklæring",
+                            verdi = "Ingen vedlegg er lastet opp.",
+                        )
+                    },
+                    barn.fødselsnummer?.let {
+                        VerdilisteElement(
+                            label = "Fødselsattest",
+                            verdi =
+                                if (fødselsattestVedleggId.isNullOrEmpty()) {
+                                    "Har ikke lastet opp kopi av fødselsattest til barnet."
+                                } else {
+                                    "Har lastet opp kopi av fødselsattest til barnet."
+                                },
+                        )
+                    },
+                ),
+        )
+
+    fun mapSamtykke(
+        harForståttRettigheterOgPlikter: Boolean,
+        harBekreftetOpplysninger: Boolean,
+    ): VerdilisteElement =
+        VerdilisteElement(
+            label = "Samtykke fra deg",
+            verdiliste =
+                listOf(
+                    VerdilisteElement(
+                        label = "Har du forstått dine rettigheter og plikter?",
+                        verdi = konverterBooleanTilSvar(harForståttRettigheterOgPlikter),
+                    ),
+                    VerdilisteElement(
+                        label = "Har du bekreftet at opplysningene du har gitt er riktige?",
+                        verdi = konverterBooleanTilSvar(harBekreftetOpplysninger),
+                    ),
+                ),
+        )
 
     fun konverterBooleanTilSvar(svar: Boolean) =
         if (svar) {
