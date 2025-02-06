@@ -10,6 +10,7 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsfo
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Beredskap
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.FerieuttakIPerioden
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
@@ -61,7 +62,7 @@ object PSBSøknadPdfDataMapper {
         val omsorgstilbud = mapOmsorgstilbud(søknad.omsorgstilbud)
         val nattevåk = mapNattevåk(søknad.nattevåk)
         val beredskap = mapBeredskap(søknad.beredskap)
-        val utenlandsopphold = mapUtenlandsopphold(søknad.utenlandsoppholdIPerioden)
+        val utenlandsopphold = mapUtenlandsopphold(søknad.utenlandsoppholdIPerioden, søknad.ferieuttakIPerioden)
 
 //        utenlandskNæring,
 
@@ -686,7 +687,10 @@ object PSBSøknadPdfDataMapper {
             )
         }
 
-    fun mapUtenlandsopphold(utenlandsopphold: UtenlandsoppholdIPerioden?): VerdilisteElement? =
+    fun mapUtenlandsopphold(
+        utenlandsopphold: UtenlandsoppholdIPerioden?,
+        ferieuttakIPerioden: FerieuttakIPerioden?,
+    ): VerdilisteElement? =
         utenlandsopphold?.let {
             VerdilisteElement(
                 label = "Perioder med utenlandsopphold og ferie",
@@ -727,6 +731,33 @@ object PSBSøknadPdfDataMapper {
                                         }
                                     }
                                 },
+                        ),
+                        VerdilisteElement(
+                            label = "Skal du ha ferie i perioden du søker om pleiepenger?",
+                            verdiliste =
+                                listOfNotNull(
+                                    ferieuttakIPerioden?.skalTaUtFerieIPerioden?.let {
+                                        if (it) {
+                                            VerdilisteElement(
+                                                label = "Du opplyser at du skal ha ferie",
+                                                visningsVariant = "PUNKTLISTE",
+                                                verdiliste =
+                                                    ferieuttakIPerioden.ferieuttak.map { ferieuttak ->
+                                                        VerdilisteElement(
+                                                            label = "Ferie:",
+                                                            verdi =
+                                                                DATE_FORMATTER.format(ferieuttak.fraOgMed) + " - " +
+                                                                    DATE_FORMATTER.format(ferieuttak.tilOgMed),
+                                                        )
+                                                    },
+                                            )
+                                        } else {
+                                            VerdilisteElement(
+                                                label = konverterBooleanTilSvar(ferieuttakIPerioden.skalTaUtFerieIPerioden),
+                                            )
+                                        }
+                                    },
+                                ),
                         ),
                     ),
             )
