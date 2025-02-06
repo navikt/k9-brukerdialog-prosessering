@@ -12,6 +12,7 @@ import org.springframework.web.ErrorResponseException
 import java.net.URI
 import java.time.Duration
 
+// TODO: Bytt navn til DuplikatInnsendingSjekker
 @Service
 class InnsendingCache(
     @Value("\${no.nav.cache.innsending.expiry-in-seconds}") private val expireSeconds: Long
@@ -28,7 +29,7 @@ class InnsendingCache(
     }
 
     @kotlin.jvm.Throws(ErrorResponseException::class)
-    fun put(key: String) {
+    fun put(key: String) { // TODO: Rename til sjekkDuplikat
         if (duplikatEksisterer(key)) {
             throw DuplikatInnsendingProblem()
         }
