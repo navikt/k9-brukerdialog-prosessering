@@ -12,9 +12,9 @@ data class OppgittInntektForPeriode(
     val periodeForInntekt: UngPeriode,
 ) {
     fun somUngOppgittInntektForPeriode(): UngOppgittInntektForPeriode = UngOppgittInntektForPeriode(
-        arbeidstakerOgFrilansInntekt?.let { BigDecimal.valueOf(it.toDouble()) },
-        næringsinntekt?.let { BigDecimal.valueOf(it.toDouble()) },
-        inntektFraYtelse?.let { BigDecimal.valueOf(it.toDouble()) },
+        arbeidstakerOgFrilansInntekt?.let { BigDecimal.valueOf(it.toLong()) },
+        næringsinntekt?.let { BigDecimal.valueOf(it.toLong()) },
+        inntektFraYtelse?.let { BigDecimal.valueOf(it.toLong()) },
         periodeForInntekt.somUngPeriode(),
     )
 }

@@ -144,9 +144,9 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
               "inntekter": {
                 "oppgittePeriodeinntekter": [
                   {
-                    "arbeidstakerOgFrilansInntekt": "6000.0",
-                    "næringsinntekt": "4000.0",
-                    "ytelse": "2000.0",
+                    "arbeidstakerOgFrilansInntekt": "6000",
+                    "næringsinntekt": "4000",
+                    "ytelse": "2000",
                     "periode": "2025-01-01/2025-01-31"
                   }
                 ]
