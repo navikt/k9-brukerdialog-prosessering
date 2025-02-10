@@ -6,6 +6,7 @@ import no.nav.brukerdialog.common.FeltMap
 import no.nav.brukerdialog.common.PdfConfig
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Barn
@@ -16,6 +17,7 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Medlemskap
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.RedusertArbeidstidType
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
@@ -100,20 +102,48 @@ object PSBSøknadPdfDataMapper {
         )
     }
 
+    // TODO FELLES-FUN
     fun lagVerdiElement(
         spørsmålsTekst: String,
-        variabel: Any?,
+        svarVerdi: Any?,
     ): VerdilisteElement? =
-        when (variabel) {
-            is String -> VerdilisteElement(label = spørsmålsTekst, verdi = variabel)
-            is Enum<*> -> VerdilisteElement(label = spørsmålsTekst, verdi = variabel.toString())
-            is Boolean -> VerdilisteElement(label = spørsmålsTekst, verdi = konverterBooleanTilSvar(variabel))
-            is Duration -> VerdilisteElement(label = spørsmålsTekst, verdi = variabel.tilString())
-            is LocalDate -> VerdilisteElement(label = spørsmålsTekst, verdi = DATE_FORMATTER.format(variabel))
+        when (svarVerdi) {
+            is String -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi)
+            is Enum<*> -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.toString())
+            is Boolean -> VerdilisteElement(label = spørsmålsTekst, verdi = konverterBooleanTilSvar(svarVerdi))
+            is Duration -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.tilString())
+            is LocalDate -> VerdilisteElement(label = spørsmålsTekst, verdi = DATE_FORMATTER.format(svarVerdi))
+            is Int -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.toString())
+            is Arbeidsforhold -> VerdilisteElement(label = spørsmålsTekst, verdi = arbeidIPerioden(svarVerdi))
             else -> null
         }
 
     // Sende inn et tredje param som er optional som er det man sjekker på, også kan verdien være noe annet. Defaulter til å være det samme med mindre den er med
+
+    // TODO FELLES-FUN
+    private fun arbeidIPerioden(arbeidsforhold: Arbeidsforhold?): String? {
+        val arbeidIPeriode = arbeidsforhold?.arbeidIPeriode ?: return "Ingen arbeidsforhold registrert"
+
+        return when (arbeidIPeriode.type) {
+            ArbeidIPeriodeType.ARBEIDER_IKKE -> "Jobber ikke i perioden."
+            ArbeidIPeriodeType.ARBEIDER_VANLIG -> "Jobber som normalt i perioden. Har ikke fravær fra jobb"
+            ArbeidIPeriodeType.ARBEIDER_REDUSERT -> {
+                val redusertArbeid = arbeidIPeriode.redusertArbeid ?: return "Jobber kombinerer pleiepeneger med arbeid i perioden."
+
+                val redusertInfo =
+                    when (redusertArbeid.type) {
+                        RedusertArbeidstidType.PROSENT_AV_NORMALT -> "Jobber ${redusertArbeid.prosentAvNormalt} av normalt i perioden"
+                        RedusertArbeidstidType.TIMER_I_SNITT_PER_UKE -> "Jobber ${redusertArbeid.timerPerUke?.toHours()} timer per uke"
+                        RedusertArbeidstidType.ULIKE_UKER_TIMER ->
+                            redusertArbeid.arbeidsuker?.joinToString(
+                                "\n",
+                            ) { uke -> "Periode: ${uke.periode}, Timer: ${uke.timer?.toHours()} timer" }
+                                ?: "Ingen detaljer for ulike uker"
+                    }
+                "Jobber kombinerer pleiepenger med arbeid i perioden.\n$redusertInfo"
+            }
+        }
+    }
 
     private fun mapInnsendingsdetaljer(tidspunkt: String): VerdilisteElement =
         VerdilisteElement(
@@ -182,9 +212,6 @@ object PSBSøknadPdfDataMapper {
                 label = "Arbeidsgivere",
                 verdiliste =
                     arbeidsgivere.map { arbeidsgiver ->
-
-                        val timerPerUkeISnitt = arbeidsgiver.arbeidsforhold?.normalarbeidstid?.timerPerUkeISnitt
-
                         VerdilisteElement(
                             label = arbeidsgiver.navn.toString(),
                             verdiliste =
@@ -195,7 +222,10 @@ object PSBSøknadPdfDataMapper {
                                         "Sluttet du hos ${arbeidsgiver.navn} før $fraOgMed?",
                                         arbeidsgiver.sluttetFørSøknadsperiode,
                                     ),
-                                    lagVerdiElement("Hvor mange timer jobber du normalt per uke?", timerPerUkeISnitt),
+                                    lagVerdiElement(
+                                        "Hvor mange timer jobber du normalt per uke?",
+                                        arbeidsgiver.arbeidsforhold?.normalarbeidstid?.timerPerUkeISnitt,
+                                    ),
                                 ),
                         )
                     },
@@ -231,6 +261,7 @@ object PSBSøknadPdfDataMapper {
             )
         }
 
+    // TODO logikken i denne må sees over, mye == true inne i konverter-funksjoner
     private fun mapFrilans(frilans: Frilans?): VerdilisteElement? {
         val sisteTreMånederFørSøknadsperiodeStart = DATE_FORMATTER.format(frilans?.startdato?.minusMonths(3))
         return frilans?.takeIf { it.harInntektSomFrilanser }?.let {
@@ -250,9 +281,9 @@ object PSBSøknadPdfDataMapper {
                         },
                         lagVerdiElement("Jobber du fremdeles som frilanser?", frilans.jobberFortsattSomFrilans),
                         frilans.jobberFortsattSomFrilans.takeIf { it == false }?.let {
-                            VerdilisteElement(
-                                label = "Når sluttet du som frilanser?",
-                                verdi = DATE_FORMATTER.format(frilans.sluttdato),
+                            lagVerdiElement(
+                                "Når sluttet du som frilanser?",
+                                frilans.sluttdato,
                             )
                         },
                         VerdilisteElement(
@@ -260,27 +291,16 @@ object PSBSøknadPdfDataMapper {
                             verdiliste =
                                 listOfNotNull(
                                     if (frilans.startetFørSisteTreHeleMåneder == true) {
-                                        VerdilisteElement(
-                                            label =
-                                                "Startet du som frilanser/startet å motta honorar " +
-                                                    "før $sisteTreMånederFørSøknadsperiodeStart?",
-                                            verdi = konverterBooleanTilSvar(frilans.startetFørSisteTreHeleMåneder),
+                                        lagVerdiElement(
+                                            "Startet du som frilanser/startet å motta honorar før $sisteTreMånederFørSøknadsperiodeStart?",
+                                            frilans.startetFørSisteTreHeleMåneder,
                                         )
                                     } else {
-                                        VerdilisteElement(
-                                            label = "Når begynte du å jobbe som frilanser/startet å motta honorar?",
-                                            verdi = DATE_FORMATTER.format(frilans.startdato),
-                                        )
+                                        lagVerdiElement("Når begynte du å jobbe som frilanser/startet å motta honorar?", frilans.startdato)
                                     },
-                                    VerdilisteElement(
-                                        label = "Jobber du fremdeles som frilanser/mottar honorar?",
-                                        verdi = konverterBooleanTilSvar(frilans.jobberFortsattSomFrilans == true),
-                                    ),
+                                    lagVerdiElement("Jobber du fremdeles som frilanser/mottar honorar?", frilans.jobberFortsattSomFrilans),
                                     frilans.jobberFortsattSomFrilans.takeIf { it == false }?.let {
-                                        VerdilisteElement(
-                                            label = "Når sluttet du som frilanser/sluttet å motta honorar?",
-                                            verdi = DATE_FORMATTER.format(frilans.sluttdato),
-                                        )
+                                        lagVerdiElement("Når sluttet du som frilanser/sluttet å motta honorar?", frilans.sluttdato)
                                     },
                                 ),
                         ),
@@ -289,17 +309,12 @@ object PSBSøknadPdfDataMapper {
                             verdiliste =
                                 listOfNotNull(
                                     if (frilans.startetFørSisteTreHeleMåneder == true) {
-                                        VerdilisteElement(
-                                            label =
-                                                "Startet du som frilanser/startet å motta honorar " +
-                                                    "før $sisteTreMånederFørSøknadsperiodeStart?",
-                                            verdi = konverterBooleanTilSvar(frilans.startetFørSisteTreHeleMåneder),
+                                        lagVerdiElement(
+                                            "Startet du som frilanser/startet å motta honorar før $sisteTreMånederFørSøknadsperiodeStart?",
+                                            frilans.startetFørSisteTreHeleMåneder,
                                         )
                                     } else {
-                                        VerdilisteElement(
-                                            label = "Når begynte du å motta honorar?",
-                                            verdi = DATE_FORMATTER.format(frilans.startdato),
-                                        )
+                                        lagVerdiElement("Når begynte du å motta honorar?", frilans.startdato)
                                     },
                                     VerdilisteElement(
                                         label = "Mottar du fortsatt honorarer?",
@@ -322,13 +337,9 @@ object PSBSøknadPdfDataMapper {
                                     },
                                 ),
                         ),
-                        VerdilisteElement(
-                            label = "Hvor mange timer jobber du normalt per uke?",
-                            verdi =
-                                frilans.arbeidsforhold
-                                    ?.normalarbeidstid
-                                    ?.timerPerUkeISnitt
-                                    .toString(),
+                        lagVerdiElement(
+                            "Hvor mange timer jobber du normalt per uke?",
+                            frilans.arbeidsforhold?.normalarbeidstid?.timerPerUkeISnitt,
                         ),
                     ),
             )
@@ -344,118 +355,79 @@ object PSBSøknadPdfDataMapper {
                 label = "Selvstendig næringsdrivende",
                 verdiliste =
                     listOfNotNull(
-                        selvstendigNæringsdrivende.virksomhet?.næringsinntekt.takeIf { it != null }?.let {
-                            VerdilisteElement(
-                                label = "Næringsinntekt: ${selvstendigNæringsdrivende.virksomhet?.næringsinntekt},-",
-                            )
-                        },
-                        selvstendigNæringsdrivende.virksomhet?.yrkesaktivSisteTreFerdigliknedeÅrene.takeIf { it != null }?.let {
-                            VerdilisteElement(
-                                label =
-                                    "Oppgi dato for når du ble yrkesaktiv:" +
-                                        "  ${selvstendigNæringsdrivende.virksomhet?.yrkesaktivSisteTreFerdigliknedeÅrene?.oppstartsdato}",
-                            )
-                        },
-                        selvstendigNæringsdrivende.arbeidsforhold.takeIf { it != null }?.let {
-                            VerdilisteElement(
-                                label = "Hvor mange timer jobber du normalt per uke?",
-                                verdi =
-                                    selvstendigNæringsdrivende.arbeidsforhold
-                                        ?.normalarbeidstid
-                                        ?.timerPerUkeISnitt
-                                        .toString(),
-                            )
-                        },
+                        lagVerdiElement(
+                            "Næringsinntekt:",
+                            selvstendigNæringsdrivende.virksomhet?.næringsinntekt,
+                        ),
+                        lagVerdiElement(
+                            "Oppgi dato for når du ble yrkesaktiv: ",
+                            selvstendigNæringsdrivende.virksomhet?.yrkesaktivSisteTreFerdigliknedeÅrene?.oppstartsdato,
+                        ),
+                        lagVerdiElement(
+                            "Hvor mange timer jobber du normalt per uke?",
+                            selvstendigNæringsdrivende.arbeidsforhold?.normalarbeidstid?.timerPerUkeISnitt,
+                        ),
                         selvstendigNæringsdrivende.virksomhet?.varigEndring.takeIf { it != null }?.let {
                             VerdilisteElement(
                                 label = "Varig endring",
-                                visningsVariant = "PUNKTLISTE",
                                 verdiliste =
-                                    listOf(
-                                        VerdilisteElement(
-                                            label =
-                                                "Dato for når varig endring. oppsto: ${selvstendigNæringsdrivende.virksomhet?.varigEndring?.dato}",
+                                    listOfNotNull(
+                                        lagVerdiElement(
+                                            "Dato for når varig endring. oppsto:",
+                                            selvstendigNæringsdrivende.virksomhet?.varigEndring?.dato,
                                         ),
-                                        VerdilisteElement(
-                                            label =
-                                                "Næringsinntekt etter varig endring:" +
-                                                    " ${selvstendigNæringsdrivende.virksomhet?.varigEndring?.inntektEtterEndring}",
+                                        lagVerdiElement(
+                                            "Næringsinntekt etter varig endring:",
+                                            selvstendigNæringsdrivende.virksomhet?.varigEndring?.inntektEtterEndring,
                                         ),
-                                        VerdilisteElement(
-                                            label = "Din forklaring om varig endring:",
-                                            verdi = selvstendigNæringsdrivende.virksomhet?.varigEndring?.forklaring,
+                                        lagVerdiElement(
+                                            "Din forklaring om varig endring:",
+                                            selvstendigNæringsdrivende.virksomhet?.varigEndring?.forklaring,
                                         ),
                                     ),
                             )
                         },
-                        selvstendigNæringsdrivende.virksomhet?.harFlereAktiveVirksomheter?.takeIf { it }.let {
-                            VerdilisteElement(
-                                label = "Har du flere enn én næringsvirksomhet som er aktiv?",
-                                verdi = konverterBooleanTilSvar(selvstendigNæringsdrivende.virksomhet?.harFlereAktiveVirksomheter!!),
-                            )
-                        },
+                        lagVerdiElement(
+                            "Har du flere enn én næringsvirksomhet som er aktiv?",
+                            selvstendigNæringsdrivende.virksomhet?.harFlereAktiveVirksomheter,
+                        ),
                         VerdilisteElement(
                             label = "Næringsvirksomhet som du har lagt inn:",
                             verdiliste =
                                 listOfNotNull(
-                                    selvstendigNæringsdrivende.virksomhet?.let { it1 ->
+                                    selvstendigNæringsdrivende.virksomhet?.let { virksomhet ->
                                         VerdilisteElement(
-                                            label = "${it1.navnPåVirksomheten} startet ${it1.fraOgMed}",
+                                            label =
+                                                "${virksomhet.navnPåVirksomheten} (startet ${virksomhet.fraOgMed}, " +
+                                                    "${if (virksomhet.tilOgMed == null) "er pågående)" else "Avsluttet ${virksomhet.tilOgMed})"},",
                                             verdiliste =
                                                 listOfNotNull(
-                                                    if (it1.tilOgMed != null) {
-                                                        VerdilisteElement(
-                                                            label = "Avsluttet ${it1.tilOgMed}",
+                                                    lagVerdiElement(
+                                                        "Næringstype: ",
+                                                        "${selvstendigNæringsdrivende.virksomhet.næringstype.beskrivelse} (${selvstendigNæringsdrivende.virksomhet.fiskerErPåBladB})",
+                                                    ),
+                                                    if (selvstendigNæringsdrivende.virksomhet.registrertINorge) {
+                                                        lagVerdiElement(
+                                                            "Registrert i Norge:",
+                                                            "Organisasjonsnummer: ${selvstendigNæringsdrivende.virksomhet.organisasjonsnummer}",
                                                         )
                                                     } else {
-                                                        VerdilisteElement(
-                                                            label = "Er pågående",
+                                                        lagVerdiElement(
+                                                            "Registrert i land: ",
+                                                            "${selvstendigNæringsdrivende.virksomhet.registrertIUtlandet?.landnavn} (${selvstendigNæringsdrivende.virksomhet.registrertIUtlandet?.landkode})",
                                                         )
                                                     },
-                                                ),
-                                        )
-                                    },
-                                    VerdilisteElement(
-                                        label = "Næringstype: ${selvstendigNæringsdrivende.virksomhet?.næringstype?.beskrivelse}",
-                                        verdiliste =
-                                            listOfNotNull(
-                                                selvstendigNæringsdrivende.virksomhet?.næringstype?.let { it1 ->
-                                                    VerdilisteElement(
-                                                        label = it1.beskrivelse,
-                                                        verdi =
-                                                            if (selvstendigNæringsdrivende.virksomhet.fiskerErPåBladB == true
-                                                            ) {
-                                                                "Blad B"
-                                                            } else {
-                                                                "Ikke blad B"
-                                                            },
-                                                    )
-                                                },
-                                            ),
-                                    ),
-                                    if (selvstendigNæringsdrivende.virksomhet?.registrertINorge == true) {
-                                        VerdilisteElement(
-                                            label = "Registrert i Norge",
-                                            verdi = "Organisasjonsnummer: ${selvstendigNæringsdrivende.virksomhet.organisasjonsnummer}",
-                                        )
-                                    } else {
-                                        VerdilisteElement(
-                                            label = "Registrert i land: ${selvstendigNæringsdrivende.virksomhet?.organisasjonsnummer}",
-                                            verdi = selvstendigNæringsdrivende.virksomhet?.registrertIUtlandet?.landkode,
-                                        )
-                                    },
-                                    selvstendigNæringsdrivende.virksomhet?.regnskapsfører.takeIf { it != null }.let {
-                                        VerdilisteElement(
-                                            label = "Regnskapsfører",
-                                            visningsVariant = "PUNKTLISTE",
-                                            verdiliste =
-                                                listOf(
-                                                    VerdilisteElement(
-                                                        label = "Navn: ${it?.navn}",
-                                                    ),
-                                                    VerdilisteElement(
-                                                        label = "Telefonnummer: ${it?.telefon}",
-                                                    ),
+                                                    selvstendigNæringsdrivende.virksomhet.regnskapsfører?.let {
+                                                        VerdilisteElement(
+                                                            label = "Regnskapsfører: ",
+                                                            visningsVariant = "PUNKTLISTE",
+                                                            verdiliste =
+                                                                listOfNotNull(
+                                                                    lagVerdiElement("Navn", it.navn),
+                                                                    lagVerdiElement("Telefon: ", it.telefon),
+                                                                ),
+                                                        )
+                                                    },
                                                 ),
                                         )
                                     },
@@ -478,43 +450,31 @@ object PSBSøknadPdfDataMapper {
             label = "Jobb i søknadsperioden",
             verdiliste =
                 listOfNotNull(
-                    ingenArbeidsforhold.takeIf { it }?.let {
-                        VerdilisteElement(
-                            label = "Ingen arbeidsforhold er registrert i søknadsperioden",
-                        )
-                    },
+                    lagVerdiElement(
+                        "Arbeidsgivere",
+                        "${if (ingenArbeidsforhold) "Ingen arbeidsforhold er registrert i søknadsperioden" else null} ",
+                    ),
                     arbeidsgivere.takeIf { it.isNotEmpty() }.let {
                         VerdilisteElement(
                             label = "Arbeidsgivere",
                             verdiliste =
-                                arbeidsgivere.map { arbeidsgiver ->
-                                    arbeidsgiver.arbeidsforhold.takeIf { it != null }.let {
-                                        VerdilisteElement(
-                                            label = "${arbeidsgiver.navn} Orgnr: ${arbeidsgiver.organisasjonsnummer}",
-                                            verdi =
-                                                "Hvor mange timer jobber du normalt per uke? " +
-                                                    "${arbeidsgiver.arbeidsforhold?.normalarbeidstid?.timerPerUkeISnitt}",
-                                        )
-                                    }
+                                arbeidsgivere.filter { it.erAnsatt }.map { arbeidsgiver ->
+                                    VerdilisteElement(
+                                        label = "${arbeidsgiver.navn} (orgnr: ${arbeidsgiver.organisasjonsnummer})",
+                                        verdiliste =
+                                            listOfNotNull(
+                                                lagVerdiElement("Hvor mye jobber du normalt per uke? ", arbeidsgiver.arbeidsforhold),
+                                            ),
+                                    )
                                 },
                         )
                     },
-                    frilans?.harInntektSomFrilanser.takeIf { it == true }.let {
+                    frilans?.harInntektSomFrilanser.takeIf { it == true }?.let {
                         VerdilisteElement(
                             label = "Frilans",
                             verdiliste =
                                 listOfNotNull(
-                                    frilans?.arbeidsforhold.takeIf { it != null }.let {
-                                        VerdilisteElement(
-                                            label = "Hvor mange timer jobber du normalt per uke?",
-                                            verdi =
-                                                frilans
-                                                    ?.arbeidsforhold
-                                                    ?.normalarbeidstid
-                                                    ?.timerPerUkeISnitt
-                                                    .toString(),
-                                        )
-                                    },
+                                    lagVerdiElement("Hvor mye jobber du normalt per uke?", frilans?.arbeidsforhold),
                                 ),
                         )
                     },
@@ -523,14 +483,7 @@ object PSBSøknadPdfDataMapper {
                             label = "Selvstendig næringsdrivende",
                             verdiliste =
                                 listOfNotNull(
-                                    VerdilisteElement(
-                                        label = "Hvor mange timer jobber du normalt per uke?",
-                                        verdi =
-                                            selvstendigNæringsdrivendeArbeidsforhold
-                                                .normalarbeidstid
-                                                .timerPerUkeISnitt
-                                                .toString(),
-                                    ),
+                                    lagVerdiElement("Hvor mye jobber du normalt per uke?", selvstendigNæringsdrivendeArbeidsforhold),
                                 ),
                         )
                     },
@@ -543,13 +496,13 @@ object PSBSøknadPdfDataMapper {
             visningsVariant = "PUNKTLISTE",
             verdiliste =
                 if (opptjeningUtland.isNotEmpty()) {
-                    opptjeningUtland.map { opptjent ->
-                        VerdilisteElement(
-                            label =
-                                "Jobbet i ${opptjent.land.landnavn} som ${opptjent.opptjeningType.pdfTekst} " +
-                                    "hos ${opptjent.navn}  ${DATE_FORMATTER.format(
-                                        opptjent.fraOgMed,
-                                    )} - ${DATE_FORMATTER.format(opptjent.tilOgMed)}",
+                    opptjeningUtland.mapNotNull { opptjent ->
+
+                        lagVerdiElement(
+                            "Annet EØS-land",
+                            "Jobbet i ${opptjent.land.landnavn} som ${opptjent.opptjeningType.pdfTekst} hos " +
+                                "${opptjent.navn}  ${DATE_FORMATTER.format(opptjent.fraOgMed)} " +
+                                "- ${DATE_FORMATTER.format(opptjent.tilOgMed)}",
                         )
                     }
                 } else {
@@ -720,69 +673,57 @@ object PSBSøknadPdfDataMapper {
                 label = "Perioder med utenlandsopphold og ferie",
                 verdiliste =
                     listOfNotNull(
-                        VerdilisteElement(
-                            label = "Skal du reise til utlandet i perioden du søker om pleiepenger?",
-                            verdi = konverterBooleanTilSvar(utenlandsopphold.skalOppholdeSegIUtlandetIPerioden),
-                            verdiliste =
-                                utenlandsopphold.skalOppholdeSegIUtlandetIPerioden.let {
-                                    utenlandsopphold.opphold.mapNotNull { opphold ->
-                                        VerdilisteElement(
-                                            label = opphold.landnavn + if (opphold.erUtenforEøs == true) " utenfor EØS" else "",
-                                        )
-                                        opphold.erSammenMedBarnet?.let {
-                                            VerdilisteElement(
-                                                label = "Er barnet sammen med deg?",
-                                                verdi = konverterBooleanTilSvar(opphold.erSammenMedBarnet),
-                                            )
-                                        }
-                                        opphold.erUtenforEøs?.let {
-                                            opphold.erBarnetInnlagt?.let {
-                                                VerdilisteElement(
-                                                    label = "Er barnet innlagt?",
-                                                    verdi = konverterBooleanTilSvar(opphold.erBarnetInnlagt),
-                                                    verdiliste =
-                                                        opphold.perioderBarnetErInnlagt.map {
-                                                            VerdilisteElement(
-                                                                label = "Perioder:",
-                                                                verdi = "${it.fraOgMed} - ${it.tilOgMed}",
-                                                            )
-                                                        },
-                                                )
-                                                opphold.årsak?.let {
-                                                    VerdilisteElement(label = "Årsak:", verdi = it.beskrivelse)
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
+                        lagVerdiElement(
+                            "Skal du reise til utlandet i perioden du søker om pleiepenger",
+                            utenlandsopphold.skalOppholdeSegIUtlandetIPerioden,
                         ),
-                        VerdilisteElement(
-                            label = "Skal du ha ferie i perioden du søker om pleiepenger?",
-                            verdiliste =
-                                listOfNotNull(
-                                    ferieuttakIPerioden?.skalTaUtFerieIPerioden?.let {
-                                        if (it) {
+                        utenlandsopphold.takeIf { it.skalOppholdeSegIUtlandetIPerioden }?.let {
+                            VerdilisteElement(
+                                label = "Utenlandsopphold",
+                                verdiliste =
+                                    utenlandsopphold.opphold.map { opphold ->
+                                        VerdilisteElement(
+                                            label =
+                                                "${opphold.landnavn}${if (opphold.erUtenforEøs == true) " (utenfor EØS)" else ""}: " +
+                                                    "${opphold.fraOgMed} - ${opphold.tilOgMed}",
+                                            verdiliste =
+                                                listOfNotNull(
+                                                    lagVerdiElement("Er barnet sammen med deg?", opphold.erSammenMedBarnet),
+                                                    opphold.erUtenforEøs?.let {
+                                                        lagVerdiElement("Er barnet innlagt?", opphold.erBarnetInnlagt)
+                                                    },
+                                                    VerdilisteElement(
+                                                        label = "Perioder:",
+                                                        verdiliste =
+                                                            opphold.perioderBarnetErInnlagt.map {
+                                                                VerdilisteElement(label = "${it.fraOgMed} - ${it.tilOgMed}")
+                                                            },
+                                                    ),
+                                                    lagVerdiElement("Årsak:", opphold.årsak?.beskrivelse),
+                                                ),
+                                        )
+                                    },
+                            )
+                        },
+                        ferieuttakIPerioden?.let {
+                            VerdilisteElement(
+                                "Skal du ha ferie i perioden du søker om pleiepenger?",
+                                verdiliste =
+                                    listOfNotNull(
+                                        if (ferieuttakIPerioden.skalTaUtFerieIPerioden) {
                                             VerdilisteElement(
-                                                label = "Du opplyser at du skal ha ferie",
-                                                visningsVariant = "PUNKTLISTE",
+                                                label = "Du opplyser at du skal ha ferie:",
                                                 verdiliste =
-                                                    ferieuttakIPerioden.ferieuttak.map { ferieuttak ->
-                                                        VerdilisteElement(
-                                                            label = "Ferie:",
-                                                            verdi =
-                                                                DATE_FORMATTER.format(ferieuttak.fraOgMed) + " - " +
-                                                                    DATE_FORMATTER.format(ferieuttak.tilOgMed),
-                                                        )
+                                                    ferieuttakIPerioden.ferieuttak.map { ferie ->
+                                                        VerdilisteElement(label = "${ferie.fraOgMed} - ${ferie.tilOgMed}")
                                                     },
                                             )
                                         } else {
-                                            VerdilisteElement(
-                                                label = konverterBooleanTilSvar(ferieuttakIPerioden.skalTaUtFerieIPerioden),
-                                            )
-                                        }
-                                    },
-                                ),
-                        ),
+                                            lagVerdiElement("Du opplyser at du skal ha ferie", ferieuttakIPerioden.skalTaUtFerieIPerioden)
+                                        },
+                                    ),
+                            )
+                        },
                     ),
             )
         }
@@ -826,21 +767,17 @@ object PSBSøknadPdfDataMapper {
             label = "Vedlegg",
             verdiliste =
                 listOfNotNull(
-                    vedlegg.takeIf { it.isEmpty() }.let {
-                        VerdilisteElement(
-                            label = "Legeerklæring",
-                            verdi = "Ingen vedlegg er lastet opp.",
-                        )
+                    vedlegg.takeIf { it.isEmpty() }?.let {
+                        lagVerdiElement("Legeerklæring", "Ingen vedlegg er lastet opp.")
                     },
                     barn.fødselsnummer?.let {
-                        VerdilisteElement(
-                            label = "Fødselsattest",
-                            verdi =
-                                if (fødselsattestVedleggId.isNullOrEmpty()) {
-                                    "Har ikke lastet opp kopi av fødselsattest til barnet."
-                                } else {
-                                    "Har lastet opp kopi av fødselsattest til barnet."
-                                },
+                        lagVerdiElement(
+                            "Fødselsattest",
+                            if (fødselsattestVedleggId.isNullOrEmpty()) {
+                                "Har ikke lastet opp kopi av fødselsattest til barnet."
+                            } else {
+                                "Har lastet opp kopi av fødselsattest til barnet."
+                            },
                         )
                     },
                 ),
@@ -853,15 +790,9 @@ object PSBSøknadPdfDataMapper {
         VerdilisteElement(
             label = "Samtykke fra deg",
             verdiliste =
-                listOf(
-                    VerdilisteElement(
-                        label = "Har du forstått dine rettigheter og plikter?",
-                        verdi = konverterBooleanTilSvar(harForståttRettigheterOgPlikter),
-                    ),
-                    VerdilisteElement(
-                        label = "Har du bekreftet at opplysningene du har gitt er riktige?",
-                        verdi = konverterBooleanTilSvar(harBekreftetOpplysninger),
-                    ),
+                listOfNotNull(
+                    lagVerdiElement("Har du forstått dine rettigheter og plikter?", harForståttRettigheterOgPlikter),
+                    lagVerdiElement("Har du bekreftet at opplysningene du har gitt er riktige?", harBekreftetOpplysninger),
                 ),
         )
 
