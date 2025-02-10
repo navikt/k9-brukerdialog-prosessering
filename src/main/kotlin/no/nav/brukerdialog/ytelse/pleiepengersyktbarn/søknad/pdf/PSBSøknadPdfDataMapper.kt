@@ -107,9 +107,11 @@ object PSBSøknadPdfDataMapper {
     fun lagVerdiElement(
         spørsmålsTekst: String,
         svarVerdi: Any?,
-        typeSomSkalSjekkes: Any? = svarVerdi,
+        typeSomSkalSjekkes: Any? = null,
     ): VerdilisteElement? =
-        if (typeSomSkalSjekkes == null) {
+        if (typeSomSkalSjekkes == null && svarVerdi == null) {
+            null
+        } else if (typeSomSkalSjekkes == false) {
             null
         } else {
             when (svarVerdi) {
@@ -123,8 +125,6 @@ object PSBSøknadPdfDataMapper {
                 else -> null
             }
         }
-
-    // Sende inn et tredje param som er optional som er det man sjekker på, også kan verdien være noe annet. Defaulter til å være det samme med mindre den er med
 
     // TODO FELLES-FUN
     private fun arbeidIPerioden(arbeidsforhold: Arbeidsforhold?): String? {
@@ -589,22 +589,17 @@ object PSBSøknadPdfDataMapper {
                 },
         )
 
-    private fun mapNattevåk(nattevåk: Nattevåk?): VerdilisteElement =
-        nattevåk.takeIf { it != null }.let {
+    private fun mapNattevåk(nattevåk: Nattevåk?): VerdilisteElement? =
+        nattevåk.takeIf { it != null }?.let {
             VerdilisteElement(
                 label = "Nattevåk",
                 verdiliste =
-                    listOf(
-                        VerdilisteElement(
-                            label = "Må du være våken om natten for å pleie barnet, og derfor må være borte fra jobb dagen etter?",
-                            verdi = konverterBooleanTilSvar(nattevåk?.harNattevåk!!),
+                    listOfNotNull(
+                        lagVerdiElement(
+                            "Må du være våken om natten for å pleie barnet, og derfor må være borte fra jobb dagen etter?",
+                            it.harNattevåk,
                         ),
-                        nattevåk.tilleggsinformasjon.takeIf { it != null }.let {
-                            VerdilisteElement(
-                                label = "Dine tilleggsopplysninger:",
-                                verdi = nattevåk.tilleggsinformasjon,
-                            )
-                        },
+                        lagVerdiElement("Dine tilleggsopplysninger:", it.tilleggsinformasjon),
                     ),
             )
         }
@@ -615,16 +610,8 @@ object PSBSøknadPdfDataMapper {
                 label = "Beredskap",
                 verdiliste =
                     listOfNotNull(
-                        VerdilisteElement(
-                            label = "Må du være i beredskap også når barnet er i et omsorgstilbud?",
-                            verdi = konverterBooleanTilSvar(beredskap.beredskap),
-                        ),
-                        beredskap.tilleggsinformasjon?.let {
-                            VerdilisteElement(
-                                label = "Dine tilleggsopplysninger:",
-                                verdi = beredskap.tilleggsinformasjon,
-                            )
-                        },
+                        lagVerdiElement("Må du være i beredskap også når barnet er i et omsorgstilbud?", beredskap.beredskap),
+                        lagVerdiElement("Dine tilleggsopplysninger:", beredskap.tilleggsinformasjon),
                     ),
             )
         }
@@ -654,9 +641,7 @@ object PSBSøknadPdfDataMapper {
                                             verdiliste =
                                                 listOfNotNull(
                                                     lagVerdiElement("Er barnet sammen med deg?", opphold.erSammenMedBarnet),
-                                                    opphold.erUtenforEøs?.let {
-                                                        lagVerdiElement("Er barnet innlagt?", opphold.erBarnetInnlagt)
-                                                    },
+                                                    lagVerdiElement("Er barnet innlagt?", opphold.erBarnetInnlagt, opphold.erUtenforEøs),
                                                     VerdilisteElement(
                                                         label = "Perioder:",
                                                         verdiliste =
