@@ -23,6 +23,7 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGo
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
+import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.DurationUtils.tilString
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.helse.felles.Enkeltdag
@@ -106,16 +107,21 @@ object PSBSøknadPdfDataMapper {
     fun lagVerdiElement(
         spørsmålsTekst: String,
         svarVerdi: Any?,
+        typeSomSkalSjekkes: Any? = svarVerdi,
     ): VerdilisteElement? =
-        when (svarVerdi) {
-            is String -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi)
-            is Enum<*> -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.toString())
-            is Boolean -> VerdilisteElement(label = spørsmålsTekst, verdi = konverterBooleanTilSvar(svarVerdi))
-            is Duration -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.tilString())
-            is LocalDate -> VerdilisteElement(label = spørsmålsTekst, verdi = DATE_FORMATTER.format(svarVerdi))
-            is Int -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.toString())
-            is Arbeidsforhold -> VerdilisteElement(label = spørsmålsTekst, verdi = arbeidIPerioden(svarVerdi))
-            else -> null
+        if (typeSomSkalSjekkes == null) {
+            null
+        } else {
+            when (svarVerdi) {
+                is String -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi)
+                is Enum<*> -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.toString())
+                is Boolean -> VerdilisteElement(label = spørsmålsTekst, verdi = konverterBooleanTilSvar(svarVerdi))
+                is Duration -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.tilString())
+                is LocalDate -> VerdilisteElement(label = spørsmålsTekst, verdi = DATE_FORMATTER.format(svarVerdi))
+                is Int -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.toString())
+                is Arbeidsforhold -> VerdilisteElement(label = spørsmålsTekst, verdi = arbeidIPerioden(svarVerdi))
+                else -> null
+            }
         }
 
     // Sende inn et tredje param som er optional som er det man sjekker på, også kan verdien være noe annet. Defaulter til å være det samme med mindre den er med
@@ -496,13 +502,14 @@ object PSBSøknadPdfDataMapper {
             visningsVariant = "PUNKTLISTE",
             verdiliste =
                 if (opptjeningUtland.isNotEmpty()) {
-                    opptjeningUtland.mapNotNull { opptjent ->
-
-                        lagVerdiElement(
-                            "Annet EØS-land",
-                            "Jobbet i ${opptjent.land.landnavn} som ${opptjent.opptjeningType.pdfTekst} hos " +
-                                "${opptjent.navn}  ${DATE_FORMATTER.format(opptjent.fraOgMed)} " +
-                                "- ${DATE_FORMATTER.format(opptjent.tilOgMed)}",
+                    opptjeningUtland.flatMap { opptjent ->
+                        listOfNotNull(
+                            lagVerdiElement(
+                                "Annet EØS-land",
+                                "Jobbet i ${opptjent.land.landnavn} som ${opptjent.opptjeningType.pdfTekst} hos " +
+                                    "${opptjent.navn}  ${DATE_FORMATTER.format(opptjent.fraOgMed)} " +
+                                    "- ${DATE_FORMATTER.format(opptjent.tilOgMed)}",
+                            ),
                         )
                     }
                 } else {
@@ -515,32 +522,30 @@ object PSBSøknadPdfDataMapper {
         )
 
     private fun maputenlandskNæring(utenlandskNæring: List<UtenlandskNæring>): VerdilisteElement? =
-        VerdilisteElement(
-            label = "Utenlandsk næring",
-            verdiliste =
-                utenlandskNæring.map { næring ->
-                    VerdilisteElement(
-                        label = næring.navnPåVirksomheten,
-                        verdi = "${næring.fraOgMed} - ${næring.tilOgMed}",
-                    )
-                    VerdilisteElement(
-                        label = "Land:",
-                        verdi = "${næring.land.landnavn} ${næring.land.landkode}",
-                    )
-                    VerdilisteElement(label = "Næringstype:", verdi = næring.næringstype.beskrivelse)
-                },
-        )
+        utenlandskNæring.takeIf { it.isNotEmpty() }?.let {
+            VerdilisteElement(
+                label = "Utenlandsk næring",
+                verdiliste =
+                    utenlandskNæring.flatMap { næring ->
+                        listOfNotNull(
+                            lagVerdiElement(næring.navnPåVirksomheten, "${næring.fraOgMed} - ${næring.tilOgMed ?: ""}"),
+                            lagVerdiElement("Land:", "${næring.land.landnavn} ${næring.land.landkode}"),
+                            lagVerdiElement("Organisasjonsnummer:", næring.organisasjonsnummer),
+                            lagVerdiElement("Næringstype:", næring.næringstype.beskrivelse),
+                        )
+                    },
+            )
+        }
+
+    // TODO mapnotnull ødelegger
 
     private fun mapVerneplikt(verneplikt: Boolean?): VerdilisteElement? =
         verneplikt?.let {
             VerdilisteElement(
                 label = "Verneplikt",
                 verdiliste =
-                    listOf(
-                        VerdilisteElement(
-                            label = "Utøvde du verneplikt på tidspunktet du søker pleiepenger fra?",
-                            verdi = konverterBooleanTilSvar(verneplikt),
-                        ),
+                    listOfNotNull(
+                        lagVerdiElement("Utøvde du verneplikt på tidspunktet du søker pleiepenger fra?", verneplikt),
                     ),
             )
         }
@@ -550,25 +555,10 @@ object PSBSøknadPdfDataMapper {
             label = "Omsorgtilbud",
             verdiliste =
                 if (omsorgstilbud != null) {
-                    listOf(
-                        omsorgstilbud.svarFortid.takeIf { it != null }.let {
-                            VerdilisteElement(
-                                label = "Har barnet vært fast og regelmessig i et omsorgstilbud?",
-                                verdi = omsorgstilbud.svarFortid.toString(),
-                            )
-                        },
-                        omsorgstilbud.svarFremtid.takeIf { it != null }.let {
-                            VerdilisteElement(
-                                label = "Skal barnet være fast og regelmessig i et omsorgstilbud?",
-                                verdi = omsorgstilbud.svarFremtid.toString(),
-                            )
-                        },
-                        omsorgstilbud.erLiktHverUke.takeIf { it == true }.let {
-                            VerdilisteElement(
-                                label = "Er tiden i omsorgstilbudet lik hver uke?",
-                                verdi = omsorgstilbud.svarFremtid.toString(),
-                            )
-                        },
+                    listOfNotNull(
+                        lagVerdiElement("Har barnet vært fast og regelmessig i et omsorgstilbud?", omsorgstilbud.svarFortid),
+                        lagVerdiElement("Skal barnet være fast og regelmessig i et omsorgstilbud?", omsorgstilbud.svarFremtid),
+                        lagVerdiElement("Er tiden i omsorgstilbudet lik hver uke?", omsorgstilbud.svarFremtid),
                         omsorgstilbud.enkeltdager.takeIf { it != null }.let {
                             VerdilisteElement(
                                 label = "Tid barnet er i omsorgstilbud:",
@@ -581,36 +571,11 @@ object PSBSøknadPdfDataMapper {
                                 label = "Faste dager barnet er i omsorgtilbud: ",
                                 verdiliste =
                                     listOfNotNull(
-                                        ukedag?.mandag.takeIf { it != null }.let {
-                                            VerdilisteElement(
-                                                label = "Mandager: ",
-                                                verdi = omsorgstilbud.ukedager?.mandag.toString(),
-                                            )
-                                        },
-                                        ukedag?.tirsdag.takeIf { it != null }.let {
-                                            VerdilisteElement(
-                                                label = "Tirsdager: ",
-                                                verdi = omsorgstilbud.ukedager?.tirsdag.toString(),
-                                            )
-                                        },
-                                        ukedag?.onsdag.takeIf { it != null }.let {
-                                            VerdilisteElement(
-                                                label = "Onsdager: ",
-                                                verdi = omsorgstilbud.ukedager?.onsdag.toString(),
-                                            )
-                                        },
-                                        ukedag?.torsdag.takeIf { it != null }.let {
-                                            VerdilisteElement(
-                                                label = "Torsdager: ",
-                                                verdi = omsorgstilbud.ukedager?.torsdag.toString(),
-                                            )
-                                        },
-                                        ukedag?.fredag.takeIf { it != null }.let {
-                                            VerdilisteElement(
-                                                label = "Fredager: ",
-                                                verdi = omsorgstilbud.ukedager?.fredag.toString(),
-                                            )
-                                        },
+                                        lagVerdiElement("Mandager: ", omsorgstilbud.ukedager?.mandag?.somTekst(true), ukedag?.mandag),
+                                        lagVerdiElement("Tirsdager: ", omsorgstilbud.ukedager?.tirsdag?.somTekst(true), ukedag?.tirsdag),
+                                        lagVerdiElement("Onsdager: ", omsorgstilbud.ukedager?.onsdag?.somTekst(true), ukedag?.onsdag),
+                                        lagVerdiElement("Torsdager: ", omsorgstilbud.ukedager?.torsdag?.somTekst(true), ukedag?.torsdag),
+                                        lagVerdiElement("Fredager: ", omsorgstilbud.ukedager?.fredag?.somTekst(true), ukedag?.fredag),
                                     ),
                             )
                         },
