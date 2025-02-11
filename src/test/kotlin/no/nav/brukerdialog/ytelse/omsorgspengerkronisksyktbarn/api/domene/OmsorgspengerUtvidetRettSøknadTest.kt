@@ -81,6 +81,8 @@ class OmsorgspengerUtvidetRettSøknadTest {
                     },
                     "kroniskEllerFunksjonshemming": true,
                     "type": "OMP_UTV_KS",
+                    "høyereRisikoForFravær": true,
+                    "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær",
                     "dataBruktTilUtledning": {
                         "harBekreftetOpplysninger": true,
                         "harForståttRettigheterOgPlikter": true,

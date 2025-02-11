@@ -135,7 +135,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
           "relasjonTilBarnet": "FAR",
           "sammeAdresse": "JA",
           "høyereRisikoForFravær": true,
-           "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær",
+          "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær",
           "harBekreftetOpplysninger": true,
           "k9FormatSøknad": {
             "språk": "nb",
@@ -151,6 +151,8 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
                 "norskIdentitetsnummer": "02119970078"
               },
               "kroniskEllerFunksjonshemming": true,
+              "høyereRisikoForFravær": true,
+              "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær",
               "type": "OMP_UTV_KS",
               "dataBruktTilUtledning": null
             },

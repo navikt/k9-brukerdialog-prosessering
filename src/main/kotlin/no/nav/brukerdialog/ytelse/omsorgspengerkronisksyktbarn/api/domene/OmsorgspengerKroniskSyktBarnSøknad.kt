@@ -72,7 +72,9 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
             Språk.of(språk),
             OmsorgspengerKroniskSyktBarn(
                 barn.somK9Barn(),
-                kroniskEllerFunksjonshemming
+                kroniskEllerFunksjonshemming,
+                høyereRisikoForFravær,
+                høyereRisikoForFraværBeskrivelse
             )
                 .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as OmsorgspengerKroniskSyktBarn
         ).medKildesystem(Kildesystem.SØKNADSDIALOG)
