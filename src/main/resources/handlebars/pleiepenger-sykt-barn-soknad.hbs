@@ -296,8 +296,10 @@
             {{#each arbeidsgivere as |arbeidsgiver|~}}
                 <ul class="ul-no-indent">
                     {{#if arbeidsgiver.arbeidsforhold}}
-                        <li><b>{{arbeidsgiver.navn}} (orgnr: {{arbeidsgiver.organisasjonsnummer}})</b></li>
-                        {{> partial/arbeid/arbeidsforholdPartial arbeidsforhold=arbeidsgiver.arbeidsforhold}}
+                        {{#unless arbeidsgiver.arbeidsforhold.skalSkjuleArbeidsgiverUnderSøknadsperioden}}
+                            <li><b>{{arbeidsgiver.navn}} (orgnr: {{arbeidsgiver.organisasjonsnummer}})</b></li>
+                            {{> partial/arbeid/arbeidsforholdPartial arbeidsforhold=arbeidsgiver.arbeidsforhold}}
+                        {{/unless}}
                     {{/if}}
                 </ul>
             {{/each}}

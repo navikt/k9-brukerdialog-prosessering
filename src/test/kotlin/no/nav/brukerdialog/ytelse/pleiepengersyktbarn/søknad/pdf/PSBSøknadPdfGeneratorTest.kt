@@ -261,6 +261,19 @@ class PSBSøknadPdfGeneratorTest {
                         )
                     ),
                     Arbeidsgiver(
+                        navn = "Ikke besvart arbeid i periode",
+                        organisasjonsnummer = "917755736",
+                        erAnsatt = false,
+                        arbeidsforhold = Arbeidsforhold(
+                            normalarbeidstid = NormalArbeidstid(
+                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                            ),
+                            arbeidIPeriode = ArbeidIPeriode(
+                                type = ArbeidIPeriodeType.IKKE_BESVART
+                            )
+                        )
+                    ),
+                    Arbeidsgiver(
                         navn = "Sluttaaaa",
                         organisasjonsnummer = "917755736",
                         erAnsatt = false,

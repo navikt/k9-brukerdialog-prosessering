@@ -7,6 +7,7 @@ import no.nav.brukerdialog.common.Constants
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsRedusert
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsUke
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
@@ -234,7 +235,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     private fun Arbeidsforhold.somMap(): Map<String, Any?> = mapOf(
         "data" to this.toString(),
         "normalarbeidstid" to this.normalarbeidstid.somMap(),
-        "arbeidIPeriode" to this.arbeidIPeriode.somMap()
+        "arbeidIPeriode" to this.arbeidIPeriode.somMap(),
+        "skalSkjuleArbeidsgiverUnderSøknadsperioden" to (this.arbeidIPeriode.type == ArbeidIPeriodeType.IKKE_BESVART)
     )
 
     private fun ArbeidIPeriode.somMap(): Map<String, Any?> = mapOf(
