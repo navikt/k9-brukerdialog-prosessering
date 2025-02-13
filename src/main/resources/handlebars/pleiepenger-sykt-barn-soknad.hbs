@@ -189,9 +189,11 @@
                 {{/unless}}
 
                 {{#if frilans.misterHonorar}}
-                    <br/><p class="sporsmalstekst">Jeg mister honorar i søknadsperioden</p>
+                    <br/>
+                    <p class="sporsmalstekst">Jeg mister honorar i søknadsperioden</p>
                 {{else}}
-                    <br/><p class="sporsmalstekst">Jeg mister ikke honorar i søknadsperioden</p>
+                    <br/>
+                    <p class="sporsmalstekst">Jeg mister ikke honorar i søknadsperioden</p>
                 {{/if}}
             {{/eq}}
 
@@ -294,14 +296,14 @@
 
         {{#if arbeidsgivere}}
             {{#each arbeidsgivere as |arbeidsgiver|~}}
-                <ul class="ul-no-indent">
-                    {{#if arbeidsgiver.arbeidsforhold}}
-                        {{#unless arbeidsgiver.arbeidsforhold.skalSkjuleArbeidsgiverUnderSøknadsperioden}}
+                {{#if arbeidsgiver.arbeidsforhold}}
+                    {{#unless arbeidsgiver.arbeidsforhold.skalSkjuleArbeidsgiverUnderSøknadsperioden}}
+                        <ul class="ul-no-indent">
                             <li><b>{{arbeidsgiver.navn}} (orgnr: {{arbeidsgiver.organisasjonsnummer}})</b></li>
                             {{> partial/arbeid/arbeidsforholdPartial arbeidsforhold=arbeidsgiver.arbeidsforhold}}
-                        {{/unless}}
-                    {{/if}}
-                </ul>
+                        </ul>
+                    {{/unless}}
+                {{/if}}
             {{/each}}
         {{/if}}
 
