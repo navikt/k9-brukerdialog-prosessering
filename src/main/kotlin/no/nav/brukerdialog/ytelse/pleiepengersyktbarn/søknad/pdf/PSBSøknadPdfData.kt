@@ -1,8 +1,5 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf
 
-import no.nav.helse.felles.Enkeltdag
-import no.nav.helse.felles.Omsorgstilbud
-import no.nav.helse.felles.PlanUkedager
 import no.nav.brukerdialog.common.Constants
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
@@ -39,13 +36,14 @@ import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.DurationUtils.tilString
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
+import no.nav.helse.felles.Enkeltdag
+import no.nav.helse.felles.Omsorgstilbud
+import no.nav.helse.felles.PlanUkedager
 import no.nav.k9.søknad.felles.type.Språk
-import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.WeekFields
 
 class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
@@ -104,7 +102,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
             "hjelper" to mapOf(
                 "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
                 "harVærtEllerErVernepliktigErSatt" to erBooleanSatt(søknad.harVærtEllerErVernepliktig),
-                "ingen_arbeidsforhold" to !søknad.harMinstEtArbeidsforhold()
+                "ingen_arbeidsforhold" to !søknad.harMinstEtArbeidsforhold(),
             )
         )
     }
@@ -117,14 +115,11 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst
     )
 
-    private fun PSBMottattSøknad.harMinstEtArbeidsforhold(): Boolean {
-        if (frilans.arbeidsforhold != null) return true
-
-        if (selvstendigNæringsdrivende.arbeidsforhold != null) return true
-
-        if (arbeidsgivere.any() { it.arbeidsforhold != null }) return true
-
-        return false
+    private fun PSBMottattSøknad.harMinstEtArbeidsforhold(): Boolean = when {
+        frilans.arbeidsforhold != null -> true
+        selvstendigNæringsdrivende.arbeidsforhold != null -> true
+        arbeidsgivere.any() { it.arbeidsforhold != null && it.arbeidsforhold.arbeidIPeriode.type != ArbeidIPeriodeType.IKKE_BESVART } -> true
+        else -> false
     }
 
     private fun PSBMottattSøknad.harFlereAktiveVirksomehterSatt() =
