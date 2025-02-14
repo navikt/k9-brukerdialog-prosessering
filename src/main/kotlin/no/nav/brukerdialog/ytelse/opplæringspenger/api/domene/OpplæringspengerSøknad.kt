@@ -63,7 +63,6 @@ data class OpplæringspengerSøknad(
     @field:Valid
     val arbeidsgivere: List<ArbeidsgiverOLP>,
     val vedlegg: List<URL> = listOf(), // TODO: Fjern listof() når krav om legeerklæring er påkrevd igjen.
-    val fødselsattestVedleggUrls: List<URL>? = listOf(),
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     val fraOgMed: LocalDate,
@@ -88,8 +87,6 @@ data class OpplæringspengerSøknad(
     @field:Valid
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivendeOLP? = null,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
-    val barnRelasjon: BarnRelasjon? = null,
-    val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val dataBruktTilUtledningAnnetData: String? = null,
 
@@ -119,7 +116,7 @@ data class OpplæringspengerSøknad(
             søker = søker,
             barn = barn,
             vedleggId = vedlegg.map { it.toURI().dokumentId() },
-            fødselsattestVedleggId = fødselsattestVedleggUrls?.map { it.toURI().dokumentId() } ?: listOf(),
+            fødselsattestVedleggId = barn.fødselsattestVedleggUrls?.map { it.toURI().dokumentId() } ?: listOf(),
             arbeidsgivere = arbeidsgivere,
             medlemskap = medlemskap,
             ferieuttakIPerioden = ferieuttakIPerioden,
@@ -130,8 +127,6 @@ data class OpplæringspengerSøknad(
             frilans = frilans,
             stønadGodtgjørelse = stønadGodtgjørelse,
             selvstendigNæringsdrivende = selvstendigNæringsdrivende,
-            barnRelasjon = barnRelasjon,
-            barnRelasjonBeskrivelse = barnRelasjonBeskrivelse,
             harVærtEllerErVernepliktig = harVærtEllerErVernepliktig,
             kurs = kurs,
             k9FormatSøknad = k9Format as K9Søknad
@@ -146,15 +141,7 @@ data class OpplæringspengerSøknad(
 
     override fun vedlegg(): List<URL> = mutableListOf<URL>().apply {
         addAll(vedlegg)
-        fødselsattestVedleggUrls?.let { addAll(it) }
-    }
-
-    @AssertTrue(message = "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom")
-    fun isBarnRelasjonBeskrivelse(): Boolean {
-        if (barnRelasjon == BarnRelasjon.ANNET) {
-            return !barnRelasjonBeskrivelse.isNullOrBlank()
-        }
-        return true
+        barn.fødselsattestVedleggUrls?.let { addAll(it) }
     }
 
     override fun valider(): List<String> = mutableListOf<String>().apply {
@@ -185,7 +172,7 @@ data class OpplæringspengerSøknad(
             .medBosteder(medlemskap.tilK9Bosteder())
             .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as Opplæringspenger
 
-        barnRelasjon?.let { olp.medOmsorg(byggK9Omsorg()) }
+        barn.relasjonTilBarnet?.let { olp.medOmsorg(byggK9Omsorg()) }
 
         ferieuttakIPerioden?.let {
             if (it.ferieuttak.isNotEmpty() && it.skalTaUtFerieIPerioden) {
@@ -238,7 +225,7 @@ data class OpplæringspengerSøknad(
 
     fun byggK9Omsorg() = Omsorg()
         .medRelasjonTilBarnet(
-            when (barnRelasjon) {
+            when (barn.relasjonTilBarnet) {
                 BarnRelasjon.FAR -> Omsorg.BarnRelasjon.FAR
                 BarnRelasjon.MOR -> Omsorg.BarnRelasjon.MOR
                 BarnRelasjon.FOSTERFORELDER -> Omsorg.BarnRelasjon.FOSTERFORELDER
@@ -246,7 +233,7 @@ data class OpplæringspengerSøknad(
                 BarnRelasjon.ANNET -> Omsorg.BarnRelasjon.ANNET
                 else -> null
             }
-        ).medBeskrivelseAvOmsorgsrollen(barnRelasjonBeskrivelse?.let { StringUtils.saniter(it) })
+        ).medBeskrivelseAvOmsorgsrollen(barn .relasjonTilBarnetBeskrivelse?.let { StringUtils.saniter(it) })
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

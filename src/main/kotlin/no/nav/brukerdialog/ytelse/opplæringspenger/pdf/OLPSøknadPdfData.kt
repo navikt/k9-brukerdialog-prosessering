@@ -30,7 +30,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(Constants.OSLO_ZONE_ID).somNorskDag(),
             "soknad_mottatt" to Constants.DATE_TIME_FORMATTER.format(søknad.mottatt),
             "harIkkeVedlegg" to søknad.sjekkOmHarIkkeVedlegg(),
-            "harLastetOppFødselsattest" to !søknad.fødselsattestVedleggId.isNullOrEmpty(),
+            "harLastetOppFødselsattest" to !søknad.barn.fødselsattestVedleggId.isNullOrEmpty(),
             "soker" to søknad.søker.somMap(),
             "barn" to søknad.barn.somMap(),
             "periode" to mapOf(
@@ -59,8 +59,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "skalTaUtFerieIPerioden" to søknad.ferieuttakIPerioden?.skalTaUtFerieIPerioden,
                 "ferieuttak" to søknad.ferieuttakIPerioden?.ferieuttak?.somMapFerieuttak()
             ),
-            "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
-            "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
             "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
             "frilans" to søknad.frilans?.somMap(),
             "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende?.somMap(),
@@ -78,7 +76,9 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
         "norskIdentitetsnummer" to norskIdentifikator,
         "navn" to navn.storForbokstav(),
         "fødselsdato" to if (fødselsdato != null) Constants.DATE_FORMATTER.format(fødselsdato) else null,
-        "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst
+        "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst,
+        "relasjonTilBarnet" to relasjonTilBarnet?.utskriftsvennlig,
+        "relasjonTilBarnetBeskrivelse" to relasjonTilBarnetBeskrivelse,
     )
 
     private fun Kurs.somMap() = mapOf<String, Any?>(
