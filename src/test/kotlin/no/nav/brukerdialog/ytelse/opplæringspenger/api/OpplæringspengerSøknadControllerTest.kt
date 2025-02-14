@@ -36,7 +36,8 @@ import java.util.*
     controllers = [OpplæringspengerSøknadController::class],
     properties = [
         "ENABLE_OPPLAERINGSPENGER=true",
-    ])
+    ]
+)
 @Import(
     JacksonConfiguration::class,
     CallIdGenerator::class
@@ -111,11 +112,11 @@ class OpplæringspengerSøknadControllerTest {
             barn = defaultSøknad.barn.copy(
                 norskIdentifikator = "123ABC", // Feil format
                 navn = "", // Tomt navn
-                fødselsdato = fødselsdatoIFremtiden // Fødselsdato i fremtiden er ikke gyldig
+                fødselsdato = fødselsdatoIFremtiden, // Fødselsdato i fremtiden er ikke gyldig
+                relasjonTilBarnet = BarnRelasjon.ANNET,
+                relasjonTilBarnetBeskrivelse = null, // Må være satt dersom barnRelasjon = ANNET
 
             ),
-            barnRelasjon = BarnRelasjon.ANNET,
-            barnRelasjonBeskrivelse = null, // Må være satt dersom barnRelasjon = ANNET
             arbeidsgivere = listOf(
                 ArbeidsgiverOLP(
                     organisasjonsnummer = "123ABC", // Feil format
@@ -181,9 +182,9 @@ class OpplæringspengerSøknadControllerTest {
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "barnRelasjonBeskrivelse",
+                              "parameterName": "barn.relasjonTilBarnetBeskrivelse",
                               "parameterType": "ENTITY",
-                              "reason": "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom"
+                              "reason": "Når 'relasjonTilBarnet' er ANNET, kan ikke 'relasjonTilBarnetBeskrivelse' være tom"
                             },
                             {
                               "invalidValue": false,

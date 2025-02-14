@@ -16,7 +16,9 @@ data class Barn(
     val norskIdentifikator: String? = null,
     val fødselsdato: LocalDate? = null,
     val aktørId: String? = null, // Brukes av sif-innsyn-api
-    val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null
+    val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
+    val relasjonTilBarnet: BarnRelasjon? = null,
+    val relasjonTilBarnetBeskrivelse: String? = null,
     ) {
     override fun toString(): String {
         return "Barn()"

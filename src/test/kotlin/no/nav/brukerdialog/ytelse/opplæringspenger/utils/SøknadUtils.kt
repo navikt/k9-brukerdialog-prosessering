@@ -34,10 +34,10 @@ class SøknadUtils {
                 norskIdentifikator = "03028104560",
                 fødselsdato = LocalDate.parse("2018-01-01"),
                 navn = "Barn Barnesen",
-                aktørId = null
+                aktørId = null,
+                relasjonTilBarnet = BarnRelasjon.ANNET,
+                relasjonTilBarnetBeskrivelse = "Gudfar til barnet",
             ),
-            barnRelasjon = BarnRelasjon.ANNET,
-            barnRelasjonBeskrivelse = "Gudfar til barnet",
             arbeidsgivere = listOf(
                 ArbeidsgiverOLP(
                     navn = "Org",

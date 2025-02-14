@@ -31,8 +31,6 @@ data class OLPMottattSøknad(
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val arbeidsgivere: List<Arbeidsgiver>,
-    val barnRelasjon: BarnRelasjon? = null,
-    val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val kurs: Kurs,
     val k9FormatSøknad: Søknad

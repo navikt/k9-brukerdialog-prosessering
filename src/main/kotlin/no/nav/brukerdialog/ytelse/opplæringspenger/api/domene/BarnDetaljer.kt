@@ -27,6 +27,9 @@ data class BarnDetaljer(
     val navn: String,
 
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
+
+    val relasjonTilBarnet: BarnRelasjon? = null,
+    val relasjonTilBarnetBeskrivelse: String? = null,
 ) {
     override fun toString(): String {
         return "BarnDetaljer(aktørId=***, navn=***, fodselsdato=***"
@@ -57,6 +60,14 @@ data class BarnDetaljer(
     fun isÅrsakManglerIdentitetsnummer(): Boolean {
         if (norskIdentifikator.isNullOrEmpty()) {
             return årsakManglerIdentitetsnummer != null
+        }
+        return true
+    }
+
+    @AssertTrue(message = "Når 'relasjonTilBarnet' er ANNET, kan ikke 'relasjonTilBarnetBeskrivelse' være tom")
+    fun isRelasjonTilBarnetBeskrivelse(): Boolean {
+        if (relasjonTilBarnet == BarnRelasjon.ANNET) {
+            return !relasjonTilBarnetBeskrivelse.isNullOrBlank()
         }
         return true
     }

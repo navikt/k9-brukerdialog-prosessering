@@ -287,8 +287,10 @@ class OLPSøknadPdfGeneratorTest {
             id = "17-med-relasjon-medmor"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
-                    barnRelasjon = BarnRelasjon.MEDMOR,
-                    barnRelasjonBeskrivelse = null
+                    barn = OlpPdfSøknadUtils.gyldigSøknad(id).barn.copy(
+                        relasjonTilBarnet = BarnRelasjon.MEDMOR,
+                        relasjonTilBarnetBeskrivelse = null
+                    )
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)

@@ -30,8 +30,6 @@ data class KomplettOpplæringspengerSøknad(
     val frilans: FrilansOLP? = null,
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivendeOLP? = null,
-    val barnRelasjon: BarnRelasjon? = null,
-    val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val kurs: Kurs,
     val k9FormatSøknad: Søknad? = null,
