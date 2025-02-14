@@ -37,7 +37,9 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
 
         val defaultSøknad = defaultSøknad().copy(
             vedlegg = listOf(),
-            fødselsattestVedleggUrls = listOf()
+            barn = defaultSøknad().barn.copy(
+                fødselsattestVedleggUrls = listOf()
+            )
         )
 
         mockMvc.sendInnSøknad(defaultSøknad, mockOAuth2Server.hentToken())

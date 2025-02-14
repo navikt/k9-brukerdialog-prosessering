@@ -37,6 +37,7 @@ class SøknadUtils {
                 aktørId = null,
                 relasjonTilBarnet = BarnRelasjon.ANNET,
                 relasjonTilBarnetBeskrivelse = "Gudfar til barnet",
+                fødselsattestVedleggUrls = listOf(URI.create("http://localhost:8080/vedlegg/2").toURL()),
             ),
             arbeidsgivere = listOf(
                 ArbeidsgiverOLP(
@@ -107,7 +108,6 @@ class SøknadUtils {
                 ),
             ),
             vedlegg = listOf(URI.create("http://localhost:8080/vedlegg/1").toURL()),
-            fødselsattestVedleggUrls = listOf(URI.create("http://localhost:8080/vedlegg/2").toURL()),
             fraOgMed = LocalDate.parse("2021-01-01"),
             tilOgMed = LocalDate.parse("2021-10-01"),
             medlemskap = Medlemskap(

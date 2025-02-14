@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import java.net.URL
 import java.time.LocalDate
 
 enum class BarnRelasjon(val utskriftsvennlig: String) {
@@ -19,6 +20,7 @@ data class Barn(
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
     val relasjonTilBarnet: BarnRelasjon? = null,
     val relasjonTilBarnetBeskrivelse: String? = null,
+    val fødselsattestVedleggId: List<String>? = listOf(), // TODO: Fjern nullabel etter lansering.
     ) {
     override fun toString(): String {
         return "Barn()"

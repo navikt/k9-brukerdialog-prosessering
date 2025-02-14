@@ -6,6 +6,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.net.URL
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.personopplysninger.Barn as K9Barn
 
@@ -30,6 +31,8 @@ data class BarnDetaljer(
 
     val relasjonTilBarnet: BarnRelasjon? = null,
     val relasjonTilBarnetBeskrivelse: String? = null,
+
+    val fødselsattestVedleggUrls: List<URL>? = listOf(),
 ) {
     override fun toString(): String {
         return "BarnDetaljer(aktørId=***, navn=***, fodselsdato=***"

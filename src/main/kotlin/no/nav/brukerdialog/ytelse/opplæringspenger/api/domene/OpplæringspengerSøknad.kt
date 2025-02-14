@@ -63,7 +63,6 @@ data class OpplæringspengerSøknad(
     @field:Valid
     val arbeidsgivere: List<ArbeidsgiverOLP>,
     val vedlegg: List<URL> = listOf(), // TODO: Fjern listof() når krav om legeerklæring er påkrevd igjen.
-    val fødselsattestVedleggUrls: List<URL>? = listOf(),
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     val fraOgMed: LocalDate,
@@ -117,7 +116,7 @@ data class OpplæringspengerSøknad(
             søker = søker,
             barn = barn,
             vedleggId = vedlegg.map { it.toURI().dokumentId() },
-            fødselsattestVedleggId = fødselsattestVedleggUrls?.map { it.toURI().dokumentId() } ?: listOf(),
+            fødselsattestVedleggId = barn.fødselsattestVedleggUrls?.map { it.toURI().dokumentId() } ?: listOf(),
             arbeidsgivere = arbeidsgivere,
             medlemskap = medlemskap,
             ferieuttakIPerioden = ferieuttakIPerioden,
@@ -142,7 +141,7 @@ data class OpplæringspengerSøknad(
 
     override fun vedlegg(): List<URL> = mutableListOf<URL>().apply {
         addAll(vedlegg)
-        fødselsattestVedleggUrls?.let { addAll(it) }
+        barn.fødselsattestVedleggUrls?.let { addAll(it) }
     }
 
     override fun valider(): List<String> = mutableListOf<String>().apply {

@@ -30,7 +30,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(Constants.OSLO_ZONE_ID).somNorskDag(),
             "soknad_mottatt" to Constants.DATE_TIME_FORMATTER.format(søknad.mottatt),
             "harIkkeVedlegg" to søknad.sjekkOmHarIkkeVedlegg(),
-            "harLastetOppFødselsattest" to !søknad.fødselsattestVedleggId.isNullOrEmpty(),
+            "harLastetOppFødselsattest" to !søknad.barn.fødselsattestVedleggId.isNullOrEmpty(),
             "soker" to søknad.søker.somMap(),
             "barn" to søknad.barn.somMap(),
             "periode" to mapOf(
