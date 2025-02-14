@@ -126,6 +126,7 @@ class OLPSøknadPdfGeneratorTest {
             id = "8-barn-med-nyfødt-barn"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    fødselsattestVedleggId = listOf("123"),
                     barn = Barn(
                         navn = "OLE DOLE",
                         fødselsdato = LocalDate.now(),
