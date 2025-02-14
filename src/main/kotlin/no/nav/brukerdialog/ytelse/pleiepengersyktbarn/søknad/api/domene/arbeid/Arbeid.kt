@@ -8,7 +8,8 @@ internal const val DAGER_PER_UKE = 5L
 enum class ArbeidIPeriodeType {
     ARBEIDER_VANLIG,
     ARBEIDER_REDUSERT,
-    ARBEIDER_IKKE
+    ARBEIDER_IKKE,
+    IKKE_BESVART
 }
 
 enum class RedusertArbeidstidType {

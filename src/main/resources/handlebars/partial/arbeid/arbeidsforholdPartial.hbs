@@ -2,6 +2,8 @@
     <ul>
         <li>
             {{#with arbeidsforhold.arbeidIPeriode}}
+                {{#eq type "IKKE_BESVART" }}
+                {{/eq}}
                 {{#eq type "ARBEIDER_IKKE" }}
                     <p>Jobber ikke i perioden.</p>
                 {{/eq}}

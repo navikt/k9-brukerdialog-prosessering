@@ -34,7 +34,8 @@ data class ArbeidsRedusert(
 enum class ArbeidIPeriodeType {
     ARBEIDER_VANLIG,
     ARBEIDER_REDUSERT,
-    ARBEIDER_IKKE;
+    ARBEIDER_IKKE,
+    IKKE_BESVART;
 
     fun jobber() = this != ARBEIDER_IKKE
 }
