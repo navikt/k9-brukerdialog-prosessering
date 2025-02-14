@@ -28,7 +28,11 @@ object OlpPdfSøknadUtils {
                 fødselsdato = LocalDate.parse("1990-09-29"),
             ),
             barn = Barn(
-                norskIdentifikator = "02119970078", navn = "OLE DOLE", aktørId = "11111111111"
+                norskIdentifikator = "02119970078",
+                navn = "OLE DOLE",
+                aktørId = "11111111111",
+                relasjonTilBarnet = BarnRelasjon.ANNET,
+                relasjonTilBarnetBeskrivelse = "Blaabla annet",
             ),
             vedleggId = listOf("123", "456"),
             medlemskap = Medlemskap(
@@ -132,8 +136,6 @@ object OlpPdfSøknadUtils {
                 ),
             ),
             harVærtEllerErVernepliktig = true,
-            barnRelasjon = BarnRelasjon.ANNET,
-            barnRelasjonBeskrivelse = "Blaabla annet",
             k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
             kurs = Kurs(
                 kursholder = "Senter for Kurs AS",

@@ -204,9 +204,9 @@ class OLPSøknadPdfGeneratorTest {
                         norskIdentifikator = null,
                         fødselsdato = LocalDate.now().minusDays(7),
                         aktørId = null,
-                        årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.NYFØDT
-                    ),
-                    fødselsattestVedleggId = listOf("123")
+                        årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.NYFØDT,
+                        fødselsattestVedleggId = listOf("123")
+                    )
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
@@ -219,9 +219,9 @@ class OLPSøknadPdfGeneratorTest {
                         norskIdentifikator = null,
                         fødselsdato = LocalDate.now().minusYears(45),
                         aktørId = null,
-                        årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.BARNET_BOR_I_UTLANDET
-                    ),
-                    fødselsattestVedleggId = listOf()
+                        årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.BARNET_BOR_I_UTLANDET,
+                        fødselsattestVedleggId = listOf()
+                    )
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
@@ -287,8 +287,10 @@ class OLPSøknadPdfGeneratorTest {
             id = "17-med-relasjon-medmor"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
-                    barnRelasjon = BarnRelasjon.MEDMOR,
-                    barnRelasjonBeskrivelse = null
+                    barn = OlpPdfSøknadUtils.gyldigSøknad(id).barn.copy(
+                        relasjonTilBarnet = BarnRelasjon.MEDMOR,
+                        relasjonTilBarnetBeskrivelse = null
+                    )
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
