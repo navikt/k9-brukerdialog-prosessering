@@ -20,6 +20,7 @@ data class OLPMottattSøknad(
     val søker : Søker,
     val barn : Barn,
     var vedleggId : List<String> = listOf(),
+    val fødselsattestVedleggId: List<String>? = listOf(),
     val medlemskap: Medlemskap,
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
@@ -42,7 +43,7 @@ data class OLPMottattSøknad(
 
     override fun vedleggId(): List<String> = vedleggId
 
-    override fun fødselsattestVedleggId(): List<String> = barn.fødselsattestVedleggId ?: listOf()
+    override fun fødselsattestVedleggId(): List<String> = fødselsattestVedleggId ?: listOf()
 
     override fun mapTilPreprosessert(dokumentId: List<List<String>>) = OLPPreprosessertSøknad(
         melding = this,

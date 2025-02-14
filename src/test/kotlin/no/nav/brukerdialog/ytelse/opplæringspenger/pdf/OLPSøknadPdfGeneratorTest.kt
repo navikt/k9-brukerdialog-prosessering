@@ -199,13 +199,13 @@ class OLPSøknadPdfGeneratorTest {
             id = "12-har-lastet-opp-id-ved-manglende-norskIdentifikator"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    fødselsattestVedleggId = listOf("123"),
                     barn = Barn(
                         navn = "Barn uten norsk identifikasjonsnummer",
                         norskIdentifikator = null,
                         fødselsdato = LocalDate.now().minusDays(7),
                         aktørId = null,
                         årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.NYFØDT,
-                        fødselsattestVedleggId = listOf("123")
                     )
                 ).pdfData()
             )
@@ -214,13 +214,13 @@ class OLPSøknadPdfGeneratorTest {
             id = "13-har-ikke-lastet-opp-id-ved-manglende-norskIdentifikator"
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    fødselsattestVedleggId = listOf(),
                     barn = Barn(
                         navn = "Barn uten norsk identifikasjonsnummer",
                         norskIdentifikator = null,
                         fødselsdato = LocalDate.now().minusYears(45),
                         aktørId = null,
-                        årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.BARNET_BOR_I_UTLANDET,
-                        fødselsattestVedleggId = listOf()
+                        årsakManglerIdentitetsnummer = ÅrsakManglerIdentitetsnummer.BARNET_BOR_I_UTLANDET
                     )
                 ).pdfData()
             )

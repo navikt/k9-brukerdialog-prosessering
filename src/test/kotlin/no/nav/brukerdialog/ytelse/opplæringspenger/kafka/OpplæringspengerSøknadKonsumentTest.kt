@@ -493,7 +493,6 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
               "årsakManglerIdentitetsnummer": null,
               "relasjonTilBarnet": "ANNET",
               "relasjonTilBarnetBeskrivelse": "Blaabla annet",
-              "fødselsattestVedleggId": []
             },
             "mottatt": "$mottatt",
             "søker": {

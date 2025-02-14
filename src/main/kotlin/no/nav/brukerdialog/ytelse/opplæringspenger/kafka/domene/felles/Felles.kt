@@ -19,8 +19,7 @@ data class Barn(
     val aktørId: String? = null, // Brukes av sif-innsyn-api
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
     val relasjonTilBarnet: BarnRelasjon? = null,
-    val relasjonTilBarnetBeskrivelse: String? = null,
-    val fødselsattestVedleggId: List<String>? = listOf(), // TODO: Fjern nullabel etter lansering.
+    val relasjonTilBarnetBeskrivelse: String? = null
     ) {
     override fun toString(): String {
         return "Barn()"
