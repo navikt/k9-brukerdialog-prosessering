@@ -492,7 +492,8 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
               "norskIdentifikator": "02119970078",
               "årsakManglerIdentitetsnummer": null,
               "relasjonTilBarnet": "ANNET",
-              "relasjonTilBarnetBeskrivelse": "Blaabla annet"
+              "relasjonTilBarnetBeskrivelse": "Blaabla annet",
+              "fødselsattestVedleggId": []
             },
             "mottatt": "$mottatt",
             "søker": {
