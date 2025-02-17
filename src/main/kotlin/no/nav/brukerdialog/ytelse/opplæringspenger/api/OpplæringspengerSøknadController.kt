@@ -17,10 +17,8 @@ import no.nav.security.token.support.core.api.RequiredIssuers
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.web.ErrorResponseException
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -48,14 +46,8 @@ class OpplæringspengerSøknadController(
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun innsending(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @Value("\${ENABLE_OPPLAERINGSPENGER:false}") enabled: Boolean? = null,
         @RequestBody søknad: OpplæringspengerSøknad,
     ) = runBlocking {
-        if (enabled != true) {
-            logger.info("Opplæringspenger er ikke aktivert.")
-            throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
-        }
-
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
