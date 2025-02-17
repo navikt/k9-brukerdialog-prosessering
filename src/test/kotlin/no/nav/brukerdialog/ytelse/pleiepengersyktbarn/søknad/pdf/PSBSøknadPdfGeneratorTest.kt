@@ -261,6 +261,19 @@ class PSBSøknadPdfGeneratorTest {
                         )
                     ),
                     Arbeidsgiver(
+                        navn = "Ikke besvart arbeid i periode",
+                        organisasjonsnummer = "917755736",
+                        erAnsatt = false,
+                        arbeidsforhold = Arbeidsforhold(
+                            normalarbeidstid = NormalArbeidstid(
+                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                            ),
+                            arbeidIPeriode = ArbeidIPeriode(
+                                type = ArbeidIPeriodeType.IKKE_BESVART
+                            )
+                        )
+                    ),
+                    Arbeidsgiver(
                         navn = "Sluttaaaa",
                         organisasjonsnummer = "917755736",
                         erAnsatt = false,
@@ -734,6 +747,37 @@ class PSBSøknadPdfGeneratorTest {
                                             )
                                         )
                                     )
+                                )
+                            )
+                        )
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "24-kun-arbeidsgiver-med-ikke-besvart-arbeid-i-periode"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    fraOgMed = LocalDate.parse("2024-12-30"),
+                    tilOgMed = LocalDate.parse("2025-01-02"),
+                    omsorgstilbud = null,
+                    frilans = Frilans(
+                        harInntektSomFrilanser = false
+                    ),
+                    selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
+                        harInntektSomSelvstendig = false
+                    ),
+                    arbeidsgivere = listOf(
+                        Arbeidsgiver(
+                            navn = "Skal ikke dukke opp under jobb i søknadsperioden",
+                            organisasjonsnummer = "917755736",
+                            erAnsatt = false,
+                            arbeidsforhold = Arbeidsforhold(
+                                normalarbeidstid = NormalArbeidstid(
+                                    timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                                ),
+                                arbeidIPeriode = ArbeidIPeriode(
+                                    type = ArbeidIPeriodeType.IKKE_BESVART,
                                 )
                             )
                         )
