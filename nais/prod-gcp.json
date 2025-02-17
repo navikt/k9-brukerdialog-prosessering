@@ -36,7 +36,9 @@
     "FAMILIE_PDF_BASE_URL": "http://familie-pdf.teamfamilie",
     "FAMILIE_PDF_SCOPE": "api://prod-gcp.teamfamilie.familie-pdf/.default",
 
-    "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering"
+    "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
+
+    "ENABLE_OPPLAERINGSPENGER": "true"
   },
   "slack-channel": "sif-alerts",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "
