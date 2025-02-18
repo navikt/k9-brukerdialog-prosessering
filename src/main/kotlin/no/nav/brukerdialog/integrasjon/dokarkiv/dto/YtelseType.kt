@@ -147,6 +147,13 @@ enum class YtelseType(
         innsendingstype = Innsendingstype.SØKNAD
     ),
 
+    OPPLÆRINGSPENGERSØKNAD_ETTERSENDING(
+        brevkode = BrevKode(brevKode = "NAVe 09-11.08", dokumentKategori = "SOK"),
+        tittel = "Søknad om opplæringspenger - NAVe 09-11.08",
+        tema = Tema.K9_YTELSER,
+        innsendingstype = Innsendingstype.ETTERSENDELSE
+    ),
+
     FRISINNSØKNAD(
         brevkode = BrevKode(brevKode = "NAV 00-03.02", dokumentKategori = "SOK"),
         tittel = "Søknad om inntektskompensasjon for frilansere og selvstendig næringdrivende - NAV 00-03.02",
