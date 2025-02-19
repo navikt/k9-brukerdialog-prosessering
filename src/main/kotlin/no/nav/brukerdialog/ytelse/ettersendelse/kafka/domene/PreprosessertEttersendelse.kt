@@ -79,6 +79,7 @@ data class PreprosessertEttersendelse(
         Søknadstype.OMP_UT_ARBEIDSTAKER -> YtelseType.OMSORGSPENGESØKNAD_UTBETALING_ARBEIDSTAKER_ETTERSENDING
         Søknadstype.OMP_UTV_MA -> YtelseType.OMSORGSPENGESØKNAD_MIDLERTIDIG_ALENE_ETTERSENDING
         Søknadstype.OMP_UTV_AO -> YtelseType.OMSORGSDAGER_ALENEOMSORG_ETTERSENDING
+        Søknadstype.OPPLÆRINGSPENGER -> YtelseType.OPPLÆRINGSPENGERSØKNAD_ETTERSENDING
     }
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed? = null
