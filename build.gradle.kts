@@ -30,9 +30,9 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.16"
+val tokenSupportVersion = "5.0.17"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "11.2.1"
+val k9FormatVersion = "11.3.0"
 val springMockkVersion = "4.0.2"
 val logstashLogbackEncoderVersion = "8.0"
 val slf4jVersion = "2.0.16"
@@ -43,12 +43,12 @@ val retryVersion = "2.0.11"
 val awailitilityKotlinVersion = "4.2.2"
 val springCloudContractVersion = "4.2.0"
 val orgJsonVersion = "20250107"
-val springdocVersion = "2.8.4"
+val springdocVersion = "2.8.5"
 val pdfBoxVersion = "3.0.4"
 val imageIOVersion = "3.12.0"
 
 dependencies {
-	implementation("org.yaml:snakeyaml:2.3") {
+	implementation("org.yaml:snakeyaml:2.4") {
 		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
 	}
 
