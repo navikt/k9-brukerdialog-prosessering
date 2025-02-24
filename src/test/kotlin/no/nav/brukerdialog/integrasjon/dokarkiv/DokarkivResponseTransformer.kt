@@ -33,7 +33,7 @@ internal class DokarkivResponseTransformer : ResponseTransformer() {
             YtelseType.OMSORGSDAGER_ALENEOMSORG_ETTERSENDING to "18",
             YtelseType.UNGDOMSYTELSE_SØKNAD to "19", // TODO Bruk Tema.UNGDOMSYTELSE før lansering
             YtelseType.UNGDOMSYTELSE_INNTEKTRAPPORTERING to "20", // TODO Bruk Tema.UNGDOMSYTELSE før lansering
-            YtelseType.OPPLÆRINGSPENGERSØKNAD_ETTERSENDING to "21", // Hør med Ramin om dette tallet stemmer
+            YtelseType.OPPLÆRINGSPENGERSØKNAD_ETTERSENDING to "21",
         )
     }
 
