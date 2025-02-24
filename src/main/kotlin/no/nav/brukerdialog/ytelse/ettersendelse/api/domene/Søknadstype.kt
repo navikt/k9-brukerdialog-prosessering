@@ -9,7 +9,8 @@ enum class Søknadstype {
     OMP_UT_ARBEIDSTAKER, // Omsorgspenger utbetaling arbeidstaker ytelse.
     OMP_UTV_KS, // Omsorgspenger utvidet rett - kronisk syke eller funksjonshemming.
     OMP_UTV_MA, // Omsorgspenger utvidet rett - midlertidig alene
-    OMP_UTV_AO;
+    OMP_UTV_AO,
+    OPPLÆRINGSPENGER;
 
     fun somK9Ytelse() = when (this) {
         OMP_UTV_KS -> Ytelse.OMP_UTV_KS
@@ -18,5 +19,6 @@ enum class Søknadstype {
         OMP_UT_SNF, OMP_UT_ARBEIDSTAKER -> Ytelse.OMP_UT
         OMP_UTV_AO -> Ytelse.OMP_UTV_AO
         PLEIEPENGER_LIVETS_SLUTTFASE -> Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
+        OPPLÆRINGSPENGER -> Ytelse.OPPLÆRINGSPENGER
     }
 }
