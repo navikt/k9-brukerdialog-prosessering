@@ -35,8 +35,8 @@ class FamiliePdfClientConfig(
         logger.info("Konfigurerer opp azure klient for familie-pdf.")
         return restTemplateBuilder
             .rootUri(baseUrl)
-            .setReadTimeout(Duration.ofSeconds(120))
-            .setConnectTimeout(Duration.ofSeconds(120))
+            .readTimeout(Duration.ofSeconds(120))
+            .connectTimeout(Duration.ofSeconds(120))
             .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .additionalInterceptors(

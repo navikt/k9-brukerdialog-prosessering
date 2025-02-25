@@ -12,6 +12,7 @@ import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTVIDET_RETT_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_SYKT_BARN_TOPIC
 import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_INNTEKTSRAPPORTERING_TOPIC
+import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_SOKNAD_TOPIC
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.Ytelse.DINE_PLEIEPENGER
@@ -30,6 +31,7 @@ import no.nav.brukerdialog.ytelse.Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 import no.nav.brukerdialog.ytelse.Ytelse.PLEIEPENGER_SYKT_BARN
 import no.nav.brukerdialog.ytelse.Ytelse.UNGDOMSYTELSE
 import no.nav.brukerdialog.ytelse.Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
+import no.nav.brukerdialog.ytelse.Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE
 import org.apache.kafka.common.serialization.Serializer
 import org.json.JSONObject
 
@@ -45,6 +47,7 @@ object Topics {
     const val MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC = "dusseldorf.privat-endringsmelding-pleiepenger-sykt-barn-mottatt"
     const val UNGDOMSYTELSE_SOKNAD_TOPIC = "dusseldorf.ungdomsytelse-soknad-mottatt"
     const val UNGDOMSYTELSE_INNTEKTSRAPPORTERING_TOPIC = "dusseldorf.ungdomsytelse-inntektsrapportering-mottatt"
+    const val UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC = "dusseldorf.ungdomsytelse-oppgavebekreftelse-mottatt"
     const val OLP_MOTTATT_TOPIC = "dusseldorf.olp-soknad-mottatt"
 }
 
@@ -65,6 +68,7 @@ internal fun hentTopicForYtelse(ytelse: Ytelse) = when (ytelse) {
     ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN -> MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
     UNGDOMSYTELSE -> UNGDOMSYTELSE_SOKNAD_TOPIC
     UNGDOMSYTELSE_INNTEKTSRAPPORTERING -> UNGDOMSYTELSE_INNTEKTSRAPPORTERING_TOPIC
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC
     OPPLARINGSPENGER -> OLP_MOTTATT_TOPIC
     DINE_PLEIEPENGER -> throw IllegalArgumentException("$ytelse er ikke en gyldig ytelse for denne operasjonen")
 }

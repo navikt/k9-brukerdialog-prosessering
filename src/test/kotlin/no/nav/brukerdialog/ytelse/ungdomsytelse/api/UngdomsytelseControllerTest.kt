@@ -32,7 +32,7 @@ import java.util.*
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(
-    controllers = [UngdomsytelsesøknadController::class],
+    controllers = [UngdomsytelseController::class],
     properties = [
         "ENABLE_UNDOMSYTELSE=true",
     ])
@@ -40,7 +40,7 @@ import java.util.*
     JacksonConfiguration::class,
     CallIdGenerator::class
 )
-class UngdomsytelsesøknadControllerTest {
+class UngdomsytelseControllerTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc

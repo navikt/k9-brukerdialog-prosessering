@@ -250,6 +250,7 @@ abstract class PdfData {
             Ytelse.ETTERSENDELSE -> "ettersendelse$språkSuffix".trimEnd()
             Ytelse.UNGDOMSYTELSE_DELTAKELSE_SØKNAD -> "ungdomsytelse-soknad$språkSuffix".trimEnd()
             Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING -> "ungdomsytelse-rapportering-soknad$språkSuffix".trimEnd()
+            Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> "ungdomsytelse-oppgave-bekreftelse$språkSuffix".trimEnd()
             Ytelse.OPPLÆRINGSPENGER -> "opplaeringspenger-soknad$språkSuffix".trimEnd()
         }
     }

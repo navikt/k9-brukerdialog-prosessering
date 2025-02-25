@@ -34,6 +34,7 @@ internal class DokarkivResponseTransformer : ResponseTransformer() {
             YtelseType.UNGDOMSYTELSE_SØKNAD to "19", // TODO Bruk Tema.UNGDOMSYTELSE før lansering
             YtelseType.UNGDOMSYTELSE_INNTEKTRAPPORTERING to "20", // TODO Bruk Tema.UNGDOMSYTELSE før lansering
             YtelseType.OPPLÆRINGSPENGERSØKNAD_ETTERSENDING to "21",
+            YtelseType.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE to "22", // TODO Bruk Tema.UNGDOMSYTELSE før lansering
         )
     }
 
