@@ -6,15 +6,12 @@ import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelseOppgavebekreftelsePdfData
-import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelsesøknadPdfData
 import no.nav.k9.søknad.Søknad
-import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.util.UUID
 
 data class UngdomsytelseOppgavebekreftelseMottatt(
-    val deltakelseId: UUID,
-    val oppgaveId: UUID,
+    val deltakelseId: String,
+    val oppgaveId: String,
     val mottatt: ZonedDateTime,
     val språk: String? = "nb",
     val søker: Søker,

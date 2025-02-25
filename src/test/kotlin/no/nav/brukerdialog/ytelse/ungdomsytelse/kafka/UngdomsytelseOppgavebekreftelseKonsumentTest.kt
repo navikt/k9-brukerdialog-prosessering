@@ -68,8 +68,8 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
 
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
-        val deltakelseId = UUID.randomUUID()
-        val oppgaveId = UUID.randomUUID()
+        val deltakelseId = UUID.randomUUID().toString()
+        val oppgaveId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
         val oppgavebekreftelseMottatt = UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(deltakelseId = deltakelseId, oppgaveId = oppgaveId, mottatt = mottatt)
@@ -86,19 +86,19 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
             .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
 
         producer.leggPåTopic(
-            key = oppgaveId.toString(),
+            key = oppgaveId,
             value = topicEntryJson,
             topic = UngdomsytelseOppgavebekreftelseTopologyConfiguration.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_MOTTATT_TOPIC
         )
         val lesMelding =
             consumer.lesMelding(
-                key = oppgaveId.toString(),
+                key = oppgaveId,
                 topic = UngdomsytelseOppgavebekreftelseTopologyConfiguration.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC,
                 maxWaitInSeconds = 120
             ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(deltakelseId.toString(), oppgaveId.toString(), mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(preprosessertSøknadSomJson(deltakelseId, oppgaveId, mottattString), preprosessertSøknadJson, true)
     }
     @Language("JSON")
     private fun preprosessertSøknadSomJson(deltakelseId: String, oppgaveId: String, mottatt: String) = """

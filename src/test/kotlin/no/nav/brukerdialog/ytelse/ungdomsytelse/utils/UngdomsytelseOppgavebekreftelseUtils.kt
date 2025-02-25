@@ -19,8 +19,8 @@ object UngdomsytelseOppgavebekreftelseUtils {
 
     fun oppgavebekreftelseMottatt(
         søkerFødselsnummer: String = "02119970078",
-        deltakelseId: UUID = UUID.randomUUID(),
-        oppgaveId: UUID = UUID.randomUUID(),
+        deltakelseId: String = UUID.randomUUID().toString(),
+        oppgaveId: String = UUID.randomUUID().toString(),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
     ): UngdomsytelseOppgavebekreftelseMottatt {
         val startdato = LocalDate.parse("2022-01-01")

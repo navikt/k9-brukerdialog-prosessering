@@ -9,14 +9,13 @@ import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.søknad.Søknad
-import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class UngdomsytelseOppgavebekreftelsePreprosessert(
-    val deltakelseId: UUID,
-    val oppgaveId: UUID,
+    val deltakelseId: String,
+    val oppgaveId: String,
     val mottatt: ZonedDateTime,
     val språk: String?,
     val søker: Søker,
@@ -51,7 +50,7 @@ data class UngdomsytelseOppgavebekreftelsePreprosessert(
     override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest {
 
         return JournalføringsService.JournalføringsRequest(
-            ytelseType = YtelseType.UNGDOMSYTELSE_SØKNAD,
+            ytelseType = YtelseType.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE,
             norskIdent = søkerFødselsnummer(),
             sokerNavn = søkerNavn(),
             mottatt = mottatt,
