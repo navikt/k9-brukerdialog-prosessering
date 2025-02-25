@@ -1,6 +1,8 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
@@ -28,7 +30,14 @@ object UngdomsytelseOppgavebekreftelseUtils {
         return UngdomsytelseOppgavebekreftelseMottatt(
             språk = "nb",
             deltakelseId = deltakelseId,
-            oppgaveId = oppgaveId,
+            oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
+                oppgaveId = oppgaveId,
+                veilederRef = "veilder-123",
+                meldingFraVeileder = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
+                """.trimMargin(),
+                nyStartdato = LocalDate.parse("2025-01-01"),
+                bekreftelseSvar = BekreftelseSvar.GODTAR
+            ),
             mottatt = mottatt,
             søker = Søker(
                 aktørId = "123456",

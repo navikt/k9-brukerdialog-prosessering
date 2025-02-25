@@ -1,9 +1,10 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.config.JacksonConfiguration
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
-import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
@@ -21,7 +22,13 @@ object SøknadUtils {
 
     internal val defaultOppgavebekreftelse = UngdomsytelseOppgavebekreftelse(
         deltakelseId = UUID.randomUUID(),
-        oppgaveId = UUID.randomUUID(),
+        oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
+            oppgaveId = UUID.randomUUID().toString(),
+            veilederRef = "veilder-123",
+            meldingFraVeileder = "Melding fra veileder...",
+            nyStartdato = LocalDate.parse("2025-01-01"),
+            bekreftelseSvar = BekreftelseSvar.GODTAR
+        ),
         mottatt = ZonedDateTime.parse("2022-01-02T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter)
     )
 }

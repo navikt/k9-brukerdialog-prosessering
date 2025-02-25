@@ -98,7 +98,7 @@ class UngdomsytelseController(
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${bekreftetOppgave.ytelse()}"
 
-        logger.info(formaterStatuslogging(bekreftetOppgave.ytelse(), bekreftetOppgave.oppgaveId.toString(), "mottatt."))
+        logger.info(formaterStatuslogging(bekreftetOppgave.ytelse(), bekreftetOppgave.oppgave.oppgaveId, "mottatt."))
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(bekreftetOppgave, metadata)
         metrikkService.registrerMottattSøknad(bekreftetOppgave.ytelse())

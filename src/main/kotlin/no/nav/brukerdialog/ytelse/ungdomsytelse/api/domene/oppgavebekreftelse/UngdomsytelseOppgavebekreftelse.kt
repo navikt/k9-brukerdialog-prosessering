@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.Valid
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.oppslag.soker.Søker
@@ -23,7 +24,8 @@ import no.nav.k9.søknad.Søknad as UngSøknad
 
 data class UngdomsytelseOppgavebekreftelse(
     val deltakelseId: UUID,
-    val oppgaveId: UUID,
+
+    @field:Valid val oppgave: UngdomsytelseOppgaveDTO,
 
     @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
@@ -41,8 +43,8 @@ data class UngdomsytelseOppgavebekreftelse(
         requireNotNull(k9Format)
         return UngdomsytelseKomplettOppgavebekreftelse(
             deltakelseId = deltakelseId,
-            oppgaveId = oppgaveId,
-            søknadId = oppgaveId,
+            oppgave = oppgave,
+            søknadId = oppgave.oppgaveId,
             mottatt = mottatt,
             søker = søker,
             k9Format = k9Format as UngSøknad
@@ -60,7 +62,7 @@ data class UngdomsytelseOppgavebekreftelse(
             .medVersjon(K9_SØKNAD_VERSJON)
             .medMottattDato(mottatt)
             .medSpråk(Språk.NORSK_BOKMÅL)
-            .medSøknadId(SøknadId(oppgaveId.toString()))
+            .medSøknadId(SøknadId(oppgave.oppgaveId))
             .medSøker(søker.somK9Søker())
             .medYtelse(ytelse)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
@@ -68,7 +70,7 @@ data class UngdomsytelseOppgavebekreftelse(
 
     override fun søkerNorskIdent(): String? = null
     override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE
-    override fun søknadId(): String = oppgaveId.toString()
+    override fun søknadId(): String = oppgave.oppgaveId
     override fun vedlegg(): List<URL> = mutableListOf()
     override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()
 }

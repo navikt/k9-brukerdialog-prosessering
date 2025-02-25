@@ -8,6 +8,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.k9.søknad.Søknad
 import java.time.ZonedDateTime
 import java.util.*
@@ -15,8 +16,8 @@ import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class UngdomsytelseOppgavebekreftelsePreprosessert(
     val deltakelseId: String,
-    val oppgaveId: String,
     val mottatt: ZonedDateTime,
+    val oppgave: UngdomsytelseOppgaveDTO,
     val språk: String?,
     val søker: Søker,
     val dokumentId: List<List<String>>,
@@ -28,7 +29,7 @@ data class UngdomsytelseOppgavebekreftelsePreprosessert(
     ) : this(
         språk = ungdomsytelseSøknadMottatt.språk,
         deltakelseId = ungdomsytelseSøknadMottatt.deltakelseId,
-        oppgaveId = ungdomsytelseSøknadMottatt.oppgaveId,
+        oppgave = ungdomsytelseSøknadMottatt.oppgave,
         mottatt = ungdomsytelseSøknadMottatt.mottatt,
         søker = ungdomsytelseSøknadMottatt.søker,
         dokumentId = dokumentId,
@@ -60,7 +61,7 @@ data class UngdomsytelseOppgavebekreftelsePreprosessert(
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,
-        grupperingsId = oppgaveId.toString(),
+        grupperingsId = oppgave.oppgaveId,
         tekst = "Bekrftelse om endring av ungdomsprogramopplysninger er mottatt",
         link = null,
         dagerSynlig = 7,

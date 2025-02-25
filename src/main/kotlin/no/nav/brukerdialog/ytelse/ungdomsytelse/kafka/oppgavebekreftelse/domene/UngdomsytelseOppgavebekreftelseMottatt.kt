@@ -5,14 +5,15 @@ import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelseOppgavebekreftelsePdfData
 import no.nav.k9.søknad.Søknad
 import java.time.ZonedDateTime
 
 data class UngdomsytelseOppgavebekreftelseMottatt(
     val deltakelseId: String,
-    val oppgaveId: String,
     val mottatt: ZonedDateTime,
+    val oppgave: UngdomsytelseOppgaveDTO,
     val språk: String? = "nb",
     val søker: Søker,
     val k9Format: Søknad,

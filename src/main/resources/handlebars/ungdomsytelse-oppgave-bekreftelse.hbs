@@ -10,7 +10,8 @@
           content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
-        <bookmark name="Oppgavebekreftelse" href="#bekreftelse"/>
+        <bookmark name="Godkjenne endret startdato" href="#endretStartdato"/>
+        <bookmark name="Godkjenne endret sluttdato" href="#endretSluttdato"/>
     </bookmarks>
     {{#block 'style-common' }}
     {{/block}}
@@ -25,15 +26,64 @@
 <div class="innholdscontainer">
     {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
+    {{#if oppgave.endretStartdatoOppgave}}
+        <section id="endretStartdato">
+            <h2>Godkjenn endret startdato</h2>
 
-    <section id="bekreftelse">
-        <h2>Bekreftelse på endret opplysninger....</h2>
-    </section>
+            <div class="fritekst">
+                <p class="sporsmalstekst">Melding fra {{oppgave.veilederRef}} (veileder):</p>
+                <p class="fritekst_textarea">{{oppgave.meldingFraVeileder}}</p>
+            </div>
+
+            <br/>
+            <p class="sporsmalstekst">Godkjenner du at startdato endres
+                til {{oppgave.endretStartdatoOppgave.nyStartdato}}?</p>
+            <p>{{oppgave.endretStartdatoOppgave.bekreftelseSvar}}</p><br/>
+
+            {{#eq oppgave.endretStartdatoOppgave.bekreftelseSvar "Nei"}}
+                <p class="sporsmalstekst">Har du hatt kontakt med veileder for å diskutere hvorfor du ikke ønsker å
+                    godkjenne denne endringen?</p>
+                {{jaNeiSvar oppgave.endretStartdatoOppgave.ikkeGodkjentResponse.kontaktVeilederSvar}}<br/>
+
+                <div class="fritekst">
+                    <p class="sporsmalstekst">Skriv en kort begrunnelse for hvorfor du ikke ønsker å godkjenne</p>
+                    <p class="fritekst_textarea">{{oppgave.endretStartdatoOppgave.ikkeGodkjentResponse.meldingFraDeltaker}}</p>
+                </div>
+            {{/eq}}
+        </section>
+    {{/if}}
+
+    {{#if oppgave.endretSluttdatoOppgave}}
+        <section id="endretSluttdato">
+            <h2>Godkjenn endret sluttdato</h2>
+
+            <div class="fritekst">
+                <p class="sporsmalstekst">Melding fra {{oppgave.veilederRef}} (veileder):</p>
+                <p class="fritekst_textarea">{{oppgave.meldingFraVeileder}}</p>
+            </div>
+
+            <br/>
+            <p class="sporsmalstekst">Godkjenner du at sluttdato endres
+                til {{oppgave.endretSluttdatoOppgave.nySluttdato}}?</p>
+            <p>{{oppgave.endretSluttdatoOppgave.bekreftelseSvar}}</p><br/>
+
+            {{#eq oppgave.endretSluttdatoOppgave.bekreftelseSvar "Nei"}}
+                <p class="sporsmalstekst">Har du hatt kontakt med veileder for å diskutere hvorfor du ikke ønsker å
+                    godkjenne denne endringen?</p>
+                {{jaNeiSvar oppgave.endretSluttdatoOppgave.ikkeGodkjentResponse.kontaktVeilederSvar}}<br/>
+
+                <div class="fritekst">
+                    <p class="sporsmalstekst">Skriv en kort begrunnelse for hvorfor du ikke ønsker å godkjenne</p>
+                    <p class="fritekst_textarea">{{oppgave.endretSluttdatoOppgave.ikkeGodkjentResponse.meldingFraDeltaker}}</p>
+                </div>
+            {{/eq}}
+        </section>
+    {{/if}}
 </div>
 
 <!-- FOOTER -->
 <p id="footer">
-    <span class="soknadsid">{{ oppgaveId }}</span>
+    <span class="soknadsid">{{ oppgave.oppgaveId }}</span>
     <span class="soknadsid">{{ deltakelseId }}</span>
     <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
 </p>

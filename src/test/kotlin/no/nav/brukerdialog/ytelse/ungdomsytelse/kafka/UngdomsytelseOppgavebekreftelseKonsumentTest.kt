@@ -12,6 +12,8 @@ import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
 import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
@@ -21,6 +23,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.net.URI
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -41,7 +44,15 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
         mockJournalføring()
 
         val oppgaveId = UUID.randomUUID()
-        val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(oppgaveId = oppgaveId)
+        val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(
+            oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
+                oppgaveId = oppgaveId.toString(),
+                veilederRef = "veilder-123",
+                meldingFraVeileder = null,
+                nyStartdato = LocalDate.parse("2025-01-01"),
+                bekreftelseSvar = BekreftelseSvar.GODTAR
+            )
+        )
 
         mockMvc.sendInnSøknad(oppgavebekreftelse, mockOAuth2Server.hentToken())
 
@@ -72,7 +83,11 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
         val oppgaveId = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
-        val oppgavebekreftelseMottatt = UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(deltakelseId = deltakelseId, oppgaveId = oppgaveId, mottatt = mottatt)
+        val oppgavebekreftelseMottatt = UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
+            deltakelseId = deltakelseId,
+            oppgaveId = oppgaveId,
+            mottatt = mottatt
+        )
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, oppgavebekreftelseMottatt)
@@ -98,13 +113,26 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
             ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(deltakelseId, oppgaveId, mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(
+            preprosessertSøknadSomJson(deltakelseId, oppgaveId, mottattString),
+            preprosessertSøknadJson,
+            true
+        )
     }
+
     @Language("JSON")
     private fun preprosessertSøknadSomJson(deltakelseId: String, oppgaveId: String, mottatt: String) = """
         {
           "deltakelseId": "$deltakelseId",
-          "oppgaveId": "$oppgaveId",
+          "oppgave": {
+            "type": "BEKREFT_ENDRET_STARTDATO",
+            "oppgaveId": "$oppgaveId",
+            "veilederRef": "veilder-123",
+            "meldingFraVeileder": "Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.",
+            "nyStartdato": "2025-01-01",
+            "bekreftelseSvar": "GODTAR",
+            "ikkeGodkjentResponse": null
+          },
           "mottatt": "$mottatt",
           "søker": {
             "etternavn": "Nordmann",
