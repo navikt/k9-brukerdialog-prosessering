@@ -2,7 +2,6 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.OppgittInntektForPeriode
 import no.nav.k9.søknad.Søknad
 import java.time.ZonedDateTime
 import java.util.UUID

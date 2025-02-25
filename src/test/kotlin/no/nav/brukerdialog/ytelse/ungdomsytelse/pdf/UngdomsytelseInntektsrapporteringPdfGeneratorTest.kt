@@ -2,8 +2,8 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.pdf
 
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.OppgittInntektForPeriode
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.UngPeriode
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.OppgittInntektForPeriode
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngPeriode
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import org.junit.jupiter.api.Test
 import java.io.File
