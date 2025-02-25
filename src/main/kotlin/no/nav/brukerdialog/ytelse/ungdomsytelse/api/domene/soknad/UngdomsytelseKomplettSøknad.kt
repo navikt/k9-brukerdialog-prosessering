@@ -2,9 +2,7 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad
 
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.OppgittInntektForPeriode
 import no.nav.k9.søknad.Søknad
-import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import java.time.LocalDate
 import java.time.ZonedDateTime
 

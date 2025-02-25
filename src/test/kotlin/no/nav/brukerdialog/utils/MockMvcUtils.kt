@@ -28,6 +28,7 @@ object MockMvcUtils {
             Ytelse.DINE_PLEIEPENGER -> "/dine-pleiepenger"
             Ytelse.UNGDOMSYTELSE -> "/ungdomsytelse/soknad"
             Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING -> "/ungdomsytelse/inntektsrapportering"
+            Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> "/ungdomsytelse/oppgavebekreftelse"
             Ytelse.OPPLARINGSPENGER -> "/opplaringspenger"
         }
 

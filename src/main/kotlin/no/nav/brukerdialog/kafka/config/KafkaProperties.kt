@@ -106,6 +106,11 @@ enum class KafkaStreamName(val value: String) {
     UNGDOMSYTELSE_INNTEKTSRAPPORTERING_JOURNALFØRING("ungdomsytelse-inntektsrapportering-journalforing"),
     UNGDOMSYTELSE_INNTEKTSRAPPORTERING_CLEANUP("ungdomsytelse-inntektsrapportering-cleanup"),
 
+    // Ungdomsytelse oppgavebekreftelse
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERING("ungdomsytelse-oppgavebekreftelse-preprosessering"),
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_JOURNALFØRING("ungdomsytelse-oppgavebekreftelse-journalforing"),
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP("ungdomsytelse-oppgavebekreftelse-cleanup"),
+
     // Opplæringspenger
     OPPLÆRINGSPENGER_SØKNAD_PREPROSESSERING("olp-soknad-preprosessering"),
     OPPLÆRINGSPENGER_SØKNAD_JOURNALFØRING("olp-soknad-journalforing"),

@@ -36,8 +36,8 @@ class K9SakInnsynApiClientConfig(
         bearerTokenClientHttpRequestInterceptor: BearerTokenClientHttpRequestInterceptor
     ): RestTemplate {
         return builder
-            .setConnectTimeout(Duration.ofSeconds(20))
-            .setReadTimeout(Duration.ofSeconds(20))
+            .connectTimeout(Duration.ofSeconds(20))
+            .readTimeout(Duration.ofSeconds(20))
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .rootUri(k9SakInnsynApiBaseUrl)
             .defaultMessageConverters()

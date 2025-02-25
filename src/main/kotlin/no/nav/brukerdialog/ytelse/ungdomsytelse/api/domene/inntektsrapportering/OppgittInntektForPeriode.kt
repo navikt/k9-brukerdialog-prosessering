@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene
+package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering
 
 import no.nav.k9.søknad.felles.type.Periode
 import java.math.BigDecimal

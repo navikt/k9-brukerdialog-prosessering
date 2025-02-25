@@ -2,8 +2,8 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.OppgittInntektForPeriode
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.UngPeriode
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.OppgittInntektForPeriode
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngPeriode
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngdomsytelseInntektsrapportering
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.domene.UngdomsytelseInntektsrapporteringMottatt
 import no.nav.k9.søknad.felles.Kildesystem
