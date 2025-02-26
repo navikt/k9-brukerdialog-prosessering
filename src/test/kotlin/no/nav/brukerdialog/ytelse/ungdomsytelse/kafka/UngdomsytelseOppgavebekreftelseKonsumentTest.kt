@@ -67,7 +67,7 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
             K9Beskjed(
                 metadata = no.nav.brukerdialog.utils.SøknadUtils.metadata,
                 grupperingsId = oppgaveId.toString(),
-                tekst = "Bekrftelse om endring av ungdomsprogramopplysninger er mottatt",
+                tekst = "Bekreftelse om endring av ungdomsprogramopplysninger er mottatt",
                 link = null,
                 dagerSynlig = 7,
                 søkerFødselsnummer = søker.fødselsnummer,

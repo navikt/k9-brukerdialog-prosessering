@@ -62,7 +62,7 @@ data class UngdomsytelseOppgavebekreftelsePreprosessert(
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,
         grupperingsId = oppgave.oppgaveId,
-        tekst = "Bekrftelse om endring av ungdomsprogramopplysninger er mottatt",
+        tekst = "Bekreftelse om endring av ungdomsprogramopplysninger er mottatt",
         link = null,
         dagerSynlig = 7,
         søkerFødselsnummer = søkerFødselsnummer(),
