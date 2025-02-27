@@ -30,6 +30,32 @@ data class DagData(
     val tid: String,
 )
 
+data class SpørsmålOgSvar(
+    val spørsmål: String,
+    val svar: String?,
+)
+
+fun tilSpørsmålOgSvar(
+    spørsmål: String,
+    svar: Any?,
+): SpørsmålOgSvar? {
+    var svarSomStreng: String? = null
+
+    svarSomStreng =
+        when (svar) {
+            is String -> svar
+            is Enum<*> -> svar.toString()
+            is Boolean -> konverterBooleanTilSvar(svar)
+            is Duration -> svar.tilString()
+            is LocalDate -> DATE_FORMATTER.format(svar)
+            is Int -> svar.toString()
+            is Arbeidsforhold -> arbeidIPerioden(svar)
+            else -> null
+        }
+
+    return svarSomStreng?.let { SpørsmålOgSvar(spørsmål, it) }
+}
+
 fun lagVerdiElement(
     spørsmålsTekst: String,
     svarVerdi: Any?,
@@ -52,7 +78,15 @@ fun lagVerdiElement(
         }
     }
 
-private fun arbeidIPerioden(arbeidsforhold: Arbeidsforhold?): String? {
+fun lagVerdiElement3(spørsmålOgSvar: SpørsmålOgSvar?): VerdilisteElement? =
+
+    if (spørsmålOgSvar == null) {
+        null
+    } else {
+        VerdilisteElement(label = spørsmålOgSvar.spørsmål, verdi = spørsmålOgSvar.svar)
+    }
+
+fun arbeidIPerioden(arbeidsforhold: Arbeidsforhold?): String {
     val arbeidIPeriode = arbeidsforhold?.arbeidIPeriode ?: return "Ingen arbeidsforhold registrert"
 
     return when (arbeidIPeriode.type) {
