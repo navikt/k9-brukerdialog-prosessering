@@ -14,6 +14,7 @@ import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.Situa
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.Situasjon.UTØVER_VERNEPLIKT
 import no.nav.brukerdialog.utils.StringUtils
 import no.nav.brukerdialog.utils.erLikEllerEtter
+import no.nav.brukerdialog.validation.fritekst.ValidFritekst
 import java.time.LocalDate
 import no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder as K9AnnenForelder
 
@@ -26,7 +27,7 @@ data class AnnenForelder(
 
     val situasjon: Situasjon,
 
-    @field:Pattern(regexp = StringUtils.FritekstPattern, message = "Matcher ikke tillatt mønster: '{regexp}'")
+    @field:ValidFritekst
     val situasjonBeskrivelse: String? = null,
 
     val periodeOver6Måneder: Boolean? = null,

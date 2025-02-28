@@ -1,12 +1,8 @@
 package no.nav.brukerdialog.utils
 
 object StringUtils {
-    private const val ANFØRSELSTEGN = "\\u2018\\u2019\\u201a\\u201b\\u201c\\u201d\\u201e\\u201f"
-    private const val AKSENTTEGN = "\\u00b4"
-    private const val PUNKTTEGN = "\\u2026"
-
-    const val FritekstPattern: String = "^[\\p{Punct}\\p{L}\\p{M}\\p{N}\\p{Sc}\\p{Space}«»–§�$ANFØRSELSTEGN$AKSENTTEGN$PUNKTTEGN]*$"
-    val FRITEKST_REGEX = Regex(FritekstPattern)
+    private const val FRITEKST_PATTERN: String = "^[\\p{Graph}\\p{Space}\\p{Sc}\\p{L}\\p{M}\\p{N}«»§]+$"
+    val FRITEKST_REGEX = Regex(FRITEKST_PATTERN)
 
     fun String.storForbokstav(): String = split(" ").joinToString(" ") { name: String ->
         name.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
