@@ -3,9 +3,10 @@ package no.nav.brukerdialog.validation
 import com.ninjasquad.springmockk.MockkBean
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.utils.CallIdGenerator
+import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
-import no.nav.security.mock.oauth2.http.json
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
+import org.hamcrest.Matchers
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -69,6 +70,10 @@ class FeltValideringControllerTest {
         }
             .andExpect {
                 status { isBadRequest() }
+                header {
+                    exists(NavHeaders.PROBLEM_DETAILS)
+                    string(NavHeaders.PROBLEM_DETAILS, Matchers.not("n/a"))
+                }
                 jsonPath("$.instance") { value("http://localhost/valider/friteksfelt") }
                 jsonPath("$.type") { value("/problem-details/invalid-request-parameters") }
                 jsonPath("$.violations[0].parameterName") { value("friteksfelt.verdi") }
