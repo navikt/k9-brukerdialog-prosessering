@@ -159,7 +159,7 @@ class OmsorgspengerUtvidetRettControllerTest {
                               "invalidValue": "¨ er ikke tillatt",
                               "parameterName": "høyereRisikoForFraværBeskrivelse",
                               "parameterType": "ENTITY",
-                              "reason": "Matcher ikke tillatt mønster: '^[\\p{Punct}\\p{L}\\p{M}\\p{N}\\p{Sc}\\p{Space}«»–§�\\u2018\\u2019\\u201a\\u201b\\u201c\\u201d\\u201e\\u201f\\u00b4\\u2026]*${'$'}'"
+                              "reason": "Ugyldige tegn funnet i teksten: ¨"
                             },
                             {
                               "invalidValue": false,
