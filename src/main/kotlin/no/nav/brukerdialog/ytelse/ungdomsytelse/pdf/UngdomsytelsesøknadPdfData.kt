@@ -3,13 +3,11 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.pdf
 import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
-import no.nav.brukerdialog.common.FeltMap
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene.UngdomsytelsesøknadMottatt
-import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelsesøknadPdfDataMapper.mapUngdomsytelsesøknadPdfData
 import no.nav.k9.søknad.felles.type.Språk
 import java.text.NumberFormat
 import java.util.*
@@ -45,13 +43,13 @@ class UngdomsytelsesøknadPdfData(
                 ),
         )
 
-    fun nyPdfData(): FeltMap {
-        val tittel = ytelse().utledTittel(språk())
-        return mapUngdomsytelsesøknadPdfData(
-            tittel,
-            søknad,
-        )
-    }
+//    fun nyPdfData(): FeltMap {
+//        val tittel = ytelse().utledTittel(språk())
+//        return mapUngdomsytelsesøknadPdfData(
+//            tittel,
+//            søknad,
+//        )
+//    }
 
     fun Double.formaterSomValuta(): String {
         val valutaFormat = NumberFormat.getCurrencyInstance(Locale.of("no", "NO"))

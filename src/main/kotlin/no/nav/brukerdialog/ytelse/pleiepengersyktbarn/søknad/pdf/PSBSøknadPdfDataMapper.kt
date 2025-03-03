@@ -1,12 +1,8 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf
-import no.nav.brukerdialog.common.FeltMap
-import no.nav.brukerdialog.common.PdfConfig
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.lagVerdiElement3
-import no.nav.brukerdialog.pdf.somMapPerMnd
-import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerArbeidsgivereSeksjon
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerBeredskapSeksjon
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerFrilansSeksjon
@@ -28,39 +24,31 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.stru
 import no.nav.helse.felles.Omsorgstilbud
 
 object PSBSøknadPdfDataMapper {
-    fun mapPSBSøknadPdfData(
-        ytelseTittel: String,
-        søknad: PSBMottattSøknad,
-    ): FeltMap =
-        FeltMap(
-            label = ytelseTittel,
-            verdiliste =
-                listOfNotNull(
-                    strukturerInnsendingsdetaljerSeksjon(søknad.mottatt),
-                    strukturerSøkerSeksjon(søknad.søker, søknad.barn),
-                    strukturerRelasjonTilBarnetSeksjon(søknad.barnRelasjon, søknad.barnRelasjonBeskrivelse),
-                    strukturerPerioderSeksjon(søknad.fraOgMed, søknad.tilOgMed),
-                    strukturerArbeidsgivereSeksjon(søknad.arbeidsgivere, søknad.fraOgMed),
-                    strukturerStønadGodtgjørelseSeksjon(søknad.stønadGodtgjørelse),
-                    strukturerFrilansSeksjon(søknad.frilans),
-                    strukturerSelvstendigNæringsdrivendeSeksjon(søknad.selvstendigNæringsdrivende),
-                    strukturerJobbISøknadsperiodenSeksjon(
-                        søknad.arbeidsgivere,
-                        søknad.frilans,
-                        søknad.selvstendigNæringsdrivende.arbeidsforhold,
-                    ),
-                    strukturerOpptjeningIUtlandetSeksjon(søknad.opptjeningIUtlandet),
-                    strukturerUtenlandskNæringSeksjon(søknad.utenlandskNæring),
-                    strukturerVernepliktSeksjon(søknad.harVærtEllerErVernepliktig),
-                    strukturerOmsorgstilbudSeksjon(søknad.omsorgstilbud),
-                    strukturerNattevåkSeksjon(søknad.nattevåk),
-                    strukturerBeredskapSeksjon(søknad.beredskap),
-                    strukturerUtenlandsoppholdSeksjon(søknad.utenlandsoppholdIPerioden, søknad.ferieuttakIPerioden),
-                    strukturerMedlemskapSeksjon(søknad.medlemskap),
-                    strukturerVedleggSeksjon(søknad.vedleggId, søknad.barn, søknad.fødselsattestVedleggId),
-                    strukturerSamtykkeSeksjon(søknad.harForståttRettigheterOgPlikter, søknad.harBekreftetOpplysninger),
-                ),
-            pdfConfig = PdfConfig(true, "nb"),
+    fun mapPSBSøknadPdfData(søknad: PSBMottattSøknad): List<VerdilisteElement> =
+        listOfNotNull(
+            strukturerInnsendingsdetaljerSeksjon(søknad.mottatt),
+            strukturerSøkerSeksjon(søknad.søker, søknad.barn),
+            strukturerRelasjonTilBarnetSeksjon(søknad.barnRelasjon, søknad.barnRelasjonBeskrivelse),
+            strukturerPerioderSeksjon(søknad.fraOgMed, søknad.tilOgMed),
+            strukturerArbeidsgivereSeksjon(søknad.arbeidsgivere, søknad.fraOgMed),
+            strukturerStønadGodtgjørelseSeksjon(søknad.stønadGodtgjørelse),
+            strukturerFrilansSeksjon(søknad.frilans),
+            strukturerSelvstendigNæringsdrivendeSeksjon(søknad.selvstendigNæringsdrivende),
+            strukturerJobbISøknadsperiodenSeksjon(
+                søknad.arbeidsgivere,
+                søknad.frilans,
+                søknad.selvstendigNæringsdrivende.arbeidsforhold,
+            ),
+            strukturerOpptjeningIUtlandetSeksjon(søknad.opptjeningIUtlandet),
+            strukturerUtenlandskNæringSeksjon(søknad.utenlandskNæring),
+            strukturerVernepliktSeksjon(søknad.harVærtEllerErVernepliktig),
+            strukturerOmsorgstilbudSeksjon(søknad.omsorgstilbud),
+            strukturerNattevåkSeksjon(søknad.nattevåk),
+            strukturerBeredskapSeksjon(søknad.beredskap),
+            strukturerUtenlandsoppholdSeksjon(søknad.utenlandsoppholdIPerioden, søknad.ferieuttakIPerioden),
+            strukturerMedlemskapSeksjon(søknad.medlemskap),
+            strukturerVedleggSeksjon(søknad.vedleggId, søknad.barn, søknad.fødselsattestVedleggId),
+            strukturerSamtykkeSeksjon(søknad.harForståttRettigheterOgPlikter, søknad.harBekreftetOpplysninger),
         )
 
     // TODO påVent
@@ -74,65 +62,73 @@ object PSBSøknadPdfDataMapper {
                         lagVerdiElement3(test.harVærtIOmsorgstilbud),
                         lagVerdiElement3(test.skalVæreIOmsorgstilbud),
                         lagVerdiElement3(test.erLiktHverUke),
-                        omsorgstilbud.enkeltdager.takeIf { it != null }?.let {
+                    ).plus(
+                        test.tidIOmsorgstilbud?.map {
                             VerdilisteElement(
-                                label = "Tid barnet er i omsorgstilbud:",
-                                verdiliste =
-                                    it.somMapPerMnd().map { måned ->
-                                        VerdilisteElement(
-                                            label = "${måned.navnPåMåned} ${måned.år}",
-                                            visningsVariant = "TABELL",
-                                            verdiliste =
-                                                måned.uker.map { ukeData ->
-                                                    VerdilisteElement(
-                                                        label = "Uke ${ukeData.uke}",
-                                                        verdiliste =
-                                                            ukeData.dager.map { dagData ->
-                                                                VerdilisteElement(
-                                                                    label = dagData.dato,
-                                                                    verdi = dagData.tid,
-                                                                )
-                                                            },
-                                                    )
-                                                },
-                                        )
-                                    },
+                                label = "Tid barnet er i Omsorgstilbud",
+                                verdiliste = listOfNotNull(VerdilisteElement(label = it.månedOgÅr ?: "")),
                             )
-                        },
-                        omsorgstilbud.ukedager.takeIf { it != null }.let { ukedag ->
-                            VerdilisteElement(
-                                label = "Faste dager barnet er i omsorgtilbud: ",
-                                verdiliste =
-                                    listOfNotNull(
-                                        lagVerdiElement(
-                                            "Mandager: ",
-                                            omsorgstilbud.ukedager?.mandag?.somTekst(true),
-                                            ukedag?.mandag,
-                                        ),
-                                        lagVerdiElement(
-                                            "Tirsdager: ",
-                                            omsorgstilbud.ukedager?.tirsdag?.somTekst(true),
-                                            ukedag?.tirsdag,
-                                        ),
-                                        lagVerdiElement(
-                                            "Onsdager: ",
-                                            omsorgstilbud.ukedager?.onsdag?.somTekst(true),
-                                            ukedag?.onsdag,
-                                        ),
-                                        lagVerdiElement(
-                                            "Torsdager: ",
-                                            omsorgstilbud.ukedager?.torsdag?.somTekst(true),
-                                            ukedag?.torsdag,
-                                        ),
-                                        lagVerdiElement(
-                                            "Fredager: ",
-                                            omsorgstilbud.ukedager?.fredag?.somTekst(true),
-                                            ukedag?.fredag,
-                                        ),
-                                    ),
-                            )
-                        },
+                        } ?: emptyList(),
                     )
+//                        omsorgstilbud.enkeltdager.takeIf { it != null }?.let {
+//                            VerdilisteElement(
+//                                label = "Tid barnet er i omsorgstilbud:",
+//                                verdiliste =
+//                                    it.somMapPerMnd().map { måned ->
+//                                        VerdilisteElement(
+//                                            label = "${måned.navnPåMåned} ${måned.år}",
+//                                            visningsVariant = "TABELL",
+//                                            verdiliste =
+//                                                måned.uker.map { ukeData ->
+//                                                    VerdilisteElement(
+//                                                        label = "Uke ${ukeData.uke}",
+//                                                        verdiliste =
+//                                                            ukeData.dager.map { dagData ->
+//                                                                VerdilisteElement(
+//                                                                    label = dagData.dato,
+//                                                                    verdi = dagData.tid,
+//                                                                )
+//                                                            },
+//                                                    )
+//                                                },
+//                                        )
+//                                    },
+//                            )
+//                        },
+//                        omsorgstilbud.ukedager.takeIf { it != null }.let { ukedag ->
+//                            VerdilisteElement(
+//                                label = "Faste dager barnet er i omsorgtilbud: ",
+//                                verdiliste =
+//                                    listOfNotNull(
+//                                        lagVerdiElement(
+//                                            "Mandager: ",
+//                                            omsorgstilbud.ukedager?.mandag?.somTekst(true),
+//                                            ukedag?.mandag,
+//                                        ),
+//                                        lagVerdiElement(
+//                                            "Tirsdager: ",
+//                                            omsorgstilbud.ukedager?.tirsdag?.somTekst(true),
+//                                            ukedag?.tirsdag,
+//                                        ),
+//                                        lagVerdiElement(
+//                                            "Onsdager: ",
+//                                            omsorgstilbud.ukedager?.onsdag?.somTekst(true),
+//                                            ukedag?.onsdag,
+//                                        ),
+//                                        lagVerdiElement(
+//                                            "Torsdager: ",
+//                                            omsorgstilbud.ukedager?.torsdag?.somTekst(true),
+//                                            ukedag?.torsdag,
+//                                        ),
+//                                        lagVerdiElement(
+//                                            "Fredager: ",
+//                                            omsorgstilbud.ukedager?.fredag?.somTekst(true),
+//                                            ukedag?.fredag,
+//                                        ),
+//                                    ),
+//                            )
+//                        },
+//                    )
                 } else {
                     listOfNotNull(
                         lagVerdiElement("Har barnet vært fast og regelmessig i et omsorgstilbud?", "Nei"),

@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf
 
 import no.nav.brukerdialog.common.Constants
-import no.nav.brukerdialog.common.FeltMap
+import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
@@ -115,13 +115,7 @@ class PSBSøknadPdfData(
                 ),
         )
 
-    fun nyPdfData(): FeltMap {
-        val tittel = ytelse().utledTittel(språk())
-        return PSBSøknadPdfDataMapper.mapPSBSøknadPdfData(
-            tittel,
-            søknad,
-        )
-    }
+    override fun nyPdfData(): List<VerdilisteElement> = PSBSøknadPdfDataMapper.mapPSBSøknadPdfData(søknad)
 
     private fun Barn.somMap() =
         mapOf<String, Any?>(
