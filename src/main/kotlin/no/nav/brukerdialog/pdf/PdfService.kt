@@ -14,7 +14,7 @@ class PdfService(
 ) {
     suspend fun genererPDF(
         pdfData: PdfData,
-        brukFellesPDFLøsning: Boolean = false,
+        brukFellesPDFLøsning: Boolean = true,
     ): ByteArray {
         if (brukFellesPDFLøsning) {
             if (pdfData.ytelse() == Ytelse.PLEIEPENGER_SYKT_BARN) {
