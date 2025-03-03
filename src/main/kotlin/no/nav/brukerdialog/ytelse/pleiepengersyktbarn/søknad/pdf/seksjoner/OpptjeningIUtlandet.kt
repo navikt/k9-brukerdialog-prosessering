@@ -4,7 +4,7 @@ import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningIUtlandet
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class AndreLandSpørsmålOgSvar(
@@ -21,10 +21,10 @@ fun strukturerOpptjeningIUtlandetSeksjon(søknadSvarOpptjeningUtland: List<Opptj
     return VerdilisteElement(
         label = "Jobbet i annet EØS-land",
         verdiliste =
-            (opptjeningUtland.andreLand?.mapNotNull { lagVerdiElement3(it.opptjeningIAnnetLand) } ?: emptyList())
+            (opptjeningUtland.andreLand?.mapNotNull { lagVerdiElement(it.opptjeningIAnnetLand) } ?: emptyList())
                 .plus(
                     listOfNotNull(
-                        lagVerdiElement3(opptjeningUtland.ikkeOpptjeningIUtlandet),
+                        lagVerdiElement(opptjeningUtland.ikkeOpptjeningIUtlandet),
                     ),
                 ),
     )

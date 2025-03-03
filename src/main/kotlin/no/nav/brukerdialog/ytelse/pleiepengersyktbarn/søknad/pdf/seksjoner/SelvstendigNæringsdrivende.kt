@@ -4,7 +4,7 @@ import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.normalArbeidstid
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
@@ -31,14 +31,14 @@ fun strukturerSelvstendigNæringsdrivendeSeksjon(søknadSvarSelvstendigNæringsd
         label = "Selvstendig næringsdrivende",
         verdiliste =
             listOfNotNull(
-                lagVerdiElement3(selvstendigNæringsdrivende.næringsinntekt),
-                lagVerdiElement3(selvstendigNæringsdrivende.datoDuBleYrkesaktiv),
-                lagVerdiElement3(selvstendigNæringsdrivende.timerPerUkeNormalt),
-                lagVerdiElement3(selvstendigNæringsdrivende.datoForVarigEndring),
-                lagVerdiElement3(selvstendigNæringsdrivende.næringsinntektEtterEndring),
-                lagVerdiElement3(selvstendigNæringsdrivende.forklaringVarigEndring),
-                lagVerdiElement3(selvstendigNæringsdrivende.flereEnnEnVirksomhet),
-                lagVerdiElement3(selvstendigNæringsdrivende.ikkeSelvstendigNæringsdrivende),
+                lagVerdiElement(selvstendigNæringsdrivende.næringsinntekt),
+                lagVerdiElement(selvstendigNæringsdrivende.datoDuBleYrkesaktiv),
+                lagVerdiElement(selvstendigNæringsdrivende.timerPerUkeNormalt),
+                lagVerdiElement(selvstendigNæringsdrivende.datoForVarigEndring),
+                lagVerdiElement(selvstendigNæringsdrivende.næringsinntektEtterEndring),
+                lagVerdiElement(selvstendigNæringsdrivende.forklaringVarigEndring),
+                lagVerdiElement(selvstendigNæringsdrivende.flereEnnEnVirksomhet),
+                lagVerdiElement(selvstendigNæringsdrivende.ikkeSelvstendigNæringsdrivende),
                 selvstendigNæringsdrivende.virksomhetNavn?.let {
                     VerdilisteElement(
                         label = "Næringsvirksomhet som du har lagt inn:",
@@ -49,11 +49,11 @@ fun strukturerSelvstendigNæringsdrivendeSeksjon(søknadSvarSelvstendigNæringsd
                                     label = selvstendigNæringsdrivende.virksomhetNavn,
                                     verdiliste =
                                         listOfNotNull(
-                                            lagVerdiElement3(selvstendigNæringsdrivende.virksomhetType),
-                                            lagVerdiElement3(selvstendigNæringsdrivende.registrertINorge),
-                                            lagVerdiElement3(selvstendigNæringsdrivende.registrertIUtlandet),
-                                            lagVerdiElement3(selvstendigNæringsdrivende.regnskapsførerNavn),
-                                            lagVerdiElement3(selvstendigNæringsdrivende.regnskapsførerTlfnummer),
+                                            lagVerdiElement(selvstendigNæringsdrivende.virksomhetType),
+                                            lagVerdiElement(selvstendigNæringsdrivende.registrertINorge),
+                                            lagVerdiElement(selvstendigNæringsdrivende.registrertIUtlandet),
+                                            lagVerdiElement(selvstendigNæringsdrivende.regnskapsførerNavn),
+                                            lagVerdiElement(selvstendigNæringsdrivende.regnskapsførerTlfnummer),
                                         ),
                                 ),
                             ),

@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
 
@@ -19,9 +19,9 @@ fun strukturerStønadGodtgjørelseSeksjon(søknadSvarStønadGodtgjørelse: Støn
         label = PdfTekster.getValue("stønadGodtgjørelse.tittel"),
         verdiliste =
             listOfNotNull(
-                lagVerdiElement3(stønadGodtgjørelse.mottarStønadGodtgjørelse),
-                lagVerdiElement3(stønadGodtgjørelse.startetÅMottaUnderveisTekst),
-                lagVerdiElement3(stønadGodtgjørelse.sluttetÅMottaUnderveisTekst),
+                lagVerdiElement(stønadGodtgjørelse.mottarStønadGodtgjørelse),
+                lagVerdiElement(stønadGodtgjørelse.startetÅMottaUnderveisTekst),
+                lagVerdiElement(stønadGodtgjørelse.sluttetÅMottaUnderveisTekst),
             ),
     )
 }

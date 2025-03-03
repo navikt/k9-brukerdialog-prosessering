@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Medlemskap
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class Utenlandsopphold(
@@ -28,16 +28,16 @@ fun strukturerMedlemskapSeksjon(søknadSvarMedlemskap: Medlemskap): VerdilisteEl
                     label = "Har du bodd i utlandet de siste 12 månedene?",
                     verdiliste =
                         listOfNotNull(
-                            lagVerdiElement3(medlemskap.harBoddIUtlandetSiste12Måneder),
-                        ).plus(medlemskap.utenlandsOppholdSiste12Måneder?.mapNotNull { lagVerdiElement3(it.opphold) } ?: emptyList()),
+                            lagVerdiElement(medlemskap.harBoddIUtlandetSiste12Måneder),
+                        ).plus(medlemskap.utenlandsOppholdSiste12Måneder?.mapNotNull { lagVerdiElement(it.opphold) } ?: emptyList()),
                 ),
                 VerdilisteElement(
                     label = "Skal du bo i utlandet de neste 12 månedene?",
                     verdiliste =
                         listOfNotNull(
-                            lagVerdiElement3(medlemskap.skalBoIUtlandetNeste12Måneder),
+                            lagVerdiElement(medlemskap.skalBoIUtlandetNeste12Måneder),
                         ).plus(
-                            medlemskap.utenlandsOppholdNeste12Måneder?.mapNotNull { lagVerdiElement3(it.opphold) } ?: emptyList(),
+                            medlemskap.utenlandsOppholdNeste12Måneder?.mapNotNull { lagVerdiElement(it.opphold) } ?: emptyList(),
                         ),
                 ),
             ),

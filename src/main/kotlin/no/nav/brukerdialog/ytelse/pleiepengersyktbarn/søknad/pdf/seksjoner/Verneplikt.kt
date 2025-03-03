@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class VernepliktSpørsmålOgSvar(
@@ -16,7 +16,7 @@ fun strukturerVernepliktSeksjon(søknadSvarVerneplikt: Boolean?): VerdilisteElem
             label = "Verneplikt",
             verdiliste =
                 listOfNotNull(
-                    lagVerdiElement3(verneplikt.utøvdeVerneplikt),
+                    lagVerdiElement(verneplikt.utøvdeVerneplikt),
                 ),
         )
     }

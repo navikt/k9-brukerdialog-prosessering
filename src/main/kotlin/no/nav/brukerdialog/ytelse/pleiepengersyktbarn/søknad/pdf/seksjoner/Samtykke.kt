@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class SamtykkeSpørsmålOgSvar(
@@ -19,8 +19,8 @@ fun strukturerSamtykkeSeksjon(
         label = "Samtykke fra deg",
         verdiliste =
             listOfNotNull(
-                lagVerdiElement3(samtykke.harForståttRettigheterOgPlikter),
-                lagVerdiElement3(samtykke.harBekreftetOpplysninger),
+                lagVerdiElement(samtykke.harForståttRettigheterOgPlikter),
+                lagVerdiElement(samtykke.harBekreftetOpplysninger),
             ),
     )
 }

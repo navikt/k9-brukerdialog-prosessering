@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Barn
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
@@ -24,10 +24,10 @@ internal fun strukturerSøkerSeksjon(
         label = PdfTekster.getValue("søker.tittel"),
         verdiliste =
             listOfNotNull(
-                lagVerdiElement3(søker.navnSøker),
-                lagVerdiElement3(søker.fødselsnummerSøker),
-                lagVerdiElement3(søker.navnBarn),
-                lagVerdiElement3(søker.fødselsnummerBarn),
+                lagVerdiElement(søker.navnSøker),
+                lagVerdiElement(søker.fødselsnummerSøker),
+                lagVerdiElement(søker.navnBarn),
+                lagVerdiElement(søker.fødselsnummerBarn),
             ),
     )
 }

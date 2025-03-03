@@ -58,29 +58,7 @@ fun tilSpørsmålOgSvar(
     return svarSomStreng?.let { SpørsmålOgSvar(spørsmål, it) }
 }
 
-fun lagVerdiElement(
-    spørsmålsTekst: String,
-    svarVerdi: Any?,
-    typeSomSkalSjekkes: Any? = null,
-): VerdilisteElement? =
-    if (typeSomSkalSjekkes == null && svarVerdi == null) {
-        null
-    } else if (typeSomSkalSjekkes == false) {
-        null
-    } else {
-        when (svarVerdi) {
-            is String -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi)
-            is Enum<*> -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.toString())
-            is Boolean -> VerdilisteElement(label = spørsmålsTekst, verdi = konverterBooleanTilSvar(svarVerdi))
-            is Duration -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.tilString())
-            is LocalDate -> VerdilisteElement(label = spørsmålsTekst, verdi = DATE_FORMATTER.format(svarVerdi))
-            is Int -> VerdilisteElement(label = spørsmålsTekst, verdi = svarVerdi.toString())
-            is Arbeidsforhold -> VerdilisteElement(label = spørsmålsTekst, verdi = arbeidIPerioden(svarVerdi))
-            else -> null
-        }
-    }
-
-fun lagVerdiElement3(spørsmålOgSvar: SpørsmålOgSvar?): VerdilisteElement? =
+fun lagVerdiElement(spørsmålOgSvar: SpørsmålOgSvar?): VerdilisteElement? =
 
     if (spørsmålOgSvar == null) {
         null

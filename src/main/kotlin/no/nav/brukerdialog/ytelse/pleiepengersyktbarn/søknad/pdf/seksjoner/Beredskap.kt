@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Beredskap
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class BeredskapSpørsmålOgSvar(
@@ -17,8 +17,8 @@ fun strukturerBeredskapSeksjon(søknadSvarBeredskap: Beredskap?): VerdilisteElem
         label = "Beredskap",
         verdiliste =
             listOfNotNull(
-                lagVerdiElement3(beredskap?.iBeredskap),
-                lagVerdiElement3(beredskap?.beredskapBeskrivelse),
+                lagVerdiElement(beredskap?.iBeredskap),
+                lagVerdiElement(beredskap?.beredskapBeskrivelse),
             ),
     )
 }

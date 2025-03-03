@@ -3,7 +3,6 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
 import no.nav.brukerdialog.pdf.lagVerdiElement
-import no.nav.brukerdialog.pdf.lagVerdiElement3
 import no.nav.brukerdialog.pdf.somMapPerMnd
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 import no.nav.brukerdialog.utils.DurationUtils.somTekst
@@ -21,14 +20,14 @@ data class Enkeltdag(
     val tidspunktIOmsorgstilbud: SpørsmålOgSvar? = null,
 )
 
-data class Uker(
+data class Enkeltuke(
     val ukeTekst: String? = null,
     val enkeltDager: List<Enkeltdag>? = emptyList(),
 )
 
-data class Tidsperiode(
+data class Enkeltmåned(
     val månedOgÅr: String? = null,
-    val uker: List<Uker>? = emptyList(),
+    val uker: List<Enkeltuke>? = emptyList(),
 )
 
 data class OmsorgstilbudSpørsmålOgSvar(
@@ -36,25 +35,25 @@ data class OmsorgstilbudSpørsmålOgSvar(
     val skalVæreIOmsorgstilbud: SpørsmålOgSvar? = null,
     val erLiktHverUke: SpørsmålOgSvar? = null,
     val harIkkeOmsorgstilbud: SpørsmålOgSvar? = null,
-    val tidIOmsorgstilbud: List<Tidsperiode>? = emptyList(),
+    val tidIOmsorgstilbud: List<Enkeltmåned>? = emptyList(),
     val fasteDagerIOmsorgstilbud: FastedagerIOmsorgstilbud? = null,
 )
 
-fun strukturerOmsorgstilbudSeksjon(omsorgstilbud: Omsorgstilbud?): VerdilisteElement {
-    val test = mapOmsorgstilbudTilSpørsmålOgSvarSeksjon(omsorgstilbud)
+fun strukturerOmsorgstilbudSeksjon(søknadSvarOmsorgstilbud: Omsorgstilbud?): VerdilisteElement {
+    val omsorgstilbud = mapOmsorgstilbudTilSpørsmålOgSvarSeksjon(søknadSvarOmsorgstilbud)
     return VerdilisteElement(
         label = "Omsorgstilbud",
         verdiliste =
-            if (omsorgstilbud != null) {
+            if (søknadSvarOmsorgstilbud != null) {
                 listOfNotNull(
-                    lagVerdiElement3(test.harVærtIOmsorgstilbud),
-                    lagVerdiElement3(test.skalVæreIOmsorgstilbud),
-                    lagVerdiElement3(test.erLiktHverUke),
+                    lagVerdiElement(omsorgstilbud.harVærtIOmsorgstilbud),
+                    lagVerdiElement(omsorgstilbud.skalVæreIOmsorgstilbud),
+                    lagVerdiElement(omsorgstilbud.erLiktHverUke),
                 ).plus(
                     VerdilisteElement(
                         label = "Tid barnet er i omsorgstilbud:",
                         verdiliste =
-                            test.tidIOmsorgstilbud?.map { tidsperiode ->
+                            omsorgstilbud.tidIOmsorgstilbud?.map { tidsperiode ->
                                 VerdilisteElement(
                                     label = tidsperiode.månedOgÅr ?: "",
                                     visningsVariant = "TABELL",
@@ -64,7 +63,7 @@ fun strukturerOmsorgstilbudSeksjon(omsorgstilbud: Omsorgstilbud?): VerdilisteEle
                                                 label = "${uke.ukeTekst} (${tidsperiode.månedOgÅr})",
                                                 verdiliste =
                                                     uke.enkeltDager?.mapNotNull { dag ->
-                                                        lagVerdiElement3(dag.tidspunktIOmsorgstilbud)
+                                                        lagVerdiElement(dag.tidspunktIOmsorgstilbud)
                                                     },
                                             )
                                         },
@@ -75,20 +74,20 @@ fun strukturerOmsorgstilbudSeksjon(omsorgstilbud: Omsorgstilbud?): VerdilisteEle
                     VerdilisteElement(
                         label = "Faste dager barnet er i omsorgstilbud",
                         verdiliste =
-                            test.fasteDagerIOmsorgstilbud?.let { uke ->
+                            omsorgstilbud.fasteDagerIOmsorgstilbud?.let { uke ->
                                 listOfNotNull(
-                                    lagVerdiElement3(uke.mandag),
-                                    lagVerdiElement3(uke.tirsdag),
-                                    lagVerdiElement3(uke.onsdag),
-                                    lagVerdiElement3(uke.torsdag),
-                                    lagVerdiElement3(uke.fredag),
+                                    lagVerdiElement(uke.mandag),
+                                    lagVerdiElement(uke.tirsdag),
+                                    lagVerdiElement(uke.onsdag),
+                                    lagVerdiElement(uke.torsdag),
+                                    lagVerdiElement(uke.fredag),
                                 )
                             } ?: emptyList(),
                     ),
                 )
             } else {
                 listOfNotNull(
-                    lagVerdiElement("Har barnet vært fast og regelmessig i et omsorgstilbud?", "Nei"),
+                    lagVerdiElement(omsorgstilbud.harIkkeOmsorgstilbud),
                 )
             },
     )
@@ -107,11 +106,11 @@ fun mapOmsorgstilbudTilSpørsmålOgSvarSeksjon(omsorgstilbud: Omsorgstilbud?): O
             tidIOmsorgstilbud =
                 omsorgstilbud.enkeltdager?.let {
                     it.somMapPerMnd().map { måned ->
-                        Tidsperiode(
+                        Enkeltmåned(
                             månedOgÅr = "${måned.navnPåMåned} ${måned.år}",
                             uker =
                                 måned.uker.map { uke ->
-                                    Uker(
+                                    Enkeltuke(
                                         ukeTekst = "Uke ${uke.uke}",
                                         enkeltDager =
                                             uke.dager.map { dag ->

@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.BarnRelasjon
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
 
@@ -23,8 +23,8 @@ internal fun strukturerRelasjonTilBarnetSeksjon(
             label = PdfTekster.getValue("barnrelasjon.relasjon"),
             verdiliste =
                 listOfNotNull(
-                    lagVerdiElement3(barnrelasjon.relasjon),
-                    lagVerdiElement3(barnrelasjon.relasjonBeskrivelse),
+                    lagVerdiElement(barnrelasjon.relasjon),
+                    lagVerdiElement(barnrelasjon.relasjonBeskrivelse),
                 ),
         )
     }

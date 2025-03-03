@@ -6,12 +6,11 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.FrilansType
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
 import no.nav.brukerdialog.pdf.lagVerdiElement
-import no.nav.brukerdialog.pdf.lagVerdiElement3
 import no.nav.brukerdialog.pdf.normalArbeidstid
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class FrilansSpørsmålOgSvar(
-    val jobberSomFrilanserEllerMottarHonorar: String,
+    val jobberSomFrilanserEllerMottarHonorar: SpørsmålOgSvar? = null,
     val startetFørSisteTreHeleMåneder: SpørsmålOgSvar? = null,
     val nårStartet: SpørsmålOgSvar? = null,
     val fremdelesFrilansEllerHonorar: SpørsmålOgSvar? = null,
@@ -27,21 +26,18 @@ fun strukturerFrilansSeksjon(søknadSvarFrilans: Frilans): VerdilisteElement? {
         label = "Frilans",
         verdiliste =
             listOfNotNull(
-                lagVerdiElement(
-                    "Jobber du som frilanser eller mottar du honorarer?",
-                    frilans.jobberSomFrilanserEllerMottarHonorar,
-                ),
+                lagVerdiElement(frilans.jobberSomFrilanserEllerMottarHonorar),
                 VerdilisteElement(
-                    label = frilans.jobberSomFrilanserEllerMottarHonorar,
+                    label = frilans.jobberSomFrilanserEllerMottarHonorar?.svar ?: "",
                     verdiliste =
                         listOfNotNull(
-                            lagVerdiElement3(frilans.startetFørSisteTreHeleMåneder),
-                            lagVerdiElement3(frilans.nårStartet),
-                            lagVerdiElement3(frilans.fremdelesFrilansEllerHonorar),
-                            lagVerdiElement3(frilans.nårSluttet),
+                            lagVerdiElement(frilans.startetFørSisteTreHeleMåneder),
+                            lagVerdiElement(frilans.nårStartet),
+                            lagVerdiElement(frilans.fremdelesFrilansEllerHonorar),
+                            lagVerdiElement(frilans.nårSluttet),
                         ),
                 ),
-                lagVerdiElement3(frilans.arbeidIPerioden),
+                lagVerdiElement(frilans.arbeidIPerioden),
             ),
     )
 }
@@ -49,7 +45,11 @@ fun strukturerFrilansSeksjon(søknadSvarFrilans: Frilans): VerdilisteElement? {
 fun mapFrilansTilSpørsmålOgSvar(frilans: Frilans): FrilansSpørsmålOgSvar {
     if (!frilans.harInntektSomFrilanser) {
         return FrilansSpørsmålOgSvar(
-            jobberSomFrilanserEllerMottarHonorar = "Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.",
+            jobberSomFrilanserEllerMottarHonorar =
+                tilSpørsmålOgSvar(
+                    "Jobber du som frilanser eller mottar du honorarer?",
+                    "Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.",
+                ),
         )
     }
 
@@ -58,7 +58,11 @@ fun mapFrilansTilSpørsmålOgSvar(frilans: Frilans): FrilansSpørsmålOgSvar {
     return when (frilans.type) {
         FrilansType.FRILANS -> {
             FrilansSpørsmålOgSvar(
-                jobberSomFrilanserEllerMottarHonorar = "Jobber som frilanser",
+                jobberSomFrilanserEllerMottarHonorar =
+                    tilSpørsmålOgSvar(
+                        "Jobber du som frilanser eller mottar du honorarer?",
+                        "Jobber som frilanser",
+                    ),
                 startetFørSisteTreHeleMåneder =
                     frilans.startetFørSisteTreHeleMåneder?.takeIf { it }?.let {
                         tilSpørsmålOgSvar(
@@ -89,7 +93,11 @@ fun mapFrilansTilSpørsmålOgSvar(frilans: Frilans): FrilansSpørsmålOgSvar {
 
         FrilansType.FRILANS_HONORAR -> {
             FrilansSpørsmålOgSvar(
-                jobberSomFrilanserEllerMottarHonorar = "Jobber som frilanser og mottar honorar",
+                jobberSomFrilanserEllerMottarHonorar =
+                    tilSpørsmålOgSvar(
+                        "Jobber du som frilanser eller mottar du honorarer?",
+                        "Jobber som frilanser og mottar honorar",
+                    ),
                 startetFørSisteTreHeleMåneder =
                     frilans.startetFørSisteTreHeleMåneder?.takeIf { it }?.let {
                         tilSpørsmålOgSvar(
@@ -119,7 +127,11 @@ fun mapFrilansTilSpørsmålOgSvar(frilans: Frilans): FrilansSpørsmålOgSvar {
         }
         FrilansType.HONORAR -> {
             FrilansSpørsmålOgSvar(
-                jobberSomFrilanserEllerMottarHonorar = "Mottar honorar",
+                jobberSomFrilanserEllerMottarHonorar =
+                    tilSpørsmålOgSvar(
+                        "Jobber du som frilanser eller mottar du honorarer?",
+                        "Mottar honorar",
+                    ),
                 startetFørSisteTreHeleMåneder =
                     frilans.startetFørSisteTreHeleMåneder?.takeIf { it }?.let {
                         tilSpørsmålOgSvar(
@@ -156,7 +168,11 @@ fun mapFrilansTilSpørsmålOgSvar(frilans: Frilans): FrilansSpørsmålOgSvar {
         }
         null ->
             FrilansSpørsmålOgSvar(
-                jobberSomFrilanserEllerMottarHonorar = "ikkeFrilansEllerHonorar",
+                jobberSomFrilanserEllerMottarHonorar =
+                    tilSpørsmålOgSvar(
+                        "Jobber du som frilanser eller mottar du honorarer?",
+                        "Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.",
+                    ),
             )
     }
 }

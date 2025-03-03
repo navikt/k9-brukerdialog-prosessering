@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Barn
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class VedleggSomSpørsmålOgSvar(
@@ -22,8 +22,8 @@ fun strukturerVedleggSeksjon(
         label = "Vedlegg",
         verdiliste =
             listOfNotNull(
-                lagVerdiElement3(vedleggISøknad.legeerklæring),
-                lagVerdiElement3(vedleggISøknad.fødselsAttest),
+                lagVerdiElement(vedleggISøknad.legeerklæring),
+                lagVerdiElement(vedleggISøknad.fødselsAttest),
             ),
     )
 }

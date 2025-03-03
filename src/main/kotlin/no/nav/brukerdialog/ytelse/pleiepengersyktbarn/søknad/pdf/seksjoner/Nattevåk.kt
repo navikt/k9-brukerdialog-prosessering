@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Nattevåk
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class NattevåkSpørsmålOgSvar(
@@ -17,8 +17,8 @@ fun strukturerNattevåkSeksjon(søknadSvarNattevåk: Nattevåk?): VerdilisteElem
         label = "Nattevåk",
         verdiliste =
             listOfNotNull(
-                lagVerdiElement3(nattevåk?.harNattevåk),
-                lagVerdiElement3(nattevåk?.nattevåkBeskrivelse),
+                lagVerdiElement(nattevåk?.harNattevåk),
+                lagVerdiElement(nattevåk?.nattevåkBeskrivelse),
             ),
     )
 }

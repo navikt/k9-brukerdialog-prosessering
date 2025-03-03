@@ -5,7 +5,7 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsfo
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Frilans
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class ArbeidsGiverISøknadsperiodeSpørsmålOgSvar(
@@ -31,13 +31,13 @@ fun strukturerJobbISøknadsperiodenSeksjon(
         label = "Jobb i søknadsperioden",
         verdiliste =
             (
-                jobbISøknadsperioden.arbeidsgivere?.mapNotNull { lagVerdiElement3(it.arbeidsgiverNavnOgOrgnr) }
+                jobbISøknadsperioden.arbeidsgivere?.mapNotNull { lagVerdiElement(it.arbeidsgiverNavnOgOrgnr) }
                     ?: emptyList()
             ).plus(
                 listOfNotNull(
-                    lagVerdiElement3(jobbISøknadsperioden.ingenArbeidsforhold),
-                    lagVerdiElement3(jobbISøknadsperioden.frilans),
-                    lagVerdiElement3(jobbISøknadsperioden.selvstendigNæringsdrivendeArbeidsforhold),
+                    lagVerdiElement(jobbISøknadsperioden.ingenArbeidsforhold),
+                    lagVerdiElement(jobbISøknadsperioden.frilans),
+                    lagVerdiElement(jobbISøknadsperioden.selvstendigNæringsdrivendeArbeidsforhold),
                 ),
             ),
     )

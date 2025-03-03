@@ -4,7 +4,7 @@ import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
@@ -20,7 +20,7 @@ fun strukturerInnsendingsdetaljerSeksjon(søknadSvarInnsendingsdetaljer: ZonedDa
         label = PdfTekster.getValue("innsendingsdetaljer.tittel"),
         verdiliste =
             listOfNotNull(
-                lagVerdiElement3(innsendingsdetaljer.mottattSøknadTidspunkt),
+                lagVerdiElement(innsendingsdetaljer.mottattSøknadTidspunkt),
             ),
     )
 }

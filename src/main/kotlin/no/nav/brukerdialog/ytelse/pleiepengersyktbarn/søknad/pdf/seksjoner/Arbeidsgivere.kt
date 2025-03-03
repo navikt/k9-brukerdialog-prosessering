@@ -4,7 +4,7 @@ import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.normalArbeidstid
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
@@ -37,16 +37,16 @@ fun strukturerArbeidsgivereSeksjon(
                         label = arbeidsgiver.arbeidsgiver,
                         verdiliste =
                             listOfNotNull(
-                                lagVerdiElement3(arbeidsgiver.erAnsatt),
-                                lagVerdiElement3(arbeidsgiver.sluttetFørSøknadsperiode),
-                                lagVerdiElement3(arbeidsgiver.timerPerUkeNormalt),
+                                lagVerdiElement(arbeidsgiver.erAnsatt),
+                                lagVerdiElement(arbeidsgiver.sluttetFørSøknadsperiode),
+                                lagVerdiElement(arbeidsgiver.timerPerUkeNormalt),
                             ),
                     )
                 },
         )
     } ?: VerdilisteElement(
         label = "Arbeidsgivere",
-        verdiliste = listOfNotNull(lagVerdiElement3(arbeidsgivere.ingenArbeidsforhold)),
+        verdiliste = listOfNotNull(lagVerdiElement(arbeidsgivere.ingenArbeidsforhold)),
     )
 }
 

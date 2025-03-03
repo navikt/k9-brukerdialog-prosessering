@@ -5,7 +5,7 @@ import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.FerieuttakIPerioden
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
-import no.nav.brukerdialog.pdf.lagVerdiElement3
+import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 
 data class Opphold(
@@ -32,7 +32,7 @@ fun strukturerUtenlandsoppholdSeksjon(
             label = "Perioder med utenlandsopphold og ferie",
             verdiliste =
                 listOfNotNull(
-                    lagVerdiElement3(utenlandsopphold.utenlandsreiseIPeriode),
+                    lagVerdiElement(utenlandsopphold.utenlandsreiseIPeriode),
                     utenlandsopphold.utenlandsoppholdIPerioden?.takeIf { it.isNotEmpty() }?.let {
                         VerdilisteElement(
                             label = "Utenlandsopphold",
@@ -43,16 +43,16 @@ fun strukturerUtenlandsoppholdSeksjon(
                                         label = opphold.land,
                                         verdiliste =
                                             listOfNotNull(
-                                                lagVerdiElement3(opphold.erSammenMedBarnet),
-                                                lagVerdiElement3(opphold.erBarnetInnlagt),
-                                                lagVerdiElement3(opphold.perioder),
-                                                lagVerdiElement3(opphold.årsak),
+                                                lagVerdiElement(opphold.erSammenMedBarnet),
+                                                lagVerdiElement(opphold.erBarnetInnlagt),
+                                                lagVerdiElement(opphold.perioder),
+                                                lagVerdiElement(opphold.årsak),
                                             ),
                                     )
                                 },
                         )
                     },
-                    lagVerdiElement3(utenlandsopphold.ferieuttakIPerioden),
+                    lagVerdiElement(utenlandsopphold.ferieuttakIPerioden),
                 ),
         )
     }
