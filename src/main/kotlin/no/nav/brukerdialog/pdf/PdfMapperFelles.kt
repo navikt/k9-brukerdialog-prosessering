@@ -36,10 +36,12 @@ data class SpørsmålOgSvar(
 )
 
 fun tilSpørsmålOgSvar(
-    spørsmål: String,
+    spørsmål: String?,
     svar: Any?,
 ): SpørsmålOgSvar? {
     var svarSomStreng: String? = null
+
+    if (spørsmål == null) return null
 
     svarSomStreng =
         when (svar) {

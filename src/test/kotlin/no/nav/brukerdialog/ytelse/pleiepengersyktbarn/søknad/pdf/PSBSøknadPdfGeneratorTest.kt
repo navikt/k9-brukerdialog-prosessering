@@ -1,6 +1,8 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.nav.brukerdialog.common.PdfConfig
+import no.nav.brukerdialog.integrasjon.familiepdf.dto.FamiliePdfPostRequest
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType
@@ -351,7 +353,10 @@ class PSBSøknadPdfGeneratorTest {
             )
 
         val objectMapper = jacksonObjectMapper()
-        val jsonString = objectMapper.writeValueAsString(pbssøknadMottat.nyPdfData())
+        val jsonString =
+            objectMapper.writeValueAsString(
+                FamiliePdfPostRequest(label = "Søknad om pleiepenger for sykt barn", pbssøknadMottat.nyPdfData(), PdfConfig(true, "nb")),
+            )
         println("Dette er: $jsonString")
     }
 

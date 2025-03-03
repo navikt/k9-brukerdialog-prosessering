@@ -36,6 +36,25 @@ import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.DurationUtils.tilString
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerArbeidsgivereSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerBeredskapSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerFrilansSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerInnsendingsdetaljerSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerJobbISøknadsperiodenSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerMedlemskapSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerNattevåkSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerOmsorgstilbudSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerOpptjeningIUtlandetSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerPerioderSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerRelasjonTilBarnetSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerSamtykkeSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerSelvstendigNæringsdrivendeSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerStønadGodtgjørelseSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerSøkerSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerUtenlandskNæringSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerUtenlandsoppholdSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerVedleggSeksjon
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner.strukturerVernepliktSeksjon
 import no.nav.helse.felles.Enkeltdag
 import no.nav.helse.felles.Omsorgstilbud
 import no.nav.helse.felles.PlanUkedager
@@ -115,7 +134,32 @@ class PSBSøknadPdfData(
                 ),
         )
 
-    override fun nyPdfData(): List<VerdilisteElement> = PSBSøknadPdfDataMapper.mapPSBSøknadPdfData(søknad)
+    override fun nyPdfData(): List<VerdilisteElement> =
+        listOfNotNull(
+            strukturerInnsendingsdetaljerSeksjon(søknad.mottatt),
+            strukturerSøkerSeksjon(søknad.søker, søknad.barn),
+            strukturerRelasjonTilBarnetSeksjon(søknad.barnRelasjon, søknad.barnRelasjonBeskrivelse),
+            strukturerPerioderSeksjon(søknad.fraOgMed, søknad.tilOgMed),
+            strukturerArbeidsgivereSeksjon(søknad.arbeidsgivere, søknad.fraOgMed),
+            strukturerStønadGodtgjørelseSeksjon(søknad.stønadGodtgjørelse),
+            strukturerFrilansSeksjon(søknad.frilans),
+            strukturerSelvstendigNæringsdrivendeSeksjon(søknad.selvstendigNæringsdrivende),
+            strukturerJobbISøknadsperiodenSeksjon(
+                søknad.arbeidsgivere,
+                søknad.frilans,
+                søknad.selvstendigNæringsdrivende.arbeidsforhold,
+            ),
+            strukturerOpptjeningIUtlandetSeksjon(søknad.opptjeningIUtlandet),
+            strukturerUtenlandskNæringSeksjon(søknad.utenlandskNæring),
+            strukturerVernepliktSeksjon(søknad.harVærtEllerErVernepliktig),
+            strukturerOmsorgstilbudSeksjon(søknad.omsorgstilbud),
+            strukturerNattevåkSeksjon(søknad.nattevåk),
+            strukturerBeredskapSeksjon(søknad.beredskap),
+            strukturerUtenlandsoppholdSeksjon(søknad.utenlandsoppholdIPerioden, søknad.ferieuttakIPerioden),
+            strukturerMedlemskapSeksjon(søknad.medlemskap),
+            strukturerVedleggSeksjon(søknad.vedleggId, søknad.barn, søknad.fødselsattestVedleggId),
+            strukturerSamtykkeSeksjon(søknad.harForståttRettigheterOgPlikter, søknad.harBekreftetOpplysninger),
+        )
 
     private fun Barn.somMap() =
         mapOf<String, Any?>(
