@@ -5,14 +5,13 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
 import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.BarnRelasjon
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.*
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.SøknadUtils
@@ -37,7 +36,8 @@ import java.util.*
     controllers = [OpplæringspengerSøknadController::class],
     properties = [
         "ENABLE_OPPLAERINGSPENGER=true",
-    ])
+    ]
+)
 @Import(
     JacksonConfiguration::class,
     CallIdGenerator::class
@@ -54,7 +54,7 @@ class OpplæringspengerSøknadControllerTest {
     private lateinit var innsendingService: InnsendingService
 
     @MockkBean
-    private lateinit var innsendingCache: InnsendingCache
+    private lateinit var duplikatInnsendingSjekker: DuplikatInnsendingSjekker
 
     @MockkBean
     private lateinit var barnService: BarnService
@@ -75,7 +75,7 @@ class OpplæringspengerSøknadControllerTest {
     @Test
     fun `Innsending av søknad er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattSøknad(any()) } returns Unit
 
@@ -83,7 +83,6 @@ class OpplæringspengerSøknadControllerTest {
 
         mockMvc.post(OLP_INNSEND_SØKNAD_URL) {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OPPLARINGSPENGER.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -102,7 +101,7 @@ class OpplæringspengerSøknadControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreInnloggetBrukerErSøker(any()) } returns Unit
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
 
         val defaultSøknad = SøknadUtils.defaultSøknad()
         val fødselsdatoIFremtiden = LocalDate.now().plusDays(1)
@@ -113,11 +112,11 @@ class OpplæringspengerSøknadControllerTest {
             barn = defaultSøknad.barn.copy(
                 norskIdentifikator = "123ABC", // Feil format
                 navn = "", // Tomt navn
-                fødselsdato = fødselsdatoIFremtiden // Fødselsdato i fremtiden er ikke gyldig
+                fødselsdato = fødselsdatoIFremtiden, // Fødselsdato i fremtiden er ikke gyldig
+                relasjonTilBarnet = BarnRelasjon.ANNET,
+                relasjonTilBarnetBeskrivelse = null, // Må være satt dersom barnRelasjon = ANNET
 
             ),
-            barnRelasjon = BarnRelasjon.ANNET,
-            barnRelasjonBeskrivelse = null, // Må være satt dersom barnRelasjon = ANNET
             arbeidsgivere = listOf(
                 ArbeidsgiverOLP(
                     organisasjonsnummer = "123ABC", // Feil format
@@ -150,7 +149,6 @@ class OpplæringspengerSøknadControllerTest {
         val jsonPayload = objectMapper.writeValueAsString(ugyldigSøknad)
         mockMvc.post(OLP_INNSEND_SØKNAD_URL) {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OPPLARINGSPENGER.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -184,9 +182,9 @@ class OpplæringspengerSøknadControllerTest {
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "barnRelasjonBeskrivelse",
+                              "parameterName": "barn.relasjonTilBarnetBeskrivelse",
                               "parameterType": "ENTITY",
-                              "reason": "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom"
+                              "reason": "Når 'relasjonTilBarnet' er ANNET, kan ikke 'relasjonTilBarnetBeskrivelse' være tom"
                             },
                             {
                               "invalidValue": false,

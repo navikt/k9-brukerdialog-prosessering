@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.metrikk.MetrikkService
@@ -17,10 +17,8 @@ import no.nav.security.token.support.core.api.RequiredIssuers
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.web.ErrorResponseException
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -35,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController
 )
 class OpplæringspengerSøknadController(
     private val innsendingService: InnsendingService,
-    private val innsendingCache: InnsendingCache,
+    private val duplikatInnsendingSjekker: DuplikatInnsendingSjekker,
     private val barnService: BarnService,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
     private val metrikkService: MetrikkService,
@@ -47,23 +45,16 @@ class OpplæringspengerSøknadController(
     @PostMapping("/innsending", consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @Value("\${ENABLE_OPPLAERINGSPENGER:false}") enabled: Boolean? = null,
         @RequestBody søknad: OpplæringspengerSøknad,
     ) = runBlocking {
-        if (enabled != true) {
-            logger.info("Opplæringspenger er ikke aktivert.")
-            throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
-        }
-
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
         søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn())
 
-        innsendingCache.put(cacheKey)
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattSøknad(søknad.ytelse())
     }

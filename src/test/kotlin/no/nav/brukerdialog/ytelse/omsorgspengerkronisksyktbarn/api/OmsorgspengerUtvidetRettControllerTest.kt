@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.utils.CallIdGenerator
@@ -48,7 +47,7 @@ class OmsorgspengerUtvidetRettControllerTest {
     private lateinit var innsendingService: InnsendingService
 
     @MockkBean
-    private lateinit var innsendingCache: InnsendingCache
+    private lateinit var duplikatInnsendingSjekker: DuplikatInnsendingSjekker
 
     @MockkBean
     private lateinit var barnService: BarnService
@@ -67,7 +66,7 @@ class OmsorgspengerUtvidetRettControllerTest {
     @Test
     fun `Innsending av søknad er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattSøknad(any()) } returns Unit
 
@@ -75,7 +74,6 @@ class OmsorgspengerUtvidetRettControllerTest {
 
         mockMvc.post("/omsorgspenger-utvidet-rett/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSPENGER_UTVIDET_RETT.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -94,7 +92,7 @@ class OmsorgspengerUtvidetRettControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreInnloggetBrukerErSøker(any()) } returns Unit
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
 
         val defaultSøknad = SøknadUtils.defaultSøknad
 
@@ -114,7 +112,6 @@ class OmsorgspengerUtvidetRettControllerTest {
         )
         mockMvc.post("/omsorgspenger-utvidet-rett/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSPENGER_UTVIDET_RETT.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -162,7 +159,7 @@ class OmsorgspengerUtvidetRettControllerTest {
                               "invalidValue": "¨ er ikke tillatt",
                               "parameterName": "høyereRisikoForFraværBeskrivelse",
                               "parameterType": "ENTITY",
-                              "reason": "Matcher ikke tillatt mønster: '^[\\p{Punct}\\p{L}\\p{M}\\p{N}\\p{Sc}\\p{Space}«»–§�\\u2018\\u2019\\u201a\\u201b\\u201c\\u201d\\u201e\\u201f\\u00b4\\u2026]*${'$'}'"
+                              "reason": "Ugyldige tegn funnet i teksten: ¨"
                             },
                             {
                               "invalidValue": false,

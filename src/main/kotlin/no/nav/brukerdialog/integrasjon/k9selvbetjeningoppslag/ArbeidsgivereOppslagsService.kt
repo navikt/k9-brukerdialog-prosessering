@@ -63,7 +63,7 @@ class ArbeidsgivereOppslagsService(
         skalHentePrivateArbeidsgivere: Boolean,
         skalHenteFrilansoppdrag: Boolean
     ): ArbeidsgivereOppslagResponsDto {
-        val ytelse = Ytelse.fraMDC()
+        val ytelse = Ytelse.utledYtelseFraCallerIMDC()
         val url = UriComponentsBuilder.fromUri(arbeidsgivereUrl.toUri())
             .queryParam("fom", DateTimeFormatter.ISO_LOCAL_DATE.format(fraOgMed))
             .queryParam("tom", DateTimeFormatter.ISO_LOCAL_DATE.format(tilOgMed))

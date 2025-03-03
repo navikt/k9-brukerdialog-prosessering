@@ -37,7 +37,9 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
 
         val defaultSøknad = defaultSøknad().copy(
             vedlegg = listOf(),
-            fødselsattestVedleggUrls = listOf()
+            barn = defaultSøknad().barn.copy(
+                fødselsattestVedleggUrls = listOf()
+            )
         )
 
         mockMvc.sendInnSøknad(defaultSøknad, mockOAuth2Server.hentToken())
@@ -400,7 +402,6 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
                 "sluttdato": null
             },
             "harVærtEllerErVernepliktig": true,
-            "barnRelasjon": "ANNET",
             "opptjeningIUtlandet": [
               {
                 "fraOgMed": "2020-01-01",
@@ -489,7 +490,9 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
               "fødselsdato": null,
               "navn": "OLE DOLE",
               "norskIdentifikator": "02119970078",
-              "årsakManglerIdentitetsnummer": null
+              "årsakManglerIdentitetsnummer": null,
+              "relasjonTilBarnet": "ANNET",
+              "relasjonTilBarnetBeskrivelse": "Blaabla annet",
             },
             "mottatt": "$mottatt",
             "søker": {
@@ -514,7 +517,6 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
               ]
             ],
             "apiDataVersjon": null,
-            "barnRelasjonBeskrivelse": "Blaabla annet",
             "harBekreftetOpplysninger": true
           }
         """.trimIndent()

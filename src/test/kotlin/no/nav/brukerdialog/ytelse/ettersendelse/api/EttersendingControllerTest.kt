@@ -5,10 +5,9 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
 import no.nav.k9.ettersendelse.EttersendelseType
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.ettersendelse.api.domene.Pleietrengende
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
@@ -52,7 +51,7 @@ class EttersendingControllerTest {
     private lateinit var innsendingService: InnsendingService
 
     @MockkBean
-    private lateinit var innsendingCache: InnsendingCache
+    private lateinit var duplikatInnsendingSjekker: DuplikatInnsendingSjekker
 
     @MockkBean
     private lateinit var barnService: BarnService
@@ -71,7 +70,7 @@ class EttersendingControllerTest {
     @Test
     fun `Innsending av søknad er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattSøknad(any()) } returns Unit
 
@@ -79,7 +78,6 @@ class EttersendingControllerTest {
 
         mockMvc.post("/ettersending/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -98,7 +96,7 @@ class EttersendingControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreInnloggetBrukerErSøker(any()) } returns Unit
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
 
         val ettersendelse = defaultEttersendelse
 
@@ -118,7 +116,6 @@ class EttersendingControllerTest {
 
         mockMvc.post("/ettersending/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON

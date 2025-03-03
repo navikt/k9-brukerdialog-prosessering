@@ -22,6 +22,8 @@ internal object SøknadUtils {
         kroniskEllerFunksjonshemming = true,
         harForståttRettigheterOgPlikter = true,
         harBekreftetOpplysninger = true,
-        dataBruktTilUtledningAnnetData = "{\"string\": \"tekst\", \"boolean\": false, \"number\": 1, \"array\": [1,2,3], \"object\": {\"key\": \"value\"}}"
+        dataBruktTilUtledningAnnetData = "{\"string\": \"tekst\", \"boolean\": false, \"number\": 1, \"array\": [1,2,3], \"object\": {\"key\": \"value\"}}",
+        høyereRisikoForFravær = true,
+        høyereRisikoForFraværBeskrivelse = "Beskrivelse av høyere risiko for fravær"
     )
 }

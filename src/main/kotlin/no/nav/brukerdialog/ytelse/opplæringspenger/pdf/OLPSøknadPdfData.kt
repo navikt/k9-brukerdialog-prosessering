@@ -59,8 +59,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "skalTaUtFerieIPerioden" to søknad.ferieuttakIPerioden?.skalTaUtFerieIPerioden,
                 "ferieuttak" to søknad.ferieuttakIPerioden?.ferieuttak?.somMapFerieuttak()
             ),
-            "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
-            "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
             "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
             "frilans" to søknad.frilans?.somMap(),
             "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende?.somMap(),
@@ -74,11 +72,13 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     }
 
     private fun Barn.somMap() = mapOf<String, Any?>(
-        "manglerNorskIdentitetsnummer" to (norskIdentifikator == null),
+        "manglerNorskIdentitetsnummer" to (årsakManglerIdentitetsnummer == ÅrsakManglerIdentitetsnummer.BARNET_BOR_I_UTLANDET),
         "norskIdentitetsnummer" to norskIdentifikator,
         "navn" to navn.storForbokstav(),
         "fødselsdato" to if (fødselsdato != null) Constants.DATE_FORMATTER.format(fødselsdato) else null,
-        "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst
+        "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst,
+        "relasjonTilBarnet" to relasjonTilBarnet?.utskriftsvennlig,
+        "relasjonTilBarnetBeskrivelse" to relasjonTilBarnetBeskrivelse,
     )
 
     private fun Kurs.somMap() = mapOf<String, Any?>(

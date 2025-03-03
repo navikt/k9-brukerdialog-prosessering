@@ -7,7 +7,7 @@ import no.nav.brukerdialog.common.FeltMap
 import no.nav.brukerdialog.common.PdfConfig
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.domene.UngdomsytelsesøknadMottatt
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadMottatt
 
 object UngdomsytelsesøknadPdfDataMapper {
     fun mapUngdomsytelsesøknadPdfData(
@@ -24,12 +24,7 @@ object UngdomsytelsesøknadPdfDataMapper {
                 søknad.søker.formatertNavn(),
                 søknad.søker.fødselsnummer,
             )
-        val periode =
-            mapPeriode(
-                DATE_FORMATTER.format(søknad.fraOgMed),
-                DATE_FORMATTER.format(søknad.tilOgMed),
-                søknad.inntekt.toString(),
-            )
+
         val samtykke =
             mapSamtykke(
                 søknad.harForståttRettigheterOgPlikter.toString(),
@@ -38,7 +33,7 @@ object UngdomsytelsesøknadPdfDataMapper {
 
         return FeltMap(
             label = ytelseTittel,
-            verdiliste = listOf(innsendingsdetaljer, søker, periode, samtykke),
+            verdiliste = listOf(innsendingsdetaljer, søker, samtykke),
             pdfConfig = PdfConfig(true, "nb"),
         )
     }

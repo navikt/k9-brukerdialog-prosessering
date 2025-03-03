@@ -70,6 +70,7 @@ fun arbeidIPerioden(arbeidsforhold: Arbeidsforhold?): String {
     val arbeidIPeriode = arbeidsforhold?.arbeidIPeriode ?: return "Ingen arbeidsforhold registrert"
 
     return when (arbeidIPeriode.type) {
+        ArbeidIPeriodeType.IKKE_BESVART -> "Ikke besvart"
         ArbeidIPeriodeType.ARBEIDER_IKKE -> "Jobber ikke i perioden."
         ArbeidIPeriodeType.ARBEIDER_VANLIG -> "Jobber som normalt i perioden. Har ikke fravær fra jobb"
         ArbeidIPeriodeType.ARBEIDER_REDUSERT -> {

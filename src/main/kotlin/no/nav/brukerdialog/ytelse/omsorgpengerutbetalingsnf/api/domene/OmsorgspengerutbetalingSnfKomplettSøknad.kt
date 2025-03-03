@@ -13,7 +13,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 
-class OmsorgspengerutbetalingSnfKomplettSøknad(
+data class OmsorgspengerutbetalingSnfKomplettSøknad(
     internal val søknadId: SøknadId = SøknadId(UUID.randomUUID().toString()),
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     private val språk: String,

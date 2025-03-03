@@ -20,7 +20,7 @@ data class OLPMottattSøknad(
     val søker : Søker,
     val barn : Barn,
     var vedleggId : List<String> = listOf(),
-    val fødselsattestVedleggId: List<String>? = listOf(), // TODO: Fjern nullabel etter lansering.
+    val fødselsattestVedleggId: List<String>? = listOf(),
     val medlemskap: Medlemskap,
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
@@ -31,8 +31,6 @@ data class OLPMottattSøknad(
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val arbeidsgivere: List<Arbeidsgiver>,
-    val barnRelasjon: BarnRelasjon? = null,
-    val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val kurs: Kurs,
     val k9FormatSøknad: Søknad
@@ -58,7 +56,7 @@ data class OLPMottattSøknad(
         søkerFødselsnummer = søker.fødselsnummer,
         k9FormatSøknad = k9FormatSøknad,
         vedleggId = vedleggId,
-        fødselsattestVedleggId = fødselsattestVedleggId,
+        fødselsattestVedleggId = fødselsattestVedleggId(),
         pdfJournalføringsTittel = ytelse().tittel,
         jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
         pdfData = pdfData()

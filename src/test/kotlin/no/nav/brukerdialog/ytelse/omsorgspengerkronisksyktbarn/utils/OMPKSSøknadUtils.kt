@@ -40,7 +40,9 @@ object OMPKSSøknadUtils {
         OmsorgspengerKroniskSyktBarn(
             no.nav.k9.søknad.felles.personopplysninger.Barn()
                 .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("02119970078")),
-            true
+            true,
+            true,
+            "Beskrivelse av høyere risiko for fravær"
         )
     ).medSpråk(språk)
 

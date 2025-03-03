@@ -5,7 +5,7 @@ import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZonedDateTime
 
-class OmsorgsdagerAleneOmOmsorgenKomplettSøknad(
+data class OmsorgsdagerAleneOmOmsorgenKomplettSøknad(
     private val søknadId: String,
     private val mottatt: ZonedDateTime,
     private val søker: Søker,

@@ -32,8 +32,6 @@ data class OLPPreprosessertSøknad(
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val arbeidsgivere: List<Arbeidsgiver>,
-    val barnRelasjon: BarnRelasjon? = null,
-    val barnRelasjonBeskrivelse: String? = null,
     val harForstattRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,
     val harVærtEllerErVernepliktig: Boolean? = null,
@@ -61,8 +59,6 @@ data class OLPPreprosessertSøknad(
         harForstattRettigheterOgPlikter = melding.harForståttRettigheterOgPlikter,
         harBekreftetOpplysninger = melding.harBekreftetOpplysninger,
         ferieuttakIPerioden = melding.ferieuttakIPerioden,
-        barnRelasjon = melding.barnRelasjon,
-        barnRelasjonBeskrivelse = melding.barnRelasjonBeskrivelse,
         harVærtEllerErVernepliktig = melding.harVærtEllerErVernepliktig,
         k9FormatSøknad = melding.k9FormatSøknad
     )

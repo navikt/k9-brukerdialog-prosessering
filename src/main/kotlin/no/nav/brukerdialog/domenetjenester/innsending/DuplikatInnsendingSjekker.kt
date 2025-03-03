@@ -13,7 +13,7 @@ import java.net.URI
 import java.time.Duration
 
 @Service
-class InnsendingCache(
+class DuplikatInnsendingSjekker(
     @Value("\${no.nav.cache.innsending.expiry-in-seconds}") private val expireSeconds: Long
 ) {
 
@@ -28,7 +28,7 @@ class InnsendingCache(
     }
 
     @kotlin.jvm.Throws(ErrorResponseException::class)
-    fun put(key: String) {
+    fun forsikreIkkeDuplikatInnsending(key: String) {
         if (duplikatEksisterer(key)) {
             throw DuplikatInnsendingProblem()
         }

@@ -37,13 +37,13 @@
     {{> partial/felles/personPartial id="barn" title="Barn" navn=barn.navn fødselsnummer=barn.norskIdentitetsnummer fødselsdato=barn.fødselsdato årsakManglerIdentitetsnummer=barn.årsakManglerIdentitetsnummer }}
 
     <section id="relasjonTilBarnet">
-        {{#if barnRelasjon}}
+        {{#if barn.relasjonTilBarnet}}
             <h2>Relasjon til barnet</h2>
             <p class="sporsmalstekst">Hvilken relasjon har du til barnet?</p>
-            <p>{{barnRelasjon}}</p>
-            {{#if barnRelasjonBeskrivelse}}
+            <p>{{barn.relasjonTilBarnet}}</p>
+            {{#if barn.relasjonTilBarnetBeskrivelse}}
                 <p class="sporsmalstekst">Beskrivelse av relasjon og tilsynsrolle for barnet:</p>
-                <p>{{barnRelasjonBeskrivelse}}</p>
+                <p>{{barn.relasjonTilBarnetBeskrivelse}}</p>
             {{/if}}
         {{/if}}
     </section>

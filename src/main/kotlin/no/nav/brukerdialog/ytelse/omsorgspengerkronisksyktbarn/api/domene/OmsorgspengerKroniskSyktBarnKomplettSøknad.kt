@@ -8,7 +8,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 
-class OmsorgspengerKroniskSyktBarnKomplettSøknad(
+data class OmsorgspengerKroniskSyktBarnKomplettSøknad(
     private val språk: String,
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     private val søknadId: String = UUID.randomUUID().toString(),

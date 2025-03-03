@@ -230,15 +230,25 @@ no.nav:
         application-id-suffix: ungdomsytelse-soknad-cleanup-stream
         auto-offset-reset: earliest
 
+      ungdomsytelse-inntektsrapportering-preprosessering:
+        application-id-suffix: ungdomsytelse-inntektsrapportering-preprosessering
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-journalforing:
+        application-id-suffix: ungdomsytelse-inntektsrapportering-journalforing
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-cleanup:
+        application-id-suffix: ungdomsytelse-inntektsrapportering-cleanup-stream
+        auto-offset-reset: earliest
+
       olp-soknad-preprosessering:
         application-id-suffix: olp-soknad-preprosessering
-        auto-offset-reset: earliest
+        auto-offset-reset: none
       olp-soknad-journalforing:
         application-id-suffix: olp-soknad-journalforing
-        auto-offset-reset: earliest
+        auto-offset-reset: none
       olp-soknad-cleanup:
         application-id-suffix: olp-soknad-cleanup
-        auto-offset-reset: earliest
+        auto-offset-reset: none
 
 management:
   endpoint:

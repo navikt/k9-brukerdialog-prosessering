@@ -2,10 +2,10 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.4.1"
+	id("org.springframework.boot") version "3.4.3"
 	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("jvm") version "2.1.0"
-	kotlin("plugin.spring") version "2.1.0"
+	kotlin("jvm") version "2.1.10"
+	kotlin("plugin.spring") version "2.1.10"
 }
 
 group = "no.nav"
@@ -30,27 +30,25 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.14"
+val tokenSupportVersion = "5.0.17"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "10.0.1"
+val k9FormatVersion = "11.3.0"
 val springMockkVersion = "4.0.2"
-val confluentVersion = "7.3.0"
 val logstashLogbackEncoderVersion = "8.0"
 val slf4jVersion = "2.0.16"
 val jacksonVersion = "2.18.2"
-val kotlinxCoroutinesVersion = "1.6.4"
 val openhtmltopdfVersion = "1.1.4"
 val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.11"
 val awailitilityKotlinVersion = "4.2.2"
 val springCloudContractVersion = "4.2.0"
-val orgJsonVersion = "20241224"
-val springdocVersion = "2.8.1"
-val pdfBoxVersion = "3.0.3"
+val orgJsonVersion = "20250107"
+val springdocVersion = "2.8.5"
+val pdfBoxVersion = "3.0.4"
 val imageIOVersion = "3.12.0"
 
 dependencies {
-	implementation("org.yaml:snakeyaml:2.3") {
+	implementation("org.yaml:snakeyaml:2.4") {
 		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
 	}
 

@@ -147,6 +147,13 @@ enum class YtelseType(
         innsendingstype = Innsendingstype.SØKNAD
     ),
 
+    OPPLÆRINGSPENGERSØKNAD_ETTERSENDING(
+        brevkode = BrevKode(brevKode = "NAVe 09-11.08", dokumentKategori = "SOK"),
+        tittel = "Søknad om opplæringspenger - NAVe 09-11.08",
+        tema = Tema.K9_YTELSER,
+        innsendingstype = Innsendingstype.ETTERSENDELSE
+    ),
+
     FRISINNSØKNAD(
         brevkode = BrevKode(brevKode = "NAV 00-03.02", dokumentKategori = "SOK"),
         tittel = "Søknad om inntektskompensasjon for frilansere og selvstendig næringdrivende - NAV 00-03.02",
@@ -161,9 +168,9 @@ enum class YtelseType(
         innsendingstype = Innsendingstype.SØKNAD
     ),
 
-    UNGDOMSYTELSE_ENDRINGSSØKNAD(
-        brevkode = BrevKode(brevKode = "UNG Endringssøknad", dokumentKategori = "SOK"),
-        tittel = "Endringssøknad for ungdomsytelsen - UNG Endringssøknad",
+    UNGDOMSYTELSE_INNTEKTRAPPORTERING(
+        brevkode = BrevKode(brevKode = "UNG Inntektrapportering", dokumentKategori = "SOK"),
+        tittel = "Rapporteringsmelding for ungdomsytelsen - UNG Inntektrapportering",
         tema = Tema.K9_YTELSER, // TODO Bruk Tema.UNGDOMSYTELSE før lansering
         innsendingstype = Innsendingstype.SØKNAD
     )

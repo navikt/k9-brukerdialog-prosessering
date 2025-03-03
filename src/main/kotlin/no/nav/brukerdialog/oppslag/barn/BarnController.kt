@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 class BarnController(private val barnService: BarnService) {
 
     @GetMapping
-    fun hentBarn(@RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String): BarnOppslagListe = runBlocking {
+    fun hentBarn(): BarnOppslagListe = runBlocking {
         val barn = barnService.hentBarn()
         BarnOppslagListe(barn)
     }
