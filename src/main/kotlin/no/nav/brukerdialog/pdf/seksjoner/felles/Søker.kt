@@ -6,7 +6,6 @@ import no.nav.brukerdialog.pdf.SpørsmålOgSvar
 import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
 
 data class SøkerSpørsmålOgSvar(
     val navnSøker: SpørsmålOgSvar? = null,
@@ -32,7 +31,7 @@ internal fun strukturerSøkerSeksjon(
 ): VerdilisteElement {
     val søker = mapSøkerTilSpørsmålOgSvar(søknadSvarSøker, søknadSvarBarn)
     return VerdilisteElement(
-        label = PdfTekster.getValue("søker.tittel"),
+        label = "Søker",
         verdiliste =
             listOfNotNull(
                 lagVerdiElement(søker.navnSøker),

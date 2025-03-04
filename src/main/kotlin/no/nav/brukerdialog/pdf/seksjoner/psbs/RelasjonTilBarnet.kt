@@ -5,7 +5,6 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.BarnRelas
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
 import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
 
 data class RelasjonTilBarnetSpørsmålOgSvar(
     val relasjon: SpørsmålOgSvar? = null,
@@ -20,7 +19,7 @@ internal fun strukturerRelasjonTilBarnetSeksjon(
 
     return barnrelasjon.relasjon?.let {
         VerdilisteElement(
-            label = PdfTekster.getValue("barnrelasjon.relasjon"),
+            label = "Hvilken relasjon har du til barnet?",
             verdiliste =
                 listOfNotNull(
                     lagVerdiElement(barnrelasjon.relasjon),

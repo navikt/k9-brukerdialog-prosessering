@@ -7,7 +7,6 @@ import no.nav.brukerdialog.pdf.SpørsmålOgSvar
 import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
 import java.time.ZonedDateTime
 
 data class InnsendingsdetaljerSpørsmålOgSvar(
@@ -17,7 +16,7 @@ data class InnsendingsdetaljerSpørsmålOgSvar(
 fun strukturerInnsendingsdetaljerSeksjon(søknadSvarInnsendingsdetaljer: ZonedDateTime): VerdilisteElement {
     val innsendingsdetaljer = mapInnsendingsdetaljerTilSpørsmålOgSvar(søknadSvarInnsendingsdetaljer)
     return VerdilisteElement(
-        label = PdfTekster.getValue("innsendingsdetaljer.tittel"),
+        label = "Innsendingsdetaljer",
         verdiliste =
             listOfNotNull(
                 lagVerdiElement(innsendingsdetaljer.mottattSøknadTidspunkt),

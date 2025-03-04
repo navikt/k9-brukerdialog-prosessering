@@ -7,7 +7,6 @@ import no.nav.brukerdialog.pdf.SpørsmålOgSvar
 import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.normalArbeidstid
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
 import java.time.LocalDate
 
 data class ArbeidsgiverSpørsmålOgSvar(
@@ -29,7 +28,7 @@ fun strukturerArbeidsgivereSeksjon(
     val arbeidsgivere = mapArbeidsgivereTilSpørsmålOgSvar(søknadSvarArbeidsgivere, søknadSvarFraOgMed)
     return arbeidsgivere.takeIf { it.arbeidsgivere.isNotEmpty() }?.let {
         VerdilisteElement(
-            label = PdfTekster.getValue("arbeidsgivere.tittel"),
+            label = "Arbeidsgivere",
             visningsVariant = "TABELL",
             verdiliste =
                 arbeidsgivere.arbeidsgivere.map { arbeidsgiver ->

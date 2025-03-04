@@ -5,7 +5,6 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGo
 import no.nav.brukerdialog.pdf.SpørsmålOgSvar
 import no.nav.brukerdialog.pdf.lagVerdiElement
 import no.nav.brukerdialog.pdf.tilSpørsmålOgSvar
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
 
 data class StønadGodtgjørelseSpørsmålOgSvar(
     val mottarStønadGodtgjørelse: SpørsmålOgSvar? = null,
@@ -16,7 +15,7 @@ data class StønadGodtgjørelseSpørsmålOgSvar(
 fun strukturerStønadGodtgjørelseSeksjon(søknadSvarStønadGodtgjørelse: StønadGodtgjørelse?): VerdilisteElement {
     val stønadGodtgjørelse = mapStønadGodtgjørelseTilSpørsmålOgSvar(søknadSvarStønadGodtgjørelse)
     return VerdilisteElement(
-        label = PdfTekster.getValue("stønadGodtgjørelse.tittel"),
+        label = "Omsorgsstønad eller fosterhjemsgodtgjørelse",
         verdiliste =
             listOfNotNull(
                 lagVerdiElement(stønadGodtgjørelse.mottarStønadGodtgjørelse),
