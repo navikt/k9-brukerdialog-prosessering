@@ -158,7 +158,10 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
               "norskIdentitetsnummer": "02119970078"
             },
             "bekreftelse": {
-              "type": "UNG_ENDRET_FOM_DATO"
+              "type": "UNG_ENDRET_FOM_DATO",
+              "nyFomDato": "2025-01-01",
+              "harBrukerGodtattEndringen": true,
+              "dataBruktTilUtledning": null
             },
             "kildesystem": "søknadsdialog"
           }
