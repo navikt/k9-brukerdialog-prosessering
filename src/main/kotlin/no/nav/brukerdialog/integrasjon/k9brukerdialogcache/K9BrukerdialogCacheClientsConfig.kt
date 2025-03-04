@@ -35,7 +35,7 @@ class K9BrukerdialogCacheClientsConfig(
         logger.info("Konfigurerer opp tokenx klient for k9-brukerdialog-cache.")
         return restTemplateBuilder
             .rootUri(baseUrl)
-            .setReadTimeout(Duration.ofSeconds(20))
+            .readTimeout(Duration.ofSeconds(20))
             .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .additionalInterceptors(

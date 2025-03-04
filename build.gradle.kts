@@ -32,7 +32,7 @@ repositories {
 
 val tokenSupportVersion = "5.0.17"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "11.3.0"
+val k9FormatVersion = "11.4.2"
 val springMockkVersion = "4.0.2"
 val logstashLogbackEncoderVersion = "8.0"
 val slf4jVersion = "2.0.16"
@@ -62,6 +62,7 @@ dependencies {
 	// K9-format
 	implementation("no.nav.k9:soknad:$k9FormatVersion")
 	implementation("no.nav.k9:ettersendelse:$k9FormatVersion")
+	implementation("no.nav.k9:oppgave-ungdomsytelse:$k9FormatVersion")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")

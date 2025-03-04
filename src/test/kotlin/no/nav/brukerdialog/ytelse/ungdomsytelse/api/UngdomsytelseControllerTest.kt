@@ -12,6 +12,8 @@ import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
@@ -27,12 +29,13 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import java.time.LocalDate
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(
-    controllers = [UngdomsytelsesøknadController::class],
+    controllers = [UngdomsytelseController::class],
     properties = [
         "ENABLE_UNDOMSYTELSE=true",
     ])
@@ -40,7 +43,7 @@ import java.util.*
     JacksonConfiguration::class,
     CallIdGenerator::class
 )
-class UngdomsytelsesøknadControllerTest {
+class UngdomsytelseControllerTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -157,6 +160,88 @@ class UngdomsytelsesøknadControllerTest {
                               "parameterType": "ENTITY",
                               "reason": "Opplysningene må bekreftes for å sende inn søknad"
                             },
+                          ]
+                        }
+                        """.trimIndent(),
+                        false,
+                    )
+                }
+            }
+    }
+
+    @Test
+    fun `Innsending av oppgavebekreftelse er OK`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
+        coEvery { innsendingService.registrer(any(), any()) } returns Unit
+        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+
+        val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
+
+        mockMvc.post("/ungdomsytelse/oppgavebekreftelse/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(defaultOppgavebekreftelse)
+        }
+            .andExpect {
+                status { isAccepted() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+            }
+    }
+
+    @Test
+    fun `Innsending av oppgavebekreftelse med feile verdier responderer med bad request`() {
+        val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
+
+        val jsonPayload = objectMapper.writeValueAsString(
+            defaultOppgavebekreftelse.copy(
+                oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
+                    oppgaveId = "123",
+                    veilederRef = "veileder-123",
+                    meldingFraVeileder = null,
+                    nyStartdato = LocalDate.parse("2025-01-01"),
+                    bekreftelseSvar = BekreftelseSvar.AVSLÅR,
+                    ikkeGodkjentResponse = null,
+                )
+            )
+        )
+        mockMvc.post("/ungdomsytelse/oppgavebekreftelse/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            content = jsonPayload.trimIndent()
+        }
+            .andExpect {
+                status { isBadRequest() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+                header { exists(NavHeaders.PROBLEM_DETAILS) }
+                content {
+                    json(
+                        """
+                        {
+                          "detail": "Forespørselen inneholder valideringsfeil",
+                          "instance": "http://localhost/ungdomsytelse/oppgavebekreftelse/innsending",
+                          "properties": null,
+                          "status": 400,
+                          "title": "invalid-request-parameters",
+                          "type": "/problem-details/invalid-request-parameters",
+                          "violations": [
+                            {
+                              "invalidValue": "123",
+                              "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.oppgaveId",
+                              "parameterType": "ENTITY",
+                              "reason": "Forventet gyldig UUID, men var '123'"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.ikkeGodkjentResponseValid",
+                              "parameterType": "ENTITY",
+                              "reason": "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR"
+                            }
                           ]
                         }
                         """.trimIndent(),
