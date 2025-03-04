@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
+package no.nav.brukerdialog.pdf.seksjoner.psbs
 
 import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.VerdilisteElement

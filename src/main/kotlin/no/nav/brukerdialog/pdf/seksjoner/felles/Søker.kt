@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
+package no.nav.brukerdialog.pdf.seksjoner.felles
 
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Barn
@@ -9,15 +9,26 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.PdfTekster
 
 data class SøkerSpørsmålOgSvar(
-    val navnSøker: SpørsmålOgSvar?,
-    val fødselsnummerSøker: SpørsmålOgSvar?,
-    val navnBarn: SpørsmålOgSvar?,
-    val fødselsnummerBarn: SpørsmålOgSvar?,
+    val navnSøker: SpørsmålOgSvar? = null,
+    val fødselsnummerSøker: SpørsmålOgSvar? = null,
+    val navnBarn: SpørsmålOgSvar? = null,
+    val fødselsnummerBarn: SpørsmålOgSvar? = null,
 )
+
+private fun mapSøkerTilSpørsmålOgSvar(
+    søker: Søker,
+    barn: Barn? = null,
+): SøkerSpørsmålOgSvar =
+    SøkerSpørsmålOgSvar(
+        navnSøker = tilSpørsmålOgSvar("Navn", søker.formatertNavn()),
+        fødselsnummerSøker = tilSpørsmålOgSvar("Fødselsnummer", søker.fødselsnummer),
+        navnBarn = tilSpørsmålOgSvar("Navn på barn", barn?.navn),
+        fødselsnummerBarn = tilSpørsmålOgSvar("Fødselsnummer på barn", barn?.fødselsnummer),
+    )
 
 internal fun strukturerSøkerSeksjon(
     søknadSvarSøker: Søker,
-    søknadSvarBarn: Barn,
+    søknadSvarBarn: Barn? = null,
 ): VerdilisteElement {
     val søker = mapSøkerTilSpørsmålOgSvar(søknadSvarSøker, søknadSvarBarn)
     return VerdilisteElement(
@@ -32,13 +43,4 @@ internal fun strukturerSøkerSeksjon(
     )
 }
 
-fun mapSøkerTilSpørsmålOgSvar(
-    søker: Søker,
-    barn: Barn,
-): SøkerSpørsmålOgSvar =
-    SøkerSpørsmålOgSvar(
-        navnSøker = tilSpørsmålOgSvar("Navn", søker.formatertNavn()),
-        fødselsnummerSøker = tilSpørsmålOgSvar("Fødselsnummer", søker.fødselsnummer),
-        navnBarn = tilSpørsmålOgSvar("Navn på barn", barn.navn),
-        fødselsnummerBarn = tilSpørsmålOgSvar("Fødselsnummer på barn", barn.fødselsnummer),
-    )
+

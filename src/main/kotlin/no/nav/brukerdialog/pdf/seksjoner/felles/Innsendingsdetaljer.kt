@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf.seksjoner
+package no.nav.brukerdialog.pdf.seksjoner.felles
 
 import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID

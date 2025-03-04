@@ -3,10 +3,15 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.pdf
 import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
+import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
+import no.nav.brukerdialog.pdf.seksjoner.felles.strukturerInnsendingsdetaljerSeksjon
+import no.nav.brukerdialog.pdf.seksjoner.felles.strukturerSamtykkeSeksjon
+import no.nav.brukerdialog.pdf.seksjoner.felles.strukturerSøkerSeksjon
+import no.nav.brukerdialog.pdf.seksjoner.ungdomsytelse.strukturerDeltarIUngdomsprogramSeksjon
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadMottatt
 import no.nav.k9.søknad.felles.type.Språk
 
@@ -30,4 +35,12 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
             "språk" to søknad.språk?.språkTilTekst()
         )
     )
+
+    override fun nyPdfData(): List<VerdilisteElement> =
+        listOfNotNull(
+            strukturerInnsendingsdetaljerSeksjon(søknad.mottatt),
+            strukturerSøkerSeksjon(søknad.søker),
+            strukturerDeltarIUngdomsprogramSeksjon(søknad.startdato),
+            strukturerSamtykkeSeksjon(søknad.harForståttRettigheterOgPlikter, søknad.harBekreftetOpplysninger)
+        )
 }
