@@ -43,7 +43,7 @@ class OmsorgspengerUtbetalingSnfController(
 
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
+    fun innsendingOmsorgspengerutbetalingSnfSøknad(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @RequestBody søknad: OmsorgspengerutbetalingSnfSøknad,
     ) = runBlocking {

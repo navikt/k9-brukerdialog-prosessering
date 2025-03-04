@@ -43,7 +43,7 @@ class OmsorgsdagerAleneomsorgController(
 
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
+    fun innsendingOmsorgsdagerAleneOmOmsorgenSøknad(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @RequestBody søknad: OmsorgsdagerAleneOmOmsorgenSøknad,
     ) = runBlocking {

@@ -45,7 +45,7 @@ class EndringsmeldingController(
 
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
+    fun innsendingEndringsmelding(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @RequestBody @Valid endringsmelding: Endringsmelding,
     ) = runBlocking {

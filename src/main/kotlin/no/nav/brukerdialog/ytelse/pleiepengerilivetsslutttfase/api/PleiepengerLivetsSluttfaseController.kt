@@ -42,7 +42,7 @@ class PleiepengerLivetsSluttfaseController(
 
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
+    fun innsendingPleiepengerILivetsSluttfaseSøknad(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @Valid @RequestBody søknad: PleiepengerILivetsSluttfaseSøknad,
     ) = runBlocking {

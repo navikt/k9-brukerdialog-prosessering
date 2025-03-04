@@ -43,7 +43,7 @@ class EttersendingController(
 
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
+    fun innsendingEttersendelse(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @RequestBody ettersendelse: Ettersendelse,
     ) = runBlocking {

@@ -44,7 +44,7 @@ class PleiepengerSyktBarnController(
 
     @PostMapping("/innsending", consumes = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
+    fun innsendingPleiepengerSyktBarnSøknad(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @RequestBody søknad: PleiepengerSyktBarnSøknad,
     ) = runBlocking {
