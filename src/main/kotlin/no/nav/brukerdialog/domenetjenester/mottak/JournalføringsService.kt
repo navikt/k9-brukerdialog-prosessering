@@ -9,12 +9,14 @@ import no.nav.brukerdialog.integrasjon.k9mellomlagring.ContentTypeService
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.kafka.types.Journalfort
 import no.nav.brukerdialog.kafka.types.JournalfortEttersendelse
+import no.nav.brukerdialog.kafka.types.JournalfortOppgavebekreftelse
 import no.nav.brukerdialog.kafka.types.JournalfortSøknad
 import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Søknadstype
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
+import no.nav.k9.oppgave.OppgaveBekreftelse
 import no.nav.k9.søknad.Søknad
 import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
@@ -97,6 +99,10 @@ class JournalføringsService(
     ) = when (val innsending = preprosessertSøknad.k9FormatSøknad()) {
         is Søknad -> JournalfortSøknad(journalpostId = journalføringsResponse.journalPostId, søknad = innsending)
         is K9Ettersendelse -> JournalfortEttersendelse(
+            journalpostId = journalføringsResponse.journalPostId,
+            søknad = innsending
+        )
+        is OppgaveBekreftelse -> JournalfortOppgavebekreftelse(
             journalpostId = journalføringsResponse.journalPostId,
             søknad = innsending
         )

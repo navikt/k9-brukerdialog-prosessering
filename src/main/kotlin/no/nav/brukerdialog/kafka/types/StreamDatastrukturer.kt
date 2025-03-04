@@ -12,7 +12,8 @@ data class TopicEntry<V>(val metadata: MetaInfo, val data: V)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes(
     JsonSubTypes.Type(JournalfortSøknad::class, name = "JournalfortSøknad"),
-    JsonSubTypes.Type(JournalfortEttersendelse::class, name = "JournalfortEttersendelse")
+    JsonSubTypes.Type(JournalfortEttersendelse::class, name = "JournalfortEttersendelse"),
+    JsonSubTypes.Type(JournalfortOppgavebekreftelse::class, name = "JournalfortOppgavebekreftelse"),
 )
 open class Journalfort(open val journalpostId: String, open val søknad: Innsending)
 data class JournalfortSøknad(override val journalpostId: String, override val søknad: Søknad) :
@@ -21,6 +22,11 @@ data class JournalfortSøknad(override val journalpostId: String, override val s
 data class JournalfortEttersendelse(
     override val journalpostId: String,
     override val søknad: no.nav.k9.ettersendelse.Ettersendelse,
+) : Journalfort(journalpostId, søknad)
+
+data class JournalfortOppgavebekreftelse(
+    override val journalpostId: String,
+    override val søknad: no.nav.k9.oppgave.OppgaveBekreftelse,
 ) : Journalfort(journalpostId, søknad)
 
 data class Cleanup<T : Preprosessert>(val metadata: MetaInfo, val melding: T, val journalførtMelding: Journalfort)
