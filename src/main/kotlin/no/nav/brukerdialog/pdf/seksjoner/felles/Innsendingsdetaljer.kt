@@ -24,7 +24,7 @@ fun strukturerInnsendingsdetaljerSeksjon(søknadSvarInnsendingsdetaljer: ZonedDa
     )
 }
 
-fun mapInnsendingsdetaljerTilSpørsmålOgSvar(mottattSøknadTidspunkt: ZonedDateTime): InnsendingsdetaljerSpørsmålOgSvar {
+private fun mapInnsendingsdetaljerTilSpørsmålOgSvar(mottattSøknadTidspunkt: ZonedDateTime): InnsendingsdetaljerSpørsmålOgSvar {
     val tidspunkt = "${mottattSøknadTidspunkt.withZoneSameInstant(
         OSLO_ZONE_ID,
     ).somNorskDag()} ${DATE_TIME_FORMATTER.format(mottattSøknadTidspunkt)}"

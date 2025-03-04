@@ -44,8 +44,7 @@ fun strukturerMedlemskapSeksjon(søknadSvarMedlemskap: Medlemskap): VerdilisteEl
     )
 }
 
-// TODO her dukker kun "Har du bodd i utlandet..." opp dersom svaret er nei, om ja vises svarene. Høre om det er greit
-fun mapMedlemskapTilSpørsmålOgSvar(medlemskap: Medlemskap): MedlemskapSpørsmålOgSvar =
+private fun mapMedlemskapTilSpørsmålOgSvar(medlemskap: Medlemskap): MedlemskapSpørsmålOgSvar =
     MedlemskapSpørsmålOgSvar(
         harBoddIUtlandetSiste12Måneder =
             medlemskap.harBoddIUtlandetSiste12Mnd.takeIf { !it }?.let {
