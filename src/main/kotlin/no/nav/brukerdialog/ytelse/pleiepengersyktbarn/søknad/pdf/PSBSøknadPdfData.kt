@@ -45,7 +45,7 @@ import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerBeredskapSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerFrilansSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.felles.strukturerInnsendingsdetaljerSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerJobbISøknadsperiodenSeksjon
-import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerMedlemskapSeksjon
+import no.nav.brukerdialog.pdf.seksjoner.felles.strukturerMedlemskapSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerNattevåkSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerOmsorgstilbudSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerOpptjeningIUtlandetSeksjon
@@ -55,10 +55,10 @@ import no.nav.brukerdialog.pdf.seksjoner.felles.strukturerSamtykkeSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerSelvstendigNæringsdrivendeSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerStønadGodtgjørelseSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.felles.strukturerSøkerSeksjon
-import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerUtenlandskNæringSeksjon
+import no.nav.brukerdialog.pdf.seksjoner.felles.strukturerUtenlandskNæringSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerUtenlandsoppholdSeksjon
 import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerVedleggSeksjon
-import no.nav.brukerdialog.pdf.seksjoner.psbs.strukturerVernepliktSeksjon
+import no.nav.brukerdialog.pdf.seksjoner.felles.strukturerVernepliktSeksjon
 import no.nav.k9.søknad.felles.type.Språk
 import java.time.Duration
 import java.time.LocalDate

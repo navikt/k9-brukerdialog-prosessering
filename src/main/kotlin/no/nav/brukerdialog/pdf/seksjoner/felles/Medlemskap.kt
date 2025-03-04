@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.pdf.seksjoner.psbs
+package no.nav.brukerdialog.pdf.seksjoner.felles
 
 import no.nav.brukerdialog.common.VerdilisteElement
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Medlemskap
