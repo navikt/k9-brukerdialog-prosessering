@@ -6,21 +6,18 @@ import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.Ytelse
+import no.nav.k9.oppgave.OppgaveBekreftelse
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
-import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
 import java.net.URL
-import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
-import no.nav.k9.søknad.Søknad as UngSøknad
 
 data class UngdomsytelseOppgavebekreftelse(
     val deltakelseId: UUID,
@@ -32,7 +29,7 @@ data class UngdomsytelseOppgavebekreftelse(
 
     ) : Innsending {
     companion object {
-        private val K9_SØKNAD_VERSJON = Versjon.of("1.0.0")
+        private val UNG_OPPGAVE_VERSJON = Versjon.of("1.0.0")
     }
 
     override fun somKomplettSøknad(
@@ -47,24 +44,20 @@ data class UngdomsytelseOppgavebekreftelse(
             søknadId = oppgave.oppgaveId,
             mottatt = mottatt,
             søker = søker,
-            k9Format = k9Format as UngSøknad
+            k9Format = k9Format as OppgaveBekreftelse
         )
     }
 
     override fun valider() = mutableListOf<String>()
 
-    override fun somK9Format(søker: Søker, metadata: MetaInfo): UngSøknad {
-        val ytelse = Ungdomsytelse()
-            .medSøknadType(UngSøknadstype.DELTAKELSE_SØKNAD)
-            .medStartdato(LocalDate.now()) // TODO: Definere egen kontrakt for denne type opplysninger
-
-        return UngSøknad()
-            .medVersjon(K9_SØKNAD_VERSJON)
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): OppgaveBekreftelse {
+        return OppgaveBekreftelse()
+            .medVersjon(UNG_OPPGAVE_VERSJON)
             .medMottattDato(mottatt)
             .medSpråk(Språk.NORSK_BOKMÅL)
             .medSøknadId(SøknadId(oppgave.oppgaveId))
             .medSøker(søker.somK9Søker())
-            .medYtelse(ytelse)
+            .medBekreftelse(oppgave.somK9Format())
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 

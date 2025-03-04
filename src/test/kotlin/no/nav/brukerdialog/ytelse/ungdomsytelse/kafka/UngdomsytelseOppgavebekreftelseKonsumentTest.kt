@@ -150,24 +150,17 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
             ]
           ],
           "k9Format": {
-            "språk": "nb",
-            "kildesystem": "søknadsdialog",
-            "mottattDato": "$mottatt",
             "søknadId": "$oppgaveId",
+            "versjon": "1.0.0",
+            "språk": "nb",
+            "mottattDato": "$mottatt",
             "søker": {
               "norskIdentitetsnummer": "02119970078"
             },
-            "ytelse": {
-              "type": "UNGDOMSYTELSE",
-              "søknadType": "DELTAKELSE_SØKNAD",
-              "søktFraDatoer": ["2022-01-01"],
-              "inntekter": null
+            "bekreftelse": {
+              "type": "UNG_ENDRET_FOM_DATO"
             },
-            "journalposter": [],
-            "begrunnelseForInnsending": {
-              "tekst": null
-            },
-            "versjon": "1.0.0"
+            "kildesystem": "søknadsdialog"
           }
         }
         """.trimIndent()

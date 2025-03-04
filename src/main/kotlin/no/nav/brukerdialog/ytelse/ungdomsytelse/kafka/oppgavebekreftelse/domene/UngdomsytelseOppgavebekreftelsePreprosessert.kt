@@ -9,10 +9,9 @@ import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
-import no.nav.k9.søknad.Søknad
+import no.nav.k9.oppgave.OppgaveBekreftelse
 import java.time.ZonedDateTime
 import java.util.*
-import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class UngdomsytelseOppgavebekreftelsePreprosessert(
     val deltakelseId: String,
@@ -21,7 +20,7 @@ data class UngdomsytelseOppgavebekreftelsePreprosessert(
     val språk: String?,
     val søker: Søker,
     val dokumentId: List<List<String>>,
-    val k9Format: K9Søknad,
+    val k9Format: OppgaveBekreftelse,
 ) : Preprosessert {
     internal constructor(
         ungdomsytelseSøknadMottatt: UngdomsytelseOppgavebekreftelseMottatt,
@@ -44,7 +43,7 @@ data class UngdomsytelseOppgavebekreftelsePreprosessert(
 
     override fun søkerFødselsnummer(): String = søker.fødselsnummer
 
-    override fun k9FormatSøknad(): Søknad = k9Format
+    override fun k9FormatSøknad(): OppgaveBekreftelse = k9Format
 
     override fun dokumenter(): List<List<String>> = dokumentId
 

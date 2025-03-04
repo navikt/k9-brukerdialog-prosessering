@@ -3,18 +3,16 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
+import no.nav.k9.oppgave.OppgaveBekreftelse
+import no.nav.k9.oppgave.bekreftelse.Bekreftelse
 import no.nav.k9.søknad.felles.Kildesystem
-import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
-import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
-import no.nav.k9.søknad.Søknad as k9FormatSøknad
 import no.nav.k9.søknad.felles.personopplysninger.Søker as K9Søker
 
 object UngdomsytelseOppgavebekreftelseUtils {
@@ -23,21 +21,21 @@ object UngdomsytelseOppgavebekreftelseUtils {
         søkerFødselsnummer: String = "02119970078",
         deltakelseId: String = UUID.randomUUID().toString(),
         oppgaveId: String = UUID.randomUUID().toString(),
+        oppgave: UngdomsytelseOppgaveDTO = EndretStartdatoUngdomsytelseOppgaveDTO(
+            oppgaveId = oppgaveId,
+            veilederRef = "veilder-123",
+            meldingFraVeileder = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
+                """.trimMargin(),
+            nyStartdato = LocalDate.parse("2025-01-01"),
+            bekreftelseSvar = BekreftelseSvar.GODTAR
+        ),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
     ): UngdomsytelseOppgavebekreftelseMottatt {
-        val startdato = LocalDate.parse("2022-01-01")
 
         return UngdomsytelseOppgavebekreftelseMottatt(
             språk = "nb",
             deltakelseId = deltakelseId,
-            oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
-                oppgaveId = oppgaveId,
-                veilederRef = "veilder-123",
-                meldingFraVeileder = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
-                """.trimMargin(),
-                nyStartdato = LocalDate.parse("2025-01-01"),
-                bekreftelseSvar = BekreftelseSvar.GODTAR
-            ),
+            oppgave = oppgave,
             mottatt = mottatt,
             søker = Søker(
                 aktørId = "123456",
@@ -47,27 +45,21 @@ object UngdomsytelseOppgavebekreftelseUtils {
                 mellomnavn = "Mellomnavn",
                 fornavn = "Ola"
             ),
-            k9Format = gyldigK9Format(oppgaveId.toString(), mottatt, startdato),
+            k9Format = gyldigK9FormatOppgave(oppgaveId, mottatt, oppgave.somK9Format()),
         )
     }
 
-    fun gyldigK9Format(
+    fun gyldigK9FormatOppgave(
         søknadId: String = UUID.randomUUID().toString(),
         mottatt: ZonedDateTime,
-        fraOgMed: LocalDate,
-    ): k9FormatSøknad {
-        val ytelse = Ungdomsytelse()
-            .medSøknadType(UngSøknadstype.DELTAKELSE_SØKNAD)
-            .medStartdato(fraOgMed)
-
-        val søknad = k9FormatSøknad(
-            SøknadId(søknadId),
-            Versjon("1.0.0"),
-            mottatt,
-            K9Søker(NorskIdentitetsnummer.of("02119970078")),
-            ytelse
-
-        ).medKildesystem(Kildesystem.SØKNADSDIALOG)
-        return søknad
+        bekreftelse: Bekreftelse,
+    ): OppgaveBekreftelse {
+        return OppgaveBekreftelse()
+            .medSøknadId(søknadId)
+            .medVersjon("1.0.0")
+            .medMottattDato(mottatt)
+            .medSøker(K9Søker(NorskIdentitetsnummer.of("02119970078")))
+            .medBekreftelse(bekreftelse)
+            .medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 }

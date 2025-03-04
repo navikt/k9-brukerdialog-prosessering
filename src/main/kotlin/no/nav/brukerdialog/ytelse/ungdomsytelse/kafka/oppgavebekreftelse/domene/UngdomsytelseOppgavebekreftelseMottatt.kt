@@ -7,7 +7,7 @@ import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelseOppgavebekreftelsePdfData
-import no.nav.k9.søknad.Søknad
+import no.nav.k9.oppgave.OppgaveBekreftelse
 import java.time.ZonedDateTime
 
 data class UngdomsytelseOppgavebekreftelseMottatt(
@@ -16,13 +16,13 @@ data class UngdomsytelseOppgavebekreftelseMottatt(
     val oppgave: UngdomsytelseOppgaveDTO,
     val språk: String? = "nb",
     val søker: Søker,
-    val k9Format: Søknad,
+    val k9Format: OppgaveBekreftelse,
 ) : MottattMelding {
     override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE
 
     override fun søkerFødselsnummer(): String = søker.fødselsnummer
 
-    override fun k9FormatSøknad(): Søknad = k9Format
+    override fun k9FormatSøknad(): OppgaveBekreftelse = k9Format
 
     override fun vedleggId(): List<String> = listOf()
 
