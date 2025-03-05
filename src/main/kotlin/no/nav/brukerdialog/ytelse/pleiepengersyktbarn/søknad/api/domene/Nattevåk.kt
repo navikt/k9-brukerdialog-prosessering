@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotNull
 import no.nav.k9.søknad.ytelse.psb.v1.Nattevåk.NattevåkPeriodeInfo
@@ -27,6 +28,7 @@ data class Nattevåk(
         )
     )
 
+    @Hidden
     @AssertTrue(message = "Dersom harNattevåk er satt, må tilleggsinformasjon være satt")
     private fun isTilleggsinformasjon(): Boolean {
         if (harNattevåk == true) {
@@ -35,6 +37,7 @@ data class Nattevåk(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Kan ikke være over $MAX_FRITEKST_TEGN tegn")
     private fun isTilleggsinformasjon_lengde(): Boolean {
         if (harNattevåk == true) {

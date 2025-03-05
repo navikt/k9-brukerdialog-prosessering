@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene
 
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.PastOrPresent
@@ -49,7 +50,7 @@ data class Barn(
 
     private fun LocalDate.startenAvÅret() = LocalDate.parse("${year}-01-01")
 
-
+    @Hidden
     @AssertTrue(message = "Må være satt når 'type' er annet enn 'FRA_OPPSLAG'")
     fun isFødselsdato(): Boolean {
         if (type != TypeBarn.FRA_OPPSLAG) {
@@ -58,6 +59,7 @@ data class Barn(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Må være satt når 'tidspunktForAleneomsorg' er 'SISTE_2_ÅRENE'")
     fun isDato(): Boolean {
         if (tidspunktForAleneomsorg == SISTE_2_ÅRENE) {

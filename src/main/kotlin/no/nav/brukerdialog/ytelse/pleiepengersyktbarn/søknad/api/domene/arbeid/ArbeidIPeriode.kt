@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid
 
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertFalse
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Periode
@@ -15,12 +16,15 @@ data class ArbeidsRedusert(
     val arbeidsuker: List<ArbeidsUke>? = null,
 ) {
 
+    @Hidden
     @AssertFalse(message = "Må være satt dersom type=PROSENT_AV_NORMALT")
     fun isProsentAvNormalt(): Boolean = type == PROSENT_AV_NORMALT && prosentAvNormalt == null
 
+    @Hidden
     @AssertFalse(message = "Må være satt dersom type=TIMER_I_SNITT_PER_UKE")
     fun isTimerPerUke(): Boolean = type == TIMER_I_SNITT_PER_UKE && timerPerUke == null
 
+    @Hidden
     @AssertFalse(message = "Må være satt dersom type=ULIKE_UKER_TIMER")
     fun isArbeidsuker(): Boolean = type == ULIKE_UKER_TIMER && arbeidsuker == null
 }
@@ -30,6 +34,7 @@ data class ArbeidIPeriode(
     @field:Valid val redusertArbeid: ArbeidsRedusert? = null,
 ) {
 
+    @Hidden
     @AssertFalse(message = "Må være satt dersom type=ARBEIDER_REDUSERT")
     fun isArbeiderRedusert(): Boolean {
         return type == ArbeidIPeriodeType.ARBEIDER_REDUSERT && redusertArbeid == null

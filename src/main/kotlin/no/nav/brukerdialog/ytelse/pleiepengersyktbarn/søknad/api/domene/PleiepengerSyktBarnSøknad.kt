@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
@@ -144,6 +145,7 @@ data class PleiepengerSyktBarnSøknad(
         fødselsattestVedleggUrls?.let { addAll(it) }
     }
 
+    @Hidden
     @AssertTrue(message = "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom")
     fun isBarnRelasjonBeskrivelse(): Boolean {
         if (barnRelasjon == BarnRelasjon.ANNET) {

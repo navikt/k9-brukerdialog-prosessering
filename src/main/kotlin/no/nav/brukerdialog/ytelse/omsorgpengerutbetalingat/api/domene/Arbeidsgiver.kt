@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene
 
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
@@ -41,6 +42,7 @@ class Arbeidsgiver(
         internal fun List<Arbeidsgiver>.somK9Fraværsperiode() = this.flatMap { it.somK9Fraværsperiode() }
     }
 
+    @Hidden
     @AssertTrue(message = "årsakNyoppstartet må være satt dersom Utbetalingsårsak=NYOPPSTARTET_HOS_ARBEIDSGIVER")
     fun isÅrsakNyoppstartet(): Boolean {
         return when (utbetalingsårsak) {
@@ -49,6 +51,7 @@ class Arbeidsgiver(
         }
     }
 
+    @Hidden
     @AssertTrue(message = "konfliktForklaring må være satt dersom Utbetalingsårsak=KONFLIKT_MED_ARBEIDSGIVER")
     fun isKonfliktForklaring(): Boolean {
         return when (utbetalingsårsak) {
