@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
@@ -45,10 +46,15 @@ private val k9FormatVersjon = Versjon.of("1.0.0")
 data class PleiepengerSyktBarnSøknad(
     val newVersion: Boolean?,
     val apiDataVersjon: String? = null,
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID()
-        .toString(),
+
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
+    val søknadId: String = UUID.randomUUID().toString(),
+
+    @Schema(hidden = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+
     val språk: Språk,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val barn: BarnDetaljer,
