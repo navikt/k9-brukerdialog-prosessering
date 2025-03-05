@@ -1,11 +1,8 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf
 
-import no.nav.helse.felles.Enkeltdag
-import no.nav.helse.felles.Omsorgstilbud
-import no.nav.helse.felles.OmsorgstilbudSvarFortid
-import no.nav.helse.felles.OmsorgstilbudSvarFremtid
-import no.nav.helse.felles.PlanUkedager
-import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.nav.brukerdialog.common.PdfConfig
+import no.nav.brukerdialog.integrasjon.familiepdf.dto.FamiliePdfPostRequest
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType
@@ -44,6 +41,12 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ÅrsakMan
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.K9FormatUtils
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.helse.felles.Enkeltdag
+import no.nav.helse.felles.Omsorgstilbud
+import no.nav.helse.felles.OmsorgstilbudSvarFortid
+import no.nav.helse.felles.OmsorgstilbudSvarFremtid
+import no.nav.helse.felles.PlanUkedager
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.Duration
@@ -61,6 +64,301 @@ class PSBSøknadPdfGeneratorTest {
     //@Ignore
     fun `opprett lesbar oppsummerings-PDF`() {
         genererOppsummeringsPdfer(true)
+    }
+
+    @Test
+    fun `Dette er en test2`() {
+        val id = "1-full-søknad"
+        val søker =
+            Søker(
+                aktørId = "1234",
+                fødselsdato = LocalDate.now().minusDays(10000),
+                fødselsnummer = "12345678912",
+                fornavn = "Ola",
+                mellomnavn = "Nordmann",
+                etternavn = "Nordmannsen",
+            )
+        val soknadsId: String = "test-soknad-id"
+        val mottatt: ZonedDateTime = ZonedDateTime.now()
+        val pbssøknadMottat =
+            PSBSøknadPdfData(
+                PSBMottattSøknad(
+                    språk = "nb",
+                    søknadId = soknadsId,
+                    mottatt = mottatt,
+                    fraOgMed = LocalDate.now().plusDays(6),
+                    tilOgMed = LocalDate.now().plusDays(35),
+                    søker =
+                        Søker(
+                            aktørId = "123456",
+                            fornavn = "Ærling",
+                            mellomnavn = "ØVERBØ",
+                            etternavn = "ÅNSNES",
+                            fødselsnummer = "29099012345",
+                            fødselsdato = LocalDate.parse("1990-09-29"),
+                        ),
+                    barn =
+                        Barn(
+                            fødselsnummer = "02119970078",
+                            navn = "OLE DOLE",
+                            aktørId = "11111111111",
+                        ),
+                    vedleggId = listOf("123", "456"),
+                    medlemskap =
+                        Medlemskap(
+                            harBoddIUtlandetSiste12Mnd = true,
+                            utenlandsoppholdSiste12Mnd =
+                                listOf(
+                                    Bosted(
+                                        LocalDate.of(2020, 1, 2),
+                                        LocalDate.of(2020, 1, 3),
+                                        "US",
+                                        "USA",
+                                    ),
+                                ),
+                            skalBoIUtlandetNeste12Mnd = false,
+                        ),
+                    harForståttRettigheterOgPlikter = true,
+                    harBekreftetOpplysninger = true,
+                    nattevåk =
+                        Nattevåk(
+                            harNattevåk = true,
+                            tilleggsinformasjon = "Har nattevåk",
+                        ),
+                    beredskap =
+                        Beredskap(
+                            beredskap = true,
+                            tilleggsinformasjon = "Jeg er i beredskap. Jeg har snakket med NAV konsulent",
+                        ),
+                    utenlandsoppholdIPerioden =
+                        UtenlandsoppholdIPerioden(
+                            skalOppholdeSegIUtlandetIPerioden = true,
+                            opphold =
+                                listOf(
+                                    Utenlandsopphold(
+                                        fraOgMed = LocalDate.parse("2020-01-01"),
+                                        tilOgMed = LocalDate.parse("2020-01-10"),
+                                        landnavn = "Bahamas",
+                                        landkode = "BAH",
+                                        erUtenforEøs = true,
+                                        erBarnetInnlagt = true,
+                                        erSammenMedBarnet = true,
+                                        perioderBarnetErInnlagt =
+                                            listOf(
+                                                Periode(
+                                                    fraOgMed = LocalDate.parse("2020-01-01"),
+                                                    tilOgMed = LocalDate.parse("2020-01-01"),
+                                                ),
+                                                Periode(
+                                                    fraOgMed = LocalDate.parse("2020-01-03"),
+                                                    tilOgMed = LocalDate.parse("2020-01-04"),
+                                                ),
+                                            ),
+                                        årsak = Årsak.ANNET,
+                                    ),
+                                    Utenlandsopphold(
+                                        fraOgMed = LocalDate.parse("2020-01-01"),
+                                        tilOgMed = LocalDate.parse("2020-01-10"),
+                                        landnavn = "Sverige",
+                                        landkode = "BHS",
+                                        erUtenforEøs = false,
+                                        erBarnetInnlagt = true,
+                                        erSammenMedBarnet = true,
+                                        perioderBarnetErInnlagt =
+                                            listOf(
+                                                Periode(
+                                                    fraOgMed = LocalDate.parse("2020-01-01"),
+                                                    tilOgMed = LocalDate.parse("2020-01-01"),
+                                                ),
+                                                Periode(
+                                                    fraOgMed = LocalDate.parse("2020-01-03"),
+                                                    tilOgMed = LocalDate.parse("2020-01-04"),
+                                                ),
+                                                Periode(
+                                                    fraOgMed = LocalDate.parse("2020-01-05"),
+                                                    tilOgMed = LocalDate.parse("2020-01-05"),
+                                                ),
+                                            ),
+                                        årsak = Årsak.ANNET,
+                                    ),
+                                ),
+                        ),
+                    ferieuttakIPerioden =
+                        FerieuttakIPerioden(
+                            skalTaUtFerieIPerioden = true,
+                            ferieuttak =
+                                listOf(
+                                    Ferieuttak(fraOgMed = LocalDate.parse("2020-01-01"), tilOgMed = LocalDate.parse("2020-01-05")),
+                                    Ferieuttak(fraOgMed = LocalDate.parse("2020-01-07"), tilOgMed = LocalDate.parse("2020-01-15")),
+                                    Ferieuttak(fraOgMed = LocalDate.parse("2020-02-01"), tilOgMed = LocalDate.parse("2020-02-05")),
+                                ),
+                        ),
+                    utenlandskNæring =
+                        listOf(
+                            UtenlandskNæring(
+                                næringstype = Næringstyper.FISKE,
+                                navnPåVirksomheten = "Fiskeriet AS",
+                                land = Land(landkode = "NDL", landnavn = "Nederland"),
+                                organisasjonsnummer = "123ABC",
+                                fraOgMed = LocalDate.parse("2020-01-09"),
+                            ),
+                        ),
+                    frilans =
+                        Frilans(
+                            harInntektSomFrilanser = true,
+                            startdato = LocalDate.now().minusYears(3),
+                            sluttdato = LocalDate.now(),
+                            jobberFortsattSomFrilans = false,
+                            type = FrilansType.FRILANS,
+                            misterHonorar = true,
+                            arbeidsforhold =
+                                Arbeidsforhold(
+                                    normalarbeidstid =
+                                        NormalArbeidstid(
+                                            timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30),
+                                        ),
+                                    arbeidIPeriode =
+                                        ArbeidIPeriode(
+                                            type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
+                                        ),
+                                ),
+                        ),
+                    stønadGodtgjørelse =
+                        StønadGodtgjørelse(
+                            mottarStønadGodtgjørelse = true,
+                            startdato = LocalDate.now().minusDays(10),
+                            sluttdato = LocalDate.now().plusDays(10),
+                        ),
+                    selvstendigNæringsdrivende =
+                        SelvstendigNæringsdrivende(
+                            harInntektSomSelvstendig = true,
+                            virksomhet =
+                                Virksomhet(
+                                    næringstype = Næringstyper.FISKE,
+                                    fiskerErPåBladB = true,
+                                    fraOgMed = LocalDate.now(),
+                                    næringsinntekt = 1111,
+                                    navnPåVirksomheten = "Tull Og Tøys",
+                                    registrertINorge = false,
+                                    registrertIUtlandet =
+                                        Land(
+                                            landkode = "DEU",
+                                            landnavn = "Tyskland",
+                                        ),
+                                    yrkesaktivSisteTreFerdigliknedeÅrene = YrkesaktivSisteTreFerdigliknedeÅrene(LocalDate.now()),
+                                    varigEndring =
+                                        VarigEndring(
+                                            dato = LocalDate.now().minusDays(20),
+                                            inntektEtterEndring = 234543,
+                                            forklaring = "Forklaring som handler om varig endring",
+                                        ),
+                                    regnskapsfører =
+                                        Regnskapsfører(
+                                            navn = "Bjarne Regnskap",
+                                            telefon = "65484578",
+                                        ),
+                                    harFlereAktiveVirksomheter = true,
+                                ),
+                            arbeidsforhold =
+                                Arbeidsforhold(
+                                    normalarbeidstid =
+                                        NormalArbeidstid(
+                                            timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30),
+                                        ),
+                                    arbeidIPeriode =
+                                        ArbeidIPeriode(
+                                            type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
+                                        ),
+                                ),
+                        ),
+                    arbeidsgivere =
+                        listOf(
+                            Arbeidsgiver(
+                                navn = "Peppes",
+                                organisasjonsnummer = "917755736",
+                                erAnsatt = true,
+                                arbeidsforhold =
+                                    Arbeidsforhold(
+                                        normalarbeidstid =
+                                            NormalArbeidstid(
+                                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30),
+                                            ),
+                                        arbeidIPeriode =
+                                            ArbeidIPeriode(
+                                                type = ArbeidIPeriodeType.ARBEIDER_VANLIG,
+                                            ),
+                                    ),
+                            ),
+                            Arbeidsgiver(
+                                navn = "Pizzabakeren",
+                                organisasjonsnummer = "917755736",
+                                erAnsatt = true,
+                                arbeidsforhold =
+                                    Arbeidsforhold(
+                                        normalarbeidstid =
+                                            NormalArbeidstid(
+                                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30),
+                                            ),
+                                        arbeidIPeriode =
+                                            ArbeidIPeriode(
+                                                type = ArbeidIPeriodeType.ARBEIDER_REDUSERT,
+                                                redusertArbeid =
+                                                    ArbeidsRedusert(
+                                                        type = RedusertArbeidstidType.TIMER_I_SNITT_PER_UKE,
+                                                        timerPerUke = Duration.ofHours(37).plusMinutes(30),
+                                                    ),
+                                            ),
+                                    ),
+                            ),
+                            Arbeidsgiver(
+                                navn = "Sluttaaaa",
+                                organisasjonsnummer = "917755736",
+                                erAnsatt = false,
+                                arbeidsforhold = null,
+                                sluttetFørSøknadsperiode = true,
+                            ),
+                        ),
+                    harVærtEllerErVernepliktig = true,
+                    barnRelasjon = BarnRelasjon.ANNET,
+                    barnRelasjonBeskrivelse = "Blaabla annet",
+                    k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
+                    omsorgstilbud =
+                        Omsorgstilbud(
+                            erLiktHverUke = true,
+                            ukedager =
+                                PlanUkedager(
+                                    mandag = Duration.ofHours(3),
+                                    onsdag = Duration.ofHours(3),
+                                    fredag = Duration.ofHours(3),
+                                ),
+                            enkeltdager =
+                                listOf(
+                                    Enkeltdag(LocalDate.now(), Duration.ofHours(3)),
+                                    Enkeltdag(LocalDate.now().plusDays(3), Duration.ofHours(2)),
+                                    Enkeltdag(LocalDate.now().plusWeeks(4), Duration.ofHours(4)),
+                                    Enkeltdag(LocalDate.now().plusWeeks(4), Duration.ofHours(6).plusMinutes(45)),
+                                    Enkeltdag(LocalDate.now().plusWeeks(9).plusDays(2), Duration.ofHours(3)),
+                                ),
+                        ),
+                    opptjeningIUtlandet =
+                        listOf(
+                            OpptjeningIUtlandet(
+                                navn = "Yolo AS",
+                                opptjeningType = OpptjeningType.ARBEIDSTAKER,
+                                land = Land(landkode = "NDL", landnavn = "Nederland"),
+                                fraOgMed = LocalDate.parse("2020-01-01"),
+                                tilOgMed = LocalDate.parse("2020-10-01"),
+                            ),
+                        ),
+                ),
+            )
+
+        val objectMapper = jacksonObjectMapper()
+        val jsonString =
+            objectMapper.writeValueAsString(
+                FamiliePdfPostRequest(label = "Søknad om pleiepenger for sykt barn", pbssøknadMottat.nyPdfData(), PdfConfig(true, "nb")),
+            )
+        println("Dette er: $jsonString")
     }
 
     private companion object {
