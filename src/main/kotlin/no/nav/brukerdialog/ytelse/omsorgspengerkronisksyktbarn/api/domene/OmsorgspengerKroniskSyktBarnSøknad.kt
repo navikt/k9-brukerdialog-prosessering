@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotNull
@@ -28,8 +29,13 @@ import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class OmsorgspengerKroniskSyktBarnSøknad(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
+    val søknadId: String = UUID.randomUUID().toString(),
+
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+
     val språk: String,
     @field:Valid var barn: Barn,
     val legeerklæring: List<URL> = listOf(),

@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
@@ -23,9 +24,13 @@ import no.nav.k9.søknad.Søknad as UngSøknad
 
 data class Ungdomsytelsesøknad(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
     val språk: String,
+
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+
     val startdato: LocalDate,
     val søkerNorskIdent: String,
 

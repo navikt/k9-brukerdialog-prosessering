@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.common.MetaInfo
@@ -50,9 +51,11 @@ data class OpplæringspengerSøknad(
     val apiDataVersjon: String? = null,
 
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: Språk,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.

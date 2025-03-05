@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.ettersendelse.api.domene
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotEmpty
@@ -21,9 +22,14 @@ import java.time.ZonedDateTime
 import java.util.*
 
 data class Ettersendelse(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
+    val søknadId: String = UUID.randomUUID().toString(),
     val språk: String,
+
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+
     @field:NotEmpty(message = "Kan ikke være tom") val vedlegg: List<URL>,
     val beskrivelse: String? = null,
     val søknadstype: Søknadstype,
