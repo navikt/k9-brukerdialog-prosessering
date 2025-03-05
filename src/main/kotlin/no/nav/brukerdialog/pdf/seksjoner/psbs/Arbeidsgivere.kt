@@ -49,7 +49,7 @@ fun strukturerArbeidsgivereSeksjon(
     )
 }
 
-fun mapArbeidsgivereTilSpørsmålOgSvar(
+private fun mapArbeidsgivereTilSpørsmålOgSvar(
     arbeidsgivere: List<Arbeidsgiver>,
     fraOgMed: LocalDate,
 ): ArbeidsgivereSpørsmålOgSvar =
