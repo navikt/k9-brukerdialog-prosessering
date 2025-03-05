@@ -75,6 +75,18 @@ no.nav:
                 audience: ${K9_SELVBETJENING_OPPSLAG_TOKEN_X_AUDIENCE}
         ### K9 Selvbetjening Oppslag
 
+        ### Ung Deltakelse Opplyser
+        tokenx-ung-deltakelse-opplyser:
+          token-endpoint-url: ${TOKEN_X_TOKEN_ENDPOINT}
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: ${TOKEN_X_CLIENT_ID}
+            client-jwk: ${TOKEN_X_PRIVATE_JWK}
+          token-exchange:
+            audience: ${UNG_DELTAKELSE_OPPLYSER_TOKEN_X_AUDIENCE}
+        ### Ung Deltakelse Opplyser
+
         ### Dokarkiv
         azure-dokarkiv:
           token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
@@ -101,6 +113,7 @@ no.nav:
     k9-brukerdialog-cache-base-url: ${K9_BRUKERDIALOG_CACHE_BASE_URL}
     k9-mellomlagring-base-url: ${K9_MELLOMLAGRING_BASE_URL}
     k9-sak-innsyn-api-base-url: ${K9_SAK_INNSYN_API_BASE_URL}
+    ung-deltakelse-opplyser-base-url: ${UNG_DELTAKELSE_OPPLYSER_BASE_URL}
     k9-selvbetjening-oppslag-base-url: ${K9_SELVBETJENING_OPPSLAG_BASE_URL}
     dokarkiv-base-url: ${DOKARKIV_BASE_URL}
     familie-pdf-base-url: ${FAMILIE_PDF_BASE_URL}

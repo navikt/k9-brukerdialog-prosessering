@@ -1,6 +1,7 @@
 KAFKA_BROKERS: localhost:9092 # placeholder
 K9_MELLOMLAGRING_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-mellomlagring-mock
 K9_SAK_INNSYN_API_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-sak-innsyn-api-mock
+UNG_DELTAKELSE_OPPLYSER_BASE_URL: http://localhost:${wiremock.server.port:8083}/ung-deltakelse-opplyser-mock
 K9_BRUKERDIALOG_CACHE_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-brukerdialog-cache-mock
 K9_SELVBETJENING_OPPSLAG_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-selvbetjening-oppslag-mock
 DOKARKIV_BASE_URL: http://localhost:${wiremock.server.port:8083}/dokarkiv-mock
@@ -43,6 +44,16 @@ no.nav:
             client-jwk: src/test/resources/private-jwk.json
           token-exchange:
             audience: k9-sak-innsyn-api
+
+        tokenx-ung-deltakelse-opplyser:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: ung-deltakelse-opplyser
 
         tokenx-k9-selvbetjening-oppslag:
           token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token

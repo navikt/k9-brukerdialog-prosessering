@@ -2,11 +2,14 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.oppgave.OppgaveBekreftelse
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretFomDatoBekreftelse
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretTomDatoBekreftelse
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import java.time.LocalDate
@@ -21,7 +24,7 @@ object UngdomsytelseOppgavebekreftelseUtils {
         søkerFødselsnummer: String = "02119970078",
         deltakelseId: String = UUID.randomUUID().toString(),
         oppgaveId: String = UUID.randomUUID().toString(),
-        oppgave: UngdomsytelseOppgaveDTO = EndretStartdatoUngdomsytelseOppgaveDTO(
+        oppgave: KomplettUngdomsytelseOppgaveDTO = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveId = oppgaveId,
             veilederRef = "veilder-123",
             meldingFraVeileder = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
@@ -61,5 +64,21 @@ object UngdomsytelseOppgavebekreftelseUtils {
             .medSøker(K9Søker(NorskIdentitetsnummer.of("02119970078")))
             .medBekreftelse(bekreftelse)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
+    }
+}
+
+private fun KomplettUngdomsytelseOppgaveDTO.somK9Format(): Bekreftelse {
+    return when (this) {
+        is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> EndretFomDatoBekreftelse(
+            nyStartdato,
+            bekreftelseSvar.somBoolean()
+        )
+
+        is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> EndretTomDatoBekreftelse(
+            nySluttdato,
+            bekreftelseSvar.somBoolean()
+        )
+
+        else -> throw IllegalArgumentException("Ukjent oppgavetype")
     }
 }

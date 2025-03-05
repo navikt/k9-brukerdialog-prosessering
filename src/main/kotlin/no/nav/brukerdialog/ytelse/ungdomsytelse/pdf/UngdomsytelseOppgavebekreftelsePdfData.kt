@@ -11,7 +11,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Be
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseIkkeGodkjentResponse
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
 
@@ -36,7 +36,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
         )
     }
 
-    private fun UngdomsytelseOppgaveDTO.somMap() = mapOf(
+    private fun KomplettUngdomsytelseOppgaveDTO.somMap() = mapOf(
         "oppgaveId" to oppgaveId,
         "veilederRef" to veilederRef,
         "meldingFraVeileder" to meldingFraVeileder,

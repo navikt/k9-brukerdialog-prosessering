@@ -24,6 +24,9 @@ data class UngdomsytelseOppgavebekreftelse(
 
     @field:Valid val oppgave: UngdomsytelseOppgaveDTO,
 
+    @Schema(hidden = true) // Settes i UngdomsytelseService.oppgavebekreftelse
+    var komplettOppgavebekreftelse: KomplettUngdomsytelseOppgaveDTO? = null,
+
     @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
@@ -40,8 +43,9 @@ data class UngdomsytelseOppgavebekreftelse(
         requireNotNull(k9Format)
         return UngdomsytelseKomplettOppgavebekreftelse(
             deltakelseId = deltakelseId,
-            oppgave = oppgave,
-            søknadId = oppgave.oppgaveId,
+            oppgave = komplettOppgavebekreftelse
+                ?: throw IllegalStateException("komplettOppgavebekreftelse må være satt før registrering"),
+            søknadId = komplettOppgavebekreftelse!!.oppgaveId,
             mottatt = mottatt,
             søker = søker,
             k9Format = k9Format as OppgaveBekreftelse

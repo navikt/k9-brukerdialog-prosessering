@@ -3,6 +3,7 @@ package no.nav.brukerdialog
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
+import io.mockk.every
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.brukerdialog.integrasjon.dokarkiv.DokarkivService
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.DokarkivJournalpostResponse
@@ -11,6 +12,12 @@ import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretSluttdatoOppgavetypeDataDTO
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveStatus
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.Oppgavetype
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.oppslag.soker.SøkerService
 import no.nav.brukerdialog.utils.KafkaIntegrationTest
@@ -28,6 +35,8 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker
 import org.springframework.test.web.servlet.MockMvc
 import java.net.URI
 import java.time.LocalDate
+import java.time.ZonedDateTime
+import java.util.*
 
 @KafkaIntegrationTest
 @AutoConfigureMockMvc
@@ -48,11 +57,15 @@ abstract class AbstractIntegrationTest {
     @MockkBean(relaxed = false)
     protected lateinit var dokarkivService: DokarkivService
 
+
     @MockkBean
     protected lateinit var barnService: BarnService
 
     @MockkBean
     protected lateinit var søkerService: SøkerService
+
+    @MockkBean
+    lateinit var ungDeltakelseOpplyserService: UngDeltakelseOpplyserService
 
     @Autowired
     protected lateinit var mockOAuth2Server: MockOAuth2Server
@@ -134,5 +147,20 @@ abstract class AbstractIntegrationTest {
         )
         coEvery { søkerService.hentSøker() } returns søker
         return søker
+    }
+
+    protected fun mockHentingAvOppgave() {
+        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any(), any()) } returns OppgaveDTO(
+            id = UUID.randomUUID(),
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoOppgavetypeDataDTO(
+                nyStartdato = LocalDate.now(),
+                veilederRef = "veileder-123",
+                meldingFraVeileder = "Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen."
+            ),
+            status = OppgaveStatus.ULØST,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = null
+        )
     }
 }
