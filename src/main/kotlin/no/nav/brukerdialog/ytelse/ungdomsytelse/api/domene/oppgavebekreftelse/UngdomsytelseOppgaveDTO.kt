@@ -2,6 +2,7 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
@@ -36,6 +37,7 @@ data class EndretStartdatoUngdomsytelseOppgaveDTO(
     val nyStartdato: LocalDate,
 ) : UngdomsytelseOppgaveDTO(oppgaveId, bekreftelseSvar, ikkeGodkjentResponse) {
 
+    @Hidden
     @AssertTrue(message = "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR")
     fun isIkkeGodkjentResponseValid(): Boolean {
         return if (bekreftelseSvar == BekreftelseSvar.AVSLÅR) {
@@ -66,6 +68,7 @@ data class EndretSluttdatoUngdomsytelseOppgaveDTO(
     val nySluttdato: LocalDate,
 ) : UngdomsytelseOppgaveDTO(oppgaveId, bekreftelseSvar, ikkeGodkjentResponse) {
 
+    @Hidden
     @AssertTrue(message = "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR")
     fun isIkkeGodkjentResponseValid(): Boolean {
         return if (bekreftelseSvar == BekreftelseSvar.AVSLÅR) {

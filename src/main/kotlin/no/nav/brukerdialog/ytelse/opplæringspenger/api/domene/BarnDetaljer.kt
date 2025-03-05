@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.*
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
@@ -51,6 +52,7 @@ data class BarnDetaljer(
         else -> K9Barn()
     }
 
+    @Hidden
     @AssertTrue(message = "Må være satt dersom norskIdentifikator er null.")
     fun isFødselsDato(): Boolean {
         if (norskIdentifikator.isNullOrEmpty()) {
@@ -59,6 +61,7 @@ data class BarnDetaljer(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Må være satt dersom norskIdentifikator er null.")
     fun isÅrsakManglerIdentitetsnummer(): Boolean {
         if (norskIdentifikator.isNullOrEmpty()) {
@@ -67,6 +70,7 @@ data class BarnDetaljer(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Når 'relasjonTilBarnet' er ANNET, kan ikke 'relasjonTilBarnetBeskrivelse' være tom")
     fun isRelasjonTilBarnetBeskrivelse(): Boolean {
         if (relasjonTilBarnet == BarnRelasjon.ANNET) {

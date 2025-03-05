@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
@@ -49,6 +50,7 @@ data class BarnDetaljer(
         else -> K9Barn()
     }
 
+    @Hidden
     @AssertTrue(message = "Må være satt dersom fødselsnummer er null.")
     fun isFødselsDato(): Boolean {
         if (fødselsnummer.isNullOrEmpty()) {
@@ -57,6 +59,7 @@ data class BarnDetaljer(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Må være satt dersom fødselsnummer er null.")
     fun isÅrsakManglerIdentitetsnummer(): Boolean {
         if (fødselsnummer.isNullOrEmpty()) {

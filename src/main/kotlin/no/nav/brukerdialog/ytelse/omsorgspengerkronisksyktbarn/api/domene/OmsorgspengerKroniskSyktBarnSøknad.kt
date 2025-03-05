@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
+import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
@@ -116,6 +117,7 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
         )
     }
 
+    @Hidden
     @AssertTrue(message = "Dersom 'høyereRisikoForFravær' er true, må 'høyereRisikoForFraværBeskrivelse' være satt")
     fun isHøyereRisikoForFraværBeskrivelse(): Boolean {
         if (høyereRisikoForFravær == true) {

@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.fellesdomene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotEmpty
 import no.nav.k9.søknad.felles.fravær.FraværPeriode
@@ -32,11 +33,13 @@ class Utbetalingsperiode(
         ) = this.map { it.somK9FraværPeriode(søknadÅrsak, organisasjonsnummer) }
     }
 
+    @Hidden
     @AssertTrue(message = "'tilOgMed' må være lik eller etter 'fraOgMed'")
     fun isTilOgMed(): Boolean {
         return tilOgMed.erLikEllerEtter(fraOgMed)
     }
 
+    @Hidden
     @AssertTrue(message = "Dersom antallTimerBorte er satt må antallTimerPlanlagt være satt")
     fun isAntallTimerPlanlagt(): Boolean {
         if (antallTimerBorte != null) {
@@ -45,6 +48,7 @@ class Utbetalingsperiode(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Dersom antallTimerPlanlagt er satt må antallTimerBorte være satt")
     fun isAntallTimerBorte(): Boolean {
         if (antallTimerPlanlagt != null) {
@@ -53,6 +57,7 @@ class Utbetalingsperiode(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "antallTimerBorte kan ikke være større enn antallTimerPlanlagt")
     fun isAntallTimerPlanlagtStørreEnnAntallTimerBorte(): Boolean {
         if (antallTimerPlanlagt != null && antallTimerBorte != null) {

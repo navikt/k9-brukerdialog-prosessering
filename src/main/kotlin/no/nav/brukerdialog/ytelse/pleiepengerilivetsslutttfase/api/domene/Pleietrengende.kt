@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.PastOrPresent
@@ -34,6 +35,7 @@ data class Pleietrengende(
         else -> K9Pleietrengende()
     }
 
+    @Hidden
     @AssertTrue(message = "'Fødselsdato' må være satt dersom 'norskIdentitetsnummer' er null")
     fun isFødselsdato(): Boolean {
         if (norskIdentitetsnummer == null) {
@@ -42,6 +44,7 @@ data class Pleietrengende(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "'ÅrsakManglerIdentitetsnummer' må være satt dersom 'norskIdentitetsnummer' er null")
     fun isÅrsakManglerIdentitetsnummer(): Boolean {
         if (norskIdentitetsnummer == null) {

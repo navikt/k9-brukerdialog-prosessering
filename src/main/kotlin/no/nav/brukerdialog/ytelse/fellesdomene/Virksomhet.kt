@@ -1,6 +1,8 @@
 package no.nav.brukerdialog.ytelse.fellesdomene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotNull
@@ -38,6 +40,7 @@ data class Virksomhet(
     val harFlereAktiveVirksomheter: Boolean? = null,
 ) {
 
+    @Hidden
     @AssertTrue(message = "Kan ikke være null når registrertINorge er false")
     fun isRegistrertIUtlandet(): Boolean {
         if (registrertINorge == false) {
@@ -46,6 +49,7 @@ data class Virksomhet(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Kan ikke være null når registrertINorge er true")
     fun isOrganisasjonsnummer(): Boolean {
         if (registrertINorge == true) {
@@ -54,6 +58,7 @@ data class Virksomhet(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Må være lik eller etter fraOgMed")
     fun isTilOgMed(): Boolean {
         if (tilOgMed != null) {
@@ -62,6 +67,7 @@ data class Virksomhet(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Kan ikke være null når næringstype er FISKE")
     fun isFiskerErPåBladB(): Boolean {
         if (næringstype == Næringstype.FISKE) {
@@ -70,6 +76,7 @@ data class Virksomhet(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Når nyoppstartet er true, må fraOgMed være maks 4 år siden")
     fun isErNyoppstartet(): Boolean {
         val fireÅrSiden = LocalDate.now().minusYears(4)
@@ -79,6 +86,7 @@ data class Virksomhet(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Når nyoppstartet er false, må fraOgMed må være over 4 år siden")
     fun isErIkkeNyoppstartet(): Boolean {
         val fireÅrSiden = LocalDate.now().minusYears(4)
