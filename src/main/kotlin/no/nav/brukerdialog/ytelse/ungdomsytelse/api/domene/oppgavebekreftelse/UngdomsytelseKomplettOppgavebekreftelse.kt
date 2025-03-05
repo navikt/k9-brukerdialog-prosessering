@@ -9,7 +9,7 @@ import java.util.*
 data class UngdomsytelseKomplettOppgavebekreftelse(
     private val deltakelseId: UUID,
     private val søknadId: String,
-    private val oppgave: UngdomsytelseOppgaveDTO,
+    private val oppgave: KomplettUngdomsytelseOppgaveDTO,
     private val søker: Søker,
     private val mottatt: ZonedDateTime,
     private val k9Format: OppgaveBekreftelse,

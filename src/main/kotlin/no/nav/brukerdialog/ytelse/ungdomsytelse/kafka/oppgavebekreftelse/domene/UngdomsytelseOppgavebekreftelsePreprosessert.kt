@@ -8,7 +8,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
 import no.nav.k9.oppgave.OppgaveBekreftelse
 import java.time.ZonedDateTime
 import java.util.*
@@ -16,7 +16,7 @@ import java.util.*
 data class UngdomsytelseOppgavebekreftelsePreprosessert(
     val deltakelseId: String,
     val mottatt: ZonedDateTime,
-    val oppgave: UngdomsytelseOppgaveDTO,
+    val oppgave: KomplettUngdomsytelseOppgaveDTO,
     val språk: String?,
     val søker: Søker,
     val dokumentId: List<List<String>>,

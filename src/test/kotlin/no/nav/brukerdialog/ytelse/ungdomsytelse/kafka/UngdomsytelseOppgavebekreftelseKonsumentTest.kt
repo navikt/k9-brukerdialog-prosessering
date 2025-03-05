@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka
 
+import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.coVerify
 import no.nav.brukerdialog.AbstractIntegrationTest
@@ -36,19 +37,19 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
         UngdomsytelseOppgavebekreftelseTopologyConfiguration.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC
     )
 
+
     @Test
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
         val søker = mockSøker()
         mockBarn()
         mockLagreDokument()
         mockJournalføring()
+        mockHentingAvOppgave()
 
         val oppgaveId = UUID.randomUUID()
         val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(
             oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
                 oppgaveId = oppgaveId.toString(),
-                veilederRef = "veilder-123",
-                meldingFraVeileder = null,
                 nyStartdato = LocalDate.parse("2025-01-01"),
                 bekreftelseSvar = BekreftelseSvar.GODTAR
             )
