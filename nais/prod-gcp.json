@@ -24,7 +24,7 @@
     "K9_SAK_INNSYN_API_BASE_URL": "http://k9-sak-innsyn-api",
     "K9_SAK_INNSYN_API_TOKEN_X_AUDIENCE": "prod-gcp:dusseldorf:k9-sak-innsyn-api",
 
-    "UNG_DELTAKELSE_OPPLYSER_BASE_URL": "http://ung-delatelse-opplyser.k9saksbehandling",
+    "UNG_DELTAKELSE_OPPLYSER_BASE_URL": "http://ung-deltakelse-opplyser.k9saksbehandling",
     "UNG_DELTAKELSE_OPPLYSER_TOKEN_X_AUDIENCE": "prod-gcp:k9saksbehandling:ung-deltakelse-opplyser",
 
     "K9_BRUKERDIALOG_CACHE_BASE_URL": "http://k9-brukerdialog-cache",
