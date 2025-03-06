@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
@@ -48,6 +49,7 @@ data class AnnenForelder(
             }
     }
 
+    @Hidden
     @AssertTrue(message = "Derom 'periodeTilOgMed' er satt må den være lik eller etter 'periodeFraOgMed'")
     fun isPeriodeTilOgMed(): Boolean {
         if (periodeTilOgMed != null) {
@@ -56,6 +58,7 @@ data class AnnenForelder(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Derom 'situasjon' er 'INNLAGT_I_HELSEINSTITUSJON', 'SYKDOM', eller 'ANNET' må 'periodeTilOgMed' eller 'periodeOver6Måneder' være satt")
     fun isSituasjon_innlagt_i_helseinstitusjon_sykdom_eller_annet(): Boolean {
         return when (situasjon) {
@@ -67,6 +70,7 @@ data class AnnenForelder(
         }
     }
 
+    @Hidden
     @AssertTrue(message = "Derom 'situasjon' er 'SYKDOM', eller 'ANNET' må 'situasjonBeskrivelse' være satt")
     fun isSituasjonBeskrivelse(): Boolean {
         return when (situasjon) {
@@ -78,6 +82,7 @@ data class AnnenForelder(
         }
     }
 
+    @Hidden
     @AssertTrue(message = "Derom 'situasjon' er 'UTØVER_VERNEPLIKT', 'SYKDOM', 'ANNET' eller 'FENGSEL' må 'periodeTilOgMed' være satt")
     fun isSituasjon_utøver_verneplikt_eller_fengsel(): Boolean {
         return when (situasjon) {

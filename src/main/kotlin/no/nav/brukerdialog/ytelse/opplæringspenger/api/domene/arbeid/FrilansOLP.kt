@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotNull
@@ -19,6 +20,7 @@ data class FrilansOLP(
     @field:NotNull(message = "Kan ikke være null") val harHattInntektSomFrilanser: Boolean? = null,
 ) {
 
+    @Hidden
     @AssertTrue(message = "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt")
     fun isSluttdato(): Boolean {
         if (jobberFortsattSomFrilans) {
@@ -27,6 +29,7 @@ data class FrilansOLP(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt")
     fun isJobberFortsattSomFrilans(): Boolean {
         if (!jobberFortsattSomFrilans) {
@@ -35,6 +38,7 @@ data class FrilansOLP(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "'Sluttdato' må være lik eller etter 'startdato'")
     fun isSluttdatoEtterStartdato(): Boolean {
         if (sluttdato != null) {

@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
@@ -30,6 +31,7 @@ data class Reise(
     val reisedager: List<LocalDate>? = null,
     val reisedagerBeskrivelse: String? = null
 ){
+    @Hidden
     @AssertTrue(message = "Dersom 'reiserUtenforKursdager' er true, kan ikke 'reisedager' være tom liste")
     fun isReisedagerMedDager(): Boolean {
         if (reiserUtenforKursdager) {
@@ -38,6 +40,7 @@ data class Reise(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Dersom 'reiserUtenforKursdager' er true, må man sende med beskrivelse")
     fun isReisedagerMedBeskrivelse(): Boolean {
         if (reiserUtenforKursdager) {

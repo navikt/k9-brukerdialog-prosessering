@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
@@ -15,6 +16,7 @@ data class SelvstendigNæringsdrivende(
     @field:Valid val arbeidsforhold: Arbeidsforhold? = null,
 ) {
 
+    @Hidden
     @AssertTrue(message = "Må være satt når man har harInntektSomSelvstendig.")
     fun isArbeidsforhold(): Boolean {
         if (harInntektSomSelvstendig) {
@@ -23,6 +25,7 @@ data class SelvstendigNæringsdrivende(
         return true
     }
 
+    @Hidden
     @AssertTrue(message = "Må være satt når man har harInntektSomSelvstendig.")
     fun isVirksomhet(): Boolean {
         if (harInntektSomSelvstendig) {
