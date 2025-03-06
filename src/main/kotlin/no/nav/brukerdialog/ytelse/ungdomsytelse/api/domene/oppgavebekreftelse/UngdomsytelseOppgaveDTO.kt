@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
-import no.nav.k9.oppgave.bekreftelse.Bekreftelse
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretFomDatoBekreftelse
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretTomDatoBekreftelse
 import java.time.LocalDate
 
 @JsonTypeInfo(
@@ -25,7 +23,6 @@ sealed class UngdomsytelseOppgaveDTO(
     open val bekreftelseSvar: BekreftelseSvar,
     open val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
 ) {
-    abstract fun somK9Format(): Bekreftelse
 
     abstract fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO
 }
@@ -34,7 +31,6 @@ data class EndretStartdatoUngdomsytelseOppgaveDTO(
     override val oppgaveId: String,
     override val bekreftelseSvar: BekreftelseSvar,
     override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-    val nyStartdato: LocalDate,
 ) : UngdomsytelseOppgaveDTO(oppgaveId, bekreftelseSvar, ikkeGodkjentResponse) {
 
     @Hidden
@@ -47,14 +43,14 @@ data class EndretStartdatoUngdomsytelseOppgaveDTO(
         }
     }
 
-    override fun somK9Format(): Bekreftelse = EndretFomDatoBekreftelse(nyStartdato, bekreftelseSvar.somBoolean())
-
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+        val endretStartdatoOppgavetypeDataDTO = oppgaveDTO.oppgavetypeData as EndretStartdatoOppgavetypeDataDTO
+
         return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveId = oppgaveId,
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
-            nyStartdato = nyStartdato,
+            nyStartdato = endretStartdatoOppgavetypeDataDTO.nyStartdato,
             bekreftelseSvar = bekreftelseSvar,
             ikkeGodkjentResponse = ikkeGodkjentResponse,
         )
@@ -78,7 +74,6 @@ data class EndretSluttdatoUngdomsytelseOppgaveDTO(
         }
     }
 
-    override fun somK9Format(): Bekreftelse = EndretTomDatoBekreftelse(nySluttdato, bekreftelseSvar.somBoolean())
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
             oppgaveId = oppgaveId,

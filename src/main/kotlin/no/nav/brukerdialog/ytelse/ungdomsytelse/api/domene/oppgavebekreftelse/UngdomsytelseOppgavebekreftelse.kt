@@ -55,13 +55,16 @@ data class UngdomsytelseOppgavebekreftelse(
     override fun valider() = mutableListOf<String>()
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): OppgaveBekreftelse {
+        val komplettUngdomsytelseOppgaveDTO =
+            requireNotNull(komplettOppgavebekreftelse) { "komplettOppgavebekreftelse må være satt før konvertering" }
+
         return OppgaveBekreftelse()
             .medVersjon(UNG_OPPGAVE_VERSJON)
             .medMottattDato(mottatt)
             .medSpråk(Språk.NORSK_BOKMÅL)
-            .medSøknadId(SøknadId(oppgave.oppgaveId))
+            .medSøknadId(SøknadId(komplettUngdomsytelseOppgaveDTO.oppgaveId))
             .medSøker(søker.somK9Søker())
-            .medBekreftelse(oppgave.somK9Format())
+            .medBekreftelse(komplettUngdomsytelseOppgaveDTO.somK9Format())
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 

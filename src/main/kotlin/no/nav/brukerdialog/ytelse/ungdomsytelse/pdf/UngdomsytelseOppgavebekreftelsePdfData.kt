@@ -8,10 +8,10 @@ import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretSluttdatoUngdomsytelseOppgaveDTO
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseIkkeGodkjentResponse
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseIkkeGodkjentResponse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
 
@@ -41,7 +41,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
         "veilederRef" to veilederRef,
         "meldingFraVeileder" to meldingFraVeileder,
         "endretStartdatoOppgave" to when (this) {
-            is EndretStartdatoUngdomsytelseOppgaveDTO -> mapOf(
+            is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> mapOf(
                 "nyStartdato" to DATE_FORMATTER.format(nyStartdato),
                 "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
                 "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()
@@ -50,7 +50,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
             else -> null
         },
         "endretSluttdatoOppgave" to when (this) {
-            is EndretSluttdatoUngdomsytelseOppgaveDTO -> mapOf(
+            is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> mapOf(
                 "nySluttdato" to DATE_FORMATTER.format(nySluttdato),
                 "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
                 "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()

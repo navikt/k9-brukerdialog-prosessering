@@ -50,7 +50,6 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
         val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(
             oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
                 oppgaveId = oppgaveId.toString(),
-                nyStartdato = LocalDate.parse("2025-01-01"),
                 bekreftelseSvar = BekreftelseSvar.GODTAR
             )
         )

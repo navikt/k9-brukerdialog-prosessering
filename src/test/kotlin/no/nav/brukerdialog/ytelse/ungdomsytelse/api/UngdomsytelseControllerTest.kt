@@ -224,7 +224,6 @@ class UngdomsytelseControllerTest {
             defaultOppgavebekreftelse.copy(
                 oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
                     oppgaveId = "123",
-                    nyStartdato = LocalDate.parse("2025-01-01"),
                     bekreftelseSvar = BekreftelseSvar.AVSLÅR,
                     ikkeGodkjentResponse = null,
                 )
