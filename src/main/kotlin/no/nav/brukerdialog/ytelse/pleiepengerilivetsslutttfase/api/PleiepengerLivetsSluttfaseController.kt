@@ -52,6 +52,6 @@ class PleiepengerLivetsSluttfaseController(
         PleiepengerLivetsSluttfaseController.Companion.logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(søknad, metadata)
-        metrikkService.registrerMottattSøknad(søknad.ytelse())
+        metrikkService.registrerMottattInnsending(søknad.ytelse())
     }
 }

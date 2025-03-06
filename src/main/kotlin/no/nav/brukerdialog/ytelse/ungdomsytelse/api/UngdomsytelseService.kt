@@ -9,7 +9,6 @@ import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.TokenUtils.personIdent
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngdomsytelseInntektsrapportering
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
@@ -36,7 +35,7 @@ class UngdomsytelseService(
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId(), "mottatt."))
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(søknad, metadata)
-        metrikkService.registrerMottattSøknad(søknad.ytelse())
+        metrikkService.registrerMottattInnsending(søknad.ytelse())
     }
 
     suspend fun inntektrapportering(rapportetInntekt: UngdomsytelseInntektsrapportering, gitSha: String) {
@@ -46,7 +45,7 @@ class UngdomsytelseService(
         logger.info(formaterStatuslogging(rapportetInntekt.ytelse(), rapportetInntekt.søknadId(), "mottatt."))
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(rapportetInntekt, metadata)
-        metrikkService.registrerMottattSøknad(rapportetInntekt.ytelse())
+        metrikkService.registrerMottattInnsending(rapportetInntekt.ytelse())
     }
 
     suspend fun oppgavebekreftelse(oppgavebekreftelse: UngdomsytelseOppgavebekreftelse, gitSha: String) {
@@ -64,6 +63,6 @@ class UngdomsytelseService(
         oppgavebekreftelse.komplettOppgavebekreftelse = oppgavebekreftelse.oppgave.somKomplettOppgave(oppgaveDTO)
 
         innsendingService.registrer(oppgavebekreftelse, metadata)
-        metrikkService.registrerMottattSøknad(oppgavebekreftelse.ytelse())
+        metrikkService.registrerMottattInnsending(oppgavebekreftelse.ytelse())
     }
 }
