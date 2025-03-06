@@ -16,8 +16,8 @@ import java.time.LocalDate
     property = "type"
 )
 @JsonSubTypes(
-    JsonSubTypes.Type(value = EndretStartdatoUngdomsytelseOppgaveDTO::class, name = "EndretStartdatoUngdomsytelseOppgaveDTO"),
-    JsonSubTypes.Type(value = EndretSluttdatoUngdomsytelseOppgaveDTO::class, name = "EndretSluttdatoUngdomsytelseOppgaveDTO"),
+    JsonSubTypes.Type(value = EndretStartdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_STARTDATO"),
+    JsonSubTypes.Type(value = EndretSluttdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
 )
 sealed class UngdomsytelseOppgaveDTO(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
@@ -107,3 +107,7 @@ enum class BekreftelseSvar {
     }
 }
 
+enum class Oppgavetype {
+    BEKREFT_ENDRET_STARTDATO,
+    BEKREFT_ENDRET_SLUTTDATO,
+}
