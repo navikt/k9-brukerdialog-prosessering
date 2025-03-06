@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka
 
+import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.coVerify
 import no.nav.brukerdialog.AbstractIntegrationTest
@@ -11,6 +12,7 @@ import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
 import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
+import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
@@ -22,12 +24,14 @@ import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.post
 import java.net.URI
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
-class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
+class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrationTest() {
 
     override val consumerGroupPrefix = "ungdomsytelse-oppgavebekreftelse"
     override val consumerGroupTopics = listOf(
@@ -36,25 +40,38 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
         UngdomsytelseOppgavebekreftelseTopologyConfiguration.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC
     )
 
+
     @Test
     fun `forvent at melding konsumeres riktig og dokumenter blir slettet`() {
         val søker = mockSøker()
         mockBarn()
         mockLagreDokument()
         mockJournalføring()
+        mockHentingAvOppgave()
 
         val oppgaveId = UUID.randomUUID()
         val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(
             oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
                 oppgaveId = oppgaveId.toString(),
-                veilederRef = "veilder-123",
-                meldingFraVeileder = null,
-                nyStartdato = LocalDate.parse("2025-01-01"),
                 bekreftelseSvar = BekreftelseSvar.GODTAR
             )
         )
 
-        mockMvc.sendInnSøknad(oppgavebekreftelse, mockOAuth2Server.hentToken())
+        val token = mockOAuth2Server.hentToken()
+        mockMvc.post("/ungdomsytelse/oppgavebekreftelse/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+                setBearerAuth(token.serialize())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = JacksonConfiguration.configureObjectMapper().writeValueAsString(oppgavebekreftelse)
+        }.andExpect {
+            status {
+                isAccepted()
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+            }
+        }
 
         coVerify(exactly = 1, timeout = 120 * 1000) {
             k9DokumentMellomlagringService.slettDokumenter(any(), any())

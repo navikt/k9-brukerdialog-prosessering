@@ -8,6 +8,11 @@ import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveStatus
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.Oppgavetype
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
@@ -30,6 +35,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -41,7 +47,8 @@ import java.util.*
     ])
 @Import(
     JacksonConfiguration::class,
-    CallIdGenerator::class
+    CallIdGenerator::class,
+    UngdomsytelseService::class,
 )
 class UngdomsytelseControllerTest {
 
@@ -66,6 +73,9 @@ class UngdomsytelseControllerTest {
     @MockkBean
     private lateinit var metrikkService: MetrikkService
 
+    @MockkBean
+    private lateinit var ungDeltakelseOpplyserService: UngDeltakelseOpplyserService
+
     @BeforeEach
     fun setUp() {
         springTokenValidationContextHolder.mockContext()
@@ -76,7 +86,7 @@ class UngdomsytelseControllerTest {
         coEvery { barnService.hentBarn() } returns emptyList()
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
-        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
 
         val defaultSøknad = SøknadUtils.defaultSøknad
 
@@ -99,7 +109,7 @@ class UngdomsytelseControllerTest {
         coEvery { barnService.hentBarn() } returns emptyList()
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
-        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
 
         val defaultInntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering
 
@@ -174,7 +184,19 @@ class UngdomsytelseControllerTest {
         coEvery { barnService.hentBarn() } returns emptyList()
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
-        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
+        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any(), any()) } returns OppgaveDTO(
+            id = UUID.randomUUID(),
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoOppgavetypeDataDTO(
+                nyStartdato = LocalDate.now(),
+                veilederRef = "veileder-123",
+                meldingFraVeileder = "Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen."
+            ),
+            status = OppgaveStatus.ULØST,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = null
+        )
 
         val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
 
@@ -194,15 +216,14 @@ class UngdomsytelseControllerTest {
 
     @Test
     fun `Innsending av oppgavebekreftelse med feile verdier responderer med bad request`() {
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
+
         val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
 
         val jsonPayload = objectMapper.writeValueAsString(
             defaultOppgavebekreftelse.copy(
                 oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
                     oppgaveId = "123",
-                    veilederRef = "veileder-123",
-                    meldingFraVeileder = null,
-                    nyStartdato = LocalDate.parse("2025-01-01"),
                     bekreftelseSvar = BekreftelseSvar.AVSLÅR,
                     ikkeGodkjentResponse = null,
                 )

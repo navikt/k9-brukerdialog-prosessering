@@ -56,6 +56,6 @@ class OpplæringspengerSøknadController(
 
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(søknad, metadata)
-        metrikkService.registrerMottattSøknad(søknad.ytelse())
+        metrikkService.registrerMottattInnsending(søknad.ytelse())
     }
 }

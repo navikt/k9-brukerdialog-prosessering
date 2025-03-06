@@ -24,11 +24,7 @@ object SøknadUtils {
         deltakelseId = UUID.randomUUID(),
         oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveId = UUID.randomUUID().toString(),
-            veilederRef = "veilder-123",
-            meldingFraVeileder = "Melding fra veileder...",
-            nyStartdato = LocalDate.parse("2025-01-01"),
             bekreftelseSvar = BekreftelseSvar.GODTAR
-        ),
-        mottatt = ZonedDateTime.parse("2022-01-02T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter)
+        )
     )
 }

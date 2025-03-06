@@ -5,7 +5,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelseOppgavebekreftelsePdfData
 import no.nav.k9.oppgave.OppgaveBekreftelse
 import java.time.ZonedDateTime
@@ -13,7 +13,7 @@ import java.time.ZonedDateTime
 data class UngdomsytelseOppgavebekreftelseMottatt(
     val deltakelseId: String,
     val mottatt: ZonedDateTime,
-    val oppgave: UngdomsytelseOppgaveDTO,
+    val oppgave: KomplettUngdomsytelseOppgaveDTO,
     val språk: String? = "nb",
     val søker: Søker,
     val k9Format: OppgaveBekreftelse,

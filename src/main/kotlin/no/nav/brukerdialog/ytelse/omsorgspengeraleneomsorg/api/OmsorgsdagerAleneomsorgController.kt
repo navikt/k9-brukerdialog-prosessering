@@ -64,6 +64,6 @@ class OmsorgsdagerAleneomsorgController(
             innsendingService.registrer(søknad, metadata)
         }
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
-        metrikkService.registrerMottattSøknad(søknad.ytelse())
+        metrikkService.registrerMottattInnsending(søknad.ytelse())
     }
 }

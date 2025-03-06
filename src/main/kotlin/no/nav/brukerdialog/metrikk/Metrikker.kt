@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service
 class MetrikkService(meterRegistry: MeterRegistry) {
 
     private val antallMottatteSøknaderPerYtelseCounter = Counter.builder("antall_mottatte_soknader_per_ytelse_counter")
-        .description("Teller antall mottatte søknader per ytelse")
+        .description("Teller antall mottatte innsendinger per ytelse")
         .tag("ytelse", "ytelse")
         .register(meterRegistry)
 
-    fun registrerMottattSøknad(ytelse: Ytelse) = antallMottatteSøknaderPerYtelseCounter.increment()
+    fun registrerMottattInnsending(ytelse: Ytelse) = antallMottatteSøknaderPerYtelseCounter.increment()
 }

@@ -58,6 +58,6 @@ class EttersendingController(
 
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(ettersendelse, metadata)
-        metrikkService.registrerMottattSøknad(ettersendelse.ytelse())
+        metrikkService.registrerMottattInnsending(ettersendelse.ytelse())
     }
 }

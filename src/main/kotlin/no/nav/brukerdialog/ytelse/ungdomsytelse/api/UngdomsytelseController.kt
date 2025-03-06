@@ -2,21 +2,13 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api
 
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
-import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
-import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
-import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders
-import no.nav.brukerdialog.utils.TokenUtils.personIdent
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngdomsytelseInntektsrapportering
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
-import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -35,10 +27,7 @@ import org.springframework.web.bind.annotation.RestController
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
 class UngdomsytelseController(
-    private val innsendingService: InnsendingService,
-    private val duplikatInnsendingSjekker: DuplikatInnsendingSjekker,
-    private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
-    private val metrikkService: MetrikkService,
+    private val ungdomsytelseService: UngdomsytelseService
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(UngdomsytelseController::class.java)
@@ -46,7 +35,7 @@ class UngdomsytelseController(
 
     @PostMapping("/soknad/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
+    fun innsendingUngdomsytelsesøknad(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
         @Valid @RequestBody søknad: Ungdomsytelsesøknad,
@@ -55,13 +44,7 @@ class UngdomsytelseController(
             logger.info("Ungdomsytelse er ikke aktivert.")
             throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
         }
-        val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
-        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
-
-        logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
-        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
-        innsendingService.registrer(søknad, metadata)
-        metrikkService.registrerMottattSøknad(søknad.ytelse())
+        ungdomsytelseService.innsendingUngdomsytelsesøknad(søknad, gitSha)
     }
 
     @PostMapping("/inntektsrapportering/innsending")
@@ -75,13 +58,8 @@ class UngdomsytelseController(
             logger.info("Ungdomsytelse er ikke aktivert.")
             throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
         }
-        val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
-        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${rapportetInntekt.ytelse()}"
 
-        logger.info(formaterStatuslogging(rapportetInntekt.ytelse(), rapportetInntekt.søknadId, "mottatt."))
-        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
-        innsendingService.registrer(rapportetInntekt, metadata)
-        metrikkService.registrerMottattSøknad(rapportetInntekt.ytelse())
+        ungdomsytelseService.inntektrapportering(rapportetInntekt, gitSha)
     }
 
     @PostMapping("/oppgavebekreftelse/innsending")
@@ -95,12 +73,7 @@ class UngdomsytelseController(
             logger.info("Ungdomsytelse er ikke aktivert.")
             throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
         }
-        val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
-        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${bekreftetOppgave.ytelse()}"
 
-        logger.info(formaterStatuslogging(bekreftetOppgave.ytelse(), bekreftetOppgave.oppgave.oppgaveId, "mottatt."))
-        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
-        innsendingService.registrer(bekreftetOppgave, metadata)
-        metrikkService.registrerMottattSøknad(bekreftetOppgave.ytelse())
+        ungdomsytelseService.oppgavebekreftelse(bekreftetOppgave, gitSha)
     }
 }

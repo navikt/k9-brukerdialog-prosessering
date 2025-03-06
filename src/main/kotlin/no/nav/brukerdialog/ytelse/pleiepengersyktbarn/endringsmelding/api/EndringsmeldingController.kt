@@ -62,6 +62,6 @@ class EndringsmeldingController(
 
         innsendingService.registrer(endringsmelding, metadata)
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
-        metrikkService.registrerMottattSøknad(endringsmelding.ytelse())
+        metrikkService.registrerMottattInnsending(endringsmelding.ytelse())
     }
 }

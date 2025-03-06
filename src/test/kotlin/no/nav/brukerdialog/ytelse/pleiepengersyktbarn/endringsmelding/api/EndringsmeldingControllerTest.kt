@@ -86,7 +86,7 @@ class EndringsmeldingControllerTest {
         )
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
-        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
 
         val søknadId = UUID.randomUUID().toString()
         val mottattDato = ZonedDateTime.parse("2021-11-03T07:12:05.530Z")
