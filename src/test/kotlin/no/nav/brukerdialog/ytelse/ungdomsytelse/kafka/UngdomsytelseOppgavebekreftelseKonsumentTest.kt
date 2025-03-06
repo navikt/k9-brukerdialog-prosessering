@@ -126,7 +126,7 @@ class UngdomsytelseOppgavebekreftelseKonsumentTest : AbstractIntegrationTest() {
         {
           "deltakelseId": "$deltakelseId",
           "oppgave": {
-            "type": "BEKREFT_ENDRET_STARTDATO",
+            "type": "KomplettEndretStartdatoUngdomsytelseOppgaveDTO",
             "oppgaveId": "$oppgaveId",
             "veilederRef": "veilder-123",
             "meldingFraVeileder": "Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.",

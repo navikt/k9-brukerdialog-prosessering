@@ -10,8 +10,8 @@ import java.time.LocalDate
     property = "type"
 )
 @JsonSubTypes(
-    JsonSubTypes.Type(value = KomplettEndretStartdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_STARTDATO"),
-    JsonSubTypes.Type(value = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
+    JsonSubTypes.Type(value = KomplettEndretStartdatoUngdomsytelseOppgaveDTO::class, name = "KomplettEndretStartdatoUngdomsytelseOppgaveDTO"),
+    JsonSubTypes.Type(value = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO::class, name = "KomplettEndretSluttdatoUngdomsytelseOppgaveDTO"),
 )
 open class KomplettUngdomsytelseOppgaveDTO(
     open val oppgaveId: String,
