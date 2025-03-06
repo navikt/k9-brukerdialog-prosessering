@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretSluttdatoOppgavetypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
 import java.time.LocalDate
@@ -60,8 +61,7 @@ data class EndretStartdatoUngdomsytelseOppgaveDTO(
 data class EndretSluttdatoUngdomsytelseOppgaveDTO(
     override val oppgaveId: String,
     override val bekreftelseSvar: BekreftelseSvar,
-    override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-    val nySluttdato: LocalDate,
+    override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null
 ) : UngdomsytelseOppgaveDTO(oppgaveId, bekreftelseSvar, ikkeGodkjentResponse) {
 
     @Hidden
@@ -75,11 +75,12 @@ data class EndretSluttdatoUngdomsytelseOppgaveDTO(
     }
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+        val endretSluttdatoOppgavetypeDataDTO = oppgaveDTO.oppgavetypeData as EndretSluttdatoOppgavetypeDataDTO
         return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
             oppgaveId = oppgaveId,
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
-            nySluttdato = nySluttdato,
+            nySluttdato = endretSluttdatoOppgavetypeDataDTO.nySluttdato,
             bekreftelseSvar = bekreftelseSvar,
             ikkeGodkjentResponse = ikkeGodkjentResponse,
         )
