@@ -9,6 +9,7 @@ import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.TokenUtils.personIdent
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngdomsytelseInntektsrapportering
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseInnsending
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
@@ -49,20 +50,23 @@ class UngdomsytelseService(
     }
 
     suspend fun oppgavebekreftelse(oppgavebekreftelse: UngdomsytelseOppgavebekreftelse, gitSha: String) {
-        val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
-        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${oppgavebekreftelse.ytelse()}"
-
-        logger.info(formaterStatuslogging(oppgavebekreftelse.ytelse(), oppgavebekreftelse.søknadId(), "mottatt."))
-        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
-
         val oppgaveDTO = ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(
             oppgavebekreftelse.deltakelseId,
             UUID.fromString(oppgavebekreftelse.oppgave.oppgaveId)
         )
 
-        oppgavebekreftelse.komplettOppgavebekreftelse = oppgavebekreftelse.oppgave.somKomplettOppgave(oppgaveDTO)
+        val ungdomsytelseOppgavebekreftelseInnsending = UngdomsytelseOppgavebekreftelseInnsending(
+            deltakelseId = oppgavebekreftelse.deltakelseId,
+            komplettOppgavebekreftelse = oppgavebekreftelse.oppgave.somKomplettOppgave(oppgaveDTO)
+        )
 
-        innsendingService.registrer(oppgavebekreftelse, metadata)
-        metrikkService.registrerMottattInnsending(oppgavebekreftelse.ytelse())
+        val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
+        val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${ungdomsytelseOppgavebekreftelseInnsending.ytelse()}"
+
+        logger.info(formaterStatuslogging(ungdomsytelseOppgavebekreftelseInnsending.ytelse(), ungdomsytelseOppgavebekreftelseInnsending.søknadId(), "mottatt."))
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
+
+        innsendingService.registrer(ungdomsytelseOppgavebekreftelseInnsending, metadata)
+        metrikkService.registrerMottattInnsending(ungdomsytelseOppgavebekreftelseInnsending.ytelse())
     }
 }

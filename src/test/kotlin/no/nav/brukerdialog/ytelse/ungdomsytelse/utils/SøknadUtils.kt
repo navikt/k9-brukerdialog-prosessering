@@ -25,7 +25,6 @@ object SøknadUtils {
         oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveId = UUID.randomUUID().toString(),
             bekreftelseSvar = BekreftelseSvar.GODTAR
-        ),
-        mottatt = ZonedDateTime.parse("2022-01-02T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter)
+        )
     )
 }

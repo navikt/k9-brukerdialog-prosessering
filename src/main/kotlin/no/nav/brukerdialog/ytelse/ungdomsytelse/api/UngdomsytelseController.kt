@@ -2,12 +2,8 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api
 
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
-import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
-import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.NavHeaders
-import no.nav.brukerdialog.utils.TokenUtils.personIdent
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngdomsytelseInntektsrapportering
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
