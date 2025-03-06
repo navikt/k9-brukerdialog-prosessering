@@ -49,5 +49,6 @@ data class EndretSluttdatoOppgavetypeDataDTO(
 
 enum class OppgaveStatus {
     LØST,
-    ULØST
+    ULØST,
+    KANSELLERT
 }
