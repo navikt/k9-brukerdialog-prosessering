@@ -27,6 +27,8 @@ class K9BrukerdialogCacheService(
     }
 
     fun mellomlagreSøknad(cacheRequest: CacheRequest): CacheResponse {
+        logger.info("Mellomlagrer søknad med CacheRequest: $cacheRequest")
+        logger.info("Har httpEntity: ${HttpEntity(cacheRequest)}")
         return kotlin.runCatching {
             k9BrukerdialogCacheRestTemplate.postForEntity(
                 cacheUrl.path,
@@ -37,7 +39,7 @@ class K9BrukerdialogCacheService(
             onSuccess = { cacheResponse: CacheResponse -> cacheResponse },
             onFailure = { error: Throwable ->
                 if (error is RestClientException) {
-                    logger.error("Feil ved mellomlagring av søknad. Feilmelding: ${error.message}, CacheRequest: ${cacheRequest}")
+                    logger.error("Feil ved mellomlagring av søknad. Feilmelding: ${error.message}")
                 }
                 throw RuntimeException("Feil ved mellomlagring av søknad.", error)
             }
