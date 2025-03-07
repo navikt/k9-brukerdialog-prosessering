@@ -37,7 +37,7 @@ class K9BrukerdialogCacheService(
             onSuccess = { cacheResponse: CacheResponse -> cacheResponse },
             onFailure = { error: Throwable ->
                 if (error is RestClientException) {
-                    logger.error("Feil ved mellomlagring av søknad. Feilmelding: ${error.message}")
+                    logger.error("Feil ved mellomlagring av søknad. Feilmelding: ${error.message}, CacheRequest: ${cacheRequest}")
                 }
                 throw RuntimeException("Feil ved mellomlagring av søknad.", error)
             }
