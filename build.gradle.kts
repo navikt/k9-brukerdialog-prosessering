@@ -2,10 +2,10 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.4.3"
+	id("org.springframework.boot") version "3.4.4"
 	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("jvm") version "2.1.10"
-	kotlin("plugin.spring") version "2.1.10"
+	kotlin("jvm") version "2.1.20"
+	kotlin("plugin.spring") version "2.1.20"
 }
 
 group = "no.nav"
@@ -41,7 +41,7 @@ val openhtmltopdfVersion = "1.1.4"
 val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.11"
 val awailitilityKotlinVersion = "4.3.0"
-val springCloudContractVersion = "4.2.0"
+val springCloudContractVersion = "4.2.1"
 val orgJsonVersion = "20250107"
 val springdocVersion = "2.8.5"
 val pdfBoxVersion = "3.0.4"
