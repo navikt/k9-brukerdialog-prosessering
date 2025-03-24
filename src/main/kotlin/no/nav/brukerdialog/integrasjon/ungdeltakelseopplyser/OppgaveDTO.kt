@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import java.time.LocalDate
@@ -18,6 +19,7 @@ data class OppgaveDTO(
 enum class Oppgavetype {
     BEKREFT_ENDRET_STARTDATO,
     BEKREFT_ENDRET_SLUTTDATO,
+    BEKREFT_AVVIK_REGISTERINNTEKT
 }
 
 
@@ -29,6 +31,7 @@ enum class Oppgavetype {
 @JsonSubTypes(
     JsonSubTypes.Type(value = EndretStartdatoOppgavetypeDataDTO::class, name = "BEKREFT_ENDRET_STARTDATO"),
     JsonSubTypes.Type(value = EndretSluttdatoOppgavetypeDataDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
+    JsonSubTypes.Type(value = KontrollerRegisterInntektOppgaveTypeDataDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
 )
 sealed class OppgavetypeDataDTO(
     open val veilederRef: String,
@@ -46,6 +49,29 @@ data class EndretSluttdatoOppgavetypeDataDTO(
     override val veilederRef: String,
     override val meldingFraVeileder: String?,
 ) : OppgavetypeDataDTO(veilederRef, meldingFraVeileder)
+
+data class KontrollerRegisterInntektOppgaveTypeDataDTO(
+    @JsonProperty(defaultValue = "n/a") val registerinntekt: RegisterinntektDTO,
+    @JsonProperty(defaultValue = "n/a") val fomDato: LocalDate,
+    @JsonProperty(defaultValue = "n/a") val tomDato: LocalDate,
+) : OppgavetypeDataDTO("n/a", null)
+
+
+data class RegisterinntektDTO(
+    @JsonProperty("arbeidOgFrilansInntekter") val arbeidOgFrilansInntekter: List<ArbeidOgFrilansRegisterInntektDTO>,
+    @JsonProperty("ytelseInntekter") val ytelseInntekter: List<YtelseRegisterInntektDTO>
+)
+
+data class ArbeidOgFrilansRegisterInntektDTO(
+    @JsonProperty("inntekt") val inntekt: Int,
+    @JsonProperty("arbeidsgiver") val arbeidsgiver: String
+)
+
+
+data class YtelseRegisterInntektDTO(
+    @JsonProperty("inntekt") val inntekt: Int,
+    @JsonProperty("ytelsetype") val ytelsetype: String
+)
 
 enum class OppgaveStatus {
     LØST,

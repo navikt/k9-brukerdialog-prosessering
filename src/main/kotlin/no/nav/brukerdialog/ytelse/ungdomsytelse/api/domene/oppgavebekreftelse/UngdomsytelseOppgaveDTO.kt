@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretSluttdatoOppgavetypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.KontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
 import java.time.LocalDate
 
@@ -17,6 +18,7 @@ import java.time.LocalDate
 @JsonSubTypes(
     JsonSubTypes.Type(value = EndretStartdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_STARTDATO"),
     JsonSubTypes.Type(value = EndretSluttdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
+    JsonSubTypes.Type(value = KontrollerRegisterinntektOppgavetypeDataDTO::class, name = "BEKREFT_AVVIK_REGISTERINNTEKT"),
 )
 sealed class UngdomsytelseOppgaveDTO(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
@@ -81,6 +83,39 @@ data class EndretSluttdatoUngdomsytelseOppgaveDTO(
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             nySluttdato = endretSluttdatoOppgavetypeDataDTO.nySluttdato,
+            bekreftelseSvar = bekreftelseSvar,
+            ikkeGodkjentResponse = ikkeGodkjentResponse,
+        )
+    }
+}
+
+
+data class KontrollerRegisterinntektOppgavetypeDataDTO(
+    override val oppgaveId: String,
+    override val bekreftelseSvar: BekreftelseSvar,
+    override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
+) : UngdomsytelseOppgaveDTO(oppgaveId, bekreftelseSvar, ikkeGodkjentResponse) {
+
+    @Hidden
+    @AssertTrue(message = "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR")
+    fun isIkkeGodkjentResponseValid(): Boolean {
+        return if (bekreftelseSvar == BekreftelseSvar.AVSLÅR) {
+            ikkeGodkjentResponse != null
+        } else {
+            true
+        }
+    }
+
+    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+        val kontrollerRegisterInntektOppgaveTypeDataDTO = oppgaveDTO.oppgavetypeData as KontrollerRegisterInntektOppgaveTypeDataDTO
+
+        return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
+            oppgaveId = oppgaveId,
+            veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
+            meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
+            fomDato = kontrollerRegisterInntektOppgaveTypeDataDTO.fomDato,
+            tomDato = kontrollerRegisterInntektOppgaveTypeDataDTO.tomDato,
+            registerinntekt = kontrollerRegisterInntektOppgaveTypeDataDTO.registerinntekt,
             bekreftelseSvar = bekreftelseSvar,
             ikkeGodkjentResponse = ikkeGodkjentResponse,
         )

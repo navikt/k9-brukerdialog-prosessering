@@ -12,6 +12,7 @@
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Godkjenne endret startdato" href="#endretStartdato"/>
         <bookmark name="Godkjenne endret sluttdato" href="#endretSluttdato"/>
+        <bookmark name="Kontrollere inntekt fra register" href="#kontrollerRegisterInntektOppgave"/>
     </bookmarks>
     {{#block 'style-common' }}
     {{/block}}
@@ -75,6 +76,55 @@
                 <div class="fritekst">
                     <p class="sporsmalstekst">Skriv en kort begrunnelse for hvorfor du ikke ønsker å godkjenne</p>
                     <p class="fritekst_textarea">{{oppgave.endretSluttdatoOppgave.ikkeGodkjentResponse.meldingFraDeltaker}}</p>
+                </div>
+            {{/eq}}
+        </section>
+    {{/if}}
+
+    {{#if oppgave.kontrollerRegisterInntektOppgave}}
+        <section id="kontrollerRegisterInntektOppgave">
+            <h2>Kontrollere inntekt fra register</h2>
+
+            <table class="periode_tabell">
+                <thead>
+                <tr>
+                    <th>Arbeidstaker/frilanser</th>
+                    <th>Inntekt</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each oppgave.kontrollerRegisterInntektOppgave.registerinntekt.arbeidOgFrilansInntekter as |arbeidsinntekt|~}}
+                    <tr>
+                        <td>{{arbeidsinntekt.arbeidsgiver}}</td>
+                        <td>{{arbeidsinntekt.inntekt}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+                <br/>
+                <thead>
+                <tr>
+                    <th>Ytelser</th>
+                    <th>Inntekt</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each oppgave.kontrollerRegisterInntektOppgave.registerinntekt.ytelseInntekter as |ytelse|~}}
+                    <tr>
+                        <td>{{ytelse.ytelsetype}}</td>
+                        <td>{{ytelse.inntekt}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+
+            <br/>
+            <p class="sporsmalstekst">Er inntektsopplysningene fra A-ordningen riktig?</p>
+            <p>{{oppgave.kontrollerRegisterInntektOppgave.bekreftelseSvar}}</p><br/>
+
+            {{#eq oppgave.kontrollerRegisterInntektOppgave.bekreftelseSvar "Nei"}}
+                <div class="fritekst">
+                    <p class="sporsmalstekst">Hvorfor stemmer ikke inntekten vi har fått fra A-ordningen?</p>
+                    <p class="fritekst_textarea">{{oppgave.kontrollerRegisterInntektOppgave.ikkeGodkjentResponse.meldingFraDeltaker}}</p>
                 </div>
             {{/eq}}
         </section>

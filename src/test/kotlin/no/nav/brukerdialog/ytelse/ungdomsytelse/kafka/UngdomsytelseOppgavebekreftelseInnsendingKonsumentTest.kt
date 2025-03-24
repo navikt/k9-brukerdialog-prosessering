@@ -177,6 +177,8 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             "bekreftelse": {
               "type": "UNG_ENDRET_FOM_DATO",
               "nyFomDato": "2025-01-01",
+              "oppgaveId": null,
+              "uttalelseFraBruker": null,
               "harBrukerGodtattEndringen": true,
               "dataBruktTilUtledning": null
             },

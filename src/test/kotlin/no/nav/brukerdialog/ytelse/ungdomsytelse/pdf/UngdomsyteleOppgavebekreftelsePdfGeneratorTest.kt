@@ -1,10 +1,14 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.pdf
 
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.ArbeidOgFrilansRegisterInntektDTO
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.RegisterinntektDTO
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.YtelseRegisterInntektDTO
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseIkkeGodkjentResponse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
 import org.junit.jupiter.api.Test
@@ -85,6 +89,87 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                             ikkeGodkjentResponse = UngdomsytelseIkkeGodkjentResponse(
                                 korrigertDato = LocalDate.parse("2025-12-01"),
                                 meldingFraDeltaker = "Jeg ønsker en senere sluttdato",
+                                kontaktVeilederSvar = false
+                            )
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "5-godtar-kontrollert-registerinntekt"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(oppgaveId = id)
+                    .copy(
+                        oppgave = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
+                            oppgaveId = id,
+                            veilederRef = "n/a",
+                            meldingFraVeileder = null,
+                            fomDato = LocalDate.parse("2025-06-01"),
+                            tomDato = LocalDate.parse("2025-12-01"),
+                            registerinntekt = RegisterinntektDTO(
+                                arbeidOgFrilansInntekter = listOf(
+                                    ArbeidOgFrilansRegisterInntektDTO(
+                                        inntekt = 1000,
+                                        arbeidsgiver = "Arbeidsgiver 1"
+                                    ),
+                                    ArbeidOgFrilansRegisterInntektDTO(
+                                        inntekt = 2000,
+                                        arbeidsgiver = "Arbeidsgiver 2"
+                                    )
+                                ),
+                                ytelseInntekter = listOf(
+                                    YtelseRegisterInntektDTO(
+                                        inntekt = 3000,
+                                        ytelsetype = "Ytelse 1"
+                                    ),
+                                    YtelseRegisterInntektDTO(
+                                        inntekt = 4000,
+                                        ytelsetype = "Ytelse 2"
+                                    )
+                                )
+                            ),
+                            bekreftelseSvar = BekreftelseSvar.GODTAR
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "6-avslår-kontrollert-registerinntekt"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(oppgaveId = id)
+                    .copy(
+                        oppgave = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
+                            oppgaveId = id,
+                            veilederRef = "Pål Hønesen",
+                            meldingFraVeileder = null,
+                            fomDato = LocalDate.parse("2025-06-01"),
+                            tomDato = LocalDate.parse("2025-12-01"),
+                            registerinntekt = RegisterinntektDTO(
+                                arbeidOgFrilansInntekter = listOf(
+                                    ArbeidOgFrilansRegisterInntektDTO(
+                                        inntekt = 1000,
+                                        arbeidsgiver = "Arbeidsgiver 1"
+                                    ),
+                                    ArbeidOgFrilansRegisterInntektDTO(
+                                        inntekt = 2000,
+                                        arbeidsgiver = "Arbeidsgiver 2"
+                                    )
+                                ),
+                                ytelseInntekter = listOf(
+                                    YtelseRegisterInntektDTO(
+                                        inntekt = 3000,
+                                        ytelsetype = "Ytelse 1"
+                                    ),
+                                    YtelseRegisterInntektDTO(
+                                        inntekt = 4000,
+                                        ytelsetype = "Ytelse 2"
+                                    )
+                                )
+                            ),
+                            bekreftelseSvar = BekreftelseSvar.AVSLÅR,
+                            ikkeGodkjentResponse = UngdomsytelseIkkeGodkjentResponse(
+                                korrigertDato = LocalDate.parse("2025-12-01"),
+                                meldingFraDeltaker = "Inntektsopplysningene i A-ordningen er feil. Jeg har sendt inn korrekt informasjon.",
                                 kontaktVeilederSvar = false
                             )
                         )

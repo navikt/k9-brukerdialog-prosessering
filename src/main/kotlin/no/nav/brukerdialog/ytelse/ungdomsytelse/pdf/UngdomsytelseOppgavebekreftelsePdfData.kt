@@ -4,16 +4,20 @@ import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
 import no.nav.brukerdialog.common.Ytelse
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.RegisterinntektDTO
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
+import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseIkkeGodkjentResponse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
+import java.math.BigDecimal
 
 class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMottatt: UngdomsytelseOppgavebekreftelseMottatt) :
     PdfData() {
@@ -57,6 +61,32 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
             )
 
             else -> null
+        },
+        "kontrollerRegisterInntektOppgave" to when (this) {
+            is KomplettKontrollerRegisterInntektOppgaveTypeDataDTO -> mapOf(
+                "fomDato" to DATE_FORMATTER.format(fomDato),
+                "tomDato" to DATE_FORMATTER.format(tomDato),
+                "registerinntekt" to registerinntekt.somMap(),
+                "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
+                "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()
+            )
+
+            else -> null
+        }
+    )
+
+    private fun RegisterinntektDTO.somMap() = mapOf(
+        "arbeidOgFrilansInntekter" to this.arbeidOgFrilansInntekter.map {
+            mapOf(
+                "inntekt" to BigDecimal.valueOf(it.inntekt.toLong()).formaterSomValuta(),
+                "arbeidsgiver" to it.arbeidsgiver
+            )
+        },
+        "ytelseInntekter" to this.ytelseInntekter.map {
+            mapOf(
+                "inntekt" to BigDecimal.valueOf(it.inntekt.toLong()).formaterSomValuta(),
+                "ytelsetype" to it.ytelsetype.lowercase().replaceFirstChar {c -> c.uppercase() }
+            )
         }
     )
 
