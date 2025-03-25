@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering
 import no.nav.k9.søknad.felles.type.Periode
 import java.math.BigDecimal
 import java.time.LocalDate
-import no.nav.k9.søknad.ytelse.ung.v1.OppgittInntektForPeriode as UngOppgittInntektForPeriode
+import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntektForPeriode as UngOppgittInntektForPeriode
 
 data class OppgittInntektForPeriode(
     val arbeidstakerOgFrilansInntekt: Int? = null,
