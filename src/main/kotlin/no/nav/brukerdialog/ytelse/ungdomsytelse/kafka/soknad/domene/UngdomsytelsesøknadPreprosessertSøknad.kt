@@ -9,7 +9,6 @@ import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.søknad.Søknad
-import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*

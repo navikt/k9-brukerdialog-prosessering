@@ -11,8 +11,8 @@ import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.domene.UngdomsytelseInntektsrapporteringMottatt
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.Språk
-import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt
+import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 
 class UngdomsytelseInntektsrapporteringPdfData(private val søknad: UngdomsytelseInntektsrapporteringMottatt) :
     PdfData() {
