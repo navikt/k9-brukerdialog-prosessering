@@ -14,6 +14,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekref
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
+import java.util.UUID
 
 class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
 
@@ -34,16 +35,16 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
         fun genererOppsummeringsPdfer(writeBytes: Boolean) {
             var id = "1-godtar-endret-startdato"
             var pdf = generator.genererPDF(
-                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(oppgaveId = id).pdfData()
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt().pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
             id = "2-avslår-endret-startdato"
             pdf = generator.genererPDF(
-                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(oppgaveId = id)
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
-                            oppgaveId = id,
+                            oppgaveId = UUID.randomUUID().toString(),
                             veilederRef = "Pål Hønesen",
                             meldingFraVeileder = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
                     """.trimMargin(),
@@ -61,10 +62,10 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
 
             id = "3-godtar-endret-sluttdato"
             pdf = generator.genererPDF(
-                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(oppgaveId = id)
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-                            oppgaveId = id,
+                            oppgaveId = UUID.randomUUID().toString(),
                             veilederRef = "Pål Hønesen",
                             meldingFraVeileder = """Hei, jeg har endret sluttdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
                     """.trimMargin(),
@@ -77,10 +78,10 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
 
             id = "4-avslår-endret-sluttdato"
             pdf = generator.genererPDF(
-                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(oppgaveId = id)
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-                            oppgaveId = id,
+                            oppgaveId = UUID.randomUUID().toString(),
                             veilederRef = "Pål Hønesen",
                             meldingFraVeileder = """Hei, jeg har endret sluttdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
                     """.trimMargin(),
@@ -98,10 +99,10 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
 
             id = "5-godtar-kontrollert-registerinntekt"
             pdf = generator.genererPDF(
-                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(oppgaveId = id)
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
-                            oppgaveId = id,
+                            oppgaveId = UUID.randomUUID().toString(),
                             veilederRef = "n/a",
                             meldingFraVeileder = null,
                             fomDato = LocalDate.parse("2025-06-01"),
@@ -136,7 +137,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
 
             id = "6-avslår-kontrollert-registerinntekt"
             pdf = generator.genererPDF(
-                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(oppgaveId = id)
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
                             oppgaveId = id,

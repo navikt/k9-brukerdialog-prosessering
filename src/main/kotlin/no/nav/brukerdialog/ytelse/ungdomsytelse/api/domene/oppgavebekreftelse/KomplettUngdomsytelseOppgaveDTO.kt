@@ -42,7 +42,16 @@ data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
     val bekreftelseSvar: BekreftelseSvar,
     val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveId, veilederRef, meldingFraVeileder) {
-    override fun somK9Format(): Bekreftelse = EndretFomDatoBekreftelse(nyStartdato, bekreftelseSvar.somBoolean())
+    override fun somK9Format(): Bekreftelse {
+        val endretFomDatoBekreftelse =
+            EndretFomDatoBekreftelse(UUID.fromString(oppgaveId), nyStartdato, bekreftelseSvar.somBoolean())
+
+        if (ikkeGodkjentResponse != null) {
+            endretFomDatoBekreftelse.medUttalelseFraBruker(ikkeGodkjentResponse.meldingFraDeltaker)
+        }
+
+        return endretFomDatoBekreftelse
+    }
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
@@ -65,7 +74,16 @@ data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
     val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveId, veilederRef, meldingFraVeileder) {
 
-    override fun somK9Format(): Bekreftelse = EndretTomDatoBekreftelse(nySluttdato, bekreftelseSvar.somBoolean())
+    override fun somK9Format(): Bekreftelse {
+        val endretTomDatoBekreftelse =
+            EndretTomDatoBekreftelse(UUID.fromString(oppgaveId), nySluttdato, bekreftelseSvar.somBoolean())
+
+        if (ikkeGodkjentResponse != null) {
+            endretTomDatoBekreftelse.medUttalelseFraBruker(ikkeGodkjentResponse.meldingFraDeltaker)
+        }
+
+        return endretTomDatoBekreftelse
+    }
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
