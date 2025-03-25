@@ -108,12 +108,18 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveId, veilederRef, meldingFraVeileder) {
 
-    override fun somK9Format(): Bekreftelse = InntektBekreftelse.builder()
-        .medOppgaveId(UUID.fromString(oppgaveId))
-        .medOppgittePeriodeinntekter(registerinntekt.somK9Format())
-        .medUttalelseFraBruker(meldingFraVeileder)
-        .medHarBrukerGodtattEndringen(bekreftelseSvar.somBoolean())
-        .build()
+    override fun somK9Format(): Bekreftelse {
+        val inntektBekreftelse = InntektBekreftelse.builder()
+            .medOppgaveId(UUID.fromString(oppgaveId))
+            .medOppgittePeriodeinntekter(registerinntekt.somK9Format())
+            .medHarBrukerGodtattEndringen(bekreftelseSvar.somBoolean())
+
+        if (ikkeGodkjentResponse != null) {
+            inntektBekreftelse.medUttalelseFraBruker(ikkeGodkjentResponse.meldingFraDeltaker)
+        }
+
+        return inntektBekreftelse.build()
+    }
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
