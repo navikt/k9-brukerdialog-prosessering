@@ -30,7 +30,6 @@ class UngdomsytelseInntektsrapporteringPdfGeneratorTest {
             var pdf = generator.genererPDF(InntektrapporteringUtils.gyldigInntektsrapportering(
                 søknadId = id, oppgittInntektForPeriode = OppgittInntektForPeriode(
                     arbeidstakerOgFrilansInntekt = 6000,
-                    næringsinntekt = 4000,
                     inntektFraYtelse = 2000,
                     periodeForInntekt = UngPeriode(
                         fraOgMed = LocalDate.parse("2025-01-01"),
@@ -44,7 +43,6 @@ class UngdomsytelseInntektsrapporteringPdfGeneratorTest {
             pdf = generator.genererPDF(InntektrapporteringUtils.gyldigInntektsrapportering(
                 søknadId = id, oppgittInntektForPeriode = OppgittInntektForPeriode(
                     arbeidstakerOgFrilansInntekt = 6000,
-                    næringsinntekt = null,
                     inntektFraYtelse = null,
                     periodeForInntekt = UngPeriode(
                         fraOgMed = LocalDate.parse("2025-01-01"),
@@ -54,25 +52,10 @@ class UngdomsytelseInntektsrapporteringPdfGeneratorTest {
             ).pdfData())
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "3-næringsinntekt"
+            id = "3-ytelse"
             pdf = generator.genererPDF(InntektrapporteringUtils.gyldigInntektsrapportering(
                 søknadId = id, oppgittInntektForPeriode = OppgittInntektForPeriode(
                     arbeidstakerOgFrilansInntekt = null,
-                    næringsinntekt = 6000,
-                    inntektFraYtelse = null,
-                    periodeForInntekt = UngPeriode(
-                        fraOgMed = LocalDate.parse("2025-01-01"),
-                        tilOgMed = LocalDate.parse("2025-01-31")
-                    )
-                )
-            ).pdfData())
-            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
-
-            id = "4-ytelse"
-            pdf = generator.genererPDF(InntektrapporteringUtils.gyldigInntektsrapportering(
-                søknadId = id, oppgittInntektForPeriode = OppgittInntektForPeriode(
-                    arbeidstakerOgFrilansInntekt = null,
-                    næringsinntekt = null,
                     inntektFraYtelse = 6000,
                     periodeForInntekt = UngPeriode(
                         fraOgMed = LocalDate.parse("2025-01-01"),
