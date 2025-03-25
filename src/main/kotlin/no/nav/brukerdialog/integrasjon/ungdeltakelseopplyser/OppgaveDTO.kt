@@ -31,7 +31,7 @@ enum class Oppgavetype {
 @JsonSubTypes(
     JsonSubTypes.Type(value = EndretStartdatoOppgavetypeDataDTO::class, name = "BEKREFT_ENDRET_STARTDATO"),
     JsonSubTypes.Type(value = EndretSluttdatoOppgavetypeDataDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
-    JsonSubTypes.Type(value = KontrollerRegisterInntektOppgaveTypeDataDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
+    JsonSubTypes.Type(value = KontrollerRegisterInntektOppgaveTypeDataDTO::class, name = "BEKREFT_AVVIK_REGISTERINNTEKT"),
 )
 sealed class OppgavetypeDataDTO(
     open val veilederRef: String,
