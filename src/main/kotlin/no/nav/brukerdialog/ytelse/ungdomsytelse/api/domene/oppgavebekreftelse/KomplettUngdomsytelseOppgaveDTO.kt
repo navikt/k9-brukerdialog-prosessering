@@ -101,8 +101,8 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     override val oppgaveId: String,
     override val veilederRef: String,
     override val meldingFraVeileder: String? = null,
-    val fomDato: LocalDate,
-    val tomDato: LocalDate,
+    val fraOgMed: LocalDate,
+    val tilOgMed: LocalDate,
     val registerinntekt: RegisterinntektDTO,
     val bekreftelseSvar: BekreftelseSvar,
     val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
@@ -126,8 +126,8 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
             oppgaveId = oppgaveId,
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
-            fomDato = fomDato,
-            tomDato = tomDato,
+            fraOgMed = fraOgMed,
+            tilOgMed = tilOgMed,
             registerinntekt = registerinntekt,
             bekreftelseSvar = bekreftelseSvar,
             ikkeGodkjentResponse = ikkeGodkjentResponse,
@@ -137,12 +137,12 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     private fun RegisterinntektDTO.somK9Format(): MutableSet<OppgittInntektForPeriode> =
         mutableSetOf<OppgittInntektForPeriode>().apply {
             addAll(arbeidOgFrilansInntekter.map {
-                OppgittInntektForPeriode.builder(Periode(fomDato, tomDato))
+                OppgittInntektForPeriode.builder(Periode(fraOgMed, tilOgMed))
                     .medArbeidstakerOgFrilansinntekt(BigDecimal.valueOf(it.inntekt.toLong()))
                     .build()
             })
             addAll(ytelseInntekter.map {
-                OppgittInntektForPeriode.builder(Periode(fomDato, tomDato))
+                OppgittInntektForPeriode.builder(Periode(fraOgMed, tilOgMed))
                     .medYtelse(BigDecimal.valueOf(it.inntekt.toLong()))
                     .build()
             })

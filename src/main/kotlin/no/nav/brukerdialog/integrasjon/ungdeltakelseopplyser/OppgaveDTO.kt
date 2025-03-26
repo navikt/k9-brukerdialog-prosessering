@@ -52,8 +52,8 @@ data class EndretSluttdatoOppgavetypeDataDTO(
 
 data class KontrollerRegisterInntektOppgaveTypeDataDTO(
     @JsonProperty(defaultValue = "n/a") val registerinntekt: RegisterinntektDTO,
-    @JsonProperty(defaultValue = "n/a") val fomDato: LocalDate,
-    @JsonProperty(defaultValue = "n/a") val tomDato: LocalDate,
+    @JsonProperty(defaultValue = "n/a") val fraOgMed: LocalDate,
+    @JsonProperty(defaultValue = "n/a") val tilOgMed: LocalDate,
 ) : OppgavetypeDataDTO("n/a", null)
 
 

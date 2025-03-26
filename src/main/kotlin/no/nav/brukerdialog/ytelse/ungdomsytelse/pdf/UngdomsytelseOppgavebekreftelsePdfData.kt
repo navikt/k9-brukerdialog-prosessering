@@ -64,8 +64,8 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
         },
         "kontrollerRegisterInntektOppgave" to when (this) {
             is KomplettKontrollerRegisterInntektOppgaveTypeDataDTO -> mapOf(
-                "fomDato" to DATE_FORMATTER.format(fomDato),
-                "tomDato" to DATE_FORMATTER.format(tomDato),
+                "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
+                "tilOgMed" to DATE_FORMATTER.format(tilOgMed),
                 "registerinntekt" to registerinntekt.somMap(),
                 "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
                 "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()

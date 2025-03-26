@@ -105,8 +105,8 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                             oppgaveId = UUID.randomUUID().toString(),
                             veilederRef = "n/a",
                             meldingFraVeileder = null,
-                            fomDato = LocalDate.parse("2025-06-01"),
-                            tomDato = LocalDate.parse("2025-12-01"),
+                            fraOgMed = LocalDate.parse("2025-06-01"),
+                            tilOgMed = LocalDate.parse("2025-12-01"),
                             registerinntekt = RegisterinntektDTO(
                                 arbeidOgFrilansInntekter = listOf(
                                     ArbeidOgFrilansRegisterInntektDTO(
@@ -143,8 +143,8 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                             oppgaveId = id,
                             veilederRef = "Pål Hønesen",
                             meldingFraVeileder = null,
-                            fomDato = LocalDate.parse("2025-06-01"),
-                            tomDato = LocalDate.parse("2025-12-01"),
+                            fraOgMed = LocalDate.parse("2025-06-01"),
+                            tilOgMed = LocalDate.parse("2025-12-01"),
                             registerinntekt = RegisterinntektDTO(
                                 arbeidOgFrilansInntekter = listOf(
                                     ArbeidOgFrilansRegisterInntektDTO(
