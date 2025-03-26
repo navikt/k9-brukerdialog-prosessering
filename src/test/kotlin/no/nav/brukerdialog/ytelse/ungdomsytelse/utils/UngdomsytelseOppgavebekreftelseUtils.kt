@@ -70,11 +70,13 @@ object UngdomsytelseOppgavebekreftelseUtils {
 private fun KomplettUngdomsytelseOppgaveDTO.somK9Format(): Bekreftelse {
     return when (this) {
         is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> EndretFomDatoBekreftelse(
+            UUID.fromString(oppgaveId),
             nyStartdato,
             bekreftelseSvar.somBoolean()
         )
 
         is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> EndretTomDatoBekreftelse(
+            UUID.fromString(oppgaveId),
             nySluttdato,
             bekreftelseSvar.somBoolean()
         )

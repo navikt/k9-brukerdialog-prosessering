@@ -6,17 +6,16 @@ import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
+import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.domene.UngdomsytelseInntektsrapporteringMottatt
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt
 import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
-import java.math.BigDecimal
-import java.text.NumberFormat
-import java.util.*
 
-class UngdomsytelseInntektsrapporteringPdfData(private val søknad: UngdomsytelseInntektsrapporteringMottatt) : PdfData() {
+class UngdomsytelseInntektsrapporteringPdfData(private val søknad: UngdomsytelseInntektsrapporteringMottatt) :
+    PdfData() {
     override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
 
     override fun språk(): Språk = Språk.NORSK_BOKMÅL
@@ -36,18 +35,12 @@ class UngdomsytelseInntektsrapporteringPdfData(private val søknad: Ungdomsytels
         )
     }
 
-    fun BigDecimal.formaterSomValuta(): String {
-        val valutaFormat = NumberFormat.getCurrencyInstance(Locale.of("no", "NO"))
-        return valutaFormat.format(this)
-    }
-
     private fun OppgittInntekt.somMap(): List<Map<String, Any?>> = oppgittePeriodeinntekter.map {
-            mapOf<String, Any?>(
-                "periode" to it.periode.somMap(),
-                "arbeidstakerOgFrilansInntekt" to it.arbeidstakerOgFrilansInntekt?.formaterSomValuta(),
-                "næringsinntekt" to it.næringsinntekt?.formaterSomValuta(),
-                "ytelse" to it.ytelse?.formaterSomValuta()
-            )
+        mapOf<String, Any?>(
+            "periode" to it.periode.somMap(),
+            "arbeidstakerOgFrilansInntekt" to it.arbeidstakerOgFrilansInntekt?.formaterSomValuta(),
+            "ytelse" to it.ytelse?.formaterSomValuta()
+        )
     }
 
     private fun Periode.somMap() = mapOf(

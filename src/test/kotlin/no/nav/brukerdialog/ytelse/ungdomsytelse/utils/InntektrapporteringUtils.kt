@@ -26,7 +26,6 @@ object InntektrapporteringUtils {
         mottatt = ZonedDateTime.parse("2025-01-01T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter),
         oppgittInntektForPeriode = OppgittInntektForPeriode(
             arbeidstakerOgFrilansInntekt = 3000,
-            næringsinntekt = null,
             inntektFraYtelse = 0,
             periodeForInntekt = UngPeriode(
                 fraOgMed = LocalDate.parse("2025-01-01"),
@@ -42,7 +41,6 @@ object InntektrapporteringUtils {
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
         oppgittInntektForPeriode: OppgittInntektForPeriode = OppgittInntektForPeriode(
             arbeidstakerOgFrilansInntekt = 6000,
-            næringsinntekt = 4000,
             inntektFraYtelse = 2000,
             periodeForInntekt = UngPeriode(
                 fraOgMed = LocalDate.parse("2025-01-01"),

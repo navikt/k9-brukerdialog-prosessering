@@ -7,13 +7,12 @@ import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntektForPeriode as UngOp
 
 data class OppgittInntektForPeriode(
     val arbeidstakerOgFrilansInntekt: Int? = null,
-    val næringsinntekt: Int? = null,
     val inntektFraYtelse: Int? = null,
     val periodeForInntekt: UngPeriode,
 ) {
     fun somUngOppgittInntektForPeriode(): UngOppgittInntektForPeriode = UngOppgittInntektForPeriode(
         arbeidstakerOgFrilansInntekt?.let { BigDecimal.valueOf(it.toLong()) },
-        næringsinntekt?.let { BigDecimal.valueOf(it.toLong()) },
+        BigDecimal.ZERO,
         inntektFraYtelse?.let { BigDecimal.valueOf(it.toLong()) },
         periodeForInntekt.somUngPeriode(),
     )
