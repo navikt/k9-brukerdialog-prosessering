@@ -76,5 +76,5 @@ data class YtelseRegisterInntektDTO(
 enum class OppgaveStatus {
     LØST,
     ULØST,
-    KANSELLERT
+    AVBRUTT
 }
