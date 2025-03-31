@@ -91,7 +91,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     )
 
     private fun UngdomsytelseIkkeGodkjentResponse.somMap() = mapOf(
-        "korrigertDato" to DATE_FORMATTER.format(korrigertDato),
+        "korrigertDato" to korrigertDato?.let { DATE_FORMATTER.format(it) },
         "kontaktVeilederSvar" to kontaktVeilederSvar,
         "meldingFraDeltaker" to meldingFraDeltaker
     )
