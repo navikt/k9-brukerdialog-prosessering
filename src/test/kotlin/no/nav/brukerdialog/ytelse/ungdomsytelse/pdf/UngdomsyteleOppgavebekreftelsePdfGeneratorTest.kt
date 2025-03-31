@@ -44,7 +44,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
-                            oppgaveId = UUID.randomUUID().toString(),
+                            oppgaveReferanse = UUID.randomUUID().toString(),
                             veilederRef = "Pål Hønesen",
                             meldingFraVeileder = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
                     """.trimMargin(),
@@ -65,7 +65,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-                            oppgaveId = UUID.randomUUID().toString(),
+                            oppgaveReferanse = UUID.randomUUID().toString(),
                             veilederRef = "Pål Hønesen",
                             meldingFraVeileder = """Hei, jeg har endret sluttdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
                     """.trimMargin(),
@@ -81,7 +81,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-                            oppgaveId = UUID.randomUUID().toString(),
+                            oppgaveReferanse = UUID.randomUUID().toString(),
                             veilederRef = "Pål Hønesen",
                             meldingFraVeileder = """Hei, jeg har endret sluttdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
                     """.trimMargin(),
@@ -102,7 +102,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
-                            oppgaveId = UUID.randomUUID().toString(),
+                            oppgaveReferanse = UUID.randomUUID().toString(),
                             veilederRef = "n/a",
                             meldingFraVeileder = null,
                             fraOgMed = LocalDate.parse("2025-06-01"),
@@ -140,7 +140,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
                         oppgave = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
-                            oppgaveId = id,
+                            oppgaveReferanse = id,
                             veilederRef = "Pål Hønesen",
                             meldingFraVeileder = null,
                             fraOgMed = LocalDate.parse("2025-06-01"),

@@ -22,7 +22,7 @@ import java.time.LocalDate
 )
 sealed class UngdomsytelseOppgaveDTO(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
-    open val oppgaveId: String,
+    open val oppgaveReferanse: String,
     open val bekreftelseSvar: BekreftelseSvar,
     open val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
 ) {
@@ -31,10 +31,10 @@ sealed class UngdomsytelseOppgaveDTO(
 }
 
 data class EndretStartdatoUngdomsytelseOppgaveDTO(
-    override val oppgaveId: String,
+    override val oppgaveReferanse: String,
     override val bekreftelseSvar: BekreftelseSvar,
     override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : UngdomsytelseOppgaveDTO(oppgaveId, bekreftelseSvar, ikkeGodkjentResponse) {
+) : UngdomsytelseOppgaveDTO(oppgaveReferanse, bekreftelseSvar, ikkeGodkjentResponse) {
 
     @Hidden
     @AssertTrue(message = "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR")
@@ -50,7 +50,7 @@ data class EndretStartdatoUngdomsytelseOppgaveDTO(
         val endretStartdatoOppgavetypeDataDTO = oppgaveDTO.oppgavetypeData as EndretStartdatoOppgavetypeDataDTO
 
         return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
-            oppgaveId = oppgaveId,
+            oppgaveReferanse = oppgaveReferanse,
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             nyStartdato = endretStartdatoOppgavetypeDataDTO.nyStartdato,
@@ -61,10 +61,10 @@ data class EndretStartdatoUngdomsytelseOppgaveDTO(
 }
 
 data class EndretSluttdatoUngdomsytelseOppgaveDTO(
-    override val oppgaveId: String,
+    override val oppgaveReferanse: String,
     override val bekreftelseSvar: BekreftelseSvar,
     override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null
-) : UngdomsytelseOppgaveDTO(oppgaveId, bekreftelseSvar, ikkeGodkjentResponse) {
+) : UngdomsytelseOppgaveDTO(oppgaveReferanse, bekreftelseSvar, ikkeGodkjentResponse) {
 
     @Hidden
     @AssertTrue(message = "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR")
@@ -79,7 +79,7 @@ data class EndretSluttdatoUngdomsytelseOppgaveDTO(
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         val endretSluttdatoOppgavetypeDataDTO = oppgaveDTO.oppgavetypeData as EndretSluttdatoOppgavetypeDataDTO
         return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-            oppgaveId = oppgaveId,
+            oppgaveReferanse = oppgaveReferanse,
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             nySluttdato = endretSluttdatoOppgavetypeDataDTO.nySluttdato,
@@ -91,10 +91,10 @@ data class EndretSluttdatoUngdomsytelseOppgaveDTO(
 
 
 data class KontrollerRegisterinntektOppgavetypeDataDTO(
-    override val oppgaveId: String,
+    override val oppgaveReferanse: String,
     override val bekreftelseSvar: BekreftelseSvar,
     override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : UngdomsytelseOppgaveDTO(oppgaveId, bekreftelseSvar, ikkeGodkjentResponse) {
+) : UngdomsytelseOppgaveDTO(oppgaveReferanse, bekreftelseSvar, ikkeGodkjentResponse) {
 
     @Hidden
     @AssertTrue(message = "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR")
@@ -110,7 +110,7 @@ data class KontrollerRegisterinntektOppgavetypeDataDTO(
         val kontrollerRegisterInntektOppgaveTypeDataDTO = oppgaveDTO.oppgavetypeData as KontrollerRegisterInntektOppgaveTypeDataDTO
 
         return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
-            oppgaveId = oppgaveId,
+            oppgaveReferanse = oppgaveReferanse,
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             fraOgMed = kontrollerRegisterInntektOppgaveTypeDataDTO.fraOgMed,
