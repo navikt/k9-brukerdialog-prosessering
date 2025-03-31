@@ -8,6 +8,7 @@ import no.nav.k9.søknad.felles.type.Periode
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
+import java.util.*
 
 
 object OlpPdfSøknadUtils {
@@ -138,7 +139,10 @@ object OlpPdfSøknadUtils {
             harVærtEllerErVernepliktig = true,
             k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
             kurs = Kurs(
-                kursholder = "Senter for Kurs AS",
+                kursholder = Kursholder(
+                    UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
+                    "Senter for Kurs AS"
+                ),
                 kursperioder = listOf(
                     Periode(
                         LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")
