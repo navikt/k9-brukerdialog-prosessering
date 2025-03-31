@@ -52,7 +52,7 @@ class UngdomsytelseService(
     suspend fun oppgavebekreftelse(oppgavebekreftelse: UngdomsytelseOppgavebekreftelse, gitSha: String) {
         val oppgaveDTO = ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(
             oppgavebekreftelse.deltakelseId,
-            UUID.fromString(oppgavebekreftelse.oppgave.oppgaveId)
+            UUID.fromString(oppgavebekreftelse.oppgave.oppgaveReferanse)
         )
 
         val ungdomsytelseOppgavebekreftelseInnsending = UngdomsytelseOppgavebekreftelseInnsending(

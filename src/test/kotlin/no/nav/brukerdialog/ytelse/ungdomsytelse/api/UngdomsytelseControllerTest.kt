@@ -186,7 +186,7 @@ class UngdomsytelseControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
         every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any(), any()) } returns OppgaveDTO(
-            id = UUID.randomUUID(),
+            oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
             oppgavetypeData = EndretStartdatoOppgavetypeDataDTO(
                 nyStartdato = LocalDate.now(),
@@ -223,7 +223,7 @@ class UngdomsytelseControllerTest {
         val jsonPayload = objectMapper.writeValueAsString(
             defaultOppgavebekreftelse.copy(
                 oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
-                    oppgaveId = "123",
+                    oppgaveReferanse = "123",
                     bekreftelseSvar = BekreftelseSvar.AVSLÅR,
                     ikkeGodkjentResponse = null,
                 )
@@ -253,7 +253,7 @@ class UngdomsytelseControllerTest {
                           "violations": [
                             {
                               "invalidValue": "123",
-                              "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.oppgaveId",
+                              "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.oppgaveReferanse",
                               "parameterType": "ENTITY",
                               "reason": "Forventet gyldig UUID, men var '123'"
                             },

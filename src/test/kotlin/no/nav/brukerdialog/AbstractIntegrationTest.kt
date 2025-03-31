@@ -12,7 +12,6 @@ import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretSluttdatoOppgavetypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveStatus
@@ -151,7 +150,7 @@ abstract class AbstractIntegrationTest {
 
     protected fun mockHentingAvOppgave() {
         every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any(), any()) } returns OppgaveDTO(
-            id = UUID.randomUUID(),
+            oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
             oppgavetypeData = EndretStartdatoOppgavetypeDataDTO(
                 nyStartdato = LocalDate.now(),

@@ -36,7 +36,7 @@ data class UngdomsytelseOppgavebekreftelseInnsending(
         return UngdomsytelseKomplettOppgavebekreftelse(
             deltakelseId = deltakelseId,
             oppgave = komplettOppgavebekreftelse,
-            søknadId = komplettOppgavebekreftelse.oppgaveId,
+            søknadId = komplettOppgavebekreftelse.oppgaveReferanse,
             mottatt = mottatt,
             søker = søker,
             k9Format = k9Format as OppgaveBekreftelse
@@ -51,7 +51,7 @@ data class UngdomsytelseOppgavebekreftelseInnsending(
             .medVersjon(UNG_OPPGAVE_VERSJON)
             .medMottattDato(mottatt)
             .medSpråk(Språk.NORSK_BOKMÅL)
-            .medSøknadId(SøknadId(komplettOppgavebekreftelse.oppgaveId))
+            .medSøknadId(SøknadId(komplettOppgavebekreftelse.oppgaveReferanse))
             .medSøker(søker.somK9Søker())
             .medBekreftelse(komplettOppgavebekreftelse.somK9Format())
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
@@ -59,7 +59,7 @@ data class UngdomsytelseOppgavebekreftelseInnsending(
 
     override fun søkerNorskIdent(): String? = null
     override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE
-    override fun søknadId(): String = komplettOppgavebekreftelse.oppgaveId
+    override fun søknadId(): String = komplettOppgavebekreftelse.oppgaveReferanse
     override fun vedlegg(): List<URL> = mutableListOf()
     override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()
 }

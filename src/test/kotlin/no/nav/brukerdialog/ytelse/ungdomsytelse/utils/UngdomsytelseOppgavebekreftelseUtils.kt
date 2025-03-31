@@ -23,9 +23,9 @@ object UngdomsytelseOppgavebekreftelseUtils {
     fun oppgavebekreftelseMottatt(
         søkerFødselsnummer: String = "02119970078",
         deltakelseId: String = UUID.randomUUID().toString(),
-        oppgaveId: String = UUID.randomUUID().toString(),
+        oppgaveReferanse: String = UUID.randomUUID().toString(),
         oppgave: KomplettUngdomsytelseOppgaveDTO = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
-            oppgaveId = oppgaveId,
+            oppgaveReferanse = oppgaveReferanse,
             veilederRef = "veilder-123",
             meldingFraVeileder = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
                 """.trimMargin(),
@@ -48,7 +48,7 @@ object UngdomsytelseOppgavebekreftelseUtils {
                 mellomnavn = "Mellomnavn",
                 fornavn = "Ola"
             ),
-            k9Format = gyldigK9FormatOppgave(oppgaveId, mottatt, oppgave.somK9Format()),
+            k9Format = gyldigK9FormatOppgave(oppgaveReferanse, mottatt, oppgave.somK9Format()),
         )
     }
 
@@ -70,13 +70,13 @@ object UngdomsytelseOppgavebekreftelseUtils {
 private fun KomplettUngdomsytelseOppgaveDTO.somK9Format(): Bekreftelse {
     return when (this) {
         is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> EndretFomDatoBekreftelse(
-            UUID.fromString(oppgaveId),
+            UUID.fromString(oppgaveReferanse),
             nyStartdato,
             bekreftelseSvar.somBoolean()
         )
 
         is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> EndretTomDatoBekreftelse(
-            UUID.fromString(oppgaveId),
+            UUID.fromString(oppgaveReferanse),
             nySluttdato,
             bekreftelseSvar.somBoolean()
         )

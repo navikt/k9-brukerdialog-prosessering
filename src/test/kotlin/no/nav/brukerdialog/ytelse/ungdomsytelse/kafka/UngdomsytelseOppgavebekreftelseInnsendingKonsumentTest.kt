@@ -49,10 +49,10 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
         mockJournalføring()
         mockHentingAvOppgave()
 
-        val oppgaveId = UUID.randomUUID()
+        val oppgaveReferanse = UUID.randomUUID()
         val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(
             oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
-                oppgaveId = oppgaveId.toString(),
+                oppgaveReferanse = oppgaveReferanse.toString(),
                 bekreftelseSvar = BekreftelseSvar.GODTAR
             )
         )
@@ -78,12 +78,12 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
         }
 
         k9DittnavVarselConsumer.lesMelding(
-            key = oppgaveId.toString(),
+            key = oppgaveReferanse.toString(),
             topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC
         ).value().assertDittnavVarsel(
             K9Beskjed(
                 metadata = no.nav.brukerdialog.utils.SøknadUtils.metadata,
-                grupperingsId = oppgaveId.toString(),
+                grupperingsId = oppgaveReferanse.toString(),
                 tekst = "Bekreftelse om endring av ungdomsprogramopplysninger er mottatt",
                 link = null,
                 dagerSynlig = 7,
@@ -97,12 +97,12 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val deltakelseId = UUID.randomUUID().toString()
-        val oppgaveId = UUID.randomUUID().toString()
+        val oppgaveReferanse = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
         val oppgavebekreftelseMottatt = UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
             deltakelseId = deltakelseId,
-            oppgaveId = oppgaveId,
+            oppgaveReferanse = oppgaveReferanse,
             mottatt = mottatt
         )
         val correlationId = UUID.randomUUID().toString()
@@ -118,32 +118,32 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
 
         producer.leggPåTopic(
-            key = oppgaveId,
+            key = oppgaveReferanse,
             value = topicEntryJson,
             topic = UngdomsytelseOppgavebekreftelseTopologyConfiguration.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_MOTTATT_TOPIC
         )
         val lesMelding =
             consumer.lesMelding(
-                key = oppgaveId,
+                key = oppgaveReferanse,
                 topic = UngdomsytelseOppgavebekreftelseTopologyConfiguration.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC,
                 maxWaitInSeconds = 120
             ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(
-            preprosessertSøknadSomJson(deltakelseId, oppgaveId, mottattString),
+            preprosessertSøknadSomJson(deltakelseId, oppgaveReferanse, mottattString),
             preprosessertSøknadJson,
             true
         )
     }
 
     @Language("JSON")
-    private fun preprosessertSøknadSomJson(deltakelseId: String, oppgaveId: String, mottatt: String) = """
+    private fun preprosessertSøknadSomJson(deltakelseId: String, oppgaveReferanse: String, mottatt: String) = """
         {
           "deltakelseId": "$deltakelseId",
           "oppgave": {
             "type": "BEKREFT_ENDRET_STARTDATO",
-            "oppgaveId": "$oppgaveId",
+            "oppgaveReferanse": "$oppgaveReferanse",
             "veilederRef": "veilder-123",
             "meldingFraVeileder": "Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.",
             "nyStartdato": "2025-01-01",
@@ -167,7 +167,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             ]
           ],
           "k9Format": {
-            "søknadId": "$oppgaveId",
+            "søknadId": "$oppgaveReferanse",
             "versjon": "1.0.0",
             "språk": "nb",
             "mottattDato": "$mottatt",
@@ -177,7 +177,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             "bekreftelse": {
               "type": "UNG_ENDRET_FOM_DATO",
               "nyFomDato": "2025-01-01",
-              "oppgaveId": "$oppgaveId",
+              "oppgaveId": "$oppgaveReferanse",
               "uttalelseFraBruker": null,
               "harBrukerGodtattEndringen": true,
               "dataBruktTilUtledning": null

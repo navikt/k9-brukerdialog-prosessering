@@ -41,7 +41,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     }
 
     private fun KomplettUngdomsytelseOppgaveDTO.somMap() = mapOf(
-        "oppgaveId" to oppgaveId,
+        "oppgaveReferanse" to oppgaveReferanse,
         "veilederRef" to veilederRef,
         "meldingFraVeileder" to meldingFraVeileder,
         "endretStartdatoOppgave" to when (this) {

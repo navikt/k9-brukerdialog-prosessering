@@ -25,7 +25,7 @@ import java.util.*
     JsonSubTypes.Type(value = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO::class, name = "BEKREFT_AVVIK_REGISTERINNTEKT"),
 )
 sealed class KomplettUngdomsytelseOppgaveDTO(
-    open val oppgaveId: String,
+    open val oppgaveReferanse: String,
     open val veilederRef: String,
     open val meldingFraVeileder: String? = null,
 ) {
@@ -35,16 +35,16 @@ sealed class KomplettUngdomsytelseOppgaveDTO(
 }
 
 data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
-    override val oppgaveId: String,
+    override val oppgaveReferanse: String,
     override val veilederRef: String,
     override val meldingFraVeileder: String? = null,
     val nyStartdato: LocalDate,
     val bekreftelseSvar: BekreftelseSvar,
     val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : KomplettUngdomsytelseOppgaveDTO(oppgaveId, veilederRef, meldingFraVeileder) {
+) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, veilederRef, meldingFraVeileder) {
     override fun somK9Format(): Bekreftelse {
         val endretFomDatoBekreftelse =
-            EndretFomDatoBekreftelse(UUID.fromString(oppgaveId), nyStartdato, bekreftelseSvar.somBoolean())
+            EndretFomDatoBekreftelse(UUID.fromString(oppgaveReferanse), nyStartdato, bekreftelseSvar.somBoolean())
 
         if (ikkeGodkjentResponse != null) {
             endretFomDatoBekreftelse.medUttalelseFraBruker(ikkeGodkjentResponse.meldingFraDeltaker)
@@ -55,7 +55,7 @@ data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
-            oppgaveId = oppgaveId,
+            oppgaveReferanse = oppgaveReferanse,
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             nyStartdato = nyStartdato,
@@ -66,17 +66,17 @@ data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
 }
 
 data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-    override val oppgaveId: String,
+    override val oppgaveReferanse: String,
     override val veilederRef: String,
     override val meldingFraVeileder: String? = null,
     val nySluttdato: LocalDate,
     val bekreftelseSvar: BekreftelseSvar,
     val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : KomplettUngdomsytelseOppgaveDTO(oppgaveId, veilederRef, meldingFraVeileder) {
+) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, veilederRef, meldingFraVeileder) {
 
     override fun somK9Format(): Bekreftelse {
         val endretTomDatoBekreftelse =
-            EndretTomDatoBekreftelse(UUID.fromString(oppgaveId), nySluttdato, bekreftelseSvar.somBoolean())
+            EndretTomDatoBekreftelse(UUID.fromString(oppgaveReferanse), nySluttdato, bekreftelseSvar.somBoolean())
 
         if (ikkeGodkjentResponse != null) {
             endretTomDatoBekreftelse.medUttalelseFraBruker(ikkeGodkjentResponse.meldingFraDeltaker)
@@ -87,7 +87,7 @@ data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-            oppgaveId = oppgaveId,
+            oppgaveReferanse = oppgaveReferanse,
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             nySluttdato = nySluttdato,
@@ -98,7 +98,7 @@ data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
 }
 
 data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
-    override val oppgaveId: String,
+    override val oppgaveReferanse: String,
     override val veilederRef: String,
     override val meldingFraVeileder: String? = null,
     val fraOgMed: LocalDate,
@@ -106,11 +106,11 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     val registerinntekt: RegisterinntektDTO,
     val bekreftelseSvar: BekreftelseSvar,
     val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : KomplettUngdomsytelseOppgaveDTO(oppgaveId, veilederRef, meldingFraVeileder) {
+) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, veilederRef, meldingFraVeileder) {
 
     override fun somK9Format(): Bekreftelse {
         val inntektBekreftelse = InntektBekreftelse.builder()
-            .medOppgaveId(UUID.fromString(oppgaveId))
+            .medOppgaveId(UUID.fromString(oppgaveReferanse))
             .medOppgittePeriodeinntekter(registerinntekt.somK9Format())
             .medHarBrukerGodtattEndringen(bekreftelseSvar.somBoolean())
 
@@ -123,7 +123,7 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
-            oppgaveId = oppgaveId,
+            oppgaveReferanse = oppgaveReferanse,
             veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
             meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             fraOgMed = fraOgMed,
