@@ -1,5 +1,7 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering
 
+import io.swagger.v3.oas.annotations.Hidden
+import jakarta.validation.constraints.AssertTrue
 import no.nav.k9.søknad.felles.type.Periode
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -10,6 +12,11 @@ data class OppgittInntektForPeriode(
     val inntektFraYtelse: Int? = null,
     val periodeForInntekt: UngPeriode,
 ) {
+
+    @Hidden
+    @AssertTrue(message = "Må enten ha oppgitt inntekt fra arbeidstaker/frilans eller inntekt fra ytelse")
+    fun harOppgittInntekt(): Boolean = arbeidstakerOgFrilansInntekt != null || inntektFraYtelse != null
+
     fun somUngOppgittInntektForPeriode(): UngOppgittInntektForPeriode = UngOppgittInntektForPeriode(
         arbeidstakerOgFrilansInntekt?.let { BigDecimal.valueOf(it.toLong()) },
         BigDecimal.ZERO,
