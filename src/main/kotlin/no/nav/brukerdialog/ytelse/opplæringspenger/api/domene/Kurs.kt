@@ -28,7 +28,7 @@ data class Kurs(
 }
 
 data class Kursholder(
-    val uuid: UUID,
+    val uuid: UUID? = null,
     @field:NotBlank(message = "Kan ikke være tom") val navn: String
 ){
     fun tilK9Format(): K9Kursholder {
