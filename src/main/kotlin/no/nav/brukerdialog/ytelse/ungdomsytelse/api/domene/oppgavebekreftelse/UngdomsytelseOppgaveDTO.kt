@@ -123,8 +123,8 @@ data class KontrollerRegisterinntektOppgavetypeDataDTO(
 }
 
 data class UngdomsytelseIkkeGodkjentResponse(
-    val korrigertDato: LocalDate,
-    val kontaktVeilederSvar: Boolean,
+    val korrigertDato: LocalDate? = null,
+    val kontaktVeilederSvar: Boolean? = null,
     val meldingFraDeltaker: String,
 )
 
