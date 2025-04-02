@@ -11,7 +11,7 @@ data class Kurs(
 )
 
 data class Kursholder(
-    val uuid: UUID,
+    val uuid: UUID? = null,
     val navn: String
 )
 
