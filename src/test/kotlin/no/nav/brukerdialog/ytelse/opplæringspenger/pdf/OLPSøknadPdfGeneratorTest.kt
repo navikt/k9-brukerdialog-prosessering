@@ -250,7 +250,7 @@ class OLPSøknadPdfGeneratorTest {
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     kurs = Kurs(
-                        kursholder = Kursholder(
+                        kursholder = KursholderType.Kursholder(
                             UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                             "Senter for Kurs AS"
                         ),
@@ -276,7 +276,7 @@ class OLPSøknadPdfGeneratorTest {
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     kurs = Kurs(
-                        kursholder = Kursholder(
+                        kursholder = KursholderType.Kursholder(
                             UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                             "Senter for Kurs AS"
                         ),

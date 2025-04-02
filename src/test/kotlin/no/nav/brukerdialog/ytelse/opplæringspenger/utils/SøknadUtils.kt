@@ -6,7 +6,6 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.*
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.*
-import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.Kursholder
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
@@ -159,7 +158,7 @@ class SøknadUtils {
                 )
             ),
             kurs = Kurs(
-                kursholder = Kursholder(
+                kursholder = KursholderType.Kursholder(
                     UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                     "Senter for Kurs AS"
                 ),
