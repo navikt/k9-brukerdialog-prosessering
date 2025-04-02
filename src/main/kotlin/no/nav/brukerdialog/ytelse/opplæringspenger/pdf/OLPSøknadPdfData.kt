@@ -82,17 +82,10 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     )
 
     private fun Kurs.somMap() = mapOf<String, Any?>(
-        "institusjonsnavn" to kursholder.navn(),
+        "institusjonsnavn" to kursholder.navn,
         "kursperioder" to kursperioder.somMap(),
         "reise" to reise.somMap()
     )
-
-    private fun KursholderType.navn(): String {
-        return when (this) {
-            is KursholderType.Kursholder -> navn
-            is KursholderType.KursholderNavn -> navn
-        }
-    }
 
     private fun List<Periode>.somMap(): List<Map<String, Any?>> {
         return map {

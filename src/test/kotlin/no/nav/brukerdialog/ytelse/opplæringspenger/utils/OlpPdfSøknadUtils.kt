@@ -139,7 +139,7 @@ object OlpPdfSøknadUtils {
             harVærtEllerErVernepliktig = true,
             k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
             kurs = Kurs(
-                kursholder = KursholderType.Kursholder(
+                kursholder = Kursholder(
                     UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                     "Senter for Kurs AS"
                 ),

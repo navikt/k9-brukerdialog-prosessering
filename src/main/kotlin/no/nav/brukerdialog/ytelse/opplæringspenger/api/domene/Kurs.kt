@@ -1,10 +1,5 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
@@ -19,7 +14,7 @@ import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs as K9Kurs
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Reise as K9Reise
 
 data class Kurs(
-    @field:Valid val kursholder: KursholderType,
+    @field:Valid val kursholder: Kursholder,
     @field:NotEmpty(message = "Kan ikke være tom liste") val kursperioder: List<Periode>,
     @field:Valid val reise: Reise
 ) {
@@ -32,41 +27,12 @@ data class Kurs(
     }
 }
 
-@JsonDeserialize(using = KursholderTypeDeserializer::class)
-sealed class KursholderType {
-    abstract fun tilK9Format(): K9Kursholder
-
-    data class Kursholder(
-        val uuid: UUID? = null,
-        @field:NotBlank(message = "Kan ikke være tom") val navn: String
-    ) : KursholderType() {
-        override fun tilK9Format(): K9Kursholder {
-            return K9Kursholder(navn, uuid)
-        }
-    }
-
-    data class KursholderNavn(
-        @field:NotBlank(message = "Kan ikke være tom") val navn: String
-    ) : KursholderType() {
-        override fun tilK9Format(): K9Kursholder {
-            return K9Kursholder(navn, null)
-        }
-    }
-}
-
-class KursholderTypeDeserializer : JsonDeserializer<KursholderType>() {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): KursholderType {
-        val node: JsonNode = p.codec.readTree(p)
-        return if (node.has("uuid")) {
-            KursholderType.Kursholder(
-                uuid = node.get("uuid")?.let { UUID.fromString(it.asText()) },
-                navn = node.get("navn").asText()
-            )
-        } else {
-            KursholderType.KursholderNavn(
-                navn = node.get("navn").asText()
-            )
-        }
+data class Kursholder(
+    val uuid: UUID? = null,
+    @field:NotBlank(message = "Kan ikke være tom") val navn: String
+){
+    fun tilK9Format(): K9Kursholder {
+        return K9Kursholder(navn, uuid)
     }
 }
 
@@ -74,7 +40,7 @@ data class Reise(
     @field:NotNull(message = "Kan ikke være null") val reiserUtenforKursdager: Boolean,
     val reisedager: List<LocalDate>? = null,
     val reisedagerBeskrivelse: String? = null
-) {
+){
     @Hidden
     @AssertTrue(message = "Dersom 'reiserUtenforKursdager' er true, kan ikke 'reisedager' være tom liste")
     fun isReisedagerMedDager(): Boolean {
