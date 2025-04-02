@@ -8,21 +8,31 @@ import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.NotNull
 import no.nav.k9.søknad.felles.type.Periode
 import java.time.LocalDate
+import java.util.UUID
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kursholder as K9Kursholder
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Kurs as K9Kurs
 import no.nav.k9.søknad.ytelse.olp.v1.kurs.Reise as K9Reise
 
 data class Kurs(
-    @field:NotBlank(message = "Kan ikke være tom") val kursholder: String,
+    @field:Valid val kursholder: Kursholder,
     @field:NotEmpty(message = "Kan ikke være tom liste") val kursperioder: List<Periode>,
     @field:Valid val reise: Reise
 ) {
     fun tilK9Format(): K9Kurs {
         return K9Kurs(
-            K9Kursholder(kursholder, null),
+            kursholder.tilK9Format(),
             kursperioder,
             reise.tilK9Format()
         )
+    }
+}
+
+data class Kursholder(
+    val uuid: UUID? = null,
+    @field:NotBlank(message = "Kan ikke være tom") val navn: String
+){
+    fun tilK9Format(): K9Kursholder {
+        return K9Kursholder(navn, uuid)
     }
 }
 

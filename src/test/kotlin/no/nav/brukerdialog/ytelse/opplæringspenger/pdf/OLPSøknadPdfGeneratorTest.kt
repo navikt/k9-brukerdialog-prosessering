@@ -10,6 +10,7 @@ import java.io.File
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
+import java.util.*
 
 class OLPSøknadPdfGeneratorTest {
 
@@ -249,7 +250,10 @@ class OLPSøknadPdfGeneratorTest {
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     kurs = Kurs(
-                        kursholder = "Senter for Kurs AS",
+                        kursholder = Kursholder(
+                            UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
+                            "Senter for Kurs AS"
+                        ),
                         kursperioder = listOf(
                             Periode(LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")),
                             Periode(LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02"))
@@ -272,7 +276,10 @@ class OLPSøknadPdfGeneratorTest {
             pdf = generator.genererPDF(
                 pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
                     kurs = Kurs(
-                        kursholder = "Senter for Kurs AS",
+                        kursholder = Kursholder(
+                            UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
+                            "Senter for Kurs AS"
+                        ),
                         kursperioder = listOf(
                             Periode(LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")),
                             Periode(LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02"))

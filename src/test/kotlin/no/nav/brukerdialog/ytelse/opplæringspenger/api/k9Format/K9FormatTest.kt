@@ -191,8 +191,8 @@ class K9FormatTest {
               },
               "kurs" : {
                 "kursholder" : {
-                  "institusjonsidentifikator" : null,
-                  "navn" : "Opplæring for kurs AS"
+                  "institusjonsidentifikator" : "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+                  "navn" : "Senter for Kurs AS"
                 },
                 "kursperioder" : [ "2022-01-01/2022-01-10" ],
                 "reise" : {
