@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
@@ -23,7 +23,7 @@ object SøknadUtils {
 
     internal val defaultOppgavebekreftelse = UngdomsytelseOppgavebekreftelse(
         deltakelseId = UUID.randomUUID(),
-        oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
+        oppgave = UngdomsytelseOppgaveDTO(
             oppgaveReferanse = UUID.randomUUID().toString(),
             uttalelse = UngdomsytelseOppgaveUttalelseDTO(
                 bekreftelseSvar = BekreftelseSvar.GODTAR,

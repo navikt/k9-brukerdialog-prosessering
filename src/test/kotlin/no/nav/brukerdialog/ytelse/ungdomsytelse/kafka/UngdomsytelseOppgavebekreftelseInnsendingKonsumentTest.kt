@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka
 
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.coVerify
 import no.nav.brukerdialog.AbstractIntegrationTest
@@ -11,11 +10,10 @@ import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
-import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
@@ -28,7 +26,6 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
 import java.net.URI
-import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -52,7 +49,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
 
         val oppgaveReferanse = UUID.randomUUID()
         val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(
-            oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
+            oppgave = UngdomsytelseOppgaveDTO(
                 oppgaveReferanse = oppgaveReferanse.toString(),
                 uttalelse = UngdomsytelseOppgaveUttalelseDTO(
                     bekreftelseSvar = BekreftelseSvar.GODTAR

@@ -1,7 +1,5 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
@@ -9,76 +7,43 @@ import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretSluttdatoOppg
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.KontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
+import org.hibernate.validator.constraints.UUID
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type"
-)
-@JsonSubTypes(
-    JsonSubTypes.Type(value = EndretStartdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_STARTDATO"),
-    JsonSubTypes.Type(value = EndretSluttdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
-    JsonSubTypes.Type(
-        value = KontrollerRegisterinntektOppgavetypeDataDTO::class,
-        name = "BEKREFT_AVVIK_REGISTERINNTEKT"
-    ),
-)
-sealed class UngdomsytelseOppgaveDTO(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
-    open val oppgaveReferanse: String,
-    @field:Valid open val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
+
+data class UngdomsytelseOppgaveDTO(
+    @field:UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    val oppgaveReferanse: String,
+    @field:Valid val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
 ) {
 
-    abstract fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO
-}
+    fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+        return when (oppgaveDTO.oppgavetypeData) {
+            is EndretStartdatoOppgavetypeDataDTO -> {
+                return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
+                    oppgaveReferanse = oppgaveReferanse,
+                    nyStartdato = oppgaveDTO.oppgavetypeData.nyStartdato,
+                    uttalelse = uttalelse
+                )
+            }
 
-data class EndretStartdatoUngdomsytelseOppgaveDTO(
-    override val oppgaveReferanse: String,
-    @field:Valid override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
-) : UngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
+            is EndretSluttdatoOppgavetypeDataDTO -> {
+                KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
+                    oppgaveReferanse = oppgaveReferanse,
+                    nySluttdato = oppgaveDTO.oppgavetypeData.nySluttdato,
+                    uttalelse = uttalelse
+                )
+            }
 
-    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
-        val endretStartdatoOppgavetypeDataDTO = oppgaveDTO.oppgavetypeData as EndretStartdatoOppgavetypeDataDTO
-
-        return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
-            oppgaveReferanse = oppgaveReferanse,
-            nyStartdato = endretStartdatoOppgavetypeDataDTO.nyStartdato,
-            uttalelse = uttalelse
-        )
-    }
-}
-
-data class EndretSluttdatoUngdomsytelseOppgaveDTO(
-    override val oppgaveReferanse: String,
-    @field:Valid override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
-) : UngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
-
-    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
-        val endretSluttdatoOppgavetypeDataDTO = oppgaveDTO.oppgavetypeData as EndretSluttdatoOppgavetypeDataDTO
-        return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-            oppgaveReferanse = oppgaveReferanse,
-            nySluttdato = endretSluttdatoOppgavetypeDataDTO.nySluttdato,
-            uttalelse = uttalelse
-        )
-    }
-}
-
-data class KontrollerRegisterinntektOppgavetypeDataDTO(
-    override val oppgaveReferanse: String,
-    @field:Valid override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
-) : UngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
-
-    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
-        val kontrollerRegisterInntektOppgaveTypeDataDTO =
-            oppgaveDTO.oppgavetypeData as KontrollerRegisterInntektOppgaveTypeDataDTO
-
-        return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
-            oppgaveReferanse = oppgaveReferanse,
-            fraOgMed = kontrollerRegisterInntektOppgaveTypeDataDTO.fraOgMed,
-            tilOgMed = kontrollerRegisterInntektOppgaveTypeDataDTO.tilOgMed,
-            registerinntekt = kontrollerRegisterInntektOppgaveTypeDataDTO.registerinntekt,
-            uttalelse = uttalelse
-        )
+            is KontrollerRegisterInntektOppgaveTypeDataDTO -> {
+                KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
+                    oppgaveReferanse = oppgaveReferanse,
+                    fraOgMed = oppgaveDTO.oppgavetypeData.fraOgMed,
+                    tilOgMed = oppgaveDTO.oppgavetypeData.tilOgMed,
+                    registerinntekt = oppgaveDTO.oppgavetypeData.registerinntekt,
+                    uttalelse = uttalelse
+                )
+            }
+        }
     }
 }
 
