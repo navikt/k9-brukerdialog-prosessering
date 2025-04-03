@@ -151,7 +151,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
                 "bekreftelseSvar": "GODTAR",
                 "meldingFraDeltaker": null
             },
-            "nyStartdato": "2025-01-01",
+            "nyStartdato": "2025-01-01"
           },
           "mottatt": "$mottatt",
           "søker": {
