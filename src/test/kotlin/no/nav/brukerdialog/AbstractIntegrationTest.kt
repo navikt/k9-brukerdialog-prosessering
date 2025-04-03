@@ -153,9 +153,7 @@ abstract class AbstractIntegrationTest {
             oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
             oppgavetypeData = EndretStartdatoOppgavetypeDataDTO(
-                nyStartdato = LocalDate.now(),
-                veilederRef = "veileder-123",
-                meldingFraVeileder = "Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen."
+                nyStartdato = LocalDate.now()
             ),
             status = OppgaveStatus.ULØST,
             opprettetDato = ZonedDateTime.now(),
