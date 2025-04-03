@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser
 
 
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier

@@ -2,14 +2,14 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.RegisterinntektDTO
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.OppgittInntektForPeriode
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretFomDatoBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretTomDatoBekreftelse
 import no.nav.k9.søknad.felles.type.Periode
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.*

@@ -4,7 +4,6 @@ import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
 import no.nav.brukerdialog.common.Ytelse
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.RegisterinntektDTO
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
@@ -17,6 +16,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
 import java.math.BigDecimal
 
 class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMottatt: UngdomsytelseOppgavebekreftelseMottatt) :

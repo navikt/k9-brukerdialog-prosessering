@@ -3,10 +3,10 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretSluttdatoOppgavetypeDataDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.KontrollerRegisterInntektOppgaveTypeDataDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretSluttdatoOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.KontrollerRegisterinntektOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import org.hibernate.validator.constraints.UUID
 
 
@@ -21,7 +21,7 @@ data class UngdomsytelseOppgaveDTO(
             is EndretStartdatoOppgavetypeDataDTO -> {
                 return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
-                    nyStartdato = oppgaveDTO.oppgavetypeData.nyStartdato,
+                    nyStartdato = (oppgaveDTO.oppgavetypeData as EndretStartdatoOppgavetypeDataDTO).nyStartdato,
                     uttalelse = uttalelse
                 )
             }
@@ -29,19 +29,23 @@ data class UngdomsytelseOppgaveDTO(
             is EndretSluttdatoOppgavetypeDataDTO -> {
                 KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
-                    nySluttdato = oppgaveDTO.oppgavetypeData.nySluttdato,
+                    nySluttdato = (oppgaveDTO.oppgavetypeData as EndretSluttdatoOppgavetypeDataDTO).nySluttdato,
                     uttalelse = uttalelse
                 )
             }
 
-            is KontrollerRegisterInntektOppgaveTypeDataDTO -> {
+            is KontrollerRegisterinntektOppgavetypeDataDTO -> {
                 KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
                     oppgaveReferanse = oppgaveReferanse,
-                    fraOgMed = oppgaveDTO.oppgavetypeData.fraOgMed,
-                    tilOgMed = oppgaveDTO.oppgavetypeData.tilOgMed,
-                    registerinntekt = oppgaveDTO.oppgavetypeData.registerinntekt,
+                    fraOgMed = (oppgaveDTO.oppgavetypeData as KontrollerRegisterinntektOppgavetypeDataDTO).fraOgMed,
+                    tilOgMed = (oppgaveDTO.oppgavetypeData as KontrollerRegisterinntektOppgavetypeDataDTO).tilOgMed,
+                    registerinntekt = (oppgaveDTO.oppgavetypeData as KontrollerRegisterinntektOppgavetypeDataDTO).registerinntekt,
                     uttalelse = uttalelse
                 )
+            }
+
+            else -> {
+                throw IllegalArgumentException("Ugyldig oppgavetypeData: ${oppgaveDTO.oppgavetypeData}")
             }
         }
     }

@@ -12,10 +12,6 @@ import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveStatus
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.Oppgavetype
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.oppslag.soker.SøkerService
@@ -23,6 +19,10 @@ import no.nav.brukerdialog.utils.KafkaIntegrationTest
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaProducer
 import no.nav.security.mock.oauth2.MockOAuth2Server
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.junit.jupiter.api.AfterAll

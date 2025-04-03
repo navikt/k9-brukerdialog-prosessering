@@ -8,10 +8,6 @@ import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveStatus
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.Oppgavetype
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
@@ -24,6 +20,10 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelses
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance

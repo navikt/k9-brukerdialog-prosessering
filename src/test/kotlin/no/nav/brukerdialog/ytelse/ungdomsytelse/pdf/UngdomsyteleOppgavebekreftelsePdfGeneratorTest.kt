@@ -1,8 +1,5 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.pdf
 
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.ArbeidOgFrilansRegisterInntektDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.RegisterinntektDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.YtelseRegisterInntektDTO
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
@@ -11,6 +8,9 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.ArbeidOgFrilansRegisterInntektDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.YtelseRegisterInntektDTO
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
