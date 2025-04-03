@@ -22,7 +22,6 @@ object SøknadUtils {
     )
 
     internal val defaultOppgavebekreftelse = UngdomsytelseOppgavebekreftelse(
-        deltakelseId = UUID.randomUUID(),
         oppgave = UngdomsytelseOppgaveDTO(
             oppgaveReferanse = UUID.randomUUID().toString(),
             uttalelse = UngdomsytelseOppgaveUttalelseDTO(

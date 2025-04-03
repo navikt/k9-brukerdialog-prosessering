@@ -55,7 +55,6 @@ class UngdomsytelseService(
         )
 
         val ungdomsytelseOppgavebekreftelseInnsending = UngdomsytelseOppgavebekreftelseInnsending(
-            deltakelseId = oppgavebekreftelse.deltakelseId,
             komplettOppgavebekreftelse = oppgavebekreftelse.oppgave.somKomplettOppgave(oppgaveDTO)
         )
 
