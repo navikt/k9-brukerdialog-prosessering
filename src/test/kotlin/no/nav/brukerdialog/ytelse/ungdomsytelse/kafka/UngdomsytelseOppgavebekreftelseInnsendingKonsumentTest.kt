@@ -147,8 +147,10 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
           "oppgave": {
             "type": "BEKREFT_ENDRET_STARTDATO",
             "oppgaveReferanse": "$oppgaveReferanse",
-            "veilederRef": "veilder-123",
-            "meldingFraVeileder": "Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.",
+            "uttalelse": {
+                "bekreftelseSvar": "GODTAR",
+                "meldingFraDeltaker": null
+            },
             "nyStartdato": "2025-01-01",
             "bekreftelseSvar": "GODTAR",
             "ikkeGodkjentResponse": null

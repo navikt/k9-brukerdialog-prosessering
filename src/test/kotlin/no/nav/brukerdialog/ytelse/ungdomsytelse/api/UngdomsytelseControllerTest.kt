@@ -262,9 +262,9 @@ class UngdomsytelseControllerTest {
                             },
                             {
                               "invalidValue": false,
-                              "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.ikkeGodkjentResponseValid",
+                              "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.uttalelse.isGyldigUttalelse",
                               "parameterType": "ENTITY",
-                              "reason": "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR"
+                              "reason": "'meldingFraDeltaker' må være satt hvis 'bekreftelseSvar' er AVSLÅR"
                             }
                           ]
                         }

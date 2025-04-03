@@ -88,7 +88,7 @@ data class UngdomsytelseOppgaveUttalelseDTO(
 ) {
     @Hidden
     @AssertTrue(message = "'meldingFraDeltaker' må være satt hvis 'bekreftelseSvar' er AVSLÅR")
-    fun isIkkeGodkjentResponseValid(): Boolean {
+    fun isGyldigUttalelse(): Boolean {
         return if (bekreftelseSvar == BekreftelseSvar.AVSLÅR) {
             !meldingFraDeltaker.isNullOrBlank()
         } else {
