@@ -149,7 +149,7 @@ abstract class AbstractIntegrationTest {
     }
 
     protected fun mockHentingAvOppgave() {
-        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any(), any()) } returns OppgaveDTO(
+        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
             oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
             oppgavetypeData = EndretStartdatoOppgavetypeDataDTO(

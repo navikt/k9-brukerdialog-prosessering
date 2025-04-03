@@ -186,7 +186,7 @@ class UngdomsytelseControllerTest {
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
-        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any(), any()) } returns OppgaveDTO(
+        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
             oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
             oppgavetypeData = EndretStartdatoOppgavetypeDataDTO(
