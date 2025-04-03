@@ -25,8 +25,7 @@ object UngdomsytelseOppgavebekreftelseUtils {
         oppgave: KomplettUngdomsytelseOppgaveDTO = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
             uttalelse = UngdomsytelseOppgaveUttalelseDTO(
-                bekreftelseSvar = BekreftelseSvar.GODTAR,
-                meldingFraDeltaker = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.""".trimMargin()
+                bekreftelseSvar = BekreftelseSvar.GODTAR
             ),
             nyStartdato = LocalDate.parse("2025-01-01"),
         ),
