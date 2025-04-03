@@ -26,8 +26,7 @@ import java.util.*
 )
 sealed class KomplettUngdomsytelseOppgaveDTO(
     open val oppgaveReferanse: String,
-    open val veilederRef: String,
-    open val meldingFraVeileder: String? = null,
+    open val uttalelse: UngdomsytelseOppgaveUttalelseDTO
 ) {
     abstract fun somK9Format(): Bekreftelse
 
@@ -36,18 +35,19 @@ sealed class KomplettUngdomsytelseOppgaveDTO(
 
 data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
     override val oppgaveReferanse: String,
-    override val veilederRef: String,
-    override val meldingFraVeileder: String? = null,
+    override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val nyStartdato: LocalDate,
-    val bekreftelseSvar: BekreftelseSvar,
-    val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, veilederRef, meldingFraVeileder) {
+) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
     override fun somK9Format(): Bekreftelse {
         val endretFomDatoBekreftelse =
-            EndretFomDatoBekreftelse(UUID.fromString(oppgaveReferanse), nyStartdato, bekreftelseSvar.somBoolean())
+            EndretFomDatoBekreftelse(
+                UUID.fromString(oppgaveReferanse),
+                nyStartdato,
+                uttalelse.bekreftelseSvar.somBoolean()
+            )
 
-        if (ikkeGodkjentResponse != null) {
-            endretFomDatoBekreftelse.medUttalelseFraBruker(ikkeGodkjentResponse.meldingFraDeltaker)
+        if (!uttalelse.meldingFraDeltaker.isNullOrBlank()) {
+            endretFomDatoBekreftelse.medUttalelseFraBruker(uttalelse.meldingFraDeltaker)
         }
 
         return endretFomDatoBekreftelse
@@ -56,30 +56,28 @@ data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
-            veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
-            meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             nyStartdato = nyStartdato,
-            bekreftelseSvar = bekreftelseSvar,
-            ikkeGodkjentResponse = ikkeGodkjentResponse,
+            uttalelse = uttalelse
         )
     }
 }
 
 data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
     override val oppgaveReferanse: String,
-    override val veilederRef: String,
-    override val meldingFraVeileder: String? = null,
+    override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val nySluttdato: LocalDate,
-    val bekreftelseSvar: BekreftelseSvar,
-    val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, veilederRef, meldingFraVeileder) {
+) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
 
     override fun somK9Format(): Bekreftelse {
         val endretTomDatoBekreftelse =
-            EndretTomDatoBekreftelse(UUID.fromString(oppgaveReferanse), nySluttdato, bekreftelseSvar.somBoolean())
+            EndretTomDatoBekreftelse(
+                UUID.fromString(oppgaveReferanse),
+                nySluttdato,
+                uttalelse.bekreftelseSvar.somBoolean()
+            )
 
-        if (ikkeGodkjentResponse != null) {
-            endretTomDatoBekreftelse.medUttalelseFraBruker(ikkeGodkjentResponse.meldingFraDeltaker)
+        if (!uttalelse.meldingFraDeltaker.isNullOrBlank()) {
+            endretTomDatoBekreftelse.medUttalelseFraBruker(uttalelse.meldingFraDeltaker)
         }
 
         return endretTomDatoBekreftelse
@@ -88,34 +86,28 @@ data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
-            veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
-            meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             nySluttdato = nySluttdato,
-            bekreftelseSvar = bekreftelseSvar,
-            ikkeGodkjentResponse = ikkeGodkjentResponse,
+            uttalelse = uttalelse
         )
     }
 }
 
 data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     override val oppgaveReferanse: String,
-    override val veilederRef: String,
-    override val meldingFraVeileder: String? = null,
+    override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val fraOgMed: LocalDate,
     val tilOgMed: LocalDate,
     val registerinntekt: RegisterinntektDTO,
-    val bekreftelseSvar: BekreftelseSvar,
-    val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, veilederRef, meldingFraVeileder) {
+) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
 
     override fun somK9Format(): Bekreftelse {
         val inntektBekreftelse = InntektBekreftelse.builder()
             .medOppgaveId(UUID.fromString(oppgaveReferanse))
             .medOppgittePeriodeinntekter(registerinntekt.somK9Format())
-            .medHarBrukerGodtattEndringen(bekreftelseSvar.somBoolean())
+            .medHarBrukerGodtattEndringen(uttalelse.bekreftelseSvar.somBoolean())
 
-        if (ikkeGodkjentResponse != null) {
-            inntektBekreftelse.medUttalelseFraBruker(ikkeGodkjentResponse.meldingFraDeltaker)
+        if (!uttalelse.meldingFraDeltaker.isNullOrBlank()) {
+            inntektBekreftelse.medUttalelseFraBruker(uttalelse.meldingFraDeltaker)
         }
 
         return inntektBekreftelse.build()
@@ -124,13 +116,10 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
             oppgaveReferanse = oppgaveReferanse,
-            veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
-            meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             fraOgMed = fraOgMed,
             tilOgMed = tilOgMed,
             registerinntekt = registerinntekt,
-            bekreftelseSvar = bekreftelseSvar,
-            ikkeGodkjentResponse = ikkeGodkjentResponse,
+            uttalelse = uttalelse
         )
     }
 

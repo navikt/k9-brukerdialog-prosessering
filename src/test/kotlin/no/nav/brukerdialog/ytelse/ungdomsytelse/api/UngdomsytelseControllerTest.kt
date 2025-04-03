@@ -19,6 +19,7 @@ import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
@@ -224,8 +225,10 @@ class UngdomsytelseControllerTest {
             defaultOppgavebekreftelse.copy(
                 oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = "123",
-                    bekreftelseSvar = BekreftelseSvar.AVSLÅR,
-                    ikkeGodkjentResponse = null,
+                    uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                        bekreftelseSvar = BekreftelseSvar.AVSLÅR,
+                        meldingFraDeltaker = null,
+                    ),
                 )
             )
         )

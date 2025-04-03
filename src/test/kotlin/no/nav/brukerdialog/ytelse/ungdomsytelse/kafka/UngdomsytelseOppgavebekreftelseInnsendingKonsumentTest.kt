@@ -16,6 +16,7 @@ import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
@@ -53,7 +54,9 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
         val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(
             oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
                 oppgaveReferanse = oppgaveReferanse.toString(),
-                bekreftelseSvar = BekreftelseSvar.GODTAR
+                uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                    bekreftelseSvar = BekreftelseSvar.GODTAR
+                )
             )
         )
 

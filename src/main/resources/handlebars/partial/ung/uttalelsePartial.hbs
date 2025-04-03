@@ -1,0 +1,9 @@
+<p class="sporsmalstekst">{{spørsmålstekstBekreftelseSvar}}</p>
+<p>{{uttalelse.bekreftelseSvar}}</p><br/>
+
+{{#eq uttalelse.bekreftelseSvar "Nei"}}
+    <div class="fritekst">
+        <p class="sporsmalstekst">{{spørsmålstekstBekreftelseSvarNei}}</p>
+        <p class="fritekst_textarea">{{uttalelse.meldingFraDeltaker}}</p>
+    </div>
+{{/eq}}

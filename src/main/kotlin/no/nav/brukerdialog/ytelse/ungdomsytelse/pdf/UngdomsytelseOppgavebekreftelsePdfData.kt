@@ -14,7 +14,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseIkkeGodkjentResponse
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
 import java.math.BigDecimal
@@ -42,22 +42,17 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
 
     private fun KomplettUngdomsytelseOppgaveDTO.somMap() = mapOf(
         "oppgaveReferanse" to oppgaveReferanse,
-        "veilederRef" to veilederRef,
-        "meldingFraVeileder" to meldingFraVeileder,
+        "uttalelse" to uttalelse.somMap(),
         "endretStartdatoOppgave" to when (this) {
             is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> mapOf(
-                "nyStartdato" to DATE_FORMATTER.format(nyStartdato),
-                "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
-                "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()
+                "nyStartdato" to DATE_FORMATTER.format(nyStartdato)
             )
 
             else -> null
         },
         "endretSluttdatoOppgave" to when (this) {
             is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> mapOf(
-                "nySluttdato" to DATE_FORMATTER.format(nySluttdato),
-                "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
-                "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()
+                "nySluttdato" to DATE_FORMATTER.format(nySluttdato)
             )
 
             else -> null
@@ -67,8 +62,6 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
                 "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
                 "tilOgMed" to DATE_FORMATTER.format(tilOgMed),
                 "registerinntekt" to registerinntekt.somMap(),
-                "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
-                "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()
             )
 
             else -> null
@@ -90,9 +83,8 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
         }
     )
 
-    private fun UngdomsytelseIkkeGodkjentResponse.somMap() = mapOf(
-        "korrigertDato" to korrigertDato?.let { DATE_FORMATTER.format(it) },
-        "kontaktVeilederSvar" to kontaktVeilederSvar,
+    private fun UngdomsytelseOppgaveUttalelseDTO.somMap() = mapOf(
+        "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
         "meldingFraDeltaker" to meldingFraDeltaker
     )
 

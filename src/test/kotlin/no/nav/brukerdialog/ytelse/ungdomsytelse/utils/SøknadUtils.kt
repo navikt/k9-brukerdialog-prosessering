@@ -3,6 +3,7 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import java.time.LocalDate
@@ -24,7 +25,9 @@ object SøknadUtils {
         deltakelseId = UUID.randomUUID(),
         oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = UUID.randomUUID().toString(),
-            bekreftelseSvar = BekreftelseSvar.GODTAR
+            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                bekreftelseSvar = BekreftelseSvar.GODTAR,
+            )
         )
     )
 }

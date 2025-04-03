@@ -3,12 +3,12 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.swagger.v3.oas.annotations.Hidden
+import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretSluttdatoOppgavetypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.EndretStartdatoOppgavetypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.KontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.OppgaveDTO
-import java.time.LocalDate
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -18,13 +18,15 @@ import java.time.LocalDate
 @JsonSubTypes(
     JsonSubTypes.Type(value = EndretStartdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_STARTDATO"),
     JsonSubTypes.Type(value = EndretSluttdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
-    JsonSubTypes.Type(value = KontrollerRegisterinntektOppgavetypeDataDTO::class, name = "BEKREFT_AVVIK_REGISTERINNTEKT"),
+    JsonSubTypes.Type(
+        value = KontrollerRegisterinntektOppgavetypeDataDTO::class,
+        name = "BEKREFT_AVVIK_REGISTERINNTEKT"
+    ),
 )
 sealed class UngdomsytelseOppgaveDTO(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
     open val oppgaveReferanse: String,
-    open val bekreftelseSvar: BekreftelseSvar,
-    open val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
+    @field:Valid open val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
 ) {
 
     abstract fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO
@@ -32,101 +34,68 @@ sealed class UngdomsytelseOppgaveDTO(
 
 data class EndretStartdatoUngdomsytelseOppgaveDTO(
     override val oppgaveReferanse: String,
-    override val bekreftelseSvar: BekreftelseSvar,
-    override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : UngdomsytelseOppgaveDTO(oppgaveReferanse, bekreftelseSvar, ikkeGodkjentResponse) {
-
-    @Hidden
-    @AssertTrue(message = "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR")
-    fun isIkkeGodkjentResponseValid(): Boolean {
-        return if (bekreftelseSvar == BekreftelseSvar.AVSLÅR) {
-            ikkeGodkjentResponse != null
-        } else {
-            true
-        }
-    }
+    @field:Valid override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
+) : UngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         val endretStartdatoOppgavetypeDataDTO = oppgaveDTO.oppgavetypeData as EndretStartdatoOppgavetypeDataDTO
 
         return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
-            veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
-            meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             nyStartdato = endretStartdatoOppgavetypeDataDTO.nyStartdato,
-            bekreftelseSvar = bekreftelseSvar,
-            ikkeGodkjentResponse = ikkeGodkjentResponse,
+            uttalelse = uttalelse
         )
     }
 }
 
 data class EndretSluttdatoUngdomsytelseOppgaveDTO(
     override val oppgaveReferanse: String,
-    override val bekreftelseSvar: BekreftelseSvar,
-    override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null
-) : UngdomsytelseOppgaveDTO(oppgaveReferanse, bekreftelseSvar, ikkeGodkjentResponse) {
-
-    @Hidden
-    @AssertTrue(message = "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR")
-    fun isIkkeGodkjentResponseValid(): Boolean {
-        return if (bekreftelseSvar == BekreftelseSvar.AVSLÅR) {
-            ikkeGodkjentResponse != null
-        } else {
-            true
-        }
-    }
+    @field:Valid override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
+) : UngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         val endretSluttdatoOppgavetypeDataDTO = oppgaveDTO.oppgavetypeData as EndretSluttdatoOppgavetypeDataDTO
         return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
-            veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
-            meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
             nySluttdato = endretSluttdatoOppgavetypeDataDTO.nySluttdato,
-            bekreftelseSvar = bekreftelseSvar,
-            ikkeGodkjentResponse = ikkeGodkjentResponse,
+            uttalelse = uttalelse
         )
     }
 }
 
-
 data class KontrollerRegisterinntektOppgavetypeDataDTO(
     override val oppgaveReferanse: String,
-    override val bekreftelseSvar: BekreftelseSvar,
-    override val ikkeGodkjentResponse: UngdomsytelseIkkeGodkjentResponse? = null,
-) : UngdomsytelseOppgaveDTO(oppgaveReferanse, bekreftelseSvar, ikkeGodkjentResponse) {
+    @field:Valid override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
+) : UngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
 
+    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+        val kontrollerRegisterInntektOppgaveTypeDataDTO =
+            oppgaveDTO.oppgavetypeData as KontrollerRegisterInntektOppgaveTypeDataDTO
+
+        return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
+            oppgaveReferanse = oppgaveReferanse,
+            fraOgMed = kontrollerRegisterInntektOppgaveTypeDataDTO.fraOgMed,
+            tilOgMed = kontrollerRegisterInntektOppgaveTypeDataDTO.tilOgMed,
+            registerinntekt = kontrollerRegisterInntektOppgaveTypeDataDTO.registerinntekt,
+            uttalelse = uttalelse
+        )
+    }
+}
+
+data class UngdomsytelseOppgaveUttalelseDTO(
+    val bekreftelseSvar: BekreftelseSvar,
+    val meldingFraDeltaker: String? = null,
+) {
     @Hidden
-    @AssertTrue(message = "Ikke godkjent respons må være satt hvis bekreftelseSvar er AVSLÅR")
+    @AssertTrue(message = "'meldingFraDeltaker' må være satt hvis 'bekreftelseSvar' er AVSLÅR")
     fun isIkkeGodkjentResponseValid(): Boolean {
         return if (bekreftelseSvar == BekreftelseSvar.AVSLÅR) {
-            ikkeGodkjentResponse != null
+            !meldingFraDeltaker.isNullOrBlank()
         } else {
             true
         }
     }
-
-    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
-        val kontrollerRegisterInntektOppgaveTypeDataDTO = oppgaveDTO.oppgavetypeData as KontrollerRegisterInntektOppgaveTypeDataDTO
-
-        return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
-            oppgaveReferanse = oppgaveReferanse,
-            veilederRef = oppgaveDTO.oppgavetypeData.veilederRef,
-            meldingFraVeileder = oppgaveDTO.oppgavetypeData.meldingFraVeileder,
-            fraOgMed = kontrollerRegisterInntektOppgaveTypeDataDTO.fraOgMed,
-            tilOgMed = kontrollerRegisterInntektOppgaveTypeDataDTO.tilOgMed,
-            registerinntekt = kontrollerRegisterInntektOppgaveTypeDataDTO.registerinntekt,
-            bekreftelseSvar = bekreftelseSvar,
-            ikkeGodkjentResponse = ikkeGodkjentResponse,
-        )
-    }
 }
-
-data class UngdomsytelseIkkeGodkjentResponse(
-    val korrigertDato: LocalDate? = null,
-    val kontaktVeilederSvar: Boolean? = null,
-    val meldingFraDeltaker: String,
-)
 
 enum class BekreftelseSvar {
     GODTAR,
@@ -136,9 +105,4 @@ enum class BekreftelseSvar {
         GODTAR -> true
         AVSLÅR -> false
     }
-}
-
-enum class Oppgavetype {
-    BEKREFT_ENDRET_STARTDATO,
-    BEKREFT_ENDRET_SLUTTDATO,
 }

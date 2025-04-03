@@ -2,14 +2,12 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.oppgave.OppgaveBekreftelse
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretFomDatoBekreftelse
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretTomDatoBekreftelse
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import java.time.LocalDate
@@ -26,11 +24,11 @@ object UngdomsytelseOppgavebekreftelseUtils {
         oppgaveReferanse: String = UUID.randomUUID().toString(),
         oppgave: KomplettUngdomsytelseOppgaveDTO = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
-            veilederRef = "veilder-123",
-            meldingFraVeileder = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
-                """.trimMargin(),
+            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                bekreftelseSvar = BekreftelseSvar.GODTAR,
+                meldingFraDeltaker = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.""".trimMargin()
+            ),
             nyStartdato = LocalDate.parse("2025-01-01"),
-            bekreftelseSvar = BekreftelseSvar.GODTAR
         ),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
     ): UngdomsytelseOppgavebekreftelseMottatt {
@@ -64,23 +62,5 @@ object UngdomsytelseOppgavebekreftelseUtils {
             .medSøker(K9Søker(NorskIdentitetsnummer.of("02119970078")))
             .medBekreftelse(bekreftelse)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
-    }
-}
-
-private fun KomplettUngdomsytelseOppgaveDTO.somK9Format(): Bekreftelse {
-    return when (this) {
-        is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> EndretFomDatoBekreftelse(
-            UUID.fromString(oppgaveReferanse),
-            nyStartdato,
-            bekreftelseSvar.somBoolean()
-        )
-
-        is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> EndretTomDatoBekreftelse(
-            UUID.fromString(oppgaveReferanse),
-            nySluttdato,
-            bekreftelseSvar.somBoolean()
-        )
-
-        else -> throw IllegalArgumentException("Ukjent oppgavetype")
     }
 }
