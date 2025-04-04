@@ -83,7 +83,11 @@ dependencies {
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 
 	// PDF
-	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion")
+	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion") {
+		// Erstattes av apache pdfbox $pdfBoxVersion
+		exclude(group = "org.apache.pdfbox", module = "pdfbox")
+	}
+	implementation("org.apache.pdfbox:pdfbox:$pdfBoxVersion")
 	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
 	implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
 	implementation("com.github.jknack:handlebars:$handlebarsVersion")
