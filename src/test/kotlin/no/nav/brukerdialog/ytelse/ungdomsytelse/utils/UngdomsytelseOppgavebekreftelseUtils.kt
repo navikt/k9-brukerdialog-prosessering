@@ -20,7 +20,6 @@ object UngdomsytelseOppgavebekreftelseUtils {
 
     fun oppgavebekreftelseMottatt(
         søkerFødselsnummer: String = "02119970078",
-        deltakelseId: String = UUID.randomUUID().toString(),
         oppgaveReferanse: String = UUID.randomUUID().toString(),
         oppgave: KomplettUngdomsytelseOppgaveDTO = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
@@ -34,7 +33,6 @@ object UngdomsytelseOppgavebekreftelseUtils {
 
         return UngdomsytelseOppgavebekreftelseMottatt(
             språk = "nb",
-            deltakelseId = deltakelseId,
             oppgave = oppgave,
             mottatt = mottatt,
             søker = Søker(

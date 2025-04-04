@@ -29,7 +29,6 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
         val k9Format = oppgavebekreftelseMottatt.k9Format
         return mapOf(
             "tittel" to ytelse().utledTittel(språk()),
-            "deltakelseId" to oppgavebekreftelseMottatt.deltakelseId,
             "oppgave" to oppgavebekreftelseMottatt.oppgave.somMap(),
             "søknadMottattDag" to oppgavebekreftelseMottatt.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "søknadMottatt" to DATE_TIME_FORMATTER.format(oppgavebekreftelseMottatt.mottatt),

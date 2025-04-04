@@ -96,12 +96,10 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
 
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
-        val deltakelseId = UUID.randomUUID().toString()
         val oppgaveReferanse = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
         val oppgavebekreftelseMottatt = UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
-            deltakelseId = deltakelseId,
             oppgaveReferanse = oppgaveReferanse,
             mottatt = mottatt
         )
@@ -131,16 +129,15 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(
-            preprosessertSøknadSomJson(deltakelseId, oppgaveReferanse, mottattString),
+            preprosessertSøknadSomJson(oppgaveReferanse, mottattString),
             preprosessertSøknadJson,
             true
         )
     }
 
     @Language("JSON")
-    private fun preprosessertSøknadSomJson(deltakelseId: String, oppgaveReferanse: String, mottatt: String) = """
+    private fun preprosessertSøknadSomJson(oppgaveReferanse: String, mottatt: String) = """
         {
-          "deltakelseId": "$deltakelseId",
           "oppgave": {
             "type": "BEKREFT_ENDRET_STARTDATO",
             "oppgaveReferanse": "$oppgaveReferanse",
