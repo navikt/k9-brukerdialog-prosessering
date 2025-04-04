@@ -33,6 +33,7 @@ repositories {
 val tokenSupportVersion = "5.0.24"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "11.4.4"
+val ungDeltakelseOpplyserVersjon = "1.0.9"
 val springMockkVersion = "4.0.2"
 val logstashLogbackEncoderVersion = "8.0"
 val slf4jVersion = "2.0.17"
@@ -64,6 +65,9 @@ dependencies {
 	implementation("no.nav.k9:ettersendelse:$k9FormatVersion")
 	implementation("no.nav.k9:oppgave-ungdomsytelse:$k9FormatVersion")
 
+	// Ung-deltakelseopplyser kontrakt
+	implementation("no.nav.ung.deltakelseopplyser:kontrakt:$ungDeltakelseOpplyserVersjon")
+
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -79,7 +83,11 @@ dependencies {
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 
 	// PDF
-	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion")
+	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion") {
+		// Erstattes av apache pdfbox $pdfBoxVersion
+		exclude(group = "org.apache.pdfbox", module = "pdfbox")
+	}
+	implementation("org.apache.pdfbox:pdfbox:$pdfBoxVersion")
 	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
 	implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
 	implementation("com.github.jknack:handlebars:$handlebarsVersion")

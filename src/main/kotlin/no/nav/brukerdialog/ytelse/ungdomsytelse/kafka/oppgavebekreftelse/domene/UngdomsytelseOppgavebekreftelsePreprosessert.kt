@@ -14,7 +14,6 @@ import java.time.ZonedDateTime
 import java.util.*
 
 data class UngdomsytelseOppgavebekreftelsePreprosessert(
-    val deltakelseId: String,
     val mottatt: ZonedDateTime,
     val oppgave: KomplettUngdomsytelseOppgaveDTO,
     val språk: String?,
@@ -27,7 +26,6 @@ data class UngdomsytelseOppgavebekreftelsePreprosessert(
         dokumentId: List<List<String>>,
     ) : this(
         språk = ungdomsytelseSøknadMottatt.språk,
-        deltakelseId = ungdomsytelseSøknadMottatt.deltakelseId,
         oppgave = ungdomsytelseSøknadMottatt.oppgave,
         mottatt = ungdomsytelseSøknadMottatt.mottatt,
         søker = ungdomsytelseSøknadMottatt.søker,

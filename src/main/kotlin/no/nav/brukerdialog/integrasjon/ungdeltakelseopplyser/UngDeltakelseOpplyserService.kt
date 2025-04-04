@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser
 
 
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -38,20 +39,20 @@ class UngDeltakelseOpplyserService(
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(UngDeltakelseOpplyserService::class.java)
         private val hentOppgaveUrl = UriComponentsBuilder
-            .fromUriString("/deltakelse/register/{deltakelseId}/oppgave/{oppgaveReferanse}")
+            .fromUriString("/deltakelse/register/oppgave/{oppgaveReferanse}")
             .build()
             .toUriString()
 
         private val oppgaveDataFeil = IllegalStateException("Feilet med henting av oppgave.")
     }
 
-    fun hentOppgaveForDeltakelse(deltakelseId: UUID, oppgaveReferanse: UUID): OppgaveDTO {
+    fun hentOppgaveForDeltakelse(oppgaveReferanse: UUID): OppgaveDTO {
         val exchange = ungDeltakelseOpplyserClient.exchange(
             hentOppgaveUrl,
             HttpMethod.GET,
             null,
             object : ParameterizedTypeReference<OppgaveDTO>() {},
-            deltakelseId, oppgaveReferanse
+            oppgaveReferanse
         )
         logger.info("Fikk response {} for henting av oppgave", exchange.statusCode)
 

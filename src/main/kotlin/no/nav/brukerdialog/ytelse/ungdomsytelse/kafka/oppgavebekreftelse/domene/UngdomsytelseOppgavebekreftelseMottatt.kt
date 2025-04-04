@@ -11,7 +11,6 @@ import no.nav.k9.oppgave.OppgaveBekreftelse
 import java.time.ZonedDateTime
 
 data class UngdomsytelseOppgavebekreftelseMottatt(
-    val deltakelseId: String,
     val mottatt: ZonedDateTime,
     val oppgave: KomplettUngdomsytelseOppgaveDTO,
     val språk: String? = "nb",

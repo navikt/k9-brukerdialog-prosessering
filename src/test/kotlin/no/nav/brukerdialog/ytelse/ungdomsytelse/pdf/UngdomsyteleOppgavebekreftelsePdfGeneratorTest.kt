@@ -1,20 +1,20 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.pdf
 
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.ArbeidOgFrilansRegisterInntektDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.RegisterinntektDTO
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.YtelseRegisterInntektDTO
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseIkkeGodkjentResponse
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.ArbeidOgFrilansRegisterInntektDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.YtelseRegisterInntektDTO
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
 
@@ -45,16 +45,11 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                     .copy(
                         oppgave = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
                             oppgaveReferanse = UUID.randomUUID().toString(),
-                            veilederRef = "Pål Hønesen",
-                            meldingFraVeileder = """Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
-                    """.trimMargin(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                bekreftelseSvar = BekreftelseSvar.AVSLÅR,
+                                meldingFraDeltaker = "Jeg ønsker en senere startdato"
+                            ),
                             nyStartdato = LocalDate.parse("2025-01-01"),
-                            bekreftelseSvar = BekreftelseSvar.AVSLÅR,
-                            ikkeGodkjentResponse = UngdomsytelseIkkeGodkjentResponse(
-                                korrigertDato = LocalDate.parse("2025-02-01"),
-                                meldingFraDeltaker = "Jeg ønsker en senere startdato",
-                                kontaktVeilederSvar = false
-                            )
                         )
                     ).pdfData()
             )
@@ -66,11 +61,10 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                     .copy(
                         oppgave = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
                             oppgaveReferanse = UUID.randomUUID().toString(),
-                            veilederRef = "Pål Hønesen",
-                            meldingFraVeileder = """Hei, jeg har endret sluttdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
-                    """.trimMargin(),
                             nySluttdato = LocalDate.parse("2025-06-01"),
-                            bekreftelseSvar = BekreftelseSvar.GODTAR
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                bekreftelseSvar = BekreftelseSvar.GODTAR
+                            )
                         )
                     ).pdfData()
             )
@@ -82,16 +76,11 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                     .copy(
                         oppgave = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
                             oppgaveReferanse = UUID.randomUUID().toString(),
-                            veilederRef = "Pål Hønesen",
-                            meldingFraVeileder = """Hei, jeg har endret sluttdatoen som vi avtalte i møtet. Fra: Pål Hønesen.
-                    """.trimMargin(),
-                            nySluttdato = LocalDate.parse("2025-06-01"),
-                            bekreftelseSvar = BekreftelseSvar.AVSLÅR,
-                            ikkeGodkjentResponse = UngdomsytelseIkkeGodkjentResponse(
-                                korrigertDato = LocalDate.parse("2025-12-01"),
-                                meldingFraDeltaker = "Jeg ønsker en senere sluttdato",
-                                kontaktVeilederSvar = false
-                            )
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                bekreftelseSvar = BekreftelseSvar.AVSLÅR,
+                                meldingFraDeltaker = "Jeg ønsker en senere sluttdato"
+                            ),
+                            nySluttdato = LocalDate.parse("2025-06-01")
                         )
                     ).pdfData()
             )
@@ -103,8 +92,6 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                     .copy(
                         oppgave = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
                             oppgaveReferanse = UUID.randomUUID().toString(),
-                            veilederRef = "n/a",
-                            meldingFraVeileder = null,
                             fraOgMed = LocalDate.parse("2025-06-01"),
                             tilOgMed = LocalDate.parse("2025-12-01"),
                             registerinntekt = RegisterinntektDTO(
@@ -129,7 +116,9 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                     )
                                 )
                             ),
-                            bekreftelseSvar = BekreftelseSvar.GODTAR
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                bekreftelseSvar = BekreftelseSvar.GODTAR,
+                            )
                         )
                     ).pdfData()
             )
@@ -141,8 +130,6 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                     .copy(
                         oppgave = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
                             oppgaveReferanse = id,
-                            veilederRef = "Pål Hønesen",
-                            meldingFraVeileder = null,
                             fraOgMed = LocalDate.parse("2025-06-01"),
                             tilOgMed = LocalDate.parse("2025-12-01"),
                             registerinntekt = RegisterinntektDTO(
@@ -167,11 +154,9 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                     )
                                 )
                             ),
-                            bekreftelseSvar = BekreftelseSvar.AVSLÅR,
-                            ikkeGodkjentResponse = UngdomsytelseIkkeGodkjentResponse(
-                                korrigertDato = LocalDate.parse("2025-12-01"),
-                                meldingFraDeltaker = "Inntektsopplysningene i A-ordningen er feil. Jeg har sendt inn korrekt informasjon.",
-                                kontaktVeilederSvar = false
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                bekreftelseSvar = BekreftelseSvar.AVSLÅR,
+                                meldingFraDeltaker = "Inntektsopplysningene i A-ordningen er feil. Jeg har sendt inn korrekt informasjon."
                             )
                         )
                     ).pdfData()

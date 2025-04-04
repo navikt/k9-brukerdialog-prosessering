@@ -4,7 +4,6 @@ import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
 import no.nav.brukerdialog.common.Ytelse
-import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.RegisterinntektDTO
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
@@ -14,9 +13,10 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseIkkeGodkjentResponse
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
 import java.math.BigDecimal
 
 class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMottatt: UngdomsytelseOppgavebekreftelseMottatt) :
@@ -29,7 +29,6 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
         val k9Format = oppgavebekreftelseMottatt.k9Format
         return mapOf(
             "tittel" to ytelse().utledTittel(språk()),
-            "deltakelseId" to oppgavebekreftelseMottatt.deltakelseId,
             "oppgave" to oppgavebekreftelseMottatt.oppgave.somMap(),
             "søknadMottattDag" to oppgavebekreftelseMottatt.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "søknadMottatt" to DATE_TIME_FORMATTER.format(oppgavebekreftelseMottatt.mottatt),
@@ -42,22 +41,17 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
 
     private fun KomplettUngdomsytelseOppgaveDTO.somMap() = mapOf(
         "oppgaveReferanse" to oppgaveReferanse,
-        "veilederRef" to veilederRef,
-        "meldingFraVeileder" to meldingFraVeileder,
+        "uttalelse" to uttalelse.somMap(),
         "endretStartdatoOppgave" to when (this) {
             is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> mapOf(
-                "nyStartdato" to DATE_FORMATTER.format(nyStartdato),
-                "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
-                "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()
+                "nyStartdato" to DATE_FORMATTER.format(nyStartdato)
             )
 
             else -> null
         },
         "endretSluttdatoOppgave" to when (this) {
             is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> mapOf(
-                "nySluttdato" to DATE_FORMATTER.format(nySluttdato),
-                "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
-                "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()
+                "nySluttdato" to DATE_FORMATTER.format(nySluttdato)
             )
 
             else -> null
@@ -67,8 +61,6 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
                 "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
                 "tilOgMed" to DATE_FORMATTER.format(tilOgMed),
                 "registerinntekt" to registerinntekt.somMap(),
-                "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
-                "ikkeGodkjentResponse" to ikkeGodkjentResponse?.somMap()
             )
 
             else -> null
@@ -90,9 +82,8 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
         }
     )
 
-    private fun UngdomsytelseIkkeGodkjentResponse.somMap() = mapOf(
-        "korrigertDato" to korrigertDato?.let { DATE_FORMATTER.format(it) },
-        "kontaktVeilederSvar" to kontaktVeilederSvar,
+    private fun UngdomsytelseOppgaveUttalelseDTO.somMap() = mapOf(
+        "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
         "meldingFraDeltaker" to meldingFraDeltaker
     )
 

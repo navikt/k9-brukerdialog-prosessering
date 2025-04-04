@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka
 
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.coVerify
 import no.nav.brukerdialog.AbstractIntegrationTest
@@ -11,11 +10,11 @@ import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
-import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.EndretStartdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
@@ -27,7 +26,6 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
 import java.net.URI
-import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -51,9 +49,11 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
 
         val oppgaveReferanse = UUID.randomUUID()
         val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(
-            oppgave = EndretStartdatoUngdomsytelseOppgaveDTO(
+            oppgave = UngdomsytelseOppgaveDTO(
                 oppgaveReferanse = oppgaveReferanse.toString(),
-                bekreftelseSvar = BekreftelseSvar.GODTAR
+                uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                    bekreftelseSvar = BekreftelseSvar.GODTAR
+                )
             )
         )
 
@@ -96,12 +96,10 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
 
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
-        val deltakelseId = UUID.randomUUID().toString()
         val oppgaveReferanse = UUID.randomUUID().toString()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
         val oppgavebekreftelseMottatt = UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
-            deltakelseId = deltakelseId,
             oppgaveReferanse = oppgaveReferanse,
             mottatt = mottatt
         )
@@ -131,24 +129,23 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(
-            preprosessertSøknadSomJson(deltakelseId, oppgaveReferanse, mottattString),
+            preprosessertSøknadSomJson(oppgaveReferanse, mottattString),
             preprosessertSøknadJson,
             true
         )
     }
 
     @Language("JSON")
-    private fun preprosessertSøknadSomJson(deltakelseId: String, oppgaveReferanse: String, mottatt: String) = """
+    private fun preprosessertSøknadSomJson(oppgaveReferanse: String, mottatt: String) = """
         {
-          "deltakelseId": "$deltakelseId",
           "oppgave": {
             "type": "BEKREFT_ENDRET_STARTDATO",
             "oppgaveReferanse": "$oppgaveReferanse",
-            "veilederRef": "veilder-123",
-            "meldingFraVeileder": "Hei, jeg har endret startdatoen som vi avtalte i møtet. Fra: Pål Hønesen.",
-            "nyStartdato": "2025-01-01",
-            "bekreftelseSvar": "GODTAR",
-            "ikkeGodkjentResponse": null
+            "uttalelse": {
+                "bekreftelseSvar": "GODTAR",
+                "meldingFraDeltaker": null
+            },
+            "nyStartdato": "2025-01-01"
           },
           "mottatt": "$mottatt",
           "søker": {

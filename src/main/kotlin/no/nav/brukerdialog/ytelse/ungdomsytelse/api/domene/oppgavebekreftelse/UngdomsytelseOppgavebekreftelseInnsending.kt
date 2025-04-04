@@ -15,10 +15,8 @@ import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.util.*
 
 data class UngdomsytelseOppgavebekreftelseInnsending(
-    val deltakelseId: UUID,
     val komplettOppgavebekreftelse: KomplettUngdomsytelseOppgaveDTO,
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
@@ -34,7 +32,6 @@ data class UngdomsytelseOppgavebekreftelseInnsending(
     ): UngdomsytelseKomplettOppgavebekreftelse {
         requireNotNull(k9Format)
         return UngdomsytelseKomplettOppgavebekreftelse(
-            deltakelseId = deltakelseId,
             oppgave = komplettOppgavebekreftelse,
             søknadId = komplettOppgavebekreftelse.oppgaveReferanse,
             mottatt = mottatt,

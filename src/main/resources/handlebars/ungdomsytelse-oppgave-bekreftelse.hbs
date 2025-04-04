@@ -31,26 +31,16 @@
         <section id="endretStartdato">
             <h2>Godkjenn endret startdato</h2>
 
-            <div class="fritekst">
-                <p class="sporsmalstekst">Melding fra {{oppgave.veilederRef}} (veileder):</p>
-                <p class="fritekst_textarea">{{oppgave.meldingFraVeileder}}</p>
-            </div>
-
             <br/>
             <p class="sporsmalstekst">Godkjenner du at startdato endres
                 til {{oppgave.endretStartdatoOppgave.nyStartdato}}?</p>
-            <p>{{oppgave.endretStartdatoOppgave.bekreftelseSvar}}</p><br/>
+            <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
 
-            {{#eq oppgave.endretStartdatoOppgave.bekreftelseSvar "Nei"}}
-                <p class="sporsmalstekst">Har du hatt kontakt med veileder for å diskutere hvorfor du ikke ønsker å
-                    godkjenne denne endringen?</p>
-                {{jaNeiSvar oppgave.endretStartdatoOppgave.ikkeGodkjentResponse.kontaktVeilederSvar}}<br/>
-
-                <div class="fritekst">
-                    <p class="sporsmalstekst">Skriv en kort begrunnelse for hvorfor du ikke ønsker å godkjenne</p>
-                    <p class="fritekst_textarea">{{oppgave.endretStartdatoOppgave.ikkeGodkjentResponse.meldingFraDeltaker}}</p>
-                </div>
-            {{/eq}}
+            {{> partial/ung/uttalelsePartial
+                    uttalelse=oppgave.uttalelse
+                    spørsmålstekstBekreftelseSvar="Er startdatoen riktig?"
+                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke startdatoen?"
+            }}
         </section>
     {{/if}}
 
@@ -58,32 +48,23 @@
         <section id="endretSluttdato">
             <h2>Godkjenn endret sluttdato</h2>
 
-            <div class="fritekst">
-                <p class="sporsmalstekst">Melding fra {{oppgave.veilederRef}} (veileder):</p>
-                <p class="fritekst_textarea">{{oppgave.meldingFraVeileder}}</p>
-            </div>
-
             <br/>
             <p class="sporsmalstekst">Godkjenner du at sluttdato endres
                 til {{oppgave.endretSluttdatoOppgave.nySluttdato}}?</p>
-            <p>{{oppgave.endretSluttdatoOppgave.bekreftelseSvar}}</p><br/>
+            <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
 
-            {{#eq oppgave.endretSluttdatoOppgave.bekreftelseSvar "Nei"}}
-                <p class="sporsmalstekst">Har du hatt kontakt med veileder for å diskutere hvorfor du ikke ønsker å
-                    godkjenne denne endringen?</p>
-                {{jaNeiSvar oppgave.endretSluttdatoOppgave.ikkeGodkjentResponse.kontaktVeilederSvar}}<br/>
-
-                <div class="fritekst">
-                    <p class="sporsmalstekst">Skriv en kort begrunnelse for hvorfor du ikke ønsker å godkjenne</p>
-                    <p class="fritekst_textarea">{{oppgave.endretSluttdatoOppgave.ikkeGodkjentResponse.meldingFraDeltaker}}</p>
-                </div>
-            {{/eq}}
+            {{> partial/ung/uttalelsePartial
+                    uttalelse=oppgave.uttalelse
+                    spørsmålstekstBekreftelseSvar="Er sluttdatoen riktig?"
+                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke sluttdatoen?"
+            }}
         </section>
     {{/if}}
 
     {{#if oppgave.kontrollerRegisterInntektOppgave}}
         <section id="kontrollerRegisterInntektOppgave">
-            <h2>Kontrollere inntekt fra register for perioden {{oppgave.kontrollerRegisterInntektOppgave.fraOgMed}} - {{oppgave.kontrollerRegisterInntektOppgave.tilOgMed}}</h2>
+            <h2>Kontrollere inntekt fra register for perioden {{oppgave.kontrollerRegisterInntektOppgave.fraOgMed}}
+                - {{oppgave.kontrollerRegisterInntektOppgave.tilOgMed}}</h2>
 
             <table class="periode_tabell">
                 <thead>
@@ -118,15 +99,12 @@
             </table>
 
             <br/>
-            <p class="sporsmalstekst">Er inntektsopplysningene fra A-ordningen riktig?</p>
-            <p>{{oppgave.kontrollerRegisterInntektOppgave.bekreftelseSvar}}</p><br/>
+            {{> partial/ung/uttalelsePartial
+                    uttalelse=oppgave.uttalelse
+                    spørsmålstekstBekreftelseSvar="Er inntektsopplysningene fra A-ordningen riktig?"
+                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke inntekten vi har fått fra A-ordningen?"
+            }}
 
-            {{#eq oppgave.kontrollerRegisterInntektOppgave.bekreftelseSvar "Nei"}}
-                <div class="fritekst">
-                    <p class="sporsmalstekst">Hvorfor stemmer ikke inntekten vi har fått fra A-ordningen?</p>
-                    <p class="fritekst_textarea">{{oppgave.kontrollerRegisterInntektOppgave.ikkeGodkjentResponse.meldingFraDeltaker}}</p>
-                </div>
-            {{/eq}}
         </section>
     {{/if}}
 </div>
@@ -134,7 +112,6 @@
 <!-- FOOTER -->
 <p id="footer">
     <span class="soknadsid">{{ oppgave.oppgaveReferanse }}</span>
-    <span class="soknadsid">{{ deltakelseId }}</span>
     <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
 </p>
 </body>
