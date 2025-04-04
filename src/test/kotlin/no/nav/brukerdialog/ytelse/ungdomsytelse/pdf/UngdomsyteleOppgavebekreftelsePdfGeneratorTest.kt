@@ -46,7 +46,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                         oppgave = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
                             oppgaveReferanse = UUID.randomUUID().toString(),
                             uttalelse = UngdomsytelseOppgaveUttalelseDTO(
-                                bekreftelseSvar = BekreftelseSvar.GODTAR,
+                                bekreftelseSvar = BekreftelseSvar.AVSLÅR,
                                 meldingFraDeltaker = "Jeg ønsker en senere startdato"
                             ),
                             nyStartdato = LocalDate.parse("2025-01-01"),
@@ -77,7 +77,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                         oppgave = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
                             oppgaveReferanse = UUID.randomUUID().toString(),
                             uttalelse = UngdomsytelseOppgaveUttalelseDTO(
-                                bekreftelseSvar = BekreftelseSvar.GODTAR,
+                                bekreftelseSvar = BekreftelseSvar.AVSLÅR,
                                 meldingFraDeltaker = "Jeg ønsker en senere sluttdato"
                             ),
                             nySluttdato = LocalDate.parse("2025-06-01")
