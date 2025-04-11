@@ -19,7 +19,7 @@ import no.nav.brukerdialog.utils.KafkaIntegrationTest
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaProducer
 import no.nav.security.mock.oauth2.MockOAuth2Server
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
@@ -151,9 +151,9 @@ abstract class AbstractIntegrationTest {
     protected fun mockHentingAvOppgave() {
         every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
             oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
-            oppgavetypeData = EndretStartdatoOppgavetypeDataDTO(
-                nyStartdato = LocalDate.now()
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_PROGRAMPERIODE,
+            oppgavetypeData = EndretProgramperiodeDataDTO(
+                fraOgMed = LocalDate.now()
             ),
             status = OppgaveStatus.ULØST,
             opprettetDato = ZonedDateTime.now(),

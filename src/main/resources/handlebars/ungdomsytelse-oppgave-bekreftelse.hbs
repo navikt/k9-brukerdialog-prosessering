@@ -10,7 +10,7 @@
           content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
-        <bookmark name="Godkjenne endret startdato" href="#endretStartdato"/>
+        <bookmark name="Godkjenne endret periode" href="#endretPeriode"/>
         <bookmark name="Godkjenne endret sluttdato" href="#endretSluttdato"/>
         <bookmark name="Kontrollere inntekt fra register" href="#kontrollerRegisterInntektOppgave"/>
     </bookmarks>
@@ -27,19 +27,25 @@
 <div class="innholdscontainer">
     {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
-    {{#if oppgave.endretStartdatoOppgave}}
-        <section id="endretStartdato">
-            <h2>Godkjenn endret startdato</h2>
+    {{#if oppgave.endretPeriodeOppgave}}
+        <section id="endretPeriode">
+            <h2>Godkjenn endret periode</h2>
 
             <br/>
-            <p class="sporsmalstekst">Godkjenner du at startdato endres
-                til {{oppgave.endretStartdatoOppgave.nyStartdato}}?</p>
-            <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
+            {{#if oppgave.endretPeriodeOppgave.nySluttdato}}
+                <p class="sporsmalstekst">Godkjenner du at perioden endres
+                    til {{oppgave.endretPeriodeOppgave.nyStartdato}} - {{oppgave.endretPeriodeOppgave.nySluttdato}}?</p>
+                <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
+            {{else}}
+                <p class="sporsmalstekst">Godkjenner du at startdatoen endres
+                    til {{oppgave.endretPeriodeOppgave.nyStartdato}}?</p>
+                <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
+            {{/if}}
 
             {{> partial/ung/uttalelsePartial
                     uttalelse=oppgave.uttalelse
-                    spørsmålstekstBekreftelseSvar="Er startdatoen riktig?"
-                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke startdatoen?"
+                    spørsmålstekstBekreftelseSvar="Er perioden riktig?"
+                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke perioden?"
             }}
         </section>
     {{/if}}

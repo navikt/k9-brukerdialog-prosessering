@@ -3,8 +3,7 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretSluttdatoOppgavetypeDataDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.KontrollerRegisterinntektOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import org.hibernate.validator.constraints.UUID
@@ -18,18 +17,12 @@ data class UngdomsytelseOppgaveDTO(
 
     fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return when (oppgaveDTO.oppgavetypeData) {
-            is EndretStartdatoOppgavetypeDataDTO -> {
-                return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
+            is EndretProgramperiodeDataDTO -> {
+                val endretProgramperiodeDataDTO = oppgaveDTO.oppgavetypeData as EndretProgramperiodeDataDTO
+                return KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
-                    nyStartdato = (oppgaveDTO.oppgavetypeData as EndretStartdatoOppgavetypeDataDTO).nyStartdato,
-                    uttalelse = uttalelse
-                )
-            }
-
-            is EndretSluttdatoOppgavetypeDataDTO -> {
-                KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-                    oppgaveReferanse = oppgaveReferanse,
-                    nySluttdato = (oppgaveDTO.oppgavetypeData as EndretSluttdatoOppgavetypeDataDTO).nySluttdato,
+                    nyStartdato = endretProgramperiodeDataDTO.fraOgMed,
+                    nySluttdato = endretProgramperiodeDataDTO.tilOgMed,
                     uttalelse = uttalelse
                 )
             }

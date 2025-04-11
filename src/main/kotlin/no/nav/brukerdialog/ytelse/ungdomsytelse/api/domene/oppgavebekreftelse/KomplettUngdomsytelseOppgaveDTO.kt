@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.OppgittInntektForPeriode
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretFomDatoBekreftelse
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretTomDatoBekreftelse
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretProgramperiodeBekreftelse
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
@@ -20,8 +19,7 @@ import java.util.*
     property = "type"
 )
 @JsonSubTypes(
-    JsonSubTypes.Type(value = KomplettEndretStartdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_STARTDATO"),
-    JsonSubTypes.Type(value = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_SLUTTDATO"),
+    JsonSubTypes.Type(value = KomplettEndretPeriodeUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_PROGRAMPERIODE"),
     JsonSubTypes.Type(value = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO::class, name = "BEKREFT_AVVIK_REGISTERINNTEKT"),
 )
 sealed class KomplettUngdomsytelseOppgaveDTO(
@@ -33,16 +31,17 @@ sealed class KomplettUngdomsytelseOppgaveDTO(
     abstract fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO
 }
 
-data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
+data class KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
     override val oppgaveReferanse: String,
     override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val nyStartdato: LocalDate,
+    val nySluttdato: LocalDate? = null,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
     override fun somK9Format(): Bekreftelse {
         val endretFomDatoBekreftelse =
-            EndretFomDatoBekreftelse(
+            EndretProgramperiodeBekreftelse(
                 UUID.fromString(oppgaveReferanse),
-                nyStartdato,
+                Periode(nyStartdato, nySluttdato),
                 uttalelse.bekreftelseSvar.somBoolean()
             )
 
@@ -54,39 +53,9 @@ data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
     }
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
-        return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
+        return KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
             nyStartdato = nyStartdato,
-            uttalelse = uttalelse
-        )
-    }
-}
-
-data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-    override val oppgaveReferanse: String,
-    override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
-    val nySluttdato: LocalDate,
-) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
-
-    override fun somK9Format(): Bekreftelse {
-        val endretTomDatoBekreftelse =
-            EndretTomDatoBekreftelse(
-                UUID.fromString(oppgaveReferanse),
-                nySluttdato,
-                uttalelse.bekreftelseSvar.somBoolean()
-            )
-
-        if (!uttalelse.meldingFraDeltaker.isNullOrBlank()) {
-            endretTomDatoBekreftelse.medUttalelseFraBruker(uttalelse.meldingFraDeltaker)
-        }
-
-        return endretTomDatoBekreftelse
-    }
-
-    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
-        return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
-            oppgaveReferanse = oppgaveReferanse,
-            nySluttdato = nySluttdato,
             uttalelse = uttalelse
         )
     }
@@ -102,7 +71,7 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
 
     override fun somK9Format(): Bekreftelse {
         val inntektBekreftelse = InntektBekreftelse.builder()
-            .medOppgaveId(UUID.fromString(oppgaveReferanse))
+            .medOppgaveReferanse(UUID.fromString(oppgaveReferanse))
             .medOppgittePeriodeinntekter(registerinntekt.somK9Format())
             .medHarBrukerGodtattEndringen(uttalelse.bekreftelseSvar.somBoolean())
 

@@ -139,13 +139,14 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
     private fun preprosessertSøknadSomJson(oppgaveReferanse: String, mottatt: String) = """
         {
           "oppgave": {
-            "type": "BEKREFT_ENDRET_STARTDATO",
+            "type": "BEKREFT_ENDRET_PROGRAMPERIODE",
             "oppgaveReferanse": "$oppgaveReferanse",
             "uttalelse": {
                 "bekreftelseSvar": "GODTAR",
                 "meldingFraDeltaker": null
             },
-            "nyStartdato": "2025-01-01"
+            "nyStartdato": "2025-01-01",
+            "nySluttdato": "2025-12-01"
           },
           "mottatt": "$mottatt",
           "søker": {
@@ -172,9 +173,9 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
               "norskIdentitetsnummer": "02119970078"
             },
             "bekreftelse": {
-              "type": "UNG_ENDRET_FOM_DATO",
-              "nyFomDato": "2025-01-01",
-              "oppgaveId": "$oppgaveReferanse",
+              "type": "UNG_ENDRET_PROGRAMPERIODE",
+              "nyPeriode": "2025-01-01/2025-12-01",
+              "oppgaveReferanse": "$oppgaveReferanse",
               "uttalelseFraBruker": null,
               "harBrukerGodtattEndringen": true,
               "dataBruktTilUtledning": null
