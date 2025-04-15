@@ -49,6 +49,7 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterh
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseIkkeFrikjøpt
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseMottarIkke
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarDelerAvPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarHelePerioden
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarIkke
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadType
 import org.junit.jupiter.api.Test
@@ -867,7 +868,7 @@ class PSBSøknadPdfGeneratorTest {
             id = "30-omsorgsstønad-mottar-i-hele-perioden"
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
-                    omsorgsstønad = OmsorgsstønadMottarDelerAvPerioden(
+                    omsorgsstønad = OmsorgsstønadMottarHelePerioden(
                         type = OmsorgsstønadType.MOTTAR_I_HELE_PERIODEN,
                         mottarOmsorgsstønad = true,
                         antallTimer = 25

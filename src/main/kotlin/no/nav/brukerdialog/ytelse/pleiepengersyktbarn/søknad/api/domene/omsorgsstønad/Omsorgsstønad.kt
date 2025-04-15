@@ -37,7 +37,7 @@ data class OmsorgsstønadMottarDelerAvPerioden(
 data class OmsorgsstønadMottarHelePerioden(
     override val type: OmsorgsstønadType,
     override val mottarOmsorgsstønad: Boolean,
-    val antallTimer: BigDecimal, // Antall timer i uken en mottar omsorgsstønad
+    val antallTimer: Int, // Antall timer i uken en mottar omsorgsstønad
 ): Omsorgsstønad(type = type, mottarOmsorgsstønad = mottarOmsorgsstønad)
 
 enum class OmsorgsstønadType {
