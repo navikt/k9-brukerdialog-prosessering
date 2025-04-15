@@ -36,6 +36,14 @@ import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.DurationUtils.tilString
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.Fosterhjemgodtgjørelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseFrikjøpt
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseIkkeFrikjøpt
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseMottarIkke
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.Omsorgsstønad
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarDelerAvPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarHelePerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarIkke
 import no.nav.helse.felles.Enkeltdag
 import no.nav.helse.felles.Omsorgstilbud
 import no.nav.helse.felles.PlanUkedager
@@ -97,6 +105,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
             "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
             "frilans" to søknad.frilans.somMap(søknad.fraOgMed),
             "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
+            "fosterhjemgodtgjørelse" to søknad.fosterhjemgodtgjørelse?.somMap(),
+            "omsorgsstønad" to søknad.omsorgsstønad?.somMap(),
             "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
             "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
             "hjelper" to mapOf(
@@ -377,6 +387,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     }
 
     private fun PSBMottattSøknad.sjekkOmHarIkkeVedlegg(): Boolean = vedleggId.isEmpty()
+
+    @Deprecated("StønadGodtgjørelse er deprecated og vil bli fjernet i fremtidige versjoner av APIet")
     private fun StønadGodtgjørelse.somMap() = mapOf(
         "mottarStønadGodtgjørelse" to mottarStønadGodtgjørelse,
         "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
@@ -384,4 +396,59 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
         "sluttetIPerioden" to (sluttdato != null),
     )
+
+    private fun Fosterhjemgodtgjørelse.somMap() = when (this) {
+        is FosterhjemsgodtgjørelseMottarIkke -> mapOf(
+            "fosterhjemgodtgjørelseMottarIkke" to mapOf(
+                "type" to type.name,
+                "mottarFosterhjemsgodtgjørelse" to mottarFosterhjemsgodtgjørelse
+            )
+        )
+
+        is FosterhjemsgodtgjørelseFrikjøpt -> mapOf(
+            "fosterhjemsgodtgjørelseFrikjøpt" to mapOf(
+                "type" to type.name,
+                "mottarFosterhjemsgodtgjørelse" to mottarFosterhjemsgodtgjørelse,
+                "erFrikjøptFraJobb" to erFrikjøptFraJobb,
+                "frikjøptBeskrivelse" to frikjøptBeskrivelse
+            )
+        )
+
+        is FosterhjemsgodtgjørelseIkkeFrikjøpt -> mapOf(
+            "fosterhjemsgodtgjørelseIkkeFrikjøpt" to mapOf(
+                "type" to type.name,
+                "mottarFosterhjemsgodtgjørelse" to mottarFosterhjemsgodtgjørelse,
+                "erFrikjøptFraJobb" to erFrikjøptFraJobb,
+                "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
+                "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
+            )
+        )
+    }
+
+    private fun Omsorgsstønad.somMap() = when (this) {
+        is OmsorgsstønadMottarIkke -> mapOf(
+            "omsorgsstønadMottarIkke" to mapOf(
+                "type" to type,
+                "mottarOmsorgsstønad" to mottarOmsorgsstønad
+            )
+        )
+
+        is OmsorgsstønadMottarDelerAvPerioden -> mapOf(
+            "omsorgsstønadMottarDelerAvPerioden" to mapOf(
+                "type" to type,
+                "mottarOmsorgsstønad" to mottarOmsorgsstønad,
+                "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
+                "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
+                "antallTimer" to antallTimer
+            )
+        )
+
+        is OmsorgsstønadMottarHelePerioden -> mapOf(
+            "omsorgsstønadMottarHelePerioden" to mapOf(
+                "type" to type,
+                "mottarOmsorgsstønad" to mottarOmsorgsstønad,
+                "antallTimer" to antallTimer
+            )
+        )
+    }
 }
