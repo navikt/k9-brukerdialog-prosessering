@@ -14,6 +14,10 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidIPeriodeType
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.Arbeidsforhold
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.NormalArbeidstid
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemgodtgjørelseType
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseFrikjøpt
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarDelerAvPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadType
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -57,41 +61,41 @@ internal class SerDesTest {
             {
               "newVersion": null,
               "apiDataVersjon": "1.0.0",
-              "søknadId" : "$søknadsId",
-              "mottatt" : "$mottatt",
+              "søknadId": "$søknadsId",
+              "mottatt": "$mottatt",
               "språk": "nb",
               "søkerNorskIdent": null,
               "barn": {
                 "fødselsnummer": "03028104560",
                 "navn": "Barn Barnesen",
-                "fødselsdato" : "2018-01-01",
-                "aktørId" : null,
+                "fødselsdato": "2018-01-01",
+                "aktørId": null,
                 "årsakManglerIdentitetsnummer": null
               },
               "fraOgMed": "2021-01-01",
               "tilOgMed": "2021-10-01",
-              "arbeidsgivere" :  [
+              "arbeidsgivere": [
                 {
                   "navn": "Org",
                   "organisasjonsnummer": "917755736",
                   "erAnsatt": true,
                   "sluttetFørSøknadsperiode": null,
                   "arbeidsforhold": {
-                  "normalarbeidstid": {
-                    "timerPerUkeISnitt": "PT37H30M"
-                  },
-                  "arbeidIPeriode": {
-                    "type": "ARBEIDER_VANLIG",
-                    "redusertArbeid": null
+                    "normalarbeidstid": {
+                      "timerPerUkeISnitt": "PT37H30M"
+                    },
+                    "arbeidIPeriode": {
+                      "type": "ARBEIDER_VANLIG",
+                      "redusertArbeid": null
+                    }
                   }
-                }
                 },
                 {
                   "navn": "JobberIkkeHerLenger",
-                  "organisasjonsnummer" : "977155436",
+                  "organisasjonsnummer": "977155436",
                   "erAnsatt": false,
                   "sluttetFørSøknadsperiode": false,
-                  "arbeidsforhold" : null
+                  "arbeidsforhold": null
                 }
               ],
               "vedlegg": [
@@ -123,7 +127,7 @@ internal class SerDesTest {
               "selvstendigNæringsdrivende": {
                 "harInntektSomSelvstendig": true,
                 "virksomhet": {
-                  "næringstype":"ANNEN",
+                  "næringstype": "ANNEN",
                   "fiskerErPåBladB": false,
                   "fraOgMed": "2021-01-01",
                   "tilOgMed": null,
@@ -170,10 +174,10 @@ internal class SerDesTest {
                     "landnavn": "Sverige",
                     "erUtenforEøs": false,
                     "erBarnetInnlagt": true,
-                    "erSammenMedBarnet":  false,
-                    "perioderBarnetErInnlagt" : [
+                    "erSammenMedBarnet": false,
+                    "perioderBarnetErInnlagt": [
                       {
-                        "fraOgMed" : "2019-10-15",
+                        "fraOgMed": "2019-10-15",
                         "tilOgMed": "2019-10-20"
                       }
                     ],
@@ -186,15 +190,16 @@ internal class SerDesTest {
                     "tilOgMed": "2020-11-15",
                     "erUtenforEøs": false,
                     "erBarnetInnlagt": true,
-                    "erSammenMedBarnet":  false,
-                    "perioderBarnetErInnlagt" : [
+                    "erSammenMedBarnet": false,
+                    "perioderBarnetErInnlagt": [
                       {
-                        "fraOgMed" : "2020-11-10",
+                        "fraOgMed": "2020-11-10",
                         "tilOgMed": "2020-11-12"
                       }
                     ],
                     "årsak": "BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING"
-                  },{
+                  },
+                  {
                     "landnavn": "Sverige",
                     "landkode": "SE",
                     "fraOgMed": "2022-12-10",
@@ -202,7 +207,7 @@ internal class SerDesTest {
                     "erUtenforEøs": false,
                     "erBarnetInnlagt": false,
                     "erSammenMedBarnet": false,
-                    "perioderBarnetErInnlagt" : [],
+                    "perioderBarnetErInnlagt": [],
                     "årsak": null
                   }
                 ]
@@ -219,7 +224,7 @@ internal class SerDesTest {
                   "tilOgMed": "2022-01-10"
                 }
               ],
-              "utenlandskNæring" : [],
+              "utenlandskNæring": [],
               "harBekreftetOpplysninger": true,
               "harForståttRettigheterOgPlikter": true,
               "ferieuttakIPerioden": {
@@ -248,15 +253,24 @@ internal class SerDesTest {
                     "timerPerUkeISnitt": "PT37H30M"
                   },
                   "arbeidIPeriode": {
-                   "type": "ARBEIDER_VANLIG",
+                    "type": "ARBEIDER_VANLIG",
                     "redusertArbeid": null
                   }
                 }
               },
-              "stønadGodtgjørelse": {
-                "mottarStønadGodtgjørelse": true,
+              "stønadGodtgjørelse": null,
+              "fosterhjemgodtgjørelse": {
+                "type": "MOTTAR_FRIKJØPT",
+                "mottarFosterhjemsgodtgjørelse": true,
+                "erFrikjøptFraJobb": true,
+                "frikjøptBeskrivelse": "Frikjøpt fra jobb"
+              },
+              "omsorgsstønad": {
+                "type": "MOTTAR_I_DELER_AV_PERIODEN",
+                "mottarOmsorgsstønad": true,
                 "startdato": "2018-01-01",
-                "sluttdato": "2018-02-01"
+                "sluttdato": "2018-02-01",
+                "antallTimer": 25
               },
               "nattevåk": {
                 "harNattevåk": true,
@@ -266,29 +280,29 @@ internal class SerDesTest {
                 "svarFortid": "JA",
                 "svarFremtid": null,
                 "erLiktHverUke": false,
-                "ukedager" : null,
-                "enkeltdager" : [
-                      {
-                        "dato": "2021-01-01",
-                        "tid": "PT4H"
-                      },
-                      {
-                        "dato": "2021-01-02",
-                        "tid": "PT4H"
-                      },
-                      {
-                        "dato": "2021-01-03",
-                        "tid": "PT4H"
-                      },
-                      {
-                        "dato": "2021-01-04",
-                        "tid": "PT4H"
-                      }
-                    ]
-               },
-              "barnRelasjon" : "ANNET",
-              "barnRelasjonBeskrivelse" : "Gudfar til barnet",
-              "harVærtEllerErVernepliktig" : true,
+                "ukedager": null,
+                "enkeltdager": [
+                  {
+                    "dato": "2021-01-01",
+                    "tid": "PT4H"
+                  },
+                  {
+                    "dato": "2021-01-02",
+                    "tid": "PT4H"
+                  },
+                  {
+                    "dato": "2021-01-03",
+                    "tid": "PT4H"
+                  },
+                  {
+                    "dato": "2021-01-04",
+                    "tid": "PT4H"
+                  }
+                ]
+              },
+              "barnRelasjon": "ANNET",
+              "barnRelasjonBeskrivelse": "Gudfar til barnet",
+              "harVærtEllerErVernepliktig": true,
               "dataBruktTilUtledningAnnetData": "{\"string\": \"tekst\", \"boolean\": false, \"number\": 1, \"array\": [1,2,3], \"object\": {\"key\": \"value\"}}"
             }
         """.trimIndent()
@@ -297,242 +311,252 @@ internal class SerDesTest {
             //language=json
             """
         {
-              "mottatt": "$mottatt",
-              "språk": "nb",
-              "apiDataVersjon": "1.0.0",
-              "søknadId" : "$søknadsId",
-              "søker": {
-                "aktørId": "12345",
-                "fødselsnummer": "26104500284",
-                "fødselsdato": "1945-10-26",
-                "etternavn": "Nordmann",
-                "fornavn": "Ola",
-                "mellomnavn": null
-              },
-              "barn": {
-                "fødselsnummer": "03028104560",
-                "navn": "Barn Barnesen",
-                "aktørId": "12345",
-                "fødselsdato" : "2018-01-01",
-                "årsakManglerIdentitetsnummer" : null
-              },
-              "fraOgMed": "2020-01-01",
-              "tilOgMed": "2020-02-01",
-              "arbeidsgivere": [
-                {
-                  "navn": "Org",
-                  "organisasjonsnummer": "917755736",
-                  "erAnsatt": true,
-                  "sluttetFørSøknadsperiode" : null,
-                  "arbeidsforhold": {
-                      "normalarbeidstid": {
-                        "timerPerUkeISnitt": "PT37H30M"
-                      },
-                      "arbeidIPeriode": {
-                        "type": "ARBEIDER_VANLIG",
-                        "redusertArbeid": null
-                      }
-                    }
+          "mottatt": "$mottatt",
+          "språk": "nb",
+          "apiDataVersjon": "1.0.0",
+          "søknadId": "$søknadsId",
+          "søker": {
+            "aktørId": "12345",
+            "fødselsnummer": "26104500284",
+            "fødselsdato": "1945-10-26",
+            "etternavn": "Nordmann",
+            "fornavn": "Ola",
+            "mellomnavn": null
+          },
+          "barn": {
+            "fødselsnummer": "03028104560",
+            "navn": "Barn Barnesen",
+            "aktørId": "12345",
+            "fødselsdato": "2018-01-01",
+            "årsakManglerIdentitetsnummer": null
+          },
+          "fraOgMed": "2020-01-01",
+          "tilOgMed": "2020-02-01",
+          "arbeidsgivere": [
+            {
+              "navn": "Org",
+              "organisasjonsnummer": "917755736",
+              "erAnsatt": true,
+              "sluttetFørSøknadsperiode": null,
+              "arbeidsforhold": {
+                "normalarbeidstid": {
+                  "timerPerUkeISnitt": "PT37H30M"
+                },
+                "arbeidIPeriode": {
+                  "type": "ARBEIDER_VANLIG",
+                  "redusertArbeid": null
                 }
-              ],
-              "vedleggId": [],
-              "fødselsattestVedleggId": [],
-              "medlemskap": {
-                "harBoddIUtlandetSiste12Mnd": true,
-                "skalBoIUtlandetNeste12Mnd": true,
-                "utenlandsoppholdNeste12Mnd": [
+              }
+            }
+          ],
+          "vedleggId": [],
+          "fødselsattestVedleggId": [],
+          "medlemskap": {
+            "harBoddIUtlandetSiste12Mnd": true,
+            "skalBoIUtlandetNeste12Mnd": true,
+            "utenlandsoppholdNeste12Mnd": [
+              {
+                "fraOgMed": "2018-01-01",
+                "tilOgMed": "2018-01-10",
+                "landkode": "DEU",
+                "landnavn": "Tyskland"
+              }
+            ],
+            "utenlandsoppholdSiste12Mnd": [
+              {
+                "fraOgMed": "2017-01-01",
+                "tilOgMed": "2017-01-10",
+                "landkode": "DEU",
+                "landnavn": "Tyskland"
+              }
+            ]
+          },
+          "selvstendigNæringsdrivende": {
+            "harInntektSomSelvstendig": true,
+            "virksomhet": {
+              "næringstype": "ANNEN",
+              "fiskerErPåBladB": false,
+              "fraOgMed": "2020-01-01",
+              "tilOgMed": null,
+              "næringsinntekt": 1111,
+              "navnPåVirksomheten": "TullOgTøys",
+              "organisasjonsnummer": null,
+              "registrertINorge": false,
+              "registrertIUtlandet": {
+                "landkode": "DEU",
+                "landnavn": "Tyskland"
+              },
+              "erNyoppstartet": true,
+              "yrkesaktivSisteTreFerdigliknedeÅrene": {
+                "oppstartsdato": "2018-01-01"
+              },
+              "varigEndring": {
+                "dato": "2020-01-01",
+                "inntektEtterEndring": 9999,
+                "forklaring": "Korona"
+              },
+              "regnskapsfører": {
+                "navn": "Kjell Regnskap",
+                "telefon": "123456789"
+              },
+              "harFlereAktiveVirksomheter": true
+            },
+            "arbeidsforhold": {
+              "normalarbeidstid": {
+                "timerPerUkeISnitt": "PT37H30M"
+              },
+              "arbeidIPeriode": {
+                "type": "ARBEIDER_VANLIG",
+                "redusertArbeid": null
+              }
+            }
+          },
+          "utenlandsoppholdIPerioden": {
+            "skalOppholdeSegIUtlandetIPerioden": true,
+            "opphold": [
+              {
+                "fraOgMed": "2019-10-10",
+                "tilOgMed": "2019-11-10",
+                "landkode": "SE",
+                "landnavn": "Sverige",
+                "erUtenforEøs": false,
+                "erBarnetInnlagt": true,
+                "erSammenMedBarnet": false,
+                "perioderBarnetErInnlagt": [
                   {
-                    "fraOgMed": "2018-01-01",
-                    "tilOgMed": "2018-01-10",
-                    "landkode": "DEU",
-                    "landnavn": "Tyskland"
+                    "fraOgMed": "2020-01-01",
+                    "tilOgMed": "2020-01-02"
                   }
                 ],
-                "utenlandsoppholdSiste12Mnd": [
+                "årsak": "ANNET"
+              },
+              {
+                "landnavn": "Sverige",
+                "landkode": "SE",
+                "fraOgMed": "2019-10-10",
+                "tilOgMed": "2019-11-10",
+                "erUtenforEøs": false,
+                "erBarnetInnlagt": true,
+                "erSammenMedBarnet": false,
+                "perioderBarnetErInnlagt": [
                   {
-                    "fraOgMed": "2017-01-01",
-                    "tilOgMed": "2017-01-10",
-                    "landkode": "DEU",
-                    "landnavn": "Tyskland"
+                    "fraOgMed": "2020-01-01",
+                    "tilOgMed": "2020-01-02"
                   }
-                ]
+                ],
+                "årsak": "BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING"
               },
-              "selvstendigNæringsdrivende": {
-                "harInntektSomSelvstendig": true,
-                "virksomhet": {
-                  "næringstype": "ANNEN",
-                  "fiskerErPåBladB": false,
-                  "fraOgMed": "2020-01-01",
-                  "tilOgMed": null,
-                  "næringsinntekt": 1111,
-                  "navnPåVirksomheten": "TullOgTøys",
-                  "organisasjonsnummer": null,
-                  "registrertINorge": false,
-                  "registrertIUtlandet": {
-                    "landkode": "DEU",
-                    "landnavn": "Tyskland"
-                  },
-                  "erNyoppstartet": true,
-                  "yrkesaktivSisteTreFerdigliknedeÅrene": {
-                    "oppstartsdato": "2018-01-01"
-                  },
-                  "varigEndring": {
-                    "dato": "2020-01-01",
-                    "inntektEtterEndring": 9999,
-                    "forklaring": "Korona"
-                  },
-                  "regnskapsfører": {
-                    "navn": "Kjell Regnskap",
-                    "telefon": "123456789"
-                  },
-                  "harFlereAktiveVirksomheter": true
-                },
-                "arbeidsforhold": {
-                  "normalarbeidstid": {
-                    "timerPerUkeISnitt": "PT37H30M"
-                  },
-                  "arbeidIPeriode": {
-                    "type": "ARBEIDER_VANLIG",
-                    "redusertArbeid": null
-                  }
-                }
-              },
-              "utenlandsoppholdIPerioden": {
-                "skalOppholdeSegIUtlandetIPerioden": true,
-                "opphold": [
+              {
+                "landnavn": "Sverige",
+                "landkode": "SE",
+                "fraOgMed": "2019-10-10",
+                "tilOgMed": "2019-11-10",
+                "erUtenforEøs": false,
+                "erBarnetInnlagt": true,
+                "erSammenMedBarnet": false,
+                "perioderBarnetErInnlagt": [
                   {
-                    "fraOgMed": "2019-10-10",
-                    "tilOgMed": "2019-11-10",
-                    "landkode": "SE",
-                    "landnavn": "Sverige",
-                    "erUtenforEøs": false,
-                    "erBarnetInnlagt": true,
-                    "erSammenMedBarnet":  false,
-                    "perioderBarnetErInnlagt" : [
-                      {
-                        "fraOgMed" : "2020-01-01",
-                        "tilOgMed": "2020-01-02"
-                      }
-                    ],
-                    "årsak": "ANNET"
-                  },
-                  {
-                    "landnavn": "Sverige",
-                    "landkode": "SE",
-                    "fraOgMed": "2019-10-10",
-                    "tilOgMed": "2019-11-10",
-                    "erUtenforEøs": false,
-                    "erBarnetInnlagt": true,
-                    "erSammenMedBarnet":  false,
-                    "perioderBarnetErInnlagt" : [
-                      {
-                        "fraOgMed" : "2020-01-01",
-                        "tilOgMed": "2020-01-02"
-                      }
-                    ],
-                    "årsak": "BARNET_INNLAGT_I_HELSEINSTITUSJON_FOR_NORSK_OFFENTLIG_REGNING"
-                  },
-                  {
-                    "landnavn": "Sverige",
-                    "landkode": "SE",
-                    "fraOgMed": "2019-10-10",
-                    "tilOgMed": "2019-11-10",
-                    "erUtenforEøs": false,
-                    "erBarnetInnlagt": true,
-                    "erSammenMedBarnet":  false,
-                    "perioderBarnetErInnlagt" : [
-                      {
-                        "fraOgMed" : "2020-01-01",
-                        "tilOgMed": "2020-01-02"
-                      }
-                    ],
-                    "årsak": "BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD"
-                  },{
-                    "landnavn": "Sverige",
-                    "landkode": "SE",
-                    "fraOgMed": "2019-10-10",
-                    "tilOgMed": "2019-11-10",
-                    "erUtenforEøs": false,
-                    "erBarnetInnlagt": false,
-                    "erSammenMedBarnet":  false,
-                    "perioderBarnetErInnlagt" : [],
-                    "årsak": null
+                    "fraOgMed": "2020-01-01",
+                    "tilOgMed": "2020-01-02"
                   }
-                ]
+                ],
+                "årsak": "BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD"
               },
-              "opptjeningIUtlandet": [
-                {
-                  "navn": "Kiwi AS",
-                  "opptjeningType": "ARBEIDSTAKER",
-                  "land": {
-                    "landkode": "BEL",
-                    "landnavn": "Belgia"
-                  },
-                  "fraOgMed": "2022-01-01",
-                  "tilOgMed": "2022-01-10"
-                }
-              ],
-              "harBekreftetOpplysninger": true,
-              "harForståttRettigheterOgPlikter": true,
-              "ferieuttakIPerioden": {
-                "skalTaUtFerieIPerioden": false,
-                "ferieuttak": [
-                  {
-                    "fraOgMed": "2020-01-05",
-                    "tilOgMed": "2020-01-07"
-                  }
-                ]
+              {
+                "landnavn": "Sverige",
+                "landkode": "SE",
+                "fraOgMed": "2019-10-10",
+                "tilOgMed": "2019-11-10",
+                "erUtenforEøs": false,
+                "erBarnetInnlagt": false,
+                "erSammenMedBarnet": false,
+                "perioderBarnetErInnlagt": [],
+                "årsak": null
+              }
+            ]
+          },
+          "opptjeningIUtlandet": [
+            {
+              "navn": "Kiwi AS",
+              "opptjeningType": "ARBEIDSTAKER",
+              "land": {
+                "landkode": "BEL",
+                "landnavn": "Belgia"
               },
-              "utenlandskNæring" : [
-                {
-                  "næringstype" : "JORDBRUK_SKOGBRUK",
-                  "navnPåVirksomheten" : "Flush AS",
-                  "land" : {
-                    "landkode" : "NLD",
-                    "landnavn" : "Nederland"
-                  },
-                  "organisasjonsnummer" : "123ABC",
-                  "fraOgMed" : "2022-01-05",
-                  "tilOgMed" : null
-                }
-              ],
-              "beredskap": {
-                "beredskap": true,
-                "tilleggsinformasjon": "Ikke beredskap"
+              "fraOgMed": "2022-01-01",
+              "tilOgMed": "2022-01-10"
+            }
+          ],
+          "harBekreftetOpplysninger": true,
+          "harForståttRettigheterOgPlikter": true,
+          "ferieuttakIPerioden": {
+            "skalTaUtFerieIPerioden": false,
+            "ferieuttak": [
+              {
+                "fraOgMed": "2020-01-05",
+                "tilOgMed": "2020-01-07"
+              }
+            ]
+          },
+          "utenlandskNæring": [
+            {
+              "næringstype": "JORDBRUK_SKOGBRUK",
+              "navnPåVirksomheten": "Flush AS",
+              "land": {
+                "landkode": "NLD",
+                "landnavn": "Nederland"
               },
-              "frilans": {
-                  "jobberFortsattSomFrilans": true,
-                  "harInntektSomFrilanser": true,
-                  "startdato": "2018-01-01",
-                  "startetFørSisteTreHeleMåneder": false,
-                  "sluttdato": null,
-                  "type": "FRILANS",
-                  "misterHonorar": true,
-                  "arbeidsforhold": {
-                    "normalarbeidstid": {
-                      "timerPerUkeISnitt": "PT37H30M"
-                    },
-                    "arbeidIPeriode": {
-                      "type": "ARBEIDER_VANLIG",
-                      "redusertArbeid": null
-                    }
-                  }
-                },
-              "stønadGodtgjørelse": {
-                "mottarStønadGodtgjørelse": true,
-                "startdato": "2018-01-01",
-                "sluttdato": "2018-02-01"
+              "organisasjonsnummer": "123ABC",
+              "fraOgMed": "2022-01-05",
+              "tilOgMed": null
+            }
+          ],
+          "beredskap": {
+            "beredskap": true,
+            "tilleggsinformasjon": "Ikke beredskap"
+          },
+          "frilans": {
+            "jobberFortsattSomFrilans": true,
+            "harInntektSomFrilanser": true,
+            "startdato": "2018-01-01",
+            "startetFørSisteTreHeleMåneder": false,
+            "sluttdato": null,
+            "type": "FRILANS",
+            "misterHonorar": true,
+            "arbeidsforhold": {
+              "normalarbeidstid": {
+                "timerPerUkeISnitt": "PT37H30M"
               },
-              "nattevåk": {
-                "harNattevåk": true,
-                "tilleggsinformasjon": "Har nattevåk"
-              },
-              "omsorgstilbud": null,
-              "barnRelasjon" : null,
-              "barnRelasjonBeskrivelse" : null,
-              "harVærtEllerErVernepliktig" : true,
-              "k9FormatSøknad" : null 
-            } 
+              "arbeidIPeriode": {
+                "type": "ARBEIDER_VANLIG",
+                "redusertArbeid": null
+              }
+            }
+          },
+          "stønadGodtgjørelse": null,
+          "fosterhjemgodtgjørelse": {
+            "type": "MOTTAR_FRIKJØPT",
+            "mottarFosterhjemsgodtgjørelse": true,
+            "erFrikjøptFraJobb": true,
+            "frikjøptBeskrivelse": "Frikjøpt fra jobb"
+          },
+          "omsorgsstønad": {
+            "type": "MOTTAR_I_DELER_AV_PERIODEN",
+            "mottarOmsorgsstønad": true,
+            "startdato": "2018-01-01",
+            "sluttdato": "2018-02-01",
+            "antallTimer": 25
+          },
+          "nattevåk": {
+            "harNattevåk": true,
+            "tilleggsinformasjon": "Har nattevåk"
+          },
+          "omsorgstilbud": null,
+          "barnRelasjon": null,
+          "barnRelasjonBeskrivelse": null,
+          "harVærtEllerErVernepliktig": true,
+          "k9FormatSøknad": null
+        } 
         """.trimIndent()
 
         fun komplettSøknad(søknadId: String = UUID.randomUUID().toString()) = KomplettPleiepengerSyktBarnSøknad(
@@ -744,10 +768,18 @@ internal class SerDesTest {
                     )
                 )
             ),
-            stønadGodtgjørelse = StønadGodtgjørelse(
-                mottarStønadGodtgjørelse = true,
+            fosterhjemgodtgjørelse = FosterhjemsgodtgjørelseFrikjøpt(
+                type = FosterhjemgodtgjørelseType.MOTTAR_FRIKJØPT,
+                mottarFosterhjemsgodtgjørelse = true,
+                erFrikjøptFraJobb = true,
+                frikjøptBeskrivelse = "Frikjøpt fra jobb"
+            ),
+            omsorgsstønad = OmsorgsstønadMottarDelerAvPerioden(
+                type = OmsorgsstønadType.MOTTAR_I_DELER_AV_PERIODEN,
+                mottarOmsorgsstønad = true,
                 startdato = LocalDate.parse("2018-01-01"),
-                sluttdato = LocalDate.parse("2018-02-01")
+                sluttdato = LocalDate.parse("2018-02-01"),
+                antallTimer = 25
             ),
             harVærtEllerErVernepliktig = true,
             k9FormatSøknad = null

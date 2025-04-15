@@ -24,6 +24,8 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Selvstend
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.Fosterhjemgodtgjørelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.Omsorgsstønad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -47,7 +49,12 @@ data class PSBPreprosessertSøknad(
     val nattevåk: Nattevåk?,
     val omsorgstilbud: Omsorgstilbud? = null,
     val frilans: Frilans? = null,
+
+    @Deprecated("StønadGodtgjørelse er deprecated og vil bli fjernet i fremtidige versjoner av APIet")
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
+    val fosterhjemgodtgjørelse: Fosterhjemgodtgjørelse? = null,
+    val omsorgsstønad: Omsorgsstønad? = null,
+
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val arbeidsgivere: List<Arbeidsgiver>,
     val barnRelasjon: BarnRelasjon? = null,
@@ -75,6 +82,8 @@ data class PSBPreprosessertSøknad(
         omsorgstilbud = melding.omsorgstilbud,
         frilans = melding.frilans,
         stønadGodtgjørelse = melding.stønadGodtgjørelse,
+        fosterhjemgodtgjørelse = melding.fosterhjemgodtgjørelse,
+        omsorgsstønad = melding.omsorgsstønad,
         selvstendigNæringsdrivende = melding.selvstendigNæringsdrivende,
         opptjeningIUtlandet = melding.opptjeningIUtlandet,
         utenlandskNæring = melding.utenlandskNæring,

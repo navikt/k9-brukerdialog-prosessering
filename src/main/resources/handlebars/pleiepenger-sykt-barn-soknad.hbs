@@ -21,6 +21,8 @@
         <bookmark name="Nattevåk" href="#nattevaak"/>
         <bookmark name="Beredskap" href="#beredskap"/>
         <bookmark name="Omsorgsstønad" href="#omsorgsstønad"/>
+        <bookmark name="Fosterhjemgodtgjørelse" href="#fosterhjemgodtgjørelse"/>
+        <bookmark name="Omsorgsstønad" href="#omsorgsstønad"/>
         <bookmark name="Frilans" href="#frilans"/>
         <bookmark name="Selvstendig" href="#selvstendig"/>
         <bookmark name="Medlemskap" href="#medlemskap"/>
@@ -117,6 +119,89 @@
 
         </section>
     {{/if}}
+
+    {{#if fosterhjemgodtgjørelse}}
+        <section id="fosterhjemgodtgjørelse">
+            <h2>Fosterhjemgodtgjørelse</h2>
+
+            {{#if fosterhjemgodtgjørelse.fosterhjemgodtgjørelseMottarIkke}}
+                <ul>
+                    <li>Mottar ikke fosterhjemsgodtgjørelse fra kommunen</li>
+                </ul>
+            {{/if}}
+
+            {{#if fosterhjemgodtgjørelse.fosterhjemsgodtgjørelseFrikjøpt}}
+                <ul>
+                    <li>Mottar fosterhjemsgodtgjørelse fra kommunen</li>
+                    <li>Er frikjøpt fra jobb</li>
+                    <li>Detaljer om frikjøp og fosterhjemsgodtgjørelse:
+                        <p class="fritekst">{{fosterhjemgodtgjørelse.fosterhjemsgodtgjørelseFrikjøpt.frikjøptBeskrivelse}}</p>
+                    </li>
+                </ul>
+            {{/if}}
+
+            {{#if fosterhjemgodtgjørelse.fosterhjemsgodtgjørelseIkkeFrikjøpt}}
+                <ul>
+                    <li>Mottar fosterhjemsgodtgjørelse fra kommunen</li>
+                    <li>Er ikke frikjøpt fra jobb</li>
+                    {{#eq fosterhjemgodtgjørelse.fosterhjemsgodtgjørelseIkkeFrikjøpt.type "MOTTAR_I_DELER_AV_PERIODEN"}}
+                        <li>Mottar fosterhjemsgodtgjørelsen i deler av perioden jeg søker om</li>
+                    {{/eq}}
+                    {{#eq fosterhjemgodtgjørelse.fosterhjemsgodtgjørelseIkkeFrikjøpt.type "MOTTAR_I_HELE_PERIODEN"}}
+                        <li>Mottar fosterhjemsgodtgjørelsen gjennom hele perioden jeg søker om</li>
+                    {{/eq}}
+
+                    {{#if fosterhjemgodtgjørelse.fosterhjemsgodtgjørelseIkkeFrikjøpt.startdato}}
+                        <li>Starter {{fosterhjemgodtgjørelse.fosterhjemsgodtgjørelseIkkeFrikjøpt.startdato}}</li>
+                    {{/if}}
+
+                    {{#if fosterhjemgodtgjørelse.fosterhjemsgodtgjørelseIkkeFrikjøpt.sluttdato}}
+                        <li>Slutter {{fosterhjemgodtgjørelse.fosterhjemsgodtgjørelseIkkeFrikjøpt.sluttdato}}</li>
+                    {{/if}}
+                </ul>
+            {{/if}}
+        </section>
+    {{/if}}
+
+
+
+    {{#if omsorgsstønad}}
+        <section id="omsorgsstønad">
+            <h2>Omsorgsstønad</h2>
+
+            {{#if omsorgsstønad.omsorgsstønadMottarIkke}}
+                <ul>
+                    <li>Mottar ikke omsorgsstønad fra kommunen</li>
+                </ul>
+            {{/if}}
+
+            {{#if omsorgsstønad.omsorgsstønadMottarDelerAvPerioden}}
+                <ul>
+                    <li>Mottar omsorgsstønad fra kommunen</li>
+                    <li>Mottar omsorgsstønad i deler av perioden jeg søker om</li>
+                    <li>Antall timer i uken jeg har vedtak om omsorgsstønad: {{omsorgsstønad.omsorgsstønadMottarDelerAvPerioden.antallTimer}}</li>
+
+                    {{#if omsorgsstønad.omsorgsstønadMottarDelerAvPerioden.startdato}}
+                        <li>Starter {{omsorgsstønad.omsorgsstønadMottarDelerAvPerioden.startdato}}</li>
+                    {{/if}}
+
+                    {{#if omsorgsstønad.omsorgsstønadMottarDelerAvPerioden.sluttdato}}
+                        <li>Slutter {{omsorgsstønad.omsorgsstønadMottarDelerAvPerioden.sluttdato}}</li>
+                    {{/if}}
+                </ul>
+            {{/if}}
+
+            {{#if omsorgsstønad.omsorgsstønadMottarHelePerioden}}
+                <ul>
+                    <li>Mottar omsorgsstønad fra kommunen</li>
+                    <li>Mottar omsorgsstønad gjennom hele perioden jeg søker om</li>
+                    <li>Antall timer i uken jeg har vedtak om omsorgsstønad: {{omsorgsstønad.omsorgsstønadMottarDelerAvPerioden.antallTimer}}</li>
+                </ul>
+            {{/if}}
+        </section>
+    {{/if}}
+
+
 
     <section id="frilans">
         {{# if frilans.harInntektSomFrilanser }}

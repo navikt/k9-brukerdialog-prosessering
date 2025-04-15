@@ -30,6 +30,10 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Virksomhe
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.YrkesaktivSisteTreFerdigliknedeÅrene
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Årsak
 import no.nav.brukerdialog.utils.K9FormatUtils.defaultK9FormatPSB
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemgodtgjørelseType
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseFrikjøpt
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarDelerAvPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadType
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -150,10 +154,18 @@ internal object PSBSøknadUtils {
                 )
             )
         ),
-        stønadGodtgjørelse = StønadGodtgjørelse(
-            mottarStønadGodtgjørelse = true,
+        fosterhjemgodtgjørelse = FosterhjemsgodtgjørelseFrikjøpt(
+            type = FosterhjemgodtgjørelseType.MOTTAR_FRIKJØPT,
+            mottarFosterhjemsgodtgjørelse = true,
+            erFrikjøptFraJobb = true,
+            frikjøptBeskrivelse = "Frikjøpt fra jobb",
+        ),
+        omsorgsstønad = OmsorgsstønadMottarDelerAvPerioden(
+            type = OmsorgsstønadType.MOTTAR_I_DELER_AV_PERIODEN,
+            mottarOmsorgsstønad = true,
             startdato = LocalDate.parse("2023-03-13"),
-            sluttdato = LocalDate.parse("2023-03-29")
+            sluttdato = LocalDate.parse("2023-03-29"),
+            antallTimer = 25
         ),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
             harInntektSomSelvstendig = true,
