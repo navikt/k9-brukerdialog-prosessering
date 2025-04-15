@@ -21,8 +21,8 @@ data class UngdomsytelseOppgaveDTO(
                 val endretProgramperiodeDataDTO = oppgaveDTO.oppgavetypeData as EndretProgramperiodeDataDTO
                 return KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
-                    nyStartdato = endretProgramperiodeDataDTO.fraOgMed,
-                    nySluttdato = endretProgramperiodeDataDTO.tilOgMed,
+                    nyStartdato = endretProgramperiodeDataDTO.programperiode.fomDato,
+                    nySluttdato = endretProgramperiodeDataDTO.programperiode.fomDato,
                     uttalelse = uttalelse
                 )
             }

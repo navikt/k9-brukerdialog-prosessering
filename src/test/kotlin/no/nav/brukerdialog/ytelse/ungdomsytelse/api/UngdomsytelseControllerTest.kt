@@ -24,6 +24,7 @@ import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiod
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.periodeendring.ProgramperiodeDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -190,7 +191,11 @@ class UngdomsytelseControllerTest {
             oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.BEKREFT_ENDRET_PROGRAMPERIODE,
             oppgavetypeData = EndretProgramperiodeDataDTO(
-                fraOgMed = LocalDate.now()
+                programperiode = ProgramperiodeDTO(
+                    fomDato = LocalDate.now(),
+                    tomDato = null
+                ),
+                forrigeProgramperiode = null
             ),
             status = OppgaveStatus.ULØST,
             opprettetDato = ZonedDateTime.now(),

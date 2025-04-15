@@ -23,6 +23,7 @@ import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiod
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.periodeendring.ProgramperiodeDTO
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.junit.jupiter.api.AfterAll
@@ -153,7 +154,11 @@ abstract class AbstractIntegrationTest {
             oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.BEKREFT_ENDRET_PROGRAMPERIODE,
             oppgavetypeData = EndretProgramperiodeDataDTO(
-                fraOgMed = LocalDate.now()
+                programperiode = ProgramperiodeDTO(
+                    fomDato = LocalDate.now(),
+                    tomDato = null
+                ),
+                forrigeProgramperiode = null
             ),
             status = OppgaveStatus.ULØST,
             opprettetDato = ZonedDateTime.now(),
