@@ -9,18 +9,17 @@ import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntektForPeriode as UngOp
 
 data class OppgittInntektForPeriode(
     val arbeidstakerOgFrilansInntekt: Int? = null,
-    val inntektFraYtelse: Int? = null,
     val periodeForInntekt: UngPeriode,
 ) {
 
     @Hidden
-    @AssertTrue(message = "Må enten ha oppgitt inntekt fra arbeidstaker/frilans eller inntekt fra ytelse")
-    fun harOppgittInntekt(): Boolean = arbeidstakerOgFrilansInntekt != null || inntektFraYtelse != null
+    @AssertTrue(message = "Må ha oppgitt inntekt fra arbeidstaker/frilans")
+    fun harOppgittInntekt(): Boolean = arbeidstakerOgFrilansInntekt != null
 
     fun somUngOppgittInntektForPeriode(): UngOppgittInntektForPeriode = UngOppgittInntektForPeriode(
         arbeidstakerOgFrilansInntekt?.let { BigDecimal.valueOf(it.toLong()) },
         BigDecimal.ZERO,
-        inntektFraYtelse?.let { BigDecimal.valueOf(it.toLong()) },
+        BigDecimal.ZERO,
         periodeForInntekt.somUngPeriode(),
     )
 }
