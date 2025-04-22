@@ -115,7 +115,6 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
           },
           "oppgittInntektForPeriode": {
                 "arbeidstakerOgFrilansInntekt": 6000,
-                "inntektFraYtelse": 2000,
                 "periodeForInntekt": {
                     "fraOgMed": "2025-01-01",
                     "tilOgMed": "2025-01-31"
@@ -145,7 +144,7 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
                   {
                     "arbeidstakerOgFrilansInntekt": "6000",
                     "næringsinntekt": "0",
-                    "ytelse": "2000",
+                    "ytelse": "0",
                     "periode": "2025-01-01/2025-01-31"
                   }
                 ]
