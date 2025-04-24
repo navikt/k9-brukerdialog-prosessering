@@ -165,7 +165,7 @@ internal object PSBSøknadUtils {
             mottarOmsorgsstønad = true,
             startdato = LocalDate.parse("2023-03-13"),
             sluttdato = LocalDate.parse("2023-03-29"),
-            antallTimer = 25
+            antallTimer = Duration.ofHours(25)
         ),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
             harInntektSomSelvstendig = true,

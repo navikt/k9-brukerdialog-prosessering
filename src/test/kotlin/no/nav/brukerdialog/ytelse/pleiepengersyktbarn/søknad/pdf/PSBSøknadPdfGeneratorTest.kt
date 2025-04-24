@@ -857,7 +857,7 @@ class PSBSøknadPdfGeneratorTest {
                     omsorgsstønad = OmsorgsstønadMottarDelerAvPerioden(
                         type = OmsorgsstønadType.MOTTAR_I_DELER_AV_PERIODEN,
                         mottarOmsorgsstønad = true,
-                        antallTimer = 25,
+                        antallTimer = Duration.ofHours(25),
                         startdato = LocalDate.parse("2025-01-01"),
                         sluttdato = LocalDate.parse("2025-01-31"),
                     )
@@ -871,7 +871,7 @@ class PSBSøknadPdfGeneratorTest {
                     omsorgsstønad = OmsorgsstønadMottarHelePerioden(
                         type = OmsorgsstønadType.MOTTAR_I_HELE_PERIODEN,
                         mottarOmsorgsstønad = true,
-                        antallTimer = 25
+                        antallTimer = Duration.ofHours(25)
                     )
                 ).pdfData()
             )

@@ -178,7 +178,7 @@ class PleiepengerSyktBarnSøknadKonsumentTest : AbstractIntegrationTest() {
              "mottarOmsorgsstønad": true,
              "startdato": "2023-03-13",
              "sluttdato": "2023-03-29",
-             "antallTimer": 25
+             "antallTimer": "PT25H"
            },
            "harBekreftetOpplysninger": true,
            "harForstattRettigheterOgPlikter": true,

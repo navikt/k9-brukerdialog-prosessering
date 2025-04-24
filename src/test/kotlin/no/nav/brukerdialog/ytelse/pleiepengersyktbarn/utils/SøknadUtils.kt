@@ -277,7 +277,7 @@ class SøknadUtils {
                 mottarOmsorgsstønad = true,
                 startdato = LocalDate.parse("2018-01-01"),
                 sluttdato = LocalDate.parse("2018-02-01"),
-                antallTimer = 25
+                antallTimer = Duration.ofHours(25)
             ),
             opptjeningIUtlandet = listOf(
                 OpptjeningIUtlandet(
