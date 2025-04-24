@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorg
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import java.math.BigDecimal
+import java.time.Duration
 import java.time.LocalDate
 
 @JsonTypeInfo(
@@ -31,13 +31,13 @@ data class OmsorgsstønadMottarDelerAvPerioden(
     override val mottarOmsorgsstønad: Boolean,
     val startdato: LocalDate? = null, // dato settes hvis bruker har valgt ja på at hen starter i perioden
     val sluttdato: LocalDate? = null, // dato settes hvis bruker har valgt nei på at hen starter i perioden
-    val antallTimer: Int, // Antall timer i uken en mottar omsorgsstønad
+    val antallTimer: Duration, // Antall timer i uken en mottar omsorgsstønad
 ) : Omsorgsstønad(type = type, mottarOmsorgsstønad = mottarOmsorgsstønad)
 
 data class OmsorgsstønadMottarHelePerioden(
     override val type: OmsorgsstønadType,
     override val mottarOmsorgsstønad: Boolean,
-    val antallTimer: Int, // Antall timer i uken en mottar omsorgsstønad
+    val antallTimer: Duration, // Antall timer i uken en mottar omsorgsstønad
 ): Omsorgsstønad(type = type, mottarOmsorgsstønad = mottarOmsorgsstønad)
 
 enum class OmsorgsstønadType {
