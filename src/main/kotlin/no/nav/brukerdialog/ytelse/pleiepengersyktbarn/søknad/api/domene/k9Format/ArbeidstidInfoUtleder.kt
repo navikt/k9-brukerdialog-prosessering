@@ -55,10 +55,9 @@ class ArbeidstidInfoUtleder(
         return arbeidstidInfoer
             .map { it.somLocalDateTimeLine() }
             .reduce { initiellPeriodeInfo: LocalDateTimeline<ArbeidstidPeriodeInfo>, nestePeriodeInfo: LocalDateTimeline<ArbeidstidPeriodeInfo> ->
-                initiellPeriodeInfo.combine(
+                initiellPeriodeInfo.crossJoin(
                     nestePeriodeInfo,
-                    arbeidstidPeriodeInfoKombinator(),
-                    LocalDateTimeline.JoinStyle.CROSS_JOIN
+                    arbeidstidPeriodeInfoKombinator()
                 )
             }.tilArbeidstidInfo()
     }
