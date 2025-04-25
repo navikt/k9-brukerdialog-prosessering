@@ -68,7 +68,7 @@ class ArbeidstidInfoUtleder(
             }
     }
 
-    fun Periode.dager(): Sequence<LocalDate> =
+    private fun Periode.dager(): Sequence<LocalDate> =
         generateSequence(fraOgMed) { d -> if (d < tilOgMed) d.plusDays(1) else null }
 
     // Flater ut ArbeidstidInfo.perioder til et Map<LocalDate, ArbeidstidPeriodeInfo>
