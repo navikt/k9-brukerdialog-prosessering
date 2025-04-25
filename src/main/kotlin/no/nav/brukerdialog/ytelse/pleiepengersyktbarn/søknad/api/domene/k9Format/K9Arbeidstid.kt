@@ -14,14 +14,14 @@ internal fun PleiepengerSyktBarnSøknad.byggK9Arbeidstid(): Arbeidstid {
         if (arbeidsgivere.isNotEmpty()) medArbeidstaker(arbeidsgivere.tilK9Arbeidstaker(søknadsperiode))
 
         val frilansArbeidstidInfo = frilans.k9ArbeidstidInfo(søknadsperiode)
-        val omsorgsstønadArbeidstidInfo = omsorgsstønad?.k9ArbeidstidInfo(søknadsperiode)
+        val arbeidstidInfoer = mutableListOf(frilansArbeidstidInfo)
+        omsorgsstønad?.k9ArbeidstidInfo(søknadsperiode)?.let {
+            arbeidstidInfoer.add(it)
+        }
 
         medFrilanserArbeidstid(
             ArbeidstidInfoUtleder(
-                arbeidstidInfoer = listOf(
-                    frilansArbeidstidInfo,
-                    omsorgsstønadArbeidstidInfo ?: frilansArbeidstidInfo
-                ),
+                arbeidstidInfoer = arbeidstidInfoer,
                 totalPeriode = søknadsperiode
             ).utled()
         )
