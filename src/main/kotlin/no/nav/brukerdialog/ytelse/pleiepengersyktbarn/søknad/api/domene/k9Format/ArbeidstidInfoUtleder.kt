@@ -12,8 +12,7 @@ import java.time.Duration
  * Slår sammen to ArbeidstidInfo over en felles totalperiode ved å summere
  * per-dag-verdiene, og deretter komprimere til optimale Periode-nøkler.
  *
- * @param førsteArbeidstidInfo Den første ArbeidstidInfo som skal slås sammen.
- * @param andreArbeidstidInfo Den andre ArbeidstidInfo som skal slås sammen.
+ * @param arbeidstidInfoer Liste med ArbeidstidInfoer som skal slås sammen.
  * @param totalPeriode Den totale perioden som dekker begge ArbeidstidInfoene.
  *
  * @return En ny ArbeidstidInfo som inneholder de sammenslåtte periodene.
