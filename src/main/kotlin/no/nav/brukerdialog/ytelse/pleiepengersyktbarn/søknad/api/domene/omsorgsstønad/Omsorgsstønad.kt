@@ -2,7 +2,6 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorg
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import no.nav.brukerdialog.utils.DurationUtils.tilTimerPerDag
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.NULL_TIMER
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
@@ -72,8 +71,8 @@ data class OmsorgsstønadMottarHelePerioden(
     override fun k9ArbeidstidInfo(søknadsperiode: Periode): ArbeidstidInfo = ArbeidstidInfo().medPerioder(
         mapOf(
             søknadsperiode to ArbeidstidPeriodeInfo()
-                .medFaktiskArbeidTimerPerDag(antallTimerIUken)
-                .medJobberNormaltTimerPerDag(antallTimerIUken)
+                .medFaktiskArbeidTimerPerDag(antallTimerIUken.tilTimerPerDag())
+                .medJobberNormaltTimerPerDag(antallTimerIUken.tilTimerPerDag())
         )
     )
 }
@@ -83,3 +82,5 @@ enum class OmsorgsstønadType {
     MOTTAR_I_DELER_AV_PERIODEN,
     MOTTAR_I_HELE_PERIODEN
 }
+
+private fun Duration.tilTimerPerDag(): Duration = dividedBy(5)
