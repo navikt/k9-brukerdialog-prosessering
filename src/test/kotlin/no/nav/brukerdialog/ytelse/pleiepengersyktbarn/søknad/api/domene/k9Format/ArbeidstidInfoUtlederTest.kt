@@ -42,8 +42,7 @@ class ArbeidstidInfoUtlederTest {
         )
 
         val utledetArbeidstidInfo = ArbeidstidInfoUtleder(
-            førsteArbeidstidInfo = frilansArbeidstidInfo,
-            andreArbeidstidInfo = null,
+            arbeidstidInfoer = listOf(frilansArbeidstidInfo),
             totalPeriode = søknadsperiode
         ).utled()
 
@@ -71,8 +70,10 @@ class ArbeidstidInfoUtlederTest {
         ).k9ArbeidstidInfo(søknadsperiode)
 
         val sammenslåttArbeidstidInfo = ArbeidstidInfoUtleder(
-            førsteArbeidstidInfo = frilansArbeidstidInfo,
-            andreArbeidstidInfo = omsorgsstønadArbeidstidInfo,
+            arbeidstidInfoer = listOf(
+                frilansArbeidstidInfo,
+                omsorgsstønadArbeidstidInfo
+            ),
             totalPeriode = søknadsperiode
         ).utled()
 
@@ -116,8 +117,10 @@ class ArbeidstidInfoUtlederTest {
         )
 
         val sammenslåttArbeidstidInfo = ArbeidstidInfoUtleder(
-            førsteArbeidstidInfo = frilansArbeidstidInfo,
-            andreArbeidstidInfo = omsorgsstønadArbeidstidInfo,
+            arbeidstidInfoer = listOf(
+                frilansArbeidstidInfo,
+                omsorgsstønadArbeidstidInfo
+            ),
             totalPeriode = søknadsperiode
         ).utled()
 
@@ -161,8 +164,10 @@ class ArbeidstidInfoUtlederTest {
         )
 
         val sammenslåttArbeidstidInfo = ArbeidstidInfoUtleder(
-            førsteArbeidstidInfo = frilansArbeidstidInfo,
-            andreArbeidstidInfo = omsorgsstønadArbeidstidInfo,
+            arbeidstidInfoer = listOf(
+                frilansArbeidstidInfo,
+                omsorgsstønadArbeidstidInfo
+            ),
             totalPeriode = søknadsperiode
         ).utled()
 
@@ -170,7 +175,11 @@ class ArbeidstidInfoUtlederTest {
         assertThat(arbeidstidInfoPerioder.size).isEqualTo(1)
 
         val arbeidstidPeriodeInfo = arbeidstidInfoPerioder.values.first()
-        Validator.verifiserValideringsFeil(arbeidstidPeriodeInfo, 1, "[ugyldigVerdi] Må være lavere eller lik 24 timer.")
+        Validator.verifiserValideringsFeil(
+            arbeidstidPeriodeInfo,
+            1,
+            "[ugyldigVerdi] Må være lavere eller lik 24 timer."
+        )
     }
 
     private fun byggFrilansArbeidstidInfo(

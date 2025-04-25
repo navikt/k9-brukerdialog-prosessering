@@ -116,7 +116,7 @@ dependencies {
 
 	// Diverse
 	implementation("org.json:json:$orgJsonVersion")
-
+	implementation("no.nav.fpsak.tidsserie:fpsak-tidsserie:2.7.1")
 }
 
 tasks {

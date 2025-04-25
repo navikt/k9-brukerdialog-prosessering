@@ -18,8 +18,10 @@ internal fun PleiepengerSyktBarnSøknad.byggK9Arbeidstid(): Arbeidstid {
 
         medFrilanserArbeidstid(
             ArbeidstidInfoUtleder(
-                førsteArbeidstidInfo = frilansArbeidstidInfo,
-                andreArbeidstidInfo = omsorgsstønadArbeidstidInfo,
+                arbeidstidInfoer = listOf(
+                    frilansArbeidstidInfo,
+                    omsorgsstønadArbeidstidInfo ?: frilansArbeidstidInfo
+                ),
                 totalPeriode = søknadsperiode
             ).utled()
         )

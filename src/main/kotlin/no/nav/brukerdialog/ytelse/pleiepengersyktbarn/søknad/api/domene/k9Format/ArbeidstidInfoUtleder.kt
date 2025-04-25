@@ -1,10 +1,12 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.k9Format
 
+import no.nav.fpsak.tidsserie.LocalDateSegment
+import no.nav.fpsak.tidsserie.LocalDateSegmentCombinator
+import no.nav.fpsak.tidsserie.LocalDateTimeline
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import java.time.Duration
-import java.time.LocalDate
 
 /**
  * Slår sammen to ArbeidstidInfo over en felles totalperiode ved å summere
@@ -36,48 +38,41 @@ import java.time.LocalDate
  *
  */
 class ArbeidstidInfoUtleder(
-    val førsteArbeidstidInfo: ArbeidstidInfo,
-    val andreArbeidstidInfo: ArbeidstidInfo? = null,
-    val totalPeriode: Periode
+    private val arbeidstidInfoer: List<ArbeidstidInfo>,
+    val totalPeriode: Periode,
 ) {
 
     fun utled(): ArbeidstidInfo {
-        if (andreArbeidstidInfo == null) {
-            return førsteArbeidstidInfo
+        if (arbeidstidInfoer.size == 1) {
+            // bare én kilde → ingen sammenslåing
+            return arbeidstidInfoer.first()
         }
-        val resultat = slåSammen()
-        return resultat
+        return slåSammen()
     }
 
     private fun slåSammen(): ArbeidstidInfo {
-        checkNotNull(andreArbeidstidInfo) { "andreArbeidstidInfo kan ikke være null for sammenslåing" }
+        check(arbeidstidInfoer.size > 1) { "Det må være minst to arbeidstidInfoer for å kunne slå dem sammen." }
 
-        val førsteArbeidstidInfoDagkart = førsteArbeidstidInfo.tilDagkart()
-        val andreArbeidstidInfoDagkart = andreArbeidstidInfo.tilDagkart()
-
-        val datoerIPerioden = totalPeriode.dager().toList()
-        val arbeidstidPeriodeListe: List<ArbeidstidPeriodeInfo> = datoerIPerioden.map { dag ->
-            (førsteArbeidstidInfoDagkart[dag] ?: nullTimer()) + (andreArbeidstidInfoDagkart[dag] ?: nullTimer())
-        }
-
-        return arbeidstidPeriodeListe
-            .mapIndexed { idx: Int, periodeInfo: ArbeidstidPeriodeInfo -> datoerIPerioden[idx] to periodeInfo }
-            .tilPerioder()
-            .fold(ArbeidstidInfo()) { acc: ArbeidstidInfo, (periode: Periode, info: ArbeidstidPeriodeInfo) ->
-                acc.leggeTilPeriode(periode, info)
-            }
+        return arbeidstidInfoer
+            .map { it.somLocalDateTimeLine() }
+            .reduce { initiellPeriodeInfo: LocalDateTimeline<ArbeidstidPeriodeInfo>, nestePeriodeInfo: LocalDateTimeline<ArbeidstidPeriodeInfo> ->
+                initiellPeriodeInfo.combine(
+                    nestePeriodeInfo,
+                    arbeidstidPeriodeInfoKombinator(),
+                    LocalDateTimeline.JoinStyle.CROSS_JOIN
+                )
+            }.tilArbeidstidInfo()
     }
 
-    private fun Periode.dager(): Sequence<LocalDate> =
-        generateSequence(fraOgMed) { d -> if (d < tilOgMed) d.plusDays(1) else null }
+    private fun arbeidstidPeriodeInfoKombinator() =
+        LocalDateSegmentCombinator { interval, førsteArbeidstidPeriodeInfo, andreArbeidstidPeriodeInfo: LocalDateSegment<ArbeidstidPeriodeInfo>? ->
+            // førsteArbeidstidPeriodeInfo eller andreArbeidstidPeriodeInfo kan være null hvis en side ikke har segment i dette intervallet.
+            val venstreSide = førsteArbeidstidPeriodeInfo?.value ?: nullTimer()
+            val høyreSide = andreArbeidstidPeriodeInfo?.value ?: nullTimer()
 
-    // Flater ut ArbeidstidInfo.perioder til et Map<LocalDate, ArbeidstidPeriodeInfo>
-    private fun ArbeidstidInfo.tilDagkart(): Map<LocalDate, ArbeidstidPeriodeInfo> =
-        this.perioder.entries
-            .flatMap { (periode: Periode, info: ArbeidstidPeriodeInfo) ->
-                periode.dager().map { dato -> dato to info }
-            }
-            .toMap()
+            // Summer arbeidstidPeriodeInfo for disse to segmentene og returner nytt segment for dette intervallet.
+            LocalDateSegment(interval, venstreSide.plus(høyreSide))
+        }
 
     private fun nullTimer() = ArbeidstidPeriodeInfo()
         .medFaktiskArbeidTimerPerDag(Duration.ZERO)
@@ -88,27 +83,16 @@ class ArbeidstidInfoUtleder(
             .medFaktiskArbeidTimerPerDag(this.faktiskArbeidTimerPerDag + other.faktiskArbeidTimerPerDag)
             .medJobberNormaltTimerPerDag(this.jobberNormaltTimerPerDag + other.jobberNormaltTimerPerDag)
 
-    private fun <T> List<Pair<LocalDate, T>>.tilPerioder(): List<Pair<Periode, T>> {
-        if (isEmpty()) return emptyList()
-
-        val result = mutableListOf<Pair<Periode, T>>()
-        // startdato og info fra første element
-        var startDato = this[0].first
-        var prevDato = startDato
-        var prevInfo = this[0].second
-
-        for ((dato: LocalDate, info: T) in drop(1)) {
-            // bryt hvis ikke samme info elle ikke påfølgende dag
-            if (info != prevInfo || dato != prevDato.plusDays(1)) {
-                result += Periode(startDato, prevDato) to prevInfo
-                startDato = dato
-                prevInfo = info
-            }
-            prevDato = dato
+    private fun ArbeidstidInfo.somLocalDateTimeLine(): LocalDateTimeline<ArbeidstidPeriodeInfo> = perioder.entries
+        .map { (periode: Periode, info: ArbeidstidPeriodeInfo) ->
+            LocalDateSegment(periode.fraOgMed, periode.tilOgMed, info)
         }
-        // siste periode
-        result += Periode(startDato, prevDato) to prevInfo
+        .let { LocalDateTimeline(it) }
 
-        return result
+    private fun LocalDateTimeline<ArbeidstidPeriodeInfo>.tilArbeidstidInfo() = ArbeidstidInfo().apply {
+        this@tilArbeidstidInfo.toSegments().forEach { seg ->
+            val p = Periode(seg.fom, seg.tom)
+            leggeTilPeriode(p, seg.value)
+        }
     }
 }
