@@ -27,7 +27,7 @@ import java.time.LocalDate
  *  Resultat:
  *  |-------------------------------Søknadsperiode-------------------------------------------------|
  *  |---Mandag---|--------------------------Tirsdag-Torsdag---------------------------|---Fredag---|
- *  | Normalt: 4 |                         Normalt 8 (4+4)                            | Normalt 4  |
+ *  | Normalt: 8 |                         Normalt 12 (8+4)                           | Normalt 4  |
  *  | Faktisk: 2 |                         Faktisk 6 (2+4)                            | Faktisk 4  |
  *
  *  Første periode: mandag til mandag, normalt 4 timer, faktisk 2 timer
