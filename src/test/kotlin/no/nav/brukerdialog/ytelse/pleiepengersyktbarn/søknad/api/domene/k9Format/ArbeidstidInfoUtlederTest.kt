@@ -1,5 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.k9Format
 
+import no.nav.brukerdialog.utils.TestUtils.Validator
+import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Frilans
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.FrilansType
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidIPeriode
@@ -137,6 +139,38 @@ class ArbeidstidInfoUtlederTest {
         assertThat(tredjePeriode.key).isEqualTo(Periode(TORSDAG, søknadsperiode.tilOgMed))
         assertThat(tredjePeriode.value.faktiskArbeidTimerPerDag).isEqualTo(Duration.ofHours(8))
         assertThat(tredjePeriode.value.jobberNormaltTimerPerDag).isEqualTo(Duration.ofHours(8))
+    }
+
+    @Test
+    fun `Overlappende perioder med frilans aktivitet og omsorgsstønad som overskrider 24t per dag skal feile`() {
+        val søknadsperiode = Periode(MANDAG, FREDAG)
+
+        val frilansArbeidstidInfo = byggFrilansArbeidstidInfo(
+            søknadsperiode = søknadsperiode,
+            startdato = søknadsperiode.fraOgMed,
+            sluttdato = søknadsperiode.tilOgMed,
+            prosentAvNormalt = 50.0,
+            jobberNormaltTimerPerDag = Duration.ofHours(100)
+        )
+
+        val omsorgsstønadArbeidstidInfo = byggOmsorgsstønadDelerAvPeriodenArbeidstidInfo(
+            søknadsperiode = søknadsperiode,
+            startdato = søknadsperiode.fraOgMed,
+            sluttdato = søknadsperiode.tilOgMed,
+            antallTimerIUken = Duration.ofHours(40)
+        )
+
+        val sammenslåttArbeidstidInfo = ArbeidstidInfoUtleder(
+            førsteArbeidstidInfo = frilansArbeidstidInfo,
+            andreArbeidstidInfo = omsorgsstønadArbeidstidInfo,
+            totalPeriode = søknadsperiode
+        ).utled()
+
+        val arbeidstidInfoPerioder = sammenslåttArbeidstidInfo.perioder
+        assertThat(arbeidstidInfoPerioder.size).isEqualTo(1)
+
+        val arbeidstidPeriodeInfo = arbeidstidInfoPerioder.values.first()
+        Validator.verifiserValideringsFeil(arbeidstidPeriodeInfo, 1, "[ugyldigVerdi] Må være lavere eller lik 24 timer.")
     }
 
     private fun byggFrilansArbeidstidInfo(
