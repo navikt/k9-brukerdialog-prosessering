@@ -22,7 +22,6 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Opptjenin
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.OpptjeningType
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Periode
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Utenlandsopphold
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
@@ -165,7 +164,7 @@ internal object PSBSøknadUtils {
             mottarOmsorgsstønad = true,
             startdato = LocalDate.parse("2023-03-13"),
             sluttdato = LocalDate.parse("2023-03-29"),
-            antallTimer = Duration.ofHours(25)
+            antallTimerIUken = Duration.ofHours(25)
         ),
         selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
             harInntektSomSelvstendig = true,

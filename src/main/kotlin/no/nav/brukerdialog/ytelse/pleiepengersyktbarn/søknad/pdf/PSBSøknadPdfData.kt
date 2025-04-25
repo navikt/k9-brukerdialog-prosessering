@@ -439,7 +439,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
                 "mottarOmsorgsstønad" to mottarOmsorgsstønad,
                 "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
                 "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
-                "antallTimer" to antallTimer.tilString()
+                "antallTimerIUken" to antallTimerIUken.tilString()
             )
         )
 
@@ -447,7 +447,7 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
             "omsorgsstønadMottarHelePerioden" to mapOf(
                 "type" to type,
                 "mottarOmsorgsstønad" to mottarOmsorgsstønad,
-                "antallTimer" to antallTimer.tilString()
+                "antallTimerIUken" to antallTimerIUken.tilString()
             )
         )
     }

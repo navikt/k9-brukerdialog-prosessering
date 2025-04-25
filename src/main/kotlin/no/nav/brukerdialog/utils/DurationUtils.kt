@@ -32,4 +32,6 @@ object DurationUtils {
     }
 
     fun Duration.timer() = (this.toDaysPart() * 24) + this.toHoursPart()
+
+    fun Duration.tilTimerPerDag(): Duration = this.dividedBy(5)
 }

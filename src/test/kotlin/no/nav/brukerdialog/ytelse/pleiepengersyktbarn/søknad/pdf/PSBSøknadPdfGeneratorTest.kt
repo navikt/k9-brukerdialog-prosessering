@@ -32,7 +32,6 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Periode
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.RedusertArbeidstidType
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Regnskapsfører
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Utenlandsopphold
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
@@ -54,7 +53,6 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgs
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadType
 import org.junit.jupiter.api.Test
 import java.io.File
-import java.math.BigDecimal
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -857,7 +855,7 @@ class PSBSøknadPdfGeneratorTest {
                     omsorgsstønad = OmsorgsstønadMottarDelerAvPerioden(
                         type = OmsorgsstønadType.MOTTAR_I_DELER_AV_PERIODEN,
                         mottarOmsorgsstønad = true,
-                        antallTimer = Duration.ofHours(25),
+                        antallTimerIUken = Duration.ofHours(25),
                         startdato = LocalDate.parse("2025-01-01"),
                         sluttdato = LocalDate.parse("2025-01-31"),
                     )
@@ -871,7 +869,7 @@ class PSBSøknadPdfGeneratorTest {
                     omsorgsstønad = OmsorgsstønadMottarHelePerioden(
                         type = OmsorgsstønadType.MOTTAR_I_HELE_PERIODEN,
                         mottarOmsorgsstønad = true,
-                        antallTimer = Duration.ofHours(25)
+                        antallTimerIUken = Duration.ofHours(25)
                     )
                 ).pdfData()
             )

@@ -2,6 +2,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorg
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import no.nav.brukerdialog.utils.DurationUtils.tilTimerPerDag
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.NULL_TIMER
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
@@ -46,7 +47,7 @@ data class OmsorgsstønadMottarDelerAvPerioden(
     override val mottarOmsorgsstønad: Boolean,
     val startdato: LocalDate? = null, // dato settes hvis bruker har valgt ja på at hen starter i perioden
     val sluttdato: LocalDate? = null, // dato settes hvis bruker har valgt nei på at hen starter i perioden
-    val antallTimer: Duration, // Antall timer i uken en mottar omsorgsstønad
+    val antallTimerIUken: Duration, // Antall timer i uken en mottar omsorgsstønad
 ) : Omsorgsstønad(type = type, mottarOmsorgsstønad = mottarOmsorgsstønad) {
     override fun k9ArbeidstidInfo(søknadsperiode: Periode): ArbeidstidInfo {
         val startdato = startdato ?: søknadsperiode.fraOgMed
@@ -55,8 +56,8 @@ data class OmsorgsstønadMottarDelerAvPerioden(
         return ArbeidstidInfo().medPerioder(
             mapOf(
                 Periode(startdato, sluttdato) to ArbeidstidPeriodeInfo()
-                    .medFaktiskArbeidTimerPerDag(antallTimer)
-                    .medJobberNormaltTimerPerDag(antallTimer)
+                    .medFaktiskArbeidTimerPerDag(antallTimerIUken.tilTimerPerDag())
+                    .medJobberNormaltTimerPerDag(antallTimerIUken.tilTimerPerDag())
             )
         )
     }
@@ -66,13 +67,13 @@ data class OmsorgsstønadMottarDelerAvPerioden(
 data class OmsorgsstønadMottarHelePerioden(
     override val type: OmsorgsstønadType,
     override val mottarOmsorgsstønad: Boolean,
-    val antallTimer: Duration, // Antall timer i uken en mottar omsorgsstønad
+    val antallTimerIUken: Duration, // Antall timer i uken en mottar omsorgsstønad
 ) : Omsorgsstønad(type = type, mottarOmsorgsstønad = mottarOmsorgsstønad) {
     override fun k9ArbeidstidInfo(søknadsperiode: Periode): ArbeidstidInfo = ArbeidstidInfo().medPerioder(
         mapOf(
             søknadsperiode to ArbeidstidPeriodeInfo()
-                .medFaktiskArbeidTimerPerDag(antallTimer)
-                .medJobberNormaltTimerPerDag(antallTimer)
+                .medFaktiskArbeidTimerPerDag(antallTimerIUken)
+                .medJobberNormaltTimerPerDag(antallTimerIUken)
         )
     )
 }

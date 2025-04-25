@@ -133,7 +133,7 @@ class FrilansTest {
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
 
-        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(mandag, fredag)
+        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(Periode(mandag, fredag))
         val perioder = k9ArbeidstidInfo.perioder
         assertEquals(1, perioder.size)
         assertEquals(syvOgEnHalvTime, perioder[Periode(mandag, fredag)]!!.jobberNormaltTimerPerDag)
@@ -146,7 +146,7 @@ class FrilansTest {
             harInntektSomFrilanser = false
         )
 
-        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(mandag, fredag)
+        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(Periode(mandag, fredag))
         val perioder = k9ArbeidstidInfo.perioder
         assertEquals(1, perioder.size)
         assertEquals(NULL_TIMER, perioder[Periode(mandag, fredag)]!!.jobberNormaltTimerPerDag)
@@ -162,7 +162,7 @@ class FrilansTest {
             harInntektSomFrilanser = true,
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
-        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(mandag, fredag)
+        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(Periode(mandag, fredag))
         val perioder = k9ArbeidstidInfo.perioder
         assertEquals(2, perioder.size)
 
@@ -182,7 +182,7 @@ class FrilansTest {
             harInntektSomFrilanser = true,
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
-        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(mandag, fredag)
+        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(Periode(mandag, fredag))
         val perioder = k9ArbeidstidInfo.perioder
         assertEquals(2, perioder.size)
 
@@ -202,7 +202,7 @@ class FrilansTest {
             harInntektSomFrilanser = true,
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
-        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(mandag, fredag)
+        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(Periode(mandag, fredag))
         val perioder = k9ArbeidstidInfo.perioder
         assertEquals(1, perioder.size)
 
@@ -219,7 +219,7 @@ class FrilansTest {
             harInntektSomFrilanser = true,
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
-        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(mandag, torsdag)
+        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(Periode(mandag, torsdag))
         val perioder = k9ArbeidstidInfo.perioder
         assertEquals(1, perioder.size)
 
@@ -235,7 +235,7 @@ class FrilansTest {
             harInntektSomFrilanser = true,
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
-        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(mandag, fredag)
+        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(Periode(mandag, fredag))
         val perioder = k9ArbeidstidInfo.perioder
         assertEquals(2, perioder.size)
 
@@ -255,7 +255,7 @@ class FrilansTest {
             harInntektSomFrilanser = true,
             arbeidsforhold = arbeidsforholdMedNormaltidSomSnittPerUke
         )
-        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(mandag, fredag)
+        val k9ArbeidstidInfo = frilans.k9ArbeidstidInfo(Periode(mandag, fredag))
         val perioder = k9ArbeidstidInfo.perioder
         assertEquals(3, perioder.size)
 

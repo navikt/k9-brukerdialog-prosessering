@@ -7,6 +7,7 @@ import no.nav.brukerdialog.utils.DateUtils.månedStart
 import no.nav.brukerdialog.utils.erFørEllerLik
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.utils.kreverIkkeNull
+import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import java.time.LocalDate
@@ -77,7 +78,9 @@ data class Frilans(
         }
     }
 
-    fun k9ArbeidstidInfo(fraOgMed: LocalDate, tilOgMed: LocalDate): ArbeidstidInfo {
+    fun k9ArbeidstidInfo(søknadsperiode: Periode): ArbeidstidInfo {
+        val fraOgMed = søknadsperiode.fraOgMed
+        val tilOgMed = søknadsperiode.tilOgMed
         return when {
             (arbeidsforhold == null) -> Arbeidsforhold.k9ArbeidstidInfoMedNullTimer(fraOgMed, tilOgMed)
             startetOgSluttetISøknadsperioden(fraOgMed, tilOgMed) -> k9ArbeidstidInfoMedStartOgSluttIPerioden(

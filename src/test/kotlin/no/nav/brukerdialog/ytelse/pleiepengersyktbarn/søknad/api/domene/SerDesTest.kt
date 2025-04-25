@@ -270,7 +270,7 @@ internal class SerDesTest {
                 "mottarOmsorgsstønad": true,
                 "startdato": "2018-01-01",
                 "sluttdato": "2018-02-01",
-                "antallTimer": "PT25H"
+                "antallTimerIUken": "PT25H"
               },
               "nattevåk": {
                 "harNattevåk": true,
@@ -545,7 +545,7 @@ internal class SerDesTest {
             "mottarOmsorgsstønad": true,
             "startdato": "2018-01-01",
             "sluttdato": "2018-02-01",
-            "antallTimer": "PT25H"
+            "antallTimerIUken": "PT25H"
           },
           "nattevåk": {
             "harNattevåk": true,
@@ -779,7 +779,7 @@ internal class SerDesTest {
                 mottarOmsorgsstønad = true,
                 startdato = LocalDate.parse("2018-01-01"),
                 sluttdato = LocalDate.parse("2018-02-01"),
-                antallTimer = Duration.ofHours(25)
+                antallTimerIUken = Duration.ofHours(25)
             ),
             harVærtEllerErVernepliktig = true,
             k9FormatSøknad = null
