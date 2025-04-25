@@ -275,8 +275,8 @@ class SøknadUtils {
             omsorgsstønad = OmsorgsstønadMottarDelerAvPerioden(
                 type = OmsorgsstønadType.MOTTAR_I_DELER_AV_PERIODEN,
                 mottarOmsorgsstønad = true,
-                startdato = LocalDate.parse("2018-01-01"),
-                sluttdato = LocalDate.parse("2018-02-01"),
+                startdato = LocalDate.parse("2021-01-02"),
+                sluttdato = LocalDate.parse("2021-01-04"),
                 antallTimerIUken = Duration.ofHours(25)
             ),
             opptjeningIUtlandet = listOf(

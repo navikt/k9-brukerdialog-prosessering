@@ -268,8 +268,8 @@ internal class SerDesTest {
               "omsorgsstønad": {
                 "type": "MOTTAR_I_DELER_AV_PERIODEN",
                 "mottarOmsorgsstønad": true,
-                "startdato": "2018-01-01",
-                "sluttdato": "2018-02-01",
+                "startdato": "2021-01-02",
+                "sluttdato": "2021-01-04",
                 "antallTimerIUken": "PT25H"
               },
               "nattevåk": {
