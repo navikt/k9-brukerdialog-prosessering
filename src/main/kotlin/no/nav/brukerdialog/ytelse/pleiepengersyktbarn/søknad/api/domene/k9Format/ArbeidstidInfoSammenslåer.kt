@@ -36,21 +36,16 @@ import java.time.Duration
  *  Siste periode: fredag til fredag, normalt 4 timer, faktisk 4 timer
  *
  */
-class ArbeidstidInfoUtleder(
+class ArbeidstidInfoSammenslåer(
     private val arbeidstidInfoer: List<ArbeidstidInfo>,
     val totalPeriode: Periode,
 ) {
 
-    fun utled(): ArbeidstidInfo {
+    fun slåSammen(): ArbeidstidInfo {
         if (arbeidstidInfoer.size == 1) {
             // bare én kilde → ingen sammenslåing
             return arbeidstidInfoer.first()
         }
-        return slåSammen()
-    }
-
-    private fun slåSammen(): ArbeidstidInfo {
-        check(arbeidstidInfoer.size > 1) { "Det må være minst to arbeidstidInfoer for å kunne slå dem sammen." }
 
         return arbeidstidInfoer
             .map { it.somLocalDateTimeLine() }

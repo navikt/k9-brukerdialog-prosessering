@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test
 import java.time.Duration
 import java.time.LocalDate
 
-class ArbeidstidInfoUtlederTest {
+class ArbeidstidInfoSammenslåerTest {
 
     private companion object {
         val MANDAG = LocalDate.parse("2025-04-07")
@@ -41,10 +41,10 @@ class ArbeidstidInfoUtlederTest {
             prosentAvNormalt = 50.0
         )
 
-        val utledetArbeidstidInfo = ArbeidstidInfoUtleder(
+        val utledetArbeidstidInfo = ArbeidstidInfoSammenslåer(
             arbeidstidInfoer = listOf(frilansArbeidstidInfo),
             totalPeriode = søknadsperiode
-        ).utled()
+        ).slåSammen()
 
         assertThat(frilansArbeidstidInfo).isEqualTo(utledetArbeidstidInfo)
     }
@@ -69,13 +69,13 @@ class ArbeidstidInfoUtlederTest {
             antallTimerIUken = Duration.ofHours(40)
         ).k9ArbeidstidInfo(søknadsperiode)
 
-        val sammenslåttArbeidstidInfo = ArbeidstidInfoUtleder(
+        val sammenslåttArbeidstidInfo = ArbeidstidInfoSammenslåer(
             arbeidstidInfoer = listOf(
                 frilansArbeidstidInfo,
                 omsorgsstønadArbeidstidInfo
             ),
             totalPeriode = søknadsperiode
-        ).utled()
+        ).slåSammen()
 
         val arbeidstidInfoPerioder = sammenslåttArbeidstidInfo.perioder
         assertThat(arbeidstidInfoPerioder.size).isEqualTo(3)
@@ -116,13 +116,13 @@ class ArbeidstidInfoUtlederTest {
             antallTimerIUken = Duration.ofHours(40)
         )
 
-        val sammenslåttArbeidstidInfo = ArbeidstidInfoUtleder(
+        val sammenslåttArbeidstidInfo = ArbeidstidInfoSammenslåer(
             arbeidstidInfoer = listOf(
                 frilansArbeidstidInfo,
                 omsorgsstønadArbeidstidInfo
             ),
             totalPeriode = søknadsperiode
-        ).utled()
+        ).slåSammen()
 
         val arbeidstidInfoPerioder = sammenslåttArbeidstidInfo.perioder
         assertThat(arbeidstidInfoPerioder.size).isEqualTo(3)
@@ -163,13 +163,13 @@ class ArbeidstidInfoUtlederTest {
             antallTimerIUken = Duration.ofHours(40)
         )
 
-        val sammenslåttArbeidstidInfo = ArbeidstidInfoUtleder(
+        val sammenslåttArbeidstidInfo = ArbeidstidInfoSammenslåer(
             arbeidstidInfoer = listOf(
                 frilansArbeidstidInfo,
                 omsorgsstønadArbeidstidInfo
             ),
             totalPeriode = søknadsperiode
-        ).utled()
+        ).slåSammen()
 
         val arbeidstidInfoPerioder = sammenslåttArbeidstidInfo.perioder
         assertThat(arbeidstidInfoPerioder.size).isEqualTo(1)

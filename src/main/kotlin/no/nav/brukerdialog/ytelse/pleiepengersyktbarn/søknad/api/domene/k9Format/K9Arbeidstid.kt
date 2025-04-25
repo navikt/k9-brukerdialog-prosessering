@@ -20,10 +20,10 @@ internal fun PleiepengerSyktBarnSøknad.byggK9Arbeidstid(): Arbeidstid {
         }
 
         medFrilanserArbeidstid(
-            ArbeidstidInfoUtleder(
+            ArbeidstidInfoSammenslåer(
                 arbeidstidInfoer = arbeidstidInfoer,
                 totalPeriode = søknadsperiode
-            ).utled()
+            ).slåSammen()
         )
 
         selvstendigNæringsdrivende.arbeidsforhold?.let {
