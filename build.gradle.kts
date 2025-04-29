@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.4.5"
+	id("org.springframework.boot") version "3.4.4"
 	id("io.spring.dependency-management") version "1.1.7"
 	kotlin("jvm") version "2.1.20"
 	kotlin("plugin.spring") version "2.1.20"
@@ -30,14 +30,14 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.25"
+val tokenSupportVersion = "5.0.24"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "11.5.0"
 val ungDeltakelseOpplyserVersjon = "1.3.0"
 val springMockkVersion = "4.0.2"
-val logstashLogbackEncoderVersion = "8.1"
+val logstashLogbackEncoderVersion = "8.0"
 val slf4jVersion = "2.0.17"
-val jacksonVersion = "2.19.0"
+val jacksonVersion = "2.18.3"
 val openhtmltopdfVersion = "1.1.4"
 val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.11"
