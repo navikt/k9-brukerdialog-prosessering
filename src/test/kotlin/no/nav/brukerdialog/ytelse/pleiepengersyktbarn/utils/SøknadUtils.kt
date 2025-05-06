@@ -29,13 +29,16 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Periode
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.PleiepengerSyktBarnSøknad
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.SelvstendigNæringsdrivende
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Språk
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.StønadGodtgjørelse
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Utenlandsopphold
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.UtenlandsoppholdIPerioden
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidIPeriode
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidIPeriodeType
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.Arbeidsforhold
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.NormalArbeidstid
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemgodtgjørelseType
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseFrikjøpt
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarDelerAvPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadType
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Årsak
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
@@ -263,10 +266,18 @@ class SøknadUtils {
                     )
                 )
             ),
-            stønadGodtgjørelse = StønadGodtgjørelse(
-                mottarStønadGodtgjørelse = true,
-                startdato = LocalDate.parse("2018-01-01"),
-                sluttdato = LocalDate.parse("2018-02-01")
+            fosterhjemgodtgjørelse = FosterhjemsgodtgjørelseFrikjøpt(
+                type = FosterhjemgodtgjørelseType.MOTTAR_FRIKJØPT,
+                mottarFosterhjemsgodtgjørelse = true,
+                erFrikjøptFraJobb = true,
+                frikjøptBeskrivelse = "Frikjøpt fra jobb"
+            ),
+            omsorgsstønad = OmsorgsstønadMottarDelerAvPerioden(
+                type = OmsorgsstønadType.MOTTAR_I_DELER_AV_PERIODEN,
+                mottarOmsorgsstønad = true,
+                startdato = LocalDate.parse("2021-01-02"),
+                sluttdato = LocalDate.parse("2021-01-04"),
+                antallTimerIUken = Duration.ofHours(25)
             ),
             opptjeningIUtlandet = listOf(
                 OpptjeningIUtlandet(

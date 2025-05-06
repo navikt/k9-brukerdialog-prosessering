@@ -18,6 +18,8 @@ import no.nav.brukerdialog.utils.StringUtils
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetailsString
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.Fosterhjemgodtgjørelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.Omsorgsstønad
 import no.nav.fpsak.tidsserie.LocalDateInterval
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -82,7 +84,13 @@ data class PleiepengerSyktBarnSøknad(
     @field:Valid val nattevåk: Nattevåk? = null,
     val beredskap: Beredskap? = null,
     @field:Valid val frilans: Frilans,
+
+    @Deprecated("StønadGodtgjørelse er deprecated og vil bli fjernet i fremtidige versjoner av APIet")
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
+
+    @field:Valid val fosterhjemgodtgjørelse: Fosterhjemgodtgjørelse? = null,
+    @field:Valid val omsorgsstønad: Omsorgsstønad? = null,
+
     @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
@@ -126,6 +134,8 @@ data class PleiepengerSyktBarnSøknad(
             beredskap = beredskap,
             frilans = frilans,
             stønadGodtgjørelse = stønadGodtgjørelse,
+            fosterhjemgodtgjørelse = fosterhjemgodtgjørelse,
+            omsorgsstønad = omsorgsstønad,
             selvstendigNæringsdrivende = selvstendigNæringsdrivende,
             barnRelasjon = barnRelasjon,
             barnRelasjonBeskrivelse = barnRelasjonBeskrivelse,

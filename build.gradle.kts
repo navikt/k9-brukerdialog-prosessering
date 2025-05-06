@@ -47,6 +47,7 @@ val orgJsonVersion = "20250107"
 val springdocVersion = "2.8.6"
 val pdfBoxVersion = "3.0.4"
 val imageIOVersion = "3.12.0"
+val fpsakTidsserieVersion = "2.7.1"
 
 dependencies {
 	implementation("org.yaml:snakeyaml:2.4") {
@@ -116,7 +117,7 @@ dependencies {
 
 	// Diverse
 	implementation("org.json:json:$orgJsonVersion")
-
+	implementation("no.nav.fpsak.tidsserie:fpsak-tidsserie:$fpsakTidsserieVersion")
 }
 
 tasks {

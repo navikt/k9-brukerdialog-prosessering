@@ -3,6 +3,8 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.Fosterhjemgodtgjørelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.Omsorgsstønad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -29,7 +31,13 @@ data class KomplettPleiepengerSyktBarnSøknad(
     val nattevåk: Nattevåk?,
     val beredskap: Beredskap?,
     val frilans: Frilans,
+
+    @Deprecated("StønadGodtgjørelse er deprecated og vil bli fjernet i fremtidige versjoner av APIet")
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
+
+    val fosterhjemgodtgjørelse: Fosterhjemgodtgjørelse? = null,
+    val omsorgsstønad: Omsorgsstønad? = null,
+
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
