@@ -3,8 +3,10 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
+import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
 import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelsesøknadPdfData
 import no.nav.k9.søknad.Søknad
 import java.time.LocalDate
@@ -16,6 +18,10 @@ data class UngdomsytelsesøknadMottatt(
     val språk: String? = "nb",
     val søker: Søker,
     val startdato: LocalDate? = null,
+    val barn: List<Barn>,
+    val barnErRiktig: Boolean,
+    val kontonummerFraRegister: String? = null,
+    val kontonummerErRiktig: Boolean,
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,

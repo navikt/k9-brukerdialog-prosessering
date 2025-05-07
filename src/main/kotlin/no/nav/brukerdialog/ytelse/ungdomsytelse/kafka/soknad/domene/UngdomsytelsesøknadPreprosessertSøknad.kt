@@ -6,8 +6,10 @@ import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
 import no.nav.k9.søknad.Søknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -20,6 +22,10 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
     val språk: String?,
     val søker: Søker,
     val startdato: LocalDate? = null,
+    val barn: List<Barn>,
+    val barnErRiktig: Boolean,
+    val kontonummerFraRegister: String? = null,
+    val kontonummerErRiktig: Boolean,
     val dokumentId: List<List<String>>,
     val k9Format: K9Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
@@ -34,6 +40,10 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
         mottatt = ungdomsytelseSøknadMottatt.mottatt,
         søker = ungdomsytelseSøknadMottatt.søker,
         startdato = ungdomsytelseSøknadMottatt.startdato,
+        barn = ungdomsytelseSøknadMottatt.barn,
+        barnErRiktig = ungdomsytelseSøknadMottatt.barnErRiktig,
+        kontonummerFraRegister = ungdomsytelseSøknadMottatt.kontonummerFraRegister,
+        kontonummerErRiktig = ungdomsytelseSøknadMottatt.kontonummerErRiktig,
         dokumentId = dokumentId,
         k9Format = ungdomsytelseSøknadMottatt.k9Format,
         harForståttRettigheterOgPlikter = ungdomsytelseSøknadMottatt.harForståttRettigheterOgPlikter,

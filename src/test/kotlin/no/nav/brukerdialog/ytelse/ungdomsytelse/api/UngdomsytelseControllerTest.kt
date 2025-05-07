@@ -90,7 +90,7 @@ class UngdomsytelseControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
 
-        val defaultSøknad = SøknadUtils.defaultSøknad
+        val defaultSøknad = SøknadUtils.defaultSøknad.copy(barn = listOf())
 
         mockMvc.post("/ungdomsytelse/soknad/innsending") {
             headers {
@@ -135,6 +135,9 @@ class UngdomsytelseControllerTest {
 
         val jsonPayload = objectMapper.writeValueAsString(
             defaultSøknad.copy(
+                barn = listOf(),
+                barnErRiktig = false,
+                kontonummerErRiktig = false,
                 harForståttRettigheterOgPlikter = false,
                 harBekreftetOpplysninger = false,
             )
@@ -171,6 +174,18 @@ class UngdomsytelseControllerTest {
                               "parameterName": "ungdomsytelsesøknad.harBekreftetOpplysninger",
                               "parameterType": "ENTITY",
                               "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelsesøknad.barnErRiktig",
+                              "parameterType": "ENTITY",
+                              "reason": "Må bekrefte at opplysningene om barn er riktige for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelsesøknad.kontonummerErRiktig",
+                              "parameterType": "ENTITY",
+                              "reason": "Må bekrefte at kontonummeret er riktig for å sende inn søknad"
                             },
                           ]
                         }

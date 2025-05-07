@@ -1,6 +1,8 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
+import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadMottatt
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
@@ -37,6 +39,14 @@ object UngdomsytelsesøknadUtils {
                 fornavn = "Ola"
             ),
             startdato = startdato,
+            barn = listOf(
+                Barn(
+                    navn = "Ola Nordmann"
+                )
+            ),
+            barnErRiktig = true,
+            kontonummerFraRegister = "12345678901",
+            kontonummerErRiktig = true,
             k9Format = gyldigK9Format(søknadId, mottatt, startdato),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
