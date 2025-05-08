@@ -1,7 +1,6 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad
 
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
-import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.k9.søknad.Søknad
 import java.time.LocalDate
@@ -16,7 +15,7 @@ data class UngdomsytelseKomplettSøknad(
     private val barn: List<Barn>,
     private val barnErRiktig: Boolean,
     private val kontonummerFraRegister: String?,
-    private val kontonummerErRiktig: Boolean,
+    private val kontonummerErRiktig: Boolean?,
     private val harForståttRettigheterOgPlikter: Boolean,
     private val harBekreftetOpplysninger: Boolean,
     private val k9Format: Søknad,

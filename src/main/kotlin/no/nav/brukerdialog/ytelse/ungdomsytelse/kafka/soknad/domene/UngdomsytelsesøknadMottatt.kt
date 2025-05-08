@@ -21,7 +21,7 @@ data class UngdomsytelsesøknadMottatt(
     val barn: List<Barn>,
     val barnErRiktig: Boolean,
     val kontonummerFraRegister: String? = null,
-    val kontonummerErRiktig: Boolean,
+    val kontonummerErRiktig: Boolean? = null,
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,

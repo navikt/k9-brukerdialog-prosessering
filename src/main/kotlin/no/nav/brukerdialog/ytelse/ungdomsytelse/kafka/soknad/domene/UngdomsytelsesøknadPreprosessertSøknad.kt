@@ -6,7 +6,6 @@ import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
-import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
@@ -25,7 +24,7 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
     val barn: List<Barn>,
     val barnErRiktig: Boolean,
     val kontonummerFraRegister: String? = null,
-    val kontonummerErRiktig: Boolean,
+    val kontonummerErRiktig: Boolean? = null,
     val dokumentId: List<List<String>>,
     val k9Format: K9Søknad,
     val harForståttRettigheterOgPlikter: Boolean,

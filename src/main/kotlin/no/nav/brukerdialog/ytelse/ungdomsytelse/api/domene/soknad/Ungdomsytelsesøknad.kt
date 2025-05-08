@@ -1,10 +1,10 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad
 
+import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
-import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.k9.søknad.Søknad
@@ -35,13 +35,14 @@ data class Ungdomsytelsesøknad(
     val startdato: LocalDate,
     val søkerNorskIdent: String,
 
-    var barn: List<Barn>, // Settes i UngdomsytelseService.
+    @Hidden
+    var barn: List<Barn>? = null, // Settes i UngdomsytelseService.
     @field:AssertTrue(message = "Må bekrefte at opplysningene om barn er riktige for å sende inn søknad")
     val barnErRiktig: Boolean,
 
     val kontonummerFraRegister: String? = null,
     @field:AssertTrue(message = "Må bekrefte at kontonummeret er riktig for å sende inn søknad")
-    val kontonummerErRiktig: Boolean,
+    val kontonummerErRiktig: Boolean? = null,
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
     val harBekreftetOpplysninger: Boolean,
@@ -66,7 +67,7 @@ data class Ungdomsytelsesøknad(
             søker = søker,
             språk = språk,
             startdato = startdato,
-            barn = barn,
+            barn = barn!!,
             barnErRiktig = barnErRiktig,
             kontonummerFraRegister = kontonummerFraRegister,
             kontonummerErRiktig = kontonummerErRiktig,
