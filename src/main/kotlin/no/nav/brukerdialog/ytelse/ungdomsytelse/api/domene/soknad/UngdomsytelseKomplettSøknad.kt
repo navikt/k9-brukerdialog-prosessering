@@ -15,7 +15,7 @@ data class UngdomsytelseKomplettSøknad(
     private val mottatt: ZonedDateTime,
     private val barn: List<Barn>,
     private val barnErRiktig: Boolean,
-    private val kontonummerFraRegister: String? = null,
+    private val kontonummerFraRegister: String?,
     private val kontonummerErRiktig: Boolean,
     private val harForståttRettigheterOgPlikter: Boolean,
     private val harBekreftetOpplysninger: Boolean,
