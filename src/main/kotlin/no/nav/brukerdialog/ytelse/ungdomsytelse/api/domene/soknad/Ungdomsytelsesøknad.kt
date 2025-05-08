@@ -55,6 +55,12 @@ data class Ungdomsytelsesøknad(
         private val SØKNAD_TYPE = UngSøknadstype.DELTAKELSE_SØKNAD
     }
 
+    @Hidden
+    @AssertTrue(message = "Dersom kontonummerFraRegister er satt, må kontonummerErRiktig være satt")
+    fun isKontonummerErRiktig(): Boolean = if (!kontonummerFraRegister.isNullOrBlank()) {
+        kontonummerErRiktig !== null
+    } else true
+
     override fun somKomplettSøknad(
         søker: Søker,
         k9Format: no.nav.k9.søknad.Innsending?,
