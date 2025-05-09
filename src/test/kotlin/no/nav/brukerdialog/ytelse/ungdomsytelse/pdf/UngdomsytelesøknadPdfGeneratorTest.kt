@@ -34,6 +34,18 @@ class UngdomsytelesøknadPdfGeneratorTest {
             var id = "1-full-søknad"
             var pdf = generator.genererPDF(UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = id).pdfData())
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "2-søknad-uten-barn"
+            pdf = generator.genererPDF(UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = id)
+                .copy(barn = emptyList(), barnErRiktig = false)
+                .pdfData())
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "3-søknad-uten-kontonummer"
+            pdf = generator.genererPDF(UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = id)
+                .copy(kontonummerFraRegister = null, kontonummerErRiktig = false)
+                .pdfData())
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }

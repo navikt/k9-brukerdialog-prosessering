@@ -4,6 +4,7 @@ import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
+import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.MDCUtil
@@ -11,6 +12,7 @@ import no.nav.brukerdialog.utils.TokenUtils.personIdent
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngdomsytelseInntektsrapportering
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseInnsending
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.LoggerFactory
@@ -23,7 +25,8 @@ class UngdomsytelseService(
     private val duplikatInnsendingSjekker: DuplikatInnsendingSjekker,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
     private val metrikkService: MetrikkService,
-    private val ungDeltakelseOpplyserService: UngDeltakelseOpplyserService
+    private val ungDeltakelseOpplyserService: UngDeltakelseOpplyserService,
+    private val barnService: BarnService
 ) {
     private companion object {
         private val logger = LoggerFactory.getLogger(UngdomsytelseService::class.java)
@@ -35,6 +38,11 @@ class UngdomsytelseService(
 
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId(), "mottatt."))
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
+
+        val barn = barnService.hentBarn().map { Barn(navn = it.navn()) }
+
+        søknad.barn = barn
+
         innsendingService.registrer(søknad, metadata)
         metrikkService.registrerMottattInnsending(søknad.ytelse())
     }

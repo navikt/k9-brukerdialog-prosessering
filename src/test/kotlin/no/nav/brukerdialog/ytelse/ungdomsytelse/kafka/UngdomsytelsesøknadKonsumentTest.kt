@@ -113,6 +113,14 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             "fødselsnummer": "02119970078"
           },
           "startdato": "2022-01-01",
+          "barn": [
+            {
+              "navn": "Ola Nordmann"
+            }
+          ],
+          "barnErRiktig": true,
+          "kontonummerFraRegister": "12345678901",
+          "kontonummerErRiktig": true,
           "språk": "nb",
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [

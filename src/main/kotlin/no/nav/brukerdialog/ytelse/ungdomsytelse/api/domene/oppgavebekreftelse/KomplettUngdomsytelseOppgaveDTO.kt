@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse
-import no.nav.k9.oppgave.bekreftelse.ung.inntekt.OppgittInntektForPeriode
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretProgramperiodeBekreftelse
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
@@ -72,7 +71,6 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     override fun somK9Format(): Bekreftelse {
         val inntektBekreftelse = InntektBekreftelse.builder()
             .medOppgaveReferanse(UUID.fromString(oppgaveReferanse))
-            .medOppgittePeriodeinntekter(registerinntekt.somK9Format())
             .medHarBrukerGodtattEndringen(uttalelse.bekreftelseSvar.somBoolean())
 
         if (!uttalelse.meldingFraDeltaker.isNullOrBlank()) {
@@ -91,18 +89,4 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
             uttalelse = uttalelse
         )
     }
-
-    private fun RegisterinntektDTO.somK9Format(): MutableSet<OppgittInntektForPeriode> =
-        mutableSetOf<OppgittInntektForPeriode>().apply {
-            addAll(arbeidOgFrilansInntekter.map {
-                OppgittInntektForPeriode.builder(Periode(fraOgMed, tilOgMed))
-                    .medArbeidstakerOgFrilansinntekt(BigDecimal.valueOf(it.inntekt.toLong()))
-                    .build()
-            })
-            addAll(ytelseInntekter.map {
-                OppgittInntektForPeriode.builder(Periode(fraOgMed, tilOgMed))
-                    .medYtelse(BigDecimal.valueOf(it.inntekt.toLong()))
-                    .build()
-            })
-        }
 }
