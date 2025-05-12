@@ -110,7 +110,7 @@ class SøknadUtils {
             ),
             vedlegg = listOf(URI.create("http://localhost:8080/vedlegg/1").toURL()),
             fraOgMed = LocalDate.parse("2021-01-01"),
-            tilOgMed = LocalDate.parse("2021-10-01"),
+            tilOgMed = LocalDate.parse("2021-01-10"),
             medlemskap = Medlemskap(
                 harBoddIUtlandetSiste12Mnd = true,
                 skalBoIUtlandetNeste12Mnd = true,
@@ -165,15 +165,15 @@ class SøknadUtils {
                 ),
                 kursperioder = listOf(
                     K9Periode(
-                        LocalDate.parse("2022-01-01"),
-                        LocalDate.parse("2022-01-10")
+                        LocalDate.parse("2021-01-01"),
+                        LocalDate.parse("2021-01-10")
                     )
                 ),
                 reise = Reise(
                     reiserUtenforKursdager = true,
                     reisedager = listOf(
-                        LocalDate.parse("2022-01-01"),
-                        LocalDate.parse("2022-01-10")
+                        LocalDate.parse("2021-01-01"),
+                        LocalDate.parse("2021-01-10")
                     ),
                     reisedagerBeskrivelse = "Reise til kurs tok mer enn en dag"
                 )

@@ -194,9 +194,9 @@ class K9FormatTest {
                   "institusjonsidentifikator" : "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
                   "navn" : "Senter for Kurs AS"
                 },
-                "kursperioder" : [ "2022-01-01/2022-01-10" ],
+                "kursperioder" : [ "2021-01-01/2021-01-10" ],
                 "reise" : {
-                  "reisedager" : [ "2022-01-01", "2022-01-10" ],
+                  "reisedager" : [ "2021-01-01", "2021-01-10" ],
                   "reisedagerBeskrivelse" : "Reise til kurs tok mer enn en dag",
                   "reiserUtenforKursdager" : true
                 }

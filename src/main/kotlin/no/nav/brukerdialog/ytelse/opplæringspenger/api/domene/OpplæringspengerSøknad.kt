@@ -165,7 +165,7 @@ data class OpplæringspengerSøknad(
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = OpplæringspengerSøknadValidator()
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Innsending {
-        val søknadsperiode = K9Periode(fraOgMed, tilOgMed)
+        val søknadsperiode = kurs.kursperioder
         val olp = Opplæringspenger()
             .medSøknadsperiode(søknadsperiode)
             .medBarn(barn.tilK9Barn())
@@ -173,6 +173,7 @@ data class OpplæringspengerSøknad(
             .medArbeidstid(byggK9Arbeidstid())
             .medUttak(byggK9Uttak(søknadsperiode))
             .medBosteder(medlemskap.tilK9Bosteder())
+            .medKurs(kurs.tilK9Format())
             .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as Opplæringspenger
 
         barn.relasjonTilBarnet?.let { olp.medOmsorg(byggK9Omsorg()) }
@@ -183,19 +184,19 @@ data class OpplæringspengerSøknad(
             }
         }
 
-        olp.medKurs(kurs.tilK9Format())
-
         return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), olp)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
             .medSpråk(K9Språk.of(språk.name))
     }
 
-    fun byggK9Uttak(periode: K9Periode): Uttak {
-        val perioder = mutableMapOf<K9Periode, Uttak.UttakPeriodeInfo>()
+    fun byggK9Uttak(perioder: List<K9Periode>): Uttak {
+        val uttaksPerioder = mutableMapOf<K9Periode, Uttak.UttakPeriodeInfo>()
 
-        perioder[periode] = Uttak.UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))
+        perioder.forEach { periode ->
+            uttaksPerioder[periode] = Uttak.UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))
+        }
 
-        return Uttak().medPerioder(perioder)
+        return Uttak().medPerioder(uttaksPerioder)
     }
 
     private fun byggK9OpptjeningAktivitet() = OpptjeningAktivitet().apply {
