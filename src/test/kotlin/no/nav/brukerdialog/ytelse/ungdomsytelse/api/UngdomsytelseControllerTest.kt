@@ -213,6 +213,7 @@ class UngdomsytelseControllerTest {
                 forrigeProgramperiode = null
             ),
             status = OppgaveStatus.ULØST,
+            bekreftelse = null,
             opprettetDato = ZonedDateTime.now(),
             løstDato = null
         )
