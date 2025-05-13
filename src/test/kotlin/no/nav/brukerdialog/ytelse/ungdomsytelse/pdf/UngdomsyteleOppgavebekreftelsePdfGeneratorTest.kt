@@ -10,6 +10,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekref
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.ArbeidOgFrilansRegisterInntektDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.YtelseRegisterInntektDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.registerinntekt.YtelseType
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
@@ -77,11 +78,11 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 ytelseInntekter = listOf(
                                     YtelseRegisterInntektDTO(
                                         inntekt = 3000,
-                                        ytelsetype = "Ytelse 1"
+                                        ytelsetype = YtelseType.PLEIEPENGER_SYKT_BARN
                                     ),
                                     YtelseRegisterInntektDTO(
                                         inntekt = 4000,
-                                        ytelsetype = "Ytelse 2"
+                                        ytelsetype = YtelseType.OMSORGSPENGER
                                     )
                                 )
                             ),
@@ -115,11 +116,11 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 ytelseInntekter = listOf(
                                     YtelseRegisterInntektDTO(
                                         inntekt = 3000,
-                                        ytelsetype = "Ytelse 1"
+                                        ytelsetype = YtelseType.PLEIEPENGER_SYKT_BARN
                                     ),
                                     YtelseRegisterInntektDTO(
                                         inntekt = 4000,
-                                        ytelsetype = "Ytelse 2"
+                                        ytelsetype = YtelseType.OMSORGSPENGER
                                     )
                                 )
                             ),

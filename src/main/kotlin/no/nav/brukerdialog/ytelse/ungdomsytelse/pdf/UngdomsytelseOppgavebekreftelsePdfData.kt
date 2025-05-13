@@ -16,6 +16,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Un
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.registerinntekt.YtelseType
 import java.math.BigDecimal
 
 class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMottatt: UngdomsytelseOppgavebekreftelseMottatt) :
@@ -71,10 +72,18 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
         "ytelseInntekter" to this.ytelseInntekter.map {
             mapOf(
                 "inntekt" to BigDecimal.valueOf(it.inntekt.toLong()).formaterSomValuta(),
-                "ytelsetype" to it.ytelsetype.lowercase().replaceFirstChar {c -> c.uppercase() }
+                "ytelsetype" to it.ytelsetype.tekst()
             )
         }
     )
+
+    private fun YtelseType.tekst() = when (this) {
+        YtelseType.PLEIEPENGER_SYKT_BARN -> "Pleiepenger sykt barn"
+        YtelseType.PLEIEPENGER_LIVETS_SLUTTFASE -> "Skoleplass uten barnepass"
+        YtelseType.OMSORGSPENGER -> "Omsorgspenger"
+        YtelseType.OPPLAERINGSPENGER -> "Opplæringspenger"
+        YtelseType.SYKEPENGER -> "Sykepenger"
+    }
 
     private fun UngdomsytelseOppgaveUttalelseDTO.somMap() = mapOf(
         "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),

@@ -2,7 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.4.4"
+	id("org.springframework.boot") version "3.4.5"
 	id("io.spring.dependency-management") version "1.1.7"
 	kotlin("jvm") version "2.1.20"
 	kotlin("plugin.spring") version "2.1.20"
@@ -30,24 +30,24 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.24"
+val tokenSupportVersion = "5.0.25"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "12.0.0"
-val ungDeltakelseOpplyserVersjon = "1.3.0"
+val k9FormatVersion = "12.2.0"
+val ungDeltakelseOpplyserVersjon = "1.5.0"
 val springMockkVersion = "4.0.2"
-val logstashLogbackEncoderVersion = "8.0"
+val logstashLogbackEncoderVersion = "8.1"
 val slf4jVersion = "2.0.17"
-val jacksonVersion = "2.18.3"
+val jacksonVersion = "2.19.0"
 val openhtmltopdfVersion = "1.1.4"
 val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.11"
 val awailitilityKotlinVersion = "4.3.0"
 val springCloudContractVersion = "4.2.1"
 val orgJsonVersion = "20250107"
-val springdocVersion = "2.8.6"
-val pdfBoxVersion = "3.0.4"
+val springdocVersion = "2.8.8"
+val pdfBoxVersion = "3.0.5"
 val imageIOVersion = "3.12.0"
-val fpsakTidsserieVersion = "2.7.1"
+val fpsakTidsserieVersion = "2.7.3"
 
 dependencies {
 	implementation("org.yaml:snakeyaml:2.4") {
