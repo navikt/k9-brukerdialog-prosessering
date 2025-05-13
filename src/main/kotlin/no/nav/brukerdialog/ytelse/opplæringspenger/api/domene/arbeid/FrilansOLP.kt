@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull
 import no.nav.brukerdialog.utils.erLikEllerEtter
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
 import no.nav.k9.søknad.felles.opptjening.Frilanser
+import no.nav.k9.søknad.felles.type.Periode
 import java.time.LocalDate
 
 data class FrilansOLP(
@@ -52,7 +53,7 @@ data class FrilansOLP(
         this@FrilansOLP.sluttdato?.let { medSluttdato(this@FrilansOLP.sluttdato) }
     }
 
-    internal fun somK9Arbeidstid(fraOgMed: LocalDate, tilOgMed: LocalDate) =
-        arbeidsforhold.somK9ArbeidstidInfo(fraOgMed, tilOgMed)
+    internal fun somK9Arbeidstid(perioder: List<Periode>) =
+        arbeidsforhold.somK9ArbeidstidInfo(perioder)
 
 }

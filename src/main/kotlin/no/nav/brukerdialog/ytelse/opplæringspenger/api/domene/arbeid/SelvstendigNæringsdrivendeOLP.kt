@@ -3,7 +3,7 @@ package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid
 import jakarta.validation.Valid
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
-import java.time.LocalDate
+import no.nav.k9.søknad.felles.type.Periode
 
 data class SelvstendigNæringsdrivendeOLP(
     @field:Valid val virksomhet: Virksomhet,
@@ -11,6 +11,6 @@ data class SelvstendigNæringsdrivendeOLP(
 ) {
 
     fun somK9SelvstendigNæringsdrivende() = virksomhet.somK9SelvstendigNæringsdrivende()
-    fun somK9ArbeidstidInfo(fraOgMed: LocalDate, tilOgMed: LocalDate) =
-        arbeidsforhold.somK9ArbeidstidInfo(fraOgMed, tilOgMed)
+    fun somK9ArbeidstidInfo(perioder: List<Periode>) =
+        arbeidsforhold.somK9ArbeidstidInfo(perioder)
 }

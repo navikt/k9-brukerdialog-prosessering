@@ -8,6 +8,7 @@ import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.INGEN_ARB
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.enkeltDagerMedFulltFravær
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.enkeltDagerMedJobbSomVanlig
 import no.nav.k9.søknad.JsonUtils
+import no.nav.k9.søknad.felles.type.Periode
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -95,7 +96,6 @@ class ArbeidsgiverOLPTest {
                         Enkeltdag(LocalDate.parse("2022-01-02"), INGEN_ARBEIDSDAG),
                         Enkeltdag(LocalDate.parse("2022-01-03"), INGEN_ARBEIDSDAG),
                         Enkeltdag(LocalDate.parse("2022-01-04"), INGEN_ARBEIDSDAG),
-                        Enkeltdag(LocalDate.parse("2022-01-05"), INGEN_ARBEIDSDAG),
                         Enkeltdag(LocalDate.parse("2022-01-06"), INGEN_ARBEIDSDAG),
                         Enkeltdag(LocalDate.parse("2022-01-07"), INGEN_ARBEIDSDAG),
                         Enkeltdag(LocalDate.parse("2022-01-08"), INGEN_ARBEIDSDAG),
@@ -104,7 +104,10 @@ class ArbeidsgiverOLPTest {
                     )
                 )
             )
-        ).somK9Arbeidstaker(LocalDate.parse("2022-01-01"), LocalDate.parse("2022-01-10"))
+        ).somK9Arbeidstaker(listOf(
+            Periode(LocalDate.parse("2022-01-01"), LocalDate.parse("2022-01-04")),
+            Periode(LocalDate.parse("2022-01-06"), LocalDate.parse("2022-01-10")))
+        )
         val forventet = """
             {
               "norskIdentitetsnummer": null,
@@ -125,10 +128,6 @@ class ArbeidsgiverOLPTest {
                     "faktiskArbeidTimerPerDag": "PT0S"
                   },
                   "2022-01-04/2022-01-04": {
-                    "jobberNormaltTimerPerDag": "PT7H30M",
-                    "faktiskArbeidTimerPerDag": "PT0S"
-                  },
-                  "2022-01-05/2022-01-05": {
                     "jobberNormaltTimerPerDag": "PT7H30M",
                     "faktiskArbeidTimerPerDag": "PT0S"
                   },

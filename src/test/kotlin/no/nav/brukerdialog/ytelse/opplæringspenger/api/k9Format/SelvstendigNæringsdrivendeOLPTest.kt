@@ -16,6 +16,7 @@ import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.enkeltDag
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.fredag
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.mandag
 import no.nav.k9.søknad.JsonUtils
+import no.nav.k9.søknad.felles.type.Periode
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -92,7 +93,7 @@ class SelvstendigNæringsdrivendeOLPTest {
                 registrertINorge = true,
             ),
             arbeidsforhold = ArbeidsforholdOLP(37.5, ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, enkeltDagerMedFulltFravær))
-        ).somK9ArbeidstidInfo(mandag, fredag)
+        ).somK9ArbeidstidInfo(listOf(Periode(mandag, fredag)))
         // language=json
         val forventet = """
             {

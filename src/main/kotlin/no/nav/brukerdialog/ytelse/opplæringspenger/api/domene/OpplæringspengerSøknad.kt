@@ -25,6 +25,7 @@ import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet
+import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.olp.v1.Opplæringspenger
@@ -170,7 +171,7 @@ data class OpplæringspengerSøknad(
             .medSøknadsperiode(søknadsperiode)
             .medBarn(barn.tilK9Barn())
             .medOpptjeningAktivitet(byggK9OpptjeningAktivitet())
-            .medArbeidstid(byggK9Arbeidstid())
+            .medArbeidstid(byggK9Arbeidstid(søknadsperiode))
             .medUttak(byggK9Uttak(søknadsperiode))
             .medBosteder(medlemskap.tilK9Bosteder())
             .medKurs(kurs.tilK9Format())
@@ -206,18 +207,18 @@ data class OpplæringspengerSøknad(
         }
     }
 
-    private fun byggK9Arbeidstid() = Arbeidstid().apply {
+    private fun byggK9Arbeidstid(perioder: List<Periode>) = Arbeidstid().apply {
         if (arbeidsgivere.isNotEmpty()) {
-            medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(fraOgMed, tilOgMed))
+            medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(perioder))
         }
 
         selvstendigNæringsdrivende?.let {
-            medSelvstendigNæringsdrivendeArbeidstidInfo(it.somK9ArbeidstidInfo(fraOgMed, tilOgMed))
+            medSelvstendigNæringsdrivendeArbeidstidInfo(it.somK9ArbeidstidInfo(perioder))
         }
 
         when (frilans) {
-            null -> medFrilanserArbeidstid(arbeidstidInfoMedNullTimer(fraOgMed, tilOgMed))
-            else -> medFrilanserArbeidstid(frilans.somK9Arbeidstid(fraOgMed, tilOgMed))
+            null -> medFrilanserArbeidstid(arbeidstidInfoMedNullTimer(perioder))
+            else -> medFrilanserArbeidstid(frilans.somK9Arbeidstid(perioder))
         }
     }
 
