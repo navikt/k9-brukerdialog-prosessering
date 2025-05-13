@@ -37,7 +37,6 @@ val ungDeltakelseOpplyserVersjon = "1.5.0"
 val springMockkVersion = "4.0.2"
 val logstashLogbackEncoderVersion = "8.1"
 val slf4jVersion = "2.0.17"
-val jacksonVersion = "2.19.0"
 val openhtmltopdfVersion = "1.1.4"
 val handlebarsVersion = "4.4.0"
 val retryVersion = "2.0.11"
@@ -50,10 +49,6 @@ val imageIOVersion = "3.12.0"
 val fpsakTidsserieVersion = "2.7.3"
 
 dependencies {
-	implementation("org.yaml:snakeyaml:2.4") {
-		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
-	}
-
 	implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
 	testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
@@ -107,7 +102,7 @@ dependencies {
 	implementation("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
 
 	// Jackson
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
