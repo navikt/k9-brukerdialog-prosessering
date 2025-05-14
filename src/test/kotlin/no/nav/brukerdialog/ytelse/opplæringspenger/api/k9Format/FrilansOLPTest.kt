@@ -120,7 +120,7 @@ class FrilansOLPTest {
                 37.5,
                 ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, enkeltDagerMedFulltFravær)
             )
-        ).somK9Arbeidstid(fraOgMed, tilOgMed).also {
+        ).somK9Arbeidstid(listOf(Periode(fraOgMed, tilOgMed))).also {
             assertEquals(it.perioder.size, 5)
             it.perioder.forEach { _: Periode, arbeidstidPeriodeInfo: ArbeidstidPeriodeInfo ->
                 assertEquals(FULL_ARBEIDSDAG, arbeidstidPeriodeInfo.jobberNormaltTimerPerDag)

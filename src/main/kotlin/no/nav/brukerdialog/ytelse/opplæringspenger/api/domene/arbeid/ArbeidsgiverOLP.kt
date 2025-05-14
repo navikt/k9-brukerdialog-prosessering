@@ -6,8 +6,8 @@ import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP.Companion.somK9ArbeidstidInfo
 import no.nav.k9.søknad.felles.type.Organisasjonsnummer
+import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
-import java.time.LocalDate
 
 data class ArbeidsgiverOLP(
     @field:Size(max = 20)
@@ -25,14 +25,14 @@ data class ArbeidsgiverOLP(
 
     companion object {
 
-        internal fun List<ArbeidsgiverOLP>.somK9Arbeidstaker(fraOgMed: LocalDate, tilOgMed: LocalDate) =
-            map { it.somK9Arbeidstaker(fraOgMed, tilOgMed) }
+        internal fun List<ArbeidsgiverOLP>.somK9Arbeidstaker(perioder: List<Periode>) =
+            map { it.somK9Arbeidstaker(perioder) }
     }
 
-    fun somK9Arbeidstaker(fraOgMed: LocalDate, tilOgMed: LocalDate) = Arbeidstaker().apply {
+    fun somK9Arbeidstaker(perioder: List<Periode>) = Arbeidstaker().apply {
         medOrganisasjonsnummer(Organisasjonsnummer.of(this@ArbeidsgiverOLP.organisasjonsnummer))
         medOrganisasjonsnavn(navn)
-        medArbeidstidInfo(arbeidsforhold.somK9ArbeidstidInfo(fraOgMed, tilOgMed))
+        medArbeidstidInfo(arbeidsforhold.somK9ArbeidstidInfo(perioder))
     }
 
 }

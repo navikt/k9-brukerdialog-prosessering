@@ -25,6 +25,7 @@ import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet
+import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.olp.v1.Opplæringspenger
@@ -165,14 +166,15 @@ data class OpplæringspengerSøknad(
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = OpplæringspengerSøknadValidator()
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Innsending {
-        val søknadsperiode = K9Periode(fraOgMed, tilOgMed)
+        val søknadsperiode = kurs.kursperioder
         val olp = Opplæringspenger()
             .medSøknadsperiode(søknadsperiode)
             .medBarn(barn.tilK9Barn())
             .medOpptjeningAktivitet(byggK9OpptjeningAktivitet())
-            .medArbeidstid(byggK9Arbeidstid())
+            .medArbeidstid(byggK9Arbeidstid(søknadsperiode))
             .medUttak(byggK9Uttak(søknadsperiode))
             .medBosteder(medlemskap.tilK9Bosteder())
+            .medKurs(kurs.tilK9Format())
             .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as Opplæringspenger
 
         barn.relasjonTilBarnet?.let { olp.medOmsorg(byggK9Omsorg()) }
@@ -183,19 +185,19 @@ data class OpplæringspengerSøknad(
             }
         }
 
-        olp.medKurs(kurs.tilK9Format())
-
         return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), olp)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
             .medSpråk(K9Språk.of(språk.name))
     }
 
-    fun byggK9Uttak(periode: K9Periode): Uttak {
-        val perioder = mutableMapOf<K9Periode, Uttak.UttakPeriodeInfo>()
+    fun byggK9Uttak(perioder: List<K9Periode>): Uttak {
+        val uttaksPerioder = mutableMapOf<K9Periode, Uttak.UttakPeriodeInfo>()
 
-        perioder[periode] = Uttak.UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))
+        perioder.forEach { periode ->
+            uttaksPerioder[periode] = Uttak.UttakPeriodeInfo(Duration.ofHours(7).plusMinutes(30))
+        }
 
-        return Uttak().medPerioder(perioder)
+        return Uttak().medPerioder(uttaksPerioder)
     }
 
     private fun byggK9OpptjeningAktivitet() = OpptjeningAktivitet().apply {
@@ -205,18 +207,18 @@ data class OpplæringspengerSøknad(
         }
     }
 
-    private fun byggK9Arbeidstid() = Arbeidstid().apply {
+    private fun byggK9Arbeidstid(perioder: List<Periode>) = Arbeidstid().apply {
         if (arbeidsgivere.isNotEmpty()) {
-            medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(fraOgMed, tilOgMed))
+            medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(perioder))
         }
 
         selvstendigNæringsdrivende?.let {
-            medSelvstendigNæringsdrivendeArbeidstidInfo(it.somK9ArbeidstidInfo(fraOgMed, tilOgMed))
+            medSelvstendigNæringsdrivendeArbeidstidInfo(it.somK9ArbeidstidInfo(perioder))
         }
 
         when (frilans) {
-            null -> medFrilanserArbeidstid(arbeidstidInfoMedNullTimer(fraOgMed, tilOgMed))
-            else -> medFrilanserArbeidstid(frilans.somK9Arbeidstid(fraOgMed, tilOgMed))
+            null -> medFrilanserArbeidstid(arbeidstidInfoMedNullTimer(perioder))
+            else -> medFrilanserArbeidstid(frilans.somK9Arbeidstid(perioder))
         }
     }
 
