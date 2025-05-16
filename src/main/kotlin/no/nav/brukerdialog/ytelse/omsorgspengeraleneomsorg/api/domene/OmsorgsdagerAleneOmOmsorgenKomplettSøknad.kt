@@ -14,4 +14,6 @@ data class OmsorgsdagerAleneOmOmsorgenKomplettSøknad(
     private val k9Søknad: Søknad,
     private val harForståttRettigheterOgPlikter: Boolean,
     private val harBekreftetOpplysninger: Boolean
-): KomplettInnsending
+): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

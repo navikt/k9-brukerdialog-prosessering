@@ -148,7 +148,7 @@ data class PleiepengerSyktBarnSøknad(
 
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
 
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
 
     override fun vedlegg(): List<URL> = mutableListOf<URL>().apply {
         addAll(vedlegg)

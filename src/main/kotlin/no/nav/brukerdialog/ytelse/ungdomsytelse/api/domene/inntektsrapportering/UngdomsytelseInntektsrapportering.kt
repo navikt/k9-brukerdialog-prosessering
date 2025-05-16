@@ -20,12 +20,11 @@ import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.util.*
 import no.nav.k9.søknad.Søknad as UngSøknad
 
 data class UngdomsytelseInntektsrapportering(
-    @Schema(hidden = true)
-    val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    val oppgaveReferanse: String,
 
     @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
@@ -33,9 +32,9 @@ data class UngdomsytelseInntektsrapportering(
     @field:Valid val oppgittInntektForPeriode: OppgittInntektForPeriode,
 
     @field:AssertTrue(message = "Inntektsopplysningene må bekreftes for å kunne rapportere")
-    val harBekreftetInntekt: Boolean
+    val harBekreftetInntekt: Boolean,
 
-    ): Innsending {
+    ) : Innsending {
     companion object {
         private val K9_SØKNAD_VERSJON = Versjon.of("1.0.0")
     }
@@ -47,7 +46,7 @@ data class UngdomsytelseInntektsrapportering(
     ): UngdomsytelseKomplettInntektsrapportering {
         requireNotNull(k9Format)
         return UngdomsytelseKomplettInntektsrapportering(
-            søknadId = søknadId,
+            oppgaveReferanse = oppgaveReferanse,
             mottatt = mottatt,
             søker = søker,
             oppgittInntektForPeriode = oppgittInntektForPeriode,
@@ -67,7 +66,7 @@ data class UngdomsytelseInntektsrapportering(
             .medVersjon(K9_SØKNAD_VERSJON)
             .medMottattDato(mottatt)
             .medSpråk(Språk.NORSK_BOKMÅL)
-            .medSøknadId(SøknadId(søknadId))
+            .medSøknadId(SøknadId(oppgaveReferanse))
             .medSøker(søker.somK9Søker())
             .medYtelse(ytelse)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
@@ -75,7 +74,7 @@ data class UngdomsytelseInntektsrapportering(
 
     override fun søkerNorskIdent(): String? = null
     override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = oppgaveReferanse
     override fun vedlegg(): List<URL> = mutableListOf()
     override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()
 }

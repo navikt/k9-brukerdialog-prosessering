@@ -1,3 +1,5 @@
 package no.nav.brukerdialog.domenetjenester.innsending
 
-interface KomplettInnsending
+interface KomplettInnsending {
+    fun innsendingId(): String
+}

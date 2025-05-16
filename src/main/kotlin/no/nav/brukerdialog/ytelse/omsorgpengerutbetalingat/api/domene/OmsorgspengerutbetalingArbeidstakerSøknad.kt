@@ -129,6 +129,6 @@ data class OmsorgspengerutbetalingArbeidstakerSøknad(
     override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = vedlegg
 }

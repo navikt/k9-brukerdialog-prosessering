@@ -7,16 +7,18 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 
 data class UngdomsytelseKomplettSøknad(
-    private val søknadId: String,
-    private val søker: Søker,
-    private val språk: String,
-    private val startdato: LocalDate,
-    private val mottatt: ZonedDateTime,
-    private val barn: List<Barn>,
-    private val barnErRiktig: Boolean,
-    private val kontonummerFraRegister: String?,
-    private val kontonummerErRiktig: Boolean?,
-    private val harForståttRettigheterOgPlikter: Boolean,
-    private val harBekreftetOpplysninger: Boolean,
-    private val k9Format: Søknad,
-) : KomplettInnsending
+    val søknadId: String,
+    val søker: Søker,
+    val språk: String,
+    val startdato: LocalDate,
+    val mottatt: ZonedDateTime,
+    val barn: List<Barn>,
+    val barnErRiktig: Boolean,
+    val kontonummerFraRegister: String?,
+    val kontonummerErRiktig: Boolean?,
+    val harForståttRettigheterOgPlikter: Boolean,
+    val harBekreftetOpplysninger: Boolean,
+    val k9Format: Søknad,
+) : KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

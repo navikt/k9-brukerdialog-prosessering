@@ -22,7 +22,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker as K9Søker
 
 object InntektrapporteringUtils {
     internal val defaultInntektsrapportering = UngdomsytelseInntektsrapportering(
-        søknadId = "4e62f8de-1ff6-40e9-bdcd-10485c789094",
+        oppgaveReferanse = "4e62f8de-1ff6-40e9-bdcd-10485c789094",
         mottatt = ZonedDateTime.parse("2025-01-01T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter),
         oppgittInntektForPeriode = OppgittInntektForPeriode(
             arbeidstakerOgFrilansInntekt = 3000,
@@ -48,7 +48,7 @@ object InntektrapporteringUtils {
     ): UngdomsytelseInntektsrapporteringMottatt {
 
         return UngdomsytelseInntektsrapporteringMottatt(
-            søknadId = søknadId,
+            oppgaveReferanse = søknadId,
             mottatt = mottatt,
             søker = Søker(
                 aktørId = "123456",

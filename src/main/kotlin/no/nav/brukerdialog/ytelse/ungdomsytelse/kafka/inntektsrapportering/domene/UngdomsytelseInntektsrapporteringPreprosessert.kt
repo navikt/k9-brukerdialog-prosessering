@@ -15,7 +15,7 @@ import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class UngdomsytelseInntektsrapporteringPreprosessert(
-    val søknadId: String,
+    val oppgaveReferanse: String,
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val oppgittInntektForPeriode: OppgittInntektForPeriode,
@@ -27,7 +27,7 @@ data class UngdomsytelseInntektsrapporteringPreprosessert(
         ungdomsytelseInntektsrapporteringMottatt: UngdomsytelseInntektsrapporteringMottatt,
         dokumentId: List<List<String>>,
     ) : this(
-        søknadId = ungdomsytelseInntektsrapporteringMottatt.søknadId,
+        oppgaveReferanse = ungdomsytelseInntektsrapporteringMottatt.oppgaveReferanse,
         mottatt = ungdomsytelseInntektsrapporteringMottatt.mottatt,
         søker = ungdomsytelseInntektsrapporteringMottatt.søker,
         oppgittInntektForPeriode = ungdomsytelseInntektsrapporteringMottatt.oppgittInntektForPeriode,
@@ -61,7 +61,7 @@ data class UngdomsytelseInntektsrapporteringPreprosessert(
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,
-        grupperingsId = søknadId,
+        grupperingsId = oppgaveReferanse,
         tekst = "Rapportert inntenkt for ungdomsytelsen er mottatt",
         link = null,
         dagerSynlig = 7,

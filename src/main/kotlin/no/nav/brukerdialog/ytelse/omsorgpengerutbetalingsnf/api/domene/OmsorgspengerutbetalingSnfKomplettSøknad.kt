@@ -33,4 +33,6 @@ data class OmsorgspengerutbetalingSnfKomplettSøknad(
     private val vedleggId: List<String> = listOf(),
     private val titler: List<String>,
     private val k9FormatSøknad: Søknad,
-) : KomplettInnsending
+) : KomplettInnsending {
+    override fun innsendingId(): String = søknadId.id
+}

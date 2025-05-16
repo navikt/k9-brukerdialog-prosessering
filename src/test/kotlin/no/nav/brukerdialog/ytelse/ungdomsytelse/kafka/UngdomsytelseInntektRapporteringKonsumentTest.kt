@@ -39,8 +39,8 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
         mockLagreDokument()
         mockJournalføring()
 
-        val søknadId = UUID.randomUUID().toString()
-        val inntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering.copy(søknadId = søknadId)
+        val oppgaveReferanse = UUID.randomUUID().toString()
+        val inntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering.copy(oppgaveReferanse = oppgaveReferanse)
 
         mockMvc.sendInnSøknad(inntektsrapportering, mockOAuth2Server.hentToken())
 
@@ -49,12 +49,12 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
         }
 
         k9DittnavVarselConsumer.lesMelding(
-            key = søknadId,
+            key = oppgaveReferanse,
             topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC
         ).value().assertDittnavVarsel(
             K9Beskjed(
                 metadata = no.nav.brukerdialog.utils.SøknadUtils.metadata,
-                grupperingsId = søknadId,
+                grupperingsId = oppgaveReferanse,
                 tekst = "Rapportert inntenkt for ungdomsytelsen er mottatt",
                 link = null,
                 dagerSynlig = 7,
@@ -103,7 +103,7 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
     @Language("JSON")
     private fun preprosessertSøknadSomJson(søknadId: String, mottatt: String) = """
         {
-          "søknadId": "$søknadId",
+          "oppgaveReferanse": "$søknadId",
           "mottatt": "$mottatt",
           "søker": {
             "etternavn": "Nordmann",

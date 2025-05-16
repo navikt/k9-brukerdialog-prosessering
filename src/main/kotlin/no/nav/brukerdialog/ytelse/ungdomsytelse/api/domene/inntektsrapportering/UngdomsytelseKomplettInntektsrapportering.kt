@@ -6,10 +6,12 @@ import no.nav.k9.søknad.Søknad
 import java.time.ZonedDateTime
 
 data class UngdomsytelseKomplettInntektsrapportering(
-    private val søknadId: String,
-    private val søker: Søker,
-    private val oppgittInntektForPeriode: OppgittInntektForPeriode,
-    private val mottatt: ZonedDateTime,
-    private val harBekreftetInntekt: Boolean,
-    private val k9Format: Søknad,
-) : KomplettInnsending
+    val oppgaveReferanse: String,
+    val søker: Søker,
+    val oppgittInntektForPeriode: OppgittInntektForPeriode,
+    val mottatt: ZonedDateTime,
+    val harBekreftetInntekt: Boolean,
+    val k9Format: Søknad,
+) : KomplettInnsending {
+    override fun innsendingId(): String = oppgaveReferanse
+}

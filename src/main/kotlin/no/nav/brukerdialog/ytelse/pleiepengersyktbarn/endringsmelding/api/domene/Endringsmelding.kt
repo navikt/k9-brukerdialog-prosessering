@@ -48,7 +48,7 @@ data class Endringsmelding(
 
     override fun ytelse(): Ytelse = Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN
 
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
 
     override fun vedlegg(): List<URL> = listOf()
 
@@ -92,4 +92,6 @@ data class KomplettEndringsmelding(
     val harForståttRettigheterOgPlikter: Boolean,
     val k9Format: Søknad,
     val pleietrengendeNavn: String,
-) : KomplettInnsending
+) : KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

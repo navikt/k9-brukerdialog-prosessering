@@ -11,7 +11,7 @@ import no.nav.k9.søknad.Søknad
 import java.time.ZonedDateTime
 
 data class UngdomsytelseInntektsrapporteringMottatt(
-    val søknadId: String,
+    val oppgaveReferanse: String,
     val søker: Søker,
     val oppgittInntektForPeriode: OppgittInntektForPeriode,
     val mottatt: ZonedDateTime,

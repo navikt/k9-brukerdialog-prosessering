@@ -36,7 +36,7 @@ class UngdomsytelseService(
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
-        logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId(), "mottatt."))
+        logger.info(formaterStatuslogging(søknad.ytelse(), søknad.innsendingId(), "mottatt."))
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
 
         val barn = barnService.hentBarn().map { Barn(navn = it.navn()) }
@@ -51,7 +51,7 @@ class UngdomsytelseService(
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${rapportetInntekt.ytelse()}"
 
-        logger.info(formaterStatuslogging(rapportetInntekt.ytelse(), rapportetInntekt.søknadId(), "mottatt."))
+        logger.info(formaterStatuslogging(rapportetInntekt.ytelse(), rapportetInntekt.innsendingId(), "mottatt."))
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(rapportetInntekt, metadata)
         metrikkService.registrerMottattInnsending(rapportetInntekt.ytelse())
@@ -69,7 +69,7 @@ class UngdomsytelseService(
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${ungdomsytelseOppgavebekreftelseInnsending.ytelse()}"
 
-        logger.info(formaterStatuslogging(ungdomsytelseOppgavebekreftelseInnsending.ytelse(), ungdomsytelseOppgavebekreftelseInnsending.søknadId(), "mottatt."))
+        logger.info(formaterStatuslogging(ungdomsytelseOppgavebekreftelseInnsending.ytelse(), ungdomsytelseOppgavebekreftelseInnsending.innsendingId(), "mottatt."))
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
 
         innsendingService.registrer(ungdomsytelseOppgavebekreftelseInnsending, metadata)

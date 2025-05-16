@@ -11,7 +11,7 @@ import no.nav.k9.søknad.felles.type.Periode as K9Periode
 interface Innsending {
     fun søkerNorskIdent(): String?
     fun ytelse(): Ytelse
-    fun søknadId(): String
+    fun innsendingId(): String
     fun inneholderVedlegg(): Boolean = vedlegg().isNotEmpty()
     fun vedlegg(): List<URL>
     fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Innsending? = null

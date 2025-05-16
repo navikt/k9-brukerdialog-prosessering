@@ -56,7 +56,7 @@ data class UngdomsytelseOppgavebekreftelseInnsending(
 
     override fun søkerNorskIdent(): String? = null
     override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE
-    override fun søknadId(): String = komplettOppgavebekreftelse.oppgaveReferanse
+    override fun innsendingId(): String = komplettOppgavebekreftelse.oppgaveReferanse
     override fun vedlegg(): List<URL> = mutableListOf()
     override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()
 }

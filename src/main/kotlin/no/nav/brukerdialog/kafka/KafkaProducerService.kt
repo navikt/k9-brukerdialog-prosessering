@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
+import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.kafka.Topics.ETTERSENDING_TOPIC
 import no.nav.brukerdialog.kafka.Topics.MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSDAGER_ALENEOMSORG_TOPIC
@@ -32,27 +33,18 @@ class KafkaProducerService(
     private val NAME = "KafkaProducer"
     private val logger = LoggerFactory.getLogger(KafkaProducer::class.java)
 
-    internal fun produserKafkaMelding(metadata: MetaInfo, komplettSøknadSomJson: JSONObject, ytelse: Ytelse) {
-        sendMeldingTilTopic(metadata, komplettSøknadSomJson, ytelse)
+    internal fun produserKafkaMelding(metadata: MetaInfo, komplettInnsending: KomplettInnsending, ytelse: Ytelse) {
+        sendMeldingTilTopic(metadata, komplettInnsending, ytelse)
     }
 
-    internal fun produserKafkaMeldinger(metadata: MetaInfo, komplettSøknadSomJson: List<JSONObject>, ytelse: Ytelse) {
-        try {
-            komplettSøknadSomJson.forEach { sendMeldingTilTopic(metadata, it, ytelse) }
-        } catch (e: Exception) {
-            logger.error("Feilet med produsering av kafkamelding")
-            throw e
-        }
-    }
-
-    private fun sendMeldingTilTopic(metadata: MetaInfo, komplettSøknadSomJson: JSONObject, ytelse: Ytelse) {
+    private fun sendMeldingTilTopic(metadata: MetaInfo, komplettInnsending: KomplettInnsending, ytelse: Ytelse) {
         val topic = hentTopicForYtelse(ytelse)
         val producerRecord = ProducerRecord(
             topic,
-            komplettSøknadSomJson.getString("søknadId"),
+            komplettInnsending.innsendingId(),
             JSONObject(TopicEntry(
                 metadata = metadata,
-                data = komplettSøknadSomJson
+                data = JSONObject(objectMapper.writeValueAsString(komplettInnsending))
             )).toString()
         )
         val result = aivenKafkaTemplate.executeInTransaction {
@@ -61,7 +53,7 @@ class KafkaProducerService(
         logger.info(
             formaterStatuslogging(
                 ytelse,
-                komplettSøknadSomJson.getString("søknadId"),
+                komplettInnsending.innsendingId(),
                 "sendes til topic $topic med offset '${result.recordMetadata.offset()}' til partition '${result.recordMetadata.offset()}'"
             )
         )
