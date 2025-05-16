@@ -7,23 +7,22 @@ import io.mockk.every
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.brukerdialog.integrasjon.dokarkiv.DokarkivService
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.DokarkivJournalpostResponse
-import no.nav.brukerdialog.mellomlagring.dokument.Dokument
-import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
-import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
+import no.nav.brukerdialog.mellomlagring.dokument.Dokument
+import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
+import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.oppslag.soker.SøkerService
 import no.nav.brukerdialog.utils.KafkaIntegrationTest
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaProducer
 import no.nav.security.mock.oauth2.MockOAuth2Server
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.periodeendring.ProgramperiodeDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgavetypeDataDTO
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.junit.jupiter.api.AfterAll
@@ -149,17 +148,14 @@ abstract class AbstractIntegrationTest {
         return søker
     }
 
-    protected fun mockHentingAvOppgave() {
+    protected fun mockHentingAvOppgave(
+        oppgavetype: Oppgavetype,
+        oppgavetypeData: OppgavetypeDataDTO
+    ) {
         every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
             oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = Oppgavetype.BEKREFT_ENDRET_PROGRAMPERIODE,
-            oppgavetypeData = EndretProgramperiodeDataDTO(
-                programperiode = ProgramperiodeDTO(
-                    fomDato = LocalDate.now(),
-                    tomDato = null
-                ),
-                forrigeProgramperiode = null
-            ),
+            oppgavetype = oppgavetype,
+            oppgavetypeData = oppgavetypeData,
             status = OppgaveStatus.ULØST,
             bekreftelse = null,
             opprettetDato = ZonedDateTime.now(),

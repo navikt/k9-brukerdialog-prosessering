@@ -21,6 +21,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
@@ -46,7 +47,8 @@ import java.util.*
     controllers = [UngdomsytelseController::class],
     properties = [
         "ENABLE_UNDOMSYTELSE=true",
-    ])
+    ]
+)
 @Import(
     JacksonConfiguration::class,
     CallIdGenerator::class,
@@ -112,6 +114,18 @@ class UngdomsytelseControllerTest {
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
+        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
+            oppgaveReferanse = UUID.randomUUID(),
+            oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
+            oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now()
+            ),
+            status = OppgaveStatus.ULØST,
+            bekreftelse = null,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = null
+        )
 
         val defaultInntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering
 

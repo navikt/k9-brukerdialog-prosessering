@@ -10,16 +10,22 @@ import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
-import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
+import no.nav.brukerdialog.utils.NavHeaders
+import no.nav.brukerdialog.utils.SøknadUtils
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.UngdomsytelseInntektsrapporteringTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.post
 import java.net.URI
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -38,11 +44,32 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
         mockBarn()
         mockLagreDokument()
         mockJournalføring()
+        mockHentingAvOppgave(
+            oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
+            oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
+                fraOgMed = LocalDate.parse("2025-01-01"),
+                tilOgMed = LocalDate.parse("2025-01-31"),
+            )
+        )
 
         val oppgaveReferanse = UUID.randomUUID().toString()
         val inntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering.copy(oppgaveReferanse = oppgaveReferanse)
 
-        mockMvc.sendInnSøknad(inntektsrapportering, mockOAuth2Server.hentToken())
+        val token = mockOAuth2Server.hentToken()
+        mockMvc.post("/ungdomsytelse/inntektsrapportering/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+                setBearerAuth(token.serialize())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = JacksonConfiguration.configureObjectMapper().writeValueAsString(inntektsrapportering)
+        }.andExpect {
+            status {
+                isAccepted()
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+            }
+        }
 
         coVerify(exactly = 1, timeout = 120 * 1000) {
             k9DokumentMellomlagringService.slettDokumenter(any(), any())
@@ -53,7 +80,7 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
             topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC
         ).value().assertDittnavVarsel(
             K9Beskjed(
-                metadata = no.nav.brukerdialog.utils.SøknadUtils.metadata,
+                metadata = SøknadUtils.metadata,
                 grupperingsId = oppgaveReferanse,
                 tekst = "Rapportert inntenkt for ungdomsytelsen er mottatt",
                 link = null,
