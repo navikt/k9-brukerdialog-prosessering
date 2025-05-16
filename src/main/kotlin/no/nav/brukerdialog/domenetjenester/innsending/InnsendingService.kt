@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.domenetjenester.innsending
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.validation.ConstraintViolationException
 import jakarta.validation.Validation
 import no.nav.brukerdialog.common.MetaInfo
@@ -22,7 +21,6 @@ import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
-import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -36,7 +34,6 @@ import org.springframework.web.ErrorResponseException
 class InnsendingService(
     private val søkerService: SøkerService,
     private val kafkaProdusent: KafkaProducerService,
-    private val objectMapper: ObjectMapper,
     private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
 ) {
@@ -51,7 +48,7 @@ class InnsendingService(
     ) {
         forsikreValidert(innsending)
         val søker = søkerService.hentSøker()
-        logger.info(formaterStatuslogging(innsending.ytelse(), innsending.søknadId(), "registreres."))
+        logger.info(formaterStatuslogging(innsending.ytelse(), innsending.innsendingId(), "registreres."))
 
         innsending.valider()
         val k9Format = innsending.somK9Format(søker, metadata)
@@ -103,7 +100,7 @@ class InnsendingService(
             val komplettInnsending = innsending.somKomplettSøknad(søker, k9Format)
             kafkaProdusent.produserKafkaMelding(
                 metadata,
-                JSONObject(objectMapper.writeValueAsString(komplettInnsending)),
+                komplettInnsending,
                 innsending.ytelse()
             )
         } catch (exception: Exception) {
@@ -129,7 +126,7 @@ class InnsendingService(
             val komplettInnsending = innsending.somKomplettSøknad(søker, k9Format, vedlegg.map { it.title })
             kafkaProdusent.produserKafkaMelding(
                 metadata,
-                JSONObject(objectMapper.writeValueAsString(komplettInnsending)),
+                komplettInnsending,
                 innsending.ytelse()
             )
         } catch (exception: Exception) {

@@ -182,7 +182,7 @@ data class PleiepengerILivetsSluttfaseSøknad(
 
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf<URL>().apply {
         addAll(vedleggUrls)
         addAll(opplastetIdVedleggUrls)

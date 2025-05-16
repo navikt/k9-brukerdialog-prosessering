@@ -18,6 +18,9 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Un
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.periodeendring.ProgramperiodeDTO
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
@@ -26,6 +29,7 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
 import java.net.URI
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -45,7 +49,16 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
         mockBarn()
         mockLagreDokument()
         mockJournalføring()
-        mockHentingAvOppgave()
+        mockHentingAvOppgave(
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_PROGRAMPERIODE,
+            oppgavetypeData = EndretProgramperiodeDataDTO(
+                programperiode = ProgramperiodeDTO(
+                    fomDato = LocalDate.now(),
+                    tomDato = null
+                ),
+                forrigeProgramperiode = null
+            )
+        )
 
         val oppgaveReferanse = UUID.randomUUID()
         val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(

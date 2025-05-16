@@ -105,7 +105,7 @@ data class OmsorgspengerMidlertidigAleneSøknad(
     override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = listOf()
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> =
         OmsorgspengerMidlertidigAleneSøknadValidator()

@@ -21,6 +21,7 @@ data class KomplettEttersendelse(
     private val ettersendelsesType: EttersendelseType,
     private val pleietrengende: Pleietrengende? = null
 ): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
 
     override fun equals(other: Any?) = this === other || (other is KomplettEttersendelse && this.equals(other))
 

@@ -6,9 +6,11 @@ import no.nav.k9.oppgave.OppgaveBekreftelse
 import java.time.ZonedDateTime
 
 data class UngdomsytelseKomplettOppgavebekreftelse(
-    private val søknadId: String,
-    private val oppgave: KomplettUngdomsytelseOppgaveDTO,
-    private val søker: Søker,
-    private val mottatt: ZonedDateTime,
-    private val k9Format: OppgaveBekreftelse,
-) : KomplettInnsending
+    val søknadId: String,
+    val oppgave: KomplettUngdomsytelseOppgaveDTO,
+    val søker: Søker,
+    val mottatt: ZonedDateTime,
+    val k9Format: OppgaveBekreftelse,
+) : KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

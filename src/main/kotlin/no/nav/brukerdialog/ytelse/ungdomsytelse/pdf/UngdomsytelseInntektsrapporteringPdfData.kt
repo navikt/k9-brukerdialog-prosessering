@@ -24,7 +24,7 @@ class UngdomsytelseInntektsrapporteringPdfData(private val søknad: Ungdomsytels
         val k9Format = søknad.k9Format
         return mapOf(
             "tittel" to ytelse().utledTittel(språk()),
-            "søknadId" to søknad.søknadId,
+            "oppgaveReferanse" to søknad.oppgaveReferanse,
             "søknadMottattDag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
             "inntektForPeriode" to k9Format.getYtelse<Ungdomsytelse>().inntekter?.somMap(),

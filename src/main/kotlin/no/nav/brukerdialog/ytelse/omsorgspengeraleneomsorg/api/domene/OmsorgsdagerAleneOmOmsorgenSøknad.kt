@@ -115,7 +115,7 @@ data class OmsorgsdagerAleneOmOmsorgenSøknad(
     override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSDAGER_ALENEOMSORG
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = listOf()
 
     override fun søknadValidator(): SøknadValidator<Søknad> = OmsorgspengerAleneOmsorgSøknadValidator()

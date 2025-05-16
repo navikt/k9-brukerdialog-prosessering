@@ -44,6 +44,8 @@ data class KomplettPleiepengerSyktBarnSøknad(
     val harVærtEllerErVernepliktig: Boolean? = null,
     val k9FormatSøknad: Søknad? = null,
 ) : KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

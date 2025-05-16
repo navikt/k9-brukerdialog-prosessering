@@ -31,4 +31,6 @@ data class PilsKomplettSøknad(
     private val harBekreftetOpplysninger: Boolean,
     private val flereSokere: FlereSokereSvar? = null,
     private val k9Format: K9Søknad
-): KomplettInnsending
+): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

@@ -102,7 +102,7 @@ data class Ungdomsytelsesøknad(
 
     override fun søkerNorskIdent(): String? = søkerNorskIdent
     override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf()
     override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()
 }

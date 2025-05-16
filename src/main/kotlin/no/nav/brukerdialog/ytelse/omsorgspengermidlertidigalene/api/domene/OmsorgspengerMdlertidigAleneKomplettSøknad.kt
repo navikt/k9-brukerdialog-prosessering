@@ -17,4 +17,6 @@ data class OmsorgspengerMdlertidigAleneKomplettSøknad(
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean
-): KomplettInnsending
+): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

@@ -85,7 +85,7 @@ data class Ettersendelse(
 
     override fun ytelse(): Ytelse = Ytelse.ETTERSENDING
 
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
 
     override fun vedlegg(): List<URL> = vedlegg
 

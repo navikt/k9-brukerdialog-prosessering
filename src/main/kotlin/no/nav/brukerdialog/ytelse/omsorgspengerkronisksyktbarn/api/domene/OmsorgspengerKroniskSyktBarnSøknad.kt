@@ -134,7 +134,7 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
     override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTVIDET_RETT
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf<URL>().apply {
         addAll(legeerklæring)
         samværsavtale?.let { addAll(it) }

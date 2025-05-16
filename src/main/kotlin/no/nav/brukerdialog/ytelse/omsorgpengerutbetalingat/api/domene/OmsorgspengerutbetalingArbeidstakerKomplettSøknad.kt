@@ -23,4 +23,6 @@ data class OmsorgspengerutbetalingArbeidstakerKomplettSøknad(
     private val hjemmePgaSmittevernhensyn: Boolean,
     private val hjemmePgaStengtBhgSkole: Boolean? = null,
     private val k9Format: Søknad
-): KomplettInnsending
+): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

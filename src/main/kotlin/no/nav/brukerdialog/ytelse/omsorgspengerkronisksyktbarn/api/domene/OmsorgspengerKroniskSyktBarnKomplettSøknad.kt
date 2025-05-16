@@ -24,4 +24,6 @@ data class OmsorgspengerKroniskSyktBarnKomplettSøknad(
     private val harBekreftetOpplysninger: Boolean,
     private val høyereRisikoForFravær: Boolean?,
     private val høyereRisikoForFraværBeskrivelse: String?
-): KomplettInnsending
+): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}
