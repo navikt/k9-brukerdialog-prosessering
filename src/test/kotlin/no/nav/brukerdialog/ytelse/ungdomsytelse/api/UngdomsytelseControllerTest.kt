@@ -188,19 +188,7 @@ class UngdomsytelseControllerTest {
                               "parameterName": "ungdomsytelsesøknad.harBekreftetOpplysninger",
                               "parameterType": "ENTITY",
                               "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "ungdomsytelsesøknad.barnErRiktig",
-                              "parameterType": "ENTITY",
-                              "reason": "Må bekrefte at opplysningene om barn er riktige for å sende inn søknad"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "ungdomsytelsesøknad.kontonummerErRiktig",
-                              "parameterType": "ENTITY",
-                              "reason": "Må bekrefte at kontonummeret er riktig for å sende inn søknad"
-                            },
+                            }
                           ]
                         }
                         """.trimIndent(),

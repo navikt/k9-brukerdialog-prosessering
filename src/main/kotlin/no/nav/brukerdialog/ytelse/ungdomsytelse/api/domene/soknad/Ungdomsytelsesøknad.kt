@@ -37,11 +37,9 @@ data class Ungdomsytelsesøknad(
 
     @Hidden
     var barn: List<Barn>? = null, // Settes i UngdomsytelseService.
-    @field:AssertTrue(message = "Må bekrefte at opplysningene om barn er riktige for å sende inn søknad")
     val barnErRiktig: Boolean,
 
     val kontonummerFraRegister: String? = null,
-    @field:AssertTrue(message = "Må bekrefte at kontonummeret er riktig for å sende inn søknad")
     val kontonummerErRiktig: Boolean? = null,
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
