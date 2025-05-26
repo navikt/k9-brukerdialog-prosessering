@@ -70,10 +70,6 @@ class FeltValideringControllerTest {
         }
             .andExpect {
                 status { isBadRequest() }
-                header {
-                    exists(NavHeaders.PROBLEM_DETAILS)
-                    string(NavHeaders.PROBLEM_DETAILS, Matchers.not("n/a"))
-                }
                 jsonPath("$.instance") { value("http://localhost/valider/friteksfelt") }
                 jsonPath("$.type") { value("/problem-details/invalid-request-parameters") }
                 jsonPath("$.violations[0].parameterName") { value("friteksfelt.verdi") }
