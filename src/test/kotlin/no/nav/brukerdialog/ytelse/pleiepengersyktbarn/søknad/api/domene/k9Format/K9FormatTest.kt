@@ -126,7 +126,12 @@ class K9FormatTest {
                   "frilanser": {
                     "startdato": "2018-01-01",
                     "sluttdato": null
-                  }
+                  },
+                  "utenlandskeArbeidsforhold" : [{
+                  "ansettelsePeriode" : "2022-01-01/2022-01-10",
+                  "arbeidsgiversnavn" : "Kiwi AS",
+                  "land" : "BEL"
+                  }]
                 },
                 "dataBruktTilUtledning": null,
                 "infoFraPunsj": null,

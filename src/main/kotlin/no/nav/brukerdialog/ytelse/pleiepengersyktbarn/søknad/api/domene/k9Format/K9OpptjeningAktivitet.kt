@@ -19,6 +19,9 @@ internal fun PleiepengerSyktBarnSøknad.byggK9OpptjeningAktivitet(): OpptjeningA
     if (erFrilanserMedInntenkt) {
         opptjeningAktivitet.medFrilanser(frilans.tilK9Frilanser())
     }
+
+    opptjeningAktivitet.medUtenlandskeArbeidsforhold(opptjeningIUtlandet.map { it.somUtenlandskArbeidsforhold() })
+
     return opptjeningAktivitet
 }
 
