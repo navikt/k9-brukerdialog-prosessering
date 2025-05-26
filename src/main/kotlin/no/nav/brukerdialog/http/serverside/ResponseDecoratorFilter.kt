@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import no.nav.brukerdialog.utils.Constants.CORRELATION_ID
 import no.nav.brukerdialog.utils.MDCUtil
-import no.nav.brukerdialog.utils.NavHeaders.PROBLEM_DETAILS
 import no.nav.brukerdialog.utils.NavHeaders.X_CORRELATION_ID
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -65,15 +64,6 @@ class ResponseDecoratorFilter : Filter {
 
         MDCUtil.fromMDC(CORRELATION_ID)?.let { response.addHeader(X_CORRELATION_ID, it) }
 
-        when (response.status) {
-            200, 201, 202, 204, 401, 403, 404 -> {
-                // do nothing
-            }
-            else -> {
-                val content = String(responseWrapper.contentAsByteArray, Charsets.UTF_8)
-                response.addHeader(PROBLEM_DETAILS, content)
-            }
-        }
         responseWrapper.copyBodyToResponse()
     }
 }

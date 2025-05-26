@@ -77,7 +77,6 @@ spec:
           for: 1m
           annotations:
             summary: "Følgende request feilet: `Status \{{ $labels.status }} - \{{ $labels.method }} \{{ $labels.uri }}`.\n
-                      Grunn:\n ```\{{ $labels.problem_details }}```\n
                       Sjekk loggene for å se hvorfor dette feiler."
             action: "`kubectl logs \{{ $labels.pod }} -n \{{ $labels.namespace }} -c \{{ $labels.app }}`"
           labels:
@@ -89,7 +88,6 @@ spec:
           for: 1m
           annotations:
             summary: "Følgende request feilet: `Status \{{ $labels.status }} - \{{ $labels.method }} \{{ $labels.uri }}`.\n
-                      Grunn:\n ```\{{ $labels.problem_details }}```\n
                       Sjekk loggene for å se hvorfor dette feiler."
             action: "`kubectl logs \{{ $labels.pod }} -n \{{ $labels.namespace }} -c \{{ $labels.app }}`"
           labels:
