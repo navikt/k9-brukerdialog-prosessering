@@ -17,7 +17,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.Ungdomsytelsesøkna
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelsesøknadUtils
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SendSøknadOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SøkYtelseOppgavetypeDataDTO
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
@@ -50,8 +50,8 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
         val søknad = SøknadUtils.defaultSøknad.copy(oppgaveReferanse = oppgaveReferanse)
 
         mockHentingAvOppgave(
-            oppgavetype = Oppgavetype.SEND_SØKNAD,
-            oppgavetypeData = SendSøknadOppgavetypeDataDTO(
+            oppgavetype = Oppgavetype.SØK_YTELSE,
+            oppgavetypeData = SøkYtelseOppgavetypeDataDTO(
                 fomDato = søknad.startdato,
             )
         )

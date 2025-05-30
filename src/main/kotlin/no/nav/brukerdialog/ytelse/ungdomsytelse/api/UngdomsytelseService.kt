@@ -20,7 +20,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelses
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.UngdomsytelsesøknadInnsending
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SendSøknadOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SøkYtelseOppgavetypeDataDTO
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.*
@@ -42,8 +42,8 @@ class UngdomsytelseService(
         val sendSøknadOppgave =
             ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(UUID.fromString(søknad.oppgaveReferanse))
 
-        val sendSøknadOppgavetypeDataDTO = sendSøknadOppgave.oppgavetypeData as? SendSøknadOppgavetypeDataDTO
-            ?: throw IllegalStateException("OppgavetypeData er ikke av type SendSøknadOppgavetypeDataDTO")
+        val sendSøknadOppgavetypeDataDTO = sendSøknadOppgave.oppgavetypeData as? SøkYtelseOppgavetypeDataDTO
+            ?: throw IllegalStateException("OppgavetypeData er ikke av type SøkYtelseOppgavetypeDataDTO")
 
         val barn = barnService.hentBarn().map { Barn(navn = it.navn()) }
 

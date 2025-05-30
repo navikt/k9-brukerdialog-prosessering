@@ -26,7 +26,7 @@ import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Inntektsrapporterin
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SendSøknadOppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SøkYtelseOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.periodeendring.ProgramperiodeDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -95,8 +95,8 @@ class UngdomsytelseControllerTest {
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
         every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
             oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = Oppgavetype.SEND_SØKNAD,
-            oppgavetypeData = SendSøknadOppgavetypeDataDTO(
+            oppgavetype = Oppgavetype.SØK_YTELSE,
+            oppgavetypeData = SøkYtelseOppgavetypeDataDTO(
                 fomDato = LocalDate.now(),
             ),
             status = OppgaveStatus.ULØST,
