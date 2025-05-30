@@ -12,6 +12,9 @@ data class Ungdomsytelsesøknad(
     @field:UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
     val oppgaveReferanse: String,
 
+    @field:UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    val deltakelseId: String,
+
     val språk: String,
 
     @Schema(hidden = true)

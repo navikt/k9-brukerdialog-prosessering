@@ -15,6 +15,7 @@ import java.util.*
 object SøknadUtils {
     internal val defaultSøknad = Ungdomsytelsesøknad(
         oppgaveReferanse = "4e62f8de-1ff6-40e9-bdcd-10485c789094",
+        deltakelseId = UUID.randomUUID().toString(),
         mottatt = ZonedDateTime.parse("2022-01-02T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter),
         språk = "nb",
         søkerNorskIdent = "12345678910",

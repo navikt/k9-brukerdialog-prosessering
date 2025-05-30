@@ -55,6 +55,7 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
                 fomDato = søknad.startdato,
             )
         )
+        mockMarkerDeltakeleSomSøkt()
 
         val token = mockOAuth2Server.hentToken()
 

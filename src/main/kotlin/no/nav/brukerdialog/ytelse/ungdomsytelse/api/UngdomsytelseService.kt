@@ -22,7 +22,10 @@ import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SøkYtelseOppgavetypeDataDTO
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.stereotype.Service
+import org.springframework.web.ErrorResponseException
 import java.util.*
 
 @Service
@@ -65,10 +68,29 @@ class UngdomsytelseService(
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${ungdomsytelsesøknadInnsending.ytelse()}"
 
-        logger.info(formaterStatuslogging(ungdomsytelsesøknadInnsending.ytelse(), ungdomsytelsesøknadInnsending.innsendingId(), "mottatt."))
+        logger.info(
+            formaterStatuslogging(
+                ungdomsytelsesøknadInnsending.ytelse(),
+                ungdomsytelsesøknadInnsending.innsendingId(),
+                "mottatt."
+            )
+        )
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
 
         innsendingService.registrer(ungdomsytelsesøknadInnsending, metadata)
+        val deltakelse =
+            ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(deltakelseId = UUID.fromString(søknad.deltakelseId))
+        if (deltakelse.søktTidspunkt == null) {
+            throw ErrorResponseException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ProblemDetail.forStatusAndDetail(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Kunne ikke markere deltakelse som søkt"
+                ),
+                null
+            )
+        }
+
         metrikkService.registrerMottattInnsending(ungdomsytelsesøknadInnsending.ytelse())
     }
 
