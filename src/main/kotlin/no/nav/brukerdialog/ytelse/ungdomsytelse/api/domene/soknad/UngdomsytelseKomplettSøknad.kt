@@ -7,7 +7,7 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 
 data class UngdomsytelseKomplettSøknad(
-    val søknadId: String,
+    val oppgaveReferanse: String,
     val søker: Søker,
     val språk: String,
     val startdato: LocalDate,
@@ -20,5 +20,5 @@ data class UngdomsytelseKomplettSøknad(
     val harBekreftetOpplysninger: Boolean,
     val k9Format: Søknad,
 ) : KomplettInnsending {
-    override fun innsendingId(): String = søknadId
+    override fun innsendingId(): String = oppgaveReferanse
 }

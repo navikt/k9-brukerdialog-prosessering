@@ -19,10 +19,12 @@ import no.nav.brukerdialog.utils.KafkaIntegrationTest
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaProducer
 import no.nav.security.mock.oauth2.MockOAuth2Server
+import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseOpplysningDTO
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.junit.jupiter.api.AfterAll
@@ -159,7 +161,23 @@ abstract class AbstractIntegrationTest {
             status = OppgaveStatus.ULØST,
             bekreftelse = null,
             opprettetDato = ZonedDateTime.now(),
-            løstDato = null
+            løstDato = null,
+            åpnetDato = null,
+            lukketDato = null
+        )
+    }
+
+    fun mockMarkerDeltakeleSomSøkt() {
+        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseOpplysningDTO(
+            id = UUID.randomUUID(),
+            deltaker = DeltakerDTO(
+                id = UUID.randomUUID(),
+                deltakerIdent = "12345678901",
+            ),
+            fraOgMed = LocalDate.now(),
+            tilOgMed = null,
+            søktTidspunkt = ZonedDateTime.now(),
+            oppgaver = emptyList(),
         )
     }
 }

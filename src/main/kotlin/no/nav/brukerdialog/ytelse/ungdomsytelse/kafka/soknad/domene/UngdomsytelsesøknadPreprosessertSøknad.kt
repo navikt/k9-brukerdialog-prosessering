@@ -16,7 +16,7 @@ import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class UngdomsytelsesøknadPreprosessertSøknad(
-    val søknadId: String,
+    val oppgaveReferanse: String,
     val mottatt: ZonedDateTime,
     val språk: String?,
     val søker: Søker,
@@ -35,7 +35,7 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
         dokumentId: List<List<String>>,
     ) : this(
         språk = ungdomsytelseSøknadMottatt.språk,
-        søknadId = ungdomsytelseSøknadMottatt.søknadId,
+        oppgaveReferanse = ungdomsytelseSøknadMottatt.oppgaveReferanse,
         mottatt = ungdomsytelseSøknadMottatt.mottatt,
         søker = ungdomsytelseSøknadMottatt.søker,
         startdato = ungdomsytelseSøknadMottatt.startdato,
@@ -74,7 +74,7 @@ data class UngdomsytelsesøknadPreprosessertSøknad(
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,
-        grupperingsId = søknadId,
+        grupperingsId = oppgaveReferanse,
         tekst = "Søknad om ungdomsytelse er mottatt",
         link = null,
         dagerSynlig = 7,

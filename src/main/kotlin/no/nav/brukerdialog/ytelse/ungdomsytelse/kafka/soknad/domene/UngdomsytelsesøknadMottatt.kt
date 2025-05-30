@@ -3,7 +3,6 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
-import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
@@ -13,7 +12,7 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 
 data class UngdomsytelsesøknadMottatt(
-    val søknadId: String,
+    val oppgaveReferanse: String,
     val mottatt: ZonedDateTime,
     val språk: String? = "nb",
     val søker: Søker,

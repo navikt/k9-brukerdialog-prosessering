@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
-import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadMottatt
@@ -28,7 +27,7 @@ object UngdomsytelsesøknadUtils {
 
         return UngdomsytelsesøknadMottatt(
             språk = "nb",
-            søknadId = søknadId,
+            oppgaveReferanse = søknadId,
             mottatt = mottatt,
             søker = Søker(
                 aktørId = "123456",
