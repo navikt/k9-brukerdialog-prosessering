@@ -21,10 +21,12 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeData
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SendSøknadOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.periodeendring.ProgramperiodeDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -91,8 +93,21 @@ class UngdomsytelseControllerTest {
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
+        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
+            oppgaveReferanse = UUID.randomUUID(),
+            oppgavetype = Oppgavetype.SEND_SØKNAD,
+            oppgavetypeData = SendSøknadOppgavetypeDataDTO(
+                fomDato = LocalDate.now(),
+            ),
+            status = OppgaveStatus.ULØST,
+            åpnetDato = null,
+            lukketDato = null,
+            bekreftelse = null,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = null
+        )
 
-        val defaultSøknad = SøknadUtils.defaultSøknad.copy(barn = listOf())
+        val defaultSøknad = SøknadUtils.defaultSøknad
 
         mockMvc.post("/ungdomsytelse/soknad/innsending") {
             headers {
@@ -118,12 +133,16 @@ class UngdomsytelseControllerTest {
             oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
             oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
-                fraOgMed = LocalDate.now(),
-                tilOgMed = LocalDate.now()
+                base = InntektsrapporteringOppgavetypeData(
+                    fraOgMed = LocalDate.now(),
+                    tilOgMed = LocalDate.now()
+                )
             ),
             status = OppgaveStatus.ULØST,
             bekreftelse = null,
             opprettetDato = ZonedDateTime.now(),
+            åpnetDato = null,
+            lukketDato = null,
             løstDato = null
         )
 
@@ -149,7 +168,6 @@ class UngdomsytelseControllerTest {
 
         val jsonPayload = objectMapper.writeValueAsString(
             defaultSøknad.copy(
-                barn = listOf(),
                 barnErRiktig = false,
                 kontonummerErRiktig = false,
                 harForståttRettigheterOgPlikter = false,
@@ -216,7 +234,9 @@ class UngdomsytelseControllerTest {
             status = OppgaveStatus.ULØST,
             bekreftelse = null,
             opprettetDato = ZonedDateTime.now(),
-            løstDato = null
+            løstDato = null,
+            åpnetDato = null,
+            lukketDato = null
         )
 
         val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse

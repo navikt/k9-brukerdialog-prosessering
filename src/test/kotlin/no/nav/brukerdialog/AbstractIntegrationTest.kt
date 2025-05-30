@@ -159,7 +159,9 @@ abstract class AbstractIntegrationTest {
             status = OppgaveStatus.ULØST,
             bekreftelse = null,
             opprettetDato = ZonedDateTime.now(),
-            løstDato = null
+            løstDato = null,
+            åpnetDato = null,
+            lukketDato = null
         )
     }
 }
