@@ -22,7 +22,6 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeData
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
@@ -106,7 +105,8 @@ class UngdomsytelseControllerTest {
             lukketDato = null,
             bekreftelse = null,
             opprettetDato = ZonedDateTime.now(),
-            løstDato = null
+            løstDato = null,
+            frist = null
         )
         every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseOpplysningDTO(
             id = UUID.randomUUID(),
@@ -146,17 +146,16 @@ class UngdomsytelseControllerTest {
             oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
             oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
-                base = InntektsrapporteringOppgavetypeData(
-                    fraOgMed = LocalDate.now(),
-                    tilOgMed = LocalDate.now()
-                )
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now()
             ),
             status = OppgaveStatus.ULØST,
             bekreftelse = null,
             opprettetDato = ZonedDateTime.now(),
             åpnetDato = null,
             lukketDato = null,
-            løstDato = null
+            løstDato = null,
+            frist = null
         )
 
         val defaultInntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering
@@ -249,7 +248,8 @@ class UngdomsytelseControllerTest {
             opprettetDato = ZonedDateTime.now(),
             løstDato = null,
             åpnetDato = null,
-            lukketDato = null
+            lukketDato = null,
+            frist = null
         )
 
         val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse

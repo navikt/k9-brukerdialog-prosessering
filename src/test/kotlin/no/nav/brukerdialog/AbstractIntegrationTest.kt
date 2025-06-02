@@ -163,7 +163,8 @@ abstract class AbstractIntegrationTest {
             opprettetDato = ZonedDateTime.now(),
             løstDato = null,
             åpnetDato = null,
-            lukketDato = null
+            lukketDato = null,
+            frist = null,
         )
     }
 

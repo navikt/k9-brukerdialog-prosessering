@@ -109,8 +109,8 @@ class UngdomsytelseService(
             oppgittInntektForPeriode = OppgittInntektForPeriode(
                 arbeidstakerOgFrilansInntekt = rapportetInntekt.oppgittInntekt.arbeidstakerOgFrilansInntekt,
                 periodeForInntekt = UngPeriode(
-                    fraOgMed = inntektsrapporteringOppgaveData.base.fraOgMed,
-                    tilOgMed = inntektsrapporteringOppgaveData.base.tilOgMed
+                    fraOgMed = inntektsrapporteringOppgaveData.fraOgMed,
+                    tilOgMed = inntektsrapporteringOppgaveData.tilOgMed
                 )
             ),
             harBekreftetInntekt = rapportetInntekt.harBekreftetInntekt,

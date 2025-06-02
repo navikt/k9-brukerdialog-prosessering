@@ -15,7 +15,6 @@ import no.nav.brukerdialog.utils.SøknadUtils
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.UngdomsytelseInntektsrapporteringTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeData
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
 import org.intellij.lang.annotations.Language
@@ -48,10 +47,8 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
         mockHentingAvOppgave(
             oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
             oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
-                base = InntektsrapporteringOppgavetypeData(
-                    fraOgMed = LocalDate.parse("2025-01-01"),
-                    tilOgMed = LocalDate.parse("2025-01-31"),
-                )
+                fraOgMed = LocalDate.parse("2025-01-01"),
+                tilOgMed = LocalDate.parse("2025-01-31"),
             )
         )
 
