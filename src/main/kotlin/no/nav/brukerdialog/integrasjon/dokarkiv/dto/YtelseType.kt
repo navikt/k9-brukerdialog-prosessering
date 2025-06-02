@@ -164,21 +164,21 @@ enum class YtelseType(
     UNGDOMSYTELSE_SØKNAD(
         brevkode = BrevKode(brevKode = "UNG Søknad", dokumentKategori = "SOK"),
         tittel = "Søknad om ungdomsytelse - UNG Søknad",
-        tema = Tema.K9_YTELSER, // TODO Bruk Tema.UNGDOMSYTELSE før lansering
+        tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.SØKNAD
     ),
 
     UNGDOMSYTELSE_OPPGAVEBEKREFTELSE(
         brevkode = BrevKode(brevKode = "UNG Oppgavebekreftelse", dokumentKategori = "SOK"),
         tittel = "Bekreftelse for endring av ungdomsytelse - UNG Oppgavebekreftelse",
-        tema = Tema.K9_YTELSER, // TODO Bruk Tema.UNGDOMSYTELSE før lansering
+        tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.ENDRING
     ),
 
     UNGDOMSYTELSE_INNTEKTRAPPORTERING(
         brevkode = BrevKode(brevKode = "UNG Inntektrapportering", dokumentKategori = "SOK"),
         tittel = "Rapporteringsmelding for ungdomsytelsen - UNG Inntektrapportering",
-        tema = Tema.K9_YTELSER, // TODO Bruk Tema.UNGDOMSYTELSE før lansering
+        tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.SØKNAD
     )
     ;
