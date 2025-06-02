@@ -2,6 +2,7 @@ package no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser
 
 
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseOpplysningDTO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -43,7 +44,13 @@ class UngDeltakelseOpplyserService(
             .build()
             .toUriString()
 
+        private val markerDeltakelseSomSøktUrl = UriComponentsBuilder
+            .fromUriString("/deltakelse/register/{id}/marker-har-sokt")
+            .build()
+            .toUriString()
+
         private val oppgaveDataFeil = IllegalStateException("Feilet med henting av oppgave.")
+        private val markerDeltakelseSøktFeil = IllegalStateException("Feilet med å markere deltakelse som søkt.")
     }
 
     fun hentOppgaveForDeltakelse(oppgaveReferanse: UUID): OppgaveDTO {
@@ -84,5 +91,45 @@ class UngDeltakelseOpplyserService(
     private fun recover(error: ResourceAccessException): OppgaveDTO {
         logger.error("{}", error.message)
         throw oppgaveDataFeil
+    }
+
+    fun markerDeltakelseSomSøkt(deltakelseId: UUID): DeltakelseOpplysningDTO {
+        logger.info("Markerer deltakelse som søkt.")
+        val response = ungDeltakelseOpplyserClient.exchange(
+            markerDeltakelseSomSøktUrl,
+            HttpMethod.PUT,
+            null,
+            object : ParameterizedTypeReference<DeltakelseOpplysningDTO>() {},
+            deltakelseId
+        )
+
+        return if (response.statusCode.is2xxSuccessful) {
+            response.body!!
+        } else {
+            logger.error(
+                "Feilet med å markere deltakelse som søkt: {}, respons: {}",
+                response.statusCode,
+                response.body
+            )
+            throw markerDeltakelseSøktFeil
+        }
+    }
+
+    @Recover
+    private fun recoverMarkerDeltakelseSomSøkt(error: HttpServerErrorException): DeltakelseOpplysningDTO {
+        logger.error("Error response = '{}' fra '{}'", error.responseBodyAsString, markerDeltakelseSomSøktUrl)
+        throw markerDeltakelseSøktFeil
+    }
+
+    @Recover
+    private fun recoverMarkerDeltakelseSomSøkt(error: HttpClientErrorException): DeltakelseOpplysningDTO {
+        logger.error("Error response = '{}' fra '{}'", error.responseBodyAsString, markerDeltakelseSomSøktUrl)
+        throw markerDeltakelseSøktFeil
+    }
+
+    @Recover
+    private fun recoverMarkerDeltakelseSomSøkt(error: ResourceAccessException): DeltakelseOpplysningDTO {
+        logger.error("{}", error.message)
+        throw markerDeltakelseSøktFeil
     }
 }
