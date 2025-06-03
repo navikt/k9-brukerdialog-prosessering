@@ -21,13 +21,12 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SøkYtelseOppgavetypeDataDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.periodeendring.ProgramperiodeDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseOpplysningDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -235,13 +234,10 @@ class UngdomsytelseControllerTest {
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
         every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
             oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = Oppgavetype.BEKREFT_ENDRET_PROGRAMPERIODE,
-            oppgavetypeData = EndretProgramperiodeDataDTO(
-                programperiode = ProgramperiodeDTO(
-                    fomDato = LocalDate.now(),
-                    tomDato = null
-                ),
-                forrigeProgramperiode = null
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoDataDTO(
+                nyStartdato = LocalDate.now(),
+                forrigeStartdato = LocalDate.now().minusDays(30)
             ),
             status = OppgaveStatus.ULØST,
             bekreftelse = null,

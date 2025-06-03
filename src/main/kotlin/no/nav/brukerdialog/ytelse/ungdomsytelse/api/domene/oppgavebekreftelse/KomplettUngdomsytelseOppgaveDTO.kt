@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse
-import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretProgramperiodeBekreftelse
-import no.nav.k9.søknad.felles.type.Periode
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretSluttdatoBekreftelse
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretStartdatoBekreftelse
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
-import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.*
 
@@ -18,29 +17,29 @@ import java.util.*
     property = "type"
 )
 @JsonSubTypes(
-    JsonSubTypes.Type(value = KomplettEndretPeriodeUngdomsytelseOppgaveDTO::class, name = "BEKREFT_ENDRET_PROGRAMPERIODE"),
-    JsonSubTypes.Type(value = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO::class, name = "BEKREFT_AVVIK_REGISTERINNTEKT"),
+    JsonSubTypes.Type(value = KomplettEndretStartdatoUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_ENDRET_STARTDATO),
+    JsonSubTypes.Type(value = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_ENDRET_SLUTTDATO),
+    JsonSubTypes.Type(value = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO::class, name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
 )
 sealed class KomplettUngdomsytelseOppgaveDTO(
     open val oppgaveReferanse: String,
-    open val uttalelse: UngdomsytelseOppgaveUttalelseDTO
+    open val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
 ) {
     abstract fun somK9Format(): Bekreftelse
 
     abstract fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO
 }
 
-data class KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
     override val oppgaveReferanse: String,
     override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val nyStartdato: LocalDate,
-    val nySluttdato: LocalDate? = null,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
     override fun somK9Format(): Bekreftelse {
         val endretFomDatoBekreftelse =
-            EndretProgramperiodeBekreftelse(
+            EndretStartdatoBekreftelse(
                 UUID.fromString(oppgaveReferanse),
-                Periode(nyStartdato, nySluttdato),
+                nyStartdato,
                 uttalelse.bekreftelseSvar.somBoolean()
             )
 
@@ -52,9 +51,38 @@ data class KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
     }
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
-        return KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+        return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
             nyStartdato = nyStartdato,
+            uttalelse = uttalelse
+        )
+    }
+}
+
+data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
+    override val oppgaveReferanse: String,
+    override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
+    val nySluttdato: LocalDate,
+) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
+    override fun somK9Format(): Bekreftelse {
+        val endretFomDatoBekreftelse =
+            EndretSluttdatoBekreftelse(
+                UUID.fromString(oppgaveReferanse),
+                nySluttdato,
+                uttalelse.bekreftelseSvar.somBoolean()
+            )
+
+        if (!uttalelse.meldingFraDeltaker.isNullOrBlank()) {
+            endretFomDatoBekreftelse.medUttalelseFraBruker(uttalelse.meldingFraDeltaker)
+        }
+
+        return endretFomDatoBekreftelse
+    }
+
+    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+        return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
+            oppgaveReferanse = oppgaveReferanse,
+            nySluttdato = nySluttdato,
             uttalelse = uttalelse
         )
     }

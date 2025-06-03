@@ -3,7 +3,8 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.pdf
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretPeriodeUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
@@ -33,30 +34,60 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
         val generator = PDFGenerator()
 
         fun genererOppsummeringsPdfer(writeBytes: Boolean) {
-            var id = "1-godtar-endret-periode"
+            var id = "1-godtar-endret-startdato"
             var pdf = generator.genererPDF(
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt().pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "2-avslår-endret-periode"
+            id = "2-avslår-endret-startdato"
             pdf = generator.genererPDF(
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
-                        oppgave = KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+                        oppgave = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
                             oppgaveReferanse = UUID.randomUUID().toString(),
                             uttalelse = UngdomsytelseOppgaveUttalelseDTO(
                                 bekreftelseSvar = BekreftelseSvar.AVSLÅR,
                                 meldingFraDeltaker = "Jeg ønsker en senere startdato"
                             ),
                             nyStartdato = LocalDate.parse("2025-01-01"),
-                            //nySluttdato = LocalDate.parse("2025-12-01"),
                         )
                     ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "3-godtar-kontrollert-registerinntekt"
+            id = "3-godtar-endret-sluttdato"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
+                    .copy(
+                        oppgave = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
+                            oppgaveReferanse = UUID.randomUUID().toString(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                bekreftelseSvar = BekreftelseSvar.GODTAR,
+                            ),
+                            nySluttdato = LocalDate.parse("2025-01-01"),
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "4-avslår-endret-sluttdato"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
+                    .copy(
+                        oppgave = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
+                            oppgaveReferanse = UUID.randomUUID().toString(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                bekreftelseSvar = BekreftelseSvar.AVSLÅR,
+                                meldingFraDeltaker = "Jeg ønsker en senere sluttdato"
+                            ),
+                            nySluttdato = LocalDate.parse("2025-01-01"),
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "5-godtar-kontrollert-registerinntekt"
             pdf = generator.genererPDF(
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
@@ -94,7 +125,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "4-avslår-kontrollert-registerinntekt"
+            id = "6-avslår-kontrollert-registerinntekt"
             pdf = generator.genererPDF(
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(

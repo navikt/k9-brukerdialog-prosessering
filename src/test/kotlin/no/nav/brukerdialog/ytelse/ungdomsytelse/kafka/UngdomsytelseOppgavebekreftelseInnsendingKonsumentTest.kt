@@ -18,9 +18,8 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Un
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.periodeendring.ProgramperiodeDTO
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
@@ -50,13 +49,10 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
         mockLagreDokument()
         mockJournalføring()
         mockHentingAvOppgave(
-            oppgavetype = Oppgavetype.BEKREFT_ENDRET_PROGRAMPERIODE,
-            oppgavetypeData = EndretProgramperiodeDataDTO(
-                programperiode = ProgramperiodeDTO(
-                    fomDato = LocalDate.now(),
-                    tomDato = null
-                ),
-                forrigeProgramperiode = null
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoDataDTO(
+                nyStartdato = LocalDate.now(),
+                forrigeStartdato = LocalDate.now().minusMonths(1)
             )
         )
 
@@ -152,14 +148,13 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
     private fun preprosessertSøknadSomJson(oppgaveReferanse: String, mottatt: String) = """
         {
           "oppgave": {
-            "type": "BEKREFT_ENDRET_PROGRAMPERIODE",
+            "type": "UNG_ENDRET_STARTDATO",
             "oppgaveReferanse": "$oppgaveReferanse",
             "uttalelse": {
                 "bekreftelseSvar": "GODTAR",
                 "meldingFraDeltaker": null
             },
-            "nyStartdato": "2025-01-01",
-            "nySluttdato": "2025-12-01"
+            "nyStartdato": "2025-12-01"
           },
           "mottatt": "$mottatt",
           "søker": {
@@ -186,8 +181,8 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
               "norskIdentitetsnummer": "02119970078"
             },
             "bekreftelse": {
-              "type": "UNG_ENDRET_PROGRAMPERIODE",
-              "nyPeriode": "2025-01-01/2025-12-01",
+              "type": "UNG_ENDRET_STARTDATO",
+              "nyStartdato": "2025-12-01",
               "oppgaveReferanse": "$oppgaveReferanse",
               "uttalelseFraBruker": null,
               "harBrukerGodtattEndringen": true,
