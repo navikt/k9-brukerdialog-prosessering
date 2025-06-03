@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretPeriodeUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
@@ -21,13 +21,12 @@ object UngdomsytelseOppgavebekreftelseUtils {
     fun oppgavebekreftelseMottatt(
         søkerFødselsnummer: String = "02119970078",
         oppgaveReferanse: String = UUID.randomUUID().toString(),
-        oppgave: KomplettUngdomsytelseOppgaveDTO = KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+        oppgave: KomplettUngdomsytelseOppgaveDTO = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
             uttalelse = UngdomsytelseOppgaveUttalelseDTO(
                 bekreftelseSvar = BekreftelseSvar.GODTAR
             ),
-            nyStartdato = LocalDate.parse("2025-01-01"),
-            nySluttdato = LocalDate.parse("2025-12-01"),
+            nyStartdato = LocalDate.parse("2025-12-01"),
         ),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
     ): UngdomsytelseOppgavebekreftelseMottatt {

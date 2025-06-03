@@ -9,7 +9,8 @@ import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretPeriodeUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
@@ -42,12 +43,18 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     private fun KomplettUngdomsytelseOppgaveDTO.somMap() = mapOf(
         "oppgaveReferanse" to oppgaveReferanse,
         "uttalelse" to uttalelse.somMap(),
-        "endretPeriodeOppgave" to when (this) {
-            is KomplettEndretPeriodeUngdomsytelseOppgaveDTO -> mapOf(
-                "nyStartdato" to DATE_FORMATTER.format(nyStartdato),
-                "nySluttdato" to (nySluttdato?.let { DATE_FORMATTER.format(it) }),
-            )
 
+        "endretStartdatoOppgave" to when (this) {
+            is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> mapOf(
+                "nyStartdato" to DATE_FORMATTER.format(nyStartdato)
+            )
+            else -> null
+        },
+
+        "endretSluttdatoOppgave" to when (this) {
+            is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> mapOf(
+                "nySluttdato" to DATE_FORMATTER.format(nySluttdato)
+            )
             else -> null
         },
 

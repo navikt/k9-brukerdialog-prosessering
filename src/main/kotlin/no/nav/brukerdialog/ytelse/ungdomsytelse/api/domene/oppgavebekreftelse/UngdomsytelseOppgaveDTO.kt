@@ -3,7 +3,8 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretProgramperiodeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretSluttdatoDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.KontrollerRegisterinntektOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import org.hibernate.validator.constraints.UUID
@@ -16,13 +17,19 @@ data class UngdomsytelseOppgaveDTO(
 ) {
 
     fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
-        return when (oppgaveDTO.oppgavetypeData) {
-            is EndretProgramperiodeDataDTO -> {
-                val endretProgramperiodeDataDTO = oppgaveDTO.oppgavetypeData as EndretProgramperiodeDataDTO
-                return KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+        return when (val oppgavetypeData = oppgaveDTO.oppgavetypeData) {
+            is EndretStartdatoDataDTO -> {
+                return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
-                    nyStartdato = endretProgramperiodeDataDTO.programperiode.fomDato,
-                    nySluttdato = endretProgramperiodeDataDTO.programperiode.fomDato,
+                    nyStartdato = oppgavetypeData.nyStartdato,
+                    uttalelse = uttalelse
+                )
+            }
+
+            is EndretSluttdatoDataDTO -> {
+                return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
+                    oppgaveReferanse = oppgaveReferanse,
+                    nySluttdato = oppgavetypeData.nySluttdato,
                     uttalelse = uttalelse
                 )
             }
@@ -30,9 +37,9 @@ data class UngdomsytelseOppgaveDTO(
             is KontrollerRegisterinntektOppgavetypeDataDTO -> {
                 KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
                     oppgaveReferanse = oppgaveReferanse,
-                    fraOgMed = (oppgaveDTO.oppgavetypeData as KontrollerRegisterinntektOppgavetypeDataDTO).fraOgMed,
-                    tilOgMed = (oppgaveDTO.oppgavetypeData as KontrollerRegisterinntektOppgavetypeDataDTO).tilOgMed,
-                    registerinntekt = (oppgaveDTO.oppgavetypeData as KontrollerRegisterinntektOppgavetypeDataDTO).registerinntekt,
+                    fraOgMed = oppgavetypeData.fraOgMed,
+                    tilOgMed = oppgavetypeData.tilOgMed,
+                    registerinntekt = oppgavetypeData.registerinntekt,
                     uttalelse = uttalelse
                 )
             }

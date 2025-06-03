@@ -10,7 +10,7 @@
           content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
-        <bookmark name="Godkjenne endret periode" href="#endretPeriode"/>
+        <bookmark name="Godkjenne endret startdato" href="#endretStartdato"/>
         <bookmark name="Godkjenne endret sluttdato" href="#endretSluttdato"/>
         <bookmark name="Kontrollere inntekt fra register" href="#kontrollerRegisterInntektOppgave"/>
     </bookmarks>
@@ -27,25 +27,21 @@
 <div class="innholdscontainer">
     {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
-    {{#if oppgave.endretPeriodeOppgave}}
-        <section id="endretPeriode">
-            <h2>Godkjenn endret periode</h2>
+    {{#if oppgave.endretStartdatoOppgave}}
+        <section id="endretStartdato">
+            <h2>Godkjenn endret startdato</h2>
 
             <br/>
-            {{#if oppgave.endretPeriodeOppgave.nySluttdato}}
-                <p class="sporsmalstekst">Godkjenner du at perioden endres
-                    til {{oppgave.endretPeriodeOppgave.nyStartdato}} - {{oppgave.endretPeriodeOppgave.nySluttdato}}?</p>
-                <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
-            {{else}}
-                <p class="sporsmalstekst">Godkjenner du at startdatoen endres
-                    til {{oppgave.endretPeriodeOppgave.nyStartdato}}?</p>
-                <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
-            {{/if}}
+
+            <p class="sporsmalstekst">
+                Godkjenner du at startdatoen endres til {{oppgave.endretStartdatoOppgave.nyStartdato}}?
+            </p>
+            <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
 
             {{> partial/ung/uttalelsePartial
                     uttalelse=oppgave.uttalelse
-                    spørsmålstekstBekreftelseSvar="Er perioden riktig?"
-                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke perioden?"
+                    spørsmålstekstBekreftelseSvar="Er startdatoen riktig?"
+                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke startdatoen?"
             }}
         </section>
     {{/if}}
@@ -55,8 +51,9 @@
             <h2>Godkjenn endret sluttdato</h2>
 
             <br/>
-            <p class="sporsmalstekst">Godkjenner du at sluttdato endres
-                til {{oppgave.endretSluttdatoOppgave.nySluttdato}}?</p>
+            <p class="sporsmalstekst">
+                Godkjenner du at sluttdato endres til {{oppgave.endretSluttdatoOppgave.nySluttdato}}?
+            </p>
             <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
 
             {{> partial/ung/uttalelsePartial
