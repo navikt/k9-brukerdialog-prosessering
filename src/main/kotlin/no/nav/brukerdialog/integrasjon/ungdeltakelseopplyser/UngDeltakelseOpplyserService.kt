@@ -49,8 +49,14 @@ class UngDeltakelseOpplyserService(
             .build()
             .toUriString()
 
+        private val markerOppgaveSomLøstUrl = UriComponentsBuilder
+            .fromUriString("/deltakelse/register/oppgave/{oppgaveReferanse}/løst")
+            .build()
+            .toUriString()
+
         private val oppgaveDataFeil = IllegalStateException("Feilet med henting av oppgave.")
         private val markerDeltakelseSøktFeil = IllegalStateException("Feilet med å markere deltakelse som søkt.")
+        private val markerOppgaveSomLøstFeil = IllegalStateException("Feilet med å markere oppgave som løst.")
     }
 
     fun hentOppgaveForDeltakelse(oppgaveReferanse: UUID): OppgaveDTO {
@@ -131,5 +137,45 @@ class UngDeltakelseOpplyserService(
     private fun recoverMarkerDeltakelseSomSøkt(error: ResourceAccessException): DeltakelseOpplysningDTO {
         logger.error("{}", error.message)
         throw markerDeltakelseSøktFeil
+    }
+
+    fun markerOppgaveSomLøst(oppgaveReferanse: UUID): OppgaveDTO {
+        logger.info("Markerer oppgave med id=$oppgaveReferanse som løst.")
+        val response = ungDeltakelseOpplyserClient.exchange(
+            markerOppgaveSomLøstUrl,
+            HttpMethod.GET,
+            null,
+            object : ParameterizedTypeReference<OppgaveDTO>() {},
+            oppgaveReferanse
+        )
+
+        return if (response.statusCode.is2xxSuccessful) {
+            response.body!!
+        } else {
+            logger.error(
+                "Feilet med å markere oppgave som løst: {}, respons: {}",
+                response.statusCode,
+                response.body
+            )
+            throw markerOppgaveSomLøstFeil
+        }
+    }
+
+    @Recover
+    private fun recoverMarkerOppgaveSomLøst(error: HttpServerErrorException): OppgaveDTO {
+        logger.error("Error response = '{}' fra '{}'", error.responseBodyAsString, markerOppgaveSomLøstUrl)
+        throw markerOppgaveSomLøstFeil
+    }
+
+    @Recover
+    private fun recoverMarkerOppgaveSomLøst(error: HttpClientErrorException): OppgaveDTO {
+        logger.error("Error response = '{}' fra '{}'", error.responseBodyAsString, markerOppgaveSomLøstUrl)
+        throw markerOppgaveSomLøstFeil
+    }
+
+    @Recover
+    private fun recoverMarkerOppgaveSomLøst(error: ResourceAccessException): OppgaveDTO {
+        logger.error("{}", error.message)
+        throw markerOppgaveSomLøstFeil
     }
 }

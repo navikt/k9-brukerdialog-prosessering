@@ -20,6 +20,7 @@ import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaProducer
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
@@ -165,6 +166,24 @@ abstract class AbstractIntegrationTest {
             åpnetDato = null,
             lukketDato = null,
             frist = null,
+        )
+    }
+
+    protected fun mockMarkerOppgaveSomLøst() {
+        every { ungDeltakelseOpplyserService.markerOppgaveSomLøst(any()) } returns OppgaveDTO(
+            oppgaveReferanse = UUID.randomUUID(),
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoDataDTO(
+                nyStartdato = LocalDate.now(),
+                forrigeStartdato = LocalDate.now().minusDays(30)
+            ),
+            status = OppgaveStatus.LØST,
+            bekreftelse = null,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = ZonedDateTime.now(),
+            åpnetDato = null,
+            lukketDato = null,
+            frist = null
         )
     }
 

@@ -248,6 +248,22 @@ class UngdomsytelseControllerTest {
             frist = null
         )
 
+        every { ungDeltakelseOpplyserService.markerOppgaveSomLøst(any()) } returns OppgaveDTO(
+            oppgaveReferanse = UUID.randomUUID(),
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoDataDTO(
+                nyStartdato = LocalDate.now(),
+                forrigeStartdato = LocalDate.now().minusDays(30)
+            ),
+            status = OppgaveStatus.LØST,
+            bekreftelse = null,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = ZonedDateTime.now(),
+            åpnetDato = null,
+            lukketDato = null,
+            frist = null
+        )
+
         val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
 
         mockMvc.post("/ungdomsytelse/oppgavebekreftelse/innsending") {

@@ -55,6 +55,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
                 forrigeStartdato = LocalDate.now().minusMonths(1)
             )
         )
+        mockMarkerOppgaveSomLøst()
 
         val oppgaveReferanse = UUID.randomUUID()
         val oppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse.copy(

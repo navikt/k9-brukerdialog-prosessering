@@ -155,5 +155,6 @@ class UngdomsytelseService(
 
         innsendingService.registrer(ungdomsytelseOppgavebekreftelseInnsending, metadata)
         metrikkService.registrerMottattInnsending(ungdomsytelseOppgavebekreftelseInnsending.ytelse())
+        ungDeltakelseOpplyserService.markerOppgaveSomLøst(oppgaveReferanse = oppgaveDTO.oppgaveReferanse)
     }
 }
