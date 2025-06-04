@@ -26,6 +26,7 @@ import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Inntektsrapporterin
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SøkYtelseOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseOpplysningDTO
 import org.junit.jupiter.api.BeforeEach
@@ -93,31 +94,14 @@ class UngdomsytelseControllerTest {
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
-        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
-            oppgaveReferanse = UUID.randomUUID(),
+        mockHentingAvOppgave(
             oppgavetype = Oppgavetype.SØK_YTELSE,
             oppgavetypeData = SøkYtelseOppgavetypeDataDTO(
                 fomDato = LocalDate.now(),
-            ),
-            status = OppgaveStatus.ULØST,
-            åpnetDato = null,
-            lukketDato = null,
-            bekreftelse = null,
-            opprettetDato = ZonedDateTime.now(),
-            løstDato = null,
-            frist = null
+            )
         )
-        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseOpplysningDTO(
-            id = UUID.randomUUID(),
-            deltaker = DeltakerDTO(
-                id = UUID.randomUUID(),
-                deltakerIdent = "12345678901",
-            ),
-            fraOgMed = LocalDate.now(),
-            tilOgMed = null,
-            søktTidspunkt = ZonedDateTime.now(),
-            oppgaver = emptyList(),
-        )
+        mockMarkerDeltakelseSomSøkt()
+        mockMarkerOppgaveSomLøst()
 
         val defaultSøknad = SøknadUtils.defaultSøknad
 
@@ -141,21 +125,15 @@ class UngdomsytelseControllerTest {
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
-        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
-            oppgaveReferanse = UUID.randomUUID(),
+        mockHentingAvOppgave(
             oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
             oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
                 fraOgMed = LocalDate.now(),
                 tilOgMed = LocalDate.now()
-            ),
-            status = OppgaveStatus.ULØST,
-            bekreftelse = null,
-            opprettetDato = ZonedDateTime.now(),
-            åpnetDato = null,
-            lukketDato = null,
-            løstDato = null,
-            frist = null
+            )
         )
+
+        mockMarkerOppgaveSomLøst()
 
         val defaultInntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering
 
@@ -247,22 +225,15 @@ class UngdomsytelseControllerTest {
             lukketDato = null,
             frist = null
         )
-
-        every { ungDeltakelseOpplyserService.markerOppgaveSomLøst(any()) } returns OppgaveDTO(
-            oppgaveReferanse = UUID.randomUUID(),
+        mockHentingAvOppgave(
             oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
             oppgavetypeData = EndretStartdatoDataDTO(
                 nyStartdato = LocalDate.now(),
                 forrigeStartdato = LocalDate.now().minusDays(30)
-            ),
-            status = OppgaveStatus.LØST,
-            bekreftelse = null,
-            opprettetDato = ZonedDateTime.now(),
-            løstDato = ZonedDateTime.now(),
-            åpnetDato = null,
-            lukketDato = null,
-            frist = null
+            )
         )
+
+        mockMarkerOppgaveSomLøst()
 
         val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
 
@@ -337,5 +308,52 @@ class UngdomsytelseControllerTest {
                     )
                 }
             }
+    }
+
+    private fun mockHentingAvOppgave(oppgavetype: Oppgavetype, oppgavetypeData: OppgavetypeDataDTO) {
+        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
+            oppgaveReferanse = UUID.randomUUID(),
+            oppgavetype = oppgavetype,
+            oppgavetypeData = oppgavetypeData,
+            status = OppgaveStatus.ULØST,
+            bekreftelse = null,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = null,
+            åpnetDato = null,
+            lukketDato = null,
+            frist = null
+        )
+    }
+
+    private fun mockMarkerOppgaveSomLøst() {
+        every { ungDeltakelseOpplyserService.markerOppgaveSomLøst(any()) } returns OppgaveDTO(
+            oppgaveReferanse = UUID.randomUUID(),
+            oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
+            oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
+                fraOgMed = LocalDate.now(),
+                tilOgMed = LocalDate.now()
+            ),
+            status = OppgaveStatus.ULØST,
+            bekreftelse = null,
+            opprettetDato = ZonedDateTime.now(),
+            åpnetDato = null,
+            lukketDato = null,
+            løstDato = null,
+            frist = null
+        )
+    }
+
+    private fun mockMarkerDeltakelseSomSøkt() {
+        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseOpplysningDTO(
+            id = UUID.randomUUID(),
+            deltaker = DeltakerDTO(
+                id = UUID.randomUUID(),
+                deltakerIdent = "12345678901",
+            ),
+            fraOgMed = LocalDate.now(),
+            tilOgMed = null,
+            søktTidspunkt = ZonedDateTime.now(),
+            oppgaver = emptyList(),
+        )
     }
 }

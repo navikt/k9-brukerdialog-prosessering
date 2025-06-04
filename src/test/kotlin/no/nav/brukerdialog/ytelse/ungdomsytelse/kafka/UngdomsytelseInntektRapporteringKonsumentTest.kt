@@ -51,6 +51,7 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
                 tilOgMed = LocalDate.parse("2025-01-31"),
             )
         )
+        mockMarkerOppgaveSomLøst()
 
         val oppgaveReferanse = UUID.randomUUID().toString()
         val inntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering.copy(oppgaveReferanse = oppgaveReferanse)

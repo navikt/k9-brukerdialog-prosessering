@@ -42,10 +42,10 @@ class UngdomsytelseService(
     }
 
     suspend fun innsendingUngdomsytelsesøknad(søknad: Ungdomsytelsesøknad, gitSha: String) {
-        val sendSøknadOppgave =
+        val oppgaveDTO =
             ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(UUID.fromString(søknad.oppgaveReferanse))
 
-        val sendSøknadOppgavetypeDataDTO = sendSøknadOppgave.oppgavetypeData as? SøkYtelseOppgavetypeDataDTO
+        val søkYtelseOppgavetypeDataDTO = oppgaveDTO.oppgavetypeData as? SøkYtelseOppgavetypeDataDTO
             ?: throw IllegalStateException("OppgavetypeData er ikke av type SøkYtelseOppgavetypeDataDTO")
 
         val barn = barnService.hentBarn().map { Barn(navn = it.navn()) }
@@ -55,7 +55,7 @@ class UngdomsytelseService(
             oppgaveReferanse = søknad.oppgaveReferanse,
             språk = søknad.språk,
             mottatt = søknad.mottatt,
-            startdato = sendSøknadOppgavetypeDataDTO.fomDato,
+            startdato = søkYtelseOppgavetypeDataDTO.fomDato,
             søkerNorskIdent = søknad.søkerNorskIdent,
             barn = barn,
             barnErRiktig = søknad.barnErRiktig,
@@ -92,6 +92,7 @@ class UngdomsytelseService(
         }
 
         metrikkService.registrerMottattInnsending(ungdomsytelsesøknadInnsending.ytelse())
+        ungDeltakelseOpplyserService.markerOppgaveSomLøst(oppgaveReferanse = oppgaveDTO.oppgaveReferanse)
     }
 
     suspend fun inntektrapportering(rapportetInntekt: UngdomsytelseInntektsrapportering, gitSha: String) {
@@ -129,6 +130,7 @@ class UngdomsytelseService(
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(inntektsrapporteringInnsending, metadata)
         metrikkService.registrerMottattInnsending(inntektsrapporteringInnsending.ytelse())
+        ungDeltakelseOpplyserService.markerOppgaveSomLøst(oppgaveReferanse = rapporterInntektOppgave.oppgaveReferanse)
     }
 
     suspend fun oppgavebekreftelse(oppgavebekreftelse: UngdomsytelseOppgavebekreftelse, gitSha: String) {
