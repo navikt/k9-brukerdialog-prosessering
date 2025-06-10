@@ -32,6 +32,7 @@ object InntektrapporteringUtils {
     fun gyldigInntektsrapportering(
         søkerFødselsnummer: String = "02119970078",
         søknadId: String = UUID.randomUUID().toString(),
+        deltakelseId: UUID = UUID.randomUUID(),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
         oppgittInntektForPeriode: OppgittInntektForPeriode = OppgittInntektForPeriode(
             arbeidstakerOgFrilansInntekt = 6000,
@@ -55,17 +56,19 @@ object InntektrapporteringUtils {
             ),
             oppgittInntektForPeriode = oppgittInntektForPeriode,
             harBekreftetInntekt = true,
-            k9Format = gyldigK9Format(søknadId, mottatt, oppgittInntektForPeriode)
+            k9Format = gyldigK9Format(søknadId, deltakelseId, mottatt, oppgittInntektForPeriode)
         )
     }
 
     fun gyldigK9Format(
         søknadId: String = UUID.randomUUID().toString(),
+        deltakelseId: UUID = UUID.randomUUID(),
         mottatt: ZonedDateTime,
         oppgittInntektForPeriode: OppgittInntektForPeriode,
     ): k9FormatSøknad {
         val ytelse = Ungdomsytelse()
             .medSøknadType(UngSøknadstype.RAPPORTERING_SØKNAD)
+            .medDeltakelseId(deltakelseId)
             .medInntekter(UngOppgittInntekt(setOf(oppgittInntektForPeriode.somUngOppgittInntektForPeriode())))
 
         val søknad = k9FormatSøknad(

@@ -53,6 +53,7 @@ class UngdomsytelseService(
 
         val ungdomsytelsesøknadInnsending = UngdomsytelsesøknadInnsending(
             oppgaveReferanse = søknad.oppgaveReferanse,
+            deltakelseId = søknad.deltakelseId,
             språk = søknad.språk,
             mottatt = søknad.mottatt,
             startdato = søkYtelseOppgavetypeDataDTO.fomDato,

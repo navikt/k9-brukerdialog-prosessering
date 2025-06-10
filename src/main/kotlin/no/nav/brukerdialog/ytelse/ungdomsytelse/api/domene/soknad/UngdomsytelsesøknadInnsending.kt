@@ -22,6 +22,8 @@ import no.nav.k9.søknad.Søknad as UngSøknad
 
 data class UngdomsytelsesøknadInnsending(
     val oppgaveReferanse: String = UUID.randomUUID().toString(),
+    val deltakelseId: String,
+
     val språk: String,
 
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
@@ -72,6 +74,7 @@ data class UngdomsytelsesøknadInnsending(
         val ytelse = Ungdomsytelse()
             .medStartdato(startdato)
             .medSøknadType(SØKNAD_TYPE)
+            .medDeltakelseId(UUID.fromString(deltakelseId))
 
         return UngSøknad()
             .medVersjon(K9_SØKNAD_VERSJON)
