@@ -22,6 +22,7 @@ object UngdomsytelsesøknadUtils {
         søkerFødselsnummer: String = "02119970078",
         søknadId: String = UUID.randomUUID().toString(),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
+        deltakelseId: UUID = UUID.randomUUID(),
     ): UngdomsytelsesøknadMottatt {
         val startdato = LocalDate.parse("2022-01-01")
 
@@ -46,7 +47,7 @@ object UngdomsytelsesøknadUtils {
             barnErRiktig = true,
             kontonummerFraRegister = "12345678901",
             kontonummerErRiktig = true,
-            k9Format = gyldigK9Format(søknadId, mottatt, startdato),
+            k9Format = gyldigK9Format(søknadId, deltakelseId, mottatt, startdato),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
         )
@@ -54,12 +55,14 @@ object UngdomsytelsesøknadUtils {
 
     fun gyldigK9Format(
         søknadId: String = UUID.randomUUID().toString(),
+        deltakelseId: UUID = UUID.randomUUID(),
         mottatt: ZonedDateTime,
         fraOgMed: LocalDate,
     ): k9FormatSøknad {
         val ytelse = Ungdomsytelse()
             .medSøknadType(UngSøknadstype.DELTAKELSE_SØKNAD)
             .medStartdato(fraOgMed)
+            .medDeltakelseId(deltakelseId)
 
         val søknad = k9FormatSøknad(
             SøknadId(søknadId),

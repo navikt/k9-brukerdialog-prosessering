@@ -96,10 +96,11 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val søknadId = UUID.randomUUID().toString()
+        val deltakelseId = UUID.randomUUID()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
         val inntektsrapportering =
-            InntektrapporteringUtils.gyldigInntektsrapportering(søknadId = søknadId, mottatt = mottatt)
+            InntektrapporteringUtils.gyldigInntektsrapportering(søknadId = søknadId, deltakelseId = deltakelseId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, inntektsrapportering)
@@ -125,11 +126,11 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
             ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, deltakelseId.toString(), mottattString), preprosessertSøknadJson, true)
     }
 
     @Language("JSON")
-    private fun preprosessertSøknadSomJson(søknadId: String, mottatt: String) = """
+    private fun preprosessertSøknadSomJson(søknadId: String, deltakelseId: String, mottatt: String) = """
         {
           "oppgaveReferanse": "$søknadId",
           "mottatt": "$mottatt",
@@ -166,6 +167,7 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
             "ytelse": {
               "type": "UNGDOMSYTELSE",
               "søknadType": "RAPPORTERING_SØKNAD",
+              "deltakelseId": "$deltakelseId",
               "søktFraDatoer": [],
               "inntekter": {
                 "oppgittePeriodeinntekter": [

@@ -10,7 +10,6 @@ import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
-import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.UngdomsytelsesøknadTopologyConfiguration
@@ -26,7 +25,6 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
 import java.net.URI
-import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -99,9 +97,10 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val søknadId = UUID.randomUUID().toString()
+        val deltakelseId = UUID.randomUUID()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
-        val søknadMottatt = UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = søknadId, mottatt = mottatt)
+        val søknadMottatt = UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = søknadId, deltakelseId = deltakelseId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
@@ -127,10 +126,10 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, deltakelseId.toString(), mottattString), preprosessertSøknadJson, true)
     }
     @Language("JSON")
-    private fun preprosessertSøknadSomJson(søknadId: String, mottatt: String) = """
+    private fun preprosessertSøknadSomJson(søknadId: String, deltakelseId: String, mottatt: String) = """
         {
           "oppgaveReferanse": "$søknadId",
           "mottatt": "$mottatt",
@@ -171,6 +170,7 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             "ytelse": {
               "type": "UNGDOMSYTELSE",
               "søknadType": "DELTAKELSE_SØKNAD",
+              "deltakelseId": "$deltakelseId",
               "søktFraDatoer": ["2022-01-01"],
               "inntekter": null
             },
