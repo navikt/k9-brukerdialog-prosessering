@@ -25,7 +25,8 @@ import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgavetypeDataDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseOpplysningDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseKomposittDTO
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.junit.jupiter.api.AfterAll
@@ -188,15 +189,17 @@ abstract class AbstractIntegrationTest {
     }
 
     fun mockMarkerDeltakeleSomSøkt() {
-        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseOpplysningDTO(
-            id = UUID.randomUUID(),
-            deltaker = DeltakerDTO(
-                id = UUID.randomUUID(),
-                deltakerIdent = "12345678901",
-            ),
-            fraOgMed = LocalDate.now(),
-            tilOgMed = null,
-            søktTidspunkt = ZonedDateTime.now(),
+        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseKomposittDTO(
+           deltakelse = DeltakelseDTO(
+               id = UUID.randomUUID(),
+               deltaker = DeltakerDTO(
+                   id = UUID.randomUUID(),
+                   deltakerIdent = "12345678901",
+               ),
+               fraOgMed = LocalDate.now(),
+               tilOgMed = null,
+               søktTidspunkt = ZonedDateTime.now(),
+           ),
             oppgaver = emptyList(),
         )
     }
