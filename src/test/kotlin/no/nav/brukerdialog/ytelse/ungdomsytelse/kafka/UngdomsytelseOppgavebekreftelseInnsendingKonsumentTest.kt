@@ -12,7 +12,6 @@ import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
@@ -62,7 +61,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             oppgave = UngdomsytelseOppgaveDTO(
                 oppgaveReferanse = oppgaveReferanse.toString(),
                 uttalelse = UngdomsytelseOppgaveUttalelseDTO(
-                    bekreftelseSvar = BekreftelseSvar.GODTAR
+                    harUttalelse = false
                 )
             )
         )
@@ -152,8 +151,8 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             "type": "UNG_ENDRET_STARTDATO",
             "oppgaveReferanse": "$oppgaveReferanse",
             "uttalelse": {
-                "bekreftelseSvar": "GODTAR",
-                "meldingFraDeltaker": null
+                "harUttalelse": false,
+                "uttalelseFraDeltaker": null
             },
             "nyStartdato": "2025-12-01"
           },
@@ -186,7 +185,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
               "nyStartdato": "2025-12-01",
               "oppgaveReferanse": "$oppgaveReferanse",
               "uttalelseFraBruker": null,
-              "harBrukerGodtattEndringen": true,
+              "harUttalelse": false,
               "dataBruktTilUtledning": null
             },
             "kildesystem": "søknadsdialog"

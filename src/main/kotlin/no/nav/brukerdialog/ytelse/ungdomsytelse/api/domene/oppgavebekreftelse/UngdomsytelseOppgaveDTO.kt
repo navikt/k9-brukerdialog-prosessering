@@ -52,26 +52,16 @@ data class UngdomsytelseOppgaveDTO(
 }
 
 data class UngdomsytelseOppgaveUttalelseDTO(
-    val bekreftelseSvar: BekreftelseSvar,
-    val meldingFraDeltaker: String? = null,
+    val harUttalelse: Boolean,
+    val uttalelseFraDeltaker: String? = null,
 ) {
     @Hidden
-    @AssertTrue(message = "'meldingFraDeltaker' må være satt hvis 'bekreftelseSvar' er AVSLÅR")
+    @AssertTrue(message = "'uttalelseFraDeltaker' må være satt hvis 'harUttalelse' er true")
     fun isGyldigUttalelse(): Boolean {
-        return if (bekreftelseSvar == BekreftelseSvar.AVSLÅR) {
-            !meldingFraDeltaker.isNullOrBlank()
+        return if (harUttalelse) {
+            !uttalelseFraDeltaker.isNullOrBlank()
         } else {
             true
         }
-    }
-}
-
-enum class BekreftelseSvar {
-    GODTAR,
-    AVSLÅR;
-
-    fun somBoolean(): Boolean = when (this) {
-        GODTAR -> true
-        AVSLÅR -> false
     }
 }

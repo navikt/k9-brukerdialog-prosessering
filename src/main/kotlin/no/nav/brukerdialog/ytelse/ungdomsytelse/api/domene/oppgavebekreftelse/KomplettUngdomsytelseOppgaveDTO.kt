@@ -40,11 +40,11 @@ data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             EndretStartdatoBekreftelse(
                 UUID.fromString(oppgaveReferanse),
                 nyStartdato,
-                uttalelse.bekreftelseSvar.somBoolean()
+                uttalelse.harUttalelse
             )
 
-        if (!uttalelse.meldingFraDeltaker.isNullOrBlank()) {
-            endretFomDatoBekreftelse.medUttalelseFraBruker(uttalelse.meldingFraDeltaker)
+        if (!uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
+            endretFomDatoBekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
         }
 
         return endretFomDatoBekreftelse
@@ -69,11 +69,11 @@ data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
             EndretSluttdatoBekreftelse(
                 UUID.fromString(oppgaveReferanse),
                 nySluttdato,
-                uttalelse.bekreftelseSvar.somBoolean()
+                uttalelse.harUttalelse
             )
 
-        if (!uttalelse.meldingFraDeltaker.isNullOrBlank()) {
-            endretFomDatoBekreftelse.medUttalelseFraBruker(uttalelse.meldingFraDeltaker)
+        if (!uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
+            endretFomDatoBekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
         }
 
         return endretFomDatoBekreftelse
@@ -99,10 +99,10 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     override fun somK9Format(): Bekreftelse {
         val inntektBekreftelse = InntektBekreftelse.builder()
             .medOppgaveReferanse(UUID.fromString(oppgaveReferanse))
-            .medHarBrukerGodtattEndringen(uttalelse.bekreftelseSvar.somBoolean())
+            .medHarUttalelse(uttalelse.harUttalelse)
 
-        if (!uttalelse.meldingFraDeltaker.isNullOrBlank()) {
-            inntektBekreftelse.medUttalelseFraBruker(uttalelse.meldingFraDeltaker)
+        if (!uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
+            inntektBekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
         }
 
         return inntektBekreftelse.build()

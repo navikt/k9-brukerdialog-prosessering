@@ -1,9 +1,9 @@
-<p class="sporsmalstekst">{{spørsmålstekstBekreftelseSvar}}</p>
-<p>{{uttalelse.bekreftelseSvar}}</p><br/>
+<p class="sporsmalstekst">{{spørsmålstekstUttalelse}}</p>
+<p>{{jaNeiSvar uttalelse.harUttalelse}}</p><br/>
 
-{{#eq uttalelse.bekreftelseSvar "Nei"}}
+{{#if uttalelse.harUttalelse}}
     <div class="fritekst">
-        <p class="sporsmalstekst">{{spørsmålstekstBekreftelseSvarNei}}</p>
-        <p class="fritekst_textarea">{{uttalelse.meldingFraDeltaker}}</p>
+        <p class="sporsmalstekst">Kommentar</p>
+        <p class="fritekst_textarea">{{uttalelse.uttalelseFraDeltaker}}</p>
     </div>
-{{/eq}}
+{{/if}}

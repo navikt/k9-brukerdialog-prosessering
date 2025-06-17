@@ -8,7 +8,6 @@ import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
@@ -46,14 +45,14 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
 
         "endretStartdatoOppgave" to when (this) {
             is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> mapOf(
-                "nyStartdato" to DATE_FORMATTER.format(nyStartdato)
+                "spørsmål" to "Har du tilbakemelding på at startdatoen endres til ${DATE_FORMATTER.format(nyStartdato)}?",
             )
             else -> null
         },
 
         "endretSluttdatoOppgave" to when (this) {
             is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> mapOf(
-                "nySluttdato" to DATE_FORMATTER.format(nySluttdato)
+                "spørsmål" to "Har du tilbakemelding på at sluttdatoen endres til ${DATE_FORMATTER.format(nySluttdato)}?",
             )
             else -> null
         },
@@ -63,6 +62,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
                 "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
                 "tilOgMed" to DATE_FORMATTER.format(tilOgMed),
                 "registerinntekt" to registerinntekt.somMap(),
+                "spørsmål" to "Har du tilbakemelding på inntektsopplysningene fra A-ordningen?",
             )
 
             else -> null
@@ -93,13 +93,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     }
 
     private fun UngdomsytelseOppgaveUttalelseDTO.somMap() = mapOf(
-        "bekreftelseSvar" to bekreftelseSvar.somJaNeiSvar(),
-        "meldingFraDeltaker" to meldingFraDeltaker
+        "harUttalelse" to harUttalelse,
+        "uttalelseFraDeltaker" to uttalelseFraDeltaker
     )
-
-    private fun BekreftelseSvar.somJaNeiSvar() = when (this) {
-        BekreftelseSvar.GODTAR -> "Ja"
-        BekreftelseSvar.AVSLÅR -> "Nei"
-    }
-
 }

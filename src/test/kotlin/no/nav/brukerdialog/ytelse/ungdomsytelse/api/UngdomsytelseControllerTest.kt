@@ -13,7 +13,6 @@ import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
@@ -263,8 +262,8 @@ class UngdomsytelseControllerTest {
                 oppgave = UngdomsytelseOppgaveDTO(
                     oppgaveReferanse = "123",
                     uttalelse = UngdomsytelseOppgaveUttalelseDTO(
-                        bekreftelseSvar = BekreftelseSvar.AVSLÅR,
-                        meldingFraDeltaker = null,
+                        harUttalelse = true,
+                        uttalelseFraDeltaker = null,
                     ),
                 )
             )
@@ -300,7 +299,7 @@ class UngdomsytelseControllerTest {
                               "invalidValue": false,
                               "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.uttalelse.gyldigUttalelse",
                               "parameterType": "ENTITY",
-                              "reason": "'meldingFraDeltaker' må være satt hvis 'bekreftelseSvar' er AVSLÅR"
+                              "reason": "'uttalelseFraDeltaker' må være satt hvis 'harUttalelse' er true"
                             }
                           ]
                         }

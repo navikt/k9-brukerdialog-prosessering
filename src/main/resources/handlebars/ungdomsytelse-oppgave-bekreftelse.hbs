@@ -29,37 +29,26 @@
 
     {{#if oppgave.endretStartdatoOppgave}}
         <section id="endretStartdato">
-            <h2>Godkjenn endret startdato</h2>
+            <h2>Ny startdato i ungdomsprogrammet</h2>
 
             <br/>
 
-            <p class="sporsmalstekst">
-                Godkjenner du at startdatoen endres til {{oppgave.endretStartdatoOppgave.nyStartdato}}?
-            </p>
-            <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
-
             {{> partial/ung/uttalelsePartial
                     uttalelse=oppgave.uttalelse
-                    spørsmålstekstBekreftelseSvar="Er startdatoen riktig?"
-                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke startdatoen?"
+                    spørsmålstekstUttalelse=oppgave.endretStartdatoOppgave.spørsmål
             }}
         </section>
     {{/if}}
 
     {{#if oppgave.endretSluttdatoOppgave}}
         <section id="endretSluttdato">
-            <h2>Godkjenn endret sluttdato</h2>
+            <h2>Ny sluttdato i ungdomsprogrammet</h2>
 
             <br/>
-            <p class="sporsmalstekst">
-                Godkjenner du at sluttdato endres til {{oppgave.endretSluttdatoOppgave.nySluttdato}}?
-            </p>
-            <p>{{oppgave.uttalelse.bekreftelseSvar}}</p><br/>
 
             {{> partial/ung/uttalelsePartial
                     uttalelse=oppgave.uttalelse
-                    spørsmålstekstBekreftelseSvar="Er sluttdatoen riktig?"
-                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke sluttdatoen?"
+                    spørsmålstekstUttalelse=oppgave.endretSluttdatoOppgave.spørsmål
             }}
         </section>
     {{/if}}
@@ -104,8 +93,7 @@
             <br/>
             {{> partial/ung/uttalelsePartial
                     uttalelse=oppgave.uttalelse
-                    spørsmålstekstBekreftelseSvar="Er inntektsopplysningene fra A-ordningen riktig?"
-                    spørsmålstekstBekreftelseSvarNei="Hvorfor stemmer ikke inntekten vi har fått fra A-ordningen?"
+                    spørsmålstekstUttalelse=oppgave.kontrollerRegisterInntektOppgave.spørsmål
             }}
 
         </section>
