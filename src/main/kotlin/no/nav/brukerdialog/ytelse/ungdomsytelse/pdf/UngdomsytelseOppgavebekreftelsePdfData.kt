@@ -52,7 +52,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
 
         "endretSluttdatoOppgave" to when (this) {
             is KomplettEndretSluttdatoUngdomsytelseOppgaveDTO -> mapOf(
-                "spørsmål" to "Har du noe tilbakemelding på at sluttdatoen endres til ${DATE_FORMATTER.format(nySluttdato)}?",
+                "spørsmål" to "Har du tilbakemelding på at sluttdatoen endres til ${DATE_FORMATTER.format(nySluttdato)}?",
             )
             else -> null
         },
