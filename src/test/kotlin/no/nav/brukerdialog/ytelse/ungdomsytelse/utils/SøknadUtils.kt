@@ -1,12 +1,9 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.oppslag.barn.BarnOppslag
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.BekreftelseSvar
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -31,7 +28,7 @@ object SøknadUtils {
         oppgave = UngdomsytelseOppgaveDTO(
             oppgaveReferanse = UUID.randomUUID().toString(),
             uttalelse = UngdomsytelseOppgaveUttalelseDTO(
-                bekreftelseSvar = BekreftelseSvar.GODTAR,
+                harUttalelse = false,
             )
         )
     )
