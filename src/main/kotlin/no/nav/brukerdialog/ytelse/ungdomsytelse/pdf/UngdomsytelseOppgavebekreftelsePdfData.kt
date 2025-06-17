@@ -45,7 +45,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
 
         "endretStartdatoOppgave" to when (this) {
             is KomplettEndretStartdatoUngdomsytelseOppgaveDTO -> mapOf(
-                "spørsmål" to "Har du noe tilbakemelding på at startdatoen endres til ${DATE_FORMATTER.format(nyStartdato)}?",
+                "spørsmål" to "Har du tilbakemelding på at startdatoen endres til ${DATE_FORMATTER.format(nyStartdato)}?",
             )
             else -> null
         },
