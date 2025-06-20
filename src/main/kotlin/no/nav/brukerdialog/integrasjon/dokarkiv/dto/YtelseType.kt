@@ -177,7 +177,7 @@ enum class YtelseType(
 
     UNGDOMSYTELSE_INNTEKTRAPPORTERING(
         brevkode = BrevKode(brevKode = "UNG Inntektrapportering", dokumentKategori = "SOK"),
-        tittel = "Rapporteringsmelding for ungdomsytelsen - UNG Inntektrapportering",
+        tittel = "Rapporteringsmelding for ungdomsprogramytelsen - UNG Inntektrapportering",
         tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.SØKNAD
     )
