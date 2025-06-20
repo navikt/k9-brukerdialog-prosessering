@@ -83,7 +83,7 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
             K9Beskjed(
                 metadata = SøknadUtils.metadata,
                 grupperingsId = oppgaveReferanse,
-                tekst = "Rapportert inntenkt for ungdomsytelsen er mottatt",
+                tekst = "Rapportert inntenkt for ungdomsprogramytelsen er mottatt",
                 link = null,
                 dagerSynlig = 7,
                 søkerFødselsnummer = søker.fødselsnummer,

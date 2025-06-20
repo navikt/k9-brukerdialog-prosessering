@@ -54,9 +54,9 @@ enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
     PLEIEPENGER_LIVETS_SLUTTFASE("Søknad om pleiepenger i livets sluttfase"),
     PLEIEPENGER_SYKT_BARN("Søknad om pleiepenger for sykt barn"),
     PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING("Endringsmelding for pleiepenger sykt barn"),
-    UNGDOMSYTELSE_DELTAKELSE_SØKNAD("Søknad om ungdomsytelse"),
-    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE("Bekreftelse på løst oppgave for ungdomsytelse"),
-    UNGDOMSYTELSE_INNTEKTSRAPPORTERING("Inntektsrapportering for ungdomsytelsen"),
+    UNGDOMSYTELSE_DELTAKELSE_SØKNAD("Søknad om ungdomsprogramytelsen"),
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE("Bekreftelse på løst oppgave for ungdomsprogramytelsen"),
+    UNGDOMSYTELSE_INNTEKTSRAPPORTERING("Inntektsrapportering for ungdomsprogramytelsen"),
     OPPLÆRINGSPENGER("Søknad om opplæringspenger")
     ;
 

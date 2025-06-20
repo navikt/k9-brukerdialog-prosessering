@@ -62,7 +62,7 @@ data class UngdomsytelseInntektsrapporteringPreprosessert(
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,
         grupperingsId = oppgaveReferanse,
-        tekst = "Rapportert inntenkt for ungdomsytelsen er mottatt",
+        tekst = "Rapportert inntenkt for ungdomsprogramytelsen er mottatt",
         link = null,
         dagerSynlig = 7,
         søkerFødselsnummer = søkerFødselsnummer(),
