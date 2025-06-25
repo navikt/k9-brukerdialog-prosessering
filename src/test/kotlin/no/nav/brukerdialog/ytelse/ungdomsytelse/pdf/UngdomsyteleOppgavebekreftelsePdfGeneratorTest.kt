@@ -98,11 +98,13 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 arbeidOgFrilansInntekter = listOf(
                                     ArbeidOgFrilansRegisterInntektDTO(
                                         inntekt = 1000,
-                                        arbeidsgiver = "Arbeidsgiver 1"
+                                        arbeidsgiver = "123456789",
+                                        arbeidsgiverNavn = "Arbeidsgiver 1"
                                     ),
                                     ArbeidOgFrilansRegisterInntektDTO(
                                         inntekt = 2000,
-                                        arbeidsgiver = "Arbeidsgiver 2"
+                                        arbeidsgiver = "987654321",
+                                        arbeidsgiverNavn = "Arbeidsgiver 2"
                                     )
                                 ),
                                 ytelseInntekter = listOf(
@@ -136,11 +138,13 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 arbeidOgFrilansInntekter = listOf(
                                     ArbeidOgFrilansRegisterInntektDTO(
                                         inntekt = 1000,
-                                        arbeidsgiver = "Arbeidsgiver 1"
+                                        arbeidsgiver = "123456789",
+                                        arbeidsgiverNavn = "Arbeidsgiver 1"
                                     ),
                                     ArbeidOgFrilansRegisterInntektDTO(
                                         inntekt = 2000,
-                                        arbeidsgiver = "Arbeidsgiver 2"
+                                        arbeidsgiver = "987654321",
+                                        arbeidsgiverNavn = "Arbeidsgiver 2"
                                     )
                                 ),
                                 ytelseInntekter = listOf(

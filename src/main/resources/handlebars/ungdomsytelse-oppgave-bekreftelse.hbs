@@ -68,7 +68,13 @@
                 <tbody>
                 {{#each oppgave.kontrollerRegisterInntektOppgave.registerinntekt.arbeidOgFrilansInntekter as |arbeidsinntekt|~}}
                     <tr>
-                        <td>{{arbeidsinntekt.arbeidsgiver}}</td>
+                        <td>
+                            {{#if arbeidsinntekt.navn}}
+                                {{arbeidsinntekt.navn}} ({{arbeidsinntekt.arbeidsgiver}})
+                            {{else}}
+                                {{arbeidsinntekt.arbeidsgiver}}
+                            {{/if}}
+                        </td>
                         <td>{{arbeidsinntekt.inntekt}}</td>
                     </tr>
                 {{/each}}

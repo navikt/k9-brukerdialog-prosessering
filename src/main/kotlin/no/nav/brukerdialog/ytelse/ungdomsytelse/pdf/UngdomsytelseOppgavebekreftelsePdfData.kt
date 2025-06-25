@@ -73,7 +73,8 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
         "arbeidOgFrilansInntekter" to this.arbeidOgFrilansInntekter.map {
             mapOf(
                 "inntekt" to BigDecimal.valueOf(it.inntekt.toLong()).formaterSomValuta(),
-                "arbeidsgiver" to it.arbeidsgiver
+                "arbeidsgiver" to it.arbeidsgiver,
+                "navn" to it.arbeidsgiverNavn
             )
         },
         "ytelseInntekter" to this.ytelseInntekter.map {
