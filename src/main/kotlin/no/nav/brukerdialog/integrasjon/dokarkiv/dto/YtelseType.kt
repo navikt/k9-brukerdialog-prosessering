@@ -162,24 +162,24 @@ enum class YtelseType(
     ),
 
     UNGDOMSYTELSE_SØKNAD(
-        brevkode = BrevKode(brevKode = "UNG Søknad", dokumentKategori = "SOK"),
-        tittel = "Søknad om ungdomsytelse - UNG Søknad",
+        brevkode = BrevKode(brevKode = "NAV 76-13.92", dokumentKategori = "SOK"),
+        tittel = "Søknad om ungdomsprogramytelsen - NAV 76-13.92",
         tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.SØKNAD
-    ),
-
-    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE(
-        brevkode = BrevKode(brevKode = "UNG Oppgavebekreftelse", dokumentKategori = "SOK"),
-        tittel = "Bekreftelse for endring av ungdomsytelse - UNG Oppgavebekreftelse",
-        tema = Tema.UNGDOMSYTELSE,
-        innsendingstype = Innsendingstype.ENDRING
     ),
 
     UNGDOMSYTELSE_INNTEKTRAPPORTERING(
-        brevkode = BrevKode(brevKode = "UNG Inntektrapportering", dokumentKategori = "SOK"),
-        tittel = "Rapporteringsmelding for ungdomsprogramytelsen - UNG Inntektrapportering",
+        brevkode = BrevKode(brevKode = "NAV 76-13.93", dokumentKategori = "SOK"),
+        tittel = "Rapporteringsmelding for ungdomsprogramytelsen - NAV 76-13.93",
         tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.SØKNAD
+    ),
+
+    UNGDOMSYTELSE_UTTALELSE_PÅ_FORHÅNDSVARSEL(
+        brevkode = BrevKode(brevKode = "NAV 76-13.94", dokumentKategori = "SOK"),
+        tittel = "Uttalelse på forhåndsvarsel for ungdomsprogramytelsen - NAV 76-13.94",
+        tema = Tema.UNGDOMSYTELSE,
+        innsendingstype = Innsendingstype.ENDRING
     )
     ;
 
