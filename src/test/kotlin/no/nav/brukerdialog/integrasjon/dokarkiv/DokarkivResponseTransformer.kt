@@ -31,10 +31,10 @@ internal class DokarkivResponseTransformer : ResponseTransformer() {
             YtelseType.PLEIEPENGESØKNAD_LIVETS_SLUTTFASE to "16",
             YtelseType.PLEIEPENGESØKNAD_LIVETS_SLUTTFASE_ETTERSENDING to "17",
             YtelseType.OMSORGSDAGER_ALENEOMSORG_ETTERSENDING to "18",
-            YtelseType.UNGDOMSYTELSE_SØKNAD to "19", // TODO Bruk Tema.UNGDOMSYTELSE før lansering
-            YtelseType.UNGDOMSYTELSE_INNTEKTRAPPORTERING to "20", // TODO Bruk Tema.UNGDOMSYTELSE før lansering
+            YtelseType.UNGDOMSYTELSE_SØKNAD to "19",
+            YtelseType.UNGDOMSYTELSE_INNTEKTRAPPORTERING to "20",
             YtelseType.OPPLÆRINGSPENGERSØKNAD_ETTERSENDING to "21",
-            YtelseType.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE to "22", // TODO Bruk Tema.UNGDOMSYTELSE før lansering
+            YtelseType.UNGDOMSYTELSE_VARSEL_UTTALELSE to "22",
         )
     }
 
