@@ -163,21 +163,21 @@ enum class YtelseType(
 
     UNGDOMSYTELSE_SØKNAD(
         brevkode = BrevKode(brevKode = "NAV 76-13.92", dokumentKategori = "SOK"),
-        tittel = "Søknad om ungdomsprogramytelsen - NAV 76-13.92",
+        tittel = "Søknad om ungdomsprogramytelse - NAV 76-13.92",
         tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.SØKNAD
     ),
 
     UNGDOMSYTELSE_INNTEKTRAPPORTERING(
         brevkode = BrevKode(brevKode = "NAV 76-13.93", dokumentKategori = "SOK"),
-        tittel = "Rapporteringsmelding for ungdomsprogramytelsen - NAV 76-13.93",
+        tittel = "Rapporteringsmelding for ungdomsprogramytelse - NAV 76-13.93",
         tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.SØKNAD
     ),
 
-    UNGDOMSYTELSE_UTTALELSE_PÅ_FORHÅNDSVARSEL(
+    UNGDOMSYTELSE_VARSEL_UTTALELSE(
         brevkode = BrevKode(brevKode = "NAV 76-13.94", dokumentKategori = "SOK"),
-        tittel = "Uttalelse på forhåndsvarsel for ungdomsprogramytelsen - NAV 76-13.94",
+        tittel = "Uttalelse på forhåndsvarsel for ungdomsprogramytelse - NAV 76-13.94",
         tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.ENDRING
     )

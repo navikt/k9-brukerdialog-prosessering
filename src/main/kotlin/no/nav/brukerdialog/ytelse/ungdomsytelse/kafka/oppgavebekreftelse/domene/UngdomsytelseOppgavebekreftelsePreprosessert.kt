@@ -48,7 +48,7 @@ data class UngdomsytelseOppgavebekreftelsePreprosessert(
     override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest {
 
         return JournalføringsService.JournalføringsRequest(
-            ytelseType = YtelseType.UNGDOMSYTELSE_UTTALELSE_PÅ_FORHÅNDSVARSEL,
+            ytelseType = YtelseType.UNGDOMSYTELSE_VARSEL_UTTALELSE,
             norskIdent = søkerFødselsnummer(),
             sokerNavn = søkerNavn(),
             mottatt = mottatt,
