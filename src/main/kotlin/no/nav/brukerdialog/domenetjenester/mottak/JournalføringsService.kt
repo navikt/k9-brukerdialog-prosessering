@@ -6,15 +6,15 @@ import no.nav.brukerdialog.integrasjon.dokarkiv.dto.AvsenderMottakerIdType
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.JournalPostRequestV1Factory
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.integrasjon.k9mellomlagring.ContentTypeService
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.kafka.types.Journalfort
 import no.nav.brukerdialog.kafka.types.JournalfortEttersendelse
 import no.nav.brukerdialog.kafka.types.JournalfortOppgavebekreftelse
 import no.nav.brukerdialog.kafka.types.JournalfortSøknad
-import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Søknadstype
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
+import no.nav.brukerdialog.mellomlagring.dokument.DokumentService
 import no.nav.brukerdialog.utils.MDCUtil
+import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Søknadstype
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.k9.oppgave.OppgaveBekreftelse
 import no.nav.k9.søknad.Søknad
@@ -25,9 +25,9 @@ import no.nav.k9.ettersendelse.Ettersendelse as K9Ettersendelse
 @Service
 class JournalføringsService(
     private val dokarkivService: DokarkivService,
-    private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
+    private val dokumentService: DokumentService,
     private val contentTypeService: ContentTypeService,
-    private val image2PDFConverter: Image2PDFConverter
+    private val image2PDFConverter: Image2PDFConverter,
 ) {
     private companion object {
         private val logger = org.slf4j.LoggerFactory.getLogger(JournalføringsService::class.java)
@@ -40,7 +40,7 @@ class JournalføringsService(
         val alleDokumenter = mutableListOf<List<Dokument>>()
         journalføringsRequest.dokumentId.forEach { dokumentId: List<String> ->
             logger.info("Henter dokumenter basert på dokumentId")
-            val dokumenter = k9DokumentMellomlagringService.hentDokumenterMedId(
+            val dokumenter = dokumentService.hentDokumenter(
                 dokumentIder = dokumentId,
                 dokumentEier = DokumentEier(journalføringsRequest.norskIdent)
             )
@@ -102,6 +102,7 @@ class JournalføringsService(
             journalpostId = journalføringsResponse.journalPostId,
             søknad = innsending
         )
+
         is OppgaveBekreftelse -> JournalfortOppgavebekreftelse(
             journalpostId = journalføringsResponse.journalPostId,
             søknad = innsending

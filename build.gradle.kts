@@ -47,6 +47,7 @@ val springdocVersion = "2.8.9"
 val pdfBoxVersion = "3.0.5"
 val imageIOVersion = "3.12.0"
 val fpsakTidsserieVersion = "2.7.3"
+val gcpStorageVersion = "2.48.2"
 
 dependencies {
 	implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
@@ -109,6 +110,14 @@ dependencies {
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:$springCloudContractVersion")
 	testImplementation("org.awaitility:awaitility-kotlin:$awailitilityKotlinVersion")
+
+	// Google Cloud
+	implementation("com.google.cloud:google-cloud-storage:$gcpStorageVersion") {
+		exclude(group = "com.google.guava", module = "listenablefuture")
+	}
+
+	// Kryptokgrafi
+	implementation("com.auth0:java-jwt:4.0.0")
 
 	// Diverse
 	implementation("org.json:json:$orgJsonVersion")

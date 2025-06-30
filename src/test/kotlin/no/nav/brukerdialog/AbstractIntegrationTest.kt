@@ -7,11 +7,11 @@ import io.mockk.every
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.brukerdialog.integrasjon.dokarkiv.DokarkivService
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.DokarkivJournalpostResponse
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
+import no.nav.brukerdialog.mellomlagring.dokument.DokumentService
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.oppslag.soker.SøkerService
@@ -55,7 +55,7 @@ abstract class AbstractIntegrationTest {
     protected lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
 
     @MockkBean(relaxed = true)
-    protected lateinit var k9DokumentMellomlagringService: K9DokumentMellomlagringService
+    protected lateinit var dokumentService: DokumentService
 
     @MockkBean(relaxed = false)
     protected lateinit var dokarkivService: DokarkivService
@@ -108,15 +108,11 @@ abstract class AbstractIntegrationTest {
 
     protected fun mockLagreDokument(forventedeDokumenterForSletting: List<String> = listOf("123456789", "987654321")) {
         val forventetDokmentIderForSletting = forventedeDokumenterForSletting
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map {
-            URI(
-                "http://localhost:8080/dokument/$it"
-            )
-        })
+        coEvery { dokumentService.lagreDokument(any(), any(), any()) }.returnsMany(forventetDokmentIderForSletting)
     }
 
     protected fun mockHentDokumenter() {
-        coEvery { k9DokumentMellomlagringService.hentDokumenter(any(), any()) } returns listOf(
+        coEvery { dokumentService.hentDokumenter(any(), any()) } returns listOf(
             Dokument(
                 eier = DokumentEier("123"),
                 content = "some value".toByteArray(),

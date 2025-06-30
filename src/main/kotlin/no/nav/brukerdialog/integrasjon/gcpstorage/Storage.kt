@@ -1,0 +1,14 @@
+package no.nav.brukerdialog.integrasjon.gcpstorage
+
+interface Storage {
+    fun hent(key : StorageKey) : StorageValue?
+    fun slett(storageKey: StorageKey) : Boolean
+    fun lagre(key: StorageKey, value: StorageValue, hold: Boolean)
+    fun persister(key: StorageKey): Boolean
+    fun harHold(key: StorageKey): Boolean
+    fun ready()
+    fun fjerneHold(storageKey: StorageKey): Boolean
+}
+
+data class StorageKey(val value: String)
+data class StorageValue(val value: String)

@@ -1,10 +1,9 @@
 package no.nav.brukerdialog.domenetjenester.mottak
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
+import no.nav.brukerdialog.mellomlagring.dokument.DokumentService
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.pdf.PdfService
 import no.nav.k9.søknad.Innsending
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service
 class PreprosesseringsService(
     private val pdfService: PdfService,
     private val mapper: ObjectMapper,
-    private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
+    private val dokumentService: DokumentService,
 ) {
     companion object {
         private val logger = org.slf4j.LoggerFactory.getLogger(PreprosesseringsService::class.java)
@@ -31,26 +30,30 @@ class PreprosesseringsService(
         val oppsummeringPdf = pdfService.genererPDF(preprosesseringsData.pdfData)
 
         logger.info("Mellomlagrer Oppsummerings-PDF...")
-        val oppsummeringPdfDokumentId = k9DokumentMellomlagringService.lagreDokument(
-            Dokument(
+        val oppsummeringPdfDokumentId = dokumentService.lagreDokument(
+            dokument = Dokument(
                 eier = dokumentEier,
                 content = oppsummeringPdf,
                 contentType = "application/pdf",
                 title = preprosesseringsData.pdfJournalføringsTittel
-            )
-        ).dokumentId()
+            ),
+            dokumentEier = DokumentEier(søkerFødselsnummer),
+            medHold = true
+        )
 
         logger.info("Mellomlagrer Oppsummerings-JSON")
-        val soknadJsonDokumentId = k9DokumentMellomlagringService.lagreDokument(
+        val soknadJsonDokumentId = dokumentService.lagreDokument(
             dokument = Dokument(
                 eier = dokumentEier,
                 content = mapper.writeValueAsBytes(k9FormatSøknad),
                 contentType = "application/json",
                 title = preprosesseringsData.jsonJournalføringsTittel
-            )
-        ).dokumentId()
+            ),
+            dokumentEier = DokumentEier(søkerFødselsnummer),
+            medHold = true
+        )
 
-        val komplettDokumentId = mutableListOf(
+        val komplettDokumentId: MutableList<List<String>> = mutableListOf(
             listOf(
                 oppsummeringPdfDokumentId,
                 soknadJsonDokumentId

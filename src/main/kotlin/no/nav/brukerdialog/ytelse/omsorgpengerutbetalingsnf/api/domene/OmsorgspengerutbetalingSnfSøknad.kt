@@ -24,7 +24,7 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Barn.Companion.kunFosterbarn
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Barn.Companion.somK9BarnListe
 import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
+import no.nav.brukerdialog.utils.URIUtils.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.k9.søknad.felles.type.Språk

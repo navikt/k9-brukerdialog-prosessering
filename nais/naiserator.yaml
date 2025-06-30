@@ -85,6 +85,8 @@ spec:
     autoInstrumentation:
       enabled: {{observabilityEnabled}}
       runtime: java
+  envFrom:
+    - secret: k9-mellomlagring.crypto
   env:
   {{#each env}}
    - name: {{@key}}

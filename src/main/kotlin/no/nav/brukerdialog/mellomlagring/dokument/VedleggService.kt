@@ -1,23 +1,38 @@
 package no.nav.brukerdialog.mellomlagring.dokument
 
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
+import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.stereotype.Service
+import org.springframework.web.ErrorResponseException
 
 @Service
 class VedleggService(
-    private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
+    private val dokumentService: DokumentService,
 ) {
     suspend fun lagreVedlegg(vedlegg: Vedlegg, personIdent: String): String {
-        return k9DokumentMellomlagringService.lagreDokument(vedlegg.somDokument(personIdent)).dokumentId()
+        return dokumentService.lagreDokument(
+            dokument = vedlegg.somDokument(personIdent),
+            dokumentEier = DokumentEier(personIdent),
+            medHold = false
+        )
     }
 
     suspend fun hentVedlegg(vedleggId: String, personIdent: String): Vedlegg {
-        return k9DokumentMellomlagringService.hentDokument(vedleggId, DokumentEier(personIdent)).somVedlegg()
+        val dokument = dokumentService.hentDokument(vedleggId, DokumentEier(personIdent))
+            ?: throw ErrorResponseException(
+                HttpStatus.NOT_FOUND,
+                ProblemDetail.forStatusAndDetail(
+                    HttpStatus.NOT_FOUND,
+                    "Vedlegg med ID $vedleggId ble ikke funnet."
+                ),
+                null
+            )
+
+        return dokument.somVedlegg()
     }
 
     suspend fun slettVedlegg(vedleggId: String, personIdent: String) {
-        return k9DokumentMellomlagringService.slettDokument(vedleggId, DokumentEier(personIdent))
+        dokumentService.slettDokument(vedleggId, DokumentEier(personIdent))
     }
 
     private fun Vedlegg.somDokument(personIdent: String) = Dokument(
