@@ -108,7 +108,7 @@ abstract class AbstractIntegrationTest {
 
     protected fun mockLagreDokument(forventedeDokumenterForSletting: List<String> = listOf("123456789", "987654321")) {
         val forventetDokmentIderForSletting = forventedeDokumenterForSletting
-        coEvery { dokumentService.lagreDokument(any(), any(), any()) }.returnsMany(forventetDokmentIderForSletting)
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }.returnsMany(forventetDokmentIderForSletting)
     }
 
     protected fun mockHentDokumenter() {

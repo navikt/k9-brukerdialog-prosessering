@@ -93,7 +93,7 @@ class OMPAleneomsorgSoknadKonsumentTest : AbstractIntegrationTest() {
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
-        coEvery { dokumentService.lagreDokument(any(), any(), any()) }
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))

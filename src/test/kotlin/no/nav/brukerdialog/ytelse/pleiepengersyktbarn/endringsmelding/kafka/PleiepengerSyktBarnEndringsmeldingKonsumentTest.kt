@@ -42,7 +42,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
         val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { dokumentService.lagreDokument(any(), any(), any()) }.returnsMany(forventetDokmentIderForSletting)
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }.returnsMany(forventetDokmentIderForSletting)
         coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse("123456789", false, listOf())
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
@@ -62,7 +62,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
-        coEvery { dokumentService.lagreDokument(any(), any(), any()) }
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
