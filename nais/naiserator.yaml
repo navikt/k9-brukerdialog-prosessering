@@ -14,6 +14,11 @@ spec:
   {{#each ingresses as |url|}}
     - {{url}}
   {{/each}}
+  gcp:
+    buckets:
+      - name: {{ bucket.name }}
+        lifecycleCondition:
+          age: {{ bucket.objectAge }}
   tokenx:
     enabled: true
   azure:

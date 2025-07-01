@@ -12,6 +12,10 @@
   "ingresses": [],
   "inboundRules": [],
   "observabilityEnabled": "true",
+  "bucket": {
+    "name": "k9-mellomlagring-prod",
+    "objectAge": "3"
+  },
   "env": {
     "SERVER_PORT": "8080",
     "SPRING_APPLICATION_NAME": "k9-brukerdialog-prosessering",
