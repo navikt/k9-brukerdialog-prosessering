@@ -56,6 +56,8 @@
     "FAMILIE_PDF_BASE_URL": "http://familie-pdf.teamfamilie",
     "FAMILIE_PDF_SCOPE": "api://dev-gcp.teamfamilie.familie-pdf/.default",
 
+    "CLAM_AV_BASE_URL": "http://clamav.nais-system/scan",
+
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
     "SWAGGER_ENABLED": "true",
 
