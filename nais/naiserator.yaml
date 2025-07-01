@@ -39,8 +39,6 @@ spec:
         - application: dine-pleiepenger
         - application: opplaringspenger-soknad
         - application: ungdomsytelse-deltaker
-        - application: clamav
-          namespace: nais-system
       {{#each inboundRules}}
         - application: {{app}}
           namespace: {{namespace}}
@@ -56,6 +54,8 @@ spec:
           namespace: k9saksbehandling
         - application: familie-pdf
           namespace: teamfamilie
+        - application: clamav
+          namespace: nais-system
       external:
         {{#each externalHosts as |host|}}
         - host: {{host}}
