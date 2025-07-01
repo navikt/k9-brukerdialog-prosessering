@@ -56,7 +56,7 @@ class VedleggControllerTest {
     fun `Opplasting av vedlegg med støttet content-type returnerer location header`(filnavn: String) {
         coEvery { vedleggService.lagreVedlegg(any(), any()) } returns "12345"
 
-        val fil = ResourceUtils.getFile("classpath:filer/$filnavn")
+        val fil = hentFil(filnavn)
         val filtype = Files.probeContentType(fil.toPath())
 
         val headers = HttpHeaders()
@@ -87,7 +87,7 @@ class VedleggControllerTest {
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
 
-        val bildeFil = ResourceUtils.getFile("classpath:filer/nav-logo.png")
+        val bildeFil = hentFil("nav-logo.png")
 
         val mockFile = MockMultipartFile(
             "vedlegg",
@@ -250,14 +250,14 @@ class VedleggControllerTest {
         ]
     )
     fun `Henting av vedlegg som lykkes returnerer 200 og vedlegget`(filnavn: String) {
-        val file = ResourceUtils.getFile("classpath:filer/$filnavn")
-        val fileContent = file.readBytes()
-        val fileContentType = Files.probeContentType(file.toPath())
+        val fil = hentFil(filnavn)
+        val filtype = Files.probeContentType(fil.toPath())
 
+        val filinnhold = fil.readBytes()
         coEvery { vedleggService.hentVedlegg(any(), any()) } returns Vedlegg(
-            content = fileContent,
-            contentType = fileContentType,
-            title = file.name
+            content = filinnhold,
+            contentType = filtype,
+            title = fil.name
         )
 
         mockMvc.get("/vedlegg/12345")
@@ -265,10 +265,12 @@ class VedleggControllerTest {
                 status { isOk() }
                 header { exists(NavHeaders.X_CORRELATION_ID) }
                 content {
-                    contentType(fileContentType)
-                    bytes(fileContent)
+                    contentType(filtype)
+                    bytes(filinnhold)
                 }
             }
     }
+
+    private fun hentFil(filnavn: String) = ResourceUtils.getFile("classpath:filer/$filnavn")
 }
 
