@@ -104,7 +104,6 @@ no.nav:
     kryptering:
       passord:
         krypteringsnøkkel: "test-krypteringsnøkkel"
-        dekrypteringsnøkler: "1,2"
     gcp_storage_bucket_navn: "bucket"
     søknad_tid_timer: 1
 

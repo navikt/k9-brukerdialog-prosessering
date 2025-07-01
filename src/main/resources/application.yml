@@ -129,8 +129,7 @@ no.nav:
   mellomlagring:
     kryptering:
       passord:
-        krypteringsnøkkel: ${CRYPTO_ENCRYPTION_KEY_ID}
-        dekrypteringsnøkler: ${CRYPTO_DECRYPTION_KEY_IDS}
+        krypteringsnøkkel: ${CRYPTO_PASSPHRASE}
     gcp_storage_bucket_navn: ${GCP_STORAGE_BUCKET_NAVN}
     søknad_tid_timer: ${MELLOMLAGRING_SØKNAD_TID_TIMER:72}
 
