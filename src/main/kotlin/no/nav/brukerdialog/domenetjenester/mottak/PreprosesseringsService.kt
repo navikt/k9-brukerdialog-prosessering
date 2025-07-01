@@ -38,7 +38,8 @@ class PreprosesseringsService(
                 title = preprosesseringsData.pdfJournalføringsTittel
             ),
             dokumentEier = DokumentEier(søkerFødselsnummer),
-            medHold = true
+            medHold = true,
+            skannForVirus = false
         )
 
         logger.info("Mellomlagrer Oppsummerings-JSON")
@@ -50,7 +51,8 @@ class PreprosesseringsService(
                 title = preprosesseringsData.jsonJournalføringsTittel
             ),
             dokumentEier = DokumentEier(søkerFødselsnummer),
-            medHold = true
+            medHold = true,
+            skannForVirus = false
         )
 
         val komplettDokumentId: MutableList<List<String>> = mutableListOf(

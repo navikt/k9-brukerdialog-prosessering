@@ -117,8 +117,11 @@ data class DokumentService(
         dokument: Dokument,
         dokumentEier: DokumentEier,
         medHold: Boolean = false,
+        skannForVirus: Boolean = true,
     ): String {
-        virusScanner.skann(dokument.content)
+        if (skannForVirus) {
+            virusScanner.skann(dokument.content)
+        }
 
         logger.trace("Generer DokumentID")
         val dokumentId = genererDokumentId()
