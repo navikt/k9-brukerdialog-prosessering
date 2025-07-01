@@ -15,7 +15,7 @@ class VedleggService(
             dokument = vedlegg.somDokument(personIdent),
             dokumentEier = DokumentEier(personIdent),
             medHold = false,
-            skannForVirus = true
+            skannForVirus = false // TODO: Skru på virusskanning før prodsetting.
         )
     }
 
