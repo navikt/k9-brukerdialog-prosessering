@@ -45,20 +45,28 @@ class VedleggControllerTest {
         springTokenValidationContextHolder.mockContext()
     }
 
-    @Test
-    fun `Opplasting av vedlegg med støttet content-type returnerer location header`() {
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "Bilde_3_MB.jpg",
+            "test.pdf",
+            "nav-logo.png"
+        ]
+    )
+    fun `Opplasting av vedlegg med støttet content-type returnerer location header`(filnavn: String) {
         coEvery { vedleggService.lagreVedlegg(any(), any()) } returns "12345"
+
+        val fil = ResourceUtils.getFile("classpath:filer/$filnavn")
+        val filtype = Files.probeContentType(fil.toPath())
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
 
-        val pdfFil = ResourceUtils.getFile("classpath:filer/test.pdf")
-
         val mockFile = MockMultipartFile(
             "vedlegg",
-            "test.pdf",
-            MediaType.APPLICATION_PDF_VALUE,
-            pdfFil.readBytes()
+            filnavn,
+            filtype,
+            fil.readBytes()
         )
 
         mockMvc.multipart("/vedlegg") {
