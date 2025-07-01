@@ -6,6 +6,7 @@ K9_BRUKERDIALOG_CACHE_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9
 K9_SELVBETJENING_OPPSLAG_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-selvbetjening-oppslag-mock
 DOKARKIV_BASE_URL: http://localhost:${wiremock.server.port:8083}/dokarkiv-mock
 FAMILIE_PDF_BASE_URL: http://localhost:${wiremock.server.port:8083}/familie-pdf-mock
+CLAM_AV_BASE_URL: http://localhost:${wiremock.server.port:8083}/clamav-mock
 ENABLE_UNDOMSYTELSE: true
 ENABLE_OPPLAERINGSPENGER: true
 

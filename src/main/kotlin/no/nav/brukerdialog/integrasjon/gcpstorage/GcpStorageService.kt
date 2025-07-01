@@ -7,12 +7,14 @@ import com.google.cloud.storage.StorageException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import com.google.cloud.storage.Storage as GcpStorage
 
 @Service
+@Profile(value = ["dev-gcp", "prod-gcp"]) // Aktiv i dev-gcp og prod-gcp profiler
 class GcpStorageService(
     private val gcpStorage: GcpStorage,
     @Value("\${no.nav.mellomlagring.gcp_storage_bucket_navn}") private val bucket: String
