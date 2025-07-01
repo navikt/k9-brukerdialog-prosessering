@@ -88,7 +88,7 @@ spec:
       enabled: {{observabilityEnabled}}
       runtime: java
   envFrom:
-    - secret: k9-mellomlagring.crypto
+    - secret: k9-brukerdialog-prosessering
   env:
   {{#each env}}
    - name: {{@key}}
