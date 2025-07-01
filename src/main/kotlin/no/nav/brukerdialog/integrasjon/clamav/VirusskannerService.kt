@@ -22,7 +22,7 @@ class VirusskannerService(
     override fun skann(fil: ByteArray) {
         kotlin.runCatching {
             clamAvRestTemplate.exchange(
-                "/",
+                "/scan",
                 HttpMethod.PUT,
                 HttpEntity(fil),
                 object : ParameterizedTypeReference<List<ClamAVScanResponse>>() {}

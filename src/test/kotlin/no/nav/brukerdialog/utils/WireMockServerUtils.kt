@@ -86,7 +86,7 @@ object WireMockServerUtils {
 
     fun WireMockServer.stubVirusScan(httpStatus: HttpStatus, scanResultat: ScanResultat) : WireMockServer {
         WireMock.stubFor(
-            WireMock.put(WireMock.urlPathMatching(".*clamav-mock/.*"))
+            WireMock.put(WireMock.urlPathMatching(".*clamav-mock/scan"))
                 .willReturn(
                     WireMock.aResponse()
                         .withHeader("Content-Type", "application/json")
