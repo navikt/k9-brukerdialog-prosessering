@@ -10,7 +10,7 @@ import java.util.*
 
 @Service
 class KrypteringService(
-    @Value("\${no.nav.mellomlagring.kryptering.passord.krypteringsnøkkel}") private val krypteringsnøkkel: String
+    @Value("\${no.nav.mellomlagring.kryptering.passord.krypteringsnøkkel}") private val krypteringsnøkkel: String,
 ) {
     private companion object {
         private val logger = LoggerFactory.getLogger(KrypteringService::class.java)
@@ -18,8 +18,6 @@ class KrypteringService(
 
     fun krypter(id: String, plainText: String, dokumentEier: DokumentEier): String {
         logger.trace("Krypterer ID $id")
-        val keyId = hentNøkkelId(id)
-        logger.trace("Krypterer med Nøkkel ID $keyId")
 
         return KrypteringUtil(
             passphrase = krypteringsnøkkel,
@@ -29,8 +27,6 @@ class KrypteringService(
 
     fun dekrypter(id: String, encrypted: String, dokumentEier: DokumentEier): String {
         logger.trace("Dekrypterer ID $id")
-        val keyId = hentNøkkelId(id)
-        logger.trace("Dekrypterer med Nøkkel ID $keyId")
 
         return KrypteringUtil(passphrase = krypteringsnøkkel, iv = dokumentEier.eiersFødselsnummer).dekrypter(encrypted)
     }
@@ -53,6 +49,4 @@ class KrypteringService(
     }
 
     private fun decodeId(id: String) = JWT.decode(if (id.endsWith(".")) id else "$id.")
-
-    private fun hentNøkkelId(id: String) = decodeId(id).keyId.toInt()
 }
