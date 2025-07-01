@@ -117,7 +117,7 @@ data class DokumentService(
         dokument: Dokument,
         dokumentEier: DokumentEier,
         medHold: Boolean = false,
-        skannForVirus: Boolean = true,
+        skannForVirus: Boolean,
     ): String {
         if (skannForVirus) {
             virusScanner.skann(dokument.content)

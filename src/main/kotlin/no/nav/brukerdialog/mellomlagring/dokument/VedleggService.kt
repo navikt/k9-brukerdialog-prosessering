@@ -14,7 +14,8 @@ class VedleggService(
         return dokumentService.lagreDokument(
             dokument = vedlegg.somDokument(personIdent),
             dokumentEier = DokumentEier(personIdent),
-            medHold = false
+            medHold = false,
+            skannForVirus = true
         )
     }
 
