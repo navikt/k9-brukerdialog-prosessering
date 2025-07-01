@@ -9,6 +9,10 @@ import org.springframework.web.ErrorResponseException
 class VedleggService(
     private val dokumentService: DokumentService,
 ) {
+    private companion object {
+        private val logger = org.slf4j.LoggerFactory.getLogger(VedleggService::class.java)
+    }
+
     suspend fun lagreVedlegg(vedlegg: Vedlegg, personIdent: String): String {
         return dokumentService.lagreDokument(
             dokument = vedlegg.somDokument(personIdent),

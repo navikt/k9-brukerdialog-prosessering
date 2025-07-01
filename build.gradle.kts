@@ -48,6 +48,7 @@ val pdfBoxVersion = "3.0.5"
 val imageIOVersion = "3.12.0"
 val fpsakTidsserieVersion = "2.7.3"
 val gcpStorageVersion = "2.48.2"
+val tikaVersion = "3.1.0"
 
 dependencies {
 	implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
@@ -88,6 +89,7 @@ dependencies {
 	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
 	implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
 	implementation("com.github.jknack:handlebars:$handlebarsVersion")
+	implementation("org.apache.tika:tika-core:$tikaVersion")
 
 	// Bilde til PDF
 	implementation("org.apache.pdfbox:pdfbox-io:$pdfBoxVersion")

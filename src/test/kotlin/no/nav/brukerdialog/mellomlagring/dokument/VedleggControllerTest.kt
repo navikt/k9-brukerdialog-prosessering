@@ -52,11 +52,13 @@ class VedleggControllerTest {
         val headers = HttpHeaders()
         headers.contentType = MediaType.MULTIPART_FORM_DATA
 
+        val pdfFil = ResourceUtils.getFile("classpath:filer/test.pdf")
+
         val mockFile = MockMultipartFile(
             "vedlegg",
-            "test-file.pdf",
+            "test.pdf",
             MediaType.APPLICATION_PDF_VALUE,
-            "test-content".toByteArray()
+            pdfFil.readBytes()
         )
 
         mockMvc.multipart("/vedlegg") {
@@ -67,6 +69,52 @@ class VedleggControllerTest {
             header { string(HttpHeaders.LOCATION, "http://localhost/vedlegg/12345") }
             header { string(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.LOCATION) }
             header { exists(NavHeaders.X_CORRELATION_ID) }
+        }
+    }
+
+    @Test
+    fun `Opplasting av vedlegg med som er av annen type enn content-type sier den er gir valideringsfeil`() {
+        coEvery { vedleggService.lagreVedlegg(any(), any()) } returns "12345"
+
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.MULTIPART_FORM_DATA
+
+        val bildeFil = ResourceUtils.getFile("classpath:filer/nav-logo.png")
+
+        val mockFile = MockMultipartFile(
+            "vedlegg",
+            "nav-logo.pdf",
+            MediaType.APPLICATION_PDF_VALUE,
+            bildeFil.readBytes()
+        )
+
+        mockMvc.multipart("/vedlegg") {
+            file(mockFile)
+            contentType = MediaType.MULTIPART_FORM_DATA
+        }.andExpect {
+            status { isBadRequest() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
+            content {
+                json(
+                    """
+                {
+                  "type": "/problem-details/invalid-request-parameters",
+                  "title": "invalid-request-parameters",
+                  "status": 400,
+                  "detail": "Forespørselen inneholder valideringsfeil",
+                  "instance": "/vedlegg",
+                  "violations": [
+                    {
+                      "parameterName": "vedlegg",
+                      "parameterType": "FORM",
+                      "reason": "Vedlegg av typen image/png påstås ikke for å være application/pdf",
+                      "invalidValue": "application/pdf"
+                    }
+                  ]                  
+                }
+            """.trimIndent(), true
+                )
+            }
         }
     }
 
@@ -104,7 +152,7 @@ class VedleggControllerTest {
                     {
                       "parameterName": "vedlegg",
                       "parameterType": "FORM",
-                      "reason": "Kun application/pdf, image/jpeg, og image/png er tillatt",
+                      "reason": "Kun [application/pdf, image/jpeg, image/png] er tillatt",
                       "invalidValue": "text/plain"
                     }
                   ]                  
@@ -186,11 +234,13 @@ class VedleggControllerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = [
-        "Bilde_3_MB.jpg",
-        "test.pdf",
-        "nav-logo.png"
-    ])
+    @ValueSource(
+        strings = [
+            "Bilde_3_MB.jpg",
+            "test.pdf",
+            "nav-logo.png"
+        ]
+    )
     fun `Henting av vedlegg som lykkes returnerer 200 og vedlegget`(filnavn: String) {
         val file = ResourceUtils.getFile("classpath:filer/$filnavn")
         val fileContent = file.readBytes()
