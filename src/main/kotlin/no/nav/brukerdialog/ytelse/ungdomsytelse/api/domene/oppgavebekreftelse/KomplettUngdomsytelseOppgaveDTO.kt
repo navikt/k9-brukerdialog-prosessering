@@ -26,7 +26,7 @@ sealed class KomplettUngdomsytelseOppgaveDTO(
     open val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
 ) {
     abstract fun somK9Format(): Bekreftelse
-
+    abstract fun dokumentTittelSuffix(): String
     abstract fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO
 }
 
@@ -49,6 +49,8 @@ data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
 
         return endretFomDatoBekreftelse
     }
+
+    override fun dokumentTittelSuffix(): String = "endret startdato"
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
@@ -79,6 +81,8 @@ data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
         return endretFomDatoBekreftelse
     }
 
+    override fun dokumentTittelSuffix(): String = "endret sluttdato"
+
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
@@ -107,6 +111,8 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
 
         return inntektBekreftelse.build()
     }
+
+    override fun dokumentTittelSuffix(): String = "kontroll av innetekt"
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
