@@ -34,13 +34,16 @@ data class UngdomsytelseOppgavebekreftelseMottatt(
 
     override fun pdfData(): PdfData = UngdomsytelseOppgavebekreftelsePdfData(this)
 
-    override fun mapTilPreprosesseringsData(): PreprosesseringsData = PreprosesseringsData(
-        søkerFødselsnummer = søkerFødselsnummer(),
-        k9FormatSøknad = k9FormatSøknad(),
-        vedleggId = vedleggId(),
-        fødselsattestVedleggId = fødselsattestVedleggId(),
-        pdfData = pdfData(),
-        pdfJournalføringsTittel = ytelse().tittel,
-        jsonJournalføringsTittel = "${ytelse().tittel}(JSON)",
-    )
+    override fun mapTilPreprosesseringsData(): PreprosesseringsData {
+        val tittel = ytelse().tittel + oppgave.dokumentTittelSuffix()
+        return PreprosesseringsData(
+            søkerFødselsnummer = søkerFødselsnummer(),
+            k9FormatSøknad = k9FormatSøknad(),
+            vedleggId = vedleggId(),
+            fødselsattestVedleggId = fødselsattestVedleggId(),
+            pdfData = pdfData(),
+            pdfJournalføringsTittel = tittel,
+            jsonJournalføringsTittel = "$tittel(JSON)",
+        )
+    }
 }

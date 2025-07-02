@@ -28,7 +28,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     override fun pdfData(): Map<String, Any?> {
         val k9Format = oppgavebekreftelseMottatt.k9Format
         return mapOf(
-            "tittel" to ytelse().utledTittel(språk()),
+            "tittel" to ytelse().utledTittel(språk()) + oppgavebekreftelseMottatt.oppgave.dokumentTittelSuffix(),
             "oppgave" to oppgavebekreftelseMottatt.oppgave.somMap(),
             "søknadMottattDag" to oppgavebekreftelseMottatt.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "søknadMottatt" to DATE_TIME_FORMATTER.format(oppgavebekreftelseMottatt.mottatt),
