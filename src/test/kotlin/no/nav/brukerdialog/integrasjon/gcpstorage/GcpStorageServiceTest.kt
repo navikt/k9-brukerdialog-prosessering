@@ -1,21 +1,18 @@
 package no.nav.brukerdialog.integrasjon.gcpstorage
 
-import com.google.cloud.storage.Blob
+import com.google.cloud.NoCredentials
 import com.google.cloud.storage.BlobId
-import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.Bucket
 import com.google.cloud.storage.Storage
-import com.google.cloud.storage.StorageException
-import com.ninjasquad.springmockk.MockkBean
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import com.google.cloud.storage.StorageOptions
+import io.aiven.testcontainers.fakegcsserver.FakeGcsServerContainer
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.api.assertThrows
@@ -24,7 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.io.ByteArrayOutputStream
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
 
 @ExtendWith(SpringExtension::class)
 @ActiveProfiles("test")
@@ -34,155 +32,124 @@ import java.io.ByteArrayOutputStream
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureWireMock
+@Testcontainers
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GcpStorageServiceTest {
 
-    @MockkBean
-    lateinit var gcpStorage: Storage
+    private lateinit var storage: Storage
 
     lateinit var gcpStorageService: GcpStorageService
 
-    val bucket = "test-bucket"
-    private val key = StorageKey("test-nøkkel")
-    private val value = StorageValue("test-verdi")
-    private lateinit var blobId: BlobId
-    private lateinit var blob: Blob
-    private lateinit var bucketStub: Bucket
+    companion object {
+        private const val TEST_BUCKET = "test-bucket"
+        private const val TEST_PROJECT_ID = "test-project"
+        private val TEST_KEY = StorageKey("test-nøkkel")
+        private val TEST_VALUE = StorageValue("test-verdi")
+
+        @Container
+        @JvmField
+        val FAKE_GCS_SERVER_CONTAINER = FakeGcsServerContainer()
+    }
+
+    @BeforeAll
+    fun setupAll() {
+        // Bygger en Storage klient som peker til emulatoren, med ingen autentisering:
+        storage = StorageOptions.newBuilder()
+            .setHost(FAKE_GCS_SERVER_CONTAINER.url())
+            .setProjectId(TEST_PROJECT_ID)
+            .setCredentials(NoCredentials.getInstance())
+            .build()
+            .service
+
+        // Oppretter en test-bøtte i emulatoren
+        storage.create(Bucket.newBuilder(TEST_BUCKET).build())
+
+        // Initialiserer GcpStorageService med den opprettede bøtten
+        gcpStorageService = GcpStorageService(storage, TEST_BUCKET)
+    }
 
     @BeforeEach
-    fun setUp() {
-        clearAllMocks()
-        blobId = BlobId.of(bucket, key.value)
-        blob = mockk()
-        bucketStub = mockk()
-        every { bucketStub.location } returns "US"
-
-        every { gcpStorage.get(bucket) } returns bucketStub
-        gcpStorageService = assertDoesNotThrow {
-            GcpStorageService(gcpStorage, bucket)
-        }
-
-        // Stubber både single-arg BlobId, String, and vararg get() kall for å unngå manglende svar
-        every { gcpStorage.get(any<String>()) } returns null
-        every { gcpStorage.get(any<BlobId>()) } returns null
-        every { gcpStorage.get(any<BlobId>(), *anyVararg<Storage.BlobGetOption>()) } returns null
-        every { gcpStorage.get(any<String>()) } returns null
-        every { gcpStorage.get(any<BlobId>(), *anyVararg<Storage.BlobGetOption>()) } returns null
+    fun cleanBucket() {
+        // Tømmer bøtten før hver test for å sikre at vi starter med en ren tilstand
+        storage.list(TEST_BUCKET).iterateAll().forEach { storage.delete(it.blobId) }
     }
 
     @Test
     fun `init feiler ikke når bøtte finnes`() {
-        every { gcpStorage.get(bucket) } returns bucketStub
-        assertDoesNotThrow {
-            GcpStorageService(gcpStorage, bucket)
-        }
+        assertDoesNotThrow { GcpStorageService(storage, TEST_BUCKET) }
     }
 
     @Test
     fun `init feiler når bøtte ikke finnes`() {
-        every { gcpStorage.get("manglende-bøtte") } returns null
-        assertThrows<IllegalStateException> { GcpStorageService(gcpStorage, "manglende-bøtte") }
+        assertThrows<IllegalStateException> { GcpStorageService(storage, "manglende-bøtte") }
+    }
+
+    @Test
+    fun `lagre verdi i GCP Storage`() {
+        gcpStorageService.lagre(TEST_KEY, TEST_VALUE, hold = false)
+        val blob = storage.get(BlobId.of(TEST_BUCKET, TEST_KEY.value))
+        assertNotNull(blob)
+        assertThat(blob.getContent().toString(Charsets.UTF_8)).isEqualTo(TEST_VALUE.value)
     }
 
 
     @Test
     fun `hent returnerer verdi når blob finnes`() {
-        every { gcpStorage.get(blobId) } returns blob
-        every { blob.downloadTo(any<ByteArrayOutputStream>()) } answers {
-            val os = firstArg<ByteArrayOutputStream>()
-            os.write(this@GcpStorageServiceTest.value.value.toByteArray())
-        }
-
-        val resultat = gcpStorageService.hent(key)
+        gcpStorageService.lagre(TEST_KEY, TEST_VALUE, hold = false)
+        val resultat = gcpStorageService.hent(TEST_KEY)
         assertNotNull(resultat)
-        assertThat(value.value).isEqualTo(resultat.value)
+        assertThat(TEST_VALUE.value).isEqualTo(resultat.value)
     }
 
     @Test
     fun `hent returnerer null når blob ikke finnes`() {
-        every { gcpStorage.get(blobId) } returns null
-        assertThat(gcpStorageService.hent(key)).isNull()
+        assertThat(gcpStorageService.hent(TEST_KEY)).isNull()
     }
 
     @Test
     fun `hent returnerer null ved StorageException`() {
-        every { gcpStorage.get(blobId) } throws StorageException(404, "Blob not found")
-        assertThat(gcpStorageService.hent(key)).isNull()
+        assertThat(gcpStorageService.hent(TEST_KEY)).isNull()
     }
 
     @Test
     fun `slett returnerer false når hent returnerer null`() {
-        assertThat(gcpStorageService.slett(key)).isFalse()
+        assertThat(gcpStorageService.slett(TEST_KEY)).isFalse()
     }
 
     @Test
     fun `slett sletter eksisterende blob vellykket`() {
-        every { gcpStorage.get(blobId) } returns blob
-        every { blob.downloadTo(any<ByteArrayOutputStream>()) } answers {
-            val os = firstArg<ByteArrayOutputStream>()
-            os.write(this@GcpStorageServiceTest.value.value.toByteArray())
-        }
-        every { gcpStorage.delete(bucket, key.value) } returns true
-
-        assertThat(gcpStorageService.slett(key)).isTrue()
-        verify { gcpStorage.delete(bucket, key.value) }
+        gcpStorageService.lagre(TEST_KEY, TEST_VALUE, hold = false)
+        assertThat(gcpStorageService.slett(TEST_KEY)).isTrue()
     }
 
     @Test
     fun `slett returnerer false når sletting kaster StorageException`() {
-        every { gcpStorage.get(blobId) } returns blob
-        every { blob.downloadTo(any<ByteArrayOutputStream>()) } answers {
-            val os = firstArg<ByteArrayOutputStream>()
-            os.write(this@GcpStorageServiceTest.value.value.toByteArray())
-        }
-        every { gcpStorage.delete(bucket, key.value) } throws StorageException(404, "Blob not found")
-
-        assertThat(gcpStorageService.slett(key)).isFalse()
+        assertThat(gcpStorageService.slett(TEST_KEY)).isFalse()
     }
 
     @Test
     fun `harHold oppdager midlertidig hold`() {
-        every { gcpStorage.get(blobId, Storage.BlobGetOption.fields(Storage.BlobField.TEMPORARY_HOLD)) } returns blob
-        every { blob.temporaryHold } returns true
-        assertThat(gcpStorageService.harHold(key)).isTrue()
-
-        every { blob.temporaryHold } returns false
-        assertThat(gcpStorageService.harHold(key)).isFalse()
+        assertThat(gcpStorageService.harHold(TEST_KEY)).isFalse()
     }
 
     @Test
     fun `persister returnerer false når hent er null`() {
-        every { gcpStorage.get(blobId) } returns null
-        assertThat(gcpStorageService.persister(key)).isFalse()
+        assertThat(gcpStorageService.persister(TEST_KEY)).isFalse()
     }
 
     @Test
     fun `persister setter hold og returnerer true`() {
-        every { gcpStorage.get(blobId) } returns blob
-        every { blob.downloadTo(any<ByteArrayOutputStream>()) } answers {
-            val os = firstArg<ByteArrayOutputStream>()
-            os.write(this@GcpStorageServiceTest.value.value.toByteArray())
-        }
-        every { gcpStorage.update(any<BlobInfo>()) } returns blob
-
-        assertThat(gcpStorageService.persister(key)).isTrue()
-        verify { gcpStorage.update(any<BlobInfo>()) }
+        gcpStorageService.lagre(TEST_KEY, TEST_VALUE, hold = false)
+        assertThat(gcpStorageService.persister(TEST_KEY)).isTrue()
     }
 
     @Test
     fun `persister returnerer false ved StorageException`() {
-        every { gcpStorage.get(blobId) } returns blob
-        every { blob.downloadTo(any<ByteArrayOutputStream>()) } answers {
-            val os = firstArg<ByteArrayOutputStream>()
-            os.write(this@GcpStorageServiceTest.value.value.toByteArray())
-        }
-        every { gcpStorage.update(any<BlobInfo>()) } throws StorageException(500, "Internal Server Error")
-
-        assertThat(gcpStorageService.persister(key)).isFalse()
+        assertThat(gcpStorageService.persister(TEST_KEY)).isFalse()
     }
 
     @Test
     fun `ready feiler ikke når bøtte finnes`() {
-        every { gcpStorage.get(bucket) } returns bucketStub
         assertDoesNotThrow { gcpStorageService.ready() }
     }
 }
