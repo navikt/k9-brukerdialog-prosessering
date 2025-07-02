@@ -6,7 +6,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import no.nav.brukerdialog.integrasjon.clamav.VirusskannerService
-import no.nav.brukerdialog.integrasjon.gcpstorage.Storage
+import no.nav.brukerdialog.integrasjon.gcpstorage.GcpStorageService
 import no.nav.brukerdialog.integrasjon.gcpstorage.StorageKey
 import no.nav.brukerdialog.integrasjon.gcpstorage.StorageValue
 import no.nav.brukerdialog.mellomlagring.dokument.kryptering.KrypteringService
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service
 @Service
 data class DokumentService(
     private val krypteringService: KrypteringService,
-    private val storage: Storage,
+    private val gcpStorageService: GcpStorageService,
     private val virusScanner: VirusskannerService,
     private val objectMapper: ObjectMapper,
 ) {
@@ -30,7 +30,7 @@ data class DokumentService(
         dokumentEier: DokumentEier,
     ): Dokument? {
         logger.trace("Henter dokument {}.", dokumentId)
-        val value = storage.hent(
+        val value = gcpStorageService.hent(
             genererLagringsnøkkel(
                 dokumentId = dokumentId,
                 eier = dokumentEier
@@ -66,7 +66,7 @@ data class DokumentService(
         dokumentEier: DokumentEier,
     ): Boolean {
         logger.trace("Sletter dokument {}", dokumentId)
-        val result = storage.slett(
+        val result = gcpStorageService.slett(
             genererLagringsnøkkel(
                 dokumentId = dokumentId,
                 eier = dokumentEier
@@ -96,7 +96,7 @@ data class DokumentService(
     ): Boolean {
         logger.info("Setter metadata på dokument med id: {}", dokumentId)
         val key = genererLagringsnøkkel(dokumentId, dokumentEier)
-        return storage.persister(key)
+        return gcpStorageService.persister(key)
     }
 
     suspend fun persisterDokumenter(
@@ -135,7 +135,7 @@ data class DokumentService(
 
         logger.trace("Larer dokument.")
 
-        storage.lagre(
+        gcpStorageService.lagre(
             key = genererLagringsnøkkel(dokumentId = dokumentId, eier = dokumentEier),
             value = StorageValue(value = encrypted),
             hold = medHold
@@ -150,7 +150,7 @@ data class DokumentService(
         dokumentId: String,
         dokumentEier: DokumentEier,
     ): Boolean {
-        return storage.fjerneHold(
+        return gcpStorageService.fjerneHold(
             genererLagringsnøkkel(
                 dokumentId = dokumentId,
                 eier = dokumentEier

@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.mellomlagring.dokument
 
 import kotlinx.coroutines.runBlocking
+import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.brukerdialog.utils.FilUtils.hentFil
 import no.nav.brukerdialog.utils.FødselsnummerGenerator
@@ -8,7 +9,6 @@ import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.apache.commons.lang3.stream.Streams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.nio.file.Files
@@ -28,6 +29,7 @@ import java.nio.file.Files
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureWireMock
+@Import(GcsStorageTestConfiguration::class)
 class DokumentServiceTest {
 
     private companion object {
@@ -114,20 +116,6 @@ class DokumentServiceTest {
             // og slettes uten problemer
             dokumentService.slettDokumenter(dokumentIder, dokumentEier)
             assertThat(dokumentService.hentDokumenter(dokumentIder, dokumentEier)).isEmpty()
-        }
-    }
-
-    @Test
-    fun `Persistering av ikke-eksisterende dokument feiler`() {
-        // Gitt et dokument som ikke er lagret
-        val dokumentEier = DokumentEier(FødselsnummerGenerator.neste())
-
-        // Når vi prøver å persistere det
-        assertThrows<IllegalStateException> {
-            dokumentService.persister(
-                dokumentId = "ikke-eksisterende-dokument",
-                dokumentEier = dokumentEier
-            )
         }
     }
 

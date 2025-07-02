@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.brukerdialog.mellomlagring.soknad.CacheRequest
 import no.nav.brukerdialog.mellomlagring.soknad.CacheResponse
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
+import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -33,6 +35,7 @@ import java.time.ZonedDateTime
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureWireMock
+@Import(GcsStorageTestConfiguration::class)
 class K9BrukerdialogCacheServiceTest {
 
     @Autowired

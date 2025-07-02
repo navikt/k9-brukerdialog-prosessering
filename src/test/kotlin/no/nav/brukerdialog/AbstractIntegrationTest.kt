@@ -33,16 +33,17 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.kafka.test.EmbeddedKafkaBroker
 import org.springframework.test.web.servlet.MockMvc
-import java.net.URI
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
 @KafkaIntegrationTest
 @AutoConfigureMockMvc
+@Import(GcsStorageTestConfiguration::class)
 abstract class AbstractIntegrationTest {
 
     @Autowired

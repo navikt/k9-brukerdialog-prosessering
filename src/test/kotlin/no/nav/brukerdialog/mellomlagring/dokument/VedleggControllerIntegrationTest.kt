@@ -2,6 +2,7 @@ package no.nav.brukerdialog.mellomlagring.dokument
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
+import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.context.annotation.Import
 import org.springframework.core.io.FileSystemResource
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -24,6 +25,7 @@ import org.springframework.util.unit.DataSize
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @EnableMockOAuth2Server
 @ActiveProfiles("test")
+@Import(GcsStorageTestConfiguration::class)
 class VedleggControllerIntegrationTest {
 
     @Autowired

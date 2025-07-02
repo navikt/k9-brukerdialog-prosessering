@@ -3,6 +3,7 @@ package no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.ninjasquad.springmockk.MockkBean
+import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.utils.Constants
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
+import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -24,6 +26,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@Import(GcsStorageTestConfiguration::class)
 class SøkerOppslagsServiceTest {
 
     @Autowired

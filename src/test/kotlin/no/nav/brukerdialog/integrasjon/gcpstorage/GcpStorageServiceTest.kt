@@ -1,15 +1,11 @@
 package no.nav.brukerdialog.integrasjon.gcpstorage
 
-import com.google.cloud.NoCredentials
 import com.google.cloud.storage.BlobId
-import com.google.cloud.storage.Bucket
 import com.google.cloud.storage.Storage
-import com.google.cloud.storage.StorageOptions
-import io.aiven.testcontainers.fakegcsserver.FakeGcsServerContainer
+import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -17,11 +13,12 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertNotNull
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 
 @ExtendWith(SpringExtension::class)
@@ -34,38 +31,19 @@ import org.testcontainers.junit.jupiter.Testcontainers
 @AutoConfigureWireMock
 @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Import(GcsStorageTestConfiguration::class)
 class GcpStorageServiceTest {
 
-    private lateinit var storage: Storage
+    @Autowired
+    lateinit var storage: Storage
 
+    @Autowired
     lateinit var gcpStorageService: GcpStorageService
 
     companion object {
         private const val TEST_BUCKET = "test-bucket"
-        private const val TEST_PROJECT_ID = "test-project"
         private val TEST_KEY = StorageKey("test-nøkkel")
         private val TEST_VALUE = StorageValue("test-verdi")
-
-        @Container
-        @JvmField
-        val FAKE_GCS_SERVER_CONTAINER = FakeGcsServerContainer()
-    }
-
-    @BeforeAll
-    fun setupAll() {
-        // Bygger en Storage klient som peker til emulatoren, med ingen autentisering:
-        storage = StorageOptions.newBuilder()
-            .setHost(FAKE_GCS_SERVER_CONTAINER.url())
-            .setProjectId(TEST_PROJECT_ID)
-            .setCredentials(NoCredentials.getInstance())
-            .build()
-            .service
-
-        // Oppretter en test-bøtte i emulatoren
-        storage.create(Bucket.newBuilder(TEST_BUCKET).build())
-
-        // Initialiserer GcpStorageService med den opprettede bøtten
-        gcpStorageService = GcpStorageService(storage, TEST_BUCKET)
     }
 
     @BeforeEach

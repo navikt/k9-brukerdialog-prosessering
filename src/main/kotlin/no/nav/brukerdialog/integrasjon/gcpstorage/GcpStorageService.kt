@@ -7,18 +7,16 @@ import com.google.cloud.storage.StorageException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import com.google.cloud.storage.Storage as GcpStorage
 
 @Service
-@Profile(value = ["dev-gcp", "prod-gcp"]) // Aktiv i dev-gcp og prod-gcp profiler
 class GcpStorageService(
-    private val gcpStorage: GcpStorage,
-    @Value("\${no.nav.mellomlagring.gcp_storage_bucket_navn}") private val bucket: String
-) : Storage {
+    private val storage: GcpStorage,
+    @Value("\${no.nav.mellomlagring.gcp_storage_bucket_navn}") private val bucket: String,
+) {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(GcpStorageService::class.java)
     }
@@ -27,9 +25,9 @@ class GcpStorageService(
         ensureBucketExists()
     }
 
-    override fun hent(key: StorageKey): StorageValue? {
+    fun hent(key: StorageKey): StorageValue? {
         return try {
-            val blob = gcpStorage.get(BlobId.of(bucket, key.value)) ?: return null
+            val blob = storage.get(BlobId.of(bucket, key.value)) ?: return null
             val outputStream = ByteArrayOutputStream()
             blob.downloadTo(outputStream)
 
@@ -40,14 +38,14 @@ class GcpStorageService(
         }
     }
 
-    override fun slett(storageKey: StorageKey): Boolean {
+    fun slett(storageKey: StorageKey): Boolean {
 
         if (harHold(storageKey)) toggleHold(storageKey, false)
 
         val value = hent(storageKey)
         return if (value == null) false else {
             return try {
-                gcpStorage.delete(bucket, storageKey.value)
+                storage.delete(bucket, storageKey.value)
                 true
             } catch (cause: StorageException) {
                 logger.warn("Sletting av dokument med id ${storageKey.value} feilet.", cause)
@@ -56,7 +54,7 @@ class GcpStorageService(
         }
     }
 
-    override fun lagre(key: StorageKey, value: StorageValue, hold: Boolean) {
+    fun lagre(key: StorageKey, value: StorageValue, hold: Boolean) {
         val blobId = BlobId.of(bucket, key.value)
         val blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build()
         lagre(blobInfo, value)
@@ -64,7 +62,7 @@ class GcpStorageService(
         if (hold) toggleHold(key, hold)
     }
 
-    override fun fjerneHold(storageKey: StorageKey): Boolean {
+    fun fjerneHold(storageKey: StorageKey): Boolean {
         hent(storageKey) ?: return false
         if (harHold(storageKey)) toggleHold(storageKey, false)
         return true
@@ -72,16 +70,16 @@ class GcpStorageService(
 
     private fun toggleHold(key: StorageKey, hold: Boolean) {
         val blobInfo = hentBlobInfoBuilder(key).setTemporaryHold(hold).build()
-        gcpStorage.update(blobInfo)
-        if(hold) logger.info("Midlertidig hold er plassert på dokument med id: ${key.value}")
+        storage.update(blobInfo)
+        if (hold) logger.info("Midlertidig hold er plassert på dokument med id: ${key.value}")
         else logger.info("Midlertidig hold er fjernet på dokument med id: ${key.value}")
     }
 
-    override fun harHold(key: StorageKey): Boolean {
+    fun harHold(key: StorageKey): Boolean {
         val blobId = BlobId.of(bucket, key.value)
-        val blob: Blob? = gcpStorage.get(blobId, GcpStorage.BlobGetOption.fields(GcpStorage.BlobField.TEMPORARY_HOLD))
+        val blob: Blob? = storage.get(blobId, GcpStorage.BlobGetOption.fields(GcpStorage.BlobField.TEMPORARY_HOLD))
 
-        return when(blob?.temporaryHold){
+        return when (blob?.temporaryHold) {
             true -> true
             else -> false
         }
@@ -99,7 +97,7 @@ class GcpStorageService(
      * @param key Den unike identifikatoren til objektet.
      * @return Returnerer true, dersom objektet blir funnet og oppdatert med ny metadata. False dersom den ikke blir funnet, eller feiler.
      */
-    override fun persister(key: StorageKey): Boolean {
+    fun persister(key: StorageKey): Boolean {
         if (hent(key) == null) return false
 
         return try {
@@ -114,19 +112,19 @@ class GcpStorageService(
     private fun lagre(blobInfo: BlobInfo, value: StorageValue) {
         val content: ByteArray = value.value.toByteArray()
         try {
-            gcpStorage.writer(blobInfo).use { writer -> writer.write(ByteBuffer.wrap(content, 0, content.size)) }
+            storage.writer(blobInfo).use { writer -> writer.write(ByteBuffer.wrap(content, 0, content.size)) }
         } catch (ex: StorageException) {
             logger.error("Feilet med å lagre dokument med id: ${blobInfo.blobId.name}", ex)
             throw Exception("Feilet med å lagre dokument med id: ${blobInfo.blobId.name}. Exception: $ex")
         }
     }
 
-    override fun ready() {
-        gcpStorage[bucket].location
+    fun ready() {
+        storage[bucket].location
     }
 
     private fun ensureBucketExists() {
-        val bucket = gcpStorage.get(bucket)
+        val bucket = storage.get(bucket)
         if (bucket !== null) {
             logger.info("Bucket ${this.bucket} funnet.")
         } else {

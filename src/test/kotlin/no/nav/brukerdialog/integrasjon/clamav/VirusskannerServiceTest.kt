@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.integrasjon.clamav
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.brukerdialog.utils.WireMockServerUtils.stubVirusScan
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
+import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -24,6 +26,7 @@ import org.springframework.web.ErrorResponseException
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureWireMock
+@Import(GcsStorageTestConfiguration::class)
 class VirusskannerServiceTest {
 
     @Autowired
