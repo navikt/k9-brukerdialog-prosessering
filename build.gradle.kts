@@ -2,10 +2,10 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.5.0"
+	id("org.springframework.boot") version "3.5.3"
 	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("jvm") version "2.1.21"
-	kotlin("plugin.spring") version "2.1.21"
+	kotlin("jvm") version "2.2.0"
+	kotlin("plugin.spring") version "2.2.0"
 }
 
 group = "no.nav"
@@ -30,7 +30,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.29"
+val tokenSupportVersion = "5.0.30"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "12.3.1"
 val ungDeltakelseOpplyserVersjon = "2.4.0"
