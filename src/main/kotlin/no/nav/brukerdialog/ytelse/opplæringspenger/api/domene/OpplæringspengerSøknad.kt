@@ -74,6 +74,7 @@ data class OpplæringspengerSøknad(
     @JsonFormat(pattern = "yyyy-MM-dd")
     val tilOgMed: LocalDate,
     val medlemskap: Medlemskap,
+    @field:Valid val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
 
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
@@ -123,6 +124,7 @@ data class OpplæringspengerSøknad(
             fødselsattestVedleggId = barn.fødselsattestVedleggUrls?.map { it.toURI().dokumentId() } ?: listOf(),
             arbeidsgivere = arbeidsgivere,
             medlemskap = medlemskap,
+            utenlandsoppholdIPerioden = utenlandsoppholdIPerioden,
             ferieuttakIPerioden = ferieuttakIPerioden,
             opptjeningIUtlandet = opptjeningIUtlandet,
             utenlandskNæring = utenlandskNæring,
@@ -183,6 +185,10 @@ data class OpplæringspengerSøknad(
             if (it.ferieuttak.isNotEmpty() && it.skalTaUtFerieIPerioden) {
                 olp.medLovbestemtFerie(ferieuttakIPerioden.tilK9LovbestemtFerie())
             }
+        }
+
+        if (utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden == true) {
+            olp.medUtenlandsopphold(utenlandsoppholdIPerioden.tilK9Utenlandsopphold())
         }
 
         return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), olp)

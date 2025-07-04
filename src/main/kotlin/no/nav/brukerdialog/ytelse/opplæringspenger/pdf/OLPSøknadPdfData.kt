@@ -17,6 +17,8 @@ import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles.*
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.Språk
 import java.time.Month
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.OPPLÆRINGSPENGER
@@ -44,6 +46,10 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "utenlandsopphold_siste_12_mnd" to søknad.medlemskap.utenlandsoppholdSiste12Mnd.somMapBosted(),
                 "skal_bo_i_utlandet_neste_12_mnd" to søknad.medlemskap.skalBoIUtlandetNeste12Mnd,
                 "utenlandsopphold_neste_12_mnd" to søknad.medlemskap.utenlandsoppholdNeste12Mnd.somMapBosted()
+            ),
+            "utenlandsoppholdIPerioden" to mapOf(
+                "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
+                "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
             ),
             "samtykke" to mapOf(
                 "har_forstatt_rettigheter_og_plikter" to søknad.harForståttRettigheterOgPlikter,
@@ -101,6 +107,18 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
         "reisedager" to reisedager?.map { Constants.DATE_FORMATTER.format(it) },
         "reisedagerBeskrivelse" to reisedagerBeskrivelse
     )
+
+    private fun List<Utenlandsopphold>.somMapUtenlandsopphold(): List<Map<String, Any?>> {
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withZone(ZoneId.of("Europe/Oslo"))
+        return map {
+            mapOf<String, Any?>(
+                "landnavn" to it.landnavn,
+                "landkode" to it.landkode,
+                "fraOgMed" to dateFormatter.format(it.fraOgMed),
+                "tilOgMed" to dateFormatter.format(it.tilOgMed),
+            )
+        }
+    }
 
     private fun OLPMottattSøknad.harMinstEtArbeidsforhold(): Boolean {
         if (frilans?.arbeidsforhold != null) return true
