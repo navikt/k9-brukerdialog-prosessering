@@ -2,10 +2,10 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.5.0"
+	id("org.springframework.boot") version "3.5.3"
 	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("jvm") version "2.1.21"
-	kotlin("plugin.spring") version "2.1.21"
+	kotlin("jvm") version "2.2.0"
+	kotlin("plugin.spring") version "2.2.0"
 }
 
 group = "no.nav"
@@ -30,7 +30,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.29"
+val tokenSupportVersion = "5.0.30"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "12.3.1"
 val ungDeltakelseOpplyserVersjon = "2.4.0"
@@ -47,10 +47,10 @@ val springdocVersion = "2.8.9"
 val pdfBoxVersion = "3.0.5"
 val imageIOVersion = "3.12.0"
 val fpsakTidsserieVersion = "2.7.3"
-val gcpStorageVersion = "2.48.2"
-val auth0Version = "4.0.0"
-val tikaVersion = "3.1.0"
-val testContainersVersion = "1.21.1"
+val gcpStorageVersion = "2.53.2"
+val auth0Version = "4.5.0"
+val tikaVersion = "3.2.0"
+val testContainersVersion = "1.21.3"
 val aivenFakeGCSServerVersion = "0.2.0"
 
 dependencies {
