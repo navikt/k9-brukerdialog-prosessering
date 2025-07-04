@@ -43,6 +43,23 @@ object OlpPdfSøknadUtils {
                     )
                 ), skalBoIUtlandetNeste12Mnd = false
             ),
+            utenlandsoppholdIPerioden = UtenlandsoppholdIPerioden(
+                skalOppholdeSegIUtlandetIPerioden = true,
+                opphold = listOf(
+                    Utenlandsopphold(
+                        fraOgMed = LocalDate.parse("2020-01-01"),
+                        tilOgMed = LocalDate.parse("2020-01-05"),
+                        landkode = "NDL",
+                        landnavn = "Nederland"
+                    ),
+                    Utenlandsopphold(
+                        fraOgMed = LocalDate.parse("2020-01-07"),
+                        tilOgMed = LocalDate.parse("2020-01-15"),
+                        landkode = "SWE",
+                        landnavn = "Sverige"
+                    )
+                )
+            ),
             harForståttRettigheterOgPlikter = true,
             harBekreftetOpplysninger = true,
             ferieuttakIPerioden = FerieuttakIPerioden(

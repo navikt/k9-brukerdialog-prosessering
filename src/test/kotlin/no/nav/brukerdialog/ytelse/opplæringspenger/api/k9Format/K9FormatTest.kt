@@ -233,9 +233,15 @@ class K9FormatTest {
               "søknadsperiode" : [ "2021-01-01/2021-01-10" ],
               "trekkKravPerioder" : [ ],
               "utenlandsopphold" : {
-                "perioder" : { },
-                "perioderSomSkalSlettes" : { }
+              "perioder" : {
+                "2021-01-01/2021-01-10" : {
+                  "erSammenMedBarnet" : true,
+                  "land" : "SWE",
+                  "årsak" : null
+                }
               },
+              "perioderSomSkalSlettes" : { }
+            },
               "uttak" : {
                 "perioder" : {
                   "2021-01-01/2021-01-10" : {

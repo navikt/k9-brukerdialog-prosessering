@@ -302,6 +302,17 @@ class OLPSøknadPdfGeneratorTest {
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "18-uten-utenlandsopphold_i_perioden"
+            pdf = generator.genererPDF(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    utenlandsoppholdIPerioden = UtenlandsoppholdIPerioden(
+                        skalOppholdeSegIUtlandetIPerioden = false,
+                        opphold = listOf()
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }
