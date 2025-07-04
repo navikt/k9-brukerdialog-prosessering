@@ -42,16 +42,12 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
         val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map {
-            URI(
-                "http://localhost:8080/dokument/$it"
-            )
-        })
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }.returnsMany(forventetDokmentIderForSletting)
         coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse("123456789", false, listOf())
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
         coVerify(exactly = 1, timeout = 120 * 1000) {
-                k9DokumentMellomlagringService.slettDokumenter(any(), any())
+                dokumentService.slettDokumenter(any(), any())
         }
     }
 
@@ -66,12 +62,12 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
-            .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
+            .andThenMany(listOf("123456789", "987654321"))
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
 

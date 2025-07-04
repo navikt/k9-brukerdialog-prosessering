@@ -2,6 +2,7 @@ package no.nav.brukerdialog.utils
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
+import no.nav.brukerdialog.integrasjon.clamav.ScanResultat
 import org.springframework.http.HttpStatus
 
 object WireMockServerUtils {
@@ -81,5 +82,28 @@ object WireMockServerUtils {
                         .withBody(responseBodyJson)
                 )
         )
+    }
+
+    fun WireMockServer.stubVirusScan(httpStatus: HttpStatus, scanResultat: ScanResultat) : WireMockServer {
+        WireMock.stubFor(
+            WireMock.put(WireMock.urlPathMatching(".*clamav-mock/scan"))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(httpStatus.value())
+                        .withTransformers("virus-scan")
+                        .withBody(
+                            //language=json
+                            """
+                            [
+                                {
+                                  "Filename": "testfil.pdf",
+                                  "Result" : "${scanResultat.name}"
+                                }
+                            ]""".trimIndent()
+                        )
+                )
+        )
+        return this
     }
 }

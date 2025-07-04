@@ -8,7 +8,7 @@ import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
+import no.nav.brukerdialog.utils.URIUtils.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.UtenlandskNæring.Companion.valider

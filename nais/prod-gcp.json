@@ -12,6 +12,10 @@
   "ingresses": [],
   "inboundRules": [],
   "observabilityEnabled": "true",
+  "bucket": {
+    "name": "k9-mellomlagring-prod",
+    "objectAge": "3"
+  },
   "env": {
     "SERVER_PORT": "8080",
     "SPRING_APPLICATION_NAME": "k9-brukerdialog-prosessering",
@@ -39,7 +43,11 @@
     "FAMILIE_PDF_BASE_URL": "http://familie-pdf.teamfamilie",
     "FAMILIE_PDF_SCOPE": "api://prod-gcp.teamfamilie.familie-pdf/.default",
 
-    "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering"
+    "CLAM_AV_BASE_URL": "http://clamav.nais-system",
+
+    "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
+
+    "GCP_STORAGE_BUCKET_NAVN": "k9-mellomlagring-prod"
   },
   "slack-channel": "sif-alerts",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "

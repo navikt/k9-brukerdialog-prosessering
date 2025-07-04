@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import kotlinx.coroutines.runBlocking
+import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.brukerdialog.integrasjon.dokarkiv.DokarkivResponseTransformer.Companion.BREVKODE_MED_FORVENTET_JOURNALPOST_ID
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.AvsenderMottakerIdType
@@ -43,7 +44,7 @@ import java.time.ZonedDateTime
     classes = [K9brukerdialogprosesseringApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-@Import(DokarkivServiceTest.DokarkivServiceTestConfig::class)
+@Import(DokarkivServiceTest.DokarkivServiceTestConfig::class, GcsStorageTestConfiguration::class)
 @AutoConfigureWireMock
 class DokarkivServiceTest {
     @Autowired

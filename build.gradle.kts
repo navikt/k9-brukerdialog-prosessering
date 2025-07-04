@@ -47,6 +47,11 @@ val springdocVersion = "2.8.9"
 val pdfBoxVersion = "3.0.5"
 val imageIOVersion = "3.12.0"
 val fpsakTidsserieVersion = "2.7.3"
+val gcpStorageVersion = "2.48.2"
+val auth0Version = "4.0.0"
+val tikaVersion = "3.1.0"
+val testContainersVersion = "1.21.1"
+val aivenFakeGCSServerVersion = "0.2.0"
 
 dependencies {
 	implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
@@ -87,6 +92,7 @@ dependencies {
 	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
 	implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
 	implementation("com.github.jknack:handlebars:$handlebarsVersion")
+	implementation("org.apache.tika:tika-core:$tikaVersion")
 
 	// Bilde til PDF
 	implementation("org.apache.pdfbox:pdfbox-io:$pdfBoxVersion")
@@ -110,9 +116,22 @@ dependencies {
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:$springCloudContractVersion")
 	testImplementation("org.awaitility:awaitility-kotlin:$awailitilityKotlinVersion")
 
+	// Google Cloud
+	implementation("com.google.cloud:google-cloud-storage:$gcpStorageVersion") {
+		exclude(group = "com.google.guava", module = "listenablefuture")
+	}
+	testImplementation("io.aiven:testcontainers-fake-gcs-server:$aivenFakeGCSServerVersion")
+
+	// Kryptokgrafi
+	implementation("com.auth0:java-jwt:$auth0Version")
+
 	// Diverse
 	implementation("org.json:json:$orgJsonVersion")
 	implementation("no.nav.fpsak.tidsserie:fpsak-tidsserie:$fpsakTidsserieVersion")
+
+
+	testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
+	testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
 }
 
 tasks {

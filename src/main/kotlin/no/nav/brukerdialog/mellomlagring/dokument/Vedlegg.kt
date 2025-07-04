@@ -1,29 +1,23 @@
 package no.nav.brukerdialog.mellomlagring.dokument
 
+import no.nav.brukerdialog.mellomlagring.dokument.ContentTypeService.Companion.SUPPORTED_CONTENT_TYPES
+import no.nav.brukerdialog.mellomlagring.dokument.ContentTypeService.Companion.detectOrNull
 import no.nav.brukerdialog.validation.ParameterType
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetails
 import no.nav.brukerdialog.validation.Violation
-import org.springframework.http.MediaType
+import org.apache.tika.Tika
 
 data class Vedlegg(
     val content: ByteArray,
     val contentType: String,
-    val title: String
+    val title: String,
 ) {
     private companion object {
         private const val MAX_VEDLEGG_SIZE_IN_MB = 10
         const val MAX_VEDLEGG_SIZE = MAX_VEDLEGG_SIZE_IN_MB * 1024 * 1024 // Enkeltfil 10 MB
 
-        val supportedContentTypes = listOf(
-            MediaType.APPLICATION_PDF_VALUE,
-            MediaType.IMAGE_JPEG_VALUE,
-            MediaType.IMAGE_PNG_VALUE,
-        )
-
-        private fun isSupportedContentType(contentType: String): Boolean {
-            return supportedContentTypes.any { it.equals(contentType, ignoreCase = true) }
-        }
+        private val contentTypeService = ContentTypeService()
     }
 
     init {
@@ -33,12 +27,23 @@ data class Vedlegg(
     private fun valider() {
         val violations = mutableListOf<Violation>().apply {
             val contentType = contentType
-            if (!isSupportedContentType(contentType)) {
+            if (!erStøttetInnholdstype()) {
                 add(
                     Violation(
                         parameterName = "vedlegg",
                         parameterType = ParameterType.FORM,
-                        reason = "Kun ${MediaType.APPLICATION_PDF_VALUE}, ${MediaType.IMAGE_JPEG_VALUE}, og ${MediaType.IMAGE_PNG_VALUE} er tillatt",
+                        reason = "Kun $SUPPORTED_CONTENT_TYPES er tillatt",
+                        invalidValue = contentType
+                    )
+                )
+            }
+
+            if (!erHvaDetSierÅVære()) {
+                add(
+                    Violation(
+                        parameterName = "vedlegg",
+                        parameterType = ParameterType.FORM,
+                        reason = "Vedlegg av typen ${Tika().detectOrNull(content)} påstås ikke for å være $contentType",
                         invalidValue = contentType
                     )
                 )
@@ -69,5 +74,13 @@ data class Vedlegg(
         if (violations.isNotEmpty()) {
             throw ValidationErrorResponseException(ValidationProblemDetails(violations = violations.toSet()))
         }
+    }
+
+    private fun erStøttetInnholdstype(): Boolean {
+        return contentTypeService.isSupportedContentType(contentType)
+    }
+
+    private fun erHvaDetSierÅVære(): Boolean {
+        return contentTypeService.isWhatItSeems(content, contentType)
     }
 }

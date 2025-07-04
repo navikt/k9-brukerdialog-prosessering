@@ -22,9 +22,9 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Opphold
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Arbeidsgiver.Companion.somK9Fraværsperiode
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn.Companion.somK9BarnListe
 import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.brukerdialog.utils.URIUtils.dokumentId
 import no.nav.k9.søknad.felles.type.Språk
 import java.net.URL
 import java.time.ZoneOffset

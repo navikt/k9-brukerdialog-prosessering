@@ -14,6 +14,11 @@ spec:
   {{#each ingresses as |url|}}
     - {{url}}
   {{/each}}
+  gcp:
+    buckets:
+      - name: {{ bucket.name }}
+        lifecycleCondition:
+          age: {{ bucket.objectAge }}
   tokenx:
     enabled: true
   azure:
@@ -49,6 +54,8 @@ spec:
           namespace: k9saksbehandling
         - application: familie-pdf
           namespace: teamfamilie
+        - application: clamav
+          namespace: nais-system
       external:
         {{#each externalHosts as |host|}}
         - host: {{host}}
@@ -85,6 +92,8 @@ spec:
     autoInstrumentation:
       enabled: {{observabilityEnabled}}
       runtime: java
+  envFrom:
+    - secret: k9-brukerdialog-prosessering
   env:
   {{#each env}}
    - name: {{@key}}
