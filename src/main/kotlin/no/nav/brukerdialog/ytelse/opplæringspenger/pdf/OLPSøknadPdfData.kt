@@ -72,8 +72,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             "ettersendingAvVedlegg" to søknad.ettersendingAvVedlegg?.let { mapOf(
                 "skalEttersendeVedlegg" to it.skalEttersendeVedlegg,
                 "vedleggSomSkalEttersendes" to it.vedleggSomSkalEttersendes?.map { it.beskrivelse }
-            )
-            },
+            )},
             "hjelper" to mapOf(
                 "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
                 "harVærtEllerErVernepliktigErSatt" to erBooleanSatt(søknad.harVærtEllerErVernepliktig),
