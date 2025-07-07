@@ -25,7 +25,7 @@ data class OLPPreprosessertSøknad(
     val søker: Søker,
     val barn: Barn,
     val medlemskap: Medlemskap,
-    val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
+    val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
     val utenlandskNæring: List<UtenlandskNæring>,
     val ferieuttakIPerioden: FerieuttakIPerioden?,
