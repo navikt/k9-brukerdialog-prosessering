@@ -74,7 +74,7 @@ data class OpplæringspengerSøknad(
     @JsonFormat(pattern = "yyyy-MM-dd")
     val tilOgMed: LocalDate,
     val medlemskap: Medlemskap,
-    @field:Valid val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
+    @field:Valid val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden?, // TODO: fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
 
     val ferieuttakIPerioden: FerieuttakIPerioden?,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
@@ -187,7 +187,7 @@ data class OpplæringspengerSøknad(
             }
         }
 
-        if (utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden == true) {
+        if (utenlandsoppholdIPerioden != null && utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden == true) {
             olp.medUtenlandsopphold(utenlandsoppholdIPerioden.tilK9Utenlandsopphold())
         }
 

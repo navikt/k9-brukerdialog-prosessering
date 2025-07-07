@@ -47,10 +47,10 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
                 "skal_bo_i_utlandet_neste_12_mnd" to søknad.medlemskap.skalBoIUtlandetNeste12Mnd,
                 "utenlandsopphold_neste_12_mnd" to søknad.medlemskap.utenlandsoppholdNeste12Mnd.somMapBosted()
             ),
-            "utenlandsoppholdIPerioden" to mapOf(
-                "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
-                "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
-            ),
+            "utenlandsoppholdIPerioden" to søknad.utenlandsoppholdIPerioden?.let {  mapOf(
+                "skalOppholdeSegIUtlandetIPerioden" to (it.skalOppholdeSegIUtlandetIPerioden),
+                "opphold" to it.opphold.somMapUtenlandsopphold()
+            ) },
             "samtykke" to mapOf(
                 "har_forstatt_rettigheter_og_plikter" to søknad.harForståttRettigheterOgPlikter,
                 "har_bekreftet_opplysninger" to søknad.harBekreftetOpplysninger

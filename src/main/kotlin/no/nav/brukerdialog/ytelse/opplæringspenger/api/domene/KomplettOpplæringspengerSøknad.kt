@@ -22,7 +22,7 @@ data class KomplettOpplæringspengerSøknad(
     var vedleggId: List<String> = listOf(),
     val fødselsattestVedleggId: List<String>,
     val medlemskap: Medlemskap,
-    val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
+    val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden?, // TODO: fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,
     val utenlandskNæring: List<UtenlandskNæring>,
     val ferieuttakIPerioden: FerieuttakIPerioden?,
