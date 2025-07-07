@@ -137,6 +137,7 @@ data class OpplæringspengerSøknad(
             stønadGodtgjørelse = stønadGodtgjørelse,
             selvstendigNæringsdrivende = selvstendigNæringsdrivende,
             harVærtEllerErVernepliktig = harVærtEllerErVernepliktig,
+            ettersendingAvVedlegg = ettersendingAvVedlegg,
             kurs = kurs,
             k9FormatSøknad = k9Format as K9Søknad
         )
