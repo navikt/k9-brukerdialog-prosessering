@@ -517,7 +517,24 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
               ]
             ],
             "apiDataVersjon": null,
-            "harBekreftetOpplysninger": true
+            "harBekreftetOpplysninger": true,
+            "utenlandsoppholdIPerioden": {
+              "opphold": [
+                {
+                  "fraOgMed": "2020-01-01",
+                  "landkode": "NDL",
+                  "landnavn": "Nederland",
+                  "tilOgMed": "2020-01-05"
+                },
+                {
+                  "fraOgMed": "2020-01-07",
+                  "landkode": "SWE",
+                  "landnavn": "Sverige",
+                  "tilOgMed": "2020-01-15"
+                }
+              ],
+              "skalOppholdeSegIUtlandetIPerioden": true
+            }
           }
         """.trimIndent()
 

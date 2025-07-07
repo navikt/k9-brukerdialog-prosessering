@@ -97,6 +97,24 @@
         {{else}}
             <p>Nei</p>
         {{/if}}
+
+        <hr/>
+
+        <p class="sporsmalstekst">Oppholder du deg i utlandet i noen av dagene du søker for?</p>
+        {{# if utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}
+            <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}</p>
+            <hr/>
+            <p class="sporsmalstekst">Utenlandsopphold i perioden</p>
+            <ul>
+                {{# each utenlandsoppholdIPerioden.opphold as |opphold|~}}
+                    <li>
+                        <p>{{opphold.fraOgMed}} - {{opphold.tilOgMed}}:  {{opphold.landnavn}}</p>
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p>{{ jaNeiSvar utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden }}</p>
+        {{/if}}
     </section>
 
     <section id="arbeidsgivere">

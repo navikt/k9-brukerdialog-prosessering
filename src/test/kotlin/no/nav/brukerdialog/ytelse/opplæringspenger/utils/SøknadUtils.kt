@@ -131,6 +131,17 @@ class SøknadUtils {
                     )
                 )
             ),
+            utenlandsoppholdIPerioden = UtenlandsoppholdIPerioden(
+                skalOppholdeSegIUtlandetIPerioden = true,
+                opphold = listOf(
+                    Utenlandsopphold(
+                        fraOgMed = LocalDate.parse("2021-01-01"),
+                        tilOgMed = LocalDate.parse("2021-01-10"),
+                        landnavn = "Sverige",
+                        landkode = "SWE"
+                    )
+                )
+            ),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true,
             ferieuttakIPerioden = FerieuttakIPerioden(
