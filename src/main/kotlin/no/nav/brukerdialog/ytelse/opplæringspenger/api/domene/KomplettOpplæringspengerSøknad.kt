@@ -32,6 +32,7 @@ data class KomplettOpplæringspengerSøknad(
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivendeOLP? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
+    val ettersendingAvVedlegg: EttersendingAvVedlegg? = null, // TODO: fjern nullable når vi har lansert ettersendingAvVedlegg og mellomlagring inneholder dette feltet.
     val kurs: Kurs,
     val k9FormatSøknad: Søknad? = null,
 ) : KomplettInnsending {

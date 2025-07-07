@@ -69,6 +69,10 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             "frilans" to søknad.frilans?.somMap(),
             "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende?.somMap(),
             "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
+            "ettersendingAvVedlegg" to søknad.ettersendingAvVedlegg?.let { mapOf(
+                "skalEttersendeVedlegg" to it.skalEttersendeVedlegg,
+                "vedleggSomSkalEttersendes" to it.vedleggSomSkalEttersendes?.map { it.beskrivelse }
+            )},
             "hjelper" to mapOf(
                 "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
                 "harVærtEllerErVernepliktigErSatt" to erBooleanSatt(søknad.harVærtEllerErVernepliktig),

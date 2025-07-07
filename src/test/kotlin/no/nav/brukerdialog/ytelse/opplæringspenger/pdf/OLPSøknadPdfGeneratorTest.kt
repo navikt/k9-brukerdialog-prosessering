@@ -313,6 +313,17 @@ class OLPSøknadPdfGeneratorTest {
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "19-uten-skal-ettersende-vedlegg"
+            pdf = generator.genererPDF(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    ettersendingAvVedlegg = EttersendingAvVedlegg(
+                        skalEttersendeVedlegg = false,
+                        vedleggSomSkalEttersendes = null
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }
