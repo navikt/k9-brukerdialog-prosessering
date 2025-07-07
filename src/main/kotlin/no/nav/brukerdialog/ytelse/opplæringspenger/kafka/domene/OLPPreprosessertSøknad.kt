@@ -36,6 +36,7 @@ data class OLPPreprosessertSøknad(
     val harForstattRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,
     val harVærtEllerErVernepliktig: Boolean? = null,
+    val ettersendingAvVedlegg: EttersendingAvVedlegg? = null, // TODO: fjern nullable når vi har lansert ettersendingAvVedlegg og mellomlagring inneholder dette feltet.
     val k9FormatSøknad: Søknad,
 ) : Preprosessert {
     constructor(
@@ -62,6 +63,7 @@ data class OLPPreprosessertSøknad(
         harBekreftetOpplysninger = melding.harBekreftetOpplysninger,
         ferieuttakIPerioden = melding.ferieuttakIPerioden,
         harVærtEllerErVernepliktig = melding.harVærtEllerErVernepliktig,
+        ettersendingAvVedlegg = melding.ettersendingAvVedlegg,
         k9FormatSøknad = melding.k9FormatSøknad
     )
 

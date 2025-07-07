@@ -408,6 +408,23 @@
             <p>Har lastet opp dokumentasjon.</p>
         {{/if}}
 
+        {{#if ettersendingAvVedlegg}}
+            <hr/>
+            <p class="sporsmalstekst">Skal du ettersende vedlegg?</p>
+            <p>{{ jaNeiSvar ettersendingAvVedlegg.skalEttersendeVedlegg }}</p>
+            {{#if ettersendingAvVedlegg.skalEttersendeVedlegg }}
+                <hr/>
+                <p class="sporsmalstekst">Vedlegg som skal ettersendes:</p>
+                <ul>
+                    {{#each ettersendingAvVedlegg.vedleggSomSkalEttersendes as |vedlegg|~}}
+                        <li>
+                            <p>{{vedlegg}}</p>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{/if}}
+        {{/if}}
+
         {{#if barn.manglerNorskIdentitetsnummer}}
             <h2>Fødselsattest</h2>
             {{#if harLastetOppFødselsattest}}

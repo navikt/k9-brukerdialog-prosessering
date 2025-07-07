@@ -33,6 +33,7 @@ data class OLPMottattSøknad(
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val arbeidsgivere: List<Arbeidsgiver>,
     val harVærtEllerErVernepliktig: Boolean? = null,
+    val ettersendingAvVedlegg: EttersendingAvVedlegg? = null, // TODO: fjern nullable når vi har lansert ettersendingAvVedlegg og mellomlagring inneholder dette feltet.
     val kurs: Kurs,
     val k9FormatSøknad: Søknad
 ): MottattMelding {

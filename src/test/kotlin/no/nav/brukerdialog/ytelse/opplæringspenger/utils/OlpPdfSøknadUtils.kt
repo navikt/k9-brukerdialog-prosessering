@@ -155,6 +155,10 @@ object OlpPdfSøknadUtils {
             ),
             harVærtEllerErVernepliktig = true,
             k9FormatSøknad = K9FormatUtils.defaultK9FormatPSB(soknadsId, mottatt),
+            ettersendingAvVedlegg = EttersendingAvVedlegg(
+                skalEttersendeVedlegg = true,
+                vedleggSomSkalEttersendes = listOf(VedleggType.LEGEERKLÆRING, VedleggType.KURSINFORMASJON)
+            ),
             kurs = Kurs(
                 kursholder = Kursholder(
                     UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),

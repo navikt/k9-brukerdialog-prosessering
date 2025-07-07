@@ -96,6 +96,9 @@ data class OpplæringspengerSøknad(
     val dataBruktTilUtledningAnnetData: String? = null,
 
     @field:Valid
+    val ettersendingAvVedlegg: EttersendingAvVedlegg? = null, // TODO: fjern nullable når vi har lansert ettersendingAvVedlegg og mellomlagring inneholder dette feltet.
+
+    @field:Valid
     val kurs: Kurs
 ) : Innsending {
 

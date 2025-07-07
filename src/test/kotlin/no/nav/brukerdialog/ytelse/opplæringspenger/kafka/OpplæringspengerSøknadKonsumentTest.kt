@@ -19,7 +19,6 @@ import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
-import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -374,6 +373,13 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
                 }
               ],
               "skalTaUtFerieIPerioden": true
+            },
+            "ettersendingAvVedlegg": {
+              "skalEttersendeVedlegg": true,
+              "vedleggSomSkalEttersendes": [
+                "LEGEERKLÆRING",
+                "KURSINFORMASJON"
+              ]
             },
             "frilans": {
                 "harHattInntektSomFrilanser": true,
