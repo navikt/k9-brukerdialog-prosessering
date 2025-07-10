@@ -25,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import java.time.LocalDate
@@ -231,7 +232,7 @@ class EndringsmeldingControllerTest {
                             }
                           ]
                         }
-                        """.trimIndent(), false
+                        """.trimIndent(), JsonCompareMode.LENIENT
                     )
                 }
             }

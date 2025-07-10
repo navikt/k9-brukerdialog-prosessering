@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockMultipartFile
+import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -195,7 +196,7 @@ class VedleggControllerTest {
                           "detail": "Feil ved sletting av vedlegg",
                           "instance": "/vedlegg/12345"
                         }
-                        """.trimIndent(), true
+                        """.trimIndent(), JsonCompareMode.STRICT
                     )
                 }
             }
@@ -236,7 +237,7 @@ class VedleggControllerTest {
                           "detail": "Vedlegg med id 12345 ble ikke funnet",
                           "instance": "/vedlegg/12345"
                         }
-                        """.trimIndent(), true
+                        """.trimIndent(), JsonCompareMode.STRICT
                     )
                 }
             }
