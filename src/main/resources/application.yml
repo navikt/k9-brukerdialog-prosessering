@@ -297,5 +297,3 @@ springdoc:
     enabled: ${SWAGGER_ENABLED:false}
     disable-swagger-default-url: true
     path: swagger-ui.html
-  # Setter for å skille på klasser/skjemaer med samme navn. Inkluderer pakkenavn i navnet på skjemaet.
-  #use-fqn: true
