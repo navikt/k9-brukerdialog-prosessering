@@ -1,22 +1,9 @@
 package no.nav.brukerdialog.kafka
 
-import no.nav.brukerdialog.ytelse.Ytelse
-import no.nav.brukerdialog.ytelse.Ytelse.DINE_PLEIEPENGER
-import no.nav.brukerdialog.ytelse.Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN
-import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING
-import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_OMP
-import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE
-import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSDAGER_ALENEOMSORG
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_UTBETALING_SNF
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_UTVIDET_RETT
-import no.nav.brukerdialog.ytelse.Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
-import no.nav.brukerdialog.ytelse.Ytelse.PLEIEPENGER_SYKT_BARN
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.kafka.Topics.ETTERSENDING_TOPIC
 import no.nav.brukerdialog.kafka.Topics.MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
+import no.nav.brukerdialog.kafka.Topics.OLP_MOTTATT_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSDAGER_ALENEOMSORG_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_MIDLERTIDIG_ALENE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER_TOPIC
@@ -24,7 +11,28 @@ import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTBETALING_SNF_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTVIDET_RETT_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_SYKT_BARN_TOPIC
+import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_INNTEKTSRAPPORTERING_TOPIC
+import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_SOKNAD_TOPIC
+import no.nav.brukerdialog.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.Ytelse.DINE_PLEIEPENGER
+import no.nav.brukerdialog.ytelse.Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN
+import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING
+import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_OMP
+import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_OPPLARINGSPENGER
+import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE
+import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN
+import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSDAGER_ALENEOMSORG
+import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE
+import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
+import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_UTBETALING_SNF
+import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_UTVIDET_RETT
+import no.nav.brukerdialog.ytelse.Ytelse.OPPLARINGSPENGER
+import no.nav.brukerdialog.ytelse.Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
+import no.nav.brukerdialog.ytelse.Ytelse.PLEIEPENGER_SYKT_BARN
+import no.nav.brukerdialog.ytelse.Ytelse.UNGDOMSYTELSE
+import no.nav.brukerdialog.ytelse.Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
+import no.nav.brukerdialog.ytelse.Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE
 import org.apache.kafka.common.serialization.Serializer
 import org.json.JSONObject
 
@@ -39,6 +47,9 @@ object Topics {
     const val PLEIEPENGER_SYKT_BARN_TOPIC = "dusseldorf.pp-sykt-barn-soknad-mottatt"
     const val MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC = "dusseldorf.privat-endringsmelding-pleiepenger-sykt-barn-mottatt"
     const val UNGDOMSYTELSE_SOKNAD_TOPIC = "dusseldorf.ungdomsytelse-soknad-mottatt"
+    const val UNGDOMSYTELSE_INNTEKTSRAPPORTERING_TOPIC = "dusseldorf.ungdomsytelse-inntektsrapportering-mottatt"
+    const val UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC = "dusseldorf.ungdomsytelse-oppgavebekreftelse-mottatt"
+    const val OLP_MOTTATT_TOPIC = "dusseldorf.olp-soknad-mottatt"
 }
 
 data class TopicEntry<V>(
@@ -50,15 +61,17 @@ internal fun hentTopicForYtelse(ytelse: Ytelse) = when (ytelse) {
     PLEIEPENGER_LIVETS_SLUTTFASE -> PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC
     OMSORGSPENGER_UTVIDET_RETT -> OMSORGSPENGER_UTVIDET_RETT_TOPIC
     OMSORGSPENGER_MIDLERTIDIG_ALENE -> OMSORGSPENGER_MIDLERTIDIG_ALENE_TOPIC
-    ETTERSENDING, ETTERSENDING_OMP, ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE, ETTERSENDING_PLEIEPENGER_SYKT_BARN -> ETTERSENDING_TOPIC
+    ETTERSENDING, ETTERSENDING_OMP, ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE, ETTERSENDING_PLEIEPENGER_SYKT_BARN, ETTERSENDING_OPPLARINGSPENGER -> ETTERSENDING_TOPIC
     OMSORGSDAGER_ALENEOMSORG -> OMSORGSDAGER_ALENEOMSORG_TOPIC
     OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> OMSORGSPENGER_UTBETALING_ARBEIDSTAKER_TOPIC
     OMSORGSPENGER_UTBETALING_SNF -> OMSORGSPENGER_UTBETALING_SNF_TOPIC
     PLEIEPENGER_SYKT_BARN -> PLEIEPENGER_SYKT_BARN_TOPIC
     ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN -> MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
+    UNGDOMSYTELSE -> UNGDOMSYTELSE_SOKNAD_TOPIC
+    UNGDOMSYTELSE_INNTEKTSRAPPORTERING -> UNGDOMSYTELSE_INNTEKTSRAPPORTERING_TOPIC
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC
+    OPPLARINGSPENGER -> OLP_MOTTATT_TOPIC
     DINE_PLEIEPENGER -> throw IllegalArgumentException("$ytelse er ikke en gyldig ytelse for denne operasjonen")
-    Ytelse.UNGDOMSYTELSE -> UNGDOMSYTELSE_SOKNAD_TOPIC
-    Ytelse.OPPLARINGSPENGER -> TODO("Må opprette topic. Se nais/topics i rot av repo")
 }
 
 internal class SøknadSerializer : Serializer<TopicEntry<JSONObject>> {

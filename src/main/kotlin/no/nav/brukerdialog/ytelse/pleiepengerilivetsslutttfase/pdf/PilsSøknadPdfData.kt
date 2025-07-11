@@ -30,8 +30,10 @@ import no.nav.brukerdialog.utils.DateUtils.grupperMedUker
 import no.nav.brukerdialog.utils.DateUtils.grupperSammenHengendeDatoer
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
+import no.nav.brukerdialog.utils.DateUtils.ukeNummer
 import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
+import no.nav.k9.søknad.felles.type.Språk
 import java.time.LocalDate
 import java.time.Month
 import java.time.ZoneId
@@ -41,50 +43,54 @@ import java.time.temporal.WeekFields
 class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 
-    override fun pdfData(): Map<String, Any?> = mapOf(
-        "tittel" to ytelse().tittel,
-        "søknadId" to søknad.søknadId,
-        "søknadMottattDag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
-        "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
-        "periode" to mapOf(
-            "fraOgMed" to DATE_FORMATTER.format(søknad.fraOgMed),
-            "tilOgMed" to DATE_FORMATTER.format(søknad.tilOgMed)
-        ),
-        "dagerMedPleie" to mapOf(
-            "totalAntallDagerMedPleie" to søknad.dagerMedPleie.size,
-            "datoer" to søknad.dagerMedPleie.map { DATE_FORMATTER.format(it) },
-            "uker" to søknad.dagerMedPleie.grupperMedUker().grupperSammenhengendeDatoerPerUke()
-        ),
-        "skalJobbeOgPleieSammeDag" to søknad.skalJobbeOgPleieSammeDag,
-        "pleierDuDenSykeHjemme" to søknad.pleierDuDenSykeHjemme,
-        "søker" to søknad.søker.somMap(),
-        "pleietrengende" to søknad.pleietrengende.somMap(),
-        "medlemskap" to søknad.medlemskap.somMap(),
-        "utenlandsoppholdIPerioden" to mapOf(
-            "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
-            "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
-        ),
-        "harLastetOppId" to søknad.opplastetIdVedleggId.isNotEmpty(),
-        "harLastetOppLegeerklæring" to søknad.vedleggId.isNotEmpty(),
-        "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
-        "frilans" to søknad.frilans?.somMap(),
-        "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende?.somMap(),
-        "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMap(),
-        "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
-        "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
-        "samtykke" to mapOf(
-            "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,
-            "harBekreftetOpplysninger" to søknad.harBekreftetOpplysninger
-        ),
-        "flereSokere" to søknad.flereSokere?.name,
-        "hjelp" to mapOf(
-            "språk" to søknad.språk?.språkTilTekst(),
-            "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
-            "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
-            "ingen_arbeidsforhold" to !søknad.harMinstEtArbeidsforhold(),
-            "harVærtEllerErVernepliktigErSatt" to (søknad.harVærtEllerErVernepliktig != null)
+    override fun språk(): Språk = Språk.NORSK_BOKMÅL
+
+    override fun pdfData(): Map<String, Any?> {
+        return mapOf(
+            "tittel" to ytelse().utledTittel(språk()),
+            "søknadId" to søknad.søknadId,
+            "søknadMottattDag" to søknad.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
+            "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
+            "periode" to mapOf(
+                "fraOgMed" to DATE_FORMATTER.format(søknad.fraOgMed),
+                "tilOgMed" to DATE_FORMATTER.format(søknad.tilOgMed)
+            ),
+            "dagerMedPleie" to mapOf(
+                "totalAntallDagerMedPleie" to søknad.dagerMedPleie.size,
+                "datoer" to søknad.dagerMedPleie.map { DATE_FORMATTER.format(it) },
+                "uker" to søknad.dagerMedPleie.grupperMedUker().grupperSammenhengendeDatoerPerUke()
+            ),
+            "skalJobbeOgPleieSammeDag" to søknad.skalJobbeOgPleieSammeDag,
+            "pleierDuDenSykeHjemme" to søknad.pleierDuDenSykeHjemme,
+            "søker" to søknad.søker.somMap(),
+            "pleietrengende" to søknad.pleietrengende.somMap(),
+            "medlemskap" to søknad.medlemskap.somMap(),
+            "utenlandsoppholdIPerioden" to mapOf(
+                "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
+                "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
+            ),
+            "harLastetOppId" to søknad.opplastetIdVedleggId.isNotEmpty(),
+            "harLastetOppLegeerklæring" to søknad.vedleggId.isNotEmpty(),
+            "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
+            "frilans" to søknad.frilans?.somMap(),
+            "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende?.somMap(),
+            "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMap(),
+            "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
+            "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
+            "samtykke" to mapOf(
+                "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,
+                "harBekreftetOpplysninger" to søknad.harBekreftetOpplysninger
+            ),
+            "flereSokere" to søknad.flereSokere?.name,
+            "hjelp" to mapOf(
+                "språk" to søknad.språk?.språkTilTekst(),
+                "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
+                "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
+                "ingen_arbeidsforhold" to !søknad.harMinstEtArbeidsforhold(),
+                "harVærtEllerErVernepliktigErSatt" to (søknad.harVærtEllerErVernepliktig != null)
+            )
         )
-    )
+    }
 
     private fun Pleietrengende.somMap() = mapOf<String, Any?>(
         "manglerNorskIdentitetsnummer" to (norskIdentitetsnummer == null),
@@ -168,10 +174,7 @@ class PilsSøknadPdfData(private val søknad: PilsSøknadMottatt) : PdfData() {
         }
     }
 
-    private fun List<Enkeltdag>.grupperPerUke() = groupBy {
-        val uketall = it.dato.get(WeekFields.of(NO_LOCALE).weekOfYear())
-        if (uketall == 0) 53 else uketall
-    }
+    private fun List<Enkeltdag>.grupperPerUke() = groupBy { it.dato.ukeNummer() }
 
     private fun List<Enkeltdag>.grupperPerMåned() = groupBy { it.dato.month }
 

@@ -59,13 +59,15 @@ class ArbeidsgivereOppslagsService(
     fun hentArbeidsgivere(
         fraOgMed: LocalDate,
         tilOgMed: LocalDate,
+        inkluderAlleAnsettelsesperioder: Boolean,
         skalHentePrivateArbeidsgivere: Boolean,
         skalHenteFrilansoppdrag: Boolean
     ): ArbeidsgivereOppslagResponsDto {
-        val ytelse = Ytelse.fraMDC()
+        val ytelse = Ytelse.utledYtelseFraCallerIMDC()
         val url = UriComponentsBuilder.fromUri(arbeidsgivereUrl.toUri())
             .queryParam("fom", DateTimeFormatter.ISO_LOCAL_DATE.format(fraOgMed))
             .queryParam("tom", DateTimeFormatter.ISO_LOCAL_DATE.format(tilOgMed))
+            .queryParam("inkluderAlleAnsettelsesperioder", inkluderAlleAnsettelsesperioder)
             .queryParam("a", genererAttributter(skalHentePrivateArbeidsgivere, skalHenteFrilansoppdrag))
             .build()
         logger.info("Slår opp arbeidsgivere for url: {}...", url.toUriString())

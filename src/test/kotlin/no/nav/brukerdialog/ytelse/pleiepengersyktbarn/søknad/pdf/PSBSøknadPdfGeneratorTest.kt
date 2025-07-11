@@ -32,7 +32,6 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Periode
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.RedusertArbeidstidType
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Regnskapsfører
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Utenlandsopphold
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
@@ -44,6 +43,14 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ÅrsakMan
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.K9FormatUtils
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemgodtgjørelseType
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseFrikjøpt
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseIkkeFrikjøpt
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseMottarIkke
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarDelerAvPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarHelePerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarIkke
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadType
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.Duration
@@ -190,11 +197,6 @@ class PSBSøknadPdfGeneratorTest {
                         )
                     )
                 ),
-                stønadGodtgjørelse = StønadGodtgjørelse(
-                    mottarStønadGodtgjørelse = true,
-                    startdato = LocalDate.now().minusDays(10),
-                    sluttdato = LocalDate.now().plusDays(10)
-                ),
                 selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
                     harInntektSomSelvstendig = true,
                     virksomhet = Virksomhet(
@@ -261,6 +263,19 @@ class PSBSøknadPdfGeneratorTest {
                         )
                     ),
                     Arbeidsgiver(
+                        navn = "Ikke besvart arbeid i periode",
+                        organisasjonsnummer = "917755736",
+                        erAnsatt = false,
+                        arbeidsforhold = Arbeidsforhold(
+                            normalarbeidstid = NormalArbeidstid(
+                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                            ),
+                            arbeidIPeriode = ArbeidIPeriode(
+                                type = ArbeidIPeriodeType.IKKE_BESVART
+                            )
+                        )
+                    ),
+                    Arbeidsgiver(
                         navn = "Sluttaaaa",
                         organisasjonsnummer = "917755736",
                         erAnsatt = false,
@@ -308,7 +323,7 @@ class PSBSøknadPdfGeneratorTest {
 
             id = "2-utenSpråk"
             pdf = generator.genererPDF(
-                pdfData = fullGyldigMelding(id).copy(språk = null).pdfData()
+                pdfData = fullGyldigMelding(id).copy(språk = "nb").pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
@@ -604,22 +619,22 @@ class PSBSøknadPdfGeneratorTest {
             id = "20-frilanser-med-honorarer"
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
-                   frilans = Frilans(
-                       harInntektSomFrilanser = true,
-                       type = FrilansType.FRILANS_HONORAR,
-                       startdato = LocalDate.parse("2021-01-01"),
-                       sluttdato = LocalDate.parse("2021-01-31"),
-                       jobberFortsattSomFrilans = false,
-                       misterHonorar = null,
-                       arbeidsforhold = Arbeidsforhold(
-                           normalarbeidstid = NormalArbeidstid(
-                               timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                           ),
-                           arbeidIPeriode = ArbeidIPeriode(
-                               type = ArbeidIPeriodeType.ARBEIDER_VANLIG
-                           )
-                       )
-                   )
+                    frilans = Frilans(
+                        harInntektSomFrilanser = true,
+                        type = FrilansType.FRILANS_HONORAR,
+                        startdato = LocalDate.parse("2021-01-01"),
+                        sluttdato = LocalDate.parse("2021-01-31"),
+                        jobberFortsattSomFrilans = false,
+                        misterHonorar = null,
+                        arbeidsforhold = Arbeidsforhold(
+                            normalarbeidstid = NormalArbeidstid(
+                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                            ),
+                            arbeidIPeriode = ArbeidIPeriode(
+                                type = ArbeidIPeriodeType.ARBEIDER_VANLIG
+                            )
+                        )
+                    )
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
@@ -627,22 +642,22 @@ class PSBSøknadPdfGeneratorTest {
             id = "21-kun-honorarer"
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
-                   frilans = Frilans(
-                       harInntektSomFrilanser = true,
-                       type = FrilansType.HONORAR,
-                       startdato = LocalDate.parse("2021-01-01"),
-                       sluttdato = LocalDate.parse("2021-01-31"),
-                       jobberFortsattSomFrilans = false,
-                       misterHonorar = true,
-                       arbeidsforhold = Arbeidsforhold(
-                           normalarbeidstid = NormalArbeidstid(
-                               timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                           ),
-                           arbeidIPeriode = ArbeidIPeriode(
-                               type = ArbeidIPeriodeType.ARBEIDER_IKKE
-                           )
-                       )
-                   )
+                    frilans = Frilans(
+                        harInntektSomFrilanser = true,
+                        type = FrilansType.HONORAR,
+                        startdato = LocalDate.parse("2021-01-01"),
+                        sluttdato = LocalDate.parse("2021-01-31"),
+                        jobberFortsattSomFrilans = false,
+                        misterHonorar = true,
+                        arbeidsforhold = Arbeidsforhold(
+                            normalarbeidstid = NormalArbeidstid(
+                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                            ),
+                            arbeidIPeriode = ArbeidIPeriode(
+                                type = ArbeidIPeriodeType.ARBEIDER_IKKE
+                            )
+                        )
+                    )
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
@@ -651,22 +666,22 @@ class PSBSøknadPdfGeneratorTest {
             pdf = generator.genererPDF(
                 pdfData = fullGyldigMelding(id).copy(
                     fraOgMed = LocalDate.parse("2023-08-31"),
-                   frilans = Frilans(
-                       harInntektSomFrilanser = true,
-                       startetFørSisteTreHeleMåneder = true,
-                       type = FrilansType.FRILANS,
-                       startdato = LocalDate.parse("2023-05-30"),
-                       jobberFortsattSomFrilans = true,
-                       misterHonorar = false,
-                       arbeidsforhold = Arbeidsforhold(
-                           normalarbeidstid = NormalArbeidstid(
-                               timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
-                           ),
-                           arbeidIPeriode = ArbeidIPeriode(
-                               type = ArbeidIPeriodeType.ARBEIDER_IKKE
-                           )
-                       )
-                   )
+                    frilans = Frilans(
+                        harInntektSomFrilanser = true,
+                        startetFørSisteTreHeleMåneder = true,
+                        type = FrilansType.FRILANS,
+                        startdato = LocalDate.parse("2023-05-30"),
+                        jobberFortsattSomFrilans = true,
+                        misterHonorar = false,
+                        arbeidsforhold = Arbeidsforhold(
+                            normalarbeidstid = NormalArbeidstid(
+                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                            ),
+                            arbeidIPeriode = ArbeidIPeriode(
+                                type = ArbeidIPeriodeType.ARBEIDER_IKKE
+                            )
+                        )
+                    )
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
@@ -676,6 +691,32 @@ class PSBSøknadPdfGeneratorTest {
                 pdfData = fullGyldigMelding(id).copy(
                     fraOgMed = LocalDate.parse("2024-12-30"),
                     tilOgMed = LocalDate.parse("2025-01-02"),
+                    omsorgstilbud = Omsorgstilbud(
+                        svarFortid = OmsorgstilbudSvarFortid.JA,
+                        svarFremtid = OmsorgstilbudSvarFremtid.JA,
+                        erLiktHverUke = false,
+                        enkeltdager = listOf(
+                            // Uke 2
+                            Enkeltdag(LocalDate.parse("2025-01-06"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-07"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-08"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-09"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-10"), Duration.ofHours(5)),
+                            // Uke 3
+                            Enkeltdag(LocalDate.parse("2025-01-13"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-14"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-15"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-16"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-17"), Duration.ofHours(5)),
+                            // Uke 4
+                            Enkeltdag(LocalDate.parse("2025-01-20"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-21"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-22"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-23"), Duration.ofHours(5)),
+                            Enkeltdag(LocalDate.parse("2025-01-24"), Duration.ofHours(5)),
+                        ),
+                        ukedager = null
+                    ),
                     arbeidsgivere = listOf(
                         Arbeidsgiver(
                             navn = "Varierende frisør",
@@ -711,6 +752,124 @@ class PSBSøknadPdfGeneratorTest {
                                 )
                             )
                         )
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "24-kun-arbeidsgiver-med-ikke-besvart-arbeid-i-periode"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    fraOgMed = LocalDate.parse("2024-12-30"),
+                    tilOgMed = LocalDate.parse("2025-01-02"),
+                    omsorgstilbud = null,
+                    frilans = Frilans(
+                        harInntektSomFrilanser = false
+                    ),
+                    selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
+                        harInntektSomSelvstendig = false
+                    ),
+                    arbeidsgivere = listOf(
+                        Arbeidsgiver(
+                            navn = "Skal ikke dukke opp under jobb i søknadsperioden",
+                            organisasjonsnummer = "917755736",
+                            erAnsatt = false,
+                            arbeidsforhold = Arbeidsforhold(
+                                normalarbeidstid = NormalArbeidstid(
+                                    timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                                ),
+                                arbeidIPeriode = ArbeidIPeriode(
+                                    type = ArbeidIPeriodeType.IKKE_BESVART,
+                                )
+                            )
+                        )
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "25-fosterhjemgodtgjørelse-mottar-ikke"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    fosterhjemgodtgjørelse = FosterhjemsgodtgjørelseMottarIkke(
+                        type = FosterhjemgodtgjørelseType.MOTTAR_IKKE,
+                        mottarFosterhjemsgodtgjørelse = false
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "26-fosterhjemgodtgjørelse-mottar-frikjøpt"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    fosterhjemgodtgjørelse = FosterhjemsgodtgjørelseFrikjøpt(
+                        type = FosterhjemgodtgjørelseType.MOTTAR_FRIKJØPT,
+                        mottarFosterhjemsgodtgjørelse = true,
+                        erFrikjøptFraJobb = true,
+                        frikjøptBeskrivelse = "Jeg er frikjøpt fra jobb",
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "27-fosterhjemgodtgjørelse-mottar-deler-av-perioden"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    fosterhjemgodtgjørelse = FosterhjemsgodtgjørelseIkkeFrikjøpt(
+                        type = FosterhjemgodtgjørelseType.MOTTAR_I_DELER_AV_PERIODEN,
+                        mottarFosterhjemsgodtgjørelse = true,
+                        erFrikjøptFraJobb = false,
+                        startdato = LocalDate.parse("2025-01-01"),
+                        sluttdato = LocalDate.parse("2025-01-31"),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "28-fosterhjemgodtgjørelse-mottar-i-hele-perioden"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    fosterhjemgodtgjørelse = FosterhjemsgodtgjørelseIkkeFrikjøpt(
+                        type = FosterhjemgodtgjørelseType.MOTTAR_I_HELE_PERIODEN,
+                        mottarFosterhjemsgodtgjørelse = true,
+                        erFrikjøptFraJobb = false,
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "29-omsorgsstønad-mottar-ikke"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    omsorgsstønad = OmsorgsstønadMottarIkke(
+                        type = OmsorgsstønadType.MOTTAR_IKKE,
+                        mottarOmsorgsstønad = false
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "30-omsorgsstønad-mottar-i-deler-av-perioden"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    omsorgsstønad = OmsorgsstønadMottarDelerAvPerioden(
+                        type = OmsorgsstønadType.MOTTAR_I_DELER_AV_PERIODEN,
+                        mottarOmsorgsstønad = true,
+                        antallTimerIUken = Duration.ofHours(25),
+                        startdato = LocalDate.parse("2025-01-01"),
+                        sluttdato = LocalDate.parse("2025-01-31"),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "30-omsorgsstønad-mottar-i-hele-perioden"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    omsorgsstønad = OmsorgsstønadMottarHelePerioden(
+                        type = OmsorgsstønadType.MOTTAR_I_HELE_PERIODEN,
+                        mottarOmsorgsstønad = true,
+                        antallTimerIUken = Duration.ofHours(25)
                     )
                 ).pdfData()
             )

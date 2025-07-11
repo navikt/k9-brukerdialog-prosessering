@@ -8,9 +8,26 @@ data class Dokument(
     @JsonProperty("content_type")
     val contentType: String,
     val title: String
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-data class DokumentEier(
-    @JsonProperty("eiers_fødselsnummer")
-    val eiersFødselsnummer: String
-)
+        other as Dokument
+
+        if (title != other.title) return false
+        if (eier != other.eier) return false
+        if (!content.contentEquals(other.content)) return false
+        if (contentType != other.contentType) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + content.contentHashCode()
+        result = 31 * result + contentType.hashCode()
+        result = 31 * result + eier.hashCode()
+        return result
+    }
+}

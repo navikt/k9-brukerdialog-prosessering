@@ -1,29 +1,35 @@
 package no.nav.brukerdialog.ytelse.ettersendelse.api.domene
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotEmpty
+import no.nav.brukerdialog.common.MetaInfo
+import no.nav.brukerdialog.domenetjenester.innsending.Innsending
+import no.nav.brukerdialog.oppslag.barn.BarnOppslag
+import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.brukerdialog.utils.URIUtils.dokumentId
+import no.nav.brukerdialog.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.hentIdentitetsnummerForBarn
 import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9.ettersendelse.EttersendelseValidator
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.brukerdialog.domenetjenester.innsending.Innsending
-import no.nav.brukerdialog.ytelse.Ytelse
-import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
-import no.nav.brukerdialog.oppslag.barn.BarnOppslag
-import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.hentIdentitetsnummerForBarn
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 
 data class Ettersendelse(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
+    val søknadId: String = UUID.randomUUID().toString(),
     val språk: String,
+
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+
     @field:NotEmpty(message = "Kan ikke være tom") val vedlegg: List<URL>,
     val beskrivelse: String? = null,
     val søknadstype: Søknadstype,
@@ -38,14 +44,6 @@ data class Ettersendelse(
     val harForståttRettigheterOgPlikter: Boolean,
 ) : Innsending {
 
-    @AssertTrue(message = "Pleietrengende må være satt dersom ettersendelsen gjelder legeerklæring")
-    fun isPleietrengende(): Boolean {
-        if (ettersendelsesType == EttersendelseType.LEGEERKLÆRING) {
-            return pleietrengende != null
-        }
-        return true
-    }
-
     override fun valider() = mutableListOf<String>()
 
     override fun somKomplettSøknad(
@@ -58,7 +56,7 @@ data class Ettersendelse(
             søker = søker,
             språk = språk,
             mottatt = mottatt,
-            vedleggId = vedlegg.map { it.toURI().dokumentId() },
+            vedleggId = vedlegg.map { it.toURI().dokumentId()},
             søknadId = søknadId,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
@@ -87,7 +85,7 @@ data class Ettersendelse(
 
     override fun ytelse(): Ytelse = Ytelse.ETTERSENDING
 
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
 
     override fun vedlegg(): List<URL> = vedlegg
 

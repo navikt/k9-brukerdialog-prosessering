@@ -2,7 +2,6 @@ package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
 import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.utils.SøknadUtils.defaultSøknad
-import no.nav.brukerdialog.utils.StringUtils.FritekstPattern
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker
@@ -44,7 +43,7 @@ class OmsorgspengerUtvidetRettSøknadTest {
             3,
             "Opplysningene må bekreftes for å sende inn søknad",
             "Må ha forstått rettigheter og plikter for å sende inn søknad",
-            "Matcher ikke tillatt mønster: '$FritekstPattern'"
+            "Ugyldige tegn funnet i teksten: ¨"
         )
     }
 
@@ -81,6 +80,8 @@ class OmsorgspengerUtvidetRettSøknadTest {
                     },
                     "kroniskEllerFunksjonshemming": true,
                     "type": "OMP_UTV_KS",
+                    "høyereRisikoForFravær": true,
+                    "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær",
                     "dataBruktTilUtledning": {
                         "harBekreftetOpplysninger": true,
                         "harForståttRettigheterOgPlikter": true,

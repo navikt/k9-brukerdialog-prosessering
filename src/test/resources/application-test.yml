@@ -1,9 +1,13 @@
 KAFKA_BROKERS: localhost:9092 # placeholder
 K9_MELLOMLAGRING_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-mellomlagring-mock
-K9_JOARK_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-joark-mock
 K9_SAK_INNSYN_API_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-sak-innsyn-api-mock
+UNG_DELTAKELSE_OPPLYSER_BASE_URL: http://localhost:${wiremock.server.port:8083}/ung-deltakelse-opplyser-mock
 K9_BRUKERDIALOG_CACHE_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-brukerdialog-cache-mock
 K9_SELVBETJENING_OPPSLAG_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-selvbetjening-oppslag-mock
+DOKARKIV_BASE_URL: http://localhost:${wiremock.server.port:8083}/dokarkiv-mock
+FAMILIE_PDF_BASE_URL: http://localhost:${wiremock.server.port:8083}/familie-pdf-mock
+CLAM_AV_BASE_URL: http://localhost:${wiremock.server.port:8083}/clamav-mock
+ENABLE_OPPLAERINGSPENGER: true
 
 no.nav:
   security.jwt:
@@ -13,15 +17,6 @@ no.nav:
         accepted_audience: aud-localhost
     client:
       registration:
-        azure-k9-joark:
-          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
-          grant-type: client_credentials
-          scope: api://dev-gcp.k9-joark/.default
-          authentication:
-            client-auth-method: private_key_jwt
-            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
-            client-jwk: src/test/resources/private-jwk.json
-
         azure-k9-mellomlagring:
           token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
           grant-type: client_credentials
@@ -50,6 +45,16 @@ no.nav:
           token-exchange:
             audience: k9-sak-innsyn-api
 
+        tokenx-ung-deltakelse-opplyser:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+          token-exchange:
+            audience: ung-deltakelse-opplyser
+
         tokenx-k9-selvbetjening-oppslag:
           token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
           grant-type: urn:ietf:params:oauth:grant-type:token-exchange
@@ -70,6 +75,24 @@ no.nav:
           token-exchange:
             audience: k9-brukerdialog-cache
 
+        azure-dokarkiv:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: client_credentials
+          scope: api://dev-fss.teamdokumenthandtering.dokarkiv-q1/.default
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+
+        azure-familie-pdf:
+          token-endpoint-url: http://localhost:${mock-oauth2-server.port}/oauth2/v2.0/token
+          grant-type: client_credentials
+          scope: api://dev-gcp.teamfamilie.familie-pdf/.default
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: dev-gcp:dusseldorf:k9-brukerdialog-prosessering
+            client-jwk: src/test/resources/private-jwk.json
+
   cache:
     barn:
       max-size: 10
@@ -78,6 +101,10 @@ no.nav:
       expiry-in-seconds: 1
 
   mellomlagring:
+    kryptering:
+      passord:
+        krypteringsnøkkel: "test-krypteringsnøkkel"
+    gcp_storage_bucket_navn: "test-bucket"
     søknad_tid_timer: 1
 
   kafka:
@@ -170,6 +197,20 @@ no.nav:
       ungdomsytelse-soknad-journalforing:
         auto-offset-reset: earliest
       ungdomsytelse-soknad-cleanup:
+        auto-offset-reset: earliest
+
+      ungdomsytelse-inntektsrapportering-preprosessering:
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-journalforing:
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-cleanup:
+        auto-offset-reset: earliest
+
+      olp-soknad-preprosessering:
+        auto-offset-reset: earliest
+      olp-soknad-journalforing:
+        auto-offset-reset: earliest
+      olp-soknad-cleanup:
         auto-offset-reset: earliest
 
 wiremock:

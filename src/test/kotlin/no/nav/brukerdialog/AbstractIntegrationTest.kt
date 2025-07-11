@@ -3,34 +3,47 @@ package no.nav.brukerdialog
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
+import io.mockk.every
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsResponse
-import no.nav.brukerdialog.integrasjon.k9joark.K9JoarkService
+import no.nav.brukerdialog.integrasjon.dokarkiv.DokarkivService
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.DokarkivJournalpostResponse
+import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
+import no.nav.brukerdialog.mellomlagring.dokument.DokumentService
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
-import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.oppslag.soker.SøkerService
 import no.nav.brukerdialog.utils.KafkaIntegrationTest
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaProducer
 import no.nav.security.mock.oauth2.MockOAuth2Server
+import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseKomposittDTO
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.kafka.test.EmbeddedKafkaBroker
 import org.springframework.test.web.servlet.MockMvc
-import java.net.URI
 import java.time.LocalDate
+import java.time.ZonedDateTime
+import java.util.*
 
 @KafkaIntegrationTest
 @AutoConfigureMockMvc
+@Import(GcsStorageTestConfiguration::class)
 abstract class AbstractIntegrationTest {
 
     @Autowired
@@ -43,16 +56,20 @@ abstract class AbstractIntegrationTest {
     protected lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
 
     @MockkBean(relaxed = true)
-    protected lateinit var k9DokumentMellomlagringService: K9DokumentMellomlagringService
+    protected lateinit var dokumentService: DokumentService
 
     @MockkBean(relaxed = false)
-    protected lateinit var k9JoarkService: K9JoarkService
+    protected lateinit var dokarkivService: DokarkivService
+
 
     @MockkBean
     protected lateinit var barnService: BarnService
 
     @MockkBean
     protected lateinit var søkerService: SøkerService
+
+    @MockkBean
+    lateinit var ungDeltakelseOpplyserService: UngDeltakelseOpplyserService
 
     @Autowired
     protected lateinit var mockOAuth2Server: MockOAuth2Server
@@ -87,20 +104,16 @@ abstract class AbstractIntegrationTest {
     }
 
     protected fun mockJournalføring(journalpostId: String = "123456789") {
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse(journalpostId)
+        coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse(journalpostId, false, listOf())
     }
 
     protected fun mockLagreDokument(forventedeDokumenterForSletting: List<String> = listOf("123456789", "987654321")) {
         val forventetDokmentIderForSletting = forventedeDokumenterForSletting
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map {
-            URI(
-                "http://localhost:8080/dokument/$it"
-            )
-        })
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }.returnsMany(forventetDokmentIderForSletting)
     }
 
     protected fun mockHentDokumenter() {
-        coEvery { k9DokumentMellomlagringService.hentDokumenter(any(), any()) } returns listOf(
+        coEvery { dokumentService.hentDokumenter(any(), any()) } returns listOf(
             Dokument(
                 eier = DokumentEier("123"),
                 content = "some value".toByteArray(),
@@ -134,5 +147,57 @@ abstract class AbstractIntegrationTest {
         )
         coEvery { søkerService.hentSøker() } returns søker
         return søker
+    }
+
+    protected fun mockHentingAvOppgave(
+        oppgavetype: Oppgavetype,
+        oppgavetypeData: OppgavetypeDataDTO
+    ) {
+        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
+            oppgaveReferanse = UUID.randomUUID(),
+            oppgavetype = oppgavetype,
+            oppgavetypeData = oppgavetypeData,
+            status = OppgaveStatus.ULØST,
+            bekreftelse = null,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = null,
+            åpnetDato = null,
+            lukketDato = null,
+            frist = null,
+        )
+    }
+
+    protected fun mockMarkerOppgaveSomLøst() {
+        every { ungDeltakelseOpplyserService.markerOppgaveSomLøst(any()) } returns OppgaveDTO(
+            oppgaveReferanse = UUID.randomUUID(),
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoDataDTO(
+                nyStartdato = LocalDate.now(),
+                forrigeStartdato = LocalDate.now().minusDays(30)
+            ),
+            status = OppgaveStatus.LØST,
+            bekreftelse = null,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = ZonedDateTime.now(),
+            åpnetDato = null,
+            lukketDato = null,
+            frist = null
+        )
+    }
+
+    fun mockMarkerDeltakeleSomSøkt() {
+        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseKomposittDTO(
+           deltakelse = DeltakelseDTO(
+               id = UUID.randomUUID(),
+               deltaker = DeltakerDTO(
+                   id = UUID.randomUUID(),
+                   deltakerIdent = "12345678901",
+               ),
+               fraOgMed = LocalDate.now(),
+               tilOgMed = null,
+               søktTidspunkt = ZonedDateTime.now(),
+           ),
+            oppgaver = emptyList(),
+        )
     }
 }

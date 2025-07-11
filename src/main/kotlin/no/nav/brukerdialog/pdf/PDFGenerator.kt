@@ -16,6 +16,7 @@ import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene.FraværÅrsak
 import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.AktivitetFravær
 import no.nav.brukerdialog.utils.DurationUtils.tilString
+import no.nav.k9.søknad.felles.type.Språk
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import java.io.ByteArrayInputStream
@@ -35,7 +36,7 @@ class PDFGenerator {
     private companion object {
         private val ROOT = "handlebars"
         private val REGULAR_FONT =
-                ClassPathResource("${ROOT}/fonts/SourceSansPro-Regular.ttf").inputStream.readAllBytes()
+            ClassPathResource("${ROOT}/fonts/SourceSansPro-Regular.ttf").inputStream.readAllBytes()
         private val BOLD_FONT = ClassPathResource("${ROOT}/fonts/SourceSansPro-Bold.ttf").inputStream.readAllBytes()
         private val ITALIC_FONT = ClassPathResource("${ROOT}/fonts/SourceSansPro-Italic.ttf").inputStream.readAllBytes()
         private val bilder: Map<String, String> = emptyMap()
@@ -85,9 +86,9 @@ class PDFGenerator {
             registerHelper("fritekst", Helper<String> { context, _ ->
                 if (context == null) "" else {
                     val text = Handlebars.Utils.escapeExpression(context)
-                            .toString()
-                            .replace(Regex("\\u0002"), " ")
-                            .replace(Regex("\\r\\n|[\\n\\r]"), "<br/>")
+                        .toString()
+                        .replace(Regex("\\u0002"), " ")
+                        .replace(Regex("\\r\\n|[\\n\\r]"), "<br/>")
                     Handlebars.SafeString(text)
                 }
             })
@@ -179,13 +180,13 @@ class PDFGenerator {
     fun genererPDF(pdfData: PdfData): ByteArray = genererHTML(pdfData).let { html ->
         val outputStream = ByteArrayOutputStream()
         PdfRendererBuilder()
-                .useFastMode()
-                .usePdfUaAccessbility(true)
-                .withHtmlContent(html, "")
-                .medFonter()
-                .toStream(outputStream)
-                .buildPdfRenderer()
-                .createPDF()
+            .useFastMode()
+            .usePdfUaAccessbility(true)
+            .withHtmlContent(html, "")
+            .medFonter()
+            .toStream(outputStream)
+            .buildPdfRenderer()
+            .createPDF()
 
         outputStream.use {
             it.toByteArray()
@@ -193,54 +194,64 @@ class PDFGenerator {
     }
 
     fun genererHTML(pdfData: PdfData): String = template(pdfData)
-            .apply(
-                    Context
-                            .newBuilder(pdfData.pdfData())
-                            .resolver(MapValueResolver.INSTANCE)
-                            .build()
-            )
+        .apply(
+            Context
+                .newBuilder(pdfData.pdfData())
+                .resolver(MapValueResolver.INSTANCE)
+                .build()
+        )
 
     private fun template(pdfData: PdfData): Template = handlebars.compile(pdfData.resolveTemplate())
 
     private fun PdfRendererBuilder.medFonter(): PdfRendererBuilder {
         val sourceSansPro = "Source Sans Pro"
         return useFont(
-                { ByteArrayInputStream(REGULAR_FONT) },
+            { ByteArrayInputStream(REGULAR_FONT) },
+            sourceSansPro,
+            400,
+            BaseRendererBuilder.FontStyle.NORMAL,
+            false
+        )
+            .useFont(
+                { ByteArrayInputStream(BOLD_FONT) },
                 sourceSansPro,
-                400,
+                700,
                 BaseRendererBuilder.FontStyle.NORMAL,
                 false
-        )
-                .useFont(
-                        { ByteArrayInputStream(BOLD_FONT) },
-                        sourceSansPro,
-                        700,
-                        BaseRendererBuilder.FontStyle.NORMAL,
-                        false
-                )
-                .useFont(
-                        { ByteArrayInputStream(ITALIC_FONT) },
-                        sourceSansPro,
-                        400,
-                        BaseRendererBuilder.FontStyle.ITALIC,
-                        false
-                )
+            )
+            .useFont(
+                { ByteArrayInputStream(ITALIC_FONT) },
+                sourceSansPro,
+                400,
+                BaseRendererBuilder.FontStyle.ITALIC,
+                false
+            )
     }
 }
 
 abstract class PdfData {
     abstract fun ytelse(): Ytelse
+    abstract fun språk(): Språk
     abstract fun pdfData(): Map<String, Any?>
-    fun resolveTemplate(): String = when (ytelse()) {
-        Ytelse.PLEIEPENGER_SYKT_BARN -> "pleiepenger-sykt-barn-soknad"
-        Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> "pleiepenger-sykt-barn-endringsmelding"
-        Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> "pleiepenger-i-livets-sluttfase-soknad"
-        Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-kronisk-sykt-barn-soknad"
-        Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad"
-        Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad"
-        Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspenger-utbetaling-arbeidstaker-soknad"
-        Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspenger-utbetaling-snf-soknad"
-        Ytelse.ETTERSENDELSE -> "ettersendelse"
-        Ytelse.UNGDOMSYTELSE -> "ungdomsytelse-soknad"
+    fun resolveTemplate(): String {
+        val språkSuffix = when (språk()) {
+            Språk.NORSK_NYNORSK -> ".nn"
+            else -> "" // Default bokmål
+        }
+        return when (ytelse()) {
+            Ytelse.PLEIEPENGER_SYKT_BARN -> "pleiepenger-sykt-barn-soknad$språkSuffix".trimEnd()
+            Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING -> "pleiepenger-sykt-barn-endringsmelding$språkSuffix".trimEnd()
+            Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE -> "pleiepenger-i-livets-sluttfase-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSPENGER_UTVIDET_RETT -> "omsorgspenger-utvidet-rett-kronisk-sykt-barn-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE -> "omsorgspenger-midlertidig-alene-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSDAGER_ALENEOMSORG -> "omsorgspenger-aleneomsorg-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER -> "omsorgspenger-utbetaling-arbeidstaker-soknad$språkSuffix".trimEnd()
+            Ytelse.OMSORGSPENGER_UTBETALING_SNF -> "omsorgspenger-utbetaling-snf-soknad$språkSuffix".trimEnd()
+            Ytelse.ETTERSENDELSE -> "ettersendelse$språkSuffix".trimEnd()
+            Ytelse.UNGDOMSYTELSE_DELTAKELSE_SØKNAD -> "ungdomsytelse-soknad$språkSuffix".trimEnd()
+            Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING -> "ungdomsytelse-rapportering-soknad$språkSuffix".trimEnd()
+            Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> "ungdomsytelse-oppgave-bekreftelse$språkSuffix".trimEnd()
+            Ytelse.OPPLÆRINGSPENGER -> "opplaeringspenger-soknad$språkSuffix".trimEnd()
+        }
     }
 }

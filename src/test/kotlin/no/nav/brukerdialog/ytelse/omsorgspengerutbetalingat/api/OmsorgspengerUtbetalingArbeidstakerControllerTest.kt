@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.fellesdomene.Bekreftelser
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.OmsorgspengerUtbetalingArbeidstakerController
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn
@@ -29,6 +28,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import java.time.LocalDate
@@ -54,7 +54,7 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
     private lateinit var innsendingService: InnsendingService
 
     @MockkBean
-    private lateinit var innsendingCache: InnsendingCache
+    private lateinit var duplikatInnsendingSjekker: DuplikatInnsendingSjekker
 
     @MockkBean
     private lateinit var barnService: BarnService
@@ -73,15 +73,14 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
     @Test
     fun `Innsending av søknad er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
-        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
 
         val defaultSøknad = SøknadUtils.defaultSøknad
 
         mockMvc.post("/omsorgspenger-utbetaling-arbeidstaker/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -100,7 +99,7 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreInnloggetBrukerErSøker(any()) } returns Unit
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
 
         val over19ÅrGammel = LocalDate.now().minusYears(20)
         val jsonPayload = objectMapper.writeValueAsString(
@@ -124,7 +123,6 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
         )
         mockMvc.post("/omsorgspenger-utbetaling-arbeidstaker/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -132,7 +130,6 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
         }
             .andExpect {
                 status { isBadRequest() }
-                header { exists(NavHeaders.PROBLEM_DETAILS) }
                 header { exists(NavHeaders.X_CORRELATION_ID) }
                 content {
                     json(
@@ -180,7 +177,7 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
                           ]
                         }
                         """.trimIndent(),
-                        false,
+                        JsonCompareMode.LENIENT,
                     )
                 }
             }

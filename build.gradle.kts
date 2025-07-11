@@ -1,11 +1,12 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.3.3"
-	id("io.spring.dependency-management") version "1.1.6"
-	kotlin("jvm") version "2.0.20"
-	kotlin("plugin.spring") version "2.0.20"
+	id("org.springframework.boot") version "3.5.3"
+	id("io.spring.dependency-management") version "1.1.7"
+	kotlin("jvm") version "2.2.0"
+	kotlin("plugin.spring") version "2.2.0"
 }
 
 group = "no.nav"
@@ -30,28 +31,30 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.3"
+val tokenSupportVersion = "5.0.30"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "9.6.0"
+val k9FormatVersion = "12.3.1"
+val ungDeltakelseOpplyserVersjon = "2.4.0"
 val springMockkVersion = "4.0.2"
-val confluentVersion = "7.3.0"
-val logstashLogbackEncoderVersion = "8.0"
-val slf4jVersion = "2.0.16"
-val jacksonVersion = "2.17.2"
-val kotlinxCoroutinesVersion = "1.6.4"
-val openhtmltopdfVersion = "1.0.10"
+val logstashLogbackEncoderVersion = "8.1"
+val slf4jVersion = "2.0.17"
+val openhtmltopdfVersion = "1.1.4"
 val handlebarsVersion = "4.4.0"
-val retryVersion = "2.0.8"
-val awailitilityKotlinVersion = "4.2.2"
-val springCloudContractVersion = "4.1.4"
-val orgJsonVersion = "20240303"
-val springdocVersion = "2.6.0"
+val retryVersion = "2.0.12"
+val awailitilityKotlinVersion = "4.3.0"
+val springCloudContractVersion = "4.3.0"
+val orgJsonVersion = "20250517"
+val springdocVersion = "2.8.9"
+val pdfBoxVersion = "3.0.5"
+val imageIOVersion = "3.12.0"
+val fpsakTidsserieVersion = "2.7.3"
+val gcpStorageVersion = "2.53.2"
+val auth0Version = "4.5.0"
+val tikaVersion = "3.2.0"
+val testContainersVersion = "1.21.3"
+val aivenFakeGCSServerVersion = "0.2.0"
 
 dependencies {
-	implementation("org.yaml:snakeyaml:2.2") {
-		because("https://github.com/navikt/k9-brukerdialog-prosessering/security/dependabot/4")
-	}
-
 	implementation("no.nav.security:token-validation-spring:$tokenSupportVersion")
 	implementation("no.nav.security:token-client-spring:$tokenSupportVersion")
 	testImplementation("no.nav.security:token-validation-spring-test:$tokenSupportVersion")
@@ -62,6 +65,10 @@ dependencies {
 	// K9-format
 	implementation("no.nav.k9:soknad:$k9FormatVersion")
 	implementation("no.nav.k9:ettersendelse:$k9FormatVersion")
+	implementation("no.nav.k9:oppgave-ungdomsytelse:$k9FormatVersion")
+
+	// Ung-deltakelseopplyser kontrakt
+	implementation("no.nav.ung.deltakelseopplyser:kontrakt:$ungDeltakelseOpplyserVersjon")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -78,10 +85,19 @@ dependencies {
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 
 	// PDF
-	implementation("com.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion")
-	implementation("com.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
+	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion") {
+		// Erstattes av apache pdfbox $pdfBoxVersion
+		exclude(group = "org.apache.pdfbox", module = "pdfbox")
+	}
+	implementation("org.apache.pdfbox:pdfbox:$pdfBoxVersion")
+	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-slf4j:$openhtmltopdfVersion")
 	implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
 	implementation("com.github.jknack:handlebars:$handlebarsVersion")
+	implementation("org.apache.tika:tika-core:$tikaVersion")
+
+	// Bilde til PDF
+	implementation("org.apache.pdfbox:pdfbox-io:$pdfBoxVersion")
+	implementation("com.twelvemonkeys.imageio:imageio-jpeg:$imageIOVersion")
 
 	// kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -93,7 +109,7 @@ dependencies {
 	implementation("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
 
 	// Jackson
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
@@ -101,16 +117,29 @@ dependencies {
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:$springCloudContractVersion")
 	testImplementation("org.awaitility:awaitility-kotlin:$awailitilityKotlinVersion")
 
+	// Google Cloud
+	implementation("com.google.cloud:google-cloud-storage:$gcpStorageVersion") {
+		exclude(group = "com.google.guava", module = "listenablefuture")
+	}
+	testImplementation("io.aiven:testcontainers-fake-gcs-server:$aivenFakeGCSServerVersion")
+
+	// Kryptokgrafi
+	implementation("com.auth0:java-jwt:$auth0Version")
+
 	// Diverse
 	implementation("org.json:json:$orgJsonVersion")
+	implementation("no.nav.fpsak.tidsserie:fpsak-tidsserie:$fpsakTidsserieVersion")
 
+
+	testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
+	testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
 }
 
 tasks {
 	withType<KotlinCompile> {
-		kotlinOptions {
-			freeCompilerArgs = listOf("-Xjsr305=strict")
-			jvmTarget = "21"
+		compilerOptions {
+			freeCompilerArgs.set(listOf("-Xjsr305=strict"))
+            jvmTarget.set(JvmTarget.JVM_21)
 		}
 	}
 
@@ -119,6 +148,7 @@ tasks {
 	}
 
 	withType<Test> {
+		jvmArgs("-Xmx6g") // 6GB er for å unngå OutOfMemoryError
 		useJUnitPlatform()
 		testLogging {
 			exceptionFormat = TestExceptionFormat.FULL

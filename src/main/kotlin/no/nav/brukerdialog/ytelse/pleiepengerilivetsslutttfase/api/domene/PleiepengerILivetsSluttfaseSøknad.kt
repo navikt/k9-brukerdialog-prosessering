@@ -1,13 +1,28 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
+import no.nav.brukerdialog.common.MetaInfo
+import no.nav.brukerdialog.domenetjenester.innsending.Innsending
+import no.nav.brukerdialog.utils.URIUtils.dokumentId
+import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.brukerdialog.utils.krever
+import no.nav.brukerdialog.validation.ValidationErrorResponseException
+import no.nav.brukerdialog.validation.ValidationProblemDetailsString
+import no.nav.brukerdialog.ytelse.Ytelse
+import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.SYV_OG_EN_HALV_TIME
+import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
+import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsgiver.Companion.somK9Arbeidstaker
+import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.OpptjeningIUtlandet.Companion.valider
+import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.UtenlandskNæring.Companion.valider
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.opptjening.OpptjeningAktivitet
 import no.nav.k9.søknad.felles.type.Periode
+import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.DataBruktTilUtledning
 import no.nav.k9.søknad.ytelse.pls.v1.PleiepengerLivetsSluttfaseSøknadValidator
@@ -15,19 +30,6 @@ import no.nav.k9.søknad.ytelse.pls.v1.PleipengerLivetsSluttfase
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak
 import no.nav.k9.søknad.ytelse.psb.v1.Uttak.UttakPeriodeInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
-import no.nav.brukerdialog.domenetjenester.innsending.Innsending
-import no.nav.brukerdialog.ytelse.Ytelse
-import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.SYV_OG_EN_HALV_TIME
-import no.nav.brukerdialog.ytelse.fellesdomene.ArbeidUtils.arbeidstidInfoMedNullTimer
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsgiver.Companion.somK9Arbeidstaker
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.OpptjeningIUtlandet.Companion.valider
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.UtenlandskNæring.Companion.valider
-import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
-import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.utils.krever
-import no.nav.brukerdialog.validation.ValidationErrorResponseException
-import no.nav.brukerdialog.validation.ValidationProblemDetailsString
 import java.net.URL
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -36,13 +38,19 @@ import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class PleiepengerILivetsSluttfaseSøknad(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") internal val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
+    val søknadId: String = UUID.randomUUID().toString(),
+
     val språk: String,
     val fraOgMed: LocalDate,
     val tilOgMed: LocalDate,
     val skalJobbeOgPleieSammeDag: Boolean,
     val dagerMedPleie: List<LocalDate>,
+
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+
     val vedleggUrls: List<URL> = listOf(),
     val opplastetIdVedleggUrls: List<URL> = listOf(),
     @field:Valid val pleietrengende: Pleietrengende,
@@ -130,6 +138,7 @@ data class PleiepengerILivetsSluttfaseSøknad(
 
         return K9Søknad()
             .medVersjon(K9_SØKNAD_VERSJON)
+            .medSpråk(Språk.of(språk))
             .medMottattDato(mottatt)
             .medSøknadId(SøknadId(søknadId))
             .medSøker(søker.somK9Søker())
@@ -173,7 +182,7 @@ data class PleiepengerILivetsSluttfaseSøknad(
 
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
 
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf<URL>().apply {
         addAll(vedleggUrls)
         addAll(opplastetIdVedleggUrls)

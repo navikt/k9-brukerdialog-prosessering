@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.fellesdomene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
@@ -33,6 +34,7 @@ class Bosted(
             Utenlandsopphold().medPerioder(this.associate { it.somK9Utenlandsopphold() })
     }
 
+    @Hidden
     @AssertTrue(message = "'tilOgMed' må være lik eller etter 'fraOgMed'")
     fun isTilOgMed(): Boolean {
         return tilOgMed.erLikEllerEtter(fraOgMed)

@@ -15,7 +15,8 @@ spec:
           annotations:
             consequence: Ingen søknader blir prosessert
             action: "`kubectl describe pod <podname>` -> `kubectl logs <podname>`"
-            summary: "App \{{ $labels.deployment }} er nede i namespace \{{ $labels.namespace }}"
+            summary: "App \{{ $labels.deployment }} er nede i namespace \{{ $labels.namespace }}.\n
+                      Se logs: https://logs.adeo.no/s/nav-logs-legacy/app/r/s/40E7A"
           labels:
             namespace: {{namespace}}
             severity: danger
@@ -26,7 +27,8 @@ spec:
           annotations:
             consequence: Prosessering av stream feiler.
             action: "`kubectl describe pod <podname>` -> `kubectl logs <podname>`"
-            summary: "Helsesjekk for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
+            summary: "Helsesjekk for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}.\n
+                      Se logs: https://logs.adeo.no/s/nav-logs-legacy/app/r/s/40E7A"
           labels:
             namespace: {{namespace}}
             severity: danger
@@ -37,7 +39,8 @@ spec:
           annotations:
             consequence: Prosessering av stream feiler.
             action: "`kubectl logs \{{ $labels.pod}} -c \{{ $labels.container }} -n \{{ $labels.namespace }}`"
-            summary: "Stream \{{ $labels.client_id }} feiler."
+            summary: "Stream \{{ $labels.client_id }} feiler.\n
+                      Se logs: https://logs.adeo.no/s/nav-logs-legacy/app/r/s/40E7A"
           labels:
             namespace: {{namespace}}
             severity: danger
@@ -47,7 +50,8 @@ spec:
           for: 5m
           annotations:
             action: "`kubectl logs \{{ $labels.pod }} -c \{{ $labels.container }} -n \{{ $labels.namespace }}`"
-            summary: "Høy andel error i logger for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
+            summary: "Høy andel error i logger for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}.\n
+                      Se logs: https://logs.adeo.no/s/nav-logs-legacy/app/r/s/40E7A"
           labels:
             namespace: {{namespace}}
             severity: danger
@@ -57,7 +61,8 @@ spec:
           for: 5m
           annotations:
             action: "`kubectl logs \{{ $labels.pod }} -c \{{ $labels.container }} -n \{{ $labels.namespace }}`"
-            summary: "Høy andel error i logger for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}"
+            summary: "Høy andel error i logger for app \{{ $labels.app }} feiler med \{{ $labels.exception }} i namespace \{{ $labels.namespace }}.\n
+                      Se logs: https://logs.adeo.no/s/nav-logs-legacy/app/r/s/40E7A"
           labels:
             namespace: {{namespace}}
             severity: warning
@@ -66,7 +71,8 @@ spec:
           expr: ceil(increase(spring_kafka_template_seconds_count{result="failure", app="{{app}}"}[3m])) > 0
           for: 1m
           annotations:
-            summary: "Publisering av melding med \{{ $labels.name }} feiler med  \{{ $labels.exception }}. Sjekk loggene for å finne ut hvorfor dette feiler."
+            summary: "Publisering av melding med \{{ $labels.name }} feiler med  \{{ $labels.exception }}.\n
+                      Se logs: https://logs.adeo.no/s/nav-logs-legacy/app/r/s/40E7A"
             action: "`kubectl logs \{{ $labels.pod }} -n \{{ $labels.namespace }} -c \{{ $labels.app }}`"
           labels:
             namespace: {{namespace}}
@@ -77,8 +83,7 @@ spec:
           for: 1m
           annotations:
             summary: "Følgende request feilet: `Status \{{ $labels.status }} - \{{ $labels.method }} \{{ $labels.uri }}`.\n
-                      Grunn:\n ```\{{ $labels.problem_details }}```\n
-                      Sjekk loggene for å se hvorfor dette feiler."
+                      Se logs: https://logs.adeo.no/s/nav-logs-legacy/app/r/s/40E7A"
             action: "`kubectl logs \{{ $labels.pod }} -n \{{ $labels.namespace }} -c \{{ $labels.app }}`"
           labels:
             namespace: {{namespace}}
@@ -89,8 +94,7 @@ spec:
           for: 1m
           annotations:
             summary: "Følgende request feilet: `Status \{{ $labels.status }} - \{{ $labels.method }} \{{ $labels.uri }}`.\n
-                      Grunn:\n ```\{{ $labels.problem_details }}```\n
-                      Sjekk loggene for å se hvorfor dette feiler."
+                      Se logs: https://logs.adeo.no/s/nav-logs-legacy/app/r/s/40E7A"
             action: "`kubectl logs \{{ $labels.pod }} -n \{{ $labels.namespace }} -c \{{ $labels.app }}`"
           labels:
             namespace: {{namespace}}

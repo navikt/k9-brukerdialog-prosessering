@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotEmpty
@@ -17,6 +18,7 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.k9.søknad.felles.type.Språk
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -25,7 +27,10 @@ import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class OmsorgspengerMidlertidigAleneSøknad(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
+
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val id: String,
     val språk: String,
@@ -55,6 +60,7 @@ data class OmsorgspengerMidlertidigAleneSøknad(
             k9FormatVersjon,
             mottatt,
             søker.somK9Søker(),
+            Språk.of(språk),
             OmsorgspengerMidlertidigAlene(
                 barn.map { it.somK9Barn() },
                 annenForelder.somK9AnnenForelder(),
@@ -99,7 +105,7 @@ data class OmsorgspengerMidlertidigAleneSøknad(
     override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = listOf()
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> =
         OmsorgspengerMidlertidigAleneSøknadValidator()

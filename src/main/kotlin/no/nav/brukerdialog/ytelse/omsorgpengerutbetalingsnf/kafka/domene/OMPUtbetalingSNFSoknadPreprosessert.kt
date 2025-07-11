@@ -1,11 +1,21 @@
-package no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene
+package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.kafka.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Barn
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Bekreftelser
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Bosted
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Frilans
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.OMPUtbetalingSNFSoknadMottatt
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Opphold
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.SelvstendigNæringsdrivende
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.SpørsmålOgSvar
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Utbetalingsperiode
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import java.time.ZonedDateTime
@@ -65,13 +75,14 @@ data class OMPUtbetalingSNFSoknadPreprosessert(
 
     override fun dokumenter(): List<List<String>> = dokumentId
 
-    override fun tilJournaførigsRequest(): JournalføringsRequest = JournalføringsRequest(
-        ytelse = Ytelse.OMSORGSPENGER_UTBETALING_SNF,
-        norskIdent = søkerFødselsnummer(),
-        sokerNavn = søkerNavn(),
-        mottatt = mottattDato(),
-        dokumentId = dokumenter()
-    )
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest =
+        JournalføringsService.JournalføringsRequest(
+            ytelseType = YtelseType.OMSORGSPENGESØKNAD_UTBETALING_FRILANSER_SELVSTENDIG,
+            norskIdent = søkerFødselsnummer(),
+            sokerNavn = søkerNavn(),
+            mottatt = mottattDato(),
+            dokumentId = dokumenter()
+        )
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo) = K9Beskjed(
         metadata = metadata,

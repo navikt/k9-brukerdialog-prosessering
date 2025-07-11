@@ -53,7 +53,6 @@ class JacksonConfiguration {
 
     @Bean
     @Primary
-    @Autowired
     fun objectMapper(kotlinModule: KotlinModule, javaTimeModule: JavaTimeModule): ObjectMapper {
         return configureObjectMapper(kotlinModule, javaTimeModule)
     }

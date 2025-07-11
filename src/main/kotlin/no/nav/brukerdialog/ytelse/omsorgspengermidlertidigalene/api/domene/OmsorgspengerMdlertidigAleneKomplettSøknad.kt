@@ -6,7 +6,7 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZonedDateTime
 
-class OmsorgspengerMdlertidigAleneKomplettSøknad(
+data class OmsorgspengerMdlertidigAleneKomplettSøknad(
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val søknadId: String,
@@ -17,4 +17,6 @@ class OmsorgspengerMdlertidigAleneKomplettSøknad(
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean
-): KomplettInnsending
+): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

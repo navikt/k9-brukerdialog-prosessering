@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api.domene
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.k9.søknad.Søknad
@@ -24,7 +25,11 @@ import java.util.*
 import no.nav.k9.søknad.felles.personopplysninger.Søker as K9Søker
 
 data class Endringsmelding(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
+    val søknadId: String = UUID.randomUUID().toString(),
+
+    @Schema(hidden = true)
     val mottattDato: ZonedDateTime? = ZonedDateTime.now(UTC),
     val språk: String,
     var pleietrengendeNavn: String? = null,
@@ -43,7 +48,7 @@ data class Endringsmelding(
 
     override fun ytelse(): Ytelse = Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN
 
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
 
     override fun vedlegg(): List<URL> = listOf()
 
@@ -87,4 +92,6 @@ data class KomplettEndringsmelding(
     val harForståttRettigheterOgPlikter: Boolean,
     val k9Format: Søknad,
     val pleietrengendeNavn: String,
-) : KomplettInnsending
+) : KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

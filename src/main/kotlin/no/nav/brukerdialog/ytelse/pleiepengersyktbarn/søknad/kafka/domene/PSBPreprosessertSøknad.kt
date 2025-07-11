@@ -1,4 +1,4 @@
-package no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene
+package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import no.nav.helse.felles.Omsorgstilbud
@@ -6,8 +6,10 @@ import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsgiver
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Barn
@@ -22,12 +24,14 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Selvstend
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.Fosterhjemgodtgjørelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.Omsorgsstønad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
 data class PSBPreprosessertSøknad(
     val apiDataVersjon: String? = null,
-    val språk: String?,
+    val språk: String,
     val søknadId: String,
     val dokumentId: List<List<String>>,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX", timezone = "UTC")
@@ -45,7 +49,12 @@ data class PSBPreprosessertSøknad(
     val nattevåk: Nattevåk?,
     val omsorgstilbud: Omsorgstilbud? = null,
     val frilans: Frilans? = null,
+
+    @Deprecated("StønadGodtgjørelse er deprecated og vil bli fjernet i fremtidige versjoner av APIet")
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
+    val fosterhjemgodtgjørelse: Fosterhjemgodtgjørelse? = null,
+    val omsorgsstønad: Omsorgsstønad? = null,
+
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val arbeidsgivere: List<Arbeidsgiver>,
     val barnRelasjon: BarnRelasjon? = null,
@@ -73,6 +82,8 @@ data class PSBPreprosessertSøknad(
         omsorgstilbud = melding.omsorgstilbud,
         frilans = melding.frilans,
         stønadGodtgjørelse = melding.stønadGodtgjørelse,
+        fosterhjemgodtgjørelse = melding.fosterhjemgodtgjørelse,
+        omsorgsstønad = melding.omsorgsstønad,
         selvstendigNæringsdrivende = melding.selvstendigNæringsdrivende,
         opptjeningIUtlandet = melding.opptjeningIUtlandet,
         utenlandskNæring = melding.utenlandskNæring,
@@ -98,9 +109,9 @@ data class PSBPreprosessertSøknad(
     override fun k9FormatSøknad(): Søknad = k9FormatSøknad
 
     override fun dokumenter(): List<List<String>> = dokumentId
-    override fun tilJournaførigsRequest(): JournalføringsRequest {
-        return JournalføringsRequest(
-            ytelse = ytelse(),
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest {
+        return JournalføringsService.JournalføringsRequest(
+            ytelseType = YtelseType.PLEIEPENGESØKNAD,
             norskIdent = søkerFødselsnummer(),
             sokerNavn = søkerNavn(),
             mottatt = mottattDato(),

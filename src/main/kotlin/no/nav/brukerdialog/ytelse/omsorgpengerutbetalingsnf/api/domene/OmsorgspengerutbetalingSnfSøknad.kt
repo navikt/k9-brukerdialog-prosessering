@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
@@ -23,9 +24,10 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Barn.Companion.kunFosterbarn
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Barn.Companion.somK9BarnListe
 import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
+import no.nav.brukerdialog.utils.URIUtils.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.k9.søknad.felles.type.Språk
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -34,8 +36,12 @@ import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class OmsorgspengerutbetalingSnfSøknad(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
-    internal val søknadId: String = UUID.randomUUID().toString(),
+    @Schema(hidden = true)
+    val søknadId: String = UUID.randomUUID().toString(),
+
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+    
     val språk: String,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val bosteder: List<Bosted>,
@@ -70,6 +76,7 @@ data class OmsorgspengerutbetalingSnfSøknad(
             k9FormatVersjon,
             mottatt,
             søker.somK9Søker(),
+            Språk.of(språk),
             OmsorgspengerUtbetaling(
                 barn.somK9BarnListe(),
                 byggK9OpptjeningAktivitet(),
@@ -124,7 +131,7 @@ data class OmsorgspengerutbetalingSnfSøknad(
     override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTBETALING_SNF
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = vedlegg
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = OmsorgspengerUtbetalingSøknadValidator()
 }

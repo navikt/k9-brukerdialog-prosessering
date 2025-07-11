@@ -1,9 +1,9 @@
 package no.nav.brukerdialog.ytelse.ettersendelse.utils
 
 import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.meldinger.ettersendelse.domene.Ettersendelse
+import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Ettersendelse
 import no.nav.brukerdialog.meldinger.ettersendelse.domene.Pleietrengende
-import no.nav.brukerdialog.meldinger.ettersendelse.domene.Søknadstype
+import no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene.Søknadstype
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.k9.ettersendelse.Ytelse

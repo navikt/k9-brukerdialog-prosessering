@@ -4,7 +4,6 @@ import no.nav.k9.søknad.Innsending
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.pdf.PdfData
 import java.time.ZonedDateTime
@@ -32,7 +31,7 @@ interface Preprosessert {
     fun k9FormatSøknad(): Innsending
     fun dokumenter(): List<List<String>>
 
-    fun tilJournaførigsRequest(): JournalføringsRequest
+    fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest
     fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed?
 
 }

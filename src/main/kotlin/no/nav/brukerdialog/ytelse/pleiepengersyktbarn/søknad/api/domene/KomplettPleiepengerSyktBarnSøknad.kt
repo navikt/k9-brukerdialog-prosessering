@@ -3,6 +3,8 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.Fosterhjemgodtgjørelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.Omsorgsstønad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -29,13 +31,21 @@ data class KomplettPleiepengerSyktBarnSøknad(
     val nattevåk: Nattevåk?,
     val beredskap: Beredskap?,
     val frilans: Frilans,
+
+    @Deprecated("StønadGodtgjørelse er deprecated og vil bli fjernet i fremtidige versjoner av APIet")
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
+
+    val fosterhjemgodtgjørelse: Fosterhjemgodtgjørelse? = null,
+    val omsorgsstønad: Omsorgsstønad? = null,
+
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
     val harVærtEllerErVernepliktig: Boolean? = null,
     val k9FormatSøknad: Søknad? = null,
 ) : KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

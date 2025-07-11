@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.metrikk.MetrikkService
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController
 class OmsorgspengerUtvidetRettController(
     private val innsendingService: InnsendingService,
     private val barnService: BarnService,
-    private val innsendingCache: InnsendingCache,
+    private val duplikatInnsendingSjekker: DuplikatInnsendingSjekker,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
     private val metrikkService: MetrikkService,
 ) {
@@ -43,8 +43,7 @@ class OmsorgspengerUtvidetRettController(
 
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
+    fun innsendingOmsorgspengerKroniskSyktBarnSøknad(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @RequestBody søknad: OmsorgspengerKroniskSyktBarnSøknad,
     ) = runBlocking {
@@ -54,8 +53,8 @@ class OmsorgspengerUtvidetRettController(
         logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
         søknad.leggTilIdentifikatorPåBarnHvisMangler(barnService.hentBarn())
 
-        innsendingCache.put(cacheKey)
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(søknad, metadata)
-        metrikkService.registrerMottattSøknad(søknad.ytelse())
+        metrikkService.registrerMottattInnsending(søknad.ytelse())
     }
 }

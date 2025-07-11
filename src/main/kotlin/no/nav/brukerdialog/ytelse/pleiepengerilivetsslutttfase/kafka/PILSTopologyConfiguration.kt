@@ -11,7 +11,7 @@ import no.nav.brukerdialog.kafka.config.KafkaStreamName
 import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
-import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.PilsPreprosessertSøknad
+import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.domene.PilsPreprosessertSøknad
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.PilsSøknadMottatt
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

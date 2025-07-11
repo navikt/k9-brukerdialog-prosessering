@@ -2,30 +2,41 @@ package no.nav.brukerdialog.utils
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
-import no.nav.brukerdialog.common.Constants.X_CORRELATION_ID
+import no.nav.brukerdialog.integrasjon.clamav.ScanResultat
 import org.springframework.http.HttpStatus
 
 object WireMockServerUtils {
-    fun WireMockServer.stubJournalføring(
-        urlPathMatching: String,
-        requestBodyJson: String,
-        responseStatus: HttpStatus,
-        correlationId: String? = null,
-        responseBodyJson: String,
-    ) {
-        val response = WireMock.aResponse()
-            .withHeader("Content-Type", "application/json")
-            .withStatus(responseStatus.value()).withBody(responseBodyJson)
-
-        if (correlationId != null) {
-            response.withHeader(X_CORRELATION_ID, correlationId)
-        }
-        stubFor(
-            WireMock.post(WireMock.urlPathMatching(".*$urlPathMatching"))
-                .withRequestBody(WireMock.equalToJson(requestBodyJson)).willReturn(
-                    response
+    fun WireMockServer.stubJournalføring(status: Int = 200): WireMockServer{
+        WireMock.stubFor(
+            WireMock.post(
+                WireMock.urlMatching(".*/dokarkiv-mock/rest/journalpostapi/v1/journalpost"))
+                .withRequestBody(WireMock.matchingJsonPath("$.tilleggsopplysninger[0].nokkel", WireMock.equalTo("k9.kilde")))
+                .withRequestBody(WireMock.matchingJsonPath("$.tilleggsopplysninger[0].verdi", WireMock.equalTo("DIGITAL")))
+                .withRequestBody(WireMock.matchingJsonPath("$.tilleggsopplysninger[1].nokkel", WireMock.equalTo("k9.type")))
+                .withRequestBody(WireMock.matchingJsonPath("$.tilleggsopplysninger[1].verdi", WireMock.matching("SØKNAD|MELDING|ETTERSENDELSE|ENDRING")))
+                .withRequestBody(WireMock.matchingJsonPath("$.eksternReferanseId", WireMock.equalTo("123156")))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withTransformers("dokarkiv")
                 )
         )
+        return this
+    }
+
+    fun WireMockServer.stubFamiliePdf(status: Int = 200): WireMockServer{
+        WireMock.stubFor(
+            WireMock.post(
+                WireMock.urlMatching(".*/familie-pdf-mock/api/v1/pdf/opprett-pdf"))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/pdf")
+                        .withBody("mocked-pdf-innhold".toByteArray())
+                )
+        )
+        return this
     }
 
     fun WireMockServer.stubLagreDokument(
@@ -71,5 +82,28 @@ object WireMockServerUtils {
                         .withBody(responseBodyJson)
                 )
         )
+    }
+
+    fun WireMockServer.stubVirusScan(httpStatus: HttpStatus, scanResultat: ScanResultat) : WireMockServer {
+        WireMock.stubFor(
+            WireMock.put(WireMock.urlPathMatching(".*clamav-mock/scan"))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(httpStatus.value())
+                        .withTransformers("virus-scan")
+                        .withBody(
+                            //language=json
+                            """
+                            [
+                                {
+                                  "Filename": "testfil.pdf",
+                                  "Result" : "${scanResultat.name}"
+                                }
+                            ]""".trimIndent()
+                        )
+                )
+        )
+        return this
     }
 }

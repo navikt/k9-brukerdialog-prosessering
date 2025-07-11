@@ -1,11 +1,22 @@
-package no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene
+package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.domene
 
 import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
+import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsRequest
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.Arbeidsgiver
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.FlereSokereSvar
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.Frilans
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.Medlemskap
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.OpptjeningIUtlandet
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.PilsSøknadMottatt
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.Pleietrengende
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.SelvstendigNæringsdrivende
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.UtenlandskNæring
+import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.UtenlandsoppholdIPerioden
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import java.time.LocalDate
@@ -73,13 +84,14 @@ data class PilsPreprosessertSøknad(
 
     override fun dokumenter(): List<List<String>> = dokumentId
 
-    override fun tilJournaførigsRequest(): JournalføringsRequest = JournalføringsRequest(
-        ytelse = ytelse(),
-        norskIdent = søkerFødselsnummer(),
-        sokerNavn = søkerNavn(),
-        mottatt = mottatt,
-        dokumentId = dokumenter()
-    )
+    override fun tilJournaførigsRequest(): JournalføringsService.JournalføringsRequest =
+        JournalføringsService.JournalføringsRequest(
+            ytelseType = YtelseType.PLEIEPENGESØKNAD_LIVETS_SLUTTFASE,
+            norskIdent = søkerFødselsnummer(),
+            sokerNavn = søkerNavn(),
+            mottatt = mottatt,
+            dokumentId = dokumenter()
+        )
 
     override fun tilK9DittnavVarsel(metadata: MetaInfo): K9Beskjed = K9Beskjed(
         metadata = metadata,

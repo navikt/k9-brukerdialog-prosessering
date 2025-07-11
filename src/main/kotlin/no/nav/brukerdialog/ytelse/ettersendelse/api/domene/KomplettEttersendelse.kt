@@ -6,7 +6,7 @@ import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZonedDateTime
 
-class KomplettEttersendelse(
+data class KomplettEttersendelse(
     private val søknadId: String,
     private val søker: Søker,
     private val språk: String,
@@ -21,6 +21,7 @@ class KomplettEttersendelse(
     private val ettersendelsesType: EttersendelseType,
     private val pleietrengende: Pleietrengende? = null
 ): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
 
     override fun equals(other: Any?) = this === other || (other is KomplettEttersendelse && this.equals(other))
 

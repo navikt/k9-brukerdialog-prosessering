@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
+import org.springdoc.core.models.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpHeaders
@@ -13,6 +14,111 @@ import org.springframework.http.HttpHeaders
 
 @Configuration
 class SwaggerConfiguration {
+    private companion object {
+        private val FELLES_PAKKER = arrayOf(
+            "no.nav.brukerdialog.oppslag",
+            "no.nav.brukerdialog.mellomlagring"
+        )
+    }
+
+    @Bean
+    fun ettersendelseApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("ettersendelse")
+            .displayName("Ettersendelse API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.ettersendelse.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun omsorgspengerUtbetalingAtApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("omsorgspengerutbetaling-arbeidstaker")
+            .displayName("Omsorgspengerutbetaling Arbeidstaker API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun omsorgspengerUtbetalingSnfApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("omsorgspengerutbetaling-snf")
+            .displayName("Omsorgspengerutbetaling Selvstendig Næringsdrivende / Frilanser API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun omsorgspengerAleneomsorgApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("omsorgspenger-aleneomsorg")
+            .displayName("Omsorgspenger Aleneomsorg API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun omsorgspengerKroniskSyktBarnApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("omsorgspenger-kronisk-sykt-barn")
+            .displayName("Omsorgspenger Kronisk Sykt Barn API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun omsorgspengerMidlertidigAleneApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("omsorgspenger-midlertidig-alene")
+            .displayName("Omsorgspenger Midlertidig Alene API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun opplaeringspengerApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("opplaeringspenger")
+            .displayName("Opplæringspenger API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.opplæringspenger.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun pleiepengerLivetsSluttfaseApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("pleiepenger-livets-sluttfase")
+            .displayName("Pleiepenger Livets Sluttfase API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun pleiepengerSyktBarnSoknadApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("pleiepenger-sykt-barn-soknad")
+            .displayName("Pleiepenger Sykt Barn Søknad API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun pleiepengerSyktBarnEndringsmeldingApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("pleiepenger-sykt-barn-endringsmelding")
+            .displayName("Pleiepenger Sykt Barn Endringsmelding API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api", *FELLES_PAKKER)
+            .build()
+    }
+
+    @Bean
+    fun ungdomsytelseApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("ungdomsytelse")
+            .displayName("Ungdomsytelse API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.ungdomsytelse.api", *FELLES_PAKKER)
+            .build()
+    }
 
     @Bean
     fun openAPI(): OpenAPI {

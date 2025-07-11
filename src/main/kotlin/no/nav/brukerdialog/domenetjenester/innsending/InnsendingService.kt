@@ -1,18 +1,18 @@
 package no.nav.brukerdialog.domenetjenester.innsending
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.validation.ConstraintViolationException
 import jakarta.validation.Validation
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.K9DokumentMellomlagringService
 import no.nav.brukerdialog.kafka.KafkaProducerService
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
+import no.nav.brukerdialog.mellomlagring.dokument.DokumentService
 import no.nav.brukerdialog.mellomlagring.dokument.valider
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.oppslag.soker.SøkerService
 import no.nav.brukerdialog.utils.TokenUtils.personIdent
+import no.nav.brukerdialog.utils.URIUtils.dokumentId
 import no.nav.brukerdialog.validation.ParameterType
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetails
@@ -22,7 +22,6 @@ import no.nav.k9.ettersendelse.Ettersendelse
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarnSøknadValidator
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
-import org.json.JSONObject
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -36,8 +35,7 @@ import org.springframework.web.ErrorResponseException
 class InnsendingService(
     private val søkerService: SøkerService,
     private val kafkaProdusent: KafkaProducerService,
-    private val objectMapper: ObjectMapper,
-    private val k9DokumentMellomlagringService: K9DokumentMellomlagringService,
+    private val dokumentService: DokumentService,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
 ) {
     companion object {
@@ -51,7 +49,7 @@ class InnsendingService(
     ) {
         forsikreValidert(innsending)
         val søker = søkerService.hentSøker()
-        logger.info(formaterStatuslogging(innsending.ytelse(), innsending.søknadId(), "registreres."))
+        logger.info(formaterStatuslogging(innsending.ytelse(), innsending.innsendingId(), "registreres."))
 
         innsending.valider()
         val k9Format = innsending.somK9Format(søker, metadata)
@@ -103,7 +101,7 @@ class InnsendingService(
             val komplettInnsending = innsending.somKomplettSøknad(søker, k9Format)
             kafkaProdusent.produserKafkaMelding(
                 metadata,
-                JSONObject(objectMapper.writeValueAsString(komplettInnsending)),
+                komplettInnsending,
                 innsending.ytelse()
             )
         } catch (exception: Exception) {
@@ -120,7 +118,10 @@ class InnsendingService(
     ) {
         logger.info("Validerer ${innsending.vedlegg().size} vedlegg.")
         val dokumentEier = søker.somDokumentEier()
-        val vedlegg = k9DokumentMellomlagringService.hentDokumenter(innsending.vedlegg(), dokumentEier)
+        val vedlegg = dokumentService.hentDokumenter(
+            dokumentIder = innsending.vedlegg().map { it.toURI().dokumentId() },
+            dokumentEier = dokumentEier
+        )
         validerVedlegg(innsending, vedlegg)
 
         persisterVedlegg(innsending, dokumentEier)
@@ -129,7 +130,7 @@ class InnsendingService(
             val komplettInnsending = innsending.somKomplettSøknad(søker, k9Format, vedlegg.map { it.title })
             kafkaProdusent.produserKafkaMelding(
                 metadata,
-                JSONObject(objectMapper.writeValueAsString(komplettInnsending)),
+                komplettInnsending,
                 innsending.ytelse()
             )
         } catch (exception: Exception) {
@@ -183,15 +184,21 @@ class InnsendingService(
         vedlegg.valider("vedlegg", innsending.vedlegg())
     }
 
-    private suspend fun persisterVedlegg(innsending: Innsending, eier: DokumentEier) {
-        logger.info("Persisterer vedlegg")
-        k9DokumentMellomlagringService.persisterDokumenter(innsending.vedlegg(), eier)
+    private suspend fun persisterVedlegg(innsending: Innsending, dokumentEier: DokumentEier) {
+        logger.info("Persisterer ${innsending.vedlegg().size} vedlegg")
+        dokumentService.persisterDokumenter(
+            dokumentIder = innsending.vedlegg().map { it.toURI().dokumentId() },
+            dokumentEier = dokumentEier
+        )
     }
 
-    private suspend fun fjernHoldPåPersisterteVedlegg(innsending: Innsending, eier: DokumentEier) {
+    private suspend fun fjernHoldPåPersisterteVedlegg(innsending: Innsending, dokumentEier: DokumentEier) {
         if (innsending.inneholderVedlegg()) {
             logger.info("Fjerner hold på persisterte vedlegg")
-            k9DokumentMellomlagringService.fjernHoldPåPersisterteDokumenter(innsending.vedlegg(), eier)
+            dokumentService.fjernHoldPåPersisterteDokumenter(
+                dokumentIder = innsending.vedlegg().map { it.toURI().dokumentId() },
+                dokumentEier = dokumentEier
+            )
         }
     }
 }

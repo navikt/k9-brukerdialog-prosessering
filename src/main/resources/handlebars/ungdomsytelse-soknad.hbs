@@ -10,6 +10,9 @@
           content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
+        <bookmark name="Startdato" href="#startdato"/>
+        <bookmark name="Kontonummer" href="#kontonummer"/>
+        <bookmark name="Barn" href="#barn"/>
         <bookmark name="Samtykke" href="#samtykke"/>
     </bookmarks>
     {{#block 'style-common' }}
@@ -24,6 +27,42 @@
 </div>
 <div class="innholdscontainer">
     {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
+
+    <section id="periode">
+        <h2>Deltar i ungdomsprogrammet:</h2>
+        <p><strong>Fra og med:</strong> {{startdato}}</p>
+    </section>
+
+    <section id="kontonummer">
+        <h2>Kontonummer for utbetaling</h2>
+        {{#if kontonummer.kontonummerFraRegister}}
+            <p class="sporsmalstekst">Stemmer det at kontonummeret ditt er {{kontonummer.kontonummerFraRegister}}?</p>
+            <p>{{ jaNeiSvar kontonummer.kontonummerErRiktig }}</p>
+        {{else}}
+            <p>Vi har ikke registrert kontonummer på deg.</p>
+        {{/if}}
+    </section>
+
+    <section id="barn">
+        <h2>Barn</h2>
+        <p class="sporsmalstekst">Barn vi har registrert på deg:</p>
+        {{#if barn.folkeregistrerteBarn}}
+            <ul>
+                {{#each barn.folkeregistrerteBarn as |dineBarn|}}
+                    <li>{{dineBarn.navn}}</li>
+                {{/each}}
+            </ul>
+
+            <p class="sporsmalstekst">Stemmer informasjon om barn(a)?</p>
+            <p>{{ jaNeiSvar barn.barnErRiktig }}</p>
+        {{else}}
+            <p>Vi har ikke registrert at du har barn.</p>
+
+            <br/>
+            <p class="sporsmalstekst">Stemmer det at du ikke har barn?</p>
+            <p>{{ jaNeiSvar barn.barnErRiktig }}</p>
+        {{/if}}
+    </section>
 
     <!-- SAMTYKKE -->
     <section id="samtykke">

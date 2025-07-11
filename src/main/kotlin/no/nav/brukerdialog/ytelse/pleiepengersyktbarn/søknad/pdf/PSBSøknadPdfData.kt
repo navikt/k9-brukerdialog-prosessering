@@ -1,12 +1,10 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.pdf
 
-import no.nav.helse.felles.Enkeltdag
-import no.nav.helse.felles.Omsorgstilbud
-import no.nav.helse.felles.PlanUkedager
 import no.nav.brukerdialog.common.Constants
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriode
+import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidIPeriodeType
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsRedusert
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.ArbeidsUke
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Arbeidsforhold
@@ -38,69 +36,86 @@ import no.nav.brukerdialog.utils.DurationUtils.somTekst
 import no.nav.brukerdialog.utils.DurationUtils.tilString
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.utils.StringUtils.storForbokstav
-import java.time.DayOfWeek
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.Fosterhjemgodtgjørelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseFrikjøpt
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseIkkeFrikjøpt
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.FosterhjemsgodtgjørelseMottarIkke
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.Omsorgsstønad
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarDelerAvPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarHelePerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.OmsorgsstønadMottarIkke
+import no.nav.helse.felles.Enkeltdag
+import no.nav.helse.felles.Omsorgstilbud
+import no.nav.helse.felles.PlanUkedager
+import no.nav.k9.søknad.felles.type.Språk
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.WeekFields
 
 class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
-    override fun pdfData(): Map<String, Any?> = mapOf(
-        "tittel" to ytelse().tittel,
-        "soknad_id" to søknad.søknadId,
-        "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(Constants.OSLO_ZONE_ID).somNorskDag(),
-        "soknad_mottatt" to Constants.DATE_TIME_FORMATTER.format(søknad.mottatt),
-        "harIkkeVedlegg" to søknad.sjekkOmHarIkkeVedlegg(),
-        "harLastetOppFødselsattest" to !søknad.fødselsattestVedleggId.isNullOrEmpty(),
-        "soker" to søknad.søker.somMap(),
-        "barn" to søknad.barn.somMap(),
-        "periode" to mapOf(
-            "fra_og_med" to Constants.DATE_FORMATTER.format(søknad.fraOgMed),
-            "til_og_med" to Constants.DATE_FORMATTER.format(søknad.tilOgMed),
-            "virkedager" to DateUtils.antallVirkedager(søknad.fraOgMed, søknad.tilOgMed)
-        ),
-        "medlemskap" to mapOf(
-            "har_bodd_i_utlandet_siste_12_mnd" to søknad.medlemskap.harBoddIUtlandetSiste12Mnd,
-            "utenlandsopphold_siste_12_mnd" to søknad.medlemskap.utenlandsoppholdSiste12Mnd.somMapBosted(),
-            "skal_bo_i_utlandet_neste_12_mnd" to søknad.medlemskap.skalBoIUtlandetNeste12Mnd,
-            "utenlandsopphold_neste_12_mnd" to søknad.medlemskap.utenlandsoppholdNeste12Mnd.somMapBosted()
-        ),
-        "samtykke" to mapOf(
-            "har_forstatt_rettigheter_og_plikter" to søknad.harForståttRettigheterOgPlikter,
-            "har_bekreftet_opplysninger" to søknad.harBekreftetOpplysninger
-        ),
-        "hjelp" to mapOf(
-            "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
-            "sprak" to søknad.språk?.språkTilTekst()
-        ),
-        "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
-        "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
-        "omsorgstilbud" to søknad.omsorgstilbud?.somMap(),
-        "nattevaak" to nattevåk(søknad.nattevåk),
-        "beredskap" to beredskap(søknad.beredskap),
-        "utenlandsoppholdIPerioden" to mapOf(
-            "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
-            "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
-        ),
-        "ferieuttakIPerioden" to mapOf(
-            "skalTaUtFerieIPerioden" to søknad.ferieuttakIPerioden?.skalTaUtFerieIPerioden,
-            "ferieuttak" to søknad.ferieuttakIPerioden?.ferieuttak?.somMapFerieuttak()
-        ),
-        "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
-        "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
-        "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
-        "frilans" to søknad.frilans.somMap(søknad.fraOgMed),
-        "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
-        "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
-        "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
-        "hjelper" to mapOf(
-            "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
-            "harVærtEllerErVernepliktigErSatt" to erBooleanSatt(søknad.harVærtEllerErVernepliktig),
-            "ingen_arbeidsforhold" to !søknad.harMinstEtArbeidsforhold()
+
+    override fun språk(): Språk = Språk.NORSK_BOKMÅL
+
+    override fun pdfData(): Map<String, Any?> {
+        return mapOf(
+            "tittel" to ytelse().utledTittel(språk()),
+            "soknad_id" to søknad.søknadId,
+            "soknad_mottatt_dag" to søknad.mottatt.withZoneSameInstant(Constants.OSLO_ZONE_ID).somNorskDag(),
+            "soknad_mottatt" to Constants.DATE_TIME_FORMATTER.format(søknad.mottatt),
+            "harIkkeVedlegg" to søknad.sjekkOmHarIkkeVedlegg(),
+            "harLastetOppFødselsattest" to !søknad.fødselsattestVedleggId.isNullOrEmpty(),
+            "soker" to søknad.søker.somMap(),
+            "barn" to søknad.barn.somMap(),
+            "periode" to mapOf(
+                "fra_og_med" to Constants.DATE_FORMATTER.format(søknad.fraOgMed),
+                "til_og_med" to Constants.DATE_FORMATTER.format(søknad.tilOgMed),
+                "virkedager" to DateUtils.antallVirkedager(søknad.fraOgMed, søknad.tilOgMed)
+            ),
+            "medlemskap" to mapOf(
+                "har_bodd_i_utlandet_siste_12_mnd" to søknad.medlemskap.harBoddIUtlandetSiste12Mnd,
+                "utenlandsopphold_siste_12_mnd" to søknad.medlemskap.utenlandsoppholdSiste12Mnd.somMapBosted(),
+                "skal_bo_i_utlandet_neste_12_mnd" to søknad.medlemskap.skalBoIUtlandetNeste12Mnd,
+                "utenlandsopphold_neste_12_mnd" to søknad.medlemskap.utenlandsoppholdNeste12Mnd.somMapBosted()
+            ),
+            "samtykke" to mapOf(
+                "har_forstatt_rettigheter_og_plikter" to søknad.harForståttRettigheterOgPlikter,
+                "har_bekreftet_opplysninger" to søknad.harBekreftetOpplysninger
+            ),
+            "hjelp" to mapOf(
+                "ingen_arbeidsgivere" to søknad.arbeidsgivere.isEmpty(),
+                "sprak" to søknad.språk?.språkTilTekst()
+            ),
+            "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
+            "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
+            "omsorgstilbud" to søknad.omsorgstilbud?.somMap(),
+            "nattevaak" to nattevåk(søknad.nattevåk),
+            "beredskap" to beredskap(søknad.beredskap),
+            "utenlandsoppholdIPerioden" to mapOf(
+                "skalOppholdeSegIUtlandetIPerioden" to søknad.utenlandsoppholdIPerioden.skalOppholdeSegIUtlandetIPerioden,
+                "opphold" to søknad.utenlandsoppholdIPerioden.opphold.somMapUtenlandsopphold()
+            ),
+            "ferieuttakIPerioden" to mapOf(
+                "skalTaUtFerieIPerioden" to søknad.ferieuttakIPerioden?.skalTaUtFerieIPerioden,
+                "ferieuttak" to søknad.ferieuttakIPerioden?.ferieuttak?.somMapFerieuttak()
+            ),
+            "barnRelasjon" to søknad.barnRelasjon?.utskriftsvennlig,
+            "barnRelasjonBeskrivelse" to søknad.barnRelasjonBeskrivelse,
+            "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
+            "frilans" to søknad.frilans.somMap(søknad.fraOgMed),
+            "stønadGodtgjørelse" to søknad.stønadGodtgjørelse?.somMap(),
+            "fosterhjemgodtgjørelse" to søknad.fosterhjemgodtgjørelse?.somMap(),
+            "omsorgsstønad" to søknad.omsorgsstønad?.somMap(),
+            "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende.somMap(),
+            "arbeidsgivere" to søknad.arbeidsgivere.somMapAnsatt(),
+            "hjelper" to mapOf(
+                "harFlereAktiveVirksomheterErSatt" to søknad.harFlereAktiveVirksomehterSatt(),
+                "harVærtEllerErVernepliktigErSatt" to erBooleanSatt(søknad.harVærtEllerErVernepliktig),
+                "ingen_arbeidsforhold" to !søknad.harMinstEtArbeidsforhold(),
+            )
         )
-    )
+    }
 
     private fun Barn.somMap() = mapOf<String, Any?>(
         "manglerNorskIdentitetsnummer" to (fødselsnummer == null),
@@ -110,14 +125,11 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "årsakManglerIdentitetsnummer" to årsakManglerIdentitetsnummer?.pdfTekst
     )
 
-    private fun PSBMottattSøknad.harMinstEtArbeidsforhold(): Boolean {
-        if (frilans.arbeidsforhold != null) return true
-
-        if (selvstendigNæringsdrivende.arbeidsforhold != null) return true
-
-        if (arbeidsgivere.any() { it.arbeidsforhold != null }) return true
-
-        return false
+    private fun PSBMottattSøknad.harMinstEtArbeidsforhold(): Boolean = when {
+        frilans.arbeidsforhold != null -> true
+        selvstendigNæringsdrivende.arbeidsforhold != null -> true
+        arbeidsgivere.any() { it.arbeidsforhold != null && it.arbeidsforhold.arbeidIPeriode.type != ArbeidIPeriodeType.IKKE_BESVART } -> true
+        else -> false
     }
 
     private fun PSBMottattSøknad.harFlereAktiveVirksomehterSatt() =
@@ -179,11 +191,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     }
 
     private fun List<Enkeltdag>.somMapPerUke(): List<Map<String, Any>> {
-        val omsorgsdagerPerUke = this.groupBy {
-            val uketall = it.dato.get(WeekFields.of(DayOfWeek.MONDAY, 7).weekOfYear())
-            if (uketall == 0) 53 else uketall
-        }
-        return omsorgsdagerPerUke.map {
+        val omsorgsdagerPerUke = this.groupBy { it.dato.ukeNummer() }
+        return omsorgsdagerPerUke.map { it: Map.Entry<Int, List<Enkeltdag>> ->
             mapOf(
                 "uke" to it.key,
                 "dager" to it.value.somMapEnkeltdag()
@@ -231,7 +240,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     private fun Arbeidsforhold.somMap(): Map<String, Any?> = mapOf(
         "data" to this.toString(),
         "normalarbeidstid" to this.normalarbeidstid.somMap(),
-        "arbeidIPeriode" to this.arbeidIPeriode.somMap()
+        "arbeidIPeriode" to this.arbeidIPeriode.somMap(),
+        "skalSkjuleArbeidsgiverUnderSøknadsperioden" to (this.arbeidIPeriode.type == ArbeidIPeriodeType.IKKE_BESVART)
     )
 
     private fun ArbeidIPeriode.somMap(): Map<String, Any?> = mapOf(
@@ -377,6 +387,8 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
     }
 
     private fun PSBMottattSøknad.sjekkOmHarIkkeVedlegg(): Boolean = vedleggId.isEmpty()
+
+    @Deprecated("StønadGodtgjørelse er deprecated og vil bli fjernet i fremtidige versjoner av APIet")
     private fun StønadGodtgjørelse.somMap() = mapOf(
         "mottarStønadGodtgjørelse" to mottarStønadGodtgjørelse,
         "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
@@ -384,4 +396,59 @@ class PSBSøknadPdfData(private val søknad: PSBMottattSøknad) : PdfData() {
         "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
         "sluttetIPerioden" to (sluttdato != null),
     )
+
+    private fun Fosterhjemgodtgjørelse.somMap() = when (this) {
+        is FosterhjemsgodtgjørelseMottarIkke -> mapOf(
+            "fosterhjemgodtgjørelseMottarIkke" to mapOf(
+                "type" to type.name,
+                "mottarFosterhjemsgodtgjørelse" to mottarFosterhjemsgodtgjørelse
+            )
+        )
+
+        is FosterhjemsgodtgjørelseFrikjøpt -> mapOf(
+            "fosterhjemsgodtgjørelseFrikjøpt" to mapOf(
+                "type" to type.name,
+                "mottarFosterhjemsgodtgjørelse" to mottarFosterhjemsgodtgjørelse,
+                "erFrikjøptFraJobb" to erFrikjøptFraJobb,
+                "frikjøptBeskrivelse" to frikjøptBeskrivelse
+            )
+        )
+
+        is FosterhjemsgodtgjørelseIkkeFrikjøpt -> mapOf(
+            "fosterhjemsgodtgjørelseIkkeFrikjøpt" to mapOf(
+                "type" to type.name,
+                "mottarFosterhjemsgodtgjørelse" to mottarFosterhjemsgodtgjørelse,
+                "erFrikjøptFraJobb" to erFrikjøptFraJobb,
+                "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
+                "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
+            )
+        )
+    }
+
+    private fun Omsorgsstønad.somMap() = when (this) {
+        is OmsorgsstønadMottarIkke -> mapOf(
+            "omsorgsstønadMottarIkke" to mapOf(
+                "type" to type,
+                "mottarOmsorgsstønad" to mottarOmsorgsstønad
+            )
+        )
+
+        is OmsorgsstønadMottarDelerAvPerioden -> mapOf(
+            "omsorgsstønadMottarDelerAvPerioden" to mapOf(
+                "type" to type,
+                "mottarOmsorgsstønad" to mottarOmsorgsstønad,
+                "startdato" to startdato?.let { Constants.DATE_FORMATTER.format(it) },
+                "sluttdato" to sluttdato?.let { Constants.DATE_FORMATTER.format(it) },
+                "antallTimerIUken" to antallTimerIUken.tilString()
+            )
+        )
+
+        is OmsorgsstønadMottarHelePerioden -> mapOf(
+            "omsorgsstønadMottarHelePerioden" to mapOf(
+                "type" to type,
+                "mottarOmsorgsstønad" to mottarOmsorgsstønad,
+                "antallTimerIUken" to antallTimerIUken.tilString()
+            )
+        )
+    }
 }

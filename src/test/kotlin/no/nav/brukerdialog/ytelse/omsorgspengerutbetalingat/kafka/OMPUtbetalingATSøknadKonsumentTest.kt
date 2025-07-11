@@ -44,7 +44,7 @@ class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
         mockMvc.sendInnSøknad(SøknadUtils.defaultSøknad.copy(søknadId = søknadId), mockOAuth2Server.hentToken())
 
         coVerify(exactly = 1, timeout = 120 * 1000) {
-            k9DokumentMellomlagringService.slettDokumenter(any(), any())
+            dokumentService.slettDokumenter(any(), any())
         }
 
         k9DittnavVarselConsumer.lesMelding(
@@ -78,12 +78,12 @@ class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
-            .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
+            .andThenMany(listOf("123456789", "987654321"))
 
         producer.leggPåTopic(
             key = søknadId,

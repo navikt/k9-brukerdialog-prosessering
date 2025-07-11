@@ -41,7 +41,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
         mockMvc.sendInnSøknad(SøknadUtils.defaultSøknad.copy(søknadId = søknadId), mockOAuth2Server.hentToken())
 
         coVerify(exactly = 1, timeout = 120 * 1000) {
-            k9DokumentMellomlagringService.slettDokumenter(any(), any())
+            dokumentService.slettDokumenter(any(), any())
         }
 
         k9DittnavVarselConsumer.lesMelding(
@@ -75,12 +75,12 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
-            .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
+            .andThenMany(listOf("123456789", "987654321"))
 
         producer.leggPåTopic(
             key = søknadId,
@@ -135,7 +135,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
           "relasjonTilBarnet": "FAR",
           "sammeAdresse": "JA",
           "høyereRisikoForFravær": true,
-           "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær",
+          "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær",
           "harBekreftetOpplysninger": true,
           "k9FormatSøknad": {
             "språk": "nb",
@@ -151,6 +151,8 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
                 "norskIdentitetsnummer": "02119970078"
               },
               "kroniskEllerFunksjonshemming": true,
+              "høyereRisikoForFravær": true,
+              "høyereRisikoForFraværBeskrivelse": "Beskrivelse av høyere risiko for fravær",
               "type": "OMP_UTV_KS",
               "dataBruktTilUtledning": null
             },

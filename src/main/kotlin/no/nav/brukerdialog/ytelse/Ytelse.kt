@@ -9,61 +9,59 @@ import no.nav.brukerdialog.validation.ValidationProblemDetails
 import no.nav.brukerdialog.validation.Violation
 import org.springframework.http.HttpHeaders
 
-enum class Ytelse(val dialog: String) {
-    OMSORGSPENGER_UTVIDET_RETT("omsorgspengesoknad"),
-    OMSORGSPENGER_MIDLERTIDIG_ALENE("ekstra-omsorgsdager-andre-forelder-ikke-tilsyn"),
-    ETTERSENDING("sif-ettersending"),
-    OMSORGSDAGER_ALENEOMSORG("omsorgsdager-aleneomsorg-dialog"),
-    OMSORGSPENGER_UTBETALING_ARBEIDSTAKER("omsorgspengerutbetaling-arbeidstaker-soknad"),
-    OMSORGSPENGER_UTBETALING_SNF("omsorgspengerutbetaling-soknad"),
-    PLEIEPENGER_LIVETS_SLUTTFASE("pleiepenger-i-livets-sluttfase-soknad"),
-    ETTERSENDING_PLEIEPENGER_SYKT_BARN("sif-ettersending"),
-    ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE("sif-ettersending"),
-    ETTERSENDING_OMP("sif-ettersending"),
-    PLEIEPENGER_SYKT_BARN("pleiepengesoknad"),
-    ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN("endringsmelding-pleiepenger"),
-    DINE_PLEIEPENGER("dine-pleiepenger"),
-    OPPLARINGSPENGER("opplaringspenger-soknad"),
-    UNGDOMSYTELSE("ungdomsytelse-soknad")
+enum class Ytelse {
+    OMSORGSPENGER_UTVIDET_RETT,
+    OMSORGSPENGER_MIDLERTIDIG_ALENE,
+    ETTERSENDING,
+    OMSORGSDAGER_ALENEOMSORG,
+    OMSORGSPENGER_UTBETALING_ARBEIDSTAKER,
+    OMSORGSPENGER_UTBETALING_SNF,
+    PLEIEPENGER_LIVETS_SLUTTFASE,
+    ETTERSENDING_PLEIEPENGER_SYKT_BARN,
+    ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE,
+    ETTERSENDING_OMP,
+    ETTERSENDING_OPPLARINGSPENGER,
+    PLEIEPENGER_SYKT_BARN,
+    ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN,
+    DINE_PLEIEPENGER,
+    OPPLARINGSPENGER,
+    UNGDOMSYTELSE,
+    UNGDOMSYTELSE_INNTEKTSRAPPORTERING,
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE,
     ;
 
     companion object {
-        fun fraMDC(): Ytelse {
-            val ytelse: String = MDCUtil.fromMDC(Constants.YTELSE)
-                ?: throw ValidationErrorResponseException(
+        fun utledYtelseFraCallerIMDC(): Ytelse {
+            return MDCUtil.fromMDC(Constants.CALLER_CLIENT_ID)?.somYtelse()!!
+        }
+
+        fun String.somYtelse(): Ytelse {
+            return when(this.substringAfterLast(":")) {
+                "omsorgspengesoknad" -> OMSORGSPENGER_UTVIDET_RETT
+                "ekstra-omsorgsdager-andre-forelder-ikke-tilsyn" -> OMSORGSPENGER_MIDLERTIDIG_ALENE
+                "sif-ettersending" -> ETTERSENDING
+                "omsorgsdager-aleneomsorg-dialog" -> OMSORGSDAGER_ALENEOMSORG
+                "omsorgspengerutbetaling-arbeidstaker-soknad" -> OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
+                "omsorgspengerutbetaling-soknad" -> OMSORGSPENGER_UTBETALING_SNF
+                "pleiepenger-i-livets-sluttfase-soknad" -> PLEIEPENGER_LIVETS_SLUTTFASE
+                "pleiepengesoknad" -> PLEIEPENGER_SYKT_BARN
+                "endringsmelding-pleiepenger" -> ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN
+                "dine-pleiepenger" -> PLEIEPENGER_SYKT_BARN
+                "opplaringspenger-soknad" -> OPPLARINGSPENGER
+                "ungdomsytelse-deltaker" -> UNGDOMSYTELSE
+                "tokenx-token-generator" -> PLEIEPENGER_SYKT_BARN // Kun i dev
+                else -> throw ValidationErrorResponseException(
                     ValidationProblemDetails(
                         violations = setOf(
                             Violation(
-                                parameterName = NavHeaders.X_K9_YTELSE,
+                                parameterName = this,
                                 parameterType = ParameterType.HEADER,
-                                reason = "Påkrevd Ytelse mangler i MDC. Sjekk at headeren '${NavHeaders.X_K9_YTELSE}' er satt."
+                                reason = "Ukjent dialog '$this'."
                             )
                         )
                     )
                 )
-
-            return runCatching { valueOf(ytelse) }
-                .getOrElse {
-                    throw ValidationErrorResponseException(
-                        ValidationProblemDetails(
-                            violations = setOf(
-                                Violation(
-                                    parameterName = NavHeaders.X_K9_YTELSE,
-                                    parameterType = ParameterType.HEADER,
-                                    reason = "Ukjent Ytelse '$ytelse'."
-                                )
-                            )
-                        )
-                    )
-                }
-        }
-
-        fun String.somYtelse(): Ytelse {
-
-            return runCatching { Ytelse.entries.first { it.dialog == substringAfterLast(":") } }
-                .onSuccess { return it }
-                .onFailure { throw IllegalArgumentException("Ukjent dialog $this") }
-                .getOrThrow()
+            }
         }
     }
 

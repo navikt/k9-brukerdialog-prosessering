@@ -1,12 +1,14 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.swagger.v3.oas.annotations.Hidden
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
+import no.nav.brukerdialog.utils.URIUtils.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.UtenlandskNæring.Companion.valider
@@ -16,6 +18,8 @@ import no.nav.brukerdialog.utils.StringUtils
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetailsString
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.Fosterhjemgodtgjørelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.Omsorgsstønad
 import no.nav.fpsak.tidsserie.LocalDateInterval
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
@@ -36,6 +40,7 @@ import java.time.ZonedDateTime
 import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 import no.nav.k9.søknad.felles.type.Periode as K9Periode
+import no.nav.k9.søknad.felles.type.Språk as K9Språk
 
 enum class Språk { nb, nn }
 
@@ -44,11 +49,16 @@ private val k9FormatVersjon = Versjon.of("1.0.0")
 data class PleiepengerSyktBarnSøknad(
     val newVersion: Boolean?,
     val apiDataVersjon: String? = null,
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID()
-        .toString(),
+
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
+    val søknadId: String = UUID.randomUUID().toString(),
+
+    @Schema(hidden = true)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    val språk: Språk? = null,
+
+    val språk: Språk,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val barn: BarnDetaljer,
     @field:Valid val arbeidsgivere: List<Arbeidsgiver>,
@@ -74,7 +84,13 @@ data class PleiepengerSyktBarnSøknad(
     @field:Valid val nattevåk: Nattevåk? = null,
     val beredskap: Beredskap? = null,
     @field:Valid val frilans: Frilans,
+
+    @Deprecated("StønadGodtgjørelse er deprecated og vil bli fjernet i fremtidige versjoner av APIet")
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
+
+    @field:Valid val fosterhjemgodtgjørelse: Fosterhjemgodtgjørelse? = null,
+    @field:Valid val omsorgsstønad: Omsorgsstønad? = null,
+
     @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,
     val barnRelasjon: BarnRelasjon? = null,
     val barnRelasjonBeskrivelse: String? = null,
@@ -118,6 +134,8 @@ data class PleiepengerSyktBarnSøknad(
             beredskap = beredskap,
             frilans = frilans,
             stønadGodtgjørelse = stønadGodtgjørelse,
+            fosterhjemgodtgjørelse = fosterhjemgodtgjørelse,
+            omsorgsstønad = omsorgsstønad,
             selvstendigNæringsdrivende = selvstendigNæringsdrivende,
             barnRelasjon = barnRelasjon,
             barnRelasjonBeskrivelse = barnRelasjonBeskrivelse,
@@ -130,13 +148,14 @@ data class PleiepengerSyktBarnSøknad(
 
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN
 
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
 
     override fun vedlegg(): List<URL> = mutableListOf<URL>().apply {
         addAll(vedlegg)
         fødselsattestVedleggUrls?.let { addAll(it) }
     }
 
+    @Hidden
     @AssertTrue(message = "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom")
     fun isBarnRelasjonBeskrivelse(): Boolean {
         if (barnRelasjon == BarnRelasjon.ANNET) {
@@ -198,6 +217,7 @@ data class PleiepengerSyktBarnSøknad(
 
         return K9Søknad(SøknadId.of(søknadId), k9FormatVersjon, mottatt, søker.somK9Søker(), psb)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
+            .medSpråk(K9Språk.of(språk?.name ?: "nb"))
     }
 
     fun byggK9Uttak(periode: K9Periode): Uttak {

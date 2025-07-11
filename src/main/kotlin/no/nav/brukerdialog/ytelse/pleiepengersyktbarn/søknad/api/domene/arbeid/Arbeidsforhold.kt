@@ -31,6 +31,7 @@ data class Arbeidsforhold(
         return when (arbeidIPeriode.type) {
             ArbeidIPeriodeType.ARBEIDER_VANLIG -> arbeiderVanlig(fraOgMed, tilOgMed)
             ArbeidIPeriodeType.ARBEIDER_IKKE -> arbeiderIkke(fraOgMed, tilOgMed)
+            ArbeidIPeriodeType.IKKE_BESVART -> arbeiderIkke(fraOgMed, tilOgMed)
             ArbeidIPeriodeType.ARBEIDER_REDUSERT -> arbeiderRedusert(fraOgMed, tilOgMed)
         }
     }

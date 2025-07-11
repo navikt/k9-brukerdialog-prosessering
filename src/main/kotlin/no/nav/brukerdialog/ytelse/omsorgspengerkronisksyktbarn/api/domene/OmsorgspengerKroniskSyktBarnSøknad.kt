@@ -1,9 +1,10 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
+import io.swagger.v3.oas.annotations.Hidden
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotNull
-import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
@@ -17,10 +18,11 @@ import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.fellesdomene.Barn
 import no.nav.brukerdialog.common.MetaInfo
-import no.nav.brukerdialog.integrasjon.k9mellomlagring.dokumentId
+import no.nav.brukerdialog.utils.URIUtils.dokumentId
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
-import no.nav.brukerdialog.utils.StringUtils.FritekstPattern
+import no.nav.brukerdialog.validation.fritekst.ValidFritekst
+import no.nav.k9.søknad.felles.type.Språk
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -28,8 +30,13 @@ import java.util.*
 import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class OmsorgspengerKroniskSyktBarnSøknad(
-    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'") val søknadId: String = UUID.randomUUID().toString(),
+    @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
+    val søknadId: String = UUID.randomUUID().toString(),
+
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
+
     val språk: String,
     @field:Valid var barn: Barn,
     val legeerklæring: List<URL> = listOf(),
@@ -47,7 +54,7 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
     @field:NotNull(message = "Kan ikke være null") val sammeAdresse: BarnSammeAdresse?,
     val høyereRisikoForFravær: Boolean? = null,
 
-    @field:Pattern(regexp = FritekstPattern, message = "Matcher ikke tillatt mønster: '{regexp}'")
+    @field:ValidFritekst
     @field:Size(min = 1, max = 1000, message = "Må være mellom 1 og 1000 tegn")
     val høyereRisikoForFraværBeskrivelse: String? = null, // skal valideres hvis høyereRisikoForFravær er true
 
@@ -68,9 +75,12 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
             k9FormatVersjon,
             mottatt,
             søker.somK9Søker(),
+            Språk.of(språk),
             OmsorgspengerKroniskSyktBarn(
                 barn.somK9Barn(),
-                kroniskEllerFunksjonshemming
+                kroniskEllerFunksjonshemming,
+                høyereRisikoForFravær,
+                høyereRisikoForFraværBeskrivelse
             )
                 .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as OmsorgspengerKroniskSyktBarn
         ).medKildesystem(Kildesystem.SØKNADSDIALOG)
@@ -107,6 +117,7 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
         )
     }
 
+    @Hidden
     @AssertTrue(message = "Dersom 'høyereRisikoForFravær' er true, må 'høyereRisikoForFraværBeskrivelse' være satt")
     fun isHøyereRisikoForFraværBeskrivelse(): Boolean {
         if (høyereRisikoForFravær == true) {
@@ -123,7 +134,7 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
     override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTVIDET_RETT
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf<URL>().apply {
         addAll(legeerklæring)
         samværsavtale?.let { addAll(it) }

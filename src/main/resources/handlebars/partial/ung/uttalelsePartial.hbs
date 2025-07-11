@@ -1,0 +1,9 @@
+<p class="sporsmalstekst">{{spørsmålstekstUttalelse}}</p>
+<p>{{jaNeiSvar uttalelse.harUttalelse}}</p><br/>
+
+{{#if uttalelse.harUttalelse}}
+    <div class="fritekst">
+        <p class="sporsmalstekst">Kommentar</p>
+        <p class="fritekst_textarea">{{uttalelse.uttalelseFraDeltaker}}</p>
+    </div>
+{{/if}}

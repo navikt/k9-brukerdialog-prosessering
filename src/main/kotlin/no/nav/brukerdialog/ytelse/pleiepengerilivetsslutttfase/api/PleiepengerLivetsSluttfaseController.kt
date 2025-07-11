@@ -2,7 +2,7 @@ package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api
 
 import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.PleiepengerILivetsSluttfaseSøknad
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController
 )
 class PleiepengerLivetsSluttfaseController(
     private val innsendingService: InnsendingService,
-    private val innsendingCache: InnsendingCache,
+    private val duplikatInnsendingSjekker: DuplikatInnsendingSjekker,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
     private val metrikkService: MetrikkService,
 ) {
@@ -42,8 +42,7 @@ class PleiepengerLivetsSluttfaseController(
 
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
+    fun innsendingPleiepengerILivetsSluttfaseSøknad(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @Valid @RequestBody søknad: PleiepengerILivetsSluttfaseSøknad,
     ) = runBlocking {
@@ -51,8 +50,8 @@ class PleiepengerLivetsSluttfaseController(
         val cacheKey = "${springTokenValidationContextHolder.personIdent()}_${søknad.ytelse()}"
 
         PleiepengerLivetsSluttfaseController.Companion.logger.info(formaterStatuslogging(søknad.ytelse(), søknad.søknadId, "mottatt."))
-        innsendingCache.put(cacheKey)
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
         innsendingService.registrer(søknad, metadata)
-        metrikkService.registrerMottattSøknad(søknad.ytelse())
+        metrikkService.registrerMottattInnsending(søknad.ytelse())
     }
 }

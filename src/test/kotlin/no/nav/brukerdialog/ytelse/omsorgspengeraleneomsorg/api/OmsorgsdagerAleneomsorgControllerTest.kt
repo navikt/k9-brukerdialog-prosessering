@@ -4,17 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.Barn
 import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TidspunktForAleneomsorg
 import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene.TypeBarn
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
-import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
@@ -28,9 +26,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
-import java.time.LocalDate
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -52,7 +50,7 @@ class OmsorgsdagerAleneomsorgControllerTest {
     private lateinit var innsendingService: InnsendingService
 
     @MockkBean
-    private lateinit var innsendingCache: InnsendingCache
+    private lateinit var duplikatInnsendingSjekker: DuplikatInnsendingSjekker
 
     @MockkBean
     private lateinit var barnService: BarnService
@@ -71,15 +69,14 @@ class OmsorgsdagerAleneomsorgControllerTest {
     @Test
     fun `Innsending av søknad er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
-        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
 
         val defaultSøknad = SøknadUtils.defaultSøknad
 
         mockMvc.post("/omsorgsdager-aleneomsorg/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSDAGER_ALENEOMSORG.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -98,7 +95,7 @@ class OmsorgsdagerAleneomsorgControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreValidert(any()) } answers { callOriginal() }
         coEvery { innsendingService.forsikreInnloggetBrukerErSøker(any()) } returns Unit
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
 
         val defaultSøknad = SøknadUtils.defaultSøknad
 
@@ -121,7 +118,6 @@ class OmsorgsdagerAleneomsorgControllerTest {
         )
         mockMvc.post("/omsorgsdager-aleneomsorg/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.OMSORGSDAGER_ALENEOMSORG.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -129,7 +125,6 @@ class OmsorgsdagerAleneomsorgControllerTest {
         }
             .andExpect {
                 status { isBadRequest() }
-                header { exists(NavHeaders.PROBLEM_DETAILS) }
                 header { exists(NavHeaders.X_CORRELATION_ID) }
                 content {
                     json(
@@ -184,7 +179,7 @@ class OmsorgsdagerAleneomsorgControllerTest {
                           ]
                         }
                         """.trimIndent(),
-                        false,
+                        JsonCompareMode.LENIENT,
                     )
                 }
             }

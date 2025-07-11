@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotEmpty
@@ -17,6 +18,7 @@ import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.k9.søknad.felles.type.Språk
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -25,8 +27,10 @@ import no.nav.k9.søknad.Søknad as K9Søknad
 
 data class OmsorgsdagerAleneOmOmsorgenSøknad(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
+    @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
 
+    @Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: String,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
@@ -71,6 +75,7 @@ data class OmsorgsdagerAleneOmOmsorgenSøknad(
             .medMottattDato(mottatt)
             .medVersjon(Versjon.of("1.0.0"))
             .medSøker(søker.somK9Søker())
+            .medSpråk(Språk.of(språk))
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
             .medYtelse(
                 OmsorgspengerAleneOmsorg(
@@ -110,7 +115,7 @@ data class OmsorgsdagerAleneOmOmsorgenSøknad(
     override fun søkerNorskIdent(): String? = søkerNorskIdent
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSDAGER_ALENEOMSORG
-    override fun søknadId(): String = søknadId
+    override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = listOf()
 
     override fun søknadValidator(): SøknadValidator<Søknad> = OmsorgspengerAleneOmsorgSøknadValidator()

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="NO">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>{{tittel}}</title>
+    <meta name="subject" content="{{tittel}}"/>
+    <meta name="author" content="nav.no"/>
+    <meta name="description"
+          content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
+    <bookmarks>
+        <bookmark name="Søker" href="#søker"/>
+        <bookmark name="Godkjenne endret startdato" href="#endretStartdato"/>
+        <bookmark name="Godkjenne endret sluttdato" href="#endretSluttdato"/>
+        <bookmark name="Kontrollere inntekt fra register" href="#kontrollerRegisterInntektOppgave"/>
+    </bookmarks>
+    {{#block 'style-common' }}
+    {{/block}}
+</head>
+
+<body>
+<h1 id="header">{{tittel}}</h1>
+<div class="nokkelinfo">
+    <p><strong>Sendt til NAV</strong> {{søknadMottattDag}} {{ søknadMottatt }}</p>
+    <p><strong>Språk:</strong> {{hjelp.språk}}</p>
+</div>
+<div class="innholdscontainer">
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
+
+    {{#if oppgave.endretStartdatoOppgave}}
+        <section id="endretStartdato">
+            <h2>Ny startdato i ungdomsprogrammet</h2>
+
+            <br/>
+
+            {{> partial/ung/uttalelsePartial
+                    uttalelse=oppgave.uttalelse
+                    spørsmålstekstUttalelse=oppgave.endretStartdatoOppgave.spørsmål
+            }}
+        </section>
+    {{/if}}
+
+    {{#if oppgave.endretSluttdatoOppgave}}
+        <section id="endretSluttdato">
+            <h2>Ny sluttdato i ungdomsprogrammet</h2>
+
+            <br/>
+
+            {{> partial/ung/uttalelsePartial
+                    uttalelse=oppgave.uttalelse
+                    spørsmålstekstUttalelse=oppgave.endretSluttdatoOppgave.spørsmål
+            }}
+        </section>
+    {{/if}}
+
+    {{#if oppgave.kontrollerRegisterInntektOppgave}}
+        <section id="kontrollerRegisterInntektOppgave">
+            <h2>Kontrollere inntekt fra register for perioden {{oppgave.kontrollerRegisterInntektOppgave.fraOgMed}}
+                - {{oppgave.kontrollerRegisterInntektOppgave.tilOgMed}}</h2>
+
+            <table class="periode_tabell">
+                <thead>
+                <tr>
+                    <th>Arbeidstaker/frilanser</th>
+                    <th>Inntekt</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each oppgave.kontrollerRegisterInntektOppgave.registerinntekt.arbeidOgFrilansInntekter as |arbeidsinntekt|~}}
+                    <tr>
+                        <td>
+                            {{#if arbeidsinntekt.navn}}
+                                {{arbeidsinntekt.navn}} ({{arbeidsinntekt.arbeidsgiver}})
+                            {{else}}
+                                {{arbeidsinntekt.arbeidsgiver}}
+                            {{/if}}
+                        </td>
+                        <td>{{arbeidsinntekt.inntekt}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+                <br/>
+                <thead>
+                <tr>
+                    <th>Ytelser</th>
+                    <th>Inntekt</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each oppgave.kontrollerRegisterInntektOppgave.registerinntekt.ytelseInntekter as |ytelse|~}}
+                    <tr>
+                        <td>{{ytelse.ytelsetype}}</td>
+                        <td>{{ytelse.inntekt}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+
+            <br/>
+            {{> partial/ung/uttalelsePartial
+                    uttalelse=oppgave.uttalelse
+                    spørsmålstekstUttalelse=oppgave.kontrollerRegisterInntektOppgave.spørsmål
+            }}
+
+        </section>
+    {{/if}}
+</div>
+
+<!-- FOOTER -->
+<p id="footer">
+    <span class="soknadsid">{{ oppgave.oppgaveReferanse }}</span>
+    <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
+</p>
+</body>
+
+</html>

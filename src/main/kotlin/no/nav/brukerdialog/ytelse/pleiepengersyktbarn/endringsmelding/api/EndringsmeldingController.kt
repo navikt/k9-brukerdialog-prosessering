@@ -5,7 +5,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.config.Issuers
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.innsyn.InnsynService
 import no.nav.brukerdialog.metrikk.MetrikkService
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController
 )
 class EndringsmeldingController(
     private val innsendingService: InnsendingService,
-    private val innsendingCache: InnsendingCache,
+    private val duplikatInnsendingSjekker: DuplikatInnsendingSjekker,
     private val innsynService: InnsynService,
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
     private val metrikkService: MetrikkService
@@ -45,8 +45,7 @@ class EndringsmeldingController(
 
     @PostMapping("/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun innsending(
-        @RequestHeader(NavHeaders.BRUKERDIALOG_YTELSE) ytelse: String,
+    fun innsendingEndringsmelding(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
         @RequestBody @Valid endringsmelding: Endringsmelding,
     ) = runBlocking {
@@ -62,7 +61,7 @@ class EndringsmeldingController(
         endringsmelding.pleietrengendeNavn = søknadsopplysninger.barn.navn()
 
         innsendingService.registrer(endringsmelding, metadata)
-        innsendingCache.put(cacheKey)
-        metrikkService.registrerMottattSøknad(endringsmelding.ytelse())
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
+        metrikkService.registrerMottattInnsending(endringsmelding.ytelse())
     }
 }

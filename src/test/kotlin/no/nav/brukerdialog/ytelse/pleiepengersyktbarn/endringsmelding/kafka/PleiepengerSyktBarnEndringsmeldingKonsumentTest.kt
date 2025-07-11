@@ -5,7 +5,7 @@ import io.mockk.coVerify
 import no.nav.brukerdialog.AbstractIntegrationTest
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
-import no.nav.brukerdialog.integrasjon.k9joark.JournalføringsResponse
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.DokarkivJournalpostResponse
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_MOTTATT_TOPIC
@@ -42,16 +42,12 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
         val forventetDokmentIderForSletting = listOf("123456789", "987654321")
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }.returnsMany(forventetDokmentIderForSletting.map {
-            URI(
-                "http://localhost:8080/dokument/$it"
-            )
-        })
-        coEvery { k9JoarkService.journalfør(any()) } returns JournalføringsResponse("123456789")
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }.returnsMany(forventetDokmentIderForSletting)
+        coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse("123456789", false, listOf())
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
         coVerify(exactly = 1, timeout = 120 * 1000) {
-                k9DokumentMellomlagringService.slettDokumenter(any(), any())
+                dokumentService.slettDokumenter(any(), any())
         }
     }
 
@@ -66,12 +62,12 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
-            .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
+            .andThenMany(listOf("123456789", "987654321"))
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
 

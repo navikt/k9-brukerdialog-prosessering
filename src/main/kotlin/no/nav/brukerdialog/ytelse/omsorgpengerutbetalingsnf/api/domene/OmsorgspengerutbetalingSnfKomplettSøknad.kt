@@ -13,7 +13,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.*
 
-class OmsorgspengerutbetalingSnfKomplettSøknad(
+data class OmsorgspengerutbetalingSnfKomplettSøknad(
     internal val søknadId: SøknadId = SøknadId(UUID.randomUUID().toString()),
     private val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     private val språk: String,
@@ -33,4 +33,6 @@ class OmsorgspengerutbetalingSnfKomplettSøknad(
     private val vedleggId: List<String> = listOf(),
     private val titler: List<String>,
     private val k9FormatSøknad: Søknad,
-) : KomplettInnsending
+) : KomplettInnsending {
+    override fun innsendingId(): String = søknadId.id
+}

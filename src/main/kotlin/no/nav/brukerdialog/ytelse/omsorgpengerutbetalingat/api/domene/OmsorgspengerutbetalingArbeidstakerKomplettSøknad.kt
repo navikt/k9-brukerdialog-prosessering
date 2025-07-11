@@ -8,7 +8,7 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Opphold
 import no.nav.brukerdialog.oppslag.soker.Søker
 import java.time.ZonedDateTime
 
-class OmsorgspengerutbetalingArbeidstakerKomplettSøknad(
+data class OmsorgspengerutbetalingArbeidstakerKomplettSøknad(
     internal val søknadId: String,
     private val mottatt: ZonedDateTime,
     private val språk: String,
@@ -23,4 +23,6 @@ class OmsorgspengerutbetalingArbeidstakerKomplettSøknad(
     private val hjemmePgaSmittevernhensyn: Boolean,
     private val hjemmePgaStengtBhgSkole: Boolean? = null,
     private val k9Format: Søknad
-): KomplettInnsending
+): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

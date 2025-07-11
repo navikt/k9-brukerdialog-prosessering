@@ -21,4 +21,12 @@ object ArbeidUtils {
                 .medJobberNormaltTimerPerDag(NULL_ARBEIDSTIMER)
         )
     )
+
+    internal fun arbeidstidInfoMedNullTimer(perioder: List<Periode>) = ArbeidstidInfo().medPerioder(
+        perioder.associate { periode ->
+            periode to ArbeidstidPeriodeInfo()
+                .medFaktiskArbeidTimerPerDag(NULL_ARBEIDSTIMER)
+                .medJobberNormaltTimerPerDag(NULL_ARBEIDSTIMER)
+        }
+    )
 }

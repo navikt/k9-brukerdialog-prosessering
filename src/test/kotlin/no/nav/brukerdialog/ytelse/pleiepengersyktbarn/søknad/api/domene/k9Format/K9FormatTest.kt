@@ -115,7 +115,7 @@ class K9FormatTest {
                           "endringDato": "2020-01-01",
                           "endringBegrunnelse": "Korona",
                           "bruttoInntekt": 9999,
-                          "erNyoppstartet": true,
+                          "erNyoppstartet": false,
                           "registrertIUtlandet": true,
                           "landkode": "DEU"
                         }
@@ -126,7 +126,12 @@ class K9FormatTest {
                   "frilanser": {
                     "startdato": "2018-01-01",
                     "sluttdato": null
-                  }
+                  },
+                  "utenlandskeArbeidsforhold" : [{
+                  "ansettelsePeriode" : "2022-01-01/2022-01-10",
+                  "arbeidsgiversnavn" : "Kiwi AS",
+                  "land" : "BEL"
+                  }]
                 },
                 "dataBruktTilUtledning": null,
                 "infoFraPunsj": null,
@@ -236,10 +241,18 @@ class K9FormatTest {
                   ],
                   "frilanserArbeidstidInfo": {
                     "perioder": {
-                          "2021-01-01/2021-01-10": {
-                            "jobberNormaltTimerPerDag": "PT7H30M",
-                            "faktiskArbeidTimerPerDag": "PT7H30M"
-                          }
+                      "2021-01-01/2021-01-01": {
+                        "jobberNormaltTimerPerDag": "PT7H30M",
+                        "faktiskArbeidTimerPerDag": "PT7H30M"
+                      },
+                      "2021-01-02/2021-01-04": {
+                        "jobberNormaltTimerPerDag": "PT12H30M",
+                        "faktiskArbeidTimerPerDag": "PT12H30M"
+                       },
+                      "2021-01-05/2021-01-10": {
+                        "jobberNormaltTimerPerDag": "PT7H30M",
+                        "faktiskArbeidTimerPerDag": "PT7H30M"
+                       }
                      }
                   },
                   "selvstendigNæringsdrivendeArbeidstidInfo": {

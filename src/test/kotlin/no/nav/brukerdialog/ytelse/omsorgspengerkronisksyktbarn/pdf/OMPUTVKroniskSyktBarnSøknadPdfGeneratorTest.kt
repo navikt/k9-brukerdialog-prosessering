@@ -8,6 +8,7 @@ import no.nav.brukerdialog.meldinger.omsorgspengerkronisksyktbarn.domene.SøkerB
 import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.utils.OMPKSSøknadUtils
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
+import no.nav.k9.søknad.felles.type.Språk
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
@@ -32,6 +33,7 @@ class OMPUTVKroniskSyktBarnSøknadPdfGeneratorTest {
         private fun fullGyldigMelding(
             soknadsId: String,
             legeerklæringVedleggId: List<String> = listOf(),
+            språk: Språk = Språk.NORSK_BOKMÅL
         ) = OMPUTVKroniskSyktBarnSøknadMottatt(
             språk = "nb",
             søknadId = soknadsId,
@@ -58,7 +60,7 @@ class OMPUTVKroniskSyktBarnSøknadPdfGeneratorTest {
             sammeAdresse = BarnSammeAdresse.JA_DELT_BOSTED,
             høyereRisikoForFravær = true,
             høyereRisikoForFraværBeskrivelse = "Beskrivelse av høyere risiko for fravær",
-            k9FormatSøknad = OMPKSSøknadUtils.defaultK9Format(soknadsId, ZonedDateTime.now())
+            k9FormatSøknad = OMPKSSøknadUtils.defaultK9Format(soknadsId, ZonedDateTime.now(), språk)
         )
     }
 
@@ -72,6 +74,12 @@ class OMPUTVKroniskSyktBarnSøknadPdfGeneratorTest {
         id = "2-full-søknad-legeerklæring-lastet-opp"
         pdf = generator.genererPDF(
             pdfData = fullGyldigMelding(soknadsId = id, legeerklæringVedleggId = listOf("123")).pdfData(),
+        )
+        if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+        id = "3-full-søknad-nynorsk"
+        pdf = generator.genererPDF(
+            pdfData = fullGyldigMelding(soknadsId = id, språk = Språk.NORSK_NYNORSK).pdfData(),
         )
         if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
     }

@@ -35,7 +35,7 @@ class K9MellomlagringClientsConfig(
         logger.info("Konfigurerer opp azure klient for k9-mellomlagring.")
         return restTemplateBuilder
             .rootUri(baseUrl)
-            .setReadTimeout(Duration.ofSeconds(20))
+            .readTimeout(Duration.ofSeconds(20))
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .additionalInterceptors(
                 RestTemplateUtils.exchangeBearerTokenInterceptor(azureK9MellomlagringClientProperties, oAuth2AccessTokenService),

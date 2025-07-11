@@ -12,7 +12,7 @@ import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.types.Cleanup
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBMottattSøknad
-import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.PSBPreprosessertSøknad
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.domene.PSBPreprosessertSøknad
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.config.KafkaStreamsConfiguration

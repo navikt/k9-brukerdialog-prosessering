@@ -1,12 +1,14 @@
-package no.nav.brukerdialog.meldinger.ettersendelse.domene
+package no.nav.brukerdialog.ytelse.ettersendelse.kafka.domene
 
-import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
+import no.nav.brukerdialog.meldinger.ettersendelse.domene.Pleietrengende
+import no.nav.brukerdialog.meldinger.ettersendelse.domene.PreprosessertEttersendelse
+import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.ettersendelse.pdf.EttersendelsePdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.pdf.PdfData
+import no.nav.k9.ettersendelse.EttersendelseType
 import java.time.ZonedDateTime
 
 data class Ettersendelse(

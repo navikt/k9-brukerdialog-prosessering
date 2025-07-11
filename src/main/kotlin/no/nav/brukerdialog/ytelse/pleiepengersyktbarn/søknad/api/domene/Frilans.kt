@@ -2,13 +2,14 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.Valid
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.Arbeidsforhold
 import no.nav.brukerdialog.utils.DateUtils.månedStart
 import no.nav.brukerdialog.utils.erFørEllerLik
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.utils.kreverIkkeNull
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.Arbeidsforhold
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.k9Format.ArbeidstidInfoSammenslåer
+import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import java.time.LocalDate
 
 data class Frilans(
@@ -77,7 +78,9 @@ data class Frilans(
         }
     }
 
-    fun k9ArbeidstidInfo(fraOgMed: LocalDate, tilOgMed: LocalDate): ArbeidstidInfo {
+    fun k9ArbeidstidInfo(søknadsperiode: Periode): ArbeidstidInfo {
+        val fraOgMed = søknadsperiode.fraOgMed
+        val tilOgMed = søknadsperiode.tilOgMed
         return when {
             (arbeidsforhold == null) -> Arbeidsforhold.k9ArbeidstidInfoMedNullTimer(fraOgMed, tilOgMed)
             startetOgSluttetISøknadsperioden(fraOgMed, tilOgMed) -> k9ArbeidstidInfoMedStartOgSluttIPerioden(
@@ -98,8 +101,8 @@ data class Frilans(
         val arbeidsforholdFørStart = Arbeidsforhold.k9ArbeidstidInfoMedNullTimer(fraOgMed, startdato.minusDays(1))
         val arbeidsforholdMedArbeid = arbeidsforhold.tilK9ArbeidstidInfo(startdato, sluttdato)
         val arbeidsforholdEtterSlutt = Arbeidsforhold.k9ArbeidstidInfoMedNullTimer(sluttdato.plusDays(1), tilOgMed)
-        return slåSammenArbeidstidInfo(arbeidsforholdFørStart, arbeidsforholdMedArbeid, arbeidsforholdEtterSlutt)
 
+        return ArbeidstidInfoSammenslåer(listOf(arbeidsforholdFørStart, arbeidsforholdMedArbeid, arbeidsforholdEtterSlutt), Periode(fraOgMed, tilOgMed)).slåSammen()
     }
 
     private fun k9ArbeidstidInfoMedStartIPerioden(fraOgMed: LocalDate, tilOgMed: LocalDate): ArbeidstidInfo {
@@ -107,7 +110,10 @@ data class Frilans(
         requireNotNull(startdato)
         val arbeidsforholdFørStart = Arbeidsforhold.k9ArbeidstidInfoMedNullTimer(fraOgMed, startdato.minusDays(1))
         val arbeidsforholdEtterStart = arbeidsforhold.tilK9ArbeidstidInfo(startdato, tilOgMed)
-        return slåSammenArbeidstidInfo(arbeidsforholdFørStart, arbeidsforholdEtterStart)
+        return ArbeidstidInfoSammenslåer(
+            listOf(arbeidsforholdFørStart, arbeidsforholdEtterStart),
+            Periode(fraOgMed, tilOgMed)
+        ).slåSammen()
     }
 
     private fun k9ArbeidstidInfoMedSluttIPerioden(fraOgMed: LocalDate, tilOgMed: LocalDate): ArbeidstidInfo {
@@ -115,21 +121,10 @@ data class Frilans(
         requireNotNull(sluttdato)
         val arbeidsforholdFørSlutt = arbeidsforhold.tilK9ArbeidstidInfo(fraOgMed, sluttdato)
         val arbeidsforholdEtterSlutt = Arbeidsforhold.k9ArbeidstidInfoMedNullTimer(sluttdato.plusDays(1), tilOgMed)
-        return slåSammenArbeidstidInfo(arbeidsforholdFørSlutt, arbeidsforholdEtterSlutt)
-    }
-
-
-    private fun slåSammenArbeidstidInfo(vararg arbeidstidInfo: ArbeidstidInfo): ArbeidstidInfo {
-        return ArbeidstidInfo().apply {
-            arbeidstidInfo.forEach { arbeidstidInfo: ArbeidstidInfo ->
-                arbeidstidInfo.perioder.forEach { (periode, arbeidstidPeriodeInfo): Map.Entry<no.nav.k9.søknad.felles.type.Periode, ArbeidstidPeriodeInfo> ->
-                    this.leggeTilPeriode(
-                        periode,
-                        arbeidstidPeriodeInfo
-                    )
-                }
-            }
-        }
+        return ArbeidstidInfoSammenslåer(
+            listOf(arbeidsforholdFørSlutt, arbeidsforholdEtterSlutt),
+            Periode(fraOgMed, tilOgMed)
+        ).slåSammen()
     }
 
     private fun sluttetISøknadsperioden(tilOgMed: LocalDate?) = (sluttdato != null && sluttdato.isBefore(tilOgMed))
@@ -140,9 +135,4 @@ data class Frilans(
 
 enum class FrilansType {
     FRILANS, FRILANS_HONORAR, HONORAR
-}
-
-enum class HonorarerIPerioden {
-    MISTER_ALLE_HONORARER,
-    MISTER_DELER_AV_HONORARER,
 }

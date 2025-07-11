@@ -10,15 +10,20 @@ import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
-import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
+import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.UngdomsytelsesøknadTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelsesøknadUtils
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SøkYtelseOppgavetypeDataDTO
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.post
 import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
@@ -39,22 +44,46 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
         mockLagreDokument()
         mockJournalføring()
 
-        val søknadId = UUID.randomUUID().toString()
-        val søknad = SøknadUtils.defaultSøknad.copy(søknadId = søknadId)
+        val oppgaveReferanse = UUID.randomUUID().toString()
+        val søknad = SøknadUtils.defaultSøknad.copy(oppgaveReferanse = oppgaveReferanse)
 
-        mockMvc.sendInnSøknad(søknad, mockOAuth2Server.hentToken())
+        mockHentingAvOppgave(
+            oppgavetype = Oppgavetype.SØK_YTELSE,
+            oppgavetypeData = SøkYtelseOppgavetypeDataDTO(
+                fomDato = søknad.startdato,
+            )
+        )
+        mockMarkerDeltakeleSomSøkt()
+        mockMarkerOppgaveSomLøst()
+
+        val token = mockOAuth2Server.hentToken()
+
+        mockMvc.post("/ungdomsytelse/soknad/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+                setBearerAuth(token.serialize())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = JacksonConfiguration.configureObjectMapper().writeValueAsString(søknad)
+        }.andExpect {
+            status {
+                isAccepted()
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+            }
+        }
 
         coVerify(exactly = 1, timeout = 120 * 1000) {
-            k9DokumentMellomlagringService.slettDokumenter(any(), any())
+            dokumentService.slettDokumenter(any(), any())
         }
 
         k9DittnavVarselConsumer.lesMelding(
-            key = søknadId,
+            key = oppgaveReferanse,
             topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC
         ).value().assertDittnavVarsel(
             K9Beskjed(
                 metadata = no.nav.brukerdialog.utils.SøknadUtils.metadata,
-                grupperingsId = søknadId,
+                grupperingsId = oppgaveReferanse,
                 tekst = "Søknad om ungdomsytelse er mottatt",
                 link = null,
                 dagerSynlig = 7,
@@ -68,20 +97,21 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val søknadId = UUID.randomUUID().toString()
+        val deltakelseId = UUID.randomUUID()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
-        val søknadMottatt = UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = søknadId, mottatt = mottatt)
+        val søknadMottatt = UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = søknadId, deltakelseId = deltakelseId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
-        coEvery { k9DokumentMellomlagringService.lagreDokument(any()) }
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }
             .throws(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
-            .andThenMany(listOf("123456789", "987654321").map { URI("http://localhost:8080/dokument/$it") })
+            .andThenMany(listOf("123456789", "987654321"))
 
         producer.leggPåTopic(
             key = søknadId,
@@ -89,16 +119,19 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             topic = UngdomsytelsesøknadTopologyConfiguration.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
         )
         val lesMelding =
-            consumer.lesMelding(key = søknadId, topic = UngdomsytelsesøknadTopologyConfiguration.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC)
-                .value()
+            consumer.lesMelding(
+                key = søknadId,
+                topic = UngdomsytelsesøknadTopologyConfiguration.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC,
+                maxWaitInSeconds = 120
+            ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, deltakelseId.toString(), mottattString), preprosessertSøknadJson, true)
     }
     @Language("JSON")
-    private fun preprosessertSøknadSomJson(søknadId: String, mottatt: String) = """
+    private fun preprosessertSøknadSomJson(søknadId: String, deltakelseId: String, mottatt: String) = """
         {
-          "søknadId": "$søknadId",
+          "oppgaveReferanse": "$søknadId",
           "mottatt": "$mottatt",
           "søker": {
             "etternavn": "Nordmann",
@@ -108,8 +141,15 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             "fornavn": "Ola",
             "fødselsnummer": "02119970078"
           },
-          "fraOgMed": "2022-01-01",
-          "tilOgMed": "2022-02-01",
+          "startdato": "2022-01-01",
+          "barn": [
+            {
+              "navn": "Ola Nordmann"
+            }
+          ],
+          "barnErRiktig": true,
+          "kontonummerFraRegister": "12345678901",
+          "kontonummerErRiktig": true,
           "språk": "nb",
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
@@ -128,8 +168,11 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
               "norskIdentitetsnummer": "02119970078"
             },
             "ytelse": {
-              "søknadsperiode": [],
-              "type": "UNGDOMSYTELSE"
+              "type": "UNGDOMSYTELSE",
+              "søknadType": "DELTAKELSE_SØKNAD",
+              "deltakelseId": "$deltakelseId",
+              "søktFraDatoer": ["2022-01-01"],
+              "inntekter": null
             },
             "journalposter": [],
             "begrunnelseForInnsending": {

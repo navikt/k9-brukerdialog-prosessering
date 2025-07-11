@@ -18,17 +18,6 @@ no.nav:
         accepted_audience: ${TOKEN_X_CLIENT_ID}
     client:
       registration:
-        ### K9 Joark
-        azure-k9-joark:
-          token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
-          grant-type: client_credentials
-          scope: ${K9_JOARK_SCOPE}
-          authentication:
-            client-auth-method: private_key_jwt
-            client-id: ${AZURE_APP_CLIENT_ID}
-            client-jwk: ${AZURE_APP_JWK}
-        ### K9 Joark
-
         ### K9 Mellomlagring
         azure-k9-mellomlagring:
           token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
@@ -86,12 +75,49 @@ no.nav:
                 audience: ${K9_SELVBETJENING_OPPSLAG_TOKEN_X_AUDIENCE}
         ### K9 Selvbetjening Oppslag
 
+        ### Ung Deltakelse Opplyser
+        tokenx-ung-deltakelse-opplyser:
+          token-endpoint-url: ${TOKEN_X_TOKEN_ENDPOINT}
+          grant-type: urn:ietf:params:oauth:grant-type:token-exchange
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: ${TOKEN_X_CLIENT_ID}
+            client-jwk: ${TOKEN_X_PRIVATE_JWK}
+          token-exchange:
+            audience: ${UNG_DELTAKELSE_OPPLYSER_TOKEN_X_AUDIENCE}
+        ### Ung Deltakelse Opplyser
+
+        ### Dokarkiv
+        azure-dokarkiv:
+          token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
+          grant-type: client_credentials
+          scope: ${DOKARKIV_SCOPE}
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: ${AZURE_APP_CLIENT_ID}
+            client-jwk: ${AZURE_APP_JWK}
+        ### Dokarkiv
+
+        ### Familie PDF
+        azure-familie-pdf:
+          token-endpoint-url: ${AZURE_OPENID_CONFIG_TOKEN_ENDPOINT}
+          grant-type: client_credentials
+          scope: ${FAMILIE_PDF_SCOPE}
+          authentication:
+            client-auth-method: private_key_jwt
+            client-id: ${AZURE_APP_CLIENT_ID}
+            client-jwk: ${AZURE_APP_JWK}
+        ### Familie PDF
+
   integration:
     k9-brukerdialog-cache-base-url: ${K9_BRUKERDIALOG_CACHE_BASE_URL}
     k9-mellomlagring-base-url: ${K9_MELLOMLAGRING_BASE_URL}
-    k9-joark-base-url: ${K9_JOARK_BASE_URL}
     k9-sak-innsyn-api-base-url: ${K9_SAK_INNSYN_API_BASE_URL}
+    ung-deltakelse-opplyser-base-url: ${UNG_DELTAKELSE_OPPLYSER_BASE_URL}
     k9-selvbetjening-oppslag-base-url: ${K9_SELVBETJENING_OPPSLAG_BASE_URL}
+    dokarkiv-base-url: ${DOKARKIV_BASE_URL}
+    familie-pdf-base-url: ${FAMILIE_PDF_BASE_URL}
+    clam-av-base-url: ${CLAM_AV_BASE_URL}
 
   cache:
     barn:
@@ -101,7 +127,11 @@ no.nav:
       expiry-in-seconds: ${INNSENDING_CACHE_EXPIRY_IN_MINUTES:10}
 
   mellomlagring:
-        søknad_tid_timer: ${MELLOMLAGRING_SØKNAD_TID_TIMER:72}
+    kryptering:
+      passord:
+        krypteringsnøkkel: ${CRYPTO_PASSPHRASE}
+    gcp_storage_bucket_navn: ${GCP_STORAGE_BUCKET_NAVN}
+    søknad_tid_timer: ${MELLOMLAGRING_SØKNAD_TID_TIMER:72}
 
   kafka:
     bootstrap-servers: ${KAFKA_BROKERS}
@@ -217,6 +247,36 @@ no.nav:
       ungdomsytelse-soknad-cleanup:
         application-id-suffix: ungdomsytelse-soknad-cleanup-stream
         auto-offset-reset: earliest
+
+      ungdomsytelse-oppgavebekreftelse-preprosessering:
+        application-id-suffix: ungdomsytelse-oppgavebekreftelse-preprosessering
+        auto-offset-reset: earliest
+      ungdomsytelse-oppgavebekreftelse-journalforing:
+        application-id-suffix: ungdomsytelse-oppgavebekreftelse-journalforing
+        auto-offset-reset: earliest
+      ungdomsytelse-oppgavebekreftelse-cleanup:
+        application-id-suffix: ungdomsytelse-oppgavebekreftelse-cleanup-stream
+        auto-offset-reset: earliest
+
+      ungdomsytelse-inntektsrapportering-preprosessering:
+        application-id-suffix: ungdomsytelse-inntektsrapportering-preprosessering
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-journalforing:
+        application-id-suffix: ungdomsytelse-inntektsrapportering-journalforing
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-cleanup:
+        application-id-suffix: ungdomsytelse-inntektsrapportering-cleanup-stream
+        auto-offset-reset: earliest
+
+      olp-soknad-preprosessering:
+        application-id-suffix: olp-soknad-preprosessering
+        auto-offset-reset: none
+      olp-soknad-journalforing:
+        application-id-suffix: olp-soknad-journalforing
+        auto-offset-reset: none
+      olp-soknad-cleanup:
+        application-id-suffix: olp-soknad-cleanup
+        auto-offset-reset: none
 
 management:
   endpoint:

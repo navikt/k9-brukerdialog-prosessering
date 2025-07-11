@@ -7,6 +7,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.pdf.OMPMidlertidigAleneSoknadPDFData
 import no.nav.brukerdialog.utils.DateUtils.NO_LOCALE
+import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.kafka.domene.OMPMidlertidigAleneSoknadPreprosessert
 import java.time.ZonedDateTime
 
 data class OMPMidlertidigAleneSoknadMottatt(

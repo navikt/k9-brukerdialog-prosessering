@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.ArbeidIPeriode
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsforhold
@@ -30,6 +29,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import java.time.LocalDate
@@ -54,7 +54,7 @@ class PleiepengerLivetsSluttfaseControllerTest {
     private lateinit var innsendingService: InnsendingService
 
     @MockkBean
-    private lateinit var innsendingCache: InnsendingCache
+    private lateinit var duplikatInnsendingSjekker: DuplikatInnsendingSjekker
 
     @MockkBean
     private lateinit var barnService: BarnService
@@ -73,15 +73,14 @@ class PleiepengerLivetsSluttfaseControllerTest {
     @Test
     fun `Innsending av søknad er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
-        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
 
         val defaultSøknad = SøknadUtils.defaultSøknad
 
         mockMvc.post("/pleiepenger-livets-sluttfase/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -141,7 +140,6 @@ class PleiepengerLivetsSluttfaseControllerTest {
         )
         mockMvc.post("/pleiepenger-livets-sluttfase/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -150,7 +148,6 @@ class PleiepengerLivetsSluttfaseControllerTest {
             .andExpect {
                 status { isBadRequest() }
                 header { exists(NavHeaders.X_CORRELATION_ID) }
-                header { exists(NavHeaders.PROBLEM_DETAILS) }
                 content {
                     json(
                         """
@@ -235,7 +232,7 @@ class PleiepengerLivetsSluttfaseControllerTest {
                           ]
                         }
                         """.trimIndent(),
-                        false,
+                        JsonCompareMode.LENIENT,
                     )
                 }
             }

@@ -24,15 +24,17 @@ object MockMvcUtils {
             Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN -> "/ettersending-pleiepenger-sykt-barn"
             Ytelse.ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE -> "/ettersending-pleiepenger-livets-sluttfase"
             Ytelse.ETTERSENDING_OMP -> "/ettersending-omp"
+            Ytelse.ETTERSENDING_OPPLARINGSPENGER -> "/ettersending-opplaringspenger"
             Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN -> "/endringsmelding-pleiepenger-sykt-barn"
             Ytelse.DINE_PLEIEPENGER -> "/dine-pleiepenger"
             Ytelse.UNGDOMSYTELSE -> "/ungdomsytelse/soknad"
-            Ytelse.OPPLARINGSPENGER -> TODO("Trenger endepunkt for opplæringspenger. Se K9-joark.")
+            Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING -> "/ungdomsytelse/inntektsrapportering"
+            Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> "/ungdomsytelse/oppgavebekreftelse"
+            Ytelse.OPPLARINGSPENGER -> "/opplaringspenger"
         }
 
         post("$ytelseUrl/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, ytelse.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
                 setBearerAuth(token.serialize())
             }

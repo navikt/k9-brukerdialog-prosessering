@@ -21,8 +21,7 @@ class InnsendingServiceTest {
         val innsendingService = InnsendingService(
             søkerService = mockk(),
             kafkaProdusent = mockk(),
-            objectMapper = mockk(),
-            k9DokumentMellomlagringService = mockk(),
+            dokumentService = mockk(),
             springTokenValidationContextHolder = tokenValidationContextHolderMock,
         )
 

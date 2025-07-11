@@ -13,15 +13,17 @@ class ArbeidsgiverService(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(ArbeidsgiverService::class.java)
 
-    suspend fun hentArbedisgivere(
+    suspend fun hentArbeidsgivere(
         fraOgMed: LocalDate,
         tilOgMed: LocalDate,
+        inkluderAlleAnsettelsesperioder: Boolean,
         skalHentePrivateArbeidsgivere: Boolean,
         skalHenteFrilansoppdrag: Boolean,
     ): ArbeidsgivereDto = try {
         arbeidsgivereOppslagsService.hentArbeidsgivere(
             fraOgMed = fraOgMed,
             tilOgMed = tilOgMed,
+            inkluderAlleAnsettelsesperioder = inkluderAlleAnsettelsesperioder,
             skalHentePrivateArbeidsgivere = skalHentePrivateArbeidsgivere,
             skalHenteFrilansoppdrag = skalHenteFrilansoppdrag
         ).arbeidsgivere.somArbeidsgivereDto()

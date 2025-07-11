@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
-import no.nav.brukerdialog.domenetjenester.innsending.InnsendingCache
+import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9FormatPSB
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9SakInnsynSøknad
 import no.nav.brukerdialog.config.JacksonConfiguration
@@ -26,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import java.time.LocalDate
@@ -54,7 +54,7 @@ class EndringsmeldingControllerTest {
     private lateinit var innsynService: InnsynService
 
     @MockkBean
-    private lateinit var innsendingCache: InnsendingCache
+    private lateinit var duplikatInnsendingSjekker: DuplikatInnsendingSjekker
 
     @MockkBean
     private lateinit var springTokenValidationContextHolder: SpringTokenValidationContextHolder
@@ -85,9 +85,9 @@ class EndringsmeldingControllerTest {
             ),
             søknad = defaultK9FormatPSB()
         )
-        every { innsendingCache.put(any()) } returns Unit
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
-        every { metrikkService.registrerMottattSøknad(any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
 
         val søknadId = UUID.randomUUID().toString()
         val mottattDato = ZonedDateTime.parse("2021-11-03T07:12:05.530Z")
@@ -141,7 +141,6 @@ class EndringsmeldingControllerTest {
 
         mockMvc.post("/pleiepenger-sykt-barn/endringsmelding/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -194,7 +193,6 @@ class EndringsmeldingControllerTest {
 
         mockMvc.post("/pleiepenger-sykt-barn/endringsmelding/innsending") {
             headers {
-                set(NavHeaders.BRUKERDIALOG_YTELSE, Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN.dialog)
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
             }
             contentType = MediaType.APPLICATION_JSON
@@ -204,7 +202,6 @@ class EndringsmeldingControllerTest {
             .andExpect {
                 status { isBadRequest() }
                 header { exists(NavHeaders.X_CORRELATION_ID) }
-                header { exists(NavHeaders.PROBLEM_DETAILS) }
                 content {
                     json(
                         """
@@ -235,7 +232,7 @@ class EndringsmeldingControllerTest {
                             }
                           ]
                         }
-                        """.trimIndent(), false
+                        """.trimIndent(), JsonCompareMode.LENIENT
                     )
                 }
             }

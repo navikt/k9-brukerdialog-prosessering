@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene
 
+import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.AssertTrue
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.PastOrPresent
@@ -29,6 +30,7 @@ class Barn(
         fun List<Barn>.kunFosterbarn() = this.filter { it.type == FOSTERBARN }
     }
 
+    @Hidden
     @AssertTrue(message = "Kan ikke være null når 'type' er annet enn 'FRA_OPPSLAG'")
     fun isIdentitetsnummer(): Boolean {
         if (type != TypeBarn.FRA_OPPSLAG) {

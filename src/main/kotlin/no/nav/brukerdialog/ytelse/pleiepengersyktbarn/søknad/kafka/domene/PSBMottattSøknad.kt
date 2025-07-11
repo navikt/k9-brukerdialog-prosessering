@@ -20,6 +20,9 @@ import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.Selvstend
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.StønadGodtgjørelse
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandskNæring
 import no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles.UtenlandsoppholdIPerioden
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.fosterhjemgodtgjørelse.Fosterhjemgodtgjørelse
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.omsorgsstønad.Omsorgsstønad
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.domene.PSBPreprosessertSøknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -27,7 +30,7 @@ data class PSBMottattSøknad(
     val søknadId: String,
     val mottatt: ZonedDateTime,
     val apiDataVersjon: String? = null,
-    val språk: String? = null,
+    val språk: String,
     val fraOgMed : LocalDate,
     val tilOgMed : LocalDate,
     val søker : Søker,
@@ -45,7 +48,12 @@ data class PSBMottattSøknad(
     val beredskap: Beredskap?,
     val nattevåk: Nattevåk?,
     val frilans: Frilans,
+
+    @Deprecated("StønadGodtgjørelse er deprecated og vil bli fjernet i fremtidige versjoner av APIet")
     val stønadGodtgjørelse: StønadGodtgjørelse? = null,
+
+    val fosterhjemgodtgjørelse: Fosterhjemgodtgjørelse? = null,
+    val omsorgsstønad: Omsorgsstønad? = null,
     val selvstendigNæringsdrivende: SelvstendigNæringsdrivende,
     val arbeidsgivere: List<Arbeidsgiver>,
     val barnRelasjon: BarnRelasjon? = null,

@@ -6,7 +6,7 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 import no.nav.k9.søknad.Søknad as K9Søknad
 
-class PilsKomplettSøknad(
+data class PilsKomplettSøknad(
     private val søknadId: String,
     private val søker: Søker,
     private val språk: String,
@@ -31,4 +31,6 @@ class PilsKomplettSøknad(
     private val harBekreftetOpplysninger: Boolean,
     private val flereSokere: FlereSokereSvar? = null,
     private val k9Format: K9Søknad
-): KomplettInnsending
+): KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}

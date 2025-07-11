@@ -21,18 +21,31 @@ import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.kafka.OMPKSTopolo
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.kafka.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.kafka.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.kafka.OMPMidlertidigAleneTopologyConfiguration.Companion.OMP_MA_PREPROSESSERT_TOPIC
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.OLPTopologyConfiguration.Companion.OLP_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.OLPTopologyConfiguration.Companion.OLP_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.opplæringspenger.kafka.OLPTopologyConfiguration.Companion.OLP_PREPROSESSERT_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.PILSTopologyConfiguration.Companion.PILS_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.PILSTopologyConfiguration.Companion.PILS_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.kafka.PILSTopologyConfiguration.Companion.PILS_PREPROSESSERT_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.kafka.PSBTopologyConfiguration.Companion.PSB_PREPROSESSERT_TOPIC
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
-import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.UngdomsytelseInntektsrapporteringTopologyConfiguration.Companion.UNGDOMSYTELSE_INNTEKTSRAPPORTERING_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.UngdomsytelseInntektsrapporteringTopologyConfiguration.Companion.UNGDOMSYTELSE_INNTEKTSRAPPORTERING_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.UngdomsytelseInntektsrapporteringTopologyConfiguration.Companion.UNGDOMSYTELSE_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration.Companion.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration.Companion.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration.Companion.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC
+import no.nav.k9.søknad.felles.type.Språk
 
-enum class Ytelse(val tittel: String) {
-    OMSORGSPENGER_UTVIDET_RETT("Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning"),
+enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
+    OMSORGSPENGER_UTVIDET_RETT(
+        "Søknad om ekstra omsorgsdager for barn som har kronisk/langvarig sykdom eller funksjonshemning",
+        "Søknad om ekstra omsorgsdagar for barn som har kronisk/langvarig sjukdom eller funksjonshemming"
+    ),
     OMSORGSPENGER_MIDLERTIDIG_ALENE("Søknad om ekstra omsorgsdager når den andre forelderen ikke kan ha tilsyn med barn"),
     ETTERSENDELSE("Ettersendelse av dokumentasjon"),
     OMSORGSDAGER_ALENEOMSORG("Søknad om ekstra omsorgsdager ved aleneomsorg"),
@@ -41,8 +54,16 @@ enum class Ytelse(val tittel: String) {
     PLEIEPENGER_LIVETS_SLUTTFASE("Søknad om pleiepenger i livets sluttfase"),
     PLEIEPENGER_SYKT_BARN("Søknad om pleiepenger for sykt barn"),
     PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING("Endringsmelding for pleiepenger sykt barn"),
-    UNGDOMSYTELSE("Søknad om ungdomsytelse")
+    UNGDOMSYTELSE_DELTAKELSE_SØKNAD("Søknad om ungdomsprogramytelsen"),
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE("Ungdomsprogramytelse: svar på varsel om "),
+    UNGDOMSYTELSE_INNTEKTSRAPPORTERING("Inntektsrapportering for ungdomsprogramytelsen"),
+    OPPLÆRINGSPENGER("Søknad om opplæringspenger")
     ;
+
+    fun utledTittel(språk: Språk): String = when (språk) {
+        Språk.NORSK_NYNORSK -> nynorskTittel ?: tittel
+        else -> tittel
+    }
 
     companion object {
         fun fraTopic(topic: String): Ytelse = when (topic) {
@@ -55,7 +76,10 @@ enum class Ytelse(val tittel: String) {
             OMP_UTB_SNF_MOTTATT_TOPIC, OMP_UTB_SNF_PREPROSESSERT_TOPIC, OMP_UTB_SNF_CLEANUP_TOPIC -> OMSORGSPENGER_UTBETALING_SNF
             OMP_MA_MOTTATT_TOPIC, OMP_MA_PREPROSESSERT_TOPIC, OMP_MA_CLEANUP_TOPIC -> OMSORGSPENGER_MIDLERTIDIG_ALENE
             OMP_AO_MOTTATT_TOPIC, OMP_AO_PREPROSESSERT_TOPIC, OMP_AO_CLEANUP_TOPIC -> OMSORGSDAGER_ALENEOMSORG
-            UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC, UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC, UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC -> UNGDOMSYTELSE
+            UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC, UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC, UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC -> UNGDOMSYTELSE_DELTAKELSE_SØKNAD
+            UNGDOMSYTELSE_INNTEKTSRAPPORTERING_MOTTATT_TOPIC, UNGDOMSYTELSE_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC, UNGDOMSYTELSE_INNTEKTSRAPPORTERING_CLEANUP_TOPIC -> UNGDOMSYTELSE_INNTEKTSRAPPORTERING
+            UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_MOTTATT_TOPIC, UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC, UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC -> UNGDOMSYTELSE_OPPGAVEBEKREFTELSE
+            OLP_MOTTATT_TOPIC, OLP_PREPROSESSERT_TOPIC, OLP_CLEANUP_TOPIC -> OPPLÆRINGSPENGER
             else -> {
                 throw IllegalArgumentException("Kan ikke finne ytelse for topic: $topic")
             }

@@ -1,0 +1,21 @@
+name: Deploy ungdomsytelse oppgavebekreftelse topics
+
+env:
+  TOPICS_PATH: 'nais/topics/ungdomsytelse-oppgavebekreftelse-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-ungdomsytelse-oppgavebekreftelse-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/ungdomsytelse-oppgavebekreftelse-topics.yml'
+
+jobs:
+  deploy-ungdomsytelse-oppgavebekreftelse-topics:
+    permissions:
+      id-token: write
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: ungdomsytelse-oppgavebekreftelse-topics
+      topics-path: 'nais/topics/ungdomsytelse-oppgavebekreftelse-topics.yml'
+    secrets: inherit
