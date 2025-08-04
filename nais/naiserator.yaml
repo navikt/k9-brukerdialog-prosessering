@@ -46,7 +46,6 @@ spec:
       {{/each}}
     outbound:
       rules:
-        - application: k9-mellomlagring
         - application: k9-brukerdialog-cache
         - application: k9-sak-innsyn-api
         - application: k9-selvbetjening-oppslag
