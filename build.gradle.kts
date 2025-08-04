@@ -31,7 +31,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.33"
+val tokenSupportVersion = "5.0.34"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "12.3.2"
 val ungDeltakelseOpplyserVersjon = "2.4.0"
@@ -48,7 +48,7 @@ val springdocVersion = "2.8.9"
 val pdfBoxVersion = "3.0.5"
 val imageIOVersion = "3.12.0"
 val fpsakTidsserieVersion = "2.7.3"
-val gcpStorageVersion = "2.53.3"
+val gcpStorageVersion = "2.54.0"
 val auth0Version = "4.5.0"
 val tikaVersion = "3.2.1"
 val testContainersVersion = "1.21.3"
