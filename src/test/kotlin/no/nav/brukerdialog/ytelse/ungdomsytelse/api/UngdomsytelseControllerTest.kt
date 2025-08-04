@@ -49,9 +49,6 @@ import java.util.*
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(
     controllers = [UngdomsytelseController::class],
-    properties = [
-        "ENABLE_UNDOMSYTELSE=true",
-    ]
 )
 @Import(
     JacksonConfiguration::class,
