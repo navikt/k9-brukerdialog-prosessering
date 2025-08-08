@@ -37,13 +37,8 @@ class UngdomsytelseController(
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun innsendingUngdomsytelsesøknad(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
         @Valid @RequestBody søknad: Ungdomsytelsesøknad,
     ) = runBlocking {
-        if (enabled != true) {
-            logger.info("Ungdomsytelse er ikke aktivert.")
-            throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
-        }
         ungdomsytelseService.innsendingUngdomsytelsesøknad(søknad, gitSha)
     }
 
@@ -51,14 +46,8 @@ class UngdomsytelseController(
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun inntektrapportering(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
         @Valid @RequestBody rapportetInntekt: UngdomsytelseInntektsrapportering,
     ) = runBlocking {
-        if (enabled != true) {
-            logger.info("Ungdomsytelse er ikke aktivert.")
-            throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
-        }
-
         ungdomsytelseService.inntektrapportering(rapportetInntekt, gitSha)
     }
 
@@ -66,14 +55,8 @@ class UngdomsytelseController(
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun oppgavebekreftelse(
         @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
-        @Value("\${ENABLE_UNDOMSYTELSE:false}") enabled: Boolean? = null,
         @Valid @RequestBody bekreftetOppgave: UngdomsytelseOppgavebekreftelse,
     ) = runBlocking {
-        if (enabled != true) {
-            logger.info("Ungdomsytelse er ikke aktivert.")
-            throw ErrorResponseException(HttpStatus.NOT_IMPLEMENTED)
-        }
-
         ungdomsytelseService.oppgavebekreftelse(bekreftetOppgave, gitSha)
     }
 }
