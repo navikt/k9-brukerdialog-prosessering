@@ -36,7 +36,7 @@
                     $2 – Refererer til de første 4 fangede sifrene.
                     ******* – Erstatter resten av sifrene med stjerner.
                     -->
-                    <mask>$1$2*******</mask>
+                    <mask>MASKERT FØDSELSNUMMER</mask>
                 </valueMask>
             </jsonGeneratorDecorator>
         </encoder>
