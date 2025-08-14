@@ -34,6 +34,7 @@ class JournalføringsService(
     }
 
     suspend fun journalfør(preprosessertSøknad: Preprosessert): Journalfort {
+        logger.info("Burde maskeres: {}", preprosessertSøknad.søkerFødselsnummer()) // TODO: FJERN FØR MERGE TIL MASTER
         logger.info("Journalfører dokumenter: ${preprosessertSøknad.dokumenter().size}")
         val journalføringsRequest = preprosessertSøknad.tilJournaførigsRequest()
 
