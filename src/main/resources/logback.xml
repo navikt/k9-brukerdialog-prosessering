@@ -34,7 +34,7 @@
                     Behold de første 4 sifrene (dag og måned) og masker de resterende 7 sifrene.
                     $1 – Refererer til den første fangstgruppen (f.eks. separatoren eller starten).
                     $2 – Refererer til de første 4 fangede sifrene.
-                    ******* – Erstatter resten av sifrene med stjerner.
+                    Erstatter alle 11 sifrene med "MASKERT FØDSELSNUMMER".
                     -->
                     <mask>MASKERT FØDSELSNUMMER</mask>
                 </valueMask>
