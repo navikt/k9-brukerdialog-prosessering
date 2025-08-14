@@ -31,7 +31,8 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
         ),
         "kontonummer" to mapOf(
             "kontonummerErRiktig" to søknad.kontonummerErRiktig,
-            "kontonummerFraRegister" to søknad.kontonummerFraRegister
+            "kontonummerFraRegister" to søknad.kontonummerFraRegister,
+            "viVetIkke" to (søknad.kontonummerErRiktig == null && søknad.kontonummerFraRegister == null),
         ),
         "samtykke" to mapOf(
             "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,

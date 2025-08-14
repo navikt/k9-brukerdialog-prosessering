@@ -35,11 +35,16 @@
 
     <section id="kontonummer">
         <h2>Kontonummer for utbetaling</h2>
-        {{#if kontonummer.kontonummerFraRegister}}
-            <p class="sporsmalstekst">Stemmer det at kontonummeret ditt er {{kontonummer.kontonummerFraRegister}}?</p>
-            <p>{{ jaNeiSvar kontonummer.kontonummerErRiktig }}</p>
+        {{#if kontonummer.viVetIkke}}
+            <p>Vi klarer ikke å se om du har registrert kontonummer hos oss.</p>
+
         {{else}}
-            <p>Vi har ikke registrert kontonummer på deg.</p>
+            {{#if kontonummer.kontonummerFraRegister}}
+                <p class="sporsmalstekst">Stemmer det at kontonummeret ditt er {{kontonummer.kontonummerFraRegister}}?</p>
+                <p>{{ jaNeiSvar kontonummer.kontonummerErRiktig }}</p>
+            {{else}}
+                <p>Vi har ikke registrert kontonummer på deg.</p>
+            {{/if}}
         {{/if}}
     </section>
 
