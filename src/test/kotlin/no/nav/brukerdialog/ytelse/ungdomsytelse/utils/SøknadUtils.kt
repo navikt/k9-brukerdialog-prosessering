@@ -4,6 +4,8 @@ import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgavebekreftelse
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.HarKontonummer
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.KontonummerInfo
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -18,8 +20,11 @@ object SøknadUtils {
         søkerNorskIdent = "12345678910",
         startdato = LocalDate.parse("2021-01-01"),
         barnErRiktig = true,
-        kontonummerFraRegister = "12345678901",
-        kontonummerErRiktig = true,
+        kontonummerInfo = KontonummerInfo(
+            harKontonummer = HarKontonummer.JA,
+            kontonummerFraRegister = "12345678901",
+            kontonummerErRiktig = true,
+        ),
         harForståttRettigheterOgPlikter = true,
         harBekreftetOpplysninger = true
     )

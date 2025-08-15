@@ -10,6 +10,8 @@ import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.Utenlan
 import no.nav.brukerdialog.meldinger.pleiepengerilivetsslutttfase.domene.ÅrsakManglerIdentitetsnummer
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.HarKontonummer
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.KontonummerInfo
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
@@ -42,9 +44,31 @@ class UngdomsytelesøknadPdfGeneratorTest {
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
             id = "3-søknad-uten-kontonummer"
-            pdf = generator.genererPDF(UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = id)
-                .copy(kontonummerFraRegister = null, kontonummerErRiktig = false)
-                .pdfData())
+            pdf = generator.genererPDF(
+                UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = id)
+                    .copy(
+                        kontonummerInfo = KontonummerInfo(
+                            harKontonummer = HarKontonummer.NEI,
+                            kontonummerFraRegister = null,
+                            kontonummerErRiktig = false
+                        )
+                    )
+                    .pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "3-søknad-uvisst-kontonummer"
+            pdf = generator.genererPDF(
+                UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = id)
+                    .copy(
+                        kontonummerInfo = KontonummerInfo(
+                            harKontonummer = HarKontonummer.UVISST,
+                            kontonummerFraRegister = null,
+                            kontonummerErRiktig = false
+                        )
+                    )
+                    .pdfData()
+            )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }

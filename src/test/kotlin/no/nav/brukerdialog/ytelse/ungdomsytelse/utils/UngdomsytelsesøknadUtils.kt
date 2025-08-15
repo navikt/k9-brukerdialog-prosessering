@@ -2,6 +2,8 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.utils
 
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.HarKontonummer
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.KontonummerInfo
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadMottatt
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
@@ -45,8 +47,11 @@ object UngdomsytelsesøknadUtils {
                 )
             ),
             barnErRiktig = true,
-            kontonummerFraRegister = "12345678901",
-            kontonummerErRiktig = true,
+            kontonummerInfo = KontonummerInfo(
+                harKontonummer = HarKontonummer.JA,
+                kontonummerFraRegister = "12345678901",
+                kontonummerErRiktig = true,
+            ),
             k9Format = gyldigK9Format(søknadId, deltakelseId, mottatt, startdato),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
