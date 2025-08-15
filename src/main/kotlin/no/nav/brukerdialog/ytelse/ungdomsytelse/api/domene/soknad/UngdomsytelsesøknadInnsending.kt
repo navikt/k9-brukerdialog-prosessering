@@ -34,11 +34,9 @@ data class UngdomsytelsesøknadInnsending(
     var barn: List<Barn>?,
     val barnErRiktig: Boolean,
 
-    val kontonummerFraRegister: String? = null,
-    val kontonummerErRiktig: Boolean? = null,
-
     val harBekreftetOpplysninger: Boolean,
     val harForståttRettigheterOgPlikter: Boolean,
+    val kontonummerInfo: KontonummerInfo,
 
     ) : Innsending {
     companion object {
@@ -60,8 +58,7 @@ data class UngdomsytelsesøknadInnsending(
             startdato = startdato,
             barn = barn!!,
             barnErRiktig = barnErRiktig,
-            kontonummerFraRegister = kontonummerFraRegister,
-            kontonummerErRiktig = kontonummerErRiktig,
+            kontonummerInfo = kontonummerInfo,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
             k9Format = k9Format as UngSøknad

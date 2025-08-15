@@ -148,8 +148,11 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             }
           ],
           "barnErRiktig": true,
-          "kontonummerFraRegister": "12345678901",
-          "kontonummerErRiktig": true,
+          "kontonummerInfo": {
+            "harKontonummer": "JA",
+            "kontonummerFraRegister": "12345678901",
+            "kontonummerErRiktig": true,
+          },
           "språk": "nb",
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [

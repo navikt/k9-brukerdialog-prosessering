@@ -60,8 +60,7 @@ class UngdomsytelseService(
             søkerNorskIdent = søknad.søkerNorskIdent,
             barn = barn,
             barnErRiktig = søknad.barnErRiktig,
-            kontonummerFraRegister = søknad.kontonummerFraRegister,
-            kontonummerErRiktig = søknad.kontonummerErRiktig,
+            kontonummerInfo = søknad.kontonummerInfo,
             harBekreftetOpplysninger = søknad.harBekreftetOpplysninger,
             harForståttRettigheterOgPlikter = søknad.harForståttRettigheterOgPlikter
         )

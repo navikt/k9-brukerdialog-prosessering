@@ -6,6 +6,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.KontonummerInfo
 import no.nav.brukerdialog.ytelse.ungdomsytelse.pdf.UngdomsytelsesøknadPdfData
 import no.nav.k9.søknad.Søknad
 import java.time.LocalDate
@@ -19,8 +20,7 @@ data class UngdomsytelsesøknadMottatt(
     val startdato: LocalDate? = null,
     val barn: List<Barn>,
     val barnErRiktig: Boolean,
-    val kontonummerFraRegister: String? = null,
-    val kontonummerErRiktig: Boolean? = null,
+    val kontonummerInfo: KontonummerInfo,
     val k9Format: Søknad,
     val harForståttRettigheterOgPlikter: Boolean,
     val harBekreftetOpplysninger: Boolean,

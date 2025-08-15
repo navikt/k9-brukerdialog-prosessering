@@ -15,6 +15,8 @@ import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.HarKontonummer
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.KontonummerInfo
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
@@ -156,7 +158,11 @@ class UngdomsytelseControllerTest {
         val jsonPayload = objectMapper.writeValueAsString(
             defaultSøknad.copy(
                 barnErRiktig = false,
-                kontonummerErRiktig = false,
+                kontonummerInfo = KontonummerInfo(
+                    harKontonummer = HarKontonummer.JA,
+                    kontonummerErRiktig = null,
+                    kontonummerFraRegister = null
+                ),
                 harForståttRettigheterOgPlikter = false,
                 harBekreftetOpplysninger = false,
             )
@@ -192,6 +198,18 @@ class UngdomsytelseControllerTest {
                               "parameterName": "ungdomsytelsesøknad.harBekreftetOpplysninger",
                               "parameterType": "ENTITY",
                               "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelsesøknad.kontonummerInfo.kontonummerErRiktigSattNårHarJa",
+                              "parameterType": "ENTITY",
+                              "reason": "Dersom harKontonummer=JA må kontonummerErRiktig være satt"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelsesøknad.kontonummerInfo.kontonummerFraRegisterSattNårHarJa",
+                              "parameterType": "ENTITY",
+                              "reason": "Dersom harKontonummer=JA må kontonummerFraRegister være satt"
                             }
                           ]
                         }

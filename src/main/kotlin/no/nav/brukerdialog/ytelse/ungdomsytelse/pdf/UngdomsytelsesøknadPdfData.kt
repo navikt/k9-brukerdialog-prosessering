@@ -8,6 +8,7 @@ import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.KontonummerInfo
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.domene.UngdomsytelsesøknadMottatt
 import no.nav.k9.søknad.felles.type.Språk
 
@@ -29,11 +30,7 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
                 søknad.barn.map { it.somMap() }
             } else null,
         ),
-        "kontonummer" to mapOf(
-            "kontonummerErRiktig" to søknad.kontonummerErRiktig,
-            "kontonummerFraRegister" to søknad.kontonummerFraRegister,
-            "viVetIkke" to (søknad.kontonummerErRiktig == null && søknad.kontonummerFraRegister == null),
-        ),
+        "kontonummerInfo" to søknad.kontonummerInfo.somMap(),
         "samtykke" to mapOf(
             "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,
             "harBekreftetOpplysninger" to søknad.harBekreftetOpplysninger
@@ -41,6 +38,12 @@ class UngdomsytelsesøknadPdfData(private val søknad: UngdomsytelsesøknadMotta
         "hjelp" to mapOf(
             "språk" to søknad.språk?.språkTilTekst(),
         )
+    )
+
+    private fun KontonummerInfo.somMap() = mapOf(
+        "kontonummerErRiktig" to kontonummerErRiktig,
+        "kontonummerFraRegister" to kontonummerFraRegister,
+        "harKontonummer" to harKontonummer.name
     )
 
     private fun Barn.somMap(): Map<String, String?> = mapOf(
