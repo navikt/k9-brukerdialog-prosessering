@@ -21,10 +21,6 @@
     "SPRING_APPLICATION_NAME": "k9-brukerdialog-prosessering",
     "SPRING_PROFILES_ACTIVE": "prod-gcp",
 
-    "K9_MELLOMLAGRING_BASE_URL": "http://k9-mellomlagring",
-    "K9_MELLOMLAGRING_SCOPE": "api://prod-gcp.dusseldorf.k9-mellomlagring/.default",
-    "K9_MELLOMLAGRING_TOKEN_X_AUDIENCE": "prod-gcp:dusseldorf:k9-mellomlagring",
-
     "K9_SAK_INNSYN_API_BASE_URL": "http://k9-sak-innsyn-api",
     "K9_SAK_INNSYN_API_TOKEN_X_AUDIENCE": "prod-gcp:dusseldorf:k9-sak-innsyn-api",
 
