@@ -1,0 +1,106 @@
+no.nav:
+  kafka:
+    ssl:
+      trust-store-location: file:${KAFKA_TRUSTSTORE_PATH}
+      trust-store-password: changeit
+      trust-store-type: JKS
+      key-store-location: file:${KAFKA_KEYSTORE_PATH}
+      key-store-password: devillokeystore1234
+      key-store-type: PKCS12
+    properties:
+      security.protocol: SASL_SSL
+      sasl:
+        mechanism: PLAIN
+        jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required username='vtp' password='vtp';"
+
+    streams:
+      psb-soknad-preprosessering:
+        auto-offset-reset: earliest
+      psb-soknad-journalforing:
+        auto-offset-reset: earliest
+      psb-soknad-cleanup:
+        auto-offset-reset: earliest
+
+      psb-endringsmelding-preprosessering:
+        auto-offset-reset: earliest
+      psb-endringsmelding-journalforing:
+        auto-offset-reset: earliest
+      psb-endringsmelding-cleanup:
+        auto-offset-reset: earliest
+
+      pils-soknad-preprosessering:
+        auto-offset-reset: earliest
+      pils-soknad-journalforing:
+        auto-offset-reset: earliest
+      pils-soknad-cleanup:
+        auto-offset-reset: earliest
+
+      ettersendelse-preprosessering:
+        auto-offset-reset: earliest
+      ettersendelse-journalforing:
+        auto-offset-reset: earliest
+      ettersendelse-cleanup:
+        auto-offset-reset: earliest
+
+      omp-utv-ks-preprosessering:
+        auto-offset-reset: earliest
+      omp-utv-ks-journalforing:
+        auto-offset-reset: earliest
+      omp-utv-ks-cleanup:
+        auto-offset-reset: earliest
+
+      omp-utb-at-preprosessering:
+        auto-offset-reset: earliest
+      omp-utb-at-journalforing:
+        auto-offset-reset: earliest
+      omp-utb-at-cleanup:
+        auto-offset-reset: earliest
+
+      omp-utb-snf-preprosessering:
+        auto-offset-reset: earliest
+      omp-utb-snf-journalforing:
+        auto-offset-reset: earliest
+      omp-utb-snf-cleanup:
+        auto-offset-reset: earliest
+
+      omp-ma-preprosessering:
+        auto-offset-reset: earliest
+      omp-ma-journalforing:
+        auto-offset-reset: earliest
+      omp-ma-cleanup:
+        auto-offset-reset: earliest
+
+      omp-ao-preprosessering:
+        auto-offset-reset: earliest
+      omp-ao-journalforing:
+        auto-offset-reset: earliest
+      omp-ao-cleanup:
+        auto-offset-reset: earliest
+
+      ungdomsytelse-soknad-preprosessering:
+        auto-offset-reset: earliest
+      ungdomsytelse-soknad-journalforing:
+        auto-offset-reset: earliest
+      ungdomsytelse-soknad-cleanup:
+        auto-offset-reset: earliest
+
+      ungdomsytelse-oppgavebekreftelse-preprosessering:
+        auto-offset-reset: earliest
+      ungdomsytelse-oppgavebekreftelse-journalforing:
+        auto-offset-reset: earliest
+      ungdomsytelse-oppgavebekreftelse-cleanup:
+        auto-offset-reset: earliest
+
+      ungdomsytelse-inntektsrapportering-preprosessering:
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-journalforing:
+        auto-offset-reset: earliest
+      ungdomsytelse-inntektsrapportering-cleanup:
+        auto-offset-reset: earliest
+
+      olp-soknad-preprosessering:
+        auto-offset-reset: earliest
+      olp-soknad-journalforing:
+        auto-offset-reset: earliest
+      olp-soknad-cleanup:
+        auto-offset-reset: earliest
