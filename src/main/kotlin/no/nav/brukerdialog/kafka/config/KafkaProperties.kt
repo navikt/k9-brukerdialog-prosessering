@@ -17,7 +17,8 @@ data class KafkaProperties(
     val security: KafkaSecurityProperties? = null,
 ) {
     fun streamProperties(streamPropertyKey: KafkaStreamName): KafkaStreamsProperties {
-        return streams[streamPropertyKey.value] ?: throw IllegalStateException("Mangler konfiguration for ${streamPropertyKey.value} streams")
+        return streams[streamPropertyKey.value]
+            ?: throw IllegalStateException("Mangler konfiguration for ${streamPropertyKey.value} streams")
     }
 }
 
@@ -26,12 +27,12 @@ data class KafkaProducerProperties(
     val keySerializer: String,
     val valueSerializer: String,
     val retries: Int,
-    val transactionIdPrefix: String
+    val transactionIdPrefix: String,
 )
 
 data class KafkaStreamsProperties(
     val applicationIdSuffix: String,
-    val autoOffsetReset: String
+    val autoOffsetReset: String,
 )
 
 data class KafkaSecurityProperties(
@@ -40,13 +41,18 @@ data class KafkaSecurityProperties(
 )
 
 data class KafkaSSlProperties(
-    val keyPassword: String,
     val trustStoreType: String,
     val trustStoreLocation: Resource,
     val trustStorePassword: String,
     val keyStoreLocation: Resource,
     val keyStoreType: String,
-    val keyStorePassword: String
+    val keyStorePassword: String,
+    val sasl: KafkaSalsProperties? = null,
+)
+
+data class KafkaSalsProperties(
+    val mechanism: String,
+    val jaasConfig: String
 )
 
 enum class KafkaStreamName(val value: String) {

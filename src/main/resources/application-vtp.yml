@@ -1,18 +1,19 @@
 no.nav:
   kafka:
-    ssl:
-      trust-store-location: file:${KAFKA_TRUSTSTORE_PATH}
-      trust-store-password: changeit
-      trust-store-type: JKS
-      key-store-location: file:${KAFKA_KEYSTORE_PATH}
-      key-store-password: devillokeystore1234
-      key-store-type: PKCS12
-    properties:
-      security.protocol: SASL_SSL
-      sasl:
-        mechanism: PLAIN
-        jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required username='vtp' password='vtp';"
-
+    replication-factor: 1
+    security:
+      protocol: SASL_SSL
+      ssl:
+        key-password: ${KAFKA_CREDSTORE_PASSWORD}
+        trust-store-location: file:${KAFKA_TRUSTSTORE_PATH}
+        trust-store-password: changeit
+        trust-store-type: JKS
+        key-store-location: file:${KAFKA_KEYSTORE_PATH}
+        key-store-password: devillokeystore1234
+        key-store-type: PKCS12
+        sasl:
+          mechanism: PLAIN
+          jaas-config: "org.apache.kafka.common.security.scram.ScramLoginModule required username='vtp' password='vtp';"
     streams:
       psb-soknad-preprosessering:
         auto-offset-reset: earliest
@@ -104,3 +105,6 @@ no.nav:
         auto-offset-reset: earliest
       olp-soknad-cleanup:
         auto-offset-reset: earliest
+
+logging:
+  config: classpath:logback-vtp.xml

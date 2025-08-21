@@ -2,7 +2,10 @@ package no.nav.brukerdialog.kafka.config
 
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.common.config.SaslConfigs.SASL_JAAS_CONFIG
+import org.apache.kafka.common.config.SaslConfigs.SASL_MECHANISM
 import org.apache.kafka.common.config.SslConfigs
+import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
@@ -10,6 +13,8 @@ import org.springframework.kafka.transaction.KafkaTransactionManager
 
 class CommonKafkaConfig {
     companion object {
+        private val logger = LoggerFactory.getLogger(CommonKafkaConfig::class.java)
+
         fun commonConfig(kafkaConfigProps: KafkaProperties) = mutableMapOf<String, Any>().apply {
             put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, kafkaConfigProps.bootstrapServers)
         } + securityConfig(kafkaConfigProps.security)
@@ -27,6 +32,13 @@ class CommonKafkaConfig {
                 put(SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG, sslProps.keyStoreLocation.file.absolutePath)
                 put(SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG, sslProps.keyStorePassword)
                 put(SslConfigs.SSL_KEYSTORE_TYPE_CONFIG, sslProps.keyStoreType)
+
+                sslProps.sasl?.let { saslProps ->
+                    logger.info("Using SASL mechanism: ${saslProps.mechanism}")
+                    logger.info("Using JAAS config: ${saslProps.jaasConfig}")
+                    put(SASL_MECHANISM, saslProps.mechanism)
+                    put(SASL_JAAS_CONFIG, saslProps.jaasConfig)
+                }
             }
         }
 
