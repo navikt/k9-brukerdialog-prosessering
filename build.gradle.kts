@@ -33,7 +33,7 @@ repositories {
 
 val tokenSupportVersion = "5.0.33"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "12.3.2"
+val k9FormatVersion = "12.5.2"
 val ungDeltakelseOpplyserVersjon = "2.4.0"
 val springMockkVersion = "4.0.2"
 val logstashLogbackEncoderVersion = "8.1"
