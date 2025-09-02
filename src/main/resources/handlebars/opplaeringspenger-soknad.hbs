@@ -138,18 +138,14 @@
                         <ul>
                             {{#if arbeidsgiver.erAnsatt}}
                                 <li>Er ansatt i perioden det søkes for</li>
+                                {{#if arbeidsgiver.arbeidsforhold}}
+                                    <li>Jobber normalt {{arbeidsgiver.arbeidsforhold.jobberNormaltTimer}} timer per uke</li>
+                                {{/if}}
                             {{else}}
                                 <li>Er ikke ansatt i perioden det søkes for</li>
-                                {{#if arbeidsgiver.sluttetFørSøknadsperiodeErSatt}}
-                                    <li>
-                                        <p>Sluttet du hos {{arbeidsgiver.navn}} før {{periode.fra_og_med}}?</p>
-                                        <p>{{ jaNeiSvar arbeidsgiver.sluttetFørSøknadsperiode }}</p>
-                                    </li>
+                                {{#if arbeidsgiver.arbeidsforhold}}
+                                    <li>Jobbet normalt {{arbeidsgiver.arbeidsforhold.jobberNormaltTimer}} timer per uke</li>
                                 {{/if}}
-                            {{/if}}
-                            {{#if arbeidsgiver.arbeidsforhold}}
-                                <li>Jobber normalt {{arbeidsgiver.arbeidsforhold.jobberNormaltTimer}} timer per uke
-                                </li>
                             {{/if}}
                         </ul>
                     </li>
