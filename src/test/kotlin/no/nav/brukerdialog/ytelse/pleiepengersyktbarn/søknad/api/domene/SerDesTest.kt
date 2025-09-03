@@ -79,6 +79,7 @@ internal class SerDesTest {
                   "navn": "Org",
                   "organisasjonsnummer": "917755736",
                   "erAnsatt": true,
+                  "sluttetFørSøknadsperiode": null,
                   "arbeidsforhold": {
                     "normalarbeidstid": {
                       "timerPerUkeISnitt": "PT37H30M"
