@@ -7,7 +7,6 @@ data class Arbeidsgiver(
     val navn: String? = null,
     val organisasjonsnummer: String,
     val erAnsatt: Boolean,
-    val sluttetFørSøknadsperiode: Boolean? = null,
     val arbeidsforhold: Arbeidsforhold? = null
 )
 
