@@ -67,8 +67,7 @@ class SøknadUtils {
                 ArbeidsgiverOLP(
                     navn = "JobberIkkeHerLenger",
                     organisasjonsnummer = "977155436",
-                    erAnsatt = false,
-                    sluttetFørSøknadsperiode = false
+                    erAnsatt = false
                 )
             ),
             frilans = FrilansOLP(

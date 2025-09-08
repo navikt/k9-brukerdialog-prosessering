@@ -218,8 +218,6 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             "organisasjonsnummer" to it.organisasjonsnummer,
             "erAnsatt" to it.erAnsatt,
             "arbeidsforhold" to it.arbeidsforhold?.somMap(),
-            "sluttetFørSøknadsperiodeErSatt" to (it.sluttetFørSøknadsperiode != null),
-            "sluttetFørSøknadsperiode" to it.sluttetFørSøknadsperiode
         )
     }
 
