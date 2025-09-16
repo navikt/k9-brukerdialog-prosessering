@@ -19,7 +19,7 @@ import javax.imageio.ImageIO
 
 @Service
 class Image2PDFConverter(private val pdfGenerator: PDFGenerator) {
-    fun convertToPDF(bytes: ByteArray, contentType: String): ByteArray {
+    fun convertToPDF(bytes: ByteArray, contentType: String, skalGenererePDFForKorruptFil: Boolean): ByteArray {
         runCatching {
             logger.trace("Konverterer fra $contentType til PDF.")
             PDDocument(IOUtils.createTempFileOnlyStreamCache()).use { doc: PDDocument ->
@@ -30,12 +30,14 @@ class Image2PDFConverter(private val pdfGenerator: PDFGenerator) {
                 }
             }
         }.getOrElse { cause: Throwable ->
-            when (cause.cause) {
-                is IIOException -> {
+            when {
+                skalGenererePDFForKorruptFil && cause.cause is IIOException -> {
                     logger.warn("Feil ved lesing av bilde, genererer pdf for korrupt fil", cause)
-                     return pdfGenerator.genererPDFForKorruptFil()
+                    return pdfGenerator.genererPDFForKorruptFil()
                 }
-                else ->  throw IllegalStateException("Klarte ikke å gjøre om $contentType bilde til PDF", cause)
+                else -> {
+                    throw IllegalStateException("Klarte ikke å gjøre om $contentType bilde til PDF", cause)
+                }
             }
         }
     }

@@ -30,7 +30,7 @@ class Image2PdfConverterTest {
     @ValueSource(strings = ["bad_crc.png", "ihdr_corrupt.png", "sig_corrupt.png", "truncated.png"])
     fun `skal generere pdf for korrupt fil ved konvertering`(filnavn: String) {
         val fileResource = ResourceUtils.getFile("classpath:filer/uleselig/$filnavn")
-        val pdfData = Image2PDFConverter(generator).convertToPDF(fileResource.readBytes(), "png")
+        val pdfData = Image2PDFConverter(generator).convertToPDF(fileResource.readBytes(), "png", true)
 
         File(pdfPath(soknadId = filnavn, prefix = "uleselig")).writeBytes(pdfData)
     }
@@ -41,7 +41,7 @@ class Image2PdfConverterTest {
         name: String,
     ) {
         val fileResource = ResourceUtils.getFile("classpath:filer/$resourceName")
-        val image = Image2PDFConverter(generator).convertToPDF(fileResource.readBytes(), format)
+        val image = Image2PDFConverter(generator).convertToPDF(fileResource.readBytes(), format, true)
         val pathToWrite = "${System.getProperty("user.dir")}/scaled-image-$name.pdf"
         val file = File(pathToWrite)
         file.writeBytes(image)

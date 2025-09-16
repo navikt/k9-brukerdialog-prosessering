@@ -9,6 +9,7 @@ import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.apache.commons.lang3.stream.Streams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -19,6 +20,7 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.web.ErrorResponseException
 import java.nio.file.Files
 
 @ExtendWith(SpringExtension::class)
@@ -116,6 +118,27 @@ class DokumentServiceTest {
             // og slettes uten problemer
             dokumentService.slettDokumenter(dokumentIder, dokumentEier)
             assertThat(dokumentService.hentDokumenter(dokumentIder, dokumentEier)).isEmpty()
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["bad_crc.png", "ihdr_corrupt.png", "sig_corrupt.png", "truncated.png"])
+    fun `Lagring av korrupt fil kaster bad request`(filnavn: String) {
+        val dokumentEier = DokumentEier(FødselsnummerGenerator.neste())
+        val fil = hentFil("/uleselig/$filnavn")
+        val dokument = Dokument(
+            title = fil.name,
+            content = fil.readBytes(),
+            contentType = Files.probeContentType(fil.toPath()),
+            eier = dokumentEier
+        )
+
+        runBlocking {
+            assertThrows<ErrorResponseException> { dokumentService.lagreDokument(
+                dokument = dokument,
+                dokumentEier = dokumentEier,
+                skannForVirus = false,
+            ) }
         }
     }
 

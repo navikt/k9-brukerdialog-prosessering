@@ -83,7 +83,7 @@ class JournalføringsService(
                 Dokument(
                     title = it.title,
                     contentType = "application/pdf",
-                    content = image2PDFConverter.convertToPDF(bytes = it.content, contentType = it.contentType)
+                    content = image2PDFConverter.convertToPDF(bytes = it.content, contentType = it.contentType, skalGenererePDFForKorruptFil = true)
                 )
             )
         }

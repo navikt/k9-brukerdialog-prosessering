@@ -6,13 +6,17 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import no.nav.brukerdialog.integrasjon.clamav.VirusskannerService
+import no.nav.brukerdialog.integrasjon.dokarkiv.Image2PDFConverter
 import no.nav.brukerdialog.integrasjon.gcpstorage.GcpStorageService
 import no.nav.brukerdialog.integrasjon.gcpstorage.StorageKey
 import no.nav.brukerdialog.integrasjon.gcpstorage.StorageValue
 import no.nav.brukerdialog.mellomlagring.dokument.kryptering.KrypteringService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
+import org.springframework.http.ProblemDetail
 import org.springframework.stereotype.Service
+import org.springframework.web.ErrorResponseException
 
 @Service
 data class DokumentService(
@@ -20,6 +24,7 @@ data class DokumentService(
     private val gcpStorageService: GcpStorageService,
     private val virusScanner: VirusskannerService,
     private val objectMapper: ObjectMapper,
+    private val image2PDFConverter: Image2PDFConverter,
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(DokumentService::class.java)
@@ -122,6 +127,22 @@ data class DokumentService(
         if (skannForVirus) {
             virusScanner.skann(dokument.content)
         }
+
+        // sørger for at filen kan konverteres til PDF før journalføring senere i prosessen
+        runCatching { image2PDFConverter.convertToPDF(dokument.content, dokument.contentType, false) }
+            .fold(
+                onSuccess = { }, // Hvis konvertering lykkes, er det et bilde og vi kan gå videre
+                onFailure = { throwable ->
+                    throw ErrorResponseException(
+                        HttpStatus.BAD_REQUEST,
+                        ProblemDetail.forStatusAndDetail(
+                            HttpStatus.BAD_REQUEST,
+                            "Uleselig fil. Dobbelsjekk at filen lar seg åpne og er lesbar."
+                        ),
+                        throwable
+                    )
+                }
+            )
 
         logger.trace("Generer DokumentID")
         val dokumentId = genererDokumentId()
