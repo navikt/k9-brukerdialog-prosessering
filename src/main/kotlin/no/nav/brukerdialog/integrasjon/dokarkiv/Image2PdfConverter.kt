@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 import java.awt.geom.AffineTransform
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import javax.imageio.IIOException
 import javax.imageio.ImageIO
 
 @Service
@@ -28,6 +29,9 @@ class Image2PDFConverter {
                 }
             }
         }.getOrElse { cause: Throwable ->
+            if (cause is IIOException) {
+                // TODO: Returner template for korrupt image
+            }
             throw IllegalStateException("Klarte ikke å gjøre om $contentType bilde til PDF", cause)
         }
     }
