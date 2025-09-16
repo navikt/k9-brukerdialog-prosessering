@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.integrasjon.dokarkiv
 
+import no.nav.brukerdialog.pdf.PDFGenerator
 import org.apache.pdfbox.io.IOUtils
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage
@@ -13,11 +14,12 @@ import org.springframework.stereotype.Service
 import java.awt.geom.AffineTransform
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import javax.imageio.IIOException
 import javax.imageio.ImageIO
 
 @Service
-class Image2PDFConverter {
-    fun convertToPDF(bytes: ByteArray, contentType: String): ByteArray {
+class Image2PDFConverter(private val pdfGenerator: PDFGenerator) {
+    fun convertToPDF(bytes: ByteArray, contentType: String, skalGenererePDFForKorruptFil: Boolean): ByteArray {
         runCatching {
             logger.trace("Konverterer fra $contentType til PDF.")
             PDDocument(IOUtils.createTempFileOnlyStreamCache()).use { doc: PDDocument ->
@@ -28,7 +30,15 @@ class Image2PDFConverter {
                 }
             }
         }.getOrElse { cause: Throwable ->
-            throw IllegalStateException("Klarte ikke å gjøre om $contentType bilde til PDF", cause)
+            when {
+                skalGenererePDFForKorruptFil && cause.cause is IIOException -> {
+                    logger.warn("Feil ved lesing av bilde, genererer pdf for korrupt fil", cause)
+                    return pdfGenerator.genererPDFForKorruptFil()
+                }
+                else -> {
+                    throw IllegalStateException("Klarte ikke å gjøre om $contentType bilde til PDF", cause)
+                }
+            }
         }
     }
 
@@ -41,6 +51,10 @@ class Image2PDFConverter {
             doc.addPage(pdPage)
             try {
                 val bufferedImage = ImageIO.read(ByteArrayInputStream(bilde))
+
+                if (bufferedImage == null) {
+                    throw IIOException("Kunne ikke generere bilde")
+                }
 
                 val roteres = bufferedImage.height < bufferedImage.width
 
