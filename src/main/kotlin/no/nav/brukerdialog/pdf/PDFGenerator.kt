@@ -177,7 +177,17 @@ class PDFGenerator {
         }
     }
 
-    fun genererPDF(pdfData: PdfData): ByteArray = genererHTML(pdfData).let { html ->
+    fun genererPDF(pdfData: PdfData): ByteArray = genererHTML(pdfData).tilPDF()
+
+    fun genererPDFForKorruptFil(): ByteArray = handlebars.compile("korrupt-fil")
+        .apply(
+            Context
+                .newBuilder(emptyMap<String, Any>())
+                .resolver(MapValueResolver.INSTANCE)
+                .build()
+        ).tilPDF()
+
+    private fun String.tilPDF() = let { html ->
         val outputStream = ByteArrayOutputStream()
         PdfRendererBuilder()
             .useFastMode()
