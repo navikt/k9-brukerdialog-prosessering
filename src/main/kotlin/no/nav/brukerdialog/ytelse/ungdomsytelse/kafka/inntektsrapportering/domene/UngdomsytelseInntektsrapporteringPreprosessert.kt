@@ -19,7 +19,6 @@ data class UngdomsytelseInntektsrapporteringPreprosessert(
     val mottatt: ZonedDateTime,
     val søker: Søker,
     val oppgittInntektForPeriode: OppgittInntektForPeriode,
-    val harBekreftetInntekt: Boolean,
     val dokumentId: List<List<String>>,
     val k9Format: K9Søknad,
 ) : Preprosessert {
@@ -32,8 +31,7 @@ data class UngdomsytelseInntektsrapporteringPreprosessert(
         søker = ungdomsytelseInntektsrapporteringMottatt.søker,
         oppgittInntektForPeriode = ungdomsytelseInntektsrapporteringMottatt.oppgittInntektForPeriode,
         dokumentId = dokumentId,
-        k9Format = ungdomsytelseInntektsrapporteringMottatt.k9Format,
-        harBekreftetInntekt = ungdomsytelseInntektsrapporteringMottatt.harBekreftetInntekt
+        k9Format = ungdomsytelseInntektsrapporteringMottatt.k9Format
     )
 
     override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING

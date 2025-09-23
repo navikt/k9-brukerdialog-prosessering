@@ -113,8 +113,7 @@ class UngdomsytelseService(
                     fraOgMed = inntektsrapporteringOppgaveData.fraOgMed,
                     tilOgMed = inntektsrapporteringOppgaveData.tilOgMed
                 )
-            ),
-            harBekreftetInntekt = rapportetInntekt.harBekreftetInntekt,
+            )
         )
 
         val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)

@@ -2,7 +2,6 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering
 
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
-import jakarta.validation.constraints.AssertTrue
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.oppslag.soker.Søker
@@ -13,10 +12,10 @@ import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
-import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt
 import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
 import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
 import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
+import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -30,9 +29,6 @@ data class UngdomsytelseInntektsrapporteringInnsending(
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
     @field:Valid val oppgittInntektForPeriode: OppgittInntektForPeriode,
-
-    @field:AssertTrue(message = "Inntektsopplysningene må bekreftes for å kunne rapportere")
-    val harBekreftetInntekt: Boolean,
 
     ) : Innsending {
     companion object {
@@ -50,7 +46,6 @@ data class UngdomsytelseInntektsrapporteringInnsending(
             mottatt = mottatt,
             søker = søker,
             oppgittInntektForPeriode = oppgittInntektForPeriode,
-            harBekreftetInntekt = harBekreftetInntekt,
             k9Format = k9Format as UngSøknad
         )
     }

@@ -26,7 +26,6 @@ object InntektrapporteringUtils {
         oppgaveReferanse = "4e62f8de-1ff6-40e9-bdcd-10485c789094",
         mottatt = ZonedDateTime.parse("2025-01-01T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter),
         oppgittInntekt = OppgittInntekt(arbeidstakerOgFrilansInntekt = 3000),
-        harBekreftetInntekt = true,
     )
 
     fun gyldigInntektsrapportering(
@@ -55,7 +54,6 @@ object InntektrapporteringUtils {
                 fornavn = "Ola"
             ),
             oppgittInntektForPeriode = oppgittInntektForPeriode,
-            harBekreftetInntekt = true,
             k9Format = gyldigK9Format(søknadId, deltakelseId, mottatt, oppgittInntektForPeriode)
         )
     }

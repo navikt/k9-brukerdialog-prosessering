@@ -149,7 +149,6 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
                     "tilOgMed": "2025-01-31"
                 }
             },
-          "harBekreftetInntekt": true,
           "dokumentId": [
             [
               "123456789",
