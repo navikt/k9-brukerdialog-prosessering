@@ -59,7 +59,7 @@ class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
                 dagerSynlig = 7,
                 søkerFødselsnummer = søker.fødselsnummer,
                 eventId = "testes ikke",
-                ytelse = "OMSORGSPENGER_UT_ARBEIDSTAKER",
+                ytelse = "OMSORGSPENGER_UTBETALING_ARBEIDSTAKER",
             )
         )
     }

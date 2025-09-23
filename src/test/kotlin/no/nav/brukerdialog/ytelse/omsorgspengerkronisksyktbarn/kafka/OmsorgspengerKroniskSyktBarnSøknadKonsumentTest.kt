@@ -56,7 +56,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
                 dagerSynlig = 7,
                 søkerFødselsnummer = søker.fødselsnummer,
                 eventId = "testes ikke",
-                ytelse = "OMSORGSPENGER_UTV_KS",
+                ytelse = "OMSORGSPENGER_UTVIDET_RETT",
             )
         )
     }
