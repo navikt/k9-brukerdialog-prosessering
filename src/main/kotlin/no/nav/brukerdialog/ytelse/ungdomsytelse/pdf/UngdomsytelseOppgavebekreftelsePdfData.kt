@@ -62,7 +62,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
                 "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
                 "tilOgMed" to DATE_FORMATTER.format(tilOgMed),
                 "registerinntekt" to registerinntekt.somMap(),
-                "spørsmål" to "Har du tilbakemelding på inntektsopplysningene fra A-ordningen?",
+                "spørsmål" to "Stemmer lønnen vi har fått oppgitt?",
             )
 
             else -> null
@@ -86,7 +86,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     )
 
     private fun YtelseType.tekst() = when (this) {
-        YtelseType.PLEIEPENGER_SYKT_BARN -> "Pleiepenger sykt barn"
+        YtelseType.PLEIEPENGER_SYKT_BARN -> "Pleiepenger"
         YtelseType.PLEIEPENGER_LIVETS_SLUTTFASE -> "Skoleplass uten barnepass"
         YtelseType.OMSORGSPENGER -> "Omsorgspenger"
         YtelseType.OPPLAERINGSPENGER -> "Opplæringspenger"
