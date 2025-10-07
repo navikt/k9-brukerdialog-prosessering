@@ -112,7 +112,7 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
         return inntektBekreftelse.build()
     }
 
-    override fun dokumentTittelSuffix(): String = "kontroll av innetekt"
+    override fun dokumentTittelSuffix(): String = "kontroll av lønn"
 
     override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
         return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(

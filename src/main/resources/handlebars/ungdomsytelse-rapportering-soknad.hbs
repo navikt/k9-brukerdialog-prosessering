@@ -10,7 +10,7 @@
           content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
-        <bookmark name="Inntekt" href="#inntekt"/>
+        <bookmark name="Lønn" href="#lønn"/>
     </bookmarks>
     {{#block 'style-common' }}
     {{/block}}
@@ -25,16 +25,16 @@
 <div class="innholdscontainer">
     {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
 
-    <!--inntekt-->
-    <section id="inntekt">
-        <h2>Inntekter</h2>
+    <!--Lønn-->
+    <section id="lønn">
+        <h2>Lønn</h2>
         <ul class="ul-no-indent">
             {{#each inntektForPeriode as |inntekt|}}
                <li class="li-style-none"> I perioden <strong>{{inntekt.periode.fraOgMed}} til {{inntekt.periode.tilOgMed}}</strong> har du oppgitt følgende
-                   inntekter:</li>
+                   lønn:</li>
                 <br/>
                 {{#if inntekt.arbeidstakerOgFrilansInntekt}}
-                    <li class="li-style-none"><strong>Arbeidstaker / Frilanser:</strong> {{inntekt.arbeidstakerOgFrilansInntekt}}</li>
+                    <li class="li-style-none"><strong>Lønn (før skatt):</strong> {{inntekt.arbeidstakerOgFrilansInntekt}}</li>
                 {{/if}}
             {{/each}}
         </ul>
