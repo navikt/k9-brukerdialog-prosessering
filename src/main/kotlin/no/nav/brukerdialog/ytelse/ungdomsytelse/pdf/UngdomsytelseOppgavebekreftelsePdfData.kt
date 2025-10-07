@@ -64,7 +64,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
                 "månedÅr" to "${fraOgMed.month.somNorskMåned()} ${fraOgMed.year}",
                 "tilOgMed" to DATE_FORMATTER.format(tilOgMed),
                 "registerinntekt" to registerinntekt.somMap(),
-                "spørsmål" to "Stemmer lønnen vi har fått oppgitt?",
+                "spørsmål" to "Har du tilbakemelding på lønnen?",
             )
 
             else -> null
