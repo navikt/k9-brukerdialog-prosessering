@@ -168,6 +168,7 @@ object OlpPdfSøknadUtils {
                         LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")
                     )
                 ),
+                enkeltdagEllerPeriode = KursVarighetType.PERIODE,
                 reise = Reise(
                     reiserUtenforKursdager = true,
                     reisedager = listOf(
