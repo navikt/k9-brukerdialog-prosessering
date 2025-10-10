@@ -254,6 +254,7 @@ class OLPSøknadPdfGeneratorTest {
                             UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                             "Senter for Kurs AS"
                         ),
+                        enkeltdagEllerPeriode = KursVarighetType.PERIODE,
                         kursperioder = listOf(
                             Periode(LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")),
                             Periode(LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02"))
@@ -280,6 +281,7 @@ class OLPSøknadPdfGeneratorTest {
                             UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                             "Senter for Kurs AS"
                         ),
+                        enkeltdagEllerPeriode = KursVarighetType.PERIODE,
                         kursperioder = listOf(
                             Periode(LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")),
                             Periode(LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02"))
