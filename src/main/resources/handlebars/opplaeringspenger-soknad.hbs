@@ -94,11 +94,12 @@
                 <p class="sitat">{{kurs.reise.reisedagerBeskrivelse}}</p>
                 <hr/>
             {{/if}}
-        {{/if}}
 
-        <p class="sporsmalstekst">Reiser du på dager du ikke har kurs eller opplæring?</p>
-        <p>{{ jaNeiSvar kurs.reise.reiserUtenforKursdager }}</p>
-        <hr/>
+            <p class="sporsmalstekst">Reiser du på dager du ikke har kurs eller opplæring?</p>
+            <p>{{ jaNeiSvar kurs.reise.reiserUtenforKursdager }}</p>
+            <hr/>
+
+        {{/if}}
 
         <p class="sporsmalstekst">Skal du ta ut ferie i perioden?</p>
         {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}

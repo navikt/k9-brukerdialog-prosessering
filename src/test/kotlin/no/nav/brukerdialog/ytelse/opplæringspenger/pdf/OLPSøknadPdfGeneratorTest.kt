@@ -346,9 +346,6 @@ class OLPSøknadPdfGeneratorTest {
                                 tidKurs = Duration.ofHours(3).plusMinutes(30),
                                 tidReise = Duration.ofHours(2).plusMinutes(30)
                             )
-                        ),
-                        reise = Reise(
-                            reiserUtenforKursdager = false
                         )
                     )
                 ).pdfData()
