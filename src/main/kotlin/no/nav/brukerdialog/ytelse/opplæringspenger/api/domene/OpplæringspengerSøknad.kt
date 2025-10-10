@@ -172,7 +172,8 @@ data class OpplæringspengerSøknad(
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = OpplæringspengerSøknadValidator()
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Innsending {
-        val søknadsperiode = kurs.kursperioder
+        val søknadsperiode = if (kurs.enkeltdagEllerPeriode == KursVarighetType.PERIODE) kurs.kursperioder else kurs.kursdager?.map { Periode(it.dato, it.dato) }
+
         val olp = Opplæringspenger()
             .medSøknadsperiode(søknadsperiode)
             .medBarn(barn.tilK9Barn())
@@ -200,7 +201,11 @@ data class OpplæringspengerSøknad(
             .medSpråk(K9Språk.of(språk.name))
     }
 
-    fun byggK9Uttak(perioder: List<K9Periode>): Uttak {
+    fun byggK9Uttak(perioder: List<K9Periode>?): Uttak {
+        if (perioder.isNullOrEmpty()){
+            throw IllegalArgumentException("Perioder må være satt for å kunne lage Uttak")
+        }
+
         val uttaksPerioder = mutableMapOf<K9Periode, Uttak.UttakPeriodeInfo>()
 
         perioder.forEach { periode ->
@@ -217,7 +222,11 @@ data class OpplæringspengerSøknad(
         }
     }
 
-    private fun byggK9Arbeidstid(perioder: List<Periode>) = Arbeidstid().apply {
+    private fun byggK9Arbeidstid(perioder: List<Periode>?) = Arbeidstid().apply {
+        if (perioder.isNullOrEmpty()){
+            throw IllegalArgumentException("Perioder må være satt for å kunne lage Arbeidstid")
+        }
+
         if (arbeidsgivere.isNotEmpty()) {
             medArbeidstaker(arbeidsgivere.somK9Arbeidstaker(perioder))
         }
