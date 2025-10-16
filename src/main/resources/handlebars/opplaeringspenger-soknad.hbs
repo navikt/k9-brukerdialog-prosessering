@@ -101,23 +101,24 @@
 
         {{/if}}
 
-        <p class="sporsmalstekst">Skal du ta ut ferie i perioden?</p>
-        {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
-            <p>Ja</p>
-            <hr/>
-            <p class="sporsmalstekst">Ferie i perioden</p>
-            <ul>
-                {{# each ferieuttakIPerioden.ferieuttak as |ferieuttak|~}}
-                    <li>
-                        {{ferieuttak.fraOgMed}} - {{ferieuttak.tilOgMed}}
-                    </li>
-                {{/each}}
-            </ul>
-        {{else}}
-            <p>Nei</p>
+        {{# if ferieuttakIPerioden }}
+            <p class="sporsmalstekst">Skal du ta ut ferie i perioden?</p>
+            {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
+                <p>Ja</p>
+                <hr/>
+                <p class="sporsmalstekst">Ferie i perioden</p>
+                <ul>
+                    {{# each ferieuttakIPerioden.ferieuttak as |ferieuttak|~}}
+                        <li>
+                            {{ferieuttak.fraOgMed}} - {{ferieuttak.tilOgMed}}
+                        </li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <p>Nei</p>
+            {{/if}}
         {{/if}}
 
-<!--    TODO: fjern nullable når vi har lansert og mellomlagring inneholder dette feltet. -->
         {{# if utenlandsoppholdIPerioden }}
             <hr/>
 

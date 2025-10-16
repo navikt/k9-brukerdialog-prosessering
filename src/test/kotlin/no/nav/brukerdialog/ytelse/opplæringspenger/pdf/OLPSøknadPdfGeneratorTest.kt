@@ -347,7 +347,9 @@ class OLPSøknadPdfGeneratorTest {
                                 tidReise = Duration.ofHours(2).plusMinutes(30)
                             )
                         )
-                    )
+                    ),
+                    ferieuttakIPerioden = null,
+                    utenlandsoppholdIPerioden = null
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)

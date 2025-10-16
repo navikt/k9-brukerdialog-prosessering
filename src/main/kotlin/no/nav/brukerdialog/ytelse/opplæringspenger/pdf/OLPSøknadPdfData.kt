@@ -61,10 +61,10 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
             ),
             "opptjeningIUtlandet" to søknad.opptjeningIUtlandet.somMapOpptjeningIUtlandet(),
             "utenlandskNæring" to søknad.utenlandskNæring.somMapUtenlandskNæring(),
-            "ferieuttakIPerioden" to mapOf(
-                "skalTaUtFerieIPerioden" to søknad.ferieuttakIPerioden?.skalTaUtFerieIPerioden,
-                "ferieuttak" to søknad.ferieuttakIPerioden?.ferieuttak?.somMapFerieuttak()
-            ),
+            "ferieuttakIPerioden" to søknad.ferieuttakIPerioden?.let { mapOf(
+                "skalTaUtFerieIPerioden" to it.skalTaUtFerieIPerioden,
+                "ferieuttak" to it.ferieuttak.somMapFerieuttak()
+            )},
             "harVærtEllerErVernepliktig" to søknad.harVærtEllerErVernepliktig,
             "frilans" to søknad.frilans?.somMap(),
             "selvstendigNæringsdrivende" to søknad.selvstendigNæringsdrivende?.somMap(),
