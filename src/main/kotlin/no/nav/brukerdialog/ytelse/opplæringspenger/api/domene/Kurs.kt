@@ -37,6 +37,13 @@ data class Kurs(
         }
     }
 
+    fun søknadsperioder(): List<Periode> {
+        return when (enkeltdagEllerPeriode) {
+            KursVarighetType.PERIODE -> kursperioder!!
+            KursVarighetType.ENKELTDAG -> kursdager!!.map { Periode(it.dato, it.dato) }
+        }
+    }
+
     @Hidden
     @AssertTrue(message = "Hvis enkeltdagEllerPeriode=PERIODE må det eksistere kursperioder og reise")
     fun isKursMedPerioder(): Boolean {
