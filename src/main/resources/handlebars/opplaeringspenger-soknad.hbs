@@ -54,51 +54,71 @@
         <p>{{ kurs.institusjonsnavn }}</p>
         <hr/>
         <p class="sporsmalstekst">Hvilke dager søker du opplæringspenger?</p>
-        <ul>
-            {{#each kurs.kursperioder }}
-                <li>
-                    <p>{{ fraOgMed }} - {{ tilOgMed }}</p>
-                </li>
-            {{/each}}
-        </ul>
-        <hr/>
-
-        <p class="sporsmalstekst">Reiser du på dager du ikke har kurs eller opplæring?</p>
-        <p>{{ jaNeiSvar kurs.reise.reiserUtenforKursdager }}</p>
-        <hr/>
-        {{# if kurs.reise.reiserUtenforKursdager}}
-            <p class="sporsmalstekst">Reisedager uten kurs eller opplæring</p>
+        {{#if kurs.kursperioder}}
             <ul>
-                {{#each kurs.reise.reisedager as |reisedag|~}}
+                {{#each kurs.kursperioder }}
                     <li>
-                        <p>{{reisedag}}</p>
-                    </li>
-                {{/each}}
-            </ul>
-            <hr/>
-
-            <p class="sporsmalstekst">Årsak til reisetid</p>
-            <p class="sitat">{{kurs.reise.reisedagerBeskrivelse}}</p>
-            <hr/>
-        {{/if}}
-
-        <p class="sporsmalstekst">Skal du ta ut ferie i perioden?</p>
-        {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
-            <p>Ja</p>
-            <hr/>
-            <p class="sporsmalstekst">Ferie i perioden</p>
-            <ul>
-                {{# each ferieuttakIPerioden.ferieuttak as |ferieuttak|~}}
-                    <li>
-                        {{ferieuttak.fraOgMed}} - {{ferieuttak.tilOgMed}}
+                        <p>{{ fraOgMed }} - {{ tilOgMed }}</p>
                     </li>
                 {{/each}}
             </ul>
         {{else}}
-            <p>Nei</p>
+            <ul>
+                {{#each kurs.kursdager as |kursdag|~}}
+                    <li>
+                        {{#if kursdag.tidReise}}
+                            <p>{{kursdag.dato}}. Kurstid: {{kursdag.tidKurs}}. Reisetid: {{kursdag.tidReise}}.</p>
+                        {{else}}
+                            <p>{{kursdag.dato}}. Kurstid: {{kursdag.tidKurs}}.</p>
+                        {{/if}}
+                    </li>
+                {{/each}}
+            </ul>
         {{/if}}
 
-<!--    TODO: fjern nullable når vi har lansert og mellomlagring inneholder dette feltet. -->
+        <hr/>
+
+        {{#if kurs.reise}}
+            {{# if kurs.reise.reiserUtenforKursdager}}
+                <p class="sporsmalstekst">Reisedager uten kurs eller opplæring</p>
+                <ul>
+                    {{#each kurs.reise.reisedager as |reisedag|~}}
+                        <li>
+                            <p>{{reisedag}}</p>
+                        </li>
+                    {{/each}}
+                </ul>
+                <hr/>
+
+                <p class="sporsmalstekst">Årsak til reisetid</p>
+                <p class="sitat">{{kurs.reise.reisedagerBeskrivelse}}</p>
+                <hr/>
+            {{/if}}
+
+            <p class="sporsmalstekst">Reiser du på dager du ikke har kurs eller opplæring?</p>
+            <p>{{ jaNeiSvar kurs.reise.reiserUtenforKursdager }}</p>
+            <hr/>
+
+        {{/if}}
+
+        {{# if ferieuttakIPerioden }}
+            <p class="sporsmalstekst">Skal du ta ut ferie i perioden?</p>
+            {{# if ferieuttakIPerioden.skalTaUtFerieIPerioden }}
+                <p>Ja</p>
+                <hr/>
+                <p class="sporsmalstekst">Ferie i perioden</p>
+                <ul>
+                    {{# each ferieuttakIPerioden.ferieuttak as |ferieuttak|~}}
+                        <li>
+                            {{ferieuttak.fraOgMed}} - {{ferieuttak.tilOgMed}}
+                        </li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <p>Nei</p>
+            {{/if}}
+        {{/if}}
+
         {{# if utenlandsoppholdIPerioden }}
             <hr/>
 

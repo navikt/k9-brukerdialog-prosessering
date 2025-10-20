@@ -172,13 +172,14 @@ data class OpplæringspengerSøknad(
     override fun søknadValidator(): SøknadValidator<no.nav.k9.søknad.Søknad> = OpplæringspengerSøknadValidator()
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): no.nav.k9.søknad.Innsending {
-        val søknadsperiode = kurs.kursperioder
+        val søknadsperioder = kurs.søknadsperioder()
+
         val olp = Opplæringspenger()
-            .medSøknadsperiode(søknadsperiode)
+            .medSøknadsperiode(søknadsperioder)
             .medBarn(barn.tilK9Barn())
             .medOpptjeningAktivitet(byggK9OpptjeningAktivitet())
-            .medArbeidstid(byggK9Arbeidstid(søknadsperiode))
-            .medUttak(byggK9Uttak(søknadsperiode))
+            .medArbeidstid(byggK9Arbeidstid(søknadsperioder))
+            .medUttak(byggK9Uttak(søknadsperioder))
             .medBosteder(medlemskap.tilK9Bosteder())
             .medKurs(kurs.tilK9Format())
             .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as Opplæringspenger
@@ -201,6 +202,7 @@ data class OpplæringspengerSøknad(
     }
 
     fun byggK9Uttak(perioder: List<K9Periode>): Uttak {
+
         val uttaksPerioder = mutableMapOf<K9Periode, Uttak.UttakPeriodeInfo>()
 
         perioder.forEach { periode ->
