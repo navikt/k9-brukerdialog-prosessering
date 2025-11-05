@@ -874,6 +874,24 @@ class PSBSøknadPdfGeneratorTest {
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "31-ikke-frilans-men-har-arbeidsforhold"
+            pdf = generator.genererPDF(
+                pdfData = fullGyldigMelding(id).copy(
+                    frilans = Frilans(
+                        harInntektSomFrilanser = false,
+                        arbeidsforhold = Arbeidsforhold(
+                            normalarbeidstid = NormalArbeidstid(
+                                timerPerUkeISnitt = Duration.ofHours(37).plusMinutes(30)
+                            ),
+                            arbeidIPeriode = ArbeidIPeriode(
+                                type = ArbeidIPeriodeType.IKKE_BESVART
+                            )
+                        )
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }
