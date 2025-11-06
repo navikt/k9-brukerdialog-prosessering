@@ -22,7 +22,6 @@ class ArbeidsgiverOLPTest {
                 navn = "Fiskeriet AS",
                 organisasjonsnummer = "991346066",
                 erAnsatt = true,
-                sluttetFørSøknadsperiode = false,
                 arbeidsforhold = ArbeidsforholdOLP(
                     37.5,
                     ArbeidIPeriode(JobberIPeriodeSvar.SOM_VANLIG, enkeltDagerMedJobbSomVanlig)
@@ -38,7 +37,6 @@ class ArbeidsgiverOLPTest {
                 navn = " ",
                 organisasjonsnummer = "991346066",
                 erAnsatt = true,
-                sluttetFørSøknadsperiode = false,
                 arbeidsforhold = ArbeidsforholdOLP(
                     37.5,
                     ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, enkeltDagerMedFulltFravær)
@@ -54,7 +52,6 @@ class ArbeidsgiverOLPTest {
                 navn = "Fiskeriet AS",
                 organisasjonsnummer = "991346066",
                 erAnsatt = true,
-                sluttetFørSøknadsperiode = false,
                 arbeidsforhold = ArbeidsforholdOLP(37.5, ArbeidIPeriode(JobberIPeriodeSvar.REDUSERT, emptyList()))
             ),
             1,
@@ -69,7 +66,6 @@ class ArbeidsgiverOLPTest {
                 navn = "Fiskeriet AS",
                 organisasjonsnummer = "1ABC",
                 erAnsatt = true,
-                sluttetFørSøknadsperiode = false,
                 arbeidsforhold = ArbeidsforholdOLP(
                     37.5, ArbeidIPeriode(
                         JobberIPeriodeSvar.HELT_FRAVÆR,
@@ -88,7 +84,6 @@ class ArbeidsgiverOLPTest {
             navn = "Fiskeriet AS",
             organisasjonsnummer = "991346066",
             erAnsatt = true,
-            sluttetFørSøknadsperiode = false,
             arbeidsforhold = ArbeidsforholdOLP(
                 37.5, ArbeidIPeriode(
                     JobberIPeriodeSvar.HELT_FRAVÆR, listOf(

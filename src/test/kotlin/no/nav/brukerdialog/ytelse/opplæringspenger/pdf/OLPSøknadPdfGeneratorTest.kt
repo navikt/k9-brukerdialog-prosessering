@@ -254,6 +254,7 @@ class OLPSøknadPdfGeneratorTest {
                             UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                             "Senter for Kurs AS"
                         ),
+                        enkeltdagEllerPeriode = KursVarighetType.PERIODE,
                         kursperioder = listOf(
                             Periode(LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")),
                             Periode(LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02"))
@@ -280,6 +281,7 @@ class OLPSøknadPdfGeneratorTest {
                             UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                             "Senter for Kurs AS"
                         ),
+                        enkeltdagEllerPeriode = KursVarighetType.PERIODE,
                         kursperioder = listOf(
                             Periode(LocalDate.parse("2020-01-02"), LocalDate.parse("2020-01-07")),
                             Periode(LocalDate.parse("2020-03-01"), LocalDate.parse("2020-03-02"))
@@ -321,6 +323,33 @@ class OLPSøknadPdfGeneratorTest {
                         skalEttersendeVedlegg = false,
                         vedleggSomSkalEttersendes = null
                     )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "20-med-kursdager"
+            pdf = generator.genererPDF(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    kurs = Kurs(
+                        kursholder = Kursholder(
+                            UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
+                            "Senter for Kurs AS"
+                        ),
+                        enkeltdagEllerPeriode = KursVarighetType.ENKELTDAG,
+                        kursdager = listOf(
+                            KursDag(
+                                dato = LocalDate.parse("2020-01-02"),
+                                tidKurs = Duration.ofHours(3).plusMinutes(30)
+                            ),
+                            KursDag(
+                                dato = LocalDate.parse("2020-01-02"),
+                                tidKurs = Duration.ofHours(3).plusMinutes(30),
+                                tidReise = Duration.ofHours(2).plusMinutes(30)
+                            )
+                        )
+                    ),
+                    ferieuttakIPerioden = null,
+                    utenlandsoppholdIPerioden = null
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)

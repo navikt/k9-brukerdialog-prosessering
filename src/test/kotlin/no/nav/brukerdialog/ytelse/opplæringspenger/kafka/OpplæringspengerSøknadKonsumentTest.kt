@@ -480,14 +480,12 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
                   "jobberNormaltTimer": 40
                 },
                 "navn": "Arbeidsplassen AS",
-                "sluttetFørSøknadsperiode": null,
                 "organisasjonsnummer": "917755736"
               },
               {
                 "erAnsatt": false,
                 "arbeidsforhold": null,
                 "navn": "JobberIkkeHerLenger AS",
-                "sluttetFørSøknadsperiode": false,
                 "organisasjonsnummer": "977155436"
               }
             ],

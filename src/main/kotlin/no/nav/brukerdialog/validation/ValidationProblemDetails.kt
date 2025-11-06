@@ -22,7 +22,12 @@ data class ValidationProblemDetailsString(val violations: List<String>): Problem
 
 class ValidationErrorResponseException(val validationProblemDetails: ProblemDetail) : ErrorResponseException(HttpStatus.BAD_REQUEST, validationProblemDetails, null)
 
-data class Violation(val parameterName : String, val parameterType: ParameterType, val reason: String, val invalidValue : Any? = null)
+data class Violation(val parameterName : String, val parameterType: ParameterType, val reason: String, val invalidValue : Any? = null) {
+    override fun toString(): String {
+        val safeInvalidValue = if (invalidValue == null) "null" else "[...]"
+        return "Violation(parameterName='$parameterName', parameterType=$parameterType, reason='$reason', invalidValue=$safeInvalidValue)"
+    }
+}
 enum class ParameterType {
     QUERY,
     PATH,

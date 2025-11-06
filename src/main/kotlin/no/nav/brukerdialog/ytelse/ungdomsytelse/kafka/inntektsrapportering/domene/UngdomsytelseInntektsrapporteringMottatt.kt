@@ -15,7 +15,6 @@ data class UngdomsytelseInntektsrapporteringMottatt(
     val søker: Søker,
     val oppgittInntektForPeriode: OppgittInntektForPeriode,
     val mottatt: ZonedDateTime,
-    val harBekreftetInntekt: Boolean,
     val k9Format: Søknad,
 ) : MottattMelding {
     override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING

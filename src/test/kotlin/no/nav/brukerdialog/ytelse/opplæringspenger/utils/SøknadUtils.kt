@@ -67,8 +67,7 @@ class SøknadUtils {
                 ArbeidsgiverOLP(
                     navn = "JobberIkkeHerLenger",
                     organisasjonsnummer = "977155436",
-                    erAnsatt = false,
-                    sluttetFørSøknadsperiode = false
+                    erAnsatt = false
                 )
             ),
             frilans = FrilansOLP(
@@ -178,6 +177,7 @@ class SøknadUtils {
                     UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                     "Senter for Kurs AS"
                 ),
+                enkeltdagEllerPeriode = KursVarighetType.PERIODE,
                 kursperioder = listOf(
                     K9Periode(
                         LocalDate.parse("2021-01-01"),

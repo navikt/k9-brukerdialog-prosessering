@@ -10,7 +10,6 @@ data class UngdomsytelseKomplettInntektsrapportering(
     val søker: Søker,
     val oppgittInntektForPeriode: OppgittInntektForPeriode,
     val mottatt: ZonedDateTime,
-    val harBekreftetInntekt: Boolean,
     val k9Format: Søknad,
 ) : KomplettInnsending {
     override fun innsendingId(): String = oppgaveReferanse

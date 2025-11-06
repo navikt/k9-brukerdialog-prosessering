@@ -287,7 +287,10 @@
             {{/if}}
         {{else}}
             <h2>Frilans</h2>
-            <p>Har ikke vært frilanser eller mottatt honorar i perioden det søkes om.</p>
+            <p>Er ikke frilanser og får ikke honorar søknadsperioden.</p>
+            {{#if frilans.arbeidsforhold}}
+                <br/>{{> partial/arbeid/normalArbeidstidPartial normalarbeidstid=frilans.arbeidsforhold.normalarbeidstid fortid=true}}
+            {{/if}}
         {{/if}}
     </section>
 

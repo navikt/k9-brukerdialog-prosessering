@@ -105,8 +105,7 @@ object OlpPdfSøknadUtils {
                 ), Arbeidsgiver(
                     navn = "JobberIkkeHerLenger AS",
                     organisasjonsnummer = "977155436",
-                    erAnsatt = false,
-                    sluttetFørSøknadsperiode = false
+                    erAnsatt = false
                 )
             ),
             frilans = Frilans(
@@ -169,6 +168,7 @@ object OlpPdfSøknadUtils {
                         LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")
                     )
                 ),
+                enkeltdagEllerPeriode = KursVarighetType.PERIODE,
                 reise = Reise(
                     reiserUtenforKursdager = true,
                     reisedager = listOf(

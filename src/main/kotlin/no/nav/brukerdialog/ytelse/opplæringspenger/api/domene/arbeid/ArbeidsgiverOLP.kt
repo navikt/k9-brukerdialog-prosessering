@@ -17,7 +17,6 @@ data class ArbeidsgiverOLP(
     @field:NotBlank(message = "navn kan ikke være tomt eller blankt")
     private val navn: String,
     private val erAnsatt: Boolean,
-    private val sluttetFørSøknadsperiode: Boolean? = null,
 
     @field:Valid
     private val arbeidsforhold: ArbeidsforholdOLP? = null,
