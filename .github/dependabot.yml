@@ -5,11 +5,14 @@ registries:
     url: https://maven.pkg.github.com/navikt/k9-brukerdialog-prosessering
     username: x-access-token
     password: ${{secrets.READER_TOKEN}}
+
 updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: daily
+    cooldown:
+      default-days: 7
     groups:
       github:
         patterns:
@@ -21,6 +24,10 @@ updates:
       interval: daily
     registries:
       - k9-felles
+    cooldown:
+      default-days: 7
+      exclude:
+        - "no.nav.*"
     groups:
       gradle:
         patterns:
@@ -30,3 +37,5 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+    cooldown:
+      default-days: 7
