@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.5.7"
+	id("org.springframework.boot") version "4.0.0"
 	id("io.spring.dependency-management") version "1.1.7"
 	kotlin("jvm") version "2.2.21"
 	kotlin("plugin.spring") version "2.2.21"
@@ -31,10 +31,10 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.40"
+val tokenSupportVersion = "6.0.0"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "12.6.2"
-val ungDeltakelseOpplyserVersjon = "2.5.0"
+val k9FormatVersion = "12.7.0"
+val ungDeltakelseOpplyserVersjon = "2.7.0"
 val springMockkVersion = "4.0.2"
 val logstashLogbackEncoderVersion = "9.0"
 val slf4jVersion = "2.0.17"
@@ -42,9 +42,9 @@ val openhtmltopdfVersion = "1.1.4"
 val handlebarsVersion = "4.5.0"
 val retryVersion = "2.0.12"
 val awailitilityKotlinVersion = "4.3.0"
-val springCloudContractVersion = "4.3.0"
+val springCloudContractVersion = "5.0.0"
 val orgJsonVersion = "20250517"
-val springdocVersion = "2.8.14"
+val springdocVersion = "3.0.0"
 val pdfBoxVersion = "3.0.6"
 val imageIOVersion = "3.12.0"
 val fpsakTidsserieVersion = "2.7.3"
