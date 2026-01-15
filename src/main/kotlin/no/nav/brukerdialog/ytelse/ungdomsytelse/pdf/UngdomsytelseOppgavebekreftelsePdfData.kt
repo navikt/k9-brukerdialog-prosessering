@@ -17,6 +17,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.PeriodeDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.registerinntekt.YtelseType
 import java.math.BigDecimal
@@ -61,7 +62,7 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
 
         "endretPeriodeOppgave" to when (this) {
             is KomplettEndretPeriodeUngdomsytelseOppgaveDTO -> mapOf(
-                "spørsmål" to "Har du tilbakemelding på at  perioden din endres?"
+                "spørsmål" to lagSpørsmålEndretPeriode(this.nyPeriode)
             )
             else -> null
         },
@@ -79,6 +80,12 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
             else -> null
         }
     )
+
+    private fun lagSpørsmålEndretPeriode(nyPeriode: PeriodeDTO?): String = nyPeriode?.let { "Har du tilbakemelding på at perioden din endres til " + lagPeriodeString(nyPeriode) + "?" } ?: "Har du tilbakemelding på at hele perioden din fjernes fra start?"
+
+    private fun lagPeriodeString(nyPeriode: PeriodeDTO): String =
+        DATE_FORMATTER.format(nyPeriode.fom) + " - " +
+                (nyPeriode.tom?.let { DATE_FORMATTER.format(it) } ?: "ingen sluttdato")
 
     private fun RegisterinntektDTO.somMap() = mapOf(
         "arbeidOgFrilansInntekter" to this.arbeidOgFrilansInntekter.map {

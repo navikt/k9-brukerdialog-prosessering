@@ -200,7 +200,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "9-godtar-endret-periode-med-periode"
+            id = "9-godtar-endret-periode-med-periode-start-og-slutt"
             pdf = generator.genererPDF(
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
@@ -218,7 +218,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
-            id = "10-avslår-endret-periode-med-periode"
+            id = "10-avslår-endret-periode-med-periode-start-og-slutt"
             pdf = generator.genererPDF(
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
@@ -237,6 +237,42 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
+            id = "11-godtar-endret-periode-med-periode-kun-start"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
+                    .copy(
+                        oppgave = KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+                            oppgaveReferanse = UUID.randomUUID().toString(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                harUttalelse = false,
+                            ),
+                            nyPeriode = PeriodeDTO(
+                                fom = LocalDate.parse("2025-01-01"),
+                                tom = null
+                            )
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "12-avslår-endret-periode-med-periode-kun-start"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
+                    .copy(
+                        oppgave = KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+                            oppgaveReferanse = UUID.randomUUID().toString(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                harUttalelse = true,
+                                uttalelseFraDeltaker = "Jeg ønsker en annen periode"
+                            ),
+                            nyPeriode = PeriodeDTO(
+                                fom = LocalDate.parse("2025-01-01"),
+                                tom = null
+                            )
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
 
         }
     }
