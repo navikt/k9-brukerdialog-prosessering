@@ -49,6 +49,7 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
             oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
                 fraOgMed = LocalDate.parse("2025-01-01"),
                 tilOgMed = LocalDate.parse("2025-01-31"),
+                gjelderDelerAvMåned = false
             )
         )
         mockMarkerOppgaveSomLøst()

@@ -129,7 +129,8 @@ class UngdomsytelseControllerTest {
             oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
             oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
                 fraOgMed = LocalDate.now(),
-                tilOgMed = LocalDate.now()
+                tilOgMed = LocalDate.now(),
+                gjelderDelerAvMåned = true
             )
         )
 
@@ -347,7 +348,8 @@ class UngdomsytelseControllerTest {
             oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
             oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
                 fraOgMed = LocalDate.now(),
-                tilOgMed = LocalDate.now()
+                tilOgMed = LocalDate.now(),
+                gjelderDelerAvMåned = true
             ),
             status = OppgaveStatus.ULØST,
             bekreftelse = null,

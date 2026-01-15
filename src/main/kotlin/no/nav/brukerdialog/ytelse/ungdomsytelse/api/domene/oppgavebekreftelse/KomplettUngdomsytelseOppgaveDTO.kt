@@ -4,9 +4,12 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse
+import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretPeriodeBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretSluttdatoBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretStartdatoBekreftelse
+import no.nav.k9.søknad.felles.type.Periode
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.PeriodeDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
 import java.time.LocalDate
 import java.util.*
@@ -19,6 +22,7 @@ import java.util.*
 @JsonSubTypes(
     JsonSubTypes.Type(value = KomplettEndretStartdatoUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_ENDRET_STARTDATO),
     JsonSubTypes.Type(value = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_ENDRET_SLUTTDATO),
+    JsonSubTypes.Type(value = KomplettEndretPeriodeUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_ENDRET_PERIODE),
     JsonSubTypes.Type(value = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO::class, name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
 )
 sealed class KomplettUngdomsytelseOppgaveDTO(
@@ -91,6 +95,38 @@ data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
         )
     }
 }
+
+data class KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+    override val oppgaveReferanse: String,
+    override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
+    val nyPeriode: PeriodeDTO?,
+) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
+    override fun somK9Format(): Bekreftelse {
+        val endretPeriodeBekreftelse =
+            EndretPeriodeBekreftelse(
+                UUID.fromString(oppgaveReferanse),
+                nyPeriode?.let { Periode(nyPeriode.fom, nyPeriode.tom) },
+                uttalelse.harUttalelse
+            )
+
+        if (!uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
+            endretPeriodeBekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
+        }
+
+        return endretPeriodeBekreftelse
+    }
+
+    override fun dokumentTittelSuffix(): String = "endret periode"
+
+    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+        return KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+            oppgaveReferanse = oppgaveReferanse,
+            nyPeriode = nyPeriode,
+            uttalelse = uttalelse
+        )
+    }
+}
+
 
 data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     override val oppgaveReferanse: String,

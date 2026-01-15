@@ -3,6 +3,7 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretPeriodeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretSluttdatoDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.KontrollerRegisterinntektOppgavetypeDataDTO
@@ -30,6 +31,14 @@ data class UngdomsytelseOppgaveDTO(
                 return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
                     nySluttdato = oppgavetypeData.nySluttdato,
+                    uttalelse = uttalelse
+                )
+            }
+
+            is EndretPeriodeDataDTO -> {
+                return KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+                    oppgaveReferanse = oppgaveReferanse,
+                    nyPeriode = oppgavetypeData.nyPeriode,
                     uttalelse = uttalelse
                 )
             }

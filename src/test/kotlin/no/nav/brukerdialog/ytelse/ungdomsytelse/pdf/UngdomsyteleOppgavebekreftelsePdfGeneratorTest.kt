@@ -2,12 +2,14 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.pdf
 
 import no.nav.brukerdialog.pdf.PDFGenerator
 import no.nav.brukerdialog.utils.PathUtils.pdfPath
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretPeriodeUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.ArbeidOgFrilansRegisterInntektDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.PeriodeDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.YtelseRegisterInntektDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.registerinntekt.YtelseType
@@ -166,6 +168,76 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                     ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "7-godtar-endret-periode-uten-periode"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
+                    .copy(
+                        oppgave = KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+                            oppgaveReferanse = UUID.randomUUID().toString(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                harUttalelse = false,
+                            ),
+                            nyPeriode = null
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "8-avslår-endret-periode-uten-periode"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
+                    .copy(
+                        oppgave = KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+                            oppgaveReferanse = UUID.randomUUID().toString(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                harUttalelse = true,
+                                uttalelseFraDeltaker = "Jeg ønsker en annen periode"
+                            ),
+                            nyPeriode = null
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "9-godtar-endret-periode-med-periode"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
+                    .copy(
+                        oppgave = KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+                            oppgaveReferanse = UUID.randomUUID().toString(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                harUttalelse = false,
+                            ),
+                            nyPeriode = PeriodeDTO(
+                                fom = LocalDate.parse("2025-01-01"),
+                                tom = LocalDate.parse("2025-12-31")
+                            )
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "10-avslår-endret-periode-med-periode"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
+                    .copy(
+                        oppgave = KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
+                            oppgaveReferanse = UUID.randomUUID().toString(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                harUttalelse = true,
+                                uttalelseFraDeltaker = "Jeg ønsker en annen periode"
+                            ),
+                            nyPeriode = PeriodeDTO(
+                                fom = LocalDate.parse("2025-01-01"),
+                                tom = LocalDate.parse("2025-12-31")
+                            )
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+
         }
     }
 }

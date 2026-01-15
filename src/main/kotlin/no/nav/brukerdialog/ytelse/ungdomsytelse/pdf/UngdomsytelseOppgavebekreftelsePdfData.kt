@@ -9,6 +9,7 @@ import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
 import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretPeriodeUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
@@ -58,6 +59,14 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
             else -> null
         },
 
+        "endretPeriodeOppgave" to when (this) {
+            is KomplettEndretPeriodeUngdomsytelseOppgaveDTO -> mapOf(
+                "spørsmål" to "Har du tilbakemelding på at  perioden din endres?"
+            )
+            else -> null
+        },
+
+
         "kontrollerRegisterInntektOppgave" to when (this) {
             is KomplettKontrollerRegisterInntektOppgaveTypeDataDTO -> mapOf(
                 "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
@@ -88,8 +97,9 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     )
 
     private fun YtelseType.tekst() = when (this) {
-        YtelseType.PLEIEPENGER_SYKT_BARN -> "Pleiepenger"
-        YtelseType.PLEIEPENGER_LIVETS_SLUTTFASE -> "Skoleplass uten barnepass"
+        YtelseType.PLEIEPENGER_SYKT_BARN -> "Pleiepenger sykt barn"
+        YtelseType.PLEIEPENGER_LIVETS_SLUTTFASE -> "Pleiepenger i livets sluttfase"
+        YtelseType.PLEIEPENGER -> "Pleiepenger"
         YtelseType.OMSORGSPENGER -> "Omsorgspenger"
         YtelseType.OPPLAERINGSPENGER -> "Opplæringspenger"
         YtelseType.SYKEPENGER -> "Sykepenger"
