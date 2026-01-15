@@ -20,6 +20,8 @@ import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNFom
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNTom
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -119,8 +121,8 @@ class OmsorgspengerUtbetalingSnfControllerTest {
                     jobberFortsattSomFrilans = true
                 ),
                 selvstendigNæringsdrivende = Virksomhet(
-                    fraOgMed = LocalDate.parse("2022-01-01"),
-                    tilOgMed = LocalDate.parse("2022-10-01"),
+                    fraOgMed = nyoppstartetSNFom,
+                    tilOgMed =  nyoppstartetSNTom,
                     næringstype = Næringstype.DAGMAMMA,
                     navnPåVirksomheten = "Kiwi ASA",
                     organisasjonsnummer = "123ABC",

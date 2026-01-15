@@ -113,6 +113,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
         )
 
         val faktiskK9Format = søknad.somK9Format(søker, metadata).somJson()
+        val fjoråret = LocalDate.now().minusYears(1).year.toString();
         val forventetK9Format =
             //language=json
             """
@@ -129,7 +130,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                       "norskIdentitetsnummer": "25058118020",
                       "fødselsdato": null
                     },
-                    "periode": "2024-01-01/..",
+                    "periode": "${fjoråret}-01-01/..",
                     "dataBruktTilUtledning": {
                         "harBekreftetOpplysninger": true,
                         "harForståttRettigheterOgPlikter": true,
