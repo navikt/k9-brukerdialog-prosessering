@@ -8,6 +8,8 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Regnskapsfører
 import no.nav.brukerdialog.ytelse.fellesdomene.VarigEndring
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNFom
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNTom
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.JobberIPeriodeSvar
@@ -27,8 +29,8 @@ class SelvstendigNæringsdrivendeOLPTest {
     fun `Mapping til k9Format blir som forventet`() {
         val k9Virksomhet = SelvstendigNæringsdrivendeOLP(
             virksomhet = Virksomhet(
-                fraOgMed = LocalDate.parse("2022-01-01"),
-                tilOgMed = LocalDate.parse("2022-10-01"),
+                fraOgMed = nyoppstartetSNFom,
+                tilOgMed = nyoppstartetSNTom,
                 næringstype = DAGMAMMA,
                 næringsinntekt = 3_000_000,
                 navnPåVirksomheten = "Kiwi ASA",
@@ -55,7 +57,7 @@ class SelvstendigNæringsdrivendeOLPTest {
         val forventet = """
             {
               "perioder": {
-                "2022-01-01/2022-10-01": {
+                "${nyoppstartetSNFom}/${nyoppstartetSNTom}": {
                   "virksomhetstyper": [
                     "DAGMAMMA"
                   ],
@@ -85,8 +87,8 @@ class SelvstendigNæringsdrivendeOLPTest {
         val fredag = fredag
         val arbeidstidInfo = SelvstendigNæringsdrivendeOLP(
             virksomhet = Virksomhet(
-                fraOgMed = LocalDate.parse("2022-01-01"),
-                tilOgMed = LocalDate.parse("2022-10-01"),
+                fraOgMed = nyoppstartetSNFom,
+                tilOgMed = nyoppstartetSNTom,
                 næringstype = DAGMAMMA,
                 navnPåVirksomheten = "Kiwi ASA",
                 erNyoppstartet = true,
@@ -130,8 +132,8 @@ class SelvstendigNæringsdrivendeOLPTest {
         Validator.verifiserIngenValideringsFeil(
             SelvstendigNæringsdrivendeOLP(
                 virksomhet = Virksomhet(
-                    fraOgMed = LocalDate.parse("2022-01-01"),
-                    tilOgMed = LocalDate.parse("2022-10-01"),
+                    fraOgMed = nyoppstartetSNFom,
+                    tilOgMed = nyoppstartetSNTom,
                     næringstype = DAGMAMMA,
                     næringsinntekt = 3_000_000,
                     navnPåVirksomheten = "Kiwi ASA",
@@ -162,8 +164,8 @@ class SelvstendigNæringsdrivendeOLPTest {
         Validator.verifiserValideringsFeil(
             SelvstendigNæringsdrivendeOLP(
                 virksomhet = Virksomhet(
-                    fraOgMed = LocalDate.parse("2022-01-01"),
-                    tilOgMed = LocalDate.parse("2022-10-01"),
+                    fraOgMed = nyoppstartetSNFom,
+                    tilOgMed = nyoppstartetSNTom,
                     næringstype = DAGMAMMA,
                     næringsinntekt = 3_000_000,
                     navnPåVirksomheten = "Kiwi ASA",

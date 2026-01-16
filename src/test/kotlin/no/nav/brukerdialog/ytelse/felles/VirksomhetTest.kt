@@ -168,7 +168,7 @@ class VirksomhetTest {
     fun `Hvis erNyoppstartet=false men fraOgMed som er over 4 år gammel gir valideringsfeil`() {
         Validator.verifiserValideringsFeil(
             gyldigVirksomhet().copy(
-                fraOgMed = LocalDate.parse("2022-01-01"),
+                fraOgMed = LocalDate.now().minusYears(2),
                 erNyoppstartet = false
             ), 1, "Når nyoppstartet er false, må fraOgMed må være over 4 år siden"
         )

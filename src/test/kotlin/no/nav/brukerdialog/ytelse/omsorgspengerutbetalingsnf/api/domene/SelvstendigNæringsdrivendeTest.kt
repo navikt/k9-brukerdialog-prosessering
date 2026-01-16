@@ -7,6 +7,8 @@ import no.nav.brukerdialog.ytelse.fellesdomene.Regnskapsfører
 import no.nav.brukerdialog.ytelse.fellesdomene.VarigEndring
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
 import no.nav.brukerdialog.ytelse.fellesdomene.YrkesaktivSisteTreFerdigliknedeArene
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNFom
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNTom
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -16,8 +18,8 @@ class SelvstendigNæringsdrivendeTest {
     @Test
     fun `SelvstendigNæringsdrivende blir mappet til riktig K9SelvstendigNæringsdrivende`() {
         val k9Virksomhet = Virksomhet(
-            fraOgMed = LocalDate.parse("2022-01-01"),
-            tilOgMed = LocalDate.parse("2022-10-01"),
+            fraOgMed = nyoppstartetSNFom,
+            tilOgMed = nyoppstartetSNTom,
             næringstype = DAGMAMMA,
             næringsinntekt = 3_000_000,
             navnPåVirksomheten = "Kiwi ASA",
@@ -43,7 +45,7 @@ class SelvstendigNæringsdrivendeTest {
         val forventet = """
             {
               "perioder": {
-                "2022-01-01/2022-10-01": {
+                "${nyoppstartetSNFom}/${nyoppstartetSNTom}": {
                   "virksomhetstyper": [
                     "DAGMAMMA"
                   ],

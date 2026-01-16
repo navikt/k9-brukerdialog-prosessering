@@ -12,6 +12,7 @@
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Godkjenne endret startdato" href="#endretStartdato"/>
         <bookmark name="Godkjenne endret sluttdato" href="#endretSluttdato"/>
+        <bookmark name="Godkjenne endret periode" href="#endretPeriode"/>
         <bookmark name="Kontrollere inntekt fra register" href="#kontrollerRegisterInntektOppgave"/>
     </bookmarks>
     {{#block 'style-common' }}
@@ -52,6 +53,20 @@
             }}
         </section>
     {{/if}}
+
+    {{#if oppgave.endretPeriodeOppgave}}
+        <section id="endretPeriode">
+            <h2>Endret periode i ungdomsprogrammet</h2>
+
+            <br/>
+
+            {{> partial/ung/uttalelsePartial
+                    uttalelse=oppgave.uttalelse
+                    spørsmålstekstUttalelse=oppgave.endretPeriodeOppgave.spørsmål
+            }}
+        </section>
+    {{/if}}
+
 
     {{#if oppgave.kontrollerRegisterInntektOppgave}}
         <section id="kontrollerRegisterInntektOppgave">

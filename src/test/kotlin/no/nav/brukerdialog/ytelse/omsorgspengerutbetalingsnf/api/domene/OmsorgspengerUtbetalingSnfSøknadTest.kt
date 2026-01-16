@@ -17,6 +17,8 @@ import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNFom
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNTom
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.Duration
@@ -98,8 +100,8 @@ class OmsorgspengerUtbetalingSnfSøknadTest {
                     jobberFortsattSomFrilans = true
                 ),
                 selvstendigNæringsdrivende = Virksomhet(
-                    fraOgMed = LocalDate.parse("2022-01-01"),
-                    tilOgMed = LocalDate.parse("2022-10-01"),
+                    fraOgMed = nyoppstartetSNFom,
+                    tilOgMed = nyoppstartetSNTom,
                     næringstype = Næringstype.DAGMAMMA,
                     navnPåVirksomheten = "Kiwi ASA",
                     organisasjonsnummer = "123ABC",
@@ -147,7 +149,7 @@ class OmsorgspengerUtbetalingSnfSøknadTest {
                   "selvstendigNæringsdrivende": [
                     {
                       "perioder": {
-                        "2022-01-01/2022-10-01": {
+                        "${nyoppstartetSNFom}/${nyoppstartetSNTom}": {
                           "virksomhetstyper": [
                             "JORDBRUK_SKOGBRUK"
                           ],

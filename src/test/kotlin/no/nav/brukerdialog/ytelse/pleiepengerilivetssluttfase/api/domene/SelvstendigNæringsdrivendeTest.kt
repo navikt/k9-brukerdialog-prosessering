@@ -17,6 +17,8 @@ import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Selvst
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNFom
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNTom
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -130,8 +132,8 @@ class SelvstendigNæringsdrivendeTest {
         Validator.verifiserIngenValideringsFeil(
             SelvstendigNæringsdrivende(
                 virksomhet = Virksomhet(
-                    fraOgMed = LocalDate.parse("2022-01-01"),
-                    tilOgMed = LocalDate.parse("2022-10-01"),
+                    fraOgMed = nyoppstartetSNFom,
+                    tilOgMed = nyoppstartetSNTom,
                     næringstype = DAGMAMMA,
                     næringsinntekt = 3_000_000,
                     navnPåVirksomheten = "Kiwi ASA",
@@ -162,8 +164,8 @@ class SelvstendigNæringsdrivendeTest {
         Validator.verifiserValideringsFeil(
             SelvstendigNæringsdrivende(
                 virksomhet = Virksomhet(
-                    fraOgMed = LocalDate.parse("2022-01-01"),
-                    tilOgMed = LocalDate.parse("2022-10-01"),
+                    fraOgMed = nyoppstartetSNFom,
+                    tilOgMed = nyoppstartetSNTom,
                     næringstype = DAGMAMMA,
                     næringsinntekt = 3_000_000,
                     navnPåVirksomheten = "Kiwi ASA",

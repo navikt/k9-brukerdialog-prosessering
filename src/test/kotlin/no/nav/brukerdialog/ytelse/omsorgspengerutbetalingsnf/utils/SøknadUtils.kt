@@ -22,6 +22,9 @@ import java.time.LocalDate
 import java.time.ZonedDateTime
 
 object SøknadUtils {
+    // fom og tom som ikke gir valideringsfeil ved nyoppstartet = true
+    val nyoppstartetSNFom = LocalDate.now().minusYears(2).withDayOfYear(1)
+    val nyoppstartetSNTom = nyoppstartetSNFom.plusMonths(10)
     val defaultSøknad = OmsorgspengerutbetalingSnfSøknad(
         språk = "nb",
         mottatt = ZonedDateTime.parse("2022-01-02T03:04:05.000Z", JacksonConfiguration.zonedDateTimeFormatter),
@@ -83,8 +86,8 @@ object SøknadUtils {
             jobberFortsattSomFrilans = false
         ),
         selvstendigNæringsdrivende = Virksomhet(
-            fraOgMed = LocalDate.parse("2022-01-01"),
-            tilOgMed = LocalDate.parse("2022-10-01"),
+            fraOgMed = nyoppstartetSNFom,
+            tilOgMed = nyoppstartetSNTom,
             næringstype = Næringstype.JORDBRUK_SKOGBRUK,
             næringsinntekt = 3_000_000,
             navnPåVirksomheten = "Kiwi ASA",

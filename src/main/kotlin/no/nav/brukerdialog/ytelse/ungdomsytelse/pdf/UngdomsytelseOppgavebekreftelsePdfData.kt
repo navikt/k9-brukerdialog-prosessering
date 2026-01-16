@@ -9,6 +9,7 @@ import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
 import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretPeriodeUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
@@ -16,6 +17,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.PeriodeDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.registerinntekt.YtelseType
 import java.math.BigDecimal
@@ -58,6 +60,14 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
             else -> null
         },
 
+        "endretPeriodeOppgave" to when (this) {
+            is KomplettEndretPeriodeUngdomsytelseOppgaveDTO -> mapOf(
+                "spørsmål" to lagSpørsmålEndretPeriode(this.nyPeriode)
+            )
+            else -> null
+        },
+
+
         "kontrollerRegisterInntektOppgave" to when (this) {
             is KomplettKontrollerRegisterInntektOppgaveTypeDataDTO -> mapOf(
                 "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
@@ -70,6 +80,12 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
             else -> null
         }
     )
+
+    private fun lagSpørsmålEndretPeriode(nyPeriode: PeriodeDTO?): String = nyPeriode?.let { "Har du tilbakemelding på at perioden din endres til " + lagPeriodeString(nyPeriode) + "?" } ?: "Har du tilbakemelding på at hele perioden din fjernes fra start?"
+
+    private fun lagPeriodeString(nyPeriode: PeriodeDTO): String =
+        DATE_FORMATTER.format(nyPeriode.fom) + " - " +
+                (nyPeriode.tom?.let { DATE_FORMATTER.format(it) } ?: "ingen sluttdato")
 
     private fun RegisterinntektDTO.somMap() = mapOf(
         "arbeidOgFrilansInntekter" to this.arbeidOgFrilansInntekter.map {
@@ -88,8 +104,9 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     )
 
     private fun YtelseType.tekst() = when (this) {
-        YtelseType.PLEIEPENGER_SYKT_BARN -> "Pleiepenger"
-        YtelseType.PLEIEPENGER_LIVETS_SLUTTFASE -> "Skoleplass uten barnepass"
+        YtelseType.PLEIEPENGER_SYKT_BARN -> "Pleiepenger sykt barn"
+        YtelseType.PLEIEPENGER_LIVETS_SLUTTFASE -> "Pleiepenger i livets sluttfase"
+        YtelseType.PLEIEPENGER -> "Pleiepenger"
         YtelseType.OMSORGSPENGER -> "Omsorgspenger"
         YtelseType.OPPLAERINGSPENGER -> "Opplæringspenger"
         YtelseType.SYKEPENGER -> "Sykepenger"
