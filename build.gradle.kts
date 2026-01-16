@@ -153,7 +153,11 @@ tasks {
 
 	withType<Test> {
 		jvmArgs("-Xmx6g") // 6GB er for å unngå OutOfMemoryError
-		useJUnitPlatform()
+		useJUnitPlatform {
+			if (project.hasProperty("groups")) {
+				includeTags(project.property("groups") as String)
+			}
+		}
 		testLogging {
 			exceptionFormat = TestExceptionFormat.FULL
 			showStackTraces = true

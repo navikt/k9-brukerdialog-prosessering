@@ -3,7 +3,6 @@ package no.nav.brukerdialog.http.serverside
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import jakarta.validation.ConstraintViolationException
 import no.nav.brukerdialog.validation.ParameterType
-import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetails
 import no.nav.brukerdialog.validation.Violation
 import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
@@ -130,27 +129,6 @@ class ExceptionHandler(
         )
 
         log.error("Validerigsfeil: {}", problemDetails)
-        return problemDetails
-    }
-
-    @ExceptionHandler(value = [ValidationErrorResponseException::class])
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun håndtereValidationErrorResponseException(
-        exception: ValidationErrorResponseException,
-        request: ServletWebRequest,
-    ): ProblemDetail {
-        val validationProblemDetails = exception.validationProblemDetails
-        val violations = validationProblemDetails.properties?.get("violations") as? Set<Violation> ?: emptySet()
-
-        val problemDetails = request.respondProblemDetails(
-            status = HttpStatus.valueOf(validationProblemDetails.status),
-            title = validationProblemDetails.title ?: "invalid-request-parameters",
-            type = validationProblemDetails.type ?: URI("/problem-details/invalid-request-parameters"),
-            violations = violations,
-            detail = validationProblemDetails.detail ?: "Forespørselen inneholder valideringsfeil"
-        )
-
-        log.error("Valideringsfeil: {}", problemDetails)
         return problemDetails
     }
 
