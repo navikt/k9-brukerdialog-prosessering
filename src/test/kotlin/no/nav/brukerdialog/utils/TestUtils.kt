@@ -48,6 +48,7 @@ import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
@@ -164,6 +165,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     classes = [K9brukerdialogprosesseringApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+@Tag("kafka")
 annotation class KafkaIntegrationTest
 
 object TestUtils {
