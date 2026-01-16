@@ -31,7 +31,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "5.0.40"
+val tokenSupportVersion = "6.0.0"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "12.7.3"
 val ungDeltakelseOpplyserVersjon = "2.9.2"
@@ -73,11 +73,14 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-restclient")
 	implementation("org.springframework.retry:spring-retry:$retryVersion")
 	implementation("org.springframework:spring-aspects")
 	runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+	testImplementation("org.springframework.boot:spring-boot-resttestclient")
 
 	// kafka
 	implementation("org.springframework.kafka:spring-kafka")
@@ -108,13 +111,15 @@ dependencies {
 	// Logging
 	implementation("net.logstash.logback:logstash-logback-encoder:$logstashLogbackEncoderVersion")
 
-	// Jackson
+	// Jackson 2 compatibility for Spring Boot 4 (k9-søknad uses Jackson 2)
+	implementation("org.springframework.boot:spring-boot-jackson2")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
 	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:$springCloudContractVersion")
+	testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$springCloudContractVersion")
 	testImplementation("org.awaitility:awaitility-kotlin:$awailitilityKotlinVersion")
 
 	// Google Cloud

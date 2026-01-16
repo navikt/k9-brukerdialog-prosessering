@@ -1,18 +1,15 @@
 package no.nav.brukerdialog.integrasjon.dokarkiv
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.brukerdialog.integrasjon.dokarkiv.DokarkivResponseTransformer.Companion.BREVKODE_MED_FORVENTET_JOURNALPOST_ID
-import no.nav.brukerdialog.integrasjon.dokarkiv.dto.AvsenderMottakerIdType
-import no.nav.brukerdialog.integrasjon.dokarkiv.dto.JournalPostRequestV1Factory
-import no.nav.brukerdialog.integrasjon.dokarkiv.dto.JournalPostType
-import no.nav.brukerdialog.integrasjon.dokarkiv.dto.Kanal
-import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
+import no.nav.brukerdialog.integrasjon.dokarkiv.dto.*
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.utils.WireMockServerUtils.stubJournalføring
@@ -23,17 +20,16 @@ import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
-import org.springframework.cloud.contract.wiremock.WireMockConfigurationCustomizer
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
@@ -44,14 +40,11 @@ import java.time.ZonedDateTime
     classes = [K9brukerdialogprosesseringApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-@Import(DokarkivServiceTest.DokarkivServiceTestConfig::class, GcsStorageTestConfiguration::class)
-@AutoConfigureWireMock
+@Import(GcsStorageTestConfiguration::class)
 class DokarkivServiceTest {
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
 
     @Autowired
-    private lateinit var wireMockServer: WireMockServer
+    private lateinit var objectMapper: ObjectMapper
 
     @Autowired
     lateinit var dokarkivService: DokarkivService
@@ -62,15 +55,20 @@ class DokarkivServiceTest {
     @MockkBean
     lateinit var oAuth2AccessTokenService: OAuth2AccessTokenService
 
-    @TestConfiguration
-    class DokarkivServiceTestConfig {
-        @Bean
-        fun optionsCustomizer(): WireMockConfigurationCustomizer {
-            return WireMockConfigurationCustomizer { options -> options.extensions(DokarkivResponseTransformer()) }
-        }
-    }
 
     companion object {
+        @JvmField
+        @RegisterExtension
+        val wireMock: WireMockExtension = WireMockExtension.newInstance()
+            .options(WireMockConfiguration.wireMockConfig().extensions(DokarkivResponseTransformer()))
+            .build()
+
+        @JvmStatic
+        @DynamicPropertySource
+        fun configureProperties(registry: DynamicPropertyRegistry) {
+            registry.add("no.nav.integration.dokarkiv-base-url") { "${wireMock.baseUrl()}/dokarkiv-mock" }
+        }
+
         @JvmStatic
         fun søknaderForJournalføring(): List<Journalføring> {
             return YtelseType.entries.map {
@@ -87,7 +85,7 @@ class DokarkivServiceTest {
 
     @BeforeEach
     fun setUp() {
-        wireMockServer.stubJournalføring()
+        wireMock.stubJournalføring()
 
         val token =
             mockOAuth2Server.hentToken("123456789", audience = "dev-gcp:dusseldorf:k9-brukerdialog-cache").serialize()

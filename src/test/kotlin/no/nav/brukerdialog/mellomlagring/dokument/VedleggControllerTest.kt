@@ -13,7 +13,7 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.multipart
-import org.springframework.util.ResourceUtils
 import org.springframework.web.client.HttpClientErrorException
 import java.nio.file.Files
 
@@ -112,7 +111,6 @@ class VedleggControllerTest {
                   "title": "invalid-request-parameters",
                   "status": 400,
                   "detail": "Forespørselen inneholder valideringsfeil",
-                  "instance": "/vedlegg",
                   "violations": [
                     {
                       "parameterName": "vedlegg",
@@ -120,9 +118,9 @@ class VedleggControllerTest {
                       "reason": "Vedlegg av typen image/png påstås ikke for å være application/pdf",
                       "invalidValue": "application/pdf"
                     }
-                  ]                  
+                  ]
                 }
-            """.trimIndent(), true
+            """.trimIndent(), JsonCompareMode.LENIENT
                 )
             }
         }
@@ -157,7 +155,6 @@ class VedleggControllerTest {
                   "title": "invalid-request-parameters",
                   "status": 400,
                   "detail": "Forespørselen inneholder valideringsfeil",
-                  "instance": "/vedlegg",
                   "violations": [
                     {
                       "parameterName": "vedlegg",
@@ -165,9 +162,9 @@ class VedleggControllerTest {
                       "reason": "Kun [application/pdf, image/jpeg, image/png] er tillatt",
                       "invalidValue": "text/plain"
                     }
-                  ]                  
+                  ]
                 }
-            """.trimIndent(), true
+            """.trimIndent(), JsonCompareMode.LENIENT
                 )
             }
         }
@@ -190,7 +187,6 @@ class VedleggControllerTest {
                     json(
                         """
                         {
-                          "type": "about:blank",
                           "title": "Internal Server Error",
                           "status": 500,
                           "detail": "Feil ved sletting av vedlegg",
@@ -231,7 +227,6 @@ class VedleggControllerTest {
                     json(
                         """
                         {
-                          "type": "about:blank",
                           "title": "Not Found",
                           "status": 404,
                           "detail": "Vedlegg med id 12345 ble ikke funnet",

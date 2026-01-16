@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.utils
 
 import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -12,19 +13,17 @@ import org.junit.jupiter.api.Assertions
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.test.EmbeddedKafkaBroker
-import org.springframework.kafka.test.utils.KafkaTestUtils
 import java.time.Duration
 import java.util.*
 
 object KafkaUtils {
     fun EmbeddedKafkaBroker.opprettKafkaProducer(consumerGroupPrefix: String): Producer<String, Any> {
-        val producerProps = KafkaTestUtils.producerProps(this)
-        producerProps[ProducerConfig.CLIENT_ID_CONFIG] =
-            "k9-brukerdialog-producer-$consumerGroupPrefix-${UUID.randomUUID()}"
-        producerProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] =
-            "org.apache.kafka.common.serialization.StringSerializer"
-        producerProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] =
-            "org.apache.kafka.common.serialization.StringSerializer"
+        val producerProps = mutableMapOf<String, Any>(
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to brokersAsString,
+            ProducerConfig.CLIENT_ID_CONFIG to "k9-brukerdialog-producer-$consumerGroupPrefix-${UUID.randomUUID()}",
+            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to "org.apache.kafka.common.serialization.StringSerializer",
+            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to "org.apache.kafka.common.serialization.StringSerializer"
+        )
         return DefaultKafkaProducerFactory<String, Any>(producerProps).createProducer()
     }
 
@@ -35,10 +34,14 @@ object KafkaUtils {
     fun EmbeddedKafkaBroker.opprettKafkaConsumer(
         groupPrefix: String, topics: List<String>,
     ): Consumer<String, String> {
-        val consumerProps =
-            KafkaTestUtils.consumerProps("$groupPrefix-test-consumer-${UUID.randomUUID()}", "true", this)
-        consumerProps[KEY_DESERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.StringDeserializer"
-        consumerProps[VALUE_DESERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.StringDeserializer"
+        val consumerProps = mutableMapOf<String, Any>(
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to brokersAsString,
+            ConsumerConfig.GROUP_ID_CONFIG to "$groupPrefix-test-consumer-${UUID.randomUUID()}",
+            ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to "true",
+            ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
+            KEY_DESERIALIZER_CLASS_CONFIG to "org.apache.kafka.common.serialization.StringDeserializer",
+            VALUE_DESERIALIZER_CLASS_CONFIG to "org.apache.kafka.common.serialization.StringDeserializer"
+        )
 
         val consumer = DefaultKafkaConsumerFactory<String, String>(consumerProps).createConsumer()
         consumer.subscribe(topics)
@@ -48,7 +51,16 @@ object KafkaUtils {
     fun Consumer<String, String>.lesMelding(key: String, topic: String, maxWaitInSeconds: Long = 60): ConsumerRecord<String, String> {
 
         val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
-        seekToBeginning(assignment())
+
+        // Poll once to trigger partition assignment before seeking
+        poll(Duration.ofMillis(100))
+
+        // Only seek if we have assigned partitions
+        val currentAssignment = assignment()
+        if (currentAssignment.isNotEmpty()) {
+            seekToBeginning(currentAssignment)
+        }
+
         while (System.currentTimeMillis() < end) {
 
             val entries: List<ConsumerRecord<String, String>> = poll(Duration.ofSeconds(10))

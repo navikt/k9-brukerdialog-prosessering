@@ -3,15 +3,13 @@ package no.nav.brukerdialog.validation
 import com.ninjasquad.springmockk.MockkBean
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.utils.CallIdGenerator
-import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
-import org.hamcrest.Matchers
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -72,8 +70,8 @@ class FeltValideringControllerTest {
                 status { isBadRequest() }
                 jsonPath("$.instance") { value("http://localhost/valider/friteksfelt") }
                 jsonPath("$.type") { value("/problem-details/invalid-request-parameters") }
-                jsonPath("$.violations[0].parameterName") { value("friteksfelt.verdi") }
-                jsonPath("$.violations[0].reason") { value("Ugyldige tegn funnet i teksten: \\u0000, ¨") }
+                jsonPath("$.properties.violations[0].parameterName") { value("friteksfelt.verdi") }
+                jsonPath("$.properties.violations[0].reason") { value("Ugyldige tegn funnet i teksten: \\u0000, ¨") }
             }
     }
 }

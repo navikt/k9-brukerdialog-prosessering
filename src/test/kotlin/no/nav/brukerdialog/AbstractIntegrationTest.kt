@@ -20,11 +20,7 @@ import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaProducer
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoDataDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveStatus
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgavetypeDataDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.*
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseKomposittDTO
 import org.apache.kafka.clients.consumer.Consumer
@@ -32,7 +28,7 @@ import org.apache.kafka.clients.producer.Producer
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.kafka.test.EmbeddedKafkaBroker

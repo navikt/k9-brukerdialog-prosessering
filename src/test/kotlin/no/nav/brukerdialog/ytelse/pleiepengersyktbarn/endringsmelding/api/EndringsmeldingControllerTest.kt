@@ -4,24 +4,24 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
+import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
-import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9FormatPSB
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9SakInnsynSøknad
-import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.Barn
 import no.nav.brukerdialog.innsyn.InnsynService
+import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.Barn
+import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9FormatPSB
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9SakInnsynSøknad
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -211,26 +211,28 @@ class EndringsmeldingControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "violations": [
-                            {
-                              "invalidValue": false,
-                              "parameterName": "endringsmelding.harBekreftetOpplysninger",
-                              "parameterType": "ENTITY",
-                              "reason": "Opplysningene må bekreftes for å sende inn endringsmelding"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "endringsmelding.harForståttRettigheterOgPlikter",
-                              "parameterType": "ENTITY",
-                              "reason": "Må ha forstått rettigheter og plikter for å sende inn endringsmelding"
-                            },
-                            {
-                              "invalidValue": "abc123",
-                              "parameterName": "endringsmelding.søknadId",
-                              "parameterType": "ENTITY",
-                              "reason": "Forventet gyldig UUID, men var 'abc123'"
-                            }
-                          ]
+                          "properties": {
+                            "violations": [
+                              {
+                                "invalidValue": false,
+                                "parameterName": "endringsmelding.harBekreftetOpplysninger",
+                                "parameterType": "ENTITY",
+                                "reason": "Opplysningene må bekreftes for å sende inn endringsmelding"
+                              },
+                              {
+                                "invalidValue": false,
+                                "parameterName": "endringsmelding.harForståttRettigheterOgPlikter",
+                                "parameterType": "ENTITY",
+                                "reason": "Må ha forstått rettigheter og plikter for å sende inn endringsmelding"
+                              },
+                              {
+                                "invalidValue": "abc123",
+                                "parameterName": "endringsmelding.søknadId",
+                                "parameterType": "ENTITY",
+                                "reason": "Forventet gyldig UUID, men var 'abc123'"
+                              }
+                            ]
+                          }
                         }
                         """.trimIndent(), JsonCompareMode.LENIENT
                     )

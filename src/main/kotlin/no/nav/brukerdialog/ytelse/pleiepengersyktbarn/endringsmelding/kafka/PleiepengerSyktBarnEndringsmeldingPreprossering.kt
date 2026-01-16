@@ -1,22 +1,22 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka
 
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_PREPROSESSERING_STREAMS_BUILDER_NAME
-import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.domene.PSBPreprossesertEndringsmelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsService
 import no.nav.brukerdialog.kafka.config.KafkaStreamName
 import no.nav.brukerdialog.kafka.config.Topic
 import no.nav.brukerdialog.kafka.processors.LoggingToMDCProcessor
 import no.nav.brukerdialog.kafka.processors.process
 import no.nav.brukerdialog.kafka.types.TopicEntry
+import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
 import no.nav.brukerdialog.utils.HealthIndicatorUtils
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.PSBEndringsmeldingTopologyConfiguration.Companion.PSB_ENDRINGSMELDING_PREPROSESSERING_STREAMS_BUILDER_NAME
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.kafka.domene.PSBPreprossesertEndringsmelding
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.processor.api.ProcessorSupplier
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.boot.actuate.health.Health
-import org.springframework.boot.actuate.health.HealthIndicator
+import org.springframework.boot.health.contributor.Health
+import org.springframework.boot.health.contributor.HealthIndicator
 import org.springframework.context.annotation.Bean
 import org.springframework.kafka.config.StreamsBuilderFactoryBean
 import org.springframework.retry.support.RetryTemplate

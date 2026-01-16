@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
+import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
-import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -130,50 +130,52 @@ class OmsorgspengerUtvidetRettControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "violations": [
-                            {
-                              "invalidValue": "123ABC",
-                              "parameterName": "barn.norskIdentifikator",
-                              "parameterType": "ENTITY",
-                              "reason": "size must be between 11 and 11"
-                            },
-                            {
-                              "invalidValue": "123ABC",
-                              "parameterName": "barn.norskIdentifikator",
-                              "parameterType": "ENTITY",
-                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                            },
-                             {
-                              "invalidValue": "$fødselsdatoIFremtiden",
-                              "parameterName": "barn.fødselsdato",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være i fremtiden"
-                            },
-                            {
-                              "invalidValue": "",
-                              "parameterName": "barn.navn",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være tomt eller blankt"
-                            },
-                            {
-                              "invalidValue": "¨ er ikke tillatt",
-                              "parameterName": "høyereRisikoForFraværBeskrivelse",
-                              "parameterType": "ENTITY",
-                              "reason": "Ugyldige tegn funnet i teksten: ¨"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "harForståttRettigheterOgPlikter",
-                              "parameterType": "ENTITY",
-                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "harBekreftetOpplysninger",
-                              "parameterType": "ENTITY",
-                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                            },
-                          ]
+                          "properties": {
+                            "violations": [
+                              {
+                                "invalidValue": "123ABC",
+                                "parameterName": "barn.norskIdentifikator",
+                                "parameterType": "ENTITY",
+                                "reason": "size must be between 11 and 11"
+                              },
+                              {
+                                "invalidValue": "123ABC",
+                                "parameterName": "barn.norskIdentifikator",
+                                "parameterType": "ENTITY",
+                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                              },
+                               {
+                                "invalidValue": "$fødselsdatoIFremtiden",
+                                "parameterName": "barn.fødselsdato",
+                                "parameterType": "ENTITY",
+                                "reason": "Kan ikke være i fremtiden"
+                              },
+                              {
+                                "invalidValue": "",
+                                "parameterName": "barn.navn",
+                                "parameterType": "ENTITY",
+                                "reason": "Kan ikke være tomt eller blankt"
+                              },
+                              {
+                                "invalidValue": "¨ er ikke tillatt",
+                                "parameterName": "høyereRisikoForFraværBeskrivelse",
+                                "parameterType": "ENTITY",
+                                "reason": "Ugyldige tegn funnet i teksten: ¨"
+                              },
+                              {
+                                "invalidValue": false,
+                                "parameterName": "harForståttRettigheterOgPlikter",
+                                "parameterType": "ENTITY",
+                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                              },
+                              {
+                                "invalidValue": false,
+                                "parameterName": "harBekreftetOpplysninger",
+                                "parameterType": "ENTITY",
+                                "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                              },
+                            ]
+                          }
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,

@@ -4,24 +4,24 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
-import no.nav.k9.ettersendelse.EttersendelseType
+import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
-import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.ytelse.ettersendelse.api.domene.Pleietrengende
-import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
+import no.nav.brukerdialog.ytelse.ettersendelse.api.domene.Pleietrengende
 import no.nav.brukerdialog.ytelse.ettersendelse.utils.EttersendingUtils.defaultEttersendelse
+import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -134,44 +134,46 @@ class EttersendingControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "violations": [
-                            {
-                              "invalidValue": [],
-                              "parameterName": "vedlegg",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være tom"
-                            },
-                            {
-                              "invalidValue": "123ABC",
-                              "parameterName": "pleietrengende.norskIdentitetsnummer",
-                              "parameterType": "ENTITY",
-                              "reason": "size must be between 11 and 11"
-                            },
-                            {
-                              "invalidValue": "123ABC",
-                              "parameterName": "pleietrengende.norskIdentitetsnummer",
-                              "parameterType": "ENTITY",
-                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                            },
-                            {
-                              "invalidValue": "$fødselsdatoIFremtiden",
-                              "parameterName": "pleietrengende.fødselsdato",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være i fremtiden"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "harForståttRettigheterOgPlikter",
-                              "parameterType": "ENTITY",
-                              "reason": "Må ha forstått rettigheter og plikter for å sende inn ettersendelse"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "harBekreftetOpplysninger",
-                              "parameterType": "ENTITY",
-                              "reason": "Opplysningene må bekreftes for å sende inn ettersendelse"
-                            },
-                          ]
+                          "properties": {
+                            "violations": [
+                              {
+                                "invalidValue": [],
+                                "parameterName": "vedlegg",
+                                "parameterType": "ENTITY",
+                                "reason": "Kan ikke være tom"
+                              },
+                              {
+                                "invalidValue": "123ABC",
+                                "parameterName": "pleietrengende.norskIdentitetsnummer",
+                                "parameterType": "ENTITY",
+                                "reason": "size must be between 11 and 11"
+                              },
+                              {
+                                "invalidValue": "123ABC",
+                                "parameterName": "pleietrengende.norskIdentitetsnummer",
+                                "parameterType": "ENTITY",
+                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                              },
+                              {
+                                "invalidValue": "$fødselsdatoIFremtiden",
+                                "parameterName": "pleietrengende.fødselsdato",
+                                "parameterType": "ENTITY",
+                                "reason": "Kan ikke være i fremtiden"
+                              },
+                              {
+                                "invalidValue": false,
+                                "parameterName": "harForståttRettigheterOgPlikter",
+                                "parameterType": "ENTITY",
+                                "reason": "Må ha forstått rettigheter og plikter for å sende inn ettersendelse"
+                              },
+                              {
+                                "invalidValue": false,
+                                "parameterName": "harBekreftetOpplysninger",
+                                "parameterType": "ENTITY",
+                                "reason": "Opplysningene må bekreftes for å sende inn ettersendelse"
+                              },
+                            ]
+                          }
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,

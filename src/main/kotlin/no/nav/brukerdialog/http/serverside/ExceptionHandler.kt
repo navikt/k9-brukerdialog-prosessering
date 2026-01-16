@@ -3,6 +3,7 @@ package no.nav.brukerdialog.http.serverside
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import jakarta.validation.ConstraintViolationException
 import no.nav.brukerdialog.validation.ParameterType
+import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetails
 import no.nav.brukerdialog.validation.Violation
 import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
@@ -11,14 +12,8 @@ import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnaut
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.FORBIDDEN
-import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
-import org.springframework.http.HttpStatus.UNAUTHORIZED
-import org.springframework.http.HttpStatusCode
-import org.springframework.http.ProblemDetail
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
+import org.springframework.http.HttpStatus.*
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
@@ -129,12 +124,33 @@ class ExceptionHandler(
         val problemDetails = request.respondProblemDetails(
             status = HttpStatus.valueOf(validationProblemDetails.status),
             title = validationProblemDetails.title!!,
-            type = validationProblemDetails.type,
+            type = validationProblemDetails.type!!,
             violations = validationProblemDetails.violations,
             detail = validationProblemDetails.detail!!
         )
 
         log.error("Validerigsfeil: {}", problemDetails)
+        return problemDetails
+    }
+
+    @ExceptionHandler(value = [ValidationErrorResponseException::class])
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun håndtereValidationErrorResponseException(
+        exception: ValidationErrorResponseException,
+        request: ServletWebRequest,
+    ): ProblemDetail {
+        val validationProblemDetails = exception.validationProblemDetails
+        val violations = validationProblemDetails.properties?.get("violations") as? Set<Violation> ?: emptySet()
+
+        val problemDetails = request.respondProblemDetails(
+            status = HttpStatus.valueOf(validationProblemDetails.status),
+            title = validationProblemDetails.title ?: "invalid-request-parameters",
+            type = validationProblemDetails.type ?: URI("/problem-details/invalid-request-parameters"),
+            violations = violations,
+            detail = validationProblemDetails.detail ?: "Forespørselen inneholder valideringsfeil"
+        )
+
+        log.error("Valideringsfeil: {}", problemDetails)
         return problemDetails
     }
 
@@ -174,7 +190,7 @@ class ExceptionHandler(
         val problemDetails = request.respondProblemDetails(
             status = HttpStatus.valueOf(validationProblemDetails.status),
             title = validationProblemDetails.title!!,
-            type = validationProblemDetails.type,
+            type = validationProblemDetails.type!!,
             violations = validationProblemDetails.violations,
             detail = validationProblemDetails.detail!!
         )
@@ -201,7 +217,7 @@ class ExceptionHandler(
         val problemDetails = servletWebRequest.respondProblemDetails(
             status = HttpStatus.valueOf(validationProblemDetails.status),
             title = validationProblemDetails.title!!,
-            type = validationProblemDetails.type,
+            type = validationProblemDetails.type!!,
             violations = validationProblemDetails.violations,
             detail = validationProblemDetails.detail!!
         )

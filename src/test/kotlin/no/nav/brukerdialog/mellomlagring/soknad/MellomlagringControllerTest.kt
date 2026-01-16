@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
+import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
@@ -18,21 +19,17 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.delete
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.put
+import org.springframework.test.web.servlet.*
 import java.time.ZonedDateTime
 import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(controllers = [MellomlagringController::class])
-@Import(CallIdGenerator::class)
+@Import(CallIdGenerator::class, JacksonConfiguration::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MellomlagringControllerTest {
 
@@ -204,7 +201,6 @@ class MellomlagringControllerTest {
                 json(
                     """
                     {
-                      "type": "about:blank",
                       "title": "Conflict",
                       "status": 409,
                       "detail": "Cache med nøkkelPrefiks = psb_123 for person finnes allerede.",

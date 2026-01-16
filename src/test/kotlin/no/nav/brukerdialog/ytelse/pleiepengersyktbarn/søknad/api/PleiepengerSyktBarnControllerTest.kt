@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
+import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
-import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
@@ -17,12 +17,7 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.BarnRel
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Nattevåk
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Nattevåk.Companion.MAX_FRITEKST_TEGN
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.NormalArbeidsdag
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidIPeriode
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidIPeriodeType
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidsRedusert
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.Arbeidsforhold
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.NormalArbeidstid
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.RedusertArbeidstidType
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.*
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
@@ -30,7 +25,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -221,89 +216,91 @@ class PleiepengerSyktBarnControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "violations": [
-                            {
-                              "invalidValue": "123ABC",
-                              "parameterName": "barn.fødselsnummer",
-                              "parameterType": "ENTITY",
-                              "reason": "size must be between 11 and 11"
-                            },
-                            {
-                              "invalidValue": "",
-                              "parameterName": "barn.navn",
-                              "parameterType": "ENTITY",
-                              "reason": "kan ikke være tomt eller blankt"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "barnRelasjonBeskrivelse",
-                              "parameterType": "ENTITY",
-                              "reason": "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "nattevåk.tilleggsinformasjon_lengde",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være over $MAX_FRITEKST_TEGN tegn"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "harBekreftetOpplysninger",
-                              "parameterType": "ENTITY",
-                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                            },
-                            {
-                              
-                              "parameterName": "arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.arbeiderRedusert",
-                              "parameterType": "ENTITY",
-                              "reason": "Må være satt dersom type=ARBEIDER_REDUSERT"
-                            },
-                            {
-                              "invalidValue": "123ABC",
-                              "parameterName": "arbeidsgivere[0].organisasjonsnummer",
-                              "parameterType": "ENTITY",
-                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                            },
-                            {
-                              "invalidValue": "",
-                              "parameterName": "arbeidsgivere[0].navn",
-                              "parameterType": "ENTITY",
-                              "reason": "navn kan ikke være tomt eller blankt"
-                            },
-                            {
-                              "parameterName": "arbeidsgivere[1].arbeidsforhold.arbeidIPeriode.redusertArbeid.prosentAvNormalt",
-                              "parameterType": "ENTITY",
-                              "reason": "Må være satt dersom type=PROSENT_AV_NORMALT"
-                            },
-                            {
-                              "parameterName": "arbeidsgivere[2].arbeidsforhold.arbeidIPeriode.redusertArbeid.timerPerUke",
-                              "parameterType": "ENTITY",
-                              "reason": "Må være satt dersom type=TIMER_I_SNITT_PER_UKE"
-                            },
-                            {
-                              "parameterName": "arbeidsgivere[3].arbeidsforhold.arbeidIPeriode.redusertArbeid.arbeidsuker",
-                              "parameterType": "ENTITY",
-                              "reason": "Må være satt dersom type=ULIKE_UKER_TIMER"
-                            },
-                            {
-                              "invalidValue": "$fødselsdatoIFremtiden",
-                              "parameterName": "barn.fødselsdato",
-                              "parameterType": "ENTITY",
-                              "reason": "kan ikke være i fremtiden"
-                            },
-                            {
-                              "invalidValue": "123ABC",
-                              "parameterName": "barn.fødselsnummer",
-                              "parameterType": "ENTITY",
-                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                            },
-                            {
-                              "invalidValue": false,
-                              "parameterName": "harForståttRettigheterOgPlikter",
-                              "parameterType": "ENTITY",
-                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
-                            }
-                          ]
+                          "properties": {
+                            "violations": [
+                              {
+                                "invalidValue": "123ABC",
+                                "parameterName": "barn.fødselsnummer",
+                                "parameterType": "ENTITY",
+                                "reason": "size must be between 11 and 11"
+                              },
+                              {
+                                "invalidValue": "",
+                                "parameterName": "barn.navn",
+                                "parameterType": "ENTITY",
+                                "reason": "kan ikke være tomt eller blankt"
+                              },
+                              {
+                                "invalidValue": false,
+                                "parameterName": "barnRelasjonBeskrivelse",
+                                "parameterType": "ENTITY",
+                                "reason": "Når 'barnRelasjon' er ANNET, kan ikke 'barnRelasjonBeskrivelse' være tom"
+                              },
+                              {
+                                "invalidValue": false,
+                                "parameterName": "nattevåk.tilleggsinformasjon_lengde",
+                                "parameterType": "ENTITY",
+                                "reason": "Kan ikke være over $MAX_FRITEKST_TEGN tegn"
+                              },
+                              {
+                                "invalidValue": false,
+                                "parameterName": "harBekreftetOpplysninger",
+                                "parameterType": "ENTITY",
+                                "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                              },
+                              {
+                                
+                                "parameterName": "arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.arbeiderRedusert",
+                                "parameterType": "ENTITY",
+                                "reason": "Må være satt dersom type=ARBEIDER_REDUSERT"
+                              },
+                              {
+                                "invalidValue": "123ABC",
+                                "parameterName": "arbeidsgivere[0].organisasjonsnummer",
+                                "parameterType": "ENTITY",
+                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                              },
+                              {
+                                "invalidValue": "",
+                                "parameterName": "arbeidsgivere[0].navn",
+                                "parameterType": "ENTITY",
+                                "reason": "navn kan ikke være tomt eller blankt"
+                              },
+                              {
+                                "parameterName": "arbeidsgivere[1].arbeidsforhold.arbeidIPeriode.redusertArbeid.prosentAvNormalt",
+                                "parameterType": "ENTITY",
+                                "reason": "Må være satt dersom type=PROSENT_AV_NORMALT"
+                              },
+                              {
+                                "parameterName": "arbeidsgivere[2].arbeidsforhold.arbeidIPeriode.redusertArbeid.timerPerUke",
+                                "parameterType": "ENTITY",
+                                "reason": "Må være satt dersom type=TIMER_I_SNITT_PER_UKE"
+                              },
+                              {
+                                "parameterName": "arbeidsgivere[3].arbeidsforhold.arbeidIPeriode.redusertArbeid.arbeidsuker",
+                                "parameterType": "ENTITY",
+                                "reason": "Må være satt dersom type=ULIKE_UKER_TIMER"
+                              },
+                              {
+                                "invalidValue": "$fødselsdatoIFremtiden",
+                                "parameterName": "barn.fødselsdato",
+                                "parameterType": "ENTITY",
+                                "reason": "kan ikke være i fremtiden"
+                              },
+                              {
+                                "invalidValue": "123ABC",
+                                "parameterName": "barn.fødselsnummer",
+                                "parameterType": "ENTITY",
+                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                              },
+                              {
+                                "invalidValue": false,
+                                "parameterName": "harForståttRettigheterOgPlikter",
+                                "parameterType": "ENTITY",
+                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                              }
+                            ]
+                          }
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,
