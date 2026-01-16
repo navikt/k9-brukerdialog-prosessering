@@ -193,8 +193,3 @@ no.nav:
         auto-offset-reset: earliest
       olp-soknad-cleanup:
         auto-offset-reset: earliest
-
-wiremock:
-  reset-mappings-after-each-test: true
-  server:
-    port: 0 # random port

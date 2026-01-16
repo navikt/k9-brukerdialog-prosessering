@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
+import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
-import no.nav.brukerdialog.metrikk.MetrikkService
-import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
@@ -17,12 +17,7 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.BarnRel
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Nattevåk
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Nattevåk.Companion.MAX_FRITEKST_TEGN
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.NormalArbeidsdag
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidIPeriode
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidIPeriodeType
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.ArbeidsRedusert
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.Arbeidsforhold
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.NormalArbeidstid
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.RedusertArbeidstidType
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.arbeid.*
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
@@ -30,7 +25,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension

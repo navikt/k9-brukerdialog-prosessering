@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
-import java.net.URI
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*

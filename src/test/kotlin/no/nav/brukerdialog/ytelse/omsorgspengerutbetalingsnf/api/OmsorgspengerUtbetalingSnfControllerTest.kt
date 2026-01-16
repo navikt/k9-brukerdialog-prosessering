@@ -4,9 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
+import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
+import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.metrikk.MetrikkService
+import no.nav.brukerdialog.utils.CallIdGenerator
+import no.nav.brukerdialog.utils.NavHeaders
+import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.fellesdomene.Bekreftelser
 import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
 import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
@@ -14,11 +19,6 @@ import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.OmsorgspengerUtb
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Barn
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Frilans
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.TypeBarn
-import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
-import no.nav.brukerdialog.utils.CallIdGenerator
-import no.nav.brukerdialog.utils.NavHeaders
-import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNFom
 import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNTom
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension

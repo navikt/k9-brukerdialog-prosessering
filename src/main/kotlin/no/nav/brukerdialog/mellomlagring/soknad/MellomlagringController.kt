@@ -1,21 +1,17 @@
 package no.nav.brukerdialog.mellomlagring.soknad
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.runBlocking
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.config.Issuers
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
 import org.json.JSONObject
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/mellomlagring/{ytelse}")
@@ -24,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 )
 class MellomlagringController(
     private val mellomlagringService: MellomlagringService,
+    private val objectMapper: ObjectMapper,
 ) {
 
     @PostMapping
@@ -53,11 +50,12 @@ class MellomlagringController(
 
     }
 
-    @GetMapping
-    fun getMellomlagring(@PathVariable ytelse: String): ResponseEntity<String> = runBlocking {
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getMellomlagring(@PathVariable ytelse: String): ResponseEntity<JsonNode> = runBlocking {
         val mellomlagring = mellomlagringService.hentMellomlagring(Ytelse.valueOf(ytelse))
+        val body: JsonNode? = objectMapper.readTree(mellomlagring ?: "{}")
         ResponseEntity(
-            mellomlagring ?: "{}",
+            body,
             HttpStatus.OK
         )
     }

@@ -11,14 +11,8 @@ import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnaut
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatus.FORBIDDEN
-import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
-import org.springframework.http.HttpStatus.UNAUTHORIZED
-import org.springframework.http.HttpStatusCode
-import org.springframework.http.ProblemDetail
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
+import org.springframework.http.HttpStatus.*
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
@@ -129,7 +123,7 @@ class ExceptionHandler(
         val problemDetails = request.respondProblemDetails(
             status = HttpStatus.valueOf(validationProblemDetails.status),
             title = validationProblemDetails.title!!,
-            type = validationProblemDetails.type,
+            type = validationProblemDetails.type!!,
             violations = validationProblemDetails.violations,
             detail = validationProblemDetails.detail!!
         )
@@ -174,7 +168,7 @@ class ExceptionHandler(
         val problemDetails = request.respondProblemDetails(
             status = HttpStatus.valueOf(validationProblemDetails.status),
             title = validationProblemDetails.title!!,
-            type = validationProblemDetails.type,
+            type = validationProblemDetails.type!!,
             violations = validationProblemDetails.violations,
             detail = validationProblemDetails.detail!!
         )
@@ -201,7 +195,7 @@ class ExceptionHandler(
         val problemDetails = servletWebRequest.respondProblemDetails(
             status = HttpStatus.valueOf(validationProblemDetails.status),
             title = validationProblemDetails.title!!,
-            type = validationProblemDetails.type,
+            type = validationProblemDetails.type!!,
             violations = validationProblemDetails.violations,
             detail = validationProblemDetails.detail!!
         )

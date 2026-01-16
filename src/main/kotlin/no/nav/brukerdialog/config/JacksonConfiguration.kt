@@ -4,20 +4,15 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import no.nav.k9.søknad.JsonUtils
 import no.nav.brukerdialog.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
-import org.springframework.beans.factory.annotation.Autowired
+import no.nav.k9.søknad.JsonUtils
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -62,6 +57,11 @@ class JacksonConfiguration {
 
     @Bean
     fun javaTimeModule(): JavaTimeModule = configureJavaTimeModule()
+
+    @Bean
+    fun mappingJackson2HttpMessageConverter(objectMapper: ObjectMapper): MappingJackson2HttpMessageConverter {
+        return MappingJackson2HttpMessageConverter(objectMapper)
+    }
 }
 
 class CustomZonedDateTimeSerializer : JsonSerializer<ZonedDateTime?>() {
