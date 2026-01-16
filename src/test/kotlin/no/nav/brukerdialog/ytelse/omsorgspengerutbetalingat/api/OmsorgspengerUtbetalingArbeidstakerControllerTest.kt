@@ -140,43 +140,41 @@ class OmsorgspengerUtbetalingArbeidstakerControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "properties": {
-                            "violations": [
-                              {
-                                "parameterName": "dineBarn.barn[0].identitetsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "size must be between 11 and 11"
-                              },
-                              {
-                                "parameterName": "dineBarn.barn[0].identitetsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                               {
-                                "parameterName": "dineBarn.barn[0].fødselsdato",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være eldre enn 19 år"
-                              },
-                              {
-                                "invalidValue": "",
-                                "parameterName": "dineBarn.barn[0].navn",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tomt eller blankt"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "bekreftelser.harBekreftetOpplysninger",
-                                "parameterType": "ENTITY",
-                                "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "bekreftelser.harForståttRettigheterOgPlikter",
-                                "parameterType": "ENTITY",
-                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
-                              },
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "parameterName": "dineBarn.barn[0].identitetsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "size must be between 11 and 11"
+                            },
+                            {
+                              "parameterName": "dineBarn.barn[0].identitetsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                             {
+                              "parameterName": "dineBarn.barn[0].fødselsdato",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være eldre enn 19 år"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "dineBarn.barn[0].navn",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "bekreftelser.harBekreftetOpplysninger",
+                              "parameterType": "ENTITY",
+                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "bekreftelser.harForståttRettigheterOgPlikter",
+                              "parameterType": "ENTITY",
+                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                            },
+                          ]
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,

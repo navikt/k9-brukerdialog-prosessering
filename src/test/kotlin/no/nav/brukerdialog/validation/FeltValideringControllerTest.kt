@@ -70,8 +70,8 @@ class FeltValideringControllerTest {
                 status { isBadRequest() }
                 jsonPath("$.instance") { value("http://localhost/valider/friteksfelt") }
                 jsonPath("$.type") { value("/problem-details/invalid-request-parameters") }
-                jsonPath("$.properties.violations[0].parameterName") { value("friteksfelt.verdi") }
-                jsonPath("$.properties.violations[0].reason") { value("Ugyldige tegn funnet i teksten: \\u0000, ¨") }
+                jsonPath("$.violations[0].parameterName") { value("friteksfelt.verdi") }
+                jsonPath("$.violations[0].reason") { value("Ugyldige tegn funnet i teksten: \\u0000, ¨") }
             }
     }
 }

@@ -211,28 +211,26 @@ class EndringsmeldingControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "properties": {
-                            "violations": [
-                              {
-                                "invalidValue": false,
-                                "parameterName": "endringsmelding.harBekreftetOpplysninger",
-                                "parameterType": "ENTITY",
-                                "reason": "Opplysningene må bekreftes for å sende inn endringsmelding"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "endringsmelding.harForståttRettigheterOgPlikter",
-                                "parameterType": "ENTITY",
-                                "reason": "Må ha forstått rettigheter og plikter for å sende inn endringsmelding"
-                              },
-                              {
-                                "invalidValue": "abc123",
-                                "parameterName": "endringsmelding.søknadId",
-                                "parameterType": "ENTITY",
-                                "reason": "Forventet gyldig UUID, men var 'abc123'"
-                              }
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "invalidValue": false,
+                              "parameterName": "endringsmelding.harBekreftetOpplysninger",
+                              "parameterType": "ENTITY",
+                              "reason": "Opplysningene må bekreftes for å sende inn endringsmelding"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "endringsmelding.harForståttRettigheterOgPlikter",
+                              "parameterType": "ENTITY",
+                              "reason": "Må ha forstått rettigheter og plikter for å sende inn endringsmelding"
+                            },
+                            {
+                              "invalidValue": "abc123",
+                              "parameterName": "endringsmelding.søknadId",
+                              "parameterType": "ENTITY",
+                              "reason": "Forventet gyldig UUID, men var 'abc123'"
+                            }
+                          ]
                         }
                         """.trimIndent(), JsonCompareMode.LENIENT
                     )

@@ -181,34 +181,32 @@ class UngdomsytelseControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "properties": {
-                            "violations": [
-                              {
-                                "invalidValue": false,
-                                "parameterName": "ungdomsytelsesøknad.harForståttRettigheterOgPlikter",
-                                "parameterType": "ENTITY",
-                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "ungdomsytelsesøknad.harBekreftetOpplysninger",
-                                "parameterType": "ENTITY",
-                                "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "ungdomsytelsesøknad.kontonummerInfo.kontonummerErRiktigSattNårHarJa",
-                                "parameterType": "ENTITY",
-                                "reason": "Dersom harKontonummer=JA må kontonummerErRiktig være satt"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "ungdomsytelsesøknad.kontonummerInfo.kontonummerFraRegisterSattNårHarJa",
-                                "parameterType": "ENTITY",
-                                "reason": "Dersom harKontonummer=JA må kontonummerFraRegister være satt"
-                              }
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelsesøknad.harForståttRettigheterOgPlikter",
+                              "parameterType": "ENTITY",
+                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelsesøknad.harBekreftetOpplysninger",
+                              "parameterType": "ENTITY",
+                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelsesøknad.kontonummerInfo.kontonummerErRiktigSattNårHarJa",
+                              "parameterType": "ENTITY",
+                              "reason": "Dersom harKontonummer=JA må kontonummerErRiktig være satt"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelsesøknad.kontonummerInfo.kontonummerFraRegisterSattNårHarJa",
+                              "parameterType": "ENTITY",
+                              "reason": "Dersom harKontonummer=JA må kontonummerFraRegister være satt"
+                            }
+                          ]
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,
@@ -297,25 +295,24 @@ class UngdomsytelseControllerTest {
                         {
                           "detail": "Forespørselen inneholder valideringsfeil",
                           "instance": "http://localhost/ungdomsytelse/oppgavebekreftelse/innsending",
+                          "properties": null,
                           "status": 400,
                           "title": "invalid-request-parameters",
                           "type": "/problem-details/invalid-request-parameters",
-                          "properties": {
-                            "violations": [
-                              {
-                                "invalidValue": "123",
-                                "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.oppgaveReferanse",
-                                "parameterType": "ENTITY",
-                                "reason": "Forventet gyldig UUID, men var '123'"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.uttalelse.gyldigUttalelse",
-                                "parameterType": "ENTITY",
-                                "reason": "'uttalelseFraDeltaker' må være satt hvis 'harUttalelse' er true"
-                              }
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "invalidValue": "123",
+                              "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.oppgaveReferanse",
+                              "parameterType": "ENTITY",
+                              "reason": "Forventet gyldig UUID, men var '123'"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.uttalelse.gyldigUttalelse",
+                              "parameterType": "ENTITY",
+                              "reason": "'uttalelseFraDeltaker' må være satt hvis 'harUttalelse' er true"
+                            }
+                          ]
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,

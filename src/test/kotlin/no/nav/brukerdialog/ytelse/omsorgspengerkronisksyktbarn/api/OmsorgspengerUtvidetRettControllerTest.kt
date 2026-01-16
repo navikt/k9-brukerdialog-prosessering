@@ -130,52 +130,50 @@ class OmsorgspengerUtvidetRettControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "properties": {
-                            "violations": [
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "barn.norskIdentifikator",
-                                "parameterType": "ENTITY",
-                                "reason": "size must be between 11 and 11"
-                              },
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "barn.norskIdentifikator",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                               {
-                                "invalidValue": "$fødselsdatoIFremtiden",
-                                "parameterName": "barn.fødselsdato",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være i fremtiden"
-                              },
-                              {
-                                "invalidValue": "",
-                                "parameterName": "barn.navn",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tomt eller blankt"
-                              },
-                              {
-                                "invalidValue": "¨ er ikke tillatt",
-                                "parameterName": "høyereRisikoForFraværBeskrivelse",
-                                "parameterType": "ENTITY",
-                                "reason": "Ugyldige tegn funnet i teksten: ¨"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "harForståttRettigheterOgPlikter",
-                                "parameterType": "ENTITY",
-                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "harBekreftetOpplysninger",
-                                "parameterType": "ENTITY",
-                                "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                              },
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "barn.norskIdentifikator",
+                              "parameterType": "ENTITY",
+                              "reason": "size must be between 11 and 11"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "barn.norskIdentifikator",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                             {
+                              "invalidValue": "$fødselsdatoIFremtiden",
+                              "parameterName": "barn.fødselsdato",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være i fremtiden"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "barn.navn",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": "¨ er ikke tillatt",
+                              "parameterName": "høyereRisikoForFraværBeskrivelse",
+                              "parameterType": "ENTITY",
+                              "reason": "Ugyldige tegn funnet i teksten: ¨"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "harForståttRettigheterOgPlikter",
+                              "parameterType": "ENTITY",
+                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "harBekreftetOpplysninger",
+                              "parameterType": "ENTITY",
+                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                          ]
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,

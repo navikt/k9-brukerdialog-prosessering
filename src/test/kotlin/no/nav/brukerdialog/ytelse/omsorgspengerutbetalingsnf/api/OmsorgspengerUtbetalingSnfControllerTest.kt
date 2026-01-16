@@ -155,60 +155,58 @@ class OmsorgspengerUtbetalingSnfControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "properties": {
-                            "violations": [
-                              {
-                                "parameterName": "barn[0].identitetsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "size must be between 11 and 11"
-                              },
-                              {
-                                "parameterName": "barn[0].identitetsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                               {
-                                "parameterName": "barn[0].fødselsdato",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være i fremtiden"
-                              },
-                              {
-                                "invalidValue": "",
-                                "parameterName": "barn[0].navn",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tomt eller blankt"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "frilans.sluttdato",
-                                "parameterType": "ENTITY",
-                                "reason": "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "frilans.startdato",
-                                "parameterType": "ENTITY",
-                                "reason": "'Sluttdato' må være lik eller etter 'startdato'"
-                              },
-                              {
-                                "parameterName": "selvstendigNæringsdrivende.organisasjonsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "bekreftelser.harBekreftetOpplysninger",
-                                "parameterType": "ENTITY",
-                                "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "bekreftelser.harForståttRettigheterOgPlikter",
-                                "parameterType": "ENTITY",
-                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
-                              },
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "parameterName": "barn[0].identitetsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "size must be between 11 and 11"
+                            },
+                            {
+                              "parameterName": "barn[0].identitetsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                             {
+                              "parameterName": "barn[0].fødselsdato",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være i fremtiden"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "barn[0].navn",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "frilans.sluttdato",
+                              "parameterType": "ENTITY",
+                              "reason": "Dersom 'jobberFortsattSomFrilans' er true, kan ikke 'sluttdato' være satt"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "frilans.startdato",
+                              "parameterType": "ENTITY",
+                              "reason": "'Sluttdato' må være lik eller etter 'startdato'"
+                            },
+                            {
+                              "parameterName": "selvstendigNæringsdrivende.organisasjonsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "bekreftelser.harBekreftetOpplysninger",
+                              "parameterType": "ENTITY",
+                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "bekreftelser.harForståttRettigheterOgPlikter",
+                              "parameterType": "ENTITY",
+                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                            },
+                          ]
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,

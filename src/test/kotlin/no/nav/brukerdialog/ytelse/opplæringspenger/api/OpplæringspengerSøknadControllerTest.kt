@@ -167,88 +167,86 @@ class OpplæringspengerSøknadControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "properties": {
-                            "violations": [
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "barn.norskIdentifikator",
-                                "parameterType": "ENTITY",
-                                "reason": "size must be between 11 and 11"
-                              },
-                              {
-                                "invalidValue": "",
-                                "parameterName": "barn.navn",
-                                "parameterType": "ENTITY",
-                                "reason": "kan ikke være tomt eller blankt"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "barn.relasjonTilBarnetBeskrivelse",
-                                "parameterType": "ENTITY",
-                                "reason": "Når 'relasjonTilBarnet' er ANNET, kan ikke 'relasjonTilBarnetBeskrivelse' være tom"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "harBekreftetOpplysninger",
-                                "parameterType": "ENTITY",
-                                "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                              },
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "arbeidsgivere[0].organisasjonsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                              {
-                                "invalidValue": "",
-                                "parameterName": "arbeidsgivere[0].navn",
-                                "parameterType": "ENTITY",
-                                "reason": "navn kan ikke være tomt eller blankt"
-                              },
-                              {
-                                "invalidValue": [],
-                                "parameterName": "arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.enkeltdager",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tom liste"
-                              },
-                              {
-                                "invalidValue": null,
-                                "parameterName": "frilans.harHattInntektSomFrilanser",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være null"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "frilans.jobberFortsattSomFrilans",
-                                "parameterType": "ENTITY",
-                                "reason": "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt"
-                              },
-                              {
-                                "invalidValue": [],
-                                "parameterName": "frilans.arbeidsforhold.arbeidIPeriode.enkeltdager",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tom liste"
-                              },
-                              {
-                                "invalidValue": "$fødselsdatoIFremtiden",
-                                "parameterName": "barn.fødselsdato",
-                                "parameterType": "ENTITY",
-                                "reason": "kan ikke være i fremtiden"
-                              },
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "barn.norskIdentifikator",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "harForståttRettigheterOgPlikter",
-                                "parameterType": "ENTITY",
-                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
-                              }
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "barn.norskIdentifikator",
+                              "parameterType": "ENTITY",
+                              "reason": "size must be between 11 and 11"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "barn.navn",
+                              "parameterType": "ENTITY",
+                              "reason": "kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "barn.relasjonTilBarnetBeskrivelse",
+                              "parameterType": "ENTITY",
+                              "reason": "Når 'relasjonTilBarnet' er ANNET, kan ikke 'relasjonTilBarnetBeskrivelse' være tom"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "harBekreftetOpplysninger",
+                              "parameterType": "ENTITY",
+                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "arbeidsgivere[0].organisasjonsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "arbeidsgivere[0].navn",
+                              "parameterType": "ENTITY",
+                              "reason": "navn kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": [],
+                              "parameterName": "arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.enkeltdager",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tom liste"
+                            },
+                            {
+                              "invalidValue": null,
+                              "parameterName": "frilans.harHattInntektSomFrilanser",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være null"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "frilans.jobberFortsattSomFrilans",
+                              "parameterType": "ENTITY",
+                              "reason": "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt"
+                            },
+                            {
+                              "invalidValue": [],
+                              "parameterName": "frilans.arbeidsforhold.arbeidIPeriode.enkeltdager",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tom liste"
+                            },
+                            {
+                              "invalidValue": "$fødselsdatoIFremtiden",
+                              "parameterName": "barn.fødselsdato",
+                              "parameterType": "ENTITY",
+                              "reason": "kan ikke være i fremtiden"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "barn.norskIdentifikator",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "harForståttRettigheterOgPlikter",
+                              "parameterType": "ENTITY",
+                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                            }
+                          ]
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,

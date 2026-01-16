@@ -152,81 +152,79 @@ class PleiepengerLivetsSluttfaseControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "properties": {
-                            "violations": [
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.pleietrengende.norskIdentitetsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "size must be between 11 and 11"
-                              },
-                              {
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.pleietrengende.fødselsdato",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være i fremtiden"
-                              },
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.pleietrengende.norskIdentitetsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                              {
-                                "invalidValue": "",
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.pleietrengende.navn",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tomt eller blankt"
-                              },
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.arbeidsgivere[0].organisasjonsnummer",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                              {
-                                "invalidValue": "",
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.arbeidsgivere[0].navn",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tomt eller blankt"
-                              },
-                              {
-                                "invalidValue": [],
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.enkeltdager",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tom liste"
-                              },
-                              {
-                                "invalidValue": null,
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.frilans.harHattInntektSomFrilanser",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være null"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.frilans.jobberFortsattSomFrilans",
-                                "parameterType": "ENTITY",
-                                "reason": "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt"
-                              },
-                              {
-                                "invalidValue": [],
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.frilans.arbeidsforhold.arbeidIPeriode.enkeltdager",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tom liste"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.harForståttRettigheterOgPlikter",
-                                "parameterType": "ENTITY",
-                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "pleiepengerILivetsSluttfaseSøknad.harBekreftetOpplysninger",
-                                "parameterType": "ENTITY",
-                                "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                              },
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.pleietrengende.norskIdentitetsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "size must be between 11 and 11"
+                            },
+                            {
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.pleietrengende.fødselsdato",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være i fremtiden"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.pleietrengende.norskIdentitetsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.pleietrengende.navn",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.arbeidsgivere[0].organisasjonsnummer",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.arbeidsgivere[0].navn",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": [],
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.enkeltdager",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tom liste"
+                            },
+                            {
+                              "invalidValue": null,
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.frilans.harHattInntektSomFrilanser",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være null"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.frilans.jobberFortsattSomFrilans",
+                              "parameterType": "ENTITY",
+                              "reason": "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt"
+                            },
+                            {
+                              "invalidValue": [],
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.frilans.arbeidsforhold.arbeidIPeriode.enkeltdager",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tom liste"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.harForståttRettigheterOgPlikter",
+                              "parameterType": "ENTITY",
+                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.harBekreftetOpplysninger",
+                              "parameterType": "ENTITY",
+                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                          ]
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,

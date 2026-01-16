@@ -135,74 +135,72 @@ class OmsorgspengerMidlertidigAleneControllerTest {
                           "title": "invalid-request-parameters",
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
-                          "properties": {
-                            "violations": [
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.barn[0].norskIdentifikator",
-                                "parameterType": "ENTITY",
-                                "reason": "size must be between 11 and 11"
-                              },
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.barn[0].norskIdentifikator",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                               {
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.barn[0].fødselsdato",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være i fremtiden"
-                              },
-                              {
-                                "invalidValue": "",
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.barn[0].navn",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tomt eller blankt"
-                              },
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.fnr",
-                                "parameterType": "ENTITY",
-                                "reason": "size must be between 11 and 11"
-                              },
-                              {
-                                "invalidValue": "123ABC",
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.fnr",
-                                "parameterType": "ENTITY",
-                                "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
-                              },
-                              {
-                                "invalidValue": "",
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.navn",
-                                "parameterType": "ENTITY",
-                                "reason": "Kan ikke være tomt eller blankt"
-                              },
-                              {
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.situasjonBeskrivelse",
-                                "parameterType": "ENTITY",
-                                "reason": "Derom 'situasjon' er 'SYKDOM', eller 'ANNET' må 'situasjonBeskrivelse' være satt"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.situasjon_innlagt_i_helseinstitusjon_sykdom_eller_annet",
-                                "parameterType": "ENTITY",
-                                "reason": "Derom 'situasjon' er 'INNLAGT_I_HELSEINSTITUSJON', 'SYKDOM', eller 'ANNET' må 'periodeTilOgMed' eller 'periodeOver6Måneder' være satt"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.harForståttRettigheterOgPlikter",
-                                "parameterType": "ENTITY",
-                                "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
-                              },
-                              {
-                                "invalidValue": false,
-                                "parameterName": "omsorgspengerMidlertidigAleneSøknad.harBekreftetOpplysninger",
-                                "parameterType": "ENTITY",
-                                "reason": "Opplysningene må bekreftes for å sende inn søknad"
-                              },
-                            ]
-                          }
+                          "violations": [
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.barn[0].norskIdentifikator",
+                              "parameterType": "ENTITY",
+                              "reason": "size must be between 11 and 11"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.barn[0].norskIdentifikator",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                             {
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.barn[0].fødselsdato",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være i fremtiden"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.barn[0].navn",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.fnr",
+                              "parameterType": "ENTITY",
+                              "reason": "size must be between 11 and 11"
+                            },
+                            {
+                              "invalidValue": "123ABC",
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.fnr",
+                              "parameterType": "ENTITY",
+                              "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
+                            },
+                            {
+                              "invalidValue": "",
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.navn",
+                              "parameterType": "ENTITY",
+                              "reason": "Kan ikke være tomt eller blankt"
+                            },
+                            {
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.situasjonBeskrivelse",
+                              "parameterType": "ENTITY",
+                              "reason": "Derom 'situasjon' er 'SYKDOM', eller 'ANNET' må 'situasjonBeskrivelse' være satt"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.annenForelder.situasjon_innlagt_i_helseinstitusjon_sykdom_eller_annet",
+                              "parameterType": "ENTITY",
+                              "reason": "Derom 'situasjon' er 'INNLAGT_I_HELSEINSTITUSJON', 'SYKDOM', eller 'ANNET' må 'periodeTilOgMed' eller 'periodeOver6Måneder' være satt"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.harForståttRettigheterOgPlikter",
+                              "parameterType": "ENTITY",
+                              "reason": "Må ha forstått rettigheter og plikter for å sende inn søknad"
+                            },
+                            {
+                              "invalidValue": false,
+                              "parameterName": "omsorgspengerMidlertidigAleneSøknad.harBekreftetOpplysninger",
+                              "parameterType": "ENTITY",
+                              "reason": "Opplysningene må bekreftes for å sende inn søknad"
+                            },
+                          ]
                         }
                         """.trimIndent(),
                         JsonCompareMode.LENIENT,
