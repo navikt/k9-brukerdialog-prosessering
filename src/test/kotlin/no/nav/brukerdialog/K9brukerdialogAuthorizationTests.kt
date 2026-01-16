@@ -180,7 +180,7 @@ class K9brukerdialogAuthorizationTests {
         url: String,
         httpMethod: HttpMethod,
         token: SignedJWT?,
-    ): ResponseEntity<String> {
+    ): ResponseEntity<Any> {
         val httpEntity = HttpHeaders().let {
 
             if (token != null) {
@@ -203,7 +203,7 @@ class K9brukerdialogAuthorizationTests {
                 url,
                 httpMethod,
                 httpEntity,
-                String::class.java,
+                Any::class.java,
                 endpoint.urlVariables
             )
         } else {
@@ -211,7 +211,7 @@ class K9brukerdialogAuthorizationTests {
                 url,
                 httpMethod,
                 httpEntity,
-                String::class.java
+                Any::class.java
             )
         }
     }

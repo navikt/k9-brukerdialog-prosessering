@@ -12,6 +12,7 @@ import no.nav.k9.søknad.JsonUtils
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -57,6 +58,10 @@ class JacksonConfiguration {
     @Bean
     fun javaTimeModule(): JavaTimeModule = configureJavaTimeModule()
 
+    @Bean
+    fun mappingJackson2HttpMessageConverter(objectMapper: ObjectMapper): MappingJackson2HttpMessageConverter {
+        return MappingJackson2HttpMessageConverter(objectMapper)
+    }
 }
 
 class CustomZonedDateTimeSerializer : JsonSerializer<ZonedDateTime?>() {
