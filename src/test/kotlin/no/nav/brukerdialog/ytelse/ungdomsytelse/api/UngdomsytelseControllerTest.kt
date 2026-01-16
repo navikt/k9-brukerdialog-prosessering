@@ -295,7 +295,6 @@ class UngdomsytelseControllerTest {
                         {
                           "detail": "Forespørselen inneholder valideringsfeil",
                           "instance": "http://localhost/ungdomsytelse/oppgavebekreftelse/innsending",
-                          "properties": null,
                           "status": 400,
                           "title": "invalid-request-parameters",
                           "type": "/problem-details/invalid-request-parameters",
