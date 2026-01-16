@@ -42,7 +42,7 @@ val openhtmltopdfVersion = "1.1.4"
 val handlebarsVersion = "4.5.0"
 val retryVersion = "2.0.12"
 val awailitilityKotlinVersion = "4.3.0"
-val springCloudContractVersion = "5.0.1"
+val wiremockVersion = "3.13.2"
 val orgJsonVersion = "20251224"
 val springdocVersion = "3.0.1"
 val pdfBoxVersion = "3.0.6"
@@ -118,8 +118,7 @@ dependencies {
 
 	testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
 	testImplementation("com.ninja-squad:springmockk:$springMockkVersion")
-	testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:$springCloudContractVersion")
-	testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock:$springCloudContractVersion")
+	testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
 	testImplementation("org.awaitility:awaitility-kotlin:$awailitilityKotlinVersion")
 
 	// Google Cloud

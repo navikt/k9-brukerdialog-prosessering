@@ -196,11 +196,6 @@ class OmsorgspengerUtbetalingSnfControllerTest {
                                 "reason": "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
                               },
                               {
-                                "parameterName": "selvstendigNæringsdrivende.erNyoppstartet",
-                                "parameterType": "ENTITY",
-                                "reason": "Når nyoppstartet er true, må fraOgMed være maks 4 år siden"
-                              },
-                              {
                                 "invalidValue": false,
                                 "parameterName": "bekreftelser.harBekreftetOpplysninger",
                                 "parameterType": "ENTITY",
