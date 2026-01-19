@@ -15,7 +15,7 @@ class OMPUtbetalingATSoknadPDFData(private val melding: OMPUtbetalingATSoknadMot
 
     private companion object {
         val jacksonConfig = JacksonConfiguration()
-        val mapper = jacksonConfig.objectMapper(jacksonConfig.kotlinModule(), jacksonConfig.javaTimeModule())
+        val mapper = jacksonConfig.objectMapper()
     }
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
