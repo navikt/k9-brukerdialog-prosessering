@@ -52,15 +52,10 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.kafka.test.EmbeddedKafkaBroker
 import org.springframework.kafka.test.context.EmbeddedKafka
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.TestContext
-import org.springframework.test.context.TestExecutionListeners
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.test.context.support.AbstractTestExecutionListener
-
 
 /**
  * Annotates a test class to run with embedded Kafka and Spring Boot.
@@ -90,15 +85,80 @@ import org.springframework.test.context.support.AbstractTestExecutionListener
 @EmbeddedKafka(
     partitions = 1,
     count = 1,
-    bootstrapServersProperty = "KAFKA_BROKERS"
+    bootstrapServersProperty = "KAFKA_BROKERS",
+    topics = [
+        // Endringsmelding - Pleiepenger sykt barn
+        PSB_ENDRINGSMELDING_MOTTATT_TOPIC,
+        PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC,
+        PSB_ENDRINGSMELDING_CLEANUP_TOPIC,
+
+        // Pleiepenger sykt barn
+        PSB_MOTTATT_TOPIC,
+        PSB_PREPROSESSERT_TOPIC,
+        PSB_CLEANUP_TOPIC,
+
+        // Pleiepenger i livets sluttfase
+        PILS_MOTTATT_TOPIC,
+        PILS_PREPROSESSERT_TOPIC,
+        PILS_CLEANUP_TOPIC,
+
+        // Ettersendelse
+        ETTERSENDELSE_MOTTATT_TOPIC,
+        ETTERSENDELSE_PREPROSESSERT_TOPIC,
+        ETTERSENDELSE_CLEANUP_TOPIC,
+
+        // Omsorgspenger utvidet rett - kronisk sykt barn
+        OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC,
+        OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC,
+        OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC,
+
+        // Omsorgspengerutbetaling - arbeidstaker
+        OMP_UTB_AT_MOTTATT_TOPIC,
+        OMP_UTB_AT_PREPROSESSERT_TOPIC,
+        OMP_UTB_AT_CLEANUP_TOPIC,
+
+        // Omsorgspengerutbetaling - selvstendig næringsdrivende og frilanser
+        OMP_UTB_SNF_MOTTATT_TOPIC,
+        OMP_UTB_SNF_PREPROSESSERT_TOPIC,
+        OMP_UTB_SNF_CLEANUP_TOPIC,
+
+        // Omsorgspenger - midlertidig alene
+        OMP_MA_MOTTATT_TOPIC,
+        OMP_MA_PREPROSESSERT_TOPIC,
+        OMP_MA_CLEANUP_TOPIC,
+
+        // Omsorgspenger - aleneomsorg
+        OMP_AO_MOTTATT_TOPIC,
+        OMP_AO_PREPROSESSERT_TOPIC,
+        OMP_AO_CLEANUP_TOPIC,
+
+        // Ungdomsytelse
+        UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC,
+        UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC,
+        UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC,
+
+        // Ungdomsytelse - inntektsrapportering
+        UNGDOMSYTELSE_INNTEKTSRAPPORTERING_MOTTATT_TOPIC,
+        UNGDOMSYTELSE_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC,
+        UNGDOMSYTELSE_INNTEKTSRAPPORTERING_CLEANUP_TOPIC,
+
+        // Ungdomsytelse - oppgavebekreftelse
+        UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_MOTTATT_TOPIC,
+        UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC,
+        UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC,
+
+        // Opplæringspenger
+        OLP_MOTTATT_TOPIC,
+        OLP_PREPROSESSERT_TOPIC,
+        OLP_CLEANUP_TOPIC,
+
+        // K9 Dittnav varsel
+        K9_DITTNAV_VARSEL_TOPIC
+    ]
 )
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext
 @ExtendWith(SpringExtension::class)
-@TestExecutionListeners(
-    listeners = [KafkaTopicsInitializer::class],
-    mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS
-)
 @EnableMockOAuth2Server
 @ActiveProfiles("test")
 @SpringBootTest(
@@ -107,17 +167,6 @@ import org.springframework.test.context.support.AbstractTestExecutionListener
 )
 @Tag("kafka")
 annotation class KafkaIntegrationTest
-
-/**
- * TestExecutionListener that creates Kafka topics after the Spring context is prepared.
- */
-class KafkaTopicsInitializer : AbstractTestExecutionListener() {
-    override fun beforeTestClass(testContext: TestContext) {
-        val embeddedKafka = testContext.applicationContext.getBean(EmbeddedKafkaBroker::class.java)
-        embeddedKafka.addTopics(*KAFKA_TOPICS)
-    }
-}
-
 
 object TestUtils {
     val Validator: Validator = Validation.buildDefaultValidatorFactory().validator
@@ -155,74 +204,3 @@ object TestUtils {
         forEach { reason.contains(it) }
     }
 }
-
-val KAFKA_TOPICS = arrayOf(
-    // Endringsmelding - Pleiepenger sykt barn
-    PSB_ENDRINGSMELDING_MOTTATT_TOPIC,
-    PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC,
-    PSB_ENDRINGSMELDING_CLEANUP_TOPIC,
-
-    // Pleiepenger sykt barn
-    PSB_MOTTATT_TOPIC,
-    PSB_PREPROSESSERT_TOPIC,
-    PSB_CLEANUP_TOPIC,
-
-    // Pleiepenger i livets sluttfase
-    PILS_MOTTATT_TOPIC,
-    PILS_PREPROSESSERT_TOPIC,
-    PILS_CLEANUP_TOPIC,
-
-    // Ettersendelse
-    ETTERSENDELSE_MOTTATT_TOPIC,
-    ETTERSENDELSE_PREPROSESSERT_TOPIC,
-    ETTERSENDELSE_CLEANUP_TOPIC,
-
-    // Omsorgspenger utvidet rett - kronisk sykt barn
-    OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC,
-    OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC,
-    OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC,
-
-    // Omsorgspengerutbetaling - arbeidstaker
-    OMP_UTB_AT_MOTTATT_TOPIC,
-    OMP_UTB_AT_PREPROSESSERT_TOPIC,
-    OMP_UTB_AT_CLEANUP_TOPIC,
-
-    // Omsorgspengerutbetaling - selvstendig næringsdrivende og frilanser
-    OMP_UTB_SNF_MOTTATT_TOPIC,
-    OMP_UTB_SNF_PREPROSESSERT_TOPIC,
-    OMP_UTB_SNF_CLEANUP_TOPIC,
-
-    // Omsorgspenger - midlertidig alene
-    OMP_MA_MOTTATT_TOPIC,
-    OMP_MA_PREPROSESSERT_TOPIC,
-    OMP_MA_CLEANUP_TOPIC,
-
-    // Omsorgspenger - aleneomsorg
-    OMP_AO_MOTTATT_TOPIC,
-    OMP_AO_PREPROSESSERT_TOPIC,
-    OMP_AO_CLEANUP_TOPIC,
-
-    // Ungdomsytelse
-    UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC,
-    UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC,
-    UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC,
-
-    // Ungdomsytelse - inntektsrapportering
-    UNGDOMSYTELSE_INNTEKTSRAPPORTERING_MOTTATT_TOPIC,
-    UNGDOMSYTELSE_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC,
-    UNGDOMSYTELSE_INNTEKTSRAPPORTERING_CLEANUP_TOPIC,
-
-    // Ungdomsytelse - oppgavebekreftelse
-    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_MOTTATT_TOPIC,
-    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC,
-    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC,
-
-    // Opplæringspenger
-    OLP_MOTTATT_TOPIC,
-    OLP_PREPROSESSERT_TOPIC,
-    OLP_CLEANUP_TOPIC,
-
-    // K9 Dittnav varsel
-    K9_DITTNAV_VARSEL_TOPIC
-)
-
