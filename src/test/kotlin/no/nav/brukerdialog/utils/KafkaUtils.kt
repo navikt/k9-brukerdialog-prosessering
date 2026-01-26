@@ -51,16 +51,7 @@ object KafkaUtils {
     fun Consumer<String, String>.lesMelding(key: String, topic: String, maxWaitInSeconds: Long = 60): ConsumerRecord<String, String> {
 
         val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
-
-        // Poll once to trigger partition assignment before seeking
-        poll(Duration.ofMillis(100))
-
-        // Only seek if we have assigned partitions
-        val currentAssignment = assignment()
-        if (currentAssignment.isNotEmpty()) {
-            seekToBeginning(currentAssignment)
-        }
-
+        seekToBeginning(assignment())
         while (System.currentTimeMillis() < end) {
 
             val entries: List<ConsumerRecord<String, String>> = poll(Duration.ofSeconds(10))
