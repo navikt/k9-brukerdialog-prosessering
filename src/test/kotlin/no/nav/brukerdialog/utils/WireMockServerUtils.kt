@@ -1,13 +1,13 @@
 package no.nav.brukerdialog.utils
 
-import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension
 import no.nav.brukerdialog.integrasjon.clamav.ScanResultat
 import org.springframework.http.HttpStatus
 
 object WireMockServerUtils {
-    fun WireMockServer.stubJournalføring(status: Int = 200): WireMockServer{
-        WireMock.stubFor(
+    fun WireMockExtension.stubJournalføring(status: Int = 200): WireMockExtension {
+        this.stubFor(
             WireMock.post(
                 WireMock.urlMatching(".*/dokarkiv-mock/rest/journalpostapi/v1/journalpost"))
                 .withRequestBody(WireMock.matchingJsonPath("$.tilleggsopplysninger[0].nokkel", WireMock.equalTo("k9.kilde")))
@@ -25,8 +25,8 @@ object WireMockServerUtils {
         return this
     }
 
-    fun WireMockServer.stubFamiliePdf(status: Int = 200): WireMockServer{
-        WireMock.stubFor(
+    fun WireMockExtension.stubFamiliePdf(status: Int = 200): WireMockExtension{
+        this.stubFor(
             WireMock.post(
                 WireMock.urlMatching(".*/familie-pdf-mock/api/v1/pdf/opprett-pdf"))
                 .willReturn(
@@ -39,7 +39,7 @@ object WireMockServerUtils {
         return this
     }
 
-    fun WireMockServer.stubLagreDokument(
+    fun WireMockExtension.stubLagreDokument(
         urlPathMatching: String,
         requestBodyJson: String,
         responseStatus: HttpStatus,
@@ -55,7 +55,7 @@ object WireMockServerUtils {
         )
     }
 
-    fun WireMockServer.stubSlettDokument(
+    fun WireMockExtension.stubSlettDokument(
         urlPathMatching: String,
         requestBodyJson: String,
         responseStatus: HttpStatus,
@@ -68,7 +68,7 @@ object WireMockServerUtils {
         )
     }
 
-    fun WireMockServer.stubOpprettMellomlagring(
+    fun WireMockExtension.stubOpprettMellomlagring(
         urlPathMatching: String,
         requestBodyJson: String,
         responseStatus: HttpStatus,
@@ -84,8 +84,23 @@ object WireMockServerUtils {
         )
     }
 
-    fun WireMockServer.stubVirusScan(httpStatus: HttpStatus, scanResultat: ScanResultat) : WireMockServer {
-        WireMock.stubFor(
+    fun WireMockExtension.stubOpprettMellomlagringLenient(
+        urlPathMatching: String,
+        responseStatus: HttpStatus,
+        responseBodyJson: String,
+    ) {
+        stubFor(
+            WireMock.post(WireMock.urlPathMatching(".*$urlPathMatching"))
+                .willReturn(
+                    WireMock.aResponse().withHeader("Content-Type", "application/json")
+                        .withStatus(responseStatus.value())
+                        .withBody(responseBodyJson)
+                )
+        )
+    }
+
+    fun WireMockExtension.stubVirusScan(httpStatus: HttpStatus, scanResultat: ScanResultat) : WireMockExtension {
+        this.stubFor(
             WireMock.put(WireMock.urlPathMatching(".*clamav-mock/scan"))
                 .willReturn(
                     WireMock.aResponse()

@@ -5,14 +5,7 @@ import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Barn
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Bekreftelser
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Land
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.OMPUtbetalingSNFSoknadMottatt
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.Regnskapsfører
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.VarigEndring
-import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.YrkesaktivSisteTreFerdigliknedeÅrene
+import no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene.*
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
@@ -23,7 +16,7 @@ class OMPUtbetalingSNFSoknadPDFData(private val melding: OMPUtbetalingSNFSoknadM
 
     private companion object {
         val jacksonConfig = JacksonConfiguration()
-        val mapper = jacksonConfig.objectMapper(jacksonConfig.kotlinModule(), jacksonConfig.javaTimeModule())
+        val mapper = jacksonConfig.objectMapper()
     }
 
     override fun ytelse(): Ytelse = Ytelse.OMSORGSPENGER_UTBETALING_SNF

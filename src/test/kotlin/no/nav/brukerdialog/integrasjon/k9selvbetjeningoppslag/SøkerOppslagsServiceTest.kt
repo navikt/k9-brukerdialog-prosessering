@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag
 
-import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension
 import com.ninjasquad.springmockk.MockkBean
 import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.utils.Constants
@@ -13,15 +13,16 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
-@AutoConfigureWireMock
 @EnableMockOAuth2Server
 @ExtendWith(SpringExtension::class)
 @ActiveProfiles("test")
@@ -29,8 +30,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @Import(GcsStorageTestConfiguration::class)
 class SøkerOppslagsServiceTest {
 
-    @Autowired
-    lateinit var wireMockServer: WireMockServer
+    companion object {
+        @JvmField
+        @RegisterExtension
+        val wireMock: WireMockExtension = WireMockExtension.newInstance()
+            .build()
+
+        @JvmStatic
+        @DynamicPropertySource
+        fun configureProperties(registry: DynamicPropertyRegistry) {
+            registry.add("no.nav.integration.k9-selvbetjening-oppslag-base-url") { wireMock.baseUrl() }
+        }
+    }
 
     @Autowired
     lateinit var søkerenOppslagsService: SøkerOppslagsService
@@ -71,9 +82,9 @@ class SøkerOppslagsServiceTest {
 
         body?.let { responseDefinitionBuilder.withBody(it) }
 
-        wireMockServer.stubFor(
+        wireMock.stubFor(
             WireMock
-                .get(WireMock.urlPathEqualTo("/k9-selvbetjening-oppslag-mock/meg"))
+                .get(WireMock.urlPathEqualTo("/meg"))
                 .withQueryParam("a", WireMock.equalTo("aktør_id"))
                 .withQueryParam("a", WireMock.equalTo("fornavn"))
                 .withQueryParam("a", WireMock.equalTo("mellomnavn"))

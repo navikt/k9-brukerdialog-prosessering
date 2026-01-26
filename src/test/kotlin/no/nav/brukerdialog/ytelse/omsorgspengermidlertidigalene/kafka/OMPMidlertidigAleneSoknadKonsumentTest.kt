@@ -3,25 +3,22 @@ package no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.kafka
 import io.mockk.coEvery
 import io.mockk.coVerify
 import no.nav.brukerdialog.AbstractIntegrationTest
-import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.utils.SøknadUtils
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration
 import no.nav.brukerdialog.dittnavvarsel.K9Beskjed
 import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.meldinger.omsorgspengermidlertidigalene.utils.OMPMidlertidigAleneSoknadUtils
-import no.nav.brukerdialog.utils.KafkaIntegrationTest
 import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
 import no.nav.brukerdialog.utils.MockMvcUtils.sendInnSøknad
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
-import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.kafka.OMPMidlertidigAleneTopologyConfiguration
+import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.utils.SøknadUtils
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
-import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
 

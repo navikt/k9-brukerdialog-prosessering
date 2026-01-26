@@ -1,16 +1,16 @@
 package no.nav.brukerdialog.integrasjon.k9brukerdialogcache
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.brukerdialog.mellomlagring.soknad.CacheRequest
 import no.nav.brukerdialog.mellomlagring.soknad.CacheResponse
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
-import no.nav.brukerdialog.utils.WireMockServerUtils.stubOpprettMellomlagring
+import no.nav.brukerdialog.utils.WireMockServerUtils.stubOpprettMellomlagringLenient
+import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenResponse
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
@@ -18,12 +18,14 @@ import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.ZonedDateTime
 
@@ -34,15 +36,24 @@ import java.time.ZonedDateTime
     classes = [K9brukerdialogprosesseringApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-@AutoConfigureWireMock
 @Import(GcsStorageTestConfiguration::class)
 class K9BrukerdialogCacheServiceTest {
 
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
+    companion object {
+        @JvmField
+        @RegisterExtension
+        val wireMock: WireMockExtension = WireMockExtension.newInstance()
+            .build()
+
+        @JvmStatic
+        @DynamicPropertySource
+        fun configureProperties(registry: DynamicPropertyRegistry) {
+            registry.add("no.nav.integration.k9-brukerdialog-cache-base-url") { "${wireMock.baseUrl()}/k9-brukerdialog-cache-mock" }
+        }
+    }
 
     @Autowired
-    private lateinit var wireMockServer: WireMockServer
+    private lateinit var objectMapper: ObjectMapper
 
     @Autowired
     private lateinit var mockOAuth2Server: MockOAuth2Server
@@ -70,9 +81,8 @@ class K9BrukerdialogCacheServiceTest {
             opprettet = ZonedDateTime.now()
         )
 
-        wireMockServer.stubOpprettMellomlagring(
-            urlPathMatching = "/api/cache",
-            requestBodyJson = objectMapper.writeValueAsString(cacheRequest),
+        wireMock.stubOpprettMellomlagringLenient(
+            urlPathMatching = "/k9-brukerdialog-cache-mock/api/cache",
             responseStatus = HttpStatus.CREATED,
             responseBodyJson = objectMapper.writeValueAsString(
                 CacheResponse(

@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.integrasjon.familiePdf
 
-import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import kotlinx.coroutines.runBlocking
@@ -20,10 +20,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
@@ -33,10 +35,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     classes = [K9brukerdialogprosesseringApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-@AutoConfigureWireMock
 class FamiliePdfServiceTest {
-    @Autowired
-    private lateinit var wireMockServer: WireMockServer
+    companion object {
+        @JvmField
+        @RegisterExtension
+        val wireMock: WireMockExtension = WireMockExtension.newInstance()
+            .build()
+
+        @JvmStatic
+        @DynamicPropertySource
+        fun configureProperties(registry: DynamicPropertyRegistry) {
+            registry.add("no.nav.integration.familie-pdf-base-url") { wireMock.baseUrl() }
+        }
+    }
 
     @Autowired
     lateinit var familiePdfService: FamiliePdfService
@@ -49,7 +60,7 @@ class FamiliePdfServiceTest {
 
     @BeforeEach
     fun setUp() {
-        wireMockServer.stubFamiliePdf()
+        wireMock.stubFamiliePdf()
         val token =
             mockOAuth2Server.hentToken(
                 subject = "123456789",
