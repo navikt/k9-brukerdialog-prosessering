@@ -182,8 +182,8 @@ data class OpplæringspengerSøknad(
             .medUttak(byggK9Uttak(søknadsperioder))
             .medBosteder(medlemskap.tilK9Bosteder())
             .medKurs(kurs.tilK9Format())
-            .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata))
-            .medSkalEttersendeVedlegg(ettersendingAvVedlegg?.skalEttersendeVedlegg) as Opplæringspenger
+            .medSkalEttersendeVedlegg(ettersendingAvVedlegg?.skalEttersendeVedlegg ?: false)
+            .medDataBruktTilUtledning(byggK9DataBruktTilUtledning(metadata)) as Opplæringspenger
 
         barn.relasjonTilBarnet?.let { olp.medOmsorg(byggK9Omsorg()) }
 
