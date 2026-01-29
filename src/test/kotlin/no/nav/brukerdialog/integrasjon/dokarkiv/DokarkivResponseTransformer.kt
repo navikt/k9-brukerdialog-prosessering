@@ -72,7 +72,7 @@ internal class DokarkivResponseTransformer : ResponseTransformer() {
           "journalpostId": "$journalpostId",
           "journalstatus": "M",
           "melding": null,
-          "journalpostFerdigstilt": false,
+          "journalpostferdigstilt": false,
           "dokumenter": [
             {
               "dokumentInfoId": "485201432"

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import no.nav.brukerdialog.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.k9.søknad.JsonUtils
+import org.springframework.boot.http.converter.autoconfigure.ClientHttpMessageConvertersCustomizer
 import org.springframework.boot.http.converter.autoconfigure.ServerHttpMessageConvertersCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -61,6 +62,14 @@ class JacksonConfiguration {
             //Må være først for at swagger skal funke
             converters.addCustomConverter(ByteArrayHttpMessageConverter())
             //Brukes til å parse request i Controllere
+            converters.addCustomConverter(MappingJackson2HttpMessageConverter(objectMapper))
+        }
+    }
+
+    @Bean
+    fun clientHttpMessageConvertersCustomizer(objectMapper: ObjectMapper): ClientHttpMessageConvertersCustomizer {
+        return ClientHttpMessageConvertersCustomizer { converters: HttpMessageConverters.ClientBuilder ->
+            // Brukes til å parse response fra RestTemplate og RestClient
             converters.addCustomConverter(MappingJackson2HttpMessageConverter(objectMapper))
         }
     }
