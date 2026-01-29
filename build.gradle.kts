@@ -31,9 +31,9 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "6.0.0"
+val tokenSupportVersion = "6.0.2"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "12.7.4"
+val k9FormatVersion = "12.7.5"
 val ungDeltakelseOpplyserVersjon = "2.9.2"
 val springMockkVersion = "5.0.1"
 val logstashLogbackEncoderVersion = "9.0"
@@ -46,8 +46,8 @@ val orgJsonVersion = "20251224"
 val springdocVersion = "3.0.1"
 val pdfBoxVersion = "3.0.6"
 val imageIOVersion = "3.13.0"
-val fpsakTidsserieVersion = "2.7.3"
-val gcpStorageVersion = "2.61.0"
+val fpsakTidsserieVersion = "2.7.4"
+val gcpStorageVersion = "2.62.0"
 val auth0Version = "4.5.0"
 val tikaVersion = "3.2.3"
 val aivenFakeGCSServerVersion = "0.3.0"
