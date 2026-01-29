@@ -6,16 +6,10 @@ import no.nav.brukerdialog.GcsStorageTestConfiguration
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.assertDoesNotThrow
-import org.junit.jupiter.api.assertNotNull
-import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -28,7 +22,6 @@ import org.testcontainers.junit.jupiter.Testcontainers
     classes = [K9brukerdialogprosesseringApplication::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-@AutoConfigureWireMock
 @Testcontainers
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Import(GcsStorageTestConfiguration::class)

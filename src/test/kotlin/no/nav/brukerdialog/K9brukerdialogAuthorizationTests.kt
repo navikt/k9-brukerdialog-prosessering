@@ -11,16 +11,12 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.resttestclient.TestRestTemplate
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.Import
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.util.LinkedMultiValueMap
@@ -31,6 +27,7 @@ import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestRestTemplate
 @ActiveProfiles("test")
 @EnableMockOAuth2Server
 @Import(GcsStorageTestConfiguration::class)
@@ -183,7 +180,7 @@ class K9brukerdialogAuthorizationTests {
         url: String,
         httpMethod: HttpMethod,
         token: SignedJWT?,
-    ): ResponseEntity<String> {
+    ): ResponseEntity<Any> {
         val httpEntity = HttpHeaders().let {
 
             if (token != null) {
@@ -206,7 +203,7 @@ class K9brukerdialogAuthorizationTests {
                 url,
                 httpMethod,
                 httpEntity,
-                String::class.java,
+                Any::class.java,
                 endpoint.urlVariables
             )
         } else {
@@ -214,7 +211,7 @@ class K9brukerdialogAuthorizationTests {
                 url,
                 httpMethod,
                 httpEntity,
-                String::class.java
+                Any::class.java
             )
         }
     }

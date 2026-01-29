@@ -1,7 +1,6 @@
 package no.nav.brukerdialog.kafka
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import no.nav.brukerdialog.ytelse.Ytelse
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
@@ -15,12 +14,13 @@ import no.nav.brukerdialog.kafka.Topics.OMSORGSPENGER_UTVIDET_RETT_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_LIVETS_SLUTTFASE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.PLEIEPENGER_SYKT_BARN_TOPIC
 import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_SOKNAD_TOPIC
+import no.nav.brukerdialog.ytelse.Ytelse
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
-import org.springframework.boot.actuate.health.Health
-import org.springframework.boot.actuate.health.ReactiveHealthIndicator
+import org.springframework.boot.health.contributor.Health
+import org.springframework.boot.health.contributor.ReactiveHealthIndicator
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
@@ -54,7 +54,7 @@ class KafkaProducerService(
             formaterStatuslogging(
                 ytelse,
                 komplettInnsending.innsendingId(),
-                "sendes til topic $topic med offset '${result.recordMetadata.offset()}' til partition '${result.recordMetadata.offset()}'"
+                "sendes til topic $topic med offset '${result?.recordMetadata?.offset()}' til partition '${result?.recordMetadata?.partition()}'"
             )
         )
     }

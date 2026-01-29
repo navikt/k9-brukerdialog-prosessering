@@ -1,14 +1,14 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="K9brukerdialogprosesseringApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="K9brukerdialogprosesseringMedVtpApplicationKt" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <option name="ACTIVE_PROFILES" value="vtp" />
     <option name="envFilePaths">
       <option value="$PROJECT_DIR$/dev/vtp.env" />
     </option>
-    <module name="k9-brukerdialog-prosessering.main" />
+    <module name="k9-brukerdialog-prosessering.test" />
     <selectedOptions>
       <option name="environmentVariables" />
     </selectedOptions>
-    <option name="SPRING_BOOT_MAIN_CLASS" value="no.nav.brukerdialog.K9brukerdialogprosesseringApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="no.nav.brukerdialog.vtp.K9brukerdialogprosesseringMedVtpApplicationKt" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

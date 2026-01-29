@@ -4,20 +4,19 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.JsonDeserializer
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import no.nav.k9.søknad.JsonUtils
 import no.nav.brukerdialog.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
-import org.springframework.beans.factory.annotation.Autowired
+import no.nav.k9.søknad.JsonUtils
+import org.springframework.boot.http.converter.autoconfigure.ClientHttpMessageConvertersCustomizer
+import org.springframework.boot.http.converter.autoconfigure.ServerHttpMessageConvertersCustomizer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
+import org.springframework.http.converter.ByteArrayHttpMessageConverter
+import org.springframework.http.converter.HttpMessageConverters
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -53,27 +52,39 @@ class JacksonConfiguration {
 
     @Bean
     @Primary
-    fun objectMapper(kotlinModule: KotlinModule, javaTimeModule: JavaTimeModule): ObjectMapper {
-        return configureObjectMapper(kotlinModule, javaTimeModule)
+   fun objectMapper(): ObjectMapper {
+        return configureObjectMapper(configureKotlinModule(), configureJavaTimeModule())
     }
 
     @Bean
-    fun kotlinModule(): KotlinModule = configureKotlinModule()
+    fun serverHttpMessageConvertersCustomizer(objectMapper: ObjectMapper): ServerHttpMessageConvertersCustomizer {
+        return ServerHttpMessageConvertersCustomizer { converters: HttpMessageConverters.ServerBuilder ->
+            //Må være først for at swagger skal funke
+            converters.addCustomConverter(ByteArrayHttpMessageConverter())
+            //Brukes til å parse request i Controllere
+            converters.addCustomConverter(MappingJackson2HttpMessageConverter(objectMapper))
+        }
+    }
 
     @Bean
-    fun javaTimeModule(): JavaTimeModule = configureJavaTimeModule()
+    fun clientHttpMessageConvertersCustomizer(objectMapper: ObjectMapper): ClientHttpMessageConvertersCustomizer {
+        return ClientHttpMessageConvertersCustomizer { converters: HttpMessageConverters.ClientBuilder ->
+            // Brukes til å parse response fra RestTemplate og RestClient
+            converters.addCustomConverter(MappingJackson2HttpMessageConverter(objectMapper))
+        }
+    }
 }
 
-class CustomZonedDateTimeSerializer : JsonSerializer<ZonedDateTime?>() {
+class CustomZonedDateTimeSerializer : JsonSerializer<ZonedDateTime>() {
     override fun serialize(zdt: ZonedDateTime?, gen: JsonGenerator?, serializers: SerializerProvider?) {
         val formattedDate = zdt?.format(zonedDateTimeFormatter)
         gen?.writeString(formattedDate)
     }
 }
 
-class CustomZonedDateTimeDeSerializer : JsonDeserializer<ZonedDateTime?>() {
+class CustomZonedDateTimeDeSerializer : JsonDeserializer<ZonedDateTime>() {
 
-    override fun deserialize(p0: JsonParser?, p1: DeserializationContext?): ZonedDateTime? {
+    override fun deserialize(p0: JsonParser?, p1: DeserializationContext?): ZonedDateTime {
         return ZonedDateTime.parse(p0?.valueAsString, zonedDateTimeFormatter)
     }
 }

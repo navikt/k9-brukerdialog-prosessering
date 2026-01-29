@@ -22,7 +22,7 @@ class CacheConflictException(nøkkelPrefiks: String) :
         ProblemDetail.forStatusAndDetail(
             HttpStatus.CONFLICT,
             "Cache med nøkkelPrefiks = $nøkkelPrefiks for person finnes allerede."
-        ),
+        ).apply { title = "Conflict" },
         null
     )
 
@@ -32,6 +32,6 @@ class CacheNotFoundException(nøkkelPrefiks: String) :
         ProblemDetail.forStatusAndDetail(
             HttpStatus.NOT_FOUND,
             "Cache med nøkkelPrefiks = $nøkkelPrefiks for person finnes ikke."
-        ),
+        ).apply { title = "Not Found" },
         null
     )

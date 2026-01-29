@@ -4,7 +4,6 @@ import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletRequest
 import jakarta.servlet.ServletResponse
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import no.nav.brukerdialog.utils.Constants.CORRELATION_ID
 import no.nav.brukerdialog.utils.MDCUtil
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
-import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
 
 @Component
@@ -58,9 +56,8 @@ class ResponseDecoratorFilter : Filter {
      * @see UnavailableException
      */
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
-        val requestWrapper = ContentCachingRequestWrapper(request as HttpServletRequest)
         val responseWrapper = ContentCachingResponseWrapper(response as HttpServletResponse)
-        chain.doFilter(requestWrapper, responseWrapper)
+        chain.doFilter(request, responseWrapper)
 
         MDCUtil.fromMDC(CORRELATION_ID)?.let { response.addHeader(X_CORRELATION_ID, it) }
 
