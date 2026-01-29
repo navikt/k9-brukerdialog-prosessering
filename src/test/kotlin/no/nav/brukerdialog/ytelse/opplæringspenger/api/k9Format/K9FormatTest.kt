@@ -201,6 +201,7 @@ class K9FormatTest {
                   "reiserUtenforKursdager" : true
                 }
               },
+              "skalEttersendeVedlegg" : true,
               "lovbestemtFerie" : {
                 "perioder" : {
                   "2021-01-01/2021-01-02" : {
