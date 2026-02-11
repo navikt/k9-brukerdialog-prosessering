@@ -23,21 +23,23 @@ data class ArbeidIPeriode @JsonCreator constructor(
     }
 
     internal fun somK9ArbeidstidInfo(normaltimerPerDag: Duration): ArbeidstidInfo {
-        return when {
+        val arbeidsdager = when {
+            // Hvis enkeltdagerFravær er satt, konverter fravær til arbeidstimer
             enkeltdagerFravær.isNotEmpty() -> {
-                // Konverter fraværstimer til arbeidstimer
-                val enkeltdagerArbeid = enkeltdagerFravær.map { fraværsdag ->
+                enkeltdagerFravær.map { fraværsdag ->
                     val arbeidstimer = (normaltimerPerDag.toMinutes() - fraværsdag.tid.toMinutes()).coerceAtLeast(0)
                     Enkeltdag(
                         dato = fraværsdag.dato,
                         tid = Duration.ofMinutes(arbeidstimer)
                     )
                 }
-                ArbeidstidInfo().apply { leggTilPerioderFraEnkeltdager(normaltimerPerDag, enkeltdagerArbeid) }
             }
-            else -> {
-                ArbeidstidInfo().apply { leggTilPerioderFraEnkeltdager(normaltimerPerDag, enkeltdager) }
-            }
+            // Ellers bruk enkeltdager direkte
+            else -> enkeltdager
+        }
+
+        return ArbeidstidInfo().apply {
+            leggTilPerioderFraEnkeltdager(normaltimerPerDag, arbeidsdager)
         }
     }
 }

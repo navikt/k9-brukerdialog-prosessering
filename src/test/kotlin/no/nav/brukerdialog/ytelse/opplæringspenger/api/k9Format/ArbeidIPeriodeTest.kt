@@ -28,11 +28,66 @@ class ArbeidIPeriodeTest {
     }
 
     @Test
-    fun `Forvent feil derom det sendes tom liste med både enkeltdager og enkeltdagerFravær`() {
+    fun `Forvent feil dersom både enkeltdager og enkeltdagerFravær er tomme lister`() {
         val exception = org.junit.jupiter.api.assertThrows<IllegalArgumentException> {
             ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, emptyList(), emptyList())
         }
         assertEquals("Enten enkeltdager eller enkeltdagerFravær må være satt", exception.message)
+    }
+
+    @Test
+    fun `Mapping med kun enkeltdagerFravær trekker fra normaltimerPerDag`() {
+        val k9Arbeidstid = ArbeidIPeriode(
+            jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
+            enkeltdager = emptyList(),
+            enkeltdagerFravær = listOf(
+                Enkeltdag(mandag, HALV_ARBEIDSDAG), // 3 timer fravær
+                Enkeltdag(tirsdag, INGEN_ARBEIDSDAG), // 0 timer fravær
+            )
+        ).somK9ArbeidstidInfo(FULL_ARBEIDSDAG)
+
+        assertEquals(2, k9Arbeidstid.perioder.size)
+
+        // Mandag: 7.5 timer normalt - 3 timer fravær = 4.5 timer arbeid
+        assertEquals(Duration.ofHours(4).plusMinutes(30), k9Arbeidstid.perioder[Periode(mandag, mandag)]!!.faktiskArbeidTimerPerDag)
+
+        // Tirsdag: 7.5 timer normalt - 0 timer fravær = 7.5 timer arbeid
+        assertEquals(FULL_ARBEIDSDAG, k9Arbeidstid.perioder[Periode(tirsdag, tirsdag)]!!.faktiskArbeidTimerPerDag)
+    }
+
+    @Test
+    fun `Mapping med kun enkeltdagerFravær større enn normaltimerPerDag kuttes til 0 timer arbeid`() {
+        val merEnnFulltFravær = FULL_ARBEIDSDAG.plusHours(2) // 9.5 timer fravær
+        val k9Arbeidstid = ArbeidIPeriode(
+            jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
+            enkeltdager = emptyList(),
+            enkeltdagerFravær = listOf(
+                Enkeltdag(mandag, merEnnFulltFravær), // 9.5 timer fravær (mer enn 7.5 timer normalarbeidstid)
+            )
+        ).somK9ArbeidstidInfo(FULL_ARBEIDSDAG)
+
+        assertEquals(1, k9Arbeidstid.perioder.size)
+
+        // Mandag: 7.5 timer normalt - 9.5 timer fravær = -2 timer -> kuttes til 0 timer arbeid
+        assertEquals(INGEN_ARBEIDSDAG, k9Arbeidstid.perioder[Periode(mandag, mandag)]!!.faktiskArbeidTimerPerDag)
+    }
+
+    @Test
+    fun `Mapping med enkeltdagerFravær lik normaltimerPerDag gir 0 timer arbeid`() {
+        val k9Arbeidstid = ArbeidIPeriode(
+            jobberIPerioden = JobberIPeriodeSvar.HELT_FRAVÆR,
+            enkeltdager = emptyList(),
+            enkeltdagerFravær = listOf(
+                Enkeltdag(mandag, FULL_ARBEIDSDAG), // 7.5 timer fravær
+                Enkeltdag(tirsdag, FULL_ARBEIDSDAG), // 7.5 timer fravær
+            )
+        ).somK9ArbeidstidInfo(FULL_ARBEIDSDAG)
+
+        assertEquals(2, k9Arbeidstid.perioder.size)
+        k9Arbeidstid.perioder.forEach { _, arbeidstidPeriodeInfo ->
+            assertEquals(FULL_ARBEIDSDAG, arbeidstidPeriodeInfo.jobberNormaltTimerPerDag)
+            assertEquals(INGEN_ARBEIDSDAG, arbeidstidPeriodeInfo.faktiskArbeidTimerPerDag)
+        }
     }
 
     @Test
@@ -77,61 +132,6 @@ class ArbeidIPeriodeTest {
         k9ArbeidstidInfo.perioder.forEach { _, u ->
             assertEquals(FULL_ARBEIDSDAG, u.jobberNormaltTimerPerDag)
             assertEquals(FULL_ARBEIDSDAG, u.faktiskArbeidTimerPerDag)
-        }
-    }
-
-    @Test
-    fun `Mapping av enkeltdagerFravær konverterer fraværstimer til arbeidstimer`() {
-        val k9Arbeidstid = ArbeidIPeriode(
-            jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
-            enkeltdager = emptyList(),
-            enkeltdagerFravær = listOf(
-                Enkeltdag(mandag, HALV_ARBEIDSDAG), // 3 timer fravær
-                Enkeltdag(tirsdag, INGEN_ARBEIDSDAG), // 0 timer fravær (jobber fullt)
-            )
-        ).somK9ArbeidstidInfo(FULL_ARBEIDSDAG)
-
-        assertEquals(2, k9Arbeidstid.perioder.size)
-
-        // Mandag: 7.5 timer normalt - 3 timer fravær = 4.5 timer arbeid
-        assertEquals(Duration.ofHours(4).plusMinutes(30), k9Arbeidstid.perioder[Periode(mandag, mandag)]!!.faktiskArbeidTimerPerDag)
-
-        // Tirsdag: 7.5 timer normalt - 0 timer fravær = 7.5 timer arbeid
-        assertEquals(FULL_ARBEIDSDAG, k9Arbeidstid.perioder[Periode(tirsdag, tirsdag)]!!.faktiskArbeidTimerPerDag)
-    }
-
-    @Test
-    fun `Mapping av enkeltdagerFravær med mer fravær enn normalarbeidstid kuttes til 0 timer arbeid`() {
-        val merEnnFulltFravær = FULL_ARBEIDSDAG.plusHours(2) // 9.5 timer fravær
-        val k9Arbeidstid = ArbeidIPeriode(
-            jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
-            enkeltdager = emptyList(),
-            enkeltdagerFravær = listOf(
-                Enkeltdag(mandag, merEnnFulltFravær), // 9.5 timer fravær (mer enn 7.5 timer normalarbeidstid)
-            )
-        ).somK9ArbeidstidInfo(FULL_ARBEIDSDAG)
-
-        assertEquals(1, k9Arbeidstid.perioder.size)
-
-        // Mandag: 7.5 timer normalt - 9.5 timer fravær = -2 timer -> kuttes til 0 timer arbeid
-        assertEquals(INGEN_ARBEIDSDAG, k9Arbeidstid.perioder[Periode(mandag, mandag)]!!.faktiskArbeidTimerPerDag)
-    }
-
-    @Test
-    fun `Mapping av enkeltdagerFravær med fullt fravær gir 0 timer arbeid`() {
-        val k9Arbeidstid = ArbeidIPeriode(
-            jobberIPerioden = JobberIPeriodeSvar.HELT_FRAVÆR,
-            enkeltdager = emptyList(),
-            enkeltdagerFravær = listOf(
-                Enkeltdag(mandag, FULL_ARBEIDSDAG), // 7.5 timer fravær
-                Enkeltdag(tirsdag, FULL_ARBEIDSDAG), // 7.5 timer fravær
-            )
-        ).somK9ArbeidstidInfo(FULL_ARBEIDSDAG)
-
-        assertEquals(2, k9Arbeidstid.perioder.size)
-        k9Arbeidstid.perioder.forEach { _, arbeidstidPeriodeInfo ->
-            assertEquals(FULL_ARBEIDSDAG, arbeidstidPeriodeInfo.jobberNormaltTimerPerDag)
-            assertEquals(INGEN_ARBEIDSDAG, arbeidstidPeriodeInfo.faktiskArbeidTimerPerDag)
         }
     }
 }

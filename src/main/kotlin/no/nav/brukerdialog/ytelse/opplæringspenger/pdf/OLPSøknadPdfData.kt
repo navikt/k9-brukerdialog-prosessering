@@ -184,7 +184,8 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
 
     private fun ArbeidIPeriode.somMap(): Map<String, Any?> = mapOf(
         "jobberIPerioden" to jobberIPerioden.pdfTekst,
-        "enkeltdagerPerMnd" to enkeltdager?.somMapPerMnd()
+        "enkeltdagerPerMnd" to enkeltdager?.somMapPerMnd(),
+        "enkeltdagerFraværPerMnd" to enkeltdagerFravær?.somMapPerMnd()
     )
 
     private fun List<Enkeltdag>.somMapEnkeltdag(): List<Map<String, Any?>> {
