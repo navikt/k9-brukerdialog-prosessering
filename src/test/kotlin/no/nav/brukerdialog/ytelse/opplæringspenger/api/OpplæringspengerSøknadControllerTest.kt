@@ -28,6 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import java.time.Duration
 import java.time.LocalDate
 import java.util.*
 
@@ -67,6 +68,8 @@ class OpplæringspengerSøknadControllerTest {
     private lateinit var metrikkService: MetrikkService
 
     private val OLP_INNSEND_SØKNAD_URL = "/opplaringspenger/innsending"
+
+    private val FULL_DAG = Duration.ofHours(7).plusMinutes(30)
 
     @BeforeEach
     fun setUp() {
@@ -127,7 +130,7 @@ class OpplæringspengerSøknadControllerTest {
                         jobberNormaltTimer = 40.0,
                         arbeidIPeriode = ArbeidIPeriode(
                             jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
-                            enkeltdager = emptyList() // Kan ikke være tom liste
+                            enkeltdager = listOf(Enkeltdag(LocalDate.parse("2024-07-21"), FULL_DAG))
                         ),
                     )
                 )
@@ -141,7 +144,7 @@ class OpplæringspengerSøknadControllerTest {
                     jobberNormaltTimer = 40.0,
                     arbeidIPeriode = ArbeidIPeriode(
                         jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
-                        enkeltdager = emptyList() // Kan ikke være tom liste
+                        enkeltdager = listOf(Enkeltdag(LocalDate.parse("2024-07-22"), FULL_DAG))
                     )
                 )
             )
@@ -205,12 +208,6 @@ class OpplæringspengerSøknadControllerTest {
                               "reason": "navn kan ikke være tomt eller blankt"
                             },
                             {
-                              "invalidValue": [],
-                              "parameterName": "arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.enkeltdager",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være tom liste"
-                            },
-                            {
                               "invalidValue": null,
                               "parameterName": "frilans.harHattInntektSomFrilanser",
                               "parameterType": "ENTITY",
@@ -221,12 +218,6 @@ class OpplæringspengerSøknadControllerTest {
                               "parameterName": "frilans.jobberFortsattSomFrilans",
                               "parameterType": "ENTITY",
                               "reason": "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt"
-                            },
-                            {
-                              "invalidValue": [],
-                              "parameterName": "frilans.arbeidsforhold.arbeidIPeriode.enkeltdager",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være tom liste"
                             },
                             {
                               "invalidValue": "$fødselsdatoIFremtiden",
