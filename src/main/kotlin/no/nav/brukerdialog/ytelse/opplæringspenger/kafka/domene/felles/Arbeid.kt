@@ -17,7 +17,8 @@ data class Arbeidsforhold(
 
 data class ArbeidIPeriode(
     val jobberIPerioden: JobberIPeriodeSvar,
-    val enkeltdager: List<Enkeltdag>? = null
+    val enkeltdager: List<Enkeltdag>? = null,
+    val enkeltdagerFravær: List<Enkeltdag>? = null
 )
 
 enum class JobberIPeriodeSvar(val pdfTekst: String) {
