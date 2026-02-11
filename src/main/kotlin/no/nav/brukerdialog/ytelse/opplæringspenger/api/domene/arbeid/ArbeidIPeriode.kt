@@ -27,7 +27,7 @@ data class ArbeidIPeriode @JsonCreator constructor(
             // Hvis enkeltdagerFravær er satt, konverter fravær til arbeidstimer
             enkeltdagerFravær.isNotEmpty() -> {
                 enkeltdagerFravær.map { fraværsdag ->
-                    val arbeidstimer = (normaltimerPerDag.toMinutes() - fraværsdag.tid.toMinutes()).coerceAtLeast(0)
+                    val arbeidstimer = normaltimerPerDag.minus(fraværsdag.tid).coerceAtLeast(Duration.ZERO)
                     Enkeltdag(
                         dato = fraværsdag.dato,
                         tid = Duration.ofMinutes(arbeidstimer)
