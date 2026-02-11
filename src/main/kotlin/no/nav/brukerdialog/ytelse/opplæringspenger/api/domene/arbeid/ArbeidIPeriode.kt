@@ -30,7 +30,7 @@ data class ArbeidIPeriode @JsonCreator constructor(
                     val arbeidstimer = normaltimerPerDag.minus(fraværsdag.tid).coerceAtLeast(Duration.ZERO)
                     Enkeltdag(
                         dato = fraværsdag.dato,
-                        tid = Duration.ofMinutes(arbeidstimer)
+                        tid = arbeidstimer
                     )
                 }
             }
