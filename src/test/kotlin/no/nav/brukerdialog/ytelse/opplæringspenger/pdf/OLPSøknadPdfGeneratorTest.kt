@@ -353,6 +353,57 @@ class OLPSøknadPdfGeneratorTest {
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "21-med-enkeltdager-fravær"
+            pdf = generator.genererPDF(
+                pdfData = OlpPdfSøknadUtils.gyldigSøknad(id).copy(
+                    frilans = Frilans(
+                        startdato = LocalDate.parse("2019-01-01"),
+                        jobberFortsattSomFrilans = true,
+                        harHattInntektSomFrilanser = true,
+                        sluttdato = null,
+                        arbeidsforhold = Arbeidsforhold(
+                            jobberNormaltTimer = 37.5,
+                            arbeidIPeriode = ArbeidIPeriode(
+                                jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
+                                enkeltdagerFravær = listOf(
+                                    Enkeltdag(LocalDate.parse("2021-01-01"), Duration.ofHours(4)),
+                                    Enkeltdag(LocalDate.parse("2021-01-04"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-05"), Duration.ofHours(7).plusMinutes(30)),
+                                    Enkeltdag(LocalDate.parse("2021-01-08"), Duration.ofHours(3).plusMinutes(45))
+                                )
+                            )
+                        )
+                    ),
+                    selvstendigNæringsdrivende = SelvstendigNæringsdrivende(
+                        virksomhet = Virksomhet(
+                            fraOgMed = LocalDate.parse("2015-01-01"),
+                            tilOgMed = LocalDate.parse("2021-01-01"),
+                            næringstype = Næringstype.ANNEN,
+                            fiskerErPåBladB = false,
+                            navnPåVirksomheten = "Min Bedrift AS",
+                            registrertINorge = true,
+                            organisasjonsnummer = "123456789",
+                            registrertIUtlandet = null,
+                            næringsinntekt = 500000,
+                            erNyoppstartet = false,
+                            harFlereAktiveVirksomheter = false
+                        ),
+                        arbeidsforhold = Arbeidsforhold(
+                            jobberNormaltTimer = 40.0,
+                            arbeidIPeriode = ArbeidIPeriode(
+                                jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
+                                enkeltdagerFravær = listOf(
+                                    Enkeltdag(LocalDate.parse("2021-01-01"), Duration.ofHours(8)),
+                                    Enkeltdag(LocalDate.parse("2021-01-02"), Duration.ofHours(8)),
+                                    Enkeltdag(LocalDate.parse("2021-01-03"), Duration.ofHours(4))
+                                )
+                            )
+                        )
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }

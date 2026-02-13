@@ -1,6 +1,9 @@
 {{#if arbeidIPeriode.enkeltdagerPerMnd}}
     <li class="li-style-none">
         <ul class="ul-no-indent">
+            <li>
+                <p><b>Arbeidstimer</b></p>
+            </li>
             {{#each arbeidIPeriode.enkeltdagerPerMnd as |enkeltdagerPerMnd|~}}
                 <li>
                     <p><b>{{enkeltdagerPerMnd.måned}} {{enkeltdagerPerMnd.år}}</b></p>
@@ -24,3 +27,34 @@
         </ul>
     </li>
 {{/if}}
+
+{{#if arbeidIPeriode.enkeltdagerFraværPerMnd}}
+    <li class="li-style-none">
+        <ul class="ul-no-indent">
+            <li>
+                <p><b>Fraværstimer</b></p>
+            </li>
+            {{#each arbeidIPeriode.enkeltdagerFraværPerMnd as |enkeltdagerFraværPerMnd|~}}
+                <li>
+                    <p><b>{{enkeltdagerFraværPerMnd.måned}} {{enkeltdagerFraværPerMnd.år}}</b></p>
+                    <ul class="ul-no-indent">
+                        {{#each enkeltdagerFraværPerMnd.enkeltdagerPerUke as |enkeltdagerPerUke|~}}
+                            <li>
+                                <p>Uke {{enkeltdagerPerUke.uke}}</p>
+                                <ul>
+                                    {{#each enkeltdagerPerUke.dager as |enkeltdag|~}}
+                                        <li>
+                                            <p>{{enkeltdag.dag}} {{enkeltdag.dato}}: {{enkeltdag.tid}}</p>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            </li>
+                        {{/each}}
+                    </ul>
+                    <br/>
+                </li>
+            {{/each}}
+        </ul>
+    </li>
+{{/if}}
+
