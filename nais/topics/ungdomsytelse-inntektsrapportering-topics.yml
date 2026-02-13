@@ -66,4 +66,7 @@ spec:
       access: readwrite
     - team: k9saksbehandling
       application: ung-deltakelse-opplyser
-      access: readwrite
+      access: read
+    - team: k9saksbehandling
+      application: ung-sak
+      access: read
