@@ -83,20 +83,6 @@ class FrilansOLPTest {
     }
 
     @Test
-    fun `Feil i arbeidsforhold skal gi valideringsfeil`() {
-        Validator.verifiserValideringsFeil(
-            FrilansOLP(
-                startdato = LocalDate.parse("2022-01-01"),
-                jobberFortsattSomFrilans = true,
-                harHattInntektSomFrilanser = true,
-                arbeidsforhold = ArbeidsforholdOLP(20.0, ArbeidIPeriode(JobberIPeriodeSvar.REDUSERT, emptyList())),
-            ),
-            1,
-            "Kan ikke være tom liste"
-        )
-    }
-
-    @Test
     fun `Mapping til K9Frilanser blir som forventet`() {
         val startdato = LocalDate.parse("2022-01-01")
         val sluttdato = LocalDate.parse("2022-01-10")

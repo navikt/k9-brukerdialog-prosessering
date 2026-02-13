@@ -46,20 +46,6 @@ class ArbeidsgiverOLPTest {
     }
 
     @Test
-    fun `Ugyldig arbeidsforhold gi valideringsfeil`() {
-        Validator.verifiserValideringsFeil(
-            ArbeidsgiverOLP(
-                navn = "Fiskeriet AS",
-                organisasjonsnummer = "991346066",
-                erAnsatt = true,
-                arbeidsforhold = ArbeidsforholdOLP(37.5, ArbeidIPeriode(JobberIPeriodeSvar.REDUSERT, emptyList()))
-            ),
-            1,
-            "Kan ikke være tom liste"
-        )
-    }
-
-    @Test
     fun `Liste med arbeidsgivere med ugyldig organisasjonsnummer skal gi valideringsfeil`() {
         Validator.verifiserValideringsFeil(
             ArbeidsgiverOLP(

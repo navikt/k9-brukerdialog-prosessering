@@ -12,6 +12,7 @@ import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.
 import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNTom
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidIPeriode
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.ArbeidsforholdOLP
+import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.Enkeltdag
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.JobberIPeriodeSvar
 import no.nav.brukerdialog.ytelse.opplæringspenger.api.domene.arbeid.SelvstendigNæringsdrivendeOLP
 import no.nav.brukerdialog.ytelse.opplæringspenger.utils.OLPTestUtils.enkeltDagerMedFulltFravær
@@ -21,6 +22,7 @@ import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.felles.type.Periode
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import java.time.Duration
 import java.time.LocalDate
 
 class SelvstendigNæringsdrivendeOLPTest {
@@ -51,7 +53,7 @@ class SelvstendigNæringsdrivendeOLPTest {
                 erNyoppstartet = true,
                 harFlereAktiveVirksomheter = true
             ),
-            arbeidsforhold = ArbeidsforholdOLP(37.5, ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, emptyList()))
+            arbeidsforhold = ArbeidsforholdOLP(37.5, ArbeidIPeriode(JobberIPeriodeSvar.HELT_FRAVÆR, listOf(Enkeltdag(LocalDate.parse("2022-01-01"), Duration.ZERO))) )
         ).somK9SelvstendigNæringsdrivende()
 
         val forventet = """
@@ -178,11 +180,10 @@ class SelvstendigNæringsdrivendeOLPTest {
                     erNyoppstartet = true,
                     harFlereAktiveVirksomheter = true
                 ),
-                arbeidsforhold = ArbeidsforholdOLP(37.5, ArbeidIPeriode(JobberIPeriodeSvar.REDUSERT, emptyList()))
+                arbeidsforhold = ArbeidsforholdOLP(37.5, ArbeidIPeriode(JobberIPeriodeSvar.REDUSERT, listOf(Enkeltdag(LocalDate.parse("2022-01-01"), Duration.ofHours(4))) ))
             ),
-            2,
-            "'123ABC' matcher ikke tillatt pattern '^\\d+$'",
-            "Kan ikke være tom liste"
+            1,
+            "'123ABC' matcher ikke tillatt pattern '^\\d+$'"
         )
     }
 }

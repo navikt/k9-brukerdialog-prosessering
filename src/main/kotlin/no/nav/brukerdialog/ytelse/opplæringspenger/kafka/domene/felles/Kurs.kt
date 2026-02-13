@@ -20,7 +20,7 @@ data class Kursholder(
 
 data class KursDag(
     val dato: LocalDate,
-    val tidKurs: Duration,
+    val tidKurs: Duration? = null,
     val tidReise: Duration? = null
 )
 

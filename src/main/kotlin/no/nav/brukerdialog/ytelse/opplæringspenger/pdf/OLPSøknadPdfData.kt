@@ -1,7 +1,6 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.pdf
 
 import no.nav.brukerdialog.common.Constants
-import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.utils.DateUtils
@@ -111,8 +110,8 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     private fun List<KursDag>.somKursDager(): List<Map<String, Any?>> {
         return map {
             mapOf<String, Any?>(
-                "dato" to DATE_FORMATTER.format(it.dato),
-                "tidKurs" to it.tidKurs.somTekst(avkort = false),
+                "dato" to Constants.DATE_FORMATTER.format(it.dato),
+                "tidKurs" to it.tidKurs?.somTekst(avkort = false),
                 "tidReise" to it.tidReise?.somTekst(avkort = false)
             )
         }
@@ -185,13 +184,14 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
 
     private fun ArbeidIPeriode.somMap(): Map<String, Any?> = mapOf(
         "jobberIPerioden" to jobberIPerioden.pdfTekst,
-        "enkeltdagerPerMnd" to enkeltdager?.somMapPerMnd()
+        "enkeltdagerPerMnd" to enkeltdager.takeIf { it.isNotEmpty() }?.somMapPerMnd(),
+        "enkeltdagerFraværPerMnd" to enkeltdagerFravær.takeIf { it.isNotEmpty() }?.somMapPerMnd()
     )
 
     private fun List<Enkeltdag>.somMapEnkeltdag(): List<Map<String, Any?>> {
         return map {
             mapOf<String, Any?>(
-                "dato" to DATE_FORMATTER.format(it.dato),
+                "dato" to Constants.DATE_FORMATTER.format(it.dato),
                 "dag" to it.dato.dayOfWeek.somNorskDag(),
                 "tid" to it.tid.somTekst(avkort = false)
             )
@@ -234,8 +234,8 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
     }
 
     private fun Frilans.somMap() = mapOf<String, Any?>(
-        "startdato" to DATE_FORMATTER.format(startdato),
-        "sluttdato" to if (sluttdato != null) DATE_FORMATTER.format(sluttdato) else null,
+        "startdato" to Constants.DATE_FORMATTER.format(startdato),
+        "sluttdato" to if (sluttdato != null) Constants.DATE_FORMATTER.format(sluttdato) else null,
         "jobberFortsattSomFrilans" to jobberFortsattSomFrilans,
         "arbeidsforhold" to arbeidsforhold?.somMap(),
         "harHattInntektSomFrilanser" to harHattInntektSomFrilanser

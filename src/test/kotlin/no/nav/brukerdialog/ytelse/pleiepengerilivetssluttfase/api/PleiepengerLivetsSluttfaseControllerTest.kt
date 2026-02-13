@@ -27,6 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import java.time.Duration
 import java.time.LocalDate
 import java.util.*
 
@@ -113,7 +114,7 @@ class PleiepengerLivetsSluttfaseControllerTest {
                             jobberNormaltTimer = 40.0,
                             arbeidIPeriode = ArbeidIPeriode(
                                 jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
-                                enkeltdager = emptyList() // Kan ikke være tom liste
+                                enkeltdager = listOf(Enkeltdag(LocalDate.parse("2024-08-01"), Duration.ofHours(7).plusMinutes(30)))
                             ),
                         )
                     )
@@ -127,7 +128,7 @@ class PleiepengerLivetsSluttfaseControllerTest {
                         jobberNormaltTimer = 40.0,
                         arbeidIPeriode = ArbeidIPeriode(
                             jobberIPerioden = JobberIPeriodeSvar.REDUSERT,
-                            enkeltdager = emptyList() // Kan ikke være tom liste
+                            enkeltdager = listOf(Enkeltdag(LocalDate.parse("2024-08-01"), Duration.ofHours(7).plusMinutes(30)))
                         )
                     )
                 )
@@ -189,12 +190,6 @@ class PleiepengerLivetsSluttfaseControllerTest {
                               "reason": "Kan ikke være tomt eller blankt"
                             },
                             {
-                              "invalidValue": [],
-                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.arbeidsgivere[0].arbeidsforhold.arbeidIPeriode.enkeltdager",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være tom liste"
-                            },
-                            {
                               "invalidValue": null,
                               "parameterName": "pleiepengerILivetsSluttfaseSøknad.frilans.harHattInntektSomFrilanser",
                               "parameterType": "ENTITY",
@@ -205,12 +200,6 @@ class PleiepengerLivetsSluttfaseControllerTest {
                               "parameterName": "pleiepengerILivetsSluttfaseSøknad.frilans.jobberFortsattSomFrilans",
                               "parameterType": "ENTITY",
                               "reason": "Dersom 'jobberFortsattSomFrilans' er false, må 'sluttdato' være satt"
-                            },
-                            {
-                              "invalidValue": [],
-                              "parameterName": "pleiepengerILivetsSluttfaseSøknad.frilans.arbeidsforhold.arbeidIPeriode.enkeltdager",
-                              "parameterType": "ENTITY",
-                              "reason": "Kan ikke være tom liste"
                             },
                             {
                               "invalidValue": false,

@@ -1,5 +1,7 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.kafka.domene.felles
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonInclude.Include
 import java.time.Duration
 import java.time.LocalDate
 
@@ -15,9 +17,11 @@ data class Arbeidsforhold(
     val arbeidIPeriode: ArbeidIPeriode
 )
 
+@JsonInclude(Include.NON_EMPTY)
 data class ArbeidIPeriode(
     val jobberIPerioden: JobberIPeriodeSvar,
-    val enkeltdager: List<Enkeltdag>? = null
+    val enkeltdager: List<Enkeltdag> = emptyList(),
+    val enkeltdagerFravær: List<Enkeltdag> = emptyList()
 )
 
 enum class JobberIPeriodeSvar(val pdfTekst: String) {
