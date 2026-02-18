@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.meldinger.pleiepengersyktbarn.domene.felles
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
 enum class BarnRelasjon(val utskriftsvennlig: String) {
@@ -16,6 +17,7 @@ data class Barn(
     val fødselsnummer: String? = null,
     val fødselsdato: LocalDate? = null,
     val aktørId: String? = null, // Brukes av sif-innsyn-api
+    @get:JsonProperty("årsakManglerIdentitetsnummer")
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null
     ) {
     override fun toString(): String {
