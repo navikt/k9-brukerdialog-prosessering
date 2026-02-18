@@ -2,14 +2,15 @@ package no.nav.brukerdialog.meldinger.omsorgpengerutbetalingsnf.domene
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
-import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.kafka.domene.OMPUtbetalingSNFSoknadPreprosessert
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.pdf.OMPUtbetalingSNFSoknadPDFData
+import no.nav.k9.søknad.Søknad
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -164,6 +165,7 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null,
+    @get:JsonProperty("årsak")
     val årsak: FraværÅrsak? = null,
     val aktivitetFravær: List<AktivitetFravær> = listOf()
 )

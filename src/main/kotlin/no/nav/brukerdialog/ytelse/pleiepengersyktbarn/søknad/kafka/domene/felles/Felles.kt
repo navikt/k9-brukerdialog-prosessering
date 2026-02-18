@@ -97,6 +97,7 @@ data class Utenlandsopphold(
     val erSammenMedBarnet: Boolean?,
     val erBarnetInnlagt: Boolean?,
     val perioderBarnetErInnlagt: List<Periode> = listOf(),
+    @get:JsonProperty("årsak")
     val årsak: Årsak?
 ) {
     override fun toString(): String {

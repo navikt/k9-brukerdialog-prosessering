@@ -1,18 +1,14 @@
 package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
-import jakarta.validation.constraints.AssertTrue
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.NotEmpty
-import jakarta.validation.constraints.NotNull
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Size
-import no.nav.k9.søknad.felles.fravær.SøknadÅrsak
+import jakarta.validation.constraints.*
 import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode
 import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode.Companion.somK9FraværPeriode
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Utbetalingsårsak.KONFLIKT_MED_ARBEIDSGIVER
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER
+import no.nav.k9.søknad.felles.fravær.SøknadÅrsak
 
 class Arbeidsgiver(
     @field:NotBlank(message = "Kan ikke være blankt eller tomt")
@@ -30,6 +26,7 @@ class Arbeidsgiver(
     private val perioder: List<Utbetalingsperiode>,
 
     private val konfliktForklaring: String? = null,
+    @get:JsonProperty("årsakNyoppstartet")
     private val årsakNyoppstartet: ÅrsakNyoppstartet? = null,
 
     @field:NotNull(message = "Kan ikke være null")

@@ -2,15 +2,16 @@ package no.nav.brukerdialog.meldinger.omsorgpengerutbetalingat.domene
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
-import no.nav.k9.søknad.Søknad
 import no.nav.brukerdialog.common.Ytelse
 import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
-import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.pdf.OMPUtbetalingATSoknadPDFData
 import no.nav.brukerdialog.pdf.PdfData
+import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.kafka.domene.OMPUtbetalingATSoknadPreprosessert
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.pdf.OMPUtbetalingATSoknadPDFData
+import no.nav.k9.søknad.Søknad
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -105,6 +106,7 @@ data class ArbeidsgiverDetaljer(
     val perioder: List<Utbetalingsperiode>,
     val utbetalingsårsak: Utbetalingsårsak,
     val konfliktForklaring: String? = null,
+    @get:JsonProperty("årsakNyoppstartet")
     val årsakNyoppstartet: ÅrsakNyoppstartet? = null
 ) {
     override fun toString(): String {
@@ -138,6 +140,7 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null,
+    @get:JsonProperty("årsak")
     val årsak: FraværÅrsak? = null
 )
 
