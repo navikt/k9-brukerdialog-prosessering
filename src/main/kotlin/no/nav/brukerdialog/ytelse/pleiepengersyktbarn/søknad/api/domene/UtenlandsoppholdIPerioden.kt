@@ -1,11 +1,12 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.NotBlank
-import no.nav.brukerdialog.validation.landkode.ValidLandkode
 import no.nav.brukerdialog.utils.erFørEllerLik
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.utils.kreverIkkeNull
+import no.nav.brukerdialog.validation.landkode.ValidLandkode
 import no.nav.fpsak.tidsserie.LocalDateTimeline
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold.UtenlandsoppholdPeriodeInfo
 import no.nav.k9.søknad.felles.type.Landkode
@@ -27,6 +28,7 @@ data class Utenlandsopphold(
     val erSammenMedBarnet: Boolean?,
     val erBarnetInnlagt: Boolean?,
     val perioderBarnetErInnlagt: List<Periode> = listOf(),
+    @get:JsonProperty("årsak")
     val årsak: Årsak?,
 ) {
     override fun toString(): String {

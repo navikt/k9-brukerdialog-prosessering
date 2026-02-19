@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.opplæringspenger.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.constraints.*
 import no.nav.k9.søknad.felles.personopplysninger.Barn
@@ -28,6 +29,7 @@ data class BarnDetaljer(
     @field:NotBlank(message = "kan ikke være tomt eller blankt")
     val navn: String,
 
+    @get:JsonProperty("årsakManglerIdentitetsnummer")
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
 
     val relasjonTilBarnet: BarnRelasjon? = null,

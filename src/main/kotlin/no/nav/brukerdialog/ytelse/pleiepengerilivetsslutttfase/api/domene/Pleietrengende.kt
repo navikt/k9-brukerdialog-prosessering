@@ -1,12 +1,9 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.swagger.v3.oas.annotations.Hidden
-import jakarta.validation.constraints.AssertTrue
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.PastOrPresent
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Size
+import jakarta.validation.constraints.*
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import java.time.LocalDate
 import no.nav.k9.søknad.ytelse.pls.v1.Pleietrengende as K9Pleietrengende
@@ -22,6 +19,7 @@ data class Pleietrengende(
 
     @field:NotBlank(message = "Kan ikke være tomt eller blankt") val navn: String,
 
+    @get:JsonProperty("årsakManglerIdentitetsnummer")
     val årsakManglerIdentitetsnummer: ÅrsakManglerIdentitetsnummer? = null,
 ) {
     internal fun somK9Pleietrengende(): K9Pleietrengende = when {
