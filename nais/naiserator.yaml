@@ -27,6 +27,7 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: aktivitetspenger-soknad
         - application: omsorgspengesoknad
         - application: ekstra-omsorgsdager-andre-forelder-ikke-tilsyn
         - application: sif-ettersending
