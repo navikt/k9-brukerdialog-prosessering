@@ -25,6 +25,7 @@ enum class Ytelse {
     ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN,
     DINE_PLEIEPENGER,
     OPPLARINGSPENGER,
+    AKTIVITETSPENGER,
     UNGDOMSYTELSE,
     UNGDOMSYTELSE_INNTEKTSRAPPORTERING,
     UNGDOMSYTELSE_OPPGAVEBEKREFTELSE,
@@ -49,6 +50,7 @@ enum class Ytelse {
                 "dine-pleiepenger" -> PLEIEPENGER_SYKT_BARN
                 "opplaringspenger-soknad" -> OPPLARINGSPENGER
                 "ungdomsytelse-deltaker" -> UNGDOMSYTELSE
+                "aktivitetspenger-soknad" -> AKTIVITETSPENGER
                 "tokenx-token-generator" -> PLEIEPENGER_SYKT_BARN // Kun i dev
                 else -> throw ValidationErrorResponseException(
                     ValidationProblemDetails(
