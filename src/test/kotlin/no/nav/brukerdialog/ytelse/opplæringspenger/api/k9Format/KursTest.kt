@@ -30,9 +30,9 @@ class KursTest {
     )
 
     private val STANDARD_KURSDAGER = listOf(
-        KursDag(mandag, Duration.ofHours(6), Duration.ofHours(2)),
-        KursDag(tirsdag, Duration.ofHours(7), Duration.ofHours(1)),
-        KursDag(onsdag, Duration.ofHours(8), null)
+        KursDag(mandag),
+        KursDag(tirsdag),
+        KursDag(onsdag)
     )
 
     // Tester for kurs med PERIODE
