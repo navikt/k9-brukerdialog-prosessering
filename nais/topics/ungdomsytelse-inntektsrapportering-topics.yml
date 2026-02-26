@@ -70,3 +70,6 @@ spec:
     - team: k9saksbehandling
       application: ung-sak
       access: read
+    - team: k9saksbehandling
+      application: ung-brukerdialog
+      access: read
