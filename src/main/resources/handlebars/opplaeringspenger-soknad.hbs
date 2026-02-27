@@ -66,11 +66,7 @@
             <ul>
                 {{#each kurs.kursdager as |kursdag|~}}
                     <li>
-                        {{#if kursdag.tidReise}}
-                            <p>{{kursdag.dato}}. Kurstid: {{kursdag.tidKurs}}. Reisetid: {{kursdag.tidReise}}.</p>
-                        {{else}}
-                            <p>{{kursdag.dato}}. Kurstid: {{kursdag.tidKurs}}.</p>
-                        {{/if}}
+                        <p>{{kursdag.dato}}</p>
                     </li>
                 {{/each}}
             </ul>
