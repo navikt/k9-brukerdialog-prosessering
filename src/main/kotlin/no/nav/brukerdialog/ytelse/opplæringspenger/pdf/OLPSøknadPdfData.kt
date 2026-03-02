@@ -111,6 +111,8 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
         return map {
             mapOf<String, Any?>(
                 "dato" to Constants.DATE_FORMATTER.format(it.dato),
+                "tidKurs" to it.tidKurs?.somTekst(avkort = false),
+                "tidReise" to it.tidReise?.somTekst(avkort = false)
             )
         }
     }
