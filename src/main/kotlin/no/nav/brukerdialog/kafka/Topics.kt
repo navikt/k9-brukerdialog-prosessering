@@ -15,24 +15,7 @@ import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_INNTEKTSRAPPORTERING_TOPIC
 import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.UNGDOMSYTELSE_SOKNAD_TOPIC
 import no.nav.brukerdialog.ytelse.Ytelse
-import no.nav.brukerdialog.ytelse.Ytelse.DINE_PLEIEPENGER
-import no.nav.brukerdialog.ytelse.Ytelse.ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN
-import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING
-import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_OMP
-import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_OPPLARINGSPENGER
-import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_PLEIEPENGER_LIVETS_SLUTTFASE
-import no.nav.brukerdialog.ytelse.Ytelse.ETTERSENDING_PLEIEPENGER_SYKT_BARN
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSDAGER_ALENEOMSORG
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_MIDLERTIDIG_ALENE
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_UTBETALING_ARBEIDSTAKER
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_UTBETALING_SNF
-import no.nav.brukerdialog.ytelse.Ytelse.OMSORGSPENGER_UTVIDET_RETT
-import no.nav.brukerdialog.ytelse.Ytelse.OPPLARINGSPENGER
-import no.nav.brukerdialog.ytelse.Ytelse.PLEIEPENGER_LIVETS_SLUTTFASE
-import no.nav.brukerdialog.ytelse.Ytelse.PLEIEPENGER_SYKT_BARN
-import no.nav.brukerdialog.ytelse.Ytelse.UNGDOMSYTELSE
-import no.nav.brukerdialog.ytelse.Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
-import no.nav.brukerdialog.ytelse.Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE
+import no.nav.brukerdialog.ytelse.Ytelse.*
 import org.apache.kafka.common.serialization.Serializer
 import org.json.JSONObject
 
@@ -72,6 +55,7 @@ internal fun hentTopicForYtelse(ytelse: Ytelse) = when (ytelse) {
     UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC
     OPPLARINGSPENGER -> OLP_MOTTATT_TOPIC
     DINE_PLEIEPENGER -> throw IllegalArgumentException("$ytelse er ikke en gyldig ytelse for denne operasjonen")
+    AKTIVITETSPENGER -> TODO()
 }
 
 internal class SøknadSerializer : Serializer<TopicEntry<JSONObject>> {

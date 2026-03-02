@@ -1,9 +1,9 @@
 package no.nav.brukerdialog.utils
 
 import com.nimbusds.jwt.SignedJWT
+import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.ytelse.Ytelse
-import no.nav.brukerdialog.config.JacksonConfiguration
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
@@ -31,6 +31,7 @@ object MockMvcUtils {
             Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING -> "/ungdomsytelse/inntektsrapportering"
             Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> "/ungdomsytelse/oppgavebekreftelse"
             Ytelse.OPPLARINGSPENGER -> "/opplaringspenger"
+            Ytelse.AKTIVITETSPENGER -> TODO()
         }
 
         post("$ytelseUrl/innsending") {
