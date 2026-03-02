@@ -339,6 +339,12 @@ class OLPSøknadPdfGeneratorTest {
                         kursdager = listOf(
                             KursDag(
                                 dato = LocalDate.parse("2020-01-02"),
+                                tidKurs = Duration.ofHours(3).plusMinutes(30)
+                            ),
+                            KursDag(
+                                dato = LocalDate.parse("2020-01-02"),
+                                tidKurs = Duration.ofHours(3).plusMinutes(30),
+                                tidReise = Duration.ofHours(2).plusMinutes(30)
                             )
                         )
                     ),
