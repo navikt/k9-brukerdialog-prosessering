@@ -18,7 +18,9 @@ spec:
     - team: dusseldorf
       application: k9-brukerdialog-prosessering
       access: readwrite
-
+    - team: k9saksbehandling
+      application: ung-brukerdialog
+      access: read
 ---
 
 apiVersion: kafka.nais.io/v1
