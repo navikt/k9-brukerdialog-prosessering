@@ -180,7 +180,14 @@ enum class YtelseType(
         tittel = "Uttalelse på forhåndsvarsel for ungdomsprogramytelse - NAV 76-13.94",
         tema = Tema.UNGDOMSYTELSE,
         innsendingstype = Innsendingstype.ENDRING
-    )
+    ),
+
+    AKTIVITETSPENGER_SØKNAD(
+    brevkode = BrevKode(brevKode = "NAV Aktivitetspenger", dokumentKategori = "SOK"),
+    tittel = "Søknad om ungdomsprogramytelse - NAV Aktivitetspenger",
+    tema = Tema.UNGDOMSYTELSE,
+    innsendingstype = Innsendingstype.SØKNAD
+    ),
     ;
 
     init {

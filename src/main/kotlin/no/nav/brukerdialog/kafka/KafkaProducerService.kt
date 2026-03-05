@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
+import no.nav.brukerdialog.kafka.Topics.AKTIVITETSPENGER_SOKNAD_TOPIC
 import no.nav.brukerdialog.kafka.Topics.ETTERSENDING_TOPIC
 import no.nav.brukerdialog.kafka.Topics.MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OMSORGSDAGER_ALENEOMSORG_TOPIC
@@ -71,6 +72,7 @@ class KafkaProducerService(
             aivenKafkaTemplate.partitionsFor(MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC)
             aivenKafkaTemplate.partitionsFor(PLEIEPENGER_SYKT_BARN_TOPIC)
             aivenKafkaTemplate.partitionsFor(UNGDOMSYTELSE_SOKNAD_TOPIC)
+            aivenKafkaTemplate.partitionsFor(AKTIVITETSPENGER_SOKNAD_TOPIC)
 
             Mono.just(Health.up().withDetail(NAME, "Tilkobling til Kafka OK!").build())
         } catch (cause: Throwable) {
