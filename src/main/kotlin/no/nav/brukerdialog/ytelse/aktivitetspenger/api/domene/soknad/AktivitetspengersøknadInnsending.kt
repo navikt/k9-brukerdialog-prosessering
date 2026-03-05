@@ -28,10 +28,12 @@ data class AktivitetspengersøknadInnsending(
     val startdato: LocalDate,
     val søkerNorskIdent: String,
 
+    var barn: List<Barn>?,
     val barnErRiktig: Boolean,
 
     val harBekreftetOpplysninger: Boolean,
     val harForståttRettigheterOgPlikter: Boolean,
+    val kontonummerInfo: KontonummerInfo,
 
     ) : Innsending {
     companion object {
@@ -50,7 +52,9 @@ data class AktivitetspengersøknadInnsending(
             søker = søker,
             språk = språk,
             startdato = startdato,
+            barn = barn!!,
             barnErRiktig = barnErRiktig,
+            kontonummerInfo = kontonummerInfo,
             harForståttRettigheterOgPlikter = harForståttRettigheterOgPlikter,
             harBekreftetOpplysninger = harBekreftetOpplysninger,
             k9Format = k9Format as AktivitetspengerSøknad

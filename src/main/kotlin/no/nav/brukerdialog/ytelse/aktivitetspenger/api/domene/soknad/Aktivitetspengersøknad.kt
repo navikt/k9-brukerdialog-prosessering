@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad
 
 import io.swagger.v3.oas.annotations.media.Schema
+import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import org.hibernate.validator.constraints.UUID
 import java.time.LocalDate
@@ -16,6 +17,7 @@ data class Aktivitetspengersøknad(
     val startdato: LocalDate,
     val søkerNorskIdent: String,
     val barnErRiktig: Boolean,
+    @field:Valid val kontonummerInfo: KontonummerInfo,
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
     val harBekreftetOpplysninger: Boolean,
     @field:AssertTrue(message = "Må ha forstått rettigheter og plikter for å sende inn søknad")
