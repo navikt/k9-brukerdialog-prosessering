@@ -31,9 +31,9 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "6.0.2"
+val tokenSupportVersion = "6.0.3"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "12.8.4"
+val k9FormatVersion = "12.9.0"
 val ungDeltakelseOpplyserVersjon = "2.10.0"
 val springMockkVersion = "5.0.1"
 val logstashLogbackEncoderVersion = "9.0"
