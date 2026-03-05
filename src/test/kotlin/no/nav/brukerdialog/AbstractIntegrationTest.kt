@@ -2,6 +2,7 @@ package no.nav.brukerdialog
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.every
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
@@ -27,6 +28,7 @@ import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import
@@ -89,6 +91,16 @@ abstract class AbstractIntegrationTest {
         k9DittnavVarselConsumer = embeddedKafkaBroker.opprettKafkaConsumer(
             groupPrefix = "k9-dittnav-varsel",
             topics = listOf(K9_DITTNAV_VARSEL_TOPIC)
+        )
+    }
+
+    @BeforeEach
+    fun resetMocks() {
+        clearMocks(
+            dokumentService, dokarkivService, barnService, søkerService, ungDeltakelseOpplyserService,
+            answers = false,
+            recordedCalls = true,
+            childMocks = false
         )
     }
 

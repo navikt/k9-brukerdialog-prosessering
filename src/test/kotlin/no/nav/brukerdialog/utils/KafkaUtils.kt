@@ -54,7 +54,7 @@ object KafkaUtils {
         seekToBeginning(assignment())
         while (System.currentTimeMillis() < end) {
 
-            val entries: List<ConsumerRecord<String, String>> = poll(Duration.ofSeconds(10))
+            val entries: List<ConsumerRecord<String, String>> = poll(Duration.ofSeconds(1))
                 .records(topic)
                 .filter { it.key() == key }
 

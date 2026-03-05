@@ -53,7 +53,6 @@ import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.kafka.test.context.EmbeddedKafka
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
@@ -157,7 +156,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     ]
 )
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DirtiesContext
 @ExtendWith(SpringExtension::class)
 @EnableMockOAuth2Server
 @ActiveProfiles("test")
