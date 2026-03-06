@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.kafka
 
 import no.nav.brukerdialog.common.MetaInfo
+import no.nav.brukerdialog.kafka.Topics.AKTIVITETSPENGER_SOKNAD_TOPIC
 import no.nav.brukerdialog.kafka.Topics.ETTERSENDING_TOPIC
 import no.nav.brukerdialog.kafka.Topics.MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
 import no.nav.brukerdialog.kafka.Topics.OLP_MOTTATT_TOPIC
@@ -32,6 +33,7 @@ object Topics {
     const val UNGDOMSYTELSE_SOKNAD_TOPIC = "dusseldorf.ungdomsytelse-soknad-mottatt"
     const val UNGDOMSYTELSE_INNTEKTSRAPPORTERING_TOPIC = "dusseldorf.ungdomsytelse-inntektsrapportering-mottatt"
     const val UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC = "dusseldorf.ungdomsytelse-oppgavebekreftelse-mottatt"
+    const val AKTIVITETSPENGER_SOKNAD_TOPIC = "dusseldorf.aktivitetspenger-soknad-mottatt"
     const val OLP_MOTTATT_TOPIC = "dusseldorf.olp-soknad-mottatt"
 }
 
@@ -54,8 +56,8 @@ internal fun hentTopicForYtelse(ytelse: Ytelse) = when (ytelse) {
     UNGDOMSYTELSE_INNTEKTSRAPPORTERING -> UNGDOMSYTELSE_INNTEKTSRAPPORTERING_TOPIC
     UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC
     OPPLARINGSPENGER -> OLP_MOTTATT_TOPIC
+    AKTIVITETSPENGER -> AKTIVITETSPENGER_SOKNAD_TOPIC
     DINE_PLEIEPENGER -> throw IllegalArgumentException("$ytelse er ikke en gyldig ytelse for denne operasjonen")
-    AKTIVITETSPENGER -> TODO()
 }
 
 internal class SøknadSerializer : Serializer<TopicEntry<JSONObject>> {
