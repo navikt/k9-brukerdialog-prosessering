@@ -19,7 +19,7 @@ spec:
       application: k9-brukerdialog-prosessering
       access: readwrite
     - team: k9saksbehandling
-      application: ung-brukerdialog
+      application: ung-brukerdialog-api
       access: read
 ---
 
@@ -73,5 +73,5 @@ spec:
       application: ung-sak
       access: read
     - team: k9saksbehandling
-      application: ung-brukerdialog
+      application: ung-brukerdialog-api
       access: read
