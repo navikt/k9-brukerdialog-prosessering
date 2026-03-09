@@ -92,6 +92,8 @@ no.nav:
     application-id: k9-brukerdialog-prosessering
     retries: 5
     retry-backoff-ms: 100 # 100 ms
+    session-timeout-ms: 6000
+    heartbeat-interval-ms: 1000
 
     producer:
       client-id: k9-brukerdialog-prosessering-${random.uuid}

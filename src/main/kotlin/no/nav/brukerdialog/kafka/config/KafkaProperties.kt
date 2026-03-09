@@ -12,6 +12,8 @@ data class KafkaProperties(
     val retries: Int,
     val retryBackoffMs: Int,
     val replicationFactor: Int,
+    val sessionTimeoutMs: Int? = null,
+    val heartbeatIntervalMs: Int? = null,
     val producer: KafkaProducerProperties,
     val streams: Map<String, KafkaStreamsProperties>,
     val security: KafkaSecurityProperties? = null,

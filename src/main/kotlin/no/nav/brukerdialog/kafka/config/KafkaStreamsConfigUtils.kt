@@ -43,6 +43,8 @@ object KafkaStreamsConfigUtils {
 
         // Consumer Config
         props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = streamProps.autoOffsetReset
+        kafkaProperties.sessionTimeoutMs?.let { props[ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG] = it }
+        kafkaProperties.heartbeatIntervalMs?.let { props[ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG] = it }
 
         // Producer Config
         props[ProducerConfig.ACKS_CONFIG] = "all"
