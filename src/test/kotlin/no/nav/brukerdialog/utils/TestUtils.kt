@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolation
 import jakarta.validation.Validation
 import jakarta.validation.Validator
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
+import org.springframework.test.annotation.DirtiesContext
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
 import no.nav.brukerdialog.ytelse.ettersendelse.kafka.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.ettersendelse.kafka.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_MOTTATT_TOPIC
@@ -164,6 +165,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @Tag("kafka")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 annotation class KafkaIntegrationTest
 
 object TestUtils {
