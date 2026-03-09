@@ -43,7 +43,7 @@ class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
         val søknadId = UUID.randomUUID().toString()
         mockMvc.sendInnSøknad(SøknadUtils.defaultSøknad.copy(søknadId = søknadId), mockOAuth2Server.hentToken())
 
-        coVerify(exactly = 1, timeout = 120 * 1000) {
+        coVerify(exactly = 1, timeout = 60 * 1000) {
             dokumentService.slettDokumenter(any(), any())
         }
 

@@ -46,7 +46,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
         coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse("123456789", false, listOf())
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
-        coVerify(exactly = 1, timeout = 120 * 1000) {
+        coVerify(exactly = 1, timeout = 60 * 1000) {
                 dokumentService.slettDokumenter(any(), any())
         }
     }
