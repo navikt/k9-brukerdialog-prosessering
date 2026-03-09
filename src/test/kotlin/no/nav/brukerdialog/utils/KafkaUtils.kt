@@ -12,14 +12,13 @@ import org.apache.kafka.clients.producer.RecordMetadata
 import org.junit.jupiter.api.Assertions
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
-import org.springframework.kafka.test.EmbeddedKafkaBroker
 import java.time.Duration
 import java.util.*
 
 object KafkaUtils {
-    fun EmbeddedKafkaBroker.opprettKafkaProducer(consumerGroupPrefix: String): Producer<String, Any> {
+    fun opprettKafkaProducer(bootstrapServers: String, consumerGroupPrefix: String): Producer<String, Any> {
         val producerProps = mutableMapOf<String, Any>(
-            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to brokersAsString,
+            ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
             ProducerConfig.CLIENT_ID_CONFIG to "k9-brukerdialog-producer-$consumerGroupPrefix-${UUID.randomUUID()}",
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to "org.apache.kafka.common.serialization.StringSerializer",
             ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to "org.apache.kafka.common.serialization.StringSerializer"
@@ -31,11 +30,11 @@ object KafkaUtils {
         return send(ProducerRecord(topic, key, value)).get()
     }
 
-    fun EmbeddedKafkaBroker.opprettKafkaConsumer(
-        groupPrefix: String, topics: List<String>,
+    fun opprettKafkaConsumer(
+        bootstrapServers: String, groupPrefix: String, topics: List<String>,
     ): Consumer<String, String> {
         val consumerProps = mutableMapOf<String, Any>(
-            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to brokersAsString,
+            ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
             ConsumerConfig.GROUP_ID_CONFIG to "$groupPrefix-test-consumer-${UUID.randomUUID()}",
             ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to "true",
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",

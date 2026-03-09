@@ -83,7 +83,7 @@ dependencies {
 	// kafka
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.apache.kafka:kafka-streams")
-	testImplementation("org.springframework.kafka:spring-kafka-test")
+	testImplementation("org.testcontainers:testcontainers-kafka:2.0.3")
 
 	// PDF
 	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion") {

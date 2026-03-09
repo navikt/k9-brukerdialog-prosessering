@@ -2,6 +2,7 @@ package no.nav.brukerdialog
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
+import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.every
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
@@ -18,6 +19,7 @@ import no.nav.brukerdialog.oppslag.soker.SøkerService
 import no.nav.brukerdialog.utils.KafkaIntegrationTest
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaProducer
+import no.nav.brukerdialog.utils.TestContainers
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.*
@@ -27,12 +29,12 @@ import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.producer.Producer
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.BeforeEach
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
-import org.springframework.kafka.test.EmbeddedKafkaBroker
 import org.springframework.test.web.servlet.MockMvc
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -48,9 +50,6 @@ abstract class AbstractIntegrationTest {
 
     @Autowired
     protected lateinit var objectMapper: ObjectMapper
-
-    @Autowired
-    protected lateinit var embeddedKafkaBroker: EmbeddedKafkaBroker // Broker som brukes til å konfigurere opp en kafka producer.
 
     @MockkBean(relaxed = true)
     protected lateinit var dokumentService: DokumentService
@@ -79,15 +78,23 @@ abstract class AbstractIntegrationTest {
     protected abstract val consumerGroupTopics: List<String>
 
 
+    @BeforeEach
+    fun resetMocks() {
+        clearMocks(dokumentService, dokarkivService, barnService, søkerService, ungDeltakelseOpplyserService)
+    }
+
     @BeforeAll
     fun setUp() {
-        producer = embeddedKafkaBroker.opprettKafkaProducer(consumerGroupPrefix)
-        consumer = embeddedKafkaBroker.opprettKafkaConsumer(
+        val bootstrapServers = TestContainers.KAFKA_CONTAINER.bootstrapServers
+        producer = opprettKafkaProducer(bootstrapServers, consumerGroupPrefix)
+        consumer = opprettKafkaConsumer(
+            bootstrapServers = bootstrapServers,
             groupPrefix = consumerGroupPrefix,
             topics = consumerGroupTopics
         )
 
-        k9DittnavVarselConsumer = embeddedKafkaBroker.opprettKafkaConsumer(
+        k9DittnavVarselConsumer = opprettKafkaConsumer(
+            bootstrapServers = bootstrapServers,
             groupPrefix = "k9-dittnav-varsel",
             topics = listOf(K9_DITTNAV_VARSEL_TOPIC)
         )
