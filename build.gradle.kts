@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "4.0.2"
+	id("org.springframework.boot") version "4.0.3"
 	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("jvm") version "2.3.0"
-	kotlin("plugin.spring") version "2.3.0"
+	kotlin("jvm") version "2.3.10"
+	kotlin("plugin.spring") version "2.3.10"
 }
 
 group = "no.nav"
@@ -43,12 +43,12 @@ val retryVersion = "2.0.12"
 val awailitilityKotlinVersion = "4.3.0"
 val wiremockVersion = "3.13.2"
 val orgJsonVersion = "20251224"
-val springdocVersion = "3.0.1"
+val springdocVersion = "3.0.2"
 val pdfBoxVersion = "3.0.6"
-val imageIOVersion = "3.13.0"
-val fpsakTidsserieVersion = "2.7.3"
-val gcpStorageVersion = "2.62.0"
-val auth0Version = "4.5.0"
+val imageIOVersion = "3.13.1"
+val fpsakTidsserieVersion = "2.7.4"
+val gcpStorageVersion = "2.64.0"
+val auth0Version = "4.5.1"
 val tikaVersion = "3.2.3"
 val aivenFakeGCSServerVersion = "0.3.0"
 
