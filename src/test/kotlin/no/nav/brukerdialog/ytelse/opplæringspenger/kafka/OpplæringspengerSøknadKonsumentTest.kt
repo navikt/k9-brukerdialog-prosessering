@@ -65,11 +65,16 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenMany(listOf("123456789", "987654321"))
 
+        mockJournalføring()
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = OLP_MOTTATT_TOPIC)
         val lesMelding = consumer.lesMelding(key = søknadId, topic = OLP_PREPROSESSERT_TOPIC).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottatt.toString()), preprosessertSøknadJson, true)
+
+        coVerify(exactly = 1, timeout = 60 * 1000) {
+            dokumentService.slettDokumenter(any(), any())
+        }
     }
 
     @Language("JSON")

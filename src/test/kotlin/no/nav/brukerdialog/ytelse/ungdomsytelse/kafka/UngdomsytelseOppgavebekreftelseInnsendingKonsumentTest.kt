@@ -124,6 +124,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenMany(listOf("123456789", "987654321"))
 
+        mockJournalføring()
         producer.leggPåTopic(
             key = oppgaveReferanse,
             value = topicEntryJson,
@@ -142,6 +143,10 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             preprosessertSøknadJson,
             true
         )
+
+        coVerify(exactly = 1, timeout = 60 * 1000) {
+            dokumentService.slettDokumenter(any(), any())
+        }
     }
 
     @Language("JSON")
