@@ -5,6 +5,9 @@ import jakarta.validation.Validation
 import jakarta.validation.Validator
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration.Companion.AKTIVITETSPENGER_SØKNAD_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration.Companion.AKTIVITETSPENGER_SØKNAD_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration.Companion.AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC
 import no.nav.brukerdialog.ytelse.ettersendelse.kafka.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.ettersendelse.kafka.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.ettersendelse.kafka.EttersendelseTopologyConfiguration.Companion.ETTERSENDELSE_PREPROSESSERT_TOPIC
@@ -124,7 +127,12 @@ val ALL_KAFKA_TOPICS = listOf(
     UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC,
     UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC,
 
-    // Opplæringspenger
+    // Aktivitetspenger
+    AKTIVITETSPENGER_SØKNAD_MOTTATT_TOPIC,
+    AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC,
+    AKTIVITETSPENGER_SØKNAD_CLEANUP_TOPIC,
+
+        // Opplæringspenger
     OLP_MOTTATT_TOPIC,
     OLP_PREPROSESSERT_TOPIC,
     OLP_CLEANUP_TOPIC,

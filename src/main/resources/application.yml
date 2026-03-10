@@ -256,6 +256,16 @@ no.nav:
         application-id-suffix: olp-soknad-cleanup
         auto-offset-reset: none
 
+      aktivitetspenger-soknad-preprosessering:
+        application-id-suffix: aktivitetspenger-soknad-preprosessering
+        auto-offset-reset: earliest
+      aktivitetspenger-soknad-journalforing:
+        application-id-suffix: aktivitetspenger-soknad-journalforing
+        auto-offset-reset: earliest
+      aktivitetspenger-soknad-cleanup:
+        application-id-suffix: aktivitetspenger-soknad-cleanup
+        auto-offset-reset: earliest
+
 management:
   endpoint:
     health:

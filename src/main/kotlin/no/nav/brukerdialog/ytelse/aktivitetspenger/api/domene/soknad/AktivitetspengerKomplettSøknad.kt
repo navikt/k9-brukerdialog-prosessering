@@ -1,0 +1,23 @@
+package no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad
+
+import no.nav.brukerdialog.domenetjenester.innsending.KomplettInnsending
+import no.nav.brukerdialog.oppslag.soker.Søker
+import no.nav.k9.søknad.Søknad
+import java.time.LocalDate
+import java.time.ZonedDateTime
+
+data class AktivitetspengerKomplettSøknad(
+    val søknadId: String,
+    val søker: Søker,
+    val språk: String,
+    val startdato: LocalDate,
+    val mottatt: ZonedDateTime,
+    val barn: List<Barn>,
+    val barnErRiktig: Boolean,
+    val kontonummerInfo: KontonummerInfo,
+    val harForståttRettigheterOgPlikter: Boolean,
+    val harBekreftetOpplysninger: Boolean,
+    val k9Format: Søknad,
+) : KomplettInnsending {
+    override fun innsendingId(): String = søknadId
+}
