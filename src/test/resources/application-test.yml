@@ -173,6 +173,13 @@ no.nav:
         application-id-suffix: omp-ao-cleanup
         auto-offset-reset: earliest
 
+      aktivitetspenger-soknad-preprosessering:
+        auto-offset-reset: earliest
+      aktivitetspenger-soknad-journalforing:
+        auto-offset-reset: earliest
+      aktivitetspenger-soknad-cleanup:
+        auto-offset-reset: earliest
+
       ungdomsytelse-soknad-preprosessering:
         auto-offset-reset: earliest
       ungdomsytelse-soknad-journalforing:

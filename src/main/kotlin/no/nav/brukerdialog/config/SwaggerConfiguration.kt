@@ -121,6 +121,16 @@ class SwaggerConfiguration {
     }
 
     @Bean
+    fun aktivitetspengerApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder()
+            .group("aktivitetspenger")
+            .displayName("Aktivitetspenger API")
+            .packagesToScan("no.nav.brukerdialog.ytelse.aktivitetspenger.api", *FELLES_PAKKER)
+            .build()
+    }
+
+
+    @Bean
     fun openAPI(): OpenAPI {
         return OpenAPI()
             .info(

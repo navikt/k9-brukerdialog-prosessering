@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="NO">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>{{tittel}}</title>
+    <meta name="subject" content="{{tittel}}"/>
+    <meta name="author" content="nav.no"/>
+    <meta name="description"
+          content="{{tittel}} {{søknadMottattDag}} {{ søknadMottatt }}"/>
+    <bookmarks>
+        <bookmark name="Søker" href="#søker"/>
+        <bookmark name="Startdato" href="#startdato"/>
+        <bookmark name="Kontonummer" href="#kontonummer"/>
+        <bookmark name="Barn" href="#barn"/>
+        <bookmark name="Samtykke" href="#samtykke"/>
+    </bookmarks>
+    {{#block 'style-common' }}
+    {{/block}}
+</head>
+
+<body>
+<h1 id="header">{{tittel}}</h1>
+<div class="nokkelinfo">
+    <p><strong>Sendt til NAV</strong> {{søknadMottattDag}} {{ søknadMottatt }}</p>
+    <p><strong>Språk:</strong> {{hjelp.språk}}</p>
+</div>
+<div class="innholdscontainer">
+    {{> partial/felles/personPartial id="søker" title="Søker" navn=søker.navn fødselsnummer=søker.fødselsnummer }}
+
+    <section id="periode">
+        <h2>Søker aktivitetspenger</h2>
+        <p><strong>Fra og med:</strong> {{startdato}}</p>
+    </section>
+
+    <section id="kontonummer">
+        <h2>Kontonummer for utbetaling</h2>
+        {{#eq kontonummerInfo.harKontonummer "UVISST"}}
+            <p>Vi klarte ikke å se om du har registrert kontonummer hos oss.</p>
+        {{else}}
+            {{#if kontonummerInfo.kontonummerFraRegister}}
+                <p class="sporsmalstekst">Stemmer det at kontonummeret ditt er {{kontonummerInfo.kontonummerFraRegister}}?</p>
+                <p>{{ jaNeiSvar kontonummerInfo.kontonummerErRiktig }}</p>
+            {{else}}
+                <p>Vi har ikke registrert kontonummer på deg.</p>
+            {{/if}}
+        {{/eq}}
+    </section>
+
+    <section id="barn">
+        <h2>Barn</h2>
+        <p class="sporsmalstekst">Barn vi har registrert på deg:</p>
+        {{#if barn.folkeregistrerteBarn}}
+            <ul>
+                {{#each barn.folkeregistrerteBarn as |dineBarn|}}
+                    <li>{{dineBarn.navn}}</li>
+                {{/each}}
+            </ul>
+
+            <p class="sporsmalstekst">Stemmer informasjon om barn(a)?</p>
+            <p>{{ jaNeiSvar barn.barnErRiktig }}</p>
+        {{else}}
+            <p>Vi har ikke registrert at du har barn.</p>
+
+            <br/>
+            <p class="sporsmalstekst">Stemmer det at du ikke har barn?</p>
+            <p>{{ jaNeiSvar barn.barnErRiktig }}</p>
+        {{/if}}
+    </section>
+
+    <!-- SAMTYKKE -->
+    <section id="samtykke">
+        <h2>Samtykke fra deg</h2>
+        <p class="sporsmalstekst">Har du forstått dine rettigheter og plikter?</p>
+        <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
+        <hr/>
+        <p class="sporsmalstekst">Har du bekreftet at opplysninger du har gitt er riktige?</p>
+        <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
+    </section>
+</div>
+
+<!-- FOOTER -->
+<p id="footer">
+    <span class="soknadsid">{{ søknadId }}</span>
+    <span class="soknadsid">{{ id }}</span>
+    <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
+</p>
+</body>
+
+</html>
