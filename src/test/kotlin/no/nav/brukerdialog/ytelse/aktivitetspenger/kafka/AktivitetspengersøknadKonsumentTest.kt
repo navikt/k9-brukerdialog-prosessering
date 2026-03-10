@@ -61,7 +61,7 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
             }
         }
 
-        coVerify(exactly = 1, timeout = 120 * 1000) {
+        coVerify(exactly = 1, timeout = 60 * 1000) {
             dokumentService.slettDokumenter(any(), any())
         }
 
@@ -100,6 +100,7 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenMany(listOf("123456789", "987654321"))
 
+        mockJournalføring()
         producer.leggPåTopic(
             key = søknadId,
             value = topicEntryJson,
@@ -114,6 +115,10 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
         JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+
+        coVerify(exactly = 1, timeout = 60 * 1000) {
+            dokumentService.slettDokumenter(any(), any())
+        }
     }
 
     @Language("JSON")
