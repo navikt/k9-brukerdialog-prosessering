@@ -1,3 +1,11 @@
+spring:
+  rest:
+    retry:
+      initialDelay: 10
+      multiplier: 2
+      maxDelay: 30
+      maxAttempts: 3
+
 KAFKA_BROKERS: localhost:9092 # placeholder
 K9_SAK_INNSYN_API_BASE_URL: http://localhost:${wiremock.server.port:8083}/k9-sak-innsyn-api-mock
 UNG_DELTAKELSE_OPPLYSER_BASE_URL: http://localhost:${wiremock.server.port:8083}/ung-deltakelse-opplyser-mock
@@ -92,6 +100,9 @@ no.nav:
     application-id: k9-brukerdialog-prosessering
     retries: 5
     retry-backoff-ms: 100 # 100 ms
+    session-timeout-ms: 6000
+    heartbeat-interval-ms: 1000
+    replication-factor: 1
 
     producer:
       client-id: k9-brukerdialog-prosessering-${random.uuid}

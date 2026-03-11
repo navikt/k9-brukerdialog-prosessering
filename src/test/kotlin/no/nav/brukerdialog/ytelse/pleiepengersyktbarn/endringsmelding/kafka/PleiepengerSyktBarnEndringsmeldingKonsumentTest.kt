@@ -46,7 +46,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
         coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse("123456789", false, listOf())
 
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
-        coVerify(exactly = 1, timeout = 120 * 1000) {
+        coVerify(exactly = 1, timeout = 60 * 1000) {
                 dokumentService.slettDokumenter(any(), any())
         }
     }
@@ -69,6 +69,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenMany(listOf("123456789", "987654321"))
 
+        mockJournalføring()
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = PSB_ENDRINGSMELDING_MOTTATT_TOPIC)
 
         val lesMelding = consumer.lesMelding(key = søknadId, topic = PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC).value()
@@ -79,6 +80,10 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
             preprosessertSøknadJson,
             true
         )
+
+        coVerify(exactly = 1, timeout = 60 * 1000) {
+            dokumentService.slettDokumenter(any(), any())
+        }
     }
 
     @Language("JSON")

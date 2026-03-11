@@ -14,7 +14,12 @@ class ProcessTest {
 
     private companion object {
         private val logger = LoggerFactory.getLogger(ProcessTest::class.java)
-        val retryTemplate = RetryTemplateConfiguration().retryTemplate()
+        val retryTemplate = RetryTemplateConfiguration(
+            maxAttempts = 3,
+            initialIntervalMs = 10,
+            multiplier = 2,
+            maxIntervalMs = 30
+        ).retryTemplate()
     }
 
     @Test

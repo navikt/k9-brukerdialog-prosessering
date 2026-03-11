@@ -2,14 +2,13 @@ package no.nav.brukerdialog.vtp
 
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.brukerdialog.exception.K9brukerdialogprosesseringUncaughtExceptionHandler
-import no.nav.brukerdialog.utils.KafkaIntegrationTest
+import no.nav.brukerdialog.utils.ALL_KAFKA_TOPICS
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.admin.AdminClientConfig
 import org.apache.kafka.clients.admin.NewTopic
 import org.springframework.boot.runApplication
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.kafka.test.context.EmbeddedKafka
 import java.util.concurrent.TimeUnit
 
 fun main(args: Array<String>) {
@@ -34,13 +33,8 @@ class KafkaTopicInitializer : ApplicationContextInitializer<ConfigurableApplicat
 			"ssl.keystore.type" to env.getProperty("no.nav.kafka.security.ssl.key-store-type")
 		)
 
-		val kafkaTopics = KafkaIntegrationTest::class.java
-			.getAnnotation(EmbeddedKafka::class.java)
-			?.topics
-			?: throw IllegalStateException("Could not find @EmbeddedKafka annotation on KafkaIntegrationTest")
-
 		AdminClient.create(adminClientConfig).use { adminClient ->
-			val topics = kafkaTopics.map { NewTopic(it, 1, 1.toShort()) }
+			val topics = ALL_KAFKA_TOPICS.map { NewTopic(it, 1, 1.toShort()) }
 			try {
 				adminClient.createTopics(topics).all().get(30, TimeUnit.SECONDS)
 				println("Created ${topics.size} Kafka topics")

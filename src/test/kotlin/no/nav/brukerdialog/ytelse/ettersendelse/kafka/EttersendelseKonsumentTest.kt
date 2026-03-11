@@ -39,7 +39,7 @@ class EttersendelseKonsumentTest : AbstractIntegrationTest() {
 
         mockMvc.sendInnSøknad(defaultEttersendelse, mockOAuth2Server.hentToken())
 
-        coVerify(exactly = 1, timeout = 120 * 1000) {
+        coVerify(exactly = 1, timeout = 60 * 1000) {
             dokumentService.slettDokumenter(any(), any())
         }
     }
@@ -62,6 +62,7 @@ class EttersendelseKonsumentTest : AbstractIntegrationTest() {
             .andThenThrows(IllegalStateException("Feilet med lagring av dokument..."))
             .andThenMany(listOf("123456789", "987654321"))
 
+        mockJournalføring()
         producer.leggPåTopic(key = søknadId, value = topicEntryJson, topic = ETTERSENDELSE_MOTTATT_TOPIC)
         val lesMelding =
             consumer.lesMelding(key = søknadId, topic = ETTERSENDELSE_PREPROSESSERT_TOPIC)
@@ -73,6 +74,10 @@ class EttersendelseKonsumentTest : AbstractIntegrationTest() {
             preprosessertSøknadJson,
             true
         )
+
+        coVerify(exactly = 1, timeout = 60 * 1000) {
+            dokumentService.slettDokumenter(any(), any())
+        }
     }
 
     @Language("JSON")

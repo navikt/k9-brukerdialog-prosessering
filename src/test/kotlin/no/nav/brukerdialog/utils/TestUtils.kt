@@ -48,6 +48,9 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.Ungdomsytelsesøkna
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
+import org.apache.kafka.clients.admin.AdminClient
+import org.apache.kafka.clients.admin.AdminClientConfig
+import org.apache.kafka.clients.admin.NewTopic
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -55,117 +58,120 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.kafka.test.context.EmbeddedKafka
-import org.springframework.test.annotation.DirtiesContext
+import org.springframework.context.ApplicationContextInitializer
+import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.context.support.TestPropertySourceUtils
+import java.util.concurrent.TimeUnit
+
+val ALL_KAFKA_TOPICS = listOf(
+    // Endringsmelding - Pleiepenger sykt barn
+    PSB_ENDRINGSMELDING_MOTTATT_TOPIC,
+    PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC,
+    PSB_ENDRINGSMELDING_CLEANUP_TOPIC,
+
+    // Pleiepenger sykt barn
+    PSB_MOTTATT_TOPIC,
+    PSB_PREPROSESSERT_TOPIC,
+    PSB_CLEANUP_TOPIC,
+
+    // Pleiepenger i livets sluttfase
+    PILS_MOTTATT_TOPIC,
+    PILS_PREPROSESSERT_TOPIC,
+    PILS_CLEANUP_TOPIC,
+
+    // Ettersendelse
+    ETTERSENDELSE_MOTTATT_TOPIC,
+    ETTERSENDELSE_PREPROSESSERT_TOPIC,
+    ETTERSENDELSE_CLEANUP_TOPIC,
+
+    // Omsorgspenger utvidet rett - kronisk sykt barn
+    OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC,
+    OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC,
+    OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC,
+
+    // Omsorgspengerutbetaling - arbeidstaker
+    OMP_UTB_AT_MOTTATT_TOPIC,
+    OMP_UTB_AT_PREPROSESSERT_TOPIC,
+    OMP_UTB_AT_CLEANUP_TOPIC,
+
+    // Omsorgspengerutbetaling - selvstendig næringsdrivende og frilanser
+    OMP_UTB_SNF_MOTTATT_TOPIC,
+    OMP_UTB_SNF_PREPROSESSERT_TOPIC,
+    OMP_UTB_SNF_CLEANUP_TOPIC,
+
+    // Omsorgspenger - midlertidig alene
+    OMP_MA_MOTTATT_TOPIC,
+    OMP_MA_PREPROSESSERT_TOPIC,
+    OMP_MA_CLEANUP_TOPIC,
+
+    // Omsorgspenger - aleneomsorg
+    OMP_AO_MOTTATT_TOPIC,
+    OMP_AO_PREPROSESSERT_TOPIC,
+    OMP_AO_CLEANUP_TOPIC,
+
+    // Ungdomsytelse
+    UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC,
+    UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC,
+    UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC,
+
+    // Ungdomsytelse - inntektsrapportering
+    UNGDOMSYTELSE_INNTEKTSRAPPORTERING_MOTTATT_TOPIC,
+    UNGDOMSYTELSE_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC,
+    UNGDOMSYTELSE_INNTEKTSRAPPORTERING_CLEANUP_TOPIC,
+
+    // Ungdomsytelse - oppgavebekreftelse
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_MOTTATT_TOPIC,
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC,
+    UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC,
+
+    // Aktivitetspenger
+    AKTIVITETSPENGER_SØKNAD_MOTTATT_TOPIC,
+    AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC,
+    AKTIVITETSPENGER_SØKNAD_CLEANUP_TOPIC,
+
+        // Opplæringspenger
+    OLP_MOTTATT_TOPIC,
+    OLP_PREPROSESSERT_TOPIC,
+    OLP_CLEANUP_TOPIC,
+
+    // K9 Dittnav varsel
+    K9_DITTNAV_VARSEL_TOPIC
+)
+
+class KafkaContainerInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+    override fun initialize(applicationContext: ConfigurableApplicationContext) {
+        val kafkaContainer = TestContainers.KAFKA_CONTAINER
+        TestPropertySourceUtils.addInlinedPropertiesToEnvironment(
+            applicationContext,
+            "KAFKA_BROKERS=${kafkaContainer.bootstrapServers}"
+        )
+
+        AdminClient.create(
+            mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to kafkaContainer.bootstrapServers)
+        ).use { adminClient ->
+            val topics = ALL_KAFKA_TOPICS.map { NewTopic(it, 1, 1.toShort()) }
+            try {
+                adminClient.createTopics(topics).all().get(30, TimeUnit.SECONDS)
+            } catch (e: Exception) {
+                // Topics may already exist from previous context (@DirtiesContext)
+            }
+        }
+    }
+}
 
 /**
- * Annotates a test class to run with embedded Kafka and Spring Boot.
- * The embedded Kafka will be started with 3 brokers and 1 partition.
- * The topics specified in the annotation will be created.
- * The bootstrap servers property will be set to the value of the KAFKA_BROKERS environment variable.
- * The test class will be started with the test profile.
- * The test class will be started with a random port.
- * The test class will be started with the SpringExtension.
- * The test class will be started with the DirtiesContext annotation.
- * The test class will be started with the TestInstance annotation.
- * The test class will be started with the EnableMockOAuth2Server annotation.
- * The test class will be started with the K9brukerdialogprosesseringApplication class.
- * The test class will be started with the SpringBootTest annotation.
- *
- * @see EmbeddedKafka
- * @see SpringBootTest
- * @see EnableMockOAuth2Server
- * @see DirtiesContext
- * @see TestInstance
- * @see SpringExtension
- * @see K9brukerdialogprosesseringApplication
- * @see ActiveProfiles
+ * Annotates a test class to run with Kafka Testcontainer and Spring Boot.
+ * A singleton KafkaContainer is started once and shared across all test classes.
+ * Topics are created via KafkaContainerInitializer.
+ * Mocks resettes i AbstractIntegrationTest @BeforeEach for å unngå crosstalk mellom testklasser.
  */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
-@EmbeddedKafka(
-    partitions = 1,
-    count = 1,
-    bootstrapServersProperty = "KAFKA_BROKERS",
-    topics = [
-        // Endringsmelding - Pleiepenger sykt barn
-        PSB_ENDRINGSMELDING_MOTTATT_TOPIC,
-        PSB_ENDRINGSMELDING_PREPROSESSERT_TOPIC,
-        PSB_ENDRINGSMELDING_CLEANUP_TOPIC,
-
-        // Pleiepenger sykt barn
-        PSB_MOTTATT_TOPIC,
-        PSB_PREPROSESSERT_TOPIC,
-        PSB_CLEANUP_TOPIC,
-
-        // Pleiepenger i livets sluttfase
-        PILS_MOTTATT_TOPIC,
-        PILS_PREPROSESSERT_TOPIC,
-        PILS_CLEANUP_TOPIC,
-
-        // Ettersendelse
-        ETTERSENDELSE_MOTTATT_TOPIC,
-        ETTERSENDELSE_PREPROSESSERT_TOPIC,
-        ETTERSENDELSE_CLEANUP_TOPIC,
-
-        // Omsorgspenger utvidet rett - kronisk sykt barn
-        OMP_UTV_KS_SØKNAD_MOTTATT_TOPIC,
-        OMP_UTV_KS_SØKNAD_PREPROSESSERT_TOPIC,
-        OMP_UTV_KS_SØKNAD_CLEANUP_TOPIC,
-
-        // Omsorgspengerutbetaling - arbeidstaker
-        OMP_UTB_AT_MOTTATT_TOPIC,
-        OMP_UTB_AT_PREPROSESSERT_TOPIC,
-        OMP_UTB_AT_CLEANUP_TOPIC,
-
-        // Omsorgspengerutbetaling - selvstendig næringsdrivende og frilanser
-        OMP_UTB_SNF_MOTTATT_TOPIC,
-        OMP_UTB_SNF_PREPROSESSERT_TOPIC,
-        OMP_UTB_SNF_CLEANUP_TOPIC,
-
-        // Omsorgspenger - midlertidig alene
-        OMP_MA_MOTTATT_TOPIC,
-        OMP_MA_PREPROSESSERT_TOPIC,
-        OMP_MA_CLEANUP_TOPIC,
-
-        // Omsorgspenger - aleneomsorg
-        OMP_AO_MOTTATT_TOPIC,
-        OMP_AO_PREPROSESSERT_TOPIC,
-        OMP_AO_CLEANUP_TOPIC,
-
-        // Ungdomsytelse
-        UNGDOMSYTELSE_SØKNAD_MOTTATT_TOPIC,
-        UNGDOMSYTELSE_SØKNAD_PREPROSESSERT_TOPIC,
-        UNGDOMSYTELSE_SØKNAD_CLEANUP_TOPIC,
-
-        // Ungdomsytelse - inntektsrapportering
-        UNGDOMSYTELSE_INNTEKTSRAPPORTERING_MOTTATT_TOPIC,
-        UNGDOMSYTELSE_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC,
-        UNGDOMSYTELSE_INNTEKTSRAPPORTERING_CLEANUP_TOPIC,
-
-        // Ungdomsytelse - oppgavebekreftelse
-        UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_MOTTATT_TOPIC,
-        UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC,
-        UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC,
-
-        // Aktivitetspenger
-        AKTIVITETSPENGER_SØKNAD_MOTTATT_TOPIC,
-        AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC,
-        AKTIVITETSPENGER_SØKNAD_CLEANUP_TOPIC,
-
-        // Opplæringspenger
-        OLP_MOTTATT_TOPIC,
-        OLP_PREPROSESSERT_TOPIC,
-        OLP_CLEANUP_TOPIC,
-
-        // K9 Dittnav varsel
-        K9_DITTNAV_VARSEL_TOPIC
-    ]
-)
+@ContextConfiguration(initializers = [KafkaContainerInitializer::class])
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@DirtiesContext
 @ExtendWith(SpringExtension::class)
 @EnableMockOAuth2Server
 @ActiveProfiles("test")
