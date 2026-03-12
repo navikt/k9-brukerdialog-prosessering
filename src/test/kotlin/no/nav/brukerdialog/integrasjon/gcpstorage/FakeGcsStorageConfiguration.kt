@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Profile
 @Configuration
 @Profile("vtp")
 class FakeGcsStorageConfiguration(
-    @Value("\${GCP_STORAGE_BUCKET_NAVN}") private val bucketName: String,
+    @param:Value("\${GCP_STORAGE_BUCKET_NAVN}") private val bucketName: String,
 ) {
     private companion object {
         private val logger = LoggerFactory.getLogger(FakeGcsStorageConfiguration::class.java)
