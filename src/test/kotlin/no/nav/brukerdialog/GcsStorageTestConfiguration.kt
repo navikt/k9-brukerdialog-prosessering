@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean
 
 @TestConfiguration
 class GcsStorageTestConfiguration(
-    @Value("\${no.nav.mellomlagring.gcp_storage_bucket_navn}") private val bucket: String,
+    @param:Value("\${no.nav.mellomlagring.gcp_storage_bucket_navn}") private val bucket: String,
 ) {
 
     @Bean

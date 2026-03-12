@@ -1,14 +1,12 @@
 package no.nav.brukerdialog.integrasjon.dokarkiv
 
-import com.github.tomakehurst.wiremock.common.FileSource
-import com.github.tomakehurst.wiremock.extension.Parameters
-import com.github.tomakehurst.wiremock.extension.ResponseTransformer
-import com.github.tomakehurst.wiremock.http.Request
+import com.github.tomakehurst.wiremock.extension.ResponseTransformerV2
 import com.github.tomakehurst.wiremock.http.Response
+import com.github.tomakehurst.wiremock.stubbing.ServeEvent
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import org.json.JSONObject
 
-internal class DokarkivResponseTransformer : ResponseTransformer() {
+internal class DokarkivResponseTransformer : ResponseTransformerV2 {
     companion object {
         val BREVKODE_MED_FORVENTET_JOURNALPOST_ID = mapOf(
             YtelseType.PLEIEPENGESØKNAD to "1",
@@ -43,13 +41,8 @@ internal class DokarkivResponseTransformer : ResponseTransformer() {
         return "dokarkiv"
     }
 
-    override fun transform(
-        request: Request,
-        response: Response,
-        files: FileSource?,
-        parameters: Parameters?,
-    ): Response {
-        val requestEntity = request.bodyAsString
+    override fun transform(response: Response, serveEvent: ServeEvent): Response {
+        val requestEntity = serveEvent.request.bodyAsString
         val tema = JSONObject(requestEntity).getString("tema")
 
         val journalpostId = BREVKODE_MED_FORVENTET_JOURNALPOST_ID.entries.firstOrNull {

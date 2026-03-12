@@ -27,8 +27,8 @@ class UngdomsytelsesøknadPreprosessering(
     private val ungdomsytelsesøknadMottattTopic: Topic<TopicEntry<UngdomsytelsesøknadMottatt>>,
     private val ungdomsytelsesøknadPreprosessertTopic: Topic<TopicEntry<UngdomsytelsesøknadPreprosessertSøknad>>,
     private val retryTemplate: RetryTemplate,
-    @Qualifier(UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERING_STREAMS_BUILDER_NAME) private val streamsBuilder: StreamsBuilder,
-    @Qualifier(UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERING_STREAMS_BUILDER_NAME) private val streamsBuilderFactoryBean: StreamsBuilderFactoryBean,
+    @param:Qualifier(UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERING_STREAMS_BUILDER_NAME) private val streamsBuilder: StreamsBuilder,
+    @param:Qualifier(UngdomsytelsesøknadTopologyConfiguration.Companion.UNGDOMSYTELSE_SØKNAD_PREPROSESSERING_STREAMS_BUILDER_NAME) private val streamsBuilderFactoryBean: StreamsBuilderFactoryBean,
 ) : HealthIndicator {
 
     private companion object {
