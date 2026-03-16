@@ -25,9 +25,9 @@ data class ArbeidIPeriode(
 )
 
 enum class JobberIPeriodeSvar(val pdfTekst: String) {
-    SOM_VANLIG("Jeg jobber som normalt, og har ikke fravær"),
-    REDUSERT("Jeg kombinerer delvis jobb med opplæring"),
-    HELT_FRAVÆR("Jeg jobber ikke her de dagene jeg er på opplæring");
+    SOM_VANLIG("Jeg er ikke borte fra jobb på grunn av opplæring"),
+    REDUSERT("Jeg er delvis borte fra jobb fordi jeg er på opplæring"),
+    HELT_FRAVÆR("Jeg er helt borte fra jobb fordi jeg er på opplæring");
 
     fun tilBoolean(): Boolean{
         return when(this){
