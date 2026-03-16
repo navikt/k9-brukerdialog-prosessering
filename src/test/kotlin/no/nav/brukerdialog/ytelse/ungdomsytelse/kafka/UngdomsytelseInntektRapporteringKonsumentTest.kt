@@ -15,6 +15,8 @@ import no.nav.brukerdialog.utils.SøknadUtils
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.inntektsrapportering.UngdomsytelseInntektsrapporteringTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
 import org.intellij.lang.annotations.Language
@@ -44,17 +46,18 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
         mockLagreDokument()
         mockJournalføring()
         mockHentingAvOppgave(
-            oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
-            oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
-                fraOgMed = LocalDate.parse("2025-01-01"),
-                tilOgMed = LocalDate.parse("2025-01-31"),
-                gjelderDelerAvMåned = false
+            oppgavetype = OppgaveType.RAPPORTER_INNTEKT,
+            oppgavetypeData = InntektsrapporteringOppgavetypeDataDto(
+                LocalDate.parse("2025-01-01"),
+                LocalDate.parse("2025-01-31"),
+                false
             )
         )
         mockMarkerOppgaveSomLøst()
 
         val oppgaveReferanse = UUID.randomUUID().toString()
-        val inntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering.copy(oppgaveReferanse = oppgaveReferanse)
+        val inntektsrapportering =
+            InntektrapporteringUtils.defaultInntektsrapportering.copy(oppgaveReferanse = oppgaveReferanse)
 
         val token = mockOAuth2Server.hentToken()
         mockMvc.post("/ungdomsytelse/inntektsrapportering/innsending") {
@@ -100,7 +103,11 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
         val inntektsrapportering =
-            InntektrapporteringUtils.gyldigInntektsrapportering(søknadId = søknadId, deltakelseId = deltakelseId, mottatt = mottatt)
+            InntektrapporteringUtils.gyldigInntektsrapportering(
+                søknadId = søknadId,
+                deltakelseId = deltakelseId,
+                mottatt = mottatt
+            )
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, inntektsrapportering)
@@ -127,7 +134,11 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
             ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, deltakelseId.toString(), mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(
+            preprosessertSøknadSomJson(søknadId, deltakelseId.toString(), mottattString),
+            preprosessertSøknadJson,
+            true
+        )
 
         coVerify(exactly = 1, timeout = 60 * 1000) {
             dokumentService.slettDokumenter(any(), any())

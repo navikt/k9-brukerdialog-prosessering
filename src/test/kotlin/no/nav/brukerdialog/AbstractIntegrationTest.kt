@@ -22,6 +22,10 @@ import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaConsumer
 import no.nav.brukerdialog.utils.KafkaUtils.opprettKafkaProducer
 import no.nav.brukerdialog.utils.TestContainers
 import no.nav.security.mock.oauth2.MockOAuth2Server
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretstartdato.EndretStartdatoDataDto
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.*
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
@@ -84,7 +88,14 @@ abstract class AbstractIntegrationTest {
 
     @BeforeEach
     fun resetMocks() {
-        clearMocks(dokumentService, dokarkivService, barnService, søkerService, ungDeltakelseOpplyserService, ungBrukerdialogApiService)
+        clearMocks(
+            dokumentService,
+            dokarkivService,
+            barnService,
+            søkerService,
+            ungDeltakelseOpplyserService,
+            ungBrukerdialogApiService
+        )
     }
 
     @BeforeAll
@@ -112,12 +123,18 @@ abstract class AbstractIntegrationTest {
     }
 
     protected fun mockJournalføring(journalpostId: String = "123456789") {
-        coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse(journalpostId, false, listOf())
+        coEvery { dokarkivService.journalfør(any()) } returns DokarkivJournalpostResponse(
+            journalpostId,
+            false,
+            listOf()
+        )
     }
 
     protected fun mockLagreDokument(forventedeDokumenterForSletting: List<String> = listOf("123456789", "987654321")) {
         val forventetDokmentIderForSletting = forventedeDokumenterForSletting
-        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }.returnsMany(forventetDokmentIderForSletting)
+        coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }.returnsMany(
+            forventetDokmentIderForSletting
+        )
     }
 
     protected fun mockHentDokumenter() {
@@ -158,68 +175,52 @@ abstract class AbstractIntegrationTest {
     }
 
     protected fun mockHentingAvOppgave(
-        oppgavetype: Oppgavetype,
-        oppgavetypeData: OppgavetypeDataDTO
+        oppgavetype: OppgaveType,
+        oppgavetypeData: OppgavetypeDataDto
     ) {
-        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
-            oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = oppgavetype,
-            oppgavetypeData = oppgavetypeData,
-            status = OppgaveStatus.ULØST,
-            bekreftelse = null,
-            opprettetDato = ZonedDateTime.now(),
-            løstDato = null,
-            åpnetDato = null,
-            lukketDato = null,
-            frist = null,
+        every { ungBrukerdialogApiService.hentOppgave(any()) } returns BrukerdialogOppgaveDto(
+            UUID.randomUUID(),
+            oppgavetype,
+            oppgavetypeData,
+            null,
+            no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.ULØST,
+            ZonedDateTime.now(),
+
+            ZonedDateTime.now(),
+            null
         )
+
     }
 
     protected fun mockMarkerOppgaveSomLøst() {
-        every { ungDeltakelseOpplyserService.markerOppgaveSomLøst(any()) } returns OppgaveDTO(
-            oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
-            oppgavetypeData = EndretStartdatoDataDTO(
-                nyStartdato = LocalDate.now(),
-                forrigeStartdato = LocalDate.now().minusDays(30)
+        every { ungBrukerdialogApiService.markerOppgaveSomLøst(any(), any()) } returns BrukerdialogOppgaveDto(
+            UUID.randomUUID(),
+            OppgaveType.BEKREFT_ENDRET_STARTDATO,
+            EndretStartdatoDataDto(
+                LocalDate.now(),
+                LocalDate.now().minusDays(30)
             ),
-            status = OppgaveStatus.LØST,
-            bekreftelse = null,
-            opprettetDato = ZonedDateTime.now(),
-            løstDato = ZonedDateTime.now(),
-            åpnetDato = null,
-            lukketDato = null,
-            frist = null
-        )
-        every { ungBrukerdialogApiService.markerOppgaveSomLøst(any(), any()) } returns OppgaveDTO(
-            oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
-            oppgavetypeData = EndretStartdatoDataDTO(
-                nyStartdato = LocalDate.now(),
-                forrigeStartdato = LocalDate.now().minusDays(30)
-            ),
-            status = OppgaveStatus.LØST,
-            bekreftelse = null,
-            opprettetDato = ZonedDateTime.now(),
-            løstDato = ZonedDateTime.now(),
-            åpnetDato = null,
-            lukketDato = null,
-            frist = null
+            null,
+            no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.LØST,
+            ZonedDateTime.now(),
+
+            ZonedDateTime.now(),
+            null
         )
     }
 
     fun mockMarkerDeltakeleSomSøkt() {
         every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseKomposittDTO(
-           deltakelse = DeltakelseDTO(
-               id = UUID.randomUUID(),
-               deltaker = DeltakerDTO(
-                   id = UUID.randomUUID(),
-                   deltakerIdent = "12345678901",
-               ),
-               fraOgMed = LocalDate.now(),
-               tilOgMed = null,
-               søktTidspunkt = ZonedDateTime.now(),
-           ),
+            deltakelse = DeltakelseDTO(
+                id = UUID.randomUUID(),
+                deltaker = DeltakerDTO(
+                    id = UUID.randomUUID(),
+                    deltakerIdent = "12345678901",
+                ),
+                fraOgMed = LocalDate.now(),
+                tilOgMed = null,
+                søktTidspunkt = ZonedDateTime.now(),
+            ),
             oppgaver = emptyList(),
         )
     }

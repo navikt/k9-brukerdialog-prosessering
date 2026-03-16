@@ -16,7 +16,6 @@ DOKARKIV_BASE_URL: http://localhost:${wiremock.server.port:8083}/dokarkiv-mock
 FAMILIE_PDF_BASE_URL: http://localhost:${wiremock.server.port:8083}/familie-pdf-mock
 CLAM_AV_BASE_URL: http://localhost:${wiremock.server.port:8083}/clamav-mock
 ENABLE_OPPLAERINGSPENGER: true
-OPPGAVER_I_UNG_BRUKERDIALOG_ENABLED: true
 
 no.nav:
   security.jwt:

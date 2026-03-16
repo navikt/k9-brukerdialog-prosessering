@@ -60,7 +60,6 @@
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
     "SWAGGER_ENABLED": "true",
     "GCP_STORAGE_BUCKET_NAVN": "k9-mellomlagring",
-    "OPPGAVER_I_UNG_BRUKERDIALOG_ENABLED": "true"
   },
   "slack-channel": "sif-alerts-dev",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "
