@@ -5,6 +5,7 @@ import no.nav.brukerdialog.common.formaterStatuslogging
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.integrasjon.ungbrukerdialogapi.UngBrukerdialogApiService
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.MDCUtil
@@ -19,13 +20,18 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Barn
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelsesøknad
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.UngdomsytelsesøknadInnsending
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.LøsOppgaveRequest
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.SvarPåVarselDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.RapportertInntektDto
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.InntektsrapporteringOppgavetypeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SøkYtelseOppgavetypeDataDTO
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.stereotype.Service
 import org.springframework.web.ErrorResponseException
+import java.math.BigDecimal
 import java.util.*
 
 @Service
@@ -35,7 +41,9 @@ class UngdomsytelseService(
     private val springTokenValidationContextHolder: SpringTokenValidationContextHolder,
     private val metrikkService: MetrikkService,
     private val ungDeltakelseOpplyserService: UngDeltakelseOpplyserService,
+    private val ungBrukerdialogApiService: UngBrukerdialogApiService,
     private val barnService: BarnService,
+    @Value("\${OPPGAVER_I_UNG_BRUKERDIALOG_ENABLED}") private val oppgaverIUngBrukerdialogEnabled: Boolean
 ) {
     private companion object {
         private val logger = LoggerFactory.getLogger(UngdomsytelseService::class.java)
@@ -93,6 +101,9 @@ class UngdomsytelseService(
 
         metrikkService.registrerMottattInnsending(ungdomsytelsesøknadInnsending.ytelse())
         ungDeltakelseOpplyserService.markerOppgaveSomLøst(oppgaveReferanse = oppgaveDTO.oppgaveReferanse)
+        if (oppgaverIUngBrukerdialogEnabled) {
+            ungBrukerdialogApiService.markerOppgaveSomLøst(oppgaveDTO.oppgaveReferanse, LøsOppgaveRequest(null))
+        }
     }
 
     suspend fun inntektrapportering(rapportetInntekt: UngdomsytelseInntektsrapportering, gitSha: String) {
@@ -130,6 +141,15 @@ class UngdomsytelseService(
         innsendingService.registrer(inntektsrapporteringInnsending, metadata)
         metrikkService.registrerMottattInnsending(inntektsrapporteringInnsending.ytelse())
         ungDeltakelseOpplyserService.markerOppgaveSomLøst(oppgaveReferanse = rapporterInntektOppgave.oppgaveReferanse)
+        if (oppgaverIUngBrukerdialogEnabled) {
+            ungBrukerdialogApiService.markerOppgaveSomLøst(rapporterInntektOppgave.oppgaveReferanse,
+                LøsOppgaveRequest(RapportertInntektDto(
+                    inntektsrapporteringInnsending.oppgittInntektForPeriode.periodeForInntekt.fraOgMed,
+                    inntektsrapporteringInnsending.oppgittInntektForPeriode.periodeForInntekt.tilOgMed,
+                    inntektsrapporteringInnsending.oppgittInntektForPeriode.arbeidstakerOgFrilansInntekt
+                        ?.let { BigDecimal.valueOf(it.toLong()) }
+                    )))
+        }
     }
 
     suspend fun oppgavebekreftelse(oppgavebekreftelse: UngdomsytelseOppgavebekreftelse, gitSha: String) {
@@ -157,5 +177,15 @@ class UngdomsytelseService(
         innsendingService.registrer(ungdomsytelseOppgavebekreftelseInnsending, metadata)
         metrikkService.registrerMottattInnsending(ungdomsytelseOppgavebekreftelseInnsending.ytelse())
         ungDeltakelseOpplyserService.markerOppgaveSomLøst(oppgaveReferanse = oppgaveDTO.oppgaveReferanse)
+        if (oppgaverIUngBrukerdialogEnabled) {
+            ungBrukerdialogApiService.markerOppgaveSomLøst(
+                oppgaveDTO.oppgaveReferanse, LøsOppgaveRequest(
+                    SvarPåVarselDto(
+                        oppgavebekreftelse.oppgave.uttalelse.harUttalelse,
+                        oppgavebekreftelse.oppgave.uttalelse.uttalelseFraDeltaker
+                    )
+                )
+            )
+        }
     }
 }

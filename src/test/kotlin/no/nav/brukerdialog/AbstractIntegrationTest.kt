@@ -9,6 +9,7 @@ import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Comp
 import no.nav.brukerdialog.integrasjon.dokarkiv.DokarkivService
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.DokarkivJournalpostResponse
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.integrasjon.ungbrukerdialogapi.UngBrukerdialogApiService
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.mellomlagring.dokument.Dokument
 import no.nav.brukerdialog.mellomlagring.dokument.DokumentEier
@@ -67,6 +68,9 @@ abstract class AbstractIntegrationTest {
     @MockkBean
     lateinit var ungDeltakelseOpplyserService: UngDeltakelseOpplyserService
 
+    @MockkBean
+    lateinit var ungBrukerdialogApiService: UngBrukerdialogApiService
+
     @Autowired
     protected lateinit var mockOAuth2Server: MockOAuth2Server
 
@@ -80,7 +84,7 @@ abstract class AbstractIntegrationTest {
 
     @BeforeEach
     fun resetMocks() {
-        clearMocks(dokumentService, dokarkivService, barnService, søkerService, ungDeltakelseOpplyserService)
+        clearMocks(dokumentService, dokarkivService, barnService, søkerService, ungDeltakelseOpplyserService, ungBrukerdialogApiService)
     }
 
     @BeforeAll
@@ -173,6 +177,21 @@ abstract class AbstractIntegrationTest {
 
     protected fun mockMarkerOppgaveSomLøst() {
         every { ungDeltakelseOpplyserService.markerOppgaveSomLøst(any()) } returns OppgaveDTO(
+            oppgaveReferanse = UUID.randomUUID(),
+            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoDataDTO(
+                nyStartdato = LocalDate.now(),
+                forrigeStartdato = LocalDate.now().minusDays(30)
+            ),
+            status = OppgaveStatus.LØST,
+            bekreftelse = null,
+            opprettetDato = ZonedDateTime.now(),
+            løstDato = ZonedDateTime.now(),
+            åpnetDato = null,
+            lukketDato = null,
+            frist = null
+        )
+        every { ungBrukerdialogApiService.markerOppgaveSomLøst(any(), any()) } returns OppgaveDTO(
             oppgaveReferanse = UUID.randomUUID(),
             oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
             oppgavetypeData = EndretStartdatoDataDTO(

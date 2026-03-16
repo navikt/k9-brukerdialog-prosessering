@@ -40,6 +40,9 @@
     "UNG_DELTAKELSE_OPPLYSER_BASE_URL": "http://ung-deltakelse-opplyser.k9saksbehandling",
     "UNG_DELTAKELSE_OPPLYSER_TOKEN_X_AUDIENCE": "dev-gcp:k9saksbehandling:ung-deltakelse-opplyser",
 
+    "UNG_BRUKERDIALOG_API_BASE_URL": "http://ung-brukerdialog-api.k9saksbehandling",
+    "UNG_BRUKERDIALOG_API_TOKEN_X_AUDIENCE": "dev-gcp:k9saksbehandling:ung-brukerdialog-api",
+
     "K9_BRUKERDIALOG_CACHE_BASE_URL": "http://k9-brukerdialog-cache",
     "K9_BRUKERDIALOG_CACHE_TOKEN_X_AUDIENCE": "dev-gcp:dusseldorf:k9-brukerdialog-cache",
 
@@ -56,7 +59,8 @@
 
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
     "SWAGGER_ENABLED": "true",
-    "GCP_STORAGE_BUCKET_NAVN": "k9-mellomlagring"
+    "GCP_STORAGE_BUCKET_NAVN": "k9-mellomlagring",
+    "OPPGAVER_I_UNG_BRUKERDIALOG_ENABLED": "true"
   },
   "slack-channel": "sif-alerts-dev",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "
