@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.integrasjon.ungbrukerdialogapi
 
-import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynApiClientConfig
 import no.nav.brukerdialog.utils.RestTemplateUtils
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import no.nav.security.token.support.client.spring.ClientConfigurationProperties
@@ -23,7 +22,7 @@ class UngBrukerdialogApiClientConfig(
 ) {
 
     private companion object {
-        private val logger = LoggerFactory.getLogger(K9SakInnsynApiClientConfig::class.java)
+        private val logger = LoggerFactory.getLogger(UngBrukerdialogApiClientConfig::class.java)
         const val TOKEN_X_UNG_BRUKERDIALOG_API = "tokenx-ung-brukerdialog-api"
     }
 
@@ -43,7 +42,10 @@ class UngBrukerdialogApiClientConfig(
             .rootUri(ungBrukerdialogApiBaseUrl)
             .defaultMessageConverters()
             .additionalInterceptors(
-                RestTemplateUtils.exchangeBearerTokenInterceptor(tokenxUngBrukerdialogApiClientProperties, oAuth2AccessTokenService),
+                RestTemplateUtils.exchangeBearerTokenInterceptor(
+                    tokenxUngBrukerdialogApiClientProperties,
+                    oAuth2AccessTokenService
+                ),
                 RestTemplateUtils.requestLoggerInterceptor(logger),
                 RestTemplateUtils.requestTracingInterceptor()
             )
