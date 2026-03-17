@@ -43,6 +43,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
             "mottattDato" to DATE_TIME_FORMATTER.format(k9Format.mottattDato),
             "soker" to endringsmelding.søker.somMap(),
             "barn" to ytelse.barn.somMap(endringsmelding.pleietrengendeNavn),
+            "omsorgstilbud" to ytelse.tilsynsordning?.perioder?.somMap(),
             "ukjenteArbeidsforhold" to when {
                 dataBruktTilUtledning?.ukjenteArbeidsforhold?.isNotEmpty() == true -> dataBruktTilUtledning.ukjenteArbeidsforhold.somMap()
                 else -> null

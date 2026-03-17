@@ -12,6 +12,7 @@
         <bookmark name="UkjenteArbeidsforhold" href="#ukjenteArbeidsforhold"/>
         <bookmark name="Arbeidstid" href="#arbeidstid"/>
         <bookmark name="LovbestemtFerie" href="#lovbestemtFerie"/>
+        <bookmark name="Omsorgstilbud" href="#omsorgstilbud"/>
         <bookmark name="Samtykke" href="#samtykke"/>
     </bookmarks>
     {{#block 'style-common' }} {{/block}}
@@ -109,6 +110,18 @@
                 </ul>
             {{/if}}
 
+        </section>
+    {{/if}}
+
+    {{#if omsorgstilbud}}
+        <section id="omsorgstilbud">
+            <h2>Omsorgstilbud</h2>
+            <p><b>Tid barnet er i omsorgstilbud:</b></p>
+            <ul>
+            {{#each omsorgstilbud as |tilbud|~}}
+                <li>{{tilbud.periode.fraOgMedDag}} {{tilbud.periode.fraOgMed}} - {{tilbud.periode.tilOgMedDag}} {{tilbud.periode.tilOgMed}}: {{tilbud.tilsynPeriodeInfo.etablertTilsynTimerPerDag}}</li>
+            {{/each}}
+            </ul>
         </section>
     {{/if}}
 
