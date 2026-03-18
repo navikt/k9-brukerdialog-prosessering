@@ -234,7 +234,7 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                 ) to TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(4)),
                                 Periode(
                                     LocalDate.parse("2023-01-23"),
-                                    LocalDate.parse("2023-01-27")
+                                    LocalDate.parse("2023-01-23")
                                 ) to TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(6))
                             )
                         )

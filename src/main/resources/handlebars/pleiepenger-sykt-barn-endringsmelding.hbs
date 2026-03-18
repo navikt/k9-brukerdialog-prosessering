@@ -119,7 +119,11 @@
             <p><b>Tid barnet er i omsorgstilbud:</b></p>
             <ul>
             {{#each omsorgstilbud as |tilbud|~}}
-                <li>{{tilbud.periode.fraOgMedDag}} {{tilbud.periode.fraOgMed}} - {{tilbud.periode.tilOgMedDag}} {{tilbud.periode.tilOgMed}}: {{tilbud.tilsynPeriodeInfo.etablertTilsynTimerPerDag}}</li>
+                {{#if tilbud.enkeltdag }}
+                    <li>{{tilbud.enkeltdag.fraOgMedDag}} {{tilbud.enkeltdag.fraOgMed}}: {{tilbud.tilsynPeriodeInfo.etablertTilsynTimerPerDag}}</li>
+                {{else}}
+                    <li>{{tilbud.periode.fraOgMedDag}} {{tilbud.periode.fraOgMed}} - {{tilbud.periode.tilOgMedDag}} {{tilbud.periode.tilOgMed}}: {{tilbud.tilsynPeriodeInfo.etablertTilsynTimerPerDag}}</li>
+                {{/if}}
             {{/each}}
             </ul>
         </section>
