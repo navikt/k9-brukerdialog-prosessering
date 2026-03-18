@@ -43,6 +43,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
             "mottattDato" to DATE_TIME_FORMATTER.format(k9Format.mottattDato),
             "soker" to endringsmelding.søker.somMap(),
             "barn" to ytelse.barn.somMap(endringsmelding.pleietrengendeNavn),
+            "omsorgstilbud" to ytelse.tilsynsordning?.perioder?.somMap(),
             "ukjenteArbeidsforhold" to when {
                 dataBruktTilUtledning?.ukjenteArbeidsforhold?.isNotEmpty() == true -> dataBruktTilUtledning.ukjenteArbeidsforhold.somMap()
                 else -> null
@@ -64,8 +65,10 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
 
     @JvmName("somMapPeriodeTilsynPeriodeInfo")
     private fun MutableMap<Periode, TilsynPeriodeInfo>.somMap(): List<Map<String, Any?>> = map { entry ->
+        val erEnkeltdag = entry.key.fraOgMed.isEqual(entry.key.tilOgMed)
         mapOf(
-            "periode" to entry.key.somMap(),
+            "periode" to if (erEnkeltdag) null else entry.key.somMap(),
+            "enkeltdag" to if (erEnkeltdag) entry.key.somMap() else null,
             "tilsynPeriodeInfo" to entry.value.somMap()
         )
     }
