@@ -5,11 +5,11 @@ import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.domene.Aktivitet
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
-import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.Aktivitetspenger
+import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.Bosteder
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
