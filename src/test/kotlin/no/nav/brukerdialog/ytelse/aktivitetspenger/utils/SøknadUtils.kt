@@ -26,7 +26,7 @@ object SøknadUtils {
                 Bosted(
                     fraOgMed = LocalDate.of(2023, 1, 2),
                     tilOgMed = LocalDate.of(2023, 1, 3),
-                    landkode = "US",
+                    landkode = "USA",
                     landnavn = "USA"
                 )
             )
