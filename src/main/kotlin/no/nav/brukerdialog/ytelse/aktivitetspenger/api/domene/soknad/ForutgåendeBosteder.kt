@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import no.nav.brukerdialog.utils.erFørEllerLik
 import no.nav.brukerdialog.utils.krever
@@ -12,6 +13,7 @@ import no.nav.k9.søknad.felles.type.Periode as K9Periode
 
 data class ForutgåendeBosteder(
     val harBoddIUtlandetSiste5År: Boolean,
+    @field:Valid
     val utenlandsoppholdSiste5År: List<Bosted> = listOf(),
 ) {
     fun tilK9Bosteder(): Bosteder {

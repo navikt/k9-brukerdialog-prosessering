@@ -136,6 +136,12 @@ class AktivitetspengerControllerTest {
                           "detail": "Forespørselen inneholder valideringsfeil",
                           "violations": [
                             {
+                              "invalidValue": "ÆÆÆ",
+                              "parameterName": "aktivitetspengersøknad.forutgåendeBosteder.utenlandsoppholdSiste5År[0].landkode",
+                              "parameterType": "ENTITY",
+                              "reason": "ÆÆÆ er ikke en gyldig ISO 3166-1 alpha-3 kode"
+                            },
+                            {
                               "invalidValue": false,
                               "parameterName": "aktivitetspengersøknad.harForståttRettigheterOgPlikter",
                               "parameterType": "ENTITY",

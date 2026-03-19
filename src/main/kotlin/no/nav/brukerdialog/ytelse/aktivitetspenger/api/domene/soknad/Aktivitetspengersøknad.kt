@@ -11,6 +11,7 @@ import java.util.*
 data class Aktivitetspengersøknad(
     @field:Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
+    @field:Valid
     val forutgåendeBosteder: ForutgåendeBosteder,
     val språk: String,
     @field:Schema(hidden = true)
