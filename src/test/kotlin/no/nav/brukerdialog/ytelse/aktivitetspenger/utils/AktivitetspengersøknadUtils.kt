@@ -1,12 +1,11 @@
 package no.nav.brukerdialog.ytelse.aktivitetspenger.utils
 
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Barn
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.HarKontonummer
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.KontonummerInfo
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.*
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.domene.AktivitetspengersøknadMottatt
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
@@ -27,9 +26,21 @@ object AktivitetspengersøknadUtils {
     ): AktivitetspengersøknadMottatt {
         val startdato = LocalDate.parse("2022-01-01")
 
+        val forutgåendeMedlemskap = ForutgåendeMedlemskap(
+            true,
+            listOf(
+                Bosted(
+                    fraOgMed = LocalDate.of(2023, 1, 2),
+                    tilOgMed = LocalDate.of(2023, 1, 3),
+                    landkode = "US",
+                    landnavn = "USA"
+                )
+            )
+        )
         return AktivitetspengersøknadMottatt(
             språk = "nb",
             søknadId = søknadId,
+            forutgåendeMedlemskap = forutgåendeMedlemskap,
             mottatt = mottatt,
             søker = Søker(
                 aktørId = "123456",
@@ -51,7 +62,7 @@ object AktivitetspengersøknadUtils {
                 kontonummerFraRegister = "12345678901",
                 kontonummerErRiktig = true,
             ),
-            k9Format = gyldigK9Format(søknadId, mottatt, startdato),
+            k9Format = gyldigK9Format(søknadId, mottatt, startdato, forutgåendeMedlemskap.tilK9Bosteder()),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
         )
@@ -61,10 +72,11 @@ object AktivitetspengersøknadUtils {
         søknadId: String = UUID.randomUUID().toString(),
         mottatt: ZonedDateTime,
         fraOgMed: LocalDate,
+        bosteder: Bosteder,
     ): k9FormatSøknad {
         val ytelse = Aktivitetspenger()
             .medSøknadsperiode(Periode(fraOgMed, fraOgMed.plusMonths(12)))
-
+            .medForutgåendeMedlemskap(bosteder)
         val søknad = k9FormatSøknad(
             SøknadId(søknadId),
             Versjon("1.0.0"),

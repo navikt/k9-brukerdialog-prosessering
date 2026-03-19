@@ -165,7 +165,15 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
             },
             "ytelse": {
               "type": "AKTIVITETSPENGER",
-              "søknadsperiode": "2022-01-01/2023-01-01"
+              "søknadsperiode": "2022-01-01/2023-01-01",
+              "bosteder": {
+                "perioder": {
+                  "2023-01-02/2023-01-03": {
+                    "land":"US"
+                  }
+                }, 
+                "perioderSomSkalSlettes": {}
+              }
             },
             "journalposter": [],
             "begrunnelseForInnsending": {

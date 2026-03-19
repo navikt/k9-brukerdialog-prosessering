@@ -22,15 +22,13 @@ import no.nav.k9.søknad.Søknad as AktivitetspengerSøknad
 
 data class AktivitetspengersøknadInnsending(
     val søknadId: String = UUID.randomUUID().toString(),
+    val forutgåendeMedlemskap: ForutgåendeMedlemskap,
     val språk: String,
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-
     val startdato: LocalDate,
     val søkerNorskIdent: String,
-
     var barn: List<Barn>?,
     val barnErRiktig: Boolean,
-
     val harBekreftetOpplysninger: Boolean,
     val harForståttRettigheterOgPlikter: Boolean,
     val kontonummerInfo: KontonummerInfo,
@@ -48,6 +46,7 @@ data class AktivitetspengersøknadInnsending(
         requireNotNull(k9Format)
         return AktivitetspengerKomplettSøknad(
             søknadId = søknadId,
+            forutgåendeMedlemskap = forutgåendeMedlemskap,
             mottatt = mottatt,
             søker = søker,
             språk = språk,
@@ -66,6 +65,7 @@ data class AktivitetspengersøknadInnsending(
     override fun somK9Format(søker: Søker, metadata: MetaInfo): AktivitetspengerSøknad {
         val ytelse = Aktivitetspenger()
             .medSøknadsperiode(Periode(startdato, startdato.plusMonths(12))) //TODO endre til startdato eller fjerne dato
+            .medForutgåendeMedlemskap(forutgåendeMedlemskap.tilK9Bosteder())
 
         return AktivitetspengerSøknad()
             .medVersjon(K9_SØKNAD_VERSJON)
@@ -77,7 +77,7 @@ data class AktivitetspengersøknadInnsending(
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
     }
 
-    override fun søkerNorskIdent(): String? = søkerNorskIdent
+    override fun søkerNorskIdent(): String = søkerNorskIdent
     override fun ytelse(): Ytelse = Ytelse.AKTIVITETSPENGER
     override fun innsendingId(): String = søknadId
     override fun vedlegg(): List<URL> = mutableListOf()

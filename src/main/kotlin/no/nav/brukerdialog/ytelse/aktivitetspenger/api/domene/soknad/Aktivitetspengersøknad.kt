@@ -6,10 +6,12 @@ import jakarta.validation.constraints.AssertTrue
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.util.*
 
 data class Aktivitetspengersøknad(
     @field:Schema(hidden = true)
-    val søknadId: String = java.util.UUID.randomUUID().toString(),
+    val søknadId: String = UUID.randomUUID().toString(),
+    val forutgåendeMedlemskap: ForutgåendeMedlemskap,
     val språk: String,
     @field:Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),

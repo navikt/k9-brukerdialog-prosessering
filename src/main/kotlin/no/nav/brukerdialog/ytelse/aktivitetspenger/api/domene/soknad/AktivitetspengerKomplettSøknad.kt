@@ -8,6 +8,7 @@ import java.time.ZonedDateTime
 
 data class AktivitetspengerKomplettSøknad(
     val søknadId: String,
+    val forutgåendeMedlemskap: ForutgåendeMedlemskap,
     val søker: Søker,
     val språk: String,
     val startdato: LocalDate,
