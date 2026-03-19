@@ -171,8 +171,7 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
                   "2023-01-02/2023-01-03": {
                     "land":"US"
                   }
-                }, 
-                "perioderSomSkalSlettes": {}
+                }
               }
             },
             "journalposter": [],
