@@ -169,7 +169,7 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
               "forutgåendeBosteder": {
                 "perioder": {
                   "2023-01-02/2023-01-03": {
-                    "land":"US"
+                    "land":"JPN"
                   }
                 }
               }
