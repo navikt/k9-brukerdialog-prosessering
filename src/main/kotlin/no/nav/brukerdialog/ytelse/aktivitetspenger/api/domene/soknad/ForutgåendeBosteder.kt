@@ -10,7 +10,7 @@ import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.Bosteder
 import java.time.LocalDate
 import no.nav.k9.søknad.felles.type.Periode as K9Periode
 
-data class ForutgåendeMedlemskap(
+data class ForutgåendeBosteder(
     val harBoddIUtlandetSiste5År: Boolean,
     val utenlandsoppholdSiste5År: List<Bosted> = listOf(),
 ) {

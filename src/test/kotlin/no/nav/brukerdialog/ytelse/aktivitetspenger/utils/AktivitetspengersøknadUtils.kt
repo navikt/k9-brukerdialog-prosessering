@@ -26,7 +26,7 @@ object AktivitetspengersøknadUtils {
     ): AktivitetspengersøknadMottatt {
         val startdato = LocalDate.parse("2022-01-01")
 
-        val forutgåendeMedlemskap = ForutgåendeMedlemskap(
+        val forutgåendeBosteder = ForutgåendeBosteder(
             true,
             listOf(
                 Bosted(
@@ -40,7 +40,7 @@ object AktivitetspengersøknadUtils {
         return AktivitetspengersøknadMottatt(
             språk = "nb",
             søknadId = søknadId,
-            forutgåendeMedlemskap = forutgåendeMedlemskap,
+            forutgåendeBosteder = forutgåendeBosteder,
             mottatt = mottatt,
             søker = Søker(
                 aktørId = "123456",
@@ -62,7 +62,7 @@ object AktivitetspengersøknadUtils {
                 kontonummerFraRegister = "12345678901",
                 kontonummerErRiktig = true,
             ),
-            k9Format = gyldigK9Format(søknadId, mottatt, startdato, forutgåendeMedlemskap.tilK9Bosteder()),
+            k9Format = gyldigK9Format(søknadId, mottatt, startdato, forutgåendeBosteder.tilK9Bosteder()),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
         )
@@ -76,7 +76,7 @@ object AktivitetspengersøknadUtils {
     ): k9FormatSøknad {
         val ytelse = Aktivitetspenger()
             .medSøknadsperiode(Periode(fraOgMed, fraOgMed.plusMonths(12)))
-            .medForutgåendeMedlemskap(bosteder)
+            .medForutgåendeBosteder(bosteder)
         val søknad = k9FormatSøknad(
             SøknadId(søknadId),
             Versjon("1.0.0"),

@@ -21,7 +21,7 @@ object SøknadUtils {
         ),
         harForståttRettigheterOgPlikter = true,
         harBekreftetOpplysninger = true,
-        forutgåendeMedlemskap = ForutgåendeMedlemskap(true,
+        forutgåendeBosteder = ForutgåendeBosteder(true,
             listOf(
                 Bosted(
                     fraOgMed = LocalDate.of(2023, 1, 2),

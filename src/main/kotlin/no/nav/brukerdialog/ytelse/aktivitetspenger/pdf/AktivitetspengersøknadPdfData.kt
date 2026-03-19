@@ -9,7 +9,7 @@ import no.nav.brukerdialog.utils.DateUtils.somNorskDag
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Barn
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Bosted
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.ForutgåendeMedlemskap
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.ForutgåendeBosteder
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.KontonummerInfo
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.domene.AktivitetspengersøknadMottatt
 import no.nav.k9.søknad.felles.type.Språk
@@ -26,7 +26,7 @@ class AktivitetspengersøknadPdfData(private val søknad: Aktivitetspengersøkna
         "søknadMottatt" to DATE_TIME_FORMATTER.format(søknad.mottatt),
         "startdato" to søknad.startdato?.let { DATE_FORMATTER.format(it) },
         "søker" to søknad.søker.somMap(),
-        "forutgåendeMedlemskap" to søknad.forutgåendeMedlemskap.somMap(),
+        "forutgåendeBosteder" to søknad.forutgåendeBosteder.somMap(),
         "barn" to mapOf(
             "barnErRiktig" to søknad.barnErRiktig,
             "folkeregistrerteBarn" to if (søknad.barn.isNotEmpty()) {
@@ -53,7 +53,7 @@ class AktivitetspengersøknadPdfData(private val søknad: Aktivitetspengersøkna
         "navn" to navn
     )
 
-    private fun ForutgåendeMedlemskap.somMap() = mapOf(
+    private fun ForutgåendeBosteder.somMap() = mapOf(
         "har_bodd_i_utlandet_siste_5_år" to harBoddIUtlandetSiste5År,
         "utenlandsopphold_siste_5_år" to utenlandsoppholdSiste5År.map { it.somMap() },
     )

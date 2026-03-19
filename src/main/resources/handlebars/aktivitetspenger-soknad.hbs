@@ -35,12 +35,12 @@
     </section>
 
     <section id="medlemskap">
-        <h2>Forutgående medlemskap i folketrygden</h2>
+        <h2>Forutgående bosteder</h2>
         <p class="sporsmalstekst">Har du bodd i utlandet de siste 5 årene?</p>
-        {{# if forutgåendeMedlemskap.har_bodd_i_utlandet_siste_5_år }}
+        {{# if forutgåendeBosteder.har_bodd_i_utlandet_siste_5_år }}
             <p>Ja</p>
             <ul>
-                {{# each forutgåendeMedlemskap.utenlandsopphold_siste_5_år as |opphold|~}}
+                {{# each forutgåendeBosteder.utenlandsopphold_siste_5_år as |opphold|~}}
                     <li>
                         {{opphold.landnavn}} ({{opphold.fraOgMed}} - {{opphold.tilOgMed}})
                     </li>

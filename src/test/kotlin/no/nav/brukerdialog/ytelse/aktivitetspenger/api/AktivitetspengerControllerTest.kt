@@ -104,7 +104,7 @@ class AktivitetspengerControllerTest {
                 ),
                 harForståttRettigheterOgPlikter = false,
                 harBekreftetOpplysninger = false,
-                forutgåendeMedlemskap = ForutgåendeMedlemskap(
+                forutgåendeBosteder = ForutgåendeBosteder(
                     true,
                     listOf(Bosted(
                         LocalDate.now(),
