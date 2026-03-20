@@ -69,7 +69,6 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
     private fun Tilsynsordning.somMap(): Map<String, Any?> {
         val enkeltdager = perioder.flatMap { (periode, tilsynPeriodeInfo) ->
             periode.fraOgMed.datesUntil(periode.tilOgMed.plusDays(1))
-                .filter { it.dayOfWeek !in listOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY) }
                 .map { dato -> Enkeltdag(dato, tilsynPeriodeInfo.etablertTilsynTimerPerDag) }
                 .toList()
         }
