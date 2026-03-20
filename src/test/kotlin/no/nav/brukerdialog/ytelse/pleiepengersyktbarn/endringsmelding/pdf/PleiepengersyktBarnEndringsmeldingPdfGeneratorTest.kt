@@ -18,6 +18,8 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning
 import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.brukerdialog.pdf.PDFGenerator
@@ -216,6 +218,24 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                                     LocalDate.parse("2023-01-02"),
                                     LocalDate.parse("2023-01-06")
                                 ) to LovbestemtFeriePeriodeInfo().medSkalHaFerie(false)
+                            )
+                        )
+                    )
+                    .medTilsynsordning(
+                        Tilsynsordning().medPerioder(
+                            mapOf(
+                                Periode(
+                                    LocalDate.parse("2022-12-26"),
+                                    LocalDate.parse("2022-12-29")
+                                ) to TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(8)),
+                                Periode(
+                                    LocalDate.parse("2023-01-03"),
+                                    LocalDate.parse("2023-01-06")
+                                ) to TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(4)),
+                                Periode(
+                                    LocalDate.parse("2023-01-23"),
+                                    LocalDate.parse("2023-01-23")
+                                ) to TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(6))
                             )
                         )
                     )
