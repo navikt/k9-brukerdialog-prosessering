@@ -116,16 +116,30 @@
     {{#if omsorgstilbud}}
         <section id="omsorgstilbud">
             <h2>Omsorgstilbud</h2>
-            <p><b>Tid barnet er i omsorgstilbud:</b></p>
-            <ul>
-            {{#each omsorgstilbud as |tilbud|~}}
-                {{#if tilbud.enkeltdag }}
-                    <li>{{tilbud.enkeltdag.fraOgMedDag}} {{tilbud.enkeltdag.fraOgMed}}: {{tilbud.tilsynPeriodeInfo.etablertTilsynTimerPerDag}}</li>
-                {{else}}
-                    <li>{{tilbud.periode.fraOgMedDag}} {{tilbud.periode.fraOgMed}} - {{tilbud.periode.tilOgMedDag}} {{tilbud.periode.tilOgMed}}: {{tilbud.tilsynPeriodeInfo.etablertTilsynTimerPerDag}}</li>
-                {{/if}}
-            {{/each}}
-            </ul>
+            {{#if omsorgstilbud.enkeltdagerPerMnd}}
+                <p><b>Tid barnet er i omsorgstilbud:</b></p>
+                <ul class="ul-no-indent">
+                    {{#each omsorgstilbud.enkeltdagerPerMnd as |enkeltdagerPerMnd|~}}
+                        <li>
+                            <p><b>{{enkeltdagerPerMnd.måned}} {{enkeltdagerPerMnd.år}}</b></p>
+                            <ul class="ul-no-indent">
+                                {{#each enkeltdagerPerMnd.enkeltdagerPerUke as |enkeltdagerPerUke|~}}
+                                    <li>
+                                        <p>Uke {{enkeltdagerPerUke.uke}}</p>
+                                        <ul>
+                                            {{#each enkeltdagerPerUke.dager as |enkeltdag|~}}
+                                                <li>
+                                                    <p>{{enkeltdag.dato}}: {{enkeltdag.tid}}</p>
+                                                </li>
+                                            {{/each}}
+                                        </ul>
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{/if}}
         </section>
     {{/if}}
 
