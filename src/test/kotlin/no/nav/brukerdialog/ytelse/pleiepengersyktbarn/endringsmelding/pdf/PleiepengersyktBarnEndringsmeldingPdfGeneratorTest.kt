@@ -225,8 +225,12 @@ class PleiepengersyktBarnEndringsmeldingPdfGeneratorTest {
                         Tilsynsordning().medPerioder(
                             mapOf(
                                 Periode(
-                                    LocalDate.parse("2022-12-26"),
+                                    LocalDate.parse("2022-12-28"),
                                     LocalDate.parse("2022-12-29")
+                                ) to TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(8)),
+                                Periode(
+                                    LocalDate.parse("2022-12-26"),
+                                    LocalDate.parse("2022-12-27")
                                 ) to TilsynPeriodeInfo().medEtablertTilsynTimerPerDag(Duration.ofHours(8)),
                                 Periode(
                                     LocalDate.parse("2023-01-03"),
