@@ -28,6 +28,7 @@ spec:
     inbound:
       rules:
         - application: aktivitetspenger-soknad
+        - application: aktivitetspenger-innsyn
         - application: omsorgspengesoknad
         - application: ekstra-omsorgsdager-andre-forelder-ikke-tilsyn
         - application: sif-ettersending
