@@ -5,8 +5,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "4.0.3"
 	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("jvm") version "2.3.10"
-	kotlin("plugin.spring") version "2.3.10"
+	kotlin("jvm") version "2.3.20"
+	kotlin("plugin.spring") version "2.3.20"
 }
 
 group = "no.nav"
@@ -31,9 +31,9 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "6.0.3"
+val tokenSupportVersion = "6.0.4"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "12.9.0"
+val k9FormatVersion = "12.9.2"
 val ungDeltakelseOpplyserVersjon = "2.10.0"
 val ungBrukerdialigApiVersjon = "0.1.7"
 val springMockkVersion = "5.0.1"
@@ -45,7 +45,7 @@ val awailitilityKotlinVersion = "4.3.0"
 val wiremockVersion = "3.13.2"
 val orgJsonVersion = "20251224"
 val springdocVersion = "3.0.2"
-val pdfBoxVersion = "3.0.6"
+val pdfBoxVersion = "3.0.7"
 val imageIOVersion = "3.13.1"
 val fpsakTidsserieVersion = "2.7.4"
 val gcpStorageVersion = "2.64.0"
