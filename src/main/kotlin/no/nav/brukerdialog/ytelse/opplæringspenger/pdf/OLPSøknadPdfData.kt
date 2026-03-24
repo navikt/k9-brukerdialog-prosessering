@@ -210,7 +210,7 @@ class OLPSøknadPdfData(private val søknad: OLPMottattSøknad) : PdfData() {
 
     private fun List<Enkeltdag>.grupperPerUke() = groupBy { it.dato.ukeNummer() }
 
-    private fun List<Enkeltdag>.grupperPerMåned() = groupBy { it.dato.month }
+    private fun List<Enkeltdag>.grupperPerMåned() = sortedBy { it.dato }.groupBy { it.dato.month }
 
     fun List<Enkeltdag>.somMapPerMnd(): List<Map<String, Any>> {
         val perMåned: Map<Month, List<Enkeltdag>> = grupperPerMåned()
