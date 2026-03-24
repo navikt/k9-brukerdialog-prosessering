@@ -164,8 +164,11 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
               "norskIdentitetsnummer": "02119970078"
             },
             "ytelse": {
-              "type": "AKTIVITETSPENGER",
-              "søknadsperiode": "2022-01-01/2023-01-01"
+              "forutgåendeBosteder": {
+                "perioder": {}
+              },
+              "søknadsperiode": "2022-01-01/2023-01-01",
+              "type": "AKTIVITETSPENGER"
             },
             "journalposter": [],
             "begrunnelseForInnsending": {
