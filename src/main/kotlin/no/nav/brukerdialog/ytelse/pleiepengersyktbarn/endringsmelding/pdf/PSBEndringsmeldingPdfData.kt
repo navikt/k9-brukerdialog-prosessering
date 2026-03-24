@@ -1,6 +1,18 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.pdf
 
+import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
+import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
+import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
+import no.nav.brukerdialog.common.Ytelse
+import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
+import no.nav.brukerdialog.pdf.PdfData
+import no.nav.brukerdialog.utils.DateUtils.somNorskDag
+import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
+import no.nav.brukerdialog.utils.DateUtils.ukeNummer
+import no.nav.brukerdialog.utils.DurationUtils.somTekst
+import no.nav.brukerdialog.utils.StringUtils.storForbokstav
 import no.nav.k9.søknad.felles.type.Periode
+import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.ytelse.psb.v1.LovbestemtFerie
 import no.nav.k9.søknad.ytelse.psb.v1.NormalArbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
@@ -9,21 +21,11 @@ import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
-import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.TilsynPeriodeInfo
-import no.nav.brukerdialog.common.Constants.DATE_FORMATTER
-import no.nav.brukerdialog.common.Constants.DATE_TIME_FORMATTER
-import no.nav.brukerdialog.common.Constants.OSLO_ZONE_ID
-import no.nav.brukerdialog.common.Ytelse
-import no.nav.brukerdialog.meldinger.endringsmelding.domene.PSBEndringsmeldingMottatt
-import no.nav.brukerdialog.pdf.PdfData
-import no.nav.brukerdialog.utils.DateUtils.somNorskDag
-import no.nav.brukerdialog.utils.DateUtils.ukeNummer
-import no.nav.brukerdialog.utils.DurationUtils.somTekst
-import no.nav.k9.søknad.felles.type.Språk
+import no.nav.k9.søknad.ytelse.psb.v1.tilsyn.Tilsynsordning
 import java.time.DayOfWeek
 import java.time.Duration
+import java.time.LocalDate
 import java.time.ZoneOffset.UTC
-import java.time.temporal.WeekFields
 
 class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingMottatt) : PdfData() {
     override fun ytelse(): Ytelse = Ytelse.PLEIEPENGER_SYKT_BARN_ENDRINGSMELDING
@@ -43,7 +45,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
             "mottattDato" to DATE_TIME_FORMATTER.format(k9Format.mottattDato),
             "soker" to endringsmelding.søker.somMap(),
             "barn" to ytelse.barn.somMap(endringsmelding.pleietrengendeNavn),
-            "omsorgstilbud" to ytelse.tilsynsordning?.perioder?.somMap(),
+            "omsorgstilbud" to ytelse.tilsynsordning?.somMap(),
             "ukjenteArbeidsforhold" to when {
                 dataBruktTilUtledning?.ukjenteArbeidsforhold?.isNotEmpty() == true -> dataBruktTilUtledning.ukjenteArbeidsforhold.somMap()
                 else -> null
@@ -64,18 +66,49 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
     }
 
     @JvmName("somMapPeriodeTilsynPeriodeInfo")
-    private fun MutableMap<Periode, TilsynPeriodeInfo>.somMap(): List<Map<String, Any?>> = map { entry ->
-        val erEnkeltdag = entry.key.fraOgMed.isEqual(entry.key.tilOgMed)
-        mapOf(
-            "periode" to if (erEnkeltdag) null else entry.key.somMap(),
-            "enkeltdag" to if (erEnkeltdag) entry.key.somMap() else null,
-            "tilsynPeriodeInfo" to entry.value.somMap()
+    private fun Tilsynsordning.somMap(): Map<String, Any?> {
+        val enkeltdager = perioder.flatMap { (periode, tilsynPeriodeInfo) ->
+            periode.fraOgMed.datesUntil(periode.tilOgMed.plusDays(1))
+                .map { dato -> Enkeltdag(dato, tilsynPeriodeInfo.etablertTilsynTimerPerDag) }
+                .toList()
+        }
+        return mapOf(
+            "enkeltdagerPerMnd" to enkeltdager.takeIf { it.isNotEmpty() }?.somMapPerMnd()
         )
     }
 
-    private fun TilsynPeriodeInfo.somMap(): Map<String, Any?> = mapOf(
-        "etablertTilsynTimerPerDag" to etablertTilsynTimerPerDag.somTekst()
-    )
+    private fun List<Enkeltdag>.somMapPerMnd(): List<Map<String, Any>> {
+        val omsorgsdagerPerMnd = this.groupBy { it.dato.month }
+
+        return omsorgsdagerPerMnd.map {
+            mapOf(
+                "år" to it.value.first().dato.year,
+                "måned" to it.key.somNorskMåned().storForbokstav(),
+                "enkeltdagerPerUke" to it.value.somMapPerUke()
+            )
+        }
+    }
+
+    private fun List<Enkeltdag>.somMapPerUke(): List<Map<String, Any>> {
+        val omsorgsdagerPerUke = this.groupBy { it.dato.ukeNummer() }
+        return omsorgsdagerPerUke.map { it: Map.Entry<Int, List<Enkeltdag>> ->
+            mapOf(
+                "uke" to it.key,
+                "dager" to it.value.somMapEnkeltdag()
+            )
+        }
+    }
+
+    private fun List<Enkeltdag>.somMapEnkeltdag(): List<Map<String, Any?>> {
+        return map {
+            mapOf<String, Any?>(
+                "dato" to DATE_FORMATTER.format(it.dato),
+                "dag" to it.dato.dayOfWeek.somNorskDag(),
+                "tid" to it.tid.somTekst(avkort = false)
+            )
+        }
+    }
+
 
     private fun no.nav.k9.søknad.felles.personopplysninger.Barn.somMap(pleietrengendeNavn: String): Map<String, Any?> =
         mapOf(
@@ -180,4 +213,8 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
 
     private fun Duration.tilTimerPerUke(): Duration = this.multipliedBy(5)
 
+    private data class Enkeltdag(
+        val dato: LocalDate,
+        val tid: Duration
+    )
 }
