@@ -46,7 +46,7 @@
 
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
 
-    "GCP_STORAGE_BUCKET_NAVN": "k9-mellomlagring-prod",
+    "GCP_STORAGE_BUCKET_NAVN": "k9-mellomlagring-prod"
   },
   "slack-channel": "sif-alerts",
   "slack-notify-type": "<!here> | k9-brukerdialog-prosessering | "
