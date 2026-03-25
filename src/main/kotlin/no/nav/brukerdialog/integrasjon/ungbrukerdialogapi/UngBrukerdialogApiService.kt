@@ -3,7 +3,6 @@ package no.nav.brukerdialog.integrasjon.ungbrukerdialogapi
 
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.LøsOppgaveRequest
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
