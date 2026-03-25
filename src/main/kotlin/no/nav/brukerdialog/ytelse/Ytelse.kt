@@ -51,6 +51,7 @@ enum class Ytelse {
                 "opplaringspenger-soknad" -> OPPLARINGSPENGER
                 "ungdomsytelse-deltaker" -> UNGDOMSYTELSE
                 "aktivitetspenger-soknad" -> AKTIVITETSPENGER
+                "aktivitetspenger-innsyn" -> AKTIVITETSPENGER
                 "tokenx-token-generator" -> PLEIEPENGER_SYKT_BARN // Kun i dev
                 else -> throw ValidationErrorResponseException(
                     ValidationProblemDetails(
