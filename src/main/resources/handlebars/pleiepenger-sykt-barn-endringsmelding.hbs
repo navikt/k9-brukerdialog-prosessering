@@ -9,10 +9,10 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Barn" href="#barn"/>
-        <bookmark name="UkjenteArbeidsforhold" href="#ukjenteArbeidsforhold"/>
-        <bookmark name="Arbeidstid" href="#arbeidstid"/>
-        <bookmark name="LovbestemtFerie" href="#lovbestemtFerie"/>
-        <bookmark name="Omsorgstilbud" href="#omsorgstilbud"/>
+        {{#if ukjenteArbeidsforhold}}<bookmark name="UkjenteArbeidsforhold" href="#ukjenteArbeidsforhold"/>{{/if}}
+        {{#if arbeidstid}}<bookmark name="Arbeidstid" href="#arbeidstid"/>{{/if}}
+        {{#if lovbestemtFerie}}<bookmark name="LovbestemtFerie" href="#lovbestemtFerie"/>{{/if}}
+        {{#if omsorgstilbud}}<bookmark name="Omsorgstilbud" href="#omsorgstilbud"/>{{/if}}
         <bookmark name="Samtykke" href="#samtykke"/>
     </bookmarks>
     {{#block 'style-common' }} {{/block}}
