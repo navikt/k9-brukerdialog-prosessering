@@ -1,9 +1,7 @@
 package no.nav.brukerdialog.ytelse.aktivitetspenger.utils
 
 import no.nav.brukerdialog.config.JacksonConfiguration
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Aktivitetspengersøknad
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.HarKontonummer
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.KontonummerInfo
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.*
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
@@ -22,6 +20,16 @@ object SøknadUtils {
             kontonummerErRiktig = true,
         ),
         harForståttRettigheterOgPlikter = true,
-        harBekreftetOpplysninger = true
+        harBekreftetOpplysninger = true,
+        forutgåendeBosteder = ForutgåendeBosteder(true,
+            listOf(
+                Bosted(
+                    fraOgMed = LocalDate.of(2023, 1, 2),
+                    tilOgMed = LocalDate.of(2023, 1, 3),
+                    landkode = "JPN",
+                    landnavn = "Japan"
+                )
+            )
+        ),
     )
 }

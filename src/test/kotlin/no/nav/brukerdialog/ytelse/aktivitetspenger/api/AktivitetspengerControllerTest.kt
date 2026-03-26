@@ -12,9 +12,7 @@ import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Aktivitetspengersøknad
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.HarKontonummer
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.KontonummerInfo
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.*
 import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
@@ -29,6 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import java.time.LocalDate
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -105,6 +104,15 @@ class AktivitetspengerControllerTest {
                 ),
                 harForståttRettigheterOgPlikter = false,
                 harBekreftetOpplysninger = false,
+                forutgåendeBosteder = ForutgåendeBosteder(
+                    true,
+                    listOf(Bosted(
+                        LocalDate.now(),
+                        LocalDate.now(),
+                        landkode = "ÆÆÆ",
+                        landnavn = "Finnes ikke")
+                    )
+                )
             )
         )
         mockMvc.post("/aktivitetspenger/soknad/innsending") {
@@ -127,6 +135,12 @@ class AktivitetspengerControllerTest {
                           "status": 400,
                           "detail": "Forespørselen inneholder valideringsfeil",
                           "violations": [
+                            {
+                              "invalidValue": "ÆÆÆ",
+                              "parameterName": "aktivitetspengersøknad.forutgåendeBosteder.utenlandsoppholdSiste5År[0].landkode",
+                              "parameterType": "ENTITY",
+                              "reason": "ÆÆÆ er ikke en gyldig ISO 3166-1 alpha-3 kode"
+                            },
                             {
                               "invalidValue": false,
                               "parameterName": "aktivitetspengersøknad.harForståttRettigheterOgPlikter",

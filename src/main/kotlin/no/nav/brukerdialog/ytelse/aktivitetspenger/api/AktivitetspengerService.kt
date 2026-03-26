@@ -32,6 +32,7 @@ class AktivitetspengerService(
 
         val aktivitetspengersøknadInnsending = AktivitetspengersøknadInnsending(
             søknadId = søknad.søknadId,
+            forutgåendeBosteder = søknad.forutgåendeBosteder,
             språk = søknad.språk,
             mottatt = søknad.mottatt,
             startdato = søknad.startdato,

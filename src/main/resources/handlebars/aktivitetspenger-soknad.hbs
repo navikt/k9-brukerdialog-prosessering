@@ -11,6 +11,7 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Startdato" href="#startdato"/>
+        <bookmark name="Medlemskap" href="#medlemskap"/>
         <bookmark name="Kontonummer" href="#kontonummer"/>
         <bookmark name="Barn" href="#barn"/>
         <bookmark name="Samtykke" href="#samtykke"/>
@@ -32,6 +33,24 @@
         <h2>Søker aktivitetspenger</h2>
         <p><strong>Fra og med:</strong> {{startdato}}</p>
     </section>
+
+    <section id="medlemskap">
+        <h2>Forutgående bosteder</h2>
+        <p class="sporsmalstekst">Har du bodd i utlandet de siste 5 årene?</p>
+        {{# if forutgåendeBosteder.har_bodd_i_utlandet_siste_5_år }}
+            <p>Ja</p>
+            <ul>
+                {{# each forutgåendeBosteder.utenlandsopphold_siste_5_år as |opphold|~}}
+                    <li>
+                        {{opphold.landnavn}} ({{opphold.fraOgMed}} - {{opphold.tilOgMed}})
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p>Nei</p>{{/if}}
+        <hr/>
+    </section>
+
 
     <section id="kontonummer">
         <h2>Kontonummer for utbetaling</h2>
