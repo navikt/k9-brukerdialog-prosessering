@@ -81,9 +81,9 @@ class UngdomsytelseService(
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
 
         innsendingService.registrer(ungdomsytelsesøknadInnsending, metadata)
-        val deltakelseKomposittDTO =
+        val deltakelseDTO =
             ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(deltakelseId = UUID.fromString(søknad.deltakelseId))
-        if (deltakelseKomposittDTO.deltakelse.søktTidspunkt == null) {
+        if (deltakelseDTO.søktTidspunkt == null) {
             throw ErrorResponseException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 ProblemDetail.forStatusAndDetail(

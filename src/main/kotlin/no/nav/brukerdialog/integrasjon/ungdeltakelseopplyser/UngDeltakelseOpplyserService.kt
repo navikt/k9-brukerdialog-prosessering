@@ -1,7 +1,7 @@
 package no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser
 
 
-import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseKomposittDTO
+import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -48,13 +48,13 @@ class UngDeltakelseOpplyserService(
         private val markerDeltakelseSøktFeil = IllegalStateException("Feilet med å markere deltakelse som søkt.")
     }
 
-    fun markerDeltakelseSomSøkt(deltakelseId: UUID): DeltakelseKomposittDTO {
+    fun markerDeltakelseSomSøkt(deltakelseId: UUID): DeltakelseDTO {
         logger.info("Markerer deltakelse som søkt.")
         val response = ungDeltakelseOpplyserClient.exchange(
             markerDeltakelseSomSøktUrl,
             HttpMethod.PUT,
             null,
-            object : ParameterizedTypeReference<DeltakelseKomposittDTO>() {},
+            object : ParameterizedTypeReference<DeltakelseDTO>() {},
             deltakelseId
         )
 
@@ -71,19 +71,19 @@ class UngDeltakelseOpplyserService(
     }
 
     @Recover
-    private fun recoverMarkerDeltakelseSomSøkt(error: HttpServerErrorException): DeltakelseKomposittDTO {
+    private fun recoverMarkerDeltakelseSomSøkt(error: HttpServerErrorException): DeltakelseDTO {
         logger.error("Error response = '{}' fra '{}'", error.responseBodyAsString, markerDeltakelseSomSøktUrl)
         throw markerDeltakelseSøktFeil
     }
 
     @Recover
-    private fun recoverMarkerDeltakelseSomSøkt(error: HttpClientErrorException): DeltakelseKomposittDTO {
+    private fun recoverMarkerDeltakelseSomSøkt(error: HttpClientErrorException): DeltakelseDTO {
         logger.error("Error response = '{}' fra '{}'", error.responseBodyAsString, markerDeltakelseSomSøktUrl)
         throw markerDeltakelseSøktFeil
     }
 
     @Recover
-    private fun recoverMarkerDeltakelseSomSøkt(error: ResourceAccessException): DeltakelseKomposittDTO {
+    private fun recoverMarkerDeltakelseSomSøkt(error: ResourceAccessException): DeltakelseDTO {
         logger.error("{}", error.message)
         throw markerDeltakelseSøktFeil
     }
