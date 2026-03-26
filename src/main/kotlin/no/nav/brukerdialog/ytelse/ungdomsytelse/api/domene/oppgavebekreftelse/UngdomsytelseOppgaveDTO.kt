@@ -3,6 +3,11 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretperiode.EndretPeriodeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretsluttdato.EndretSluttdatoDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretstartdato.EndretStartdatoDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.KontrollerRegisterinntektOppgavetypeDataDto
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretPeriodeDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretSluttdatoDataDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoDataDTO
@@ -17,9 +22,9 @@ data class UngdomsytelseOppgaveDTO(
     @field:Valid val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
 ) {
 
-    fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+    fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettUngdomsytelseOppgaveDTO {
         return when (val oppgavetypeData = oppgaveDTO.oppgavetypeData) {
-            is EndretStartdatoDataDTO -> {
+            is EndretStartdatoDataDto -> {
                 return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
                     nyStartdato = oppgavetypeData.nyStartdato,
@@ -27,7 +32,7 @@ data class UngdomsytelseOppgaveDTO(
                 )
             }
 
-            is EndretSluttdatoDataDTO -> {
+            is EndretSluttdatoDataDto -> {
                 return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
                     nySluttdato = oppgavetypeData.nySluttdato,
@@ -35,7 +40,7 @@ data class UngdomsytelseOppgaveDTO(
                 )
             }
 
-            is EndretPeriodeDataDTO -> {
+            is EndretPeriodeDataDto -> {
                 return KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
                     nyPeriode = oppgavetypeData.nyPeriode,
@@ -43,7 +48,7 @@ data class UngdomsytelseOppgaveDTO(
                 )
             }
 
-            is KontrollerRegisterinntektOppgavetypeDataDTO -> {
+            is KontrollerRegisterinntektOppgavetypeDataDto -> {
                 KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
                     oppgaveReferanse = oppgaveReferanse,
                     fraOgMed = oppgavetypeData.fraOgMed,

@@ -8,9 +8,9 @@ import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretPeriodeBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretSluttdatoBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretStartdatoBekreftelse
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.OppgaveDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.PeriodeDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretperiode.PeriodeDTO
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.RegisterinntektDTO
 import java.time.LocalDate
 import java.util.*
 
@@ -31,7 +31,7 @@ sealed class KomplettUngdomsytelseOppgaveDTO(
 ) {
     abstract fun somK9Format(): Bekreftelse
     abstract fun dokumentTittelSuffix(): String
-    abstract fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO
+    abstract fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettUngdomsytelseOppgaveDTO
 }
 
 data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
@@ -56,7 +56,7 @@ data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
 
     override fun dokumentTittelSuffix(): String = "endret startdato"
 
-    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+    override fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
             nyStartdato = nyStartdato,
@@ -87,7 +87,7 @@ data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
 
     override fun dokumentTittelSuffix(): String = "endret sluttdato"
 
-    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+    override fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
             nySluttdato = nySluttdato,
@@ -105,7 +105,7 @@ data class KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
         val endretPeriodeBekreftelse =
             EndretPeriodeBekreftelse(
                 UUID.fromString(oppgaveReferanse),
-                nyPeriode?.let { Periode(nyPeriode.fom, nyPeriode.tom) },
+                nyPeriode?.let { Periode(nyPeriode.fomDato, nyPeriode.tomDato) },
                 uttalelse.harUttalelse
             )
 
@@ -118,7 +118,7 @@ data class KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
 
     override fun dokumentTittelSuffix(): String = "endret periode"
 
-    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+    override fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettUngdomsytelseOppgaveDTO {
         return KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
             nyPeriode = nyPeriode,
@@ -150,7 +150,7 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
 
     override fun dokumentTittelSuffix(): String = "kontroll av lønn"
 
-    override fun somKomplettOppgave(oppgaveDTO: OppgaveDTO): KomplettUngdomsytelseOppgaveDTO {
+    override fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettUngdomsytelseOppgaveDTO {
         return KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
             oppgaveReferanse = oppgaveReferanse,
             fraOgMed = fraOgMed,

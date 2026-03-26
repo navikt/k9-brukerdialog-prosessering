@@ -13,9 +13,9 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.*
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.domene.UngdomsytelseOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.PeriodeDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.registerinntekt.YtelseType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretperiode.PeriodeDTO
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.RegisterinntektDTO
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.YtelseType
 import java.math.BigDecimal
 
 class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMottatt: UngdomsytelseOppgavebekreftelseMottatt) :
@@ -80,14 +80,14 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     private fun lagSpørsmålEndretPeriode(nyPeriode: PeriodeDTO?): String = nyPeriode?.let { "Har du tilbakemelding på at perioden din endres til " + lagPeriodeString(nyPeriode) + "?" } ?: "Har du tilbakemelding på at hele perioden din fjernes fra start?"
 
     private fun lagPeriodeString(nyPeriode: PeriodeDTO): String =
-        DATE_FORMATTER.format(nyPeriode.fom) + " - " +
-                (nyPeriode.tom?.let { DATE_FORMATTER.format(it) } ?: "ingen sluttdato")
+        DATE_FORMATTER.format(nyPeriode.fomDato) + " - " +
+                (nyPeriode.tomDato?.let { DATE_FORMATTER.format(it) } ?: "ingen sluttdato")
 
     private fun RegisterinntektDTO.somMap() = mapOf(
         "arbeidOgFrilansInntekter" to this.arbeidOgFrilansInntekter.map {
             mapOf(
                 "inntekt" to BigDecimal.valueOf(it.inntekt.toLong()).formaterSomValuta(),
-                "arbeidsgiver" to it.arbeidsgiver,
+                "arbeidsgiver" to it.arbeidsgiverIdentifikator,
                 "navn" to it.arbeidsgiverNavn
             )
         },
@@ -100,12 +100,14 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
     )
 
     private fun YtelseType.tekst() = when (this) {
-        YtelseType.PLEIEPENGER_SYKT_BARN -> "Pleiepenger sykt barn"
-        YtelseType.PLEIEPENGER_LIVETS_SLUTTFASE -> "Pleiepenger i livets sluttfase"
         YtelseType.PLEIEPENGER -> "Pleiepenger"
         YtelseType.OMSORGSPENGER -> "Omsorgspenger"
-        YtelseType.OPPLAERINGSPENGER -> "Opplæringspenger"
+        YtelseType.OPPLÆRINGSPENGER -> "Opplæringspenger"
         YtelseType.SYKEPENGER -> "Sykepenger"
+        YtelseType.DAGPENGER -> "Dagpenger"
+        YtelseType.FORELDREPENGER -> "Foreldrepenger"
+        YtelseType.AAP -> "Arbeidsavklaringspenger"
+        YtelseType.ANNET -> "Annet"
     }
 
     private fun UngdomsytelseOppgaveUttalelseDTO.somMap() = mapOf(

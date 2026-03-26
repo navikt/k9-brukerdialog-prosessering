@@ -35,6 +35,7 @@ val tokenSupportVersion = "6.0.4"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "12.9.2"
 val ungDeltakelseOpplyserVersjon = "2.10.0"
+val ungBrukerdialigApiVersjon = "0.1.7"
 val springMockkVersion = "5.0.1"
 val logstashLogbackEncoderVersion = "9.0"
 val openhtmltopdfVersion = "1.1.4"
@@ -67,6 +68,9 @@ dependencies {
 
 	// Ung-deltakelseopplyser kontrakt
 	implementation("no.nav.ung.deltakelseopplyser:kontrakt:$ungDeltakelseOpplyserVersjon")
+
+    // Ung-brukerdialog-api kontrakt
+    implementation("no.nav.ung.brukerdialog:kontrakt:${ungBrukerdialigApiVersjon}")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")

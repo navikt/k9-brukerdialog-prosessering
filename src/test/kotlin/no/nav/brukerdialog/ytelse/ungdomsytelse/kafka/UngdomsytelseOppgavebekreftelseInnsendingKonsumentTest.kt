@@ -17,8 +17,8 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Un
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.EndretStartdatoDataDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretstartdato.EndretStartdatoDataDto
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
-import java.net.URI
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
@@ -48,10 +47,10 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
         mockLagreDokument()
         mockJournalføring()
         mockHentingAvOppgave(
-            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
-            oppgavetypeData = EndretStartdatoDataDTO(
-                nyStartdato = LocalDate.now(),
-                forrigeStartdato = LocalDate.now().minusMonths(1)
+            oppgavetype = OppgaveType.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoDataDto(
+                LocalDate.now(),
+                LocalDate.now().minusMonths(1)
             )
         )
         mockMarkerOppgaveSomLøst()
