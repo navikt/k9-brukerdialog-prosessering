@@ -68,6 +68,7 @@ Applikasjonen kommuniserer med:
 - k9-sak-innsyn-api (innsyn i sak)
 - k9-selvbetjening-oppslag (oppslagstjeneste for personopplysninger og arbeidsforhold)
 - ung-deltakelse-opplyser (deltakelse i ungdomsprogramytelsen)
+- ung-brukerdialog-api (oppdatere status på oppgaver og varsler)
 - clamav (viruskontroll av opplastede dokumenter)
 - dokarkiv (journalføring av dokumenter)
 

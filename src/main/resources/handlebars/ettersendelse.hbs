@@ -10,7 +10,7 @@
           content="{{tittel}} mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
     <bookmarks>
         <bookmark name="Søker" href="#søker" />
-        <bookmark name="Barn" href="#barn"/>
+        {{#if pleietrengende}}<bookmark name="Barn" href="#barn"/>{{/if}}
         <bookmark name="Ettersending" href="#ettersending" />
         <bookmark name="Dokumenter" href="#dokumenter" />
         <bookmark name="Samtykke" href="#samtykke" />

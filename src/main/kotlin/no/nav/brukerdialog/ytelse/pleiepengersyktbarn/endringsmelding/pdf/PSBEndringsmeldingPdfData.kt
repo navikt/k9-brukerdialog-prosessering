@@ -78,7 +78,7 @@ class PSBEndringsmeldingPdfData(private val endringsmelding: PSBEndringsmeldingM
     }
 
     private fun List<Enkeltdag>.somMapPerMnd(): List<Map<String, Any>> {
-        val omsorgsdagerPerMnd = this.groupBy { it.dato.month }
+        val omsorgsdagerPerMnd = this.sortedBy { it.dato }.groupBy { it.dato.month }
 
         return omsorgsdagerPerMnd.map {
             mapOf(

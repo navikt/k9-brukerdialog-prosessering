@@ -15,8 +15,8 @@ import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.soknad.UngdomsytelsesøknadTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelsesøknadUtils
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.Oppgavetype
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.SøkYtelseOppgavetypeDataDTO
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.søkytelse.SøkYtelseOppgavetypeDataDto
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
-import java.net.URI
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -48,9 +47,9 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
         val søknad = SøknadUtils.defaultSøknad.copy(oppgaveReferanse = oppgaveReferanse)
 
         mockHentingAvOppgave(
-            oppgavetype = Oppgavetype.SØK_YTELSE,
-            oppgavetypeData = SøkYtelseOppgavetypeDataDTO(
-                fomDato = søknad.startdato,
+            oppgavetype = OppgaveType.SØK_YTELSE,
+            oppgavetypeData = SøkYtelseOppgavetypeDataDto(
+                søknad.startdato,
             )
         )
         mockMarkerDeltakeleSomSøkt()
@@ -100,7 +99,8 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
         val deltakelseId = UUID.randomUUID()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
-        val søknadMottatt = UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = søknadId, deltakelseId = deltakelseId, mottatt = mottatt)
+        val søknadMottatt =
+            UngdomsytelsesøknadUtils.gyldigSøknad(søknadId = søknadId, deltakelseId = deltakelseId, mottatt = mottatt)
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
         val topicEntry = TopicEntry(metadata, søknadMottatt)
@@ -127,12 +127,17 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
             ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, deltakelseId.toString(), mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(
+            preprosessertSøknadSomJson(søknadId, deltakelseId.toString(), mottattString),
+            preprosessertSøknadJson,
+            true
+        )
 
         coVerify(exactly = 1, timeout = 60 * 1000) {
             dokumentService.slettDokumenter(any(), any())
         }
     }
+
     @Language("JSON")
     private fun preprosessertSøknadSomJson(søknadId: String, deltakelseId: String, mottatt: String) = """
         {
@@ -156,7 +161,7 @@ class UngdomsytelsesøknadKonsumentTest : AbstractIntegrationTest() {
           "kontonummerInfo": {
             "harKontonummer": "JA",
             "kontonummerFraRegister": "12345678901",
-            "kontonummerErRiktig": true,
+            "kontonummerErRiktig": true
           },
           "språk": "nb",
           "harForståttRettigheterOgPlikter": true,

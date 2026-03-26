@@ -8,11 +8,11 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.ArbeidOgFrilansRegisterInntektDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.PeriodeDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.RegisterinntektDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.YtelseRegisterInntektDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.registerinntekt.YtelseType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretperiode.PeriodeDTO
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.ArbeidOgFrilansRegisterInntektDTO
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.RegisterinntektDTO
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.YtelseRegisterInntektDTO
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.YtelseType
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
@@ -97,26 +97,26 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                             fraOgMed = LocalDate.parse("2025-06-01"),
                             tilOgMed = LocalDate.parse("2025-12-01"),
                             registerinntekt = RegisterinntektDTO(
-                                arbeidOgFrilansInntekter = listOf(
+                                listOf(
                                     ArbeidOgFrilansRegisterInntektDTO(
-                                        inntekt = 1000,
-                                        arbeidsgiver = "123456789",
-                                        arbeidsgiverNavn = "Arbeidsgiver 1"
+                                        1000,
+                                        "123456789",
+                                        "Arbeidsgiver 1"
                                     ),
                                     ArbeidOgFrilansRegisterInntektDTO(
-                                        inntekt = 2000,
-                                        arbeidsgiver = "987654321",
-                                        arbeidsgiverNavn = "Arbeidsgiver 2"
+                                        2000,
+                                         "987654321",
+                                        "Arbeidsgiver 2"
                                     )
                                 ),
-                                ytelseInntekter = listOf(
+                                listOf(
                                     YtelseRegisterInntektDTO(
-                                        inntekt = 3000,
-                                        ytelsetype = YtelseType.PLEIEPENGER_SYKT_BARN
+                                        3000,
+                                        YtelseType.PLEIEPENGER
                                     ),
                                     YtelseRegisterInntektDTO(
-                                        inntekt = 4000,
-                                        ytelsetype = YtelseType.OMSORGSPENGER
+                                        4000,
+                                        YtelseType.OMSORGSPENGER
                                     )
                                 )
                             ),
@@ -137,26 +137,26 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                             fraOgMed = LocalDate.parse("2025-06-01"),
                             tilOgMed = LocalDate.parse("2025-12-01"),
                             registerinntekt = RegisterinntektDTO(
-                                arbeidOgFrilansInntekter = listOf(
+                                listOf(
                                     ArbeidOgFrilansRegisterInntektDTO(
-                                        inntekt = 1000,
-                                        arbeidsgiver = "123456789",
-                                        arbeidsgiverNavn = "Arbeidsgiver 1"
+                                        1000,
+                                        "123456789",
+                                        "Arbeidsgiver 1"
                                     ),
                                     ArbeidOgFrilansRegisterInntektDTO(
-                                        inntekt = 2000,
-                                        arbeidsgiver = "987654321",
-                                        arbeidsgiverNavn = "Arbeidsgiver 2"
+                                        2000,
+                                        "987654321",
+                                        "Arbeidsgiver 2"
                                     )
                                 ),
-                                ytelseInntekter = listOf(
+                                listOf(
                                     YtelseRegisterInntektDTO(
-                                        inntekt = 3000,
-                                        ytelsetype = YtelseType.PLEIEPENGER_SYKT_BARN
+                                        3000,
+                                        YtelseType.PLEIEPENGER
                                     ),
                                     YtelseRegisterInntektDTO(
-                                        inntekt = 4000,
-                                        ytelsetype = YtelseType.OMSORGSPENGER
+                                        4000,
+                                        YtelseType.OMSORGSPENGER
                                     )
                                 )
                             ),
@@ -210,8 +210,8 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 harUttalelse = false,
                             ),
                             nyPeriode = PeriodeDTO(
-                                fom = LocalDate.parse("2025-01-01"),
-                                tom = LocalDate.parse("2025-12-31")
+                                LocalDate.parse("2025-01-01"),
+                                LocalDate.parse("2025-12-31")
                             )
                         )
                     ).pdfData()
@@ -229,8 +229,8 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 uttalelseFraDeltaker = "Jeg ønsker en annen periode"
                             ),
                             nyPeriode = PeriodeDTO(
-                                fom = LocalDate.parse("2025-01-01"),
-                                tom = LocalDate.parse("2025-12-31")
+                                LocalDate.parse("2025-01-01"),
+                                LocalDate.parse("2025-12-31")
                             )
                         )
                     ).pdfData()
@@ -247,8 +247,8 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 harUttalelse = false,
                             ),
                             nyPeriode = PeriodeDTO(
-                                fom = LocalDate.parse("2025-01-01"),
-                                tom = null
+                                LocalDate.parse("2025-01-01"),
+                                null
                             )
                         )
                     ).pdfData()
@@ -266,8 +266,8 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 uttalelseFraDeltaker = "Jeg ønsker en annen periode"
                             ),
                             nyPeriode = PeriodeDTO(
-                                fom = LocalDate.parse("2025-01-01"),
-                                tom = null
+                                LocalDate.parse("2025-01-01"),
+                                null
                             )
                         )
                     ).pdfData()

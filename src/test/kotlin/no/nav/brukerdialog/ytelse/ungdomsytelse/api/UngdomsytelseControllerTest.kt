@@ -8,6 +8,7 @@ import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.integrasjon.ungbrukerdialogapi.UngBrukerdialogApiService
 import no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser.UngDeltakelseOpplyserService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
@@ -21,8 +22,13 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad.Ungdomsytelses
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretstartdato.EndretStartdatoDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.søkytelse.SøkYtelseOppgavetypeDataDto
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.oppgave.felles.*
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseKomposittDTO
 import org.junit.jupiter.api.BeforeEach
@@ -75,6 +81,9 @@ class UngdomsytelseControllerTest {
     private lateinit var metrikkService: MetrikkService
 
     @MockkBean
+    private lateinit var ungBrukerdialogApiService: UngBrukerdialogApiService
+
+    @MockkBean
     private lateinit var ungDeltakelseOpplyserService: UngDeltakelseOpplyserService
 
     @BeforeEach
@@ -89,10 +98,8 @@ class UngdomsytelseControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
         mockHentingAvOppgave(
-            oppgavetype = Oppgavetype.SØK_YTELSE,
-            oppgavetypeData = SøkYtelseOppgavetypeDataDTO(
-                fomDato = LocalDate.now(),
-            )
+            oppgavetype = OppgaveType.SØK_YTELSE,
+            oppgavetypeData = SøkYtelseOppgavetypeDataDto(LocalDate.now())
         )
         mockMarkerDeltakelseSomSøkt()
         mockMarkerOppgaveSomLøst()
@@ -120,11 +127,11 @@ class UngdomsytelseControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
         mockHentingAvOppgave(
-            oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
-            oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
-                fraOgMed = LocalDate.now(),
-                tilOgMed = LocalDate.now(),
-                gjelderDelerAvMåned = true
+            oppgavetype = OppgaveType.RAPPORTER_INNTEKT,
+            oppgavetypeData = InntektsrapporteringOppgavetypeDataDto(
+                LocalDate.now(),
+                LocalDate.now(),
+                true
             )
         )
 
@@ -221,26 +228,11 @@ class UngdomsytelseControllerTest {
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
-        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
-            oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
-            oppgavetypeData = EndretStartdatoDataDTO(
-                nyStartdato = LocalDate.now(),
-                forrigeStartdato = LocalDate.now().minusDays(30)
-            ),
-            status = OppgaveStatus.ULØST,
-            bekreftelse = null,
-            opprettetDato = ZonedDateTime.now(),
-            løstDato = null,
-            åpnetDato = null,
-            lukketDato = null,
-            frist = null
-        )
         mockHentingAvOppgave(
-            oppgavetype = Oppgavetype.BEKREFT_ENDRET_STARTDATO,
-            oppgavetypeData = EndretStartdatoDataDTO(
-                nyStartdato = LocalDate.now(),
-                forrigeStartdato = LocalDate.now().minusDays(30)
+            oppgavetype = OppgaveType.BEKREFT_ENDRET_STARTDATO,
+            oppgavetypeData = EndretStartdatoDataDto(
+                LocalDate.now(),
+                LocalDate.now().minusDays(30)
             )
         )
 
@@ -320,37 +312,33 @@ class UngdomsytelseControllerTest {
             }
     }
 
-    private fun mockHentingAvOppgave(oppgavetype: Oppgavetype, oppgavetypeData: OppgavetypeDataDTO) {
-        every { ungDeltakelseOpplyserService.hentOppgaveForDeltakelse(any()) } returns OppgaveDTO(
-            oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = oppgavetype,
-            oppgavetypeData = oppgavetypeData,
-            status = OppgaveStatus.ULØST,
-            bekreftelse = null,
-            opprettetDato = ZonedDateTime.now(),
-            løstDato = null,
-            åpnetDato = null,
-            lukketDato = null,
-            frist = null
+    private fun mockHentingAvOppgave(oppgavetype: OppgaveType, oppgavetypeData: OppgavetypeDataDto) {
+        every { ungBrukerdialogApiService.hentOppgave(any()) } returns BrukerdialogOppgaveDto(
+            UUID.randomUUID(),
+            oppgavetype,
+            oppgavetypeData,
+            null,
+            no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.ULØST,
+            ZonedDateTime.now(),
+            ZonedDateTime.now(),
+            null
         )
     }
 
     private fun mockMarkerOppgaveSomLøst() {
-        every { ungDeltakelseOpplyserService.markerOppgaveSomLøst(any()) } returns OppgaveDTO(
-            oppgaveReferanse = UUID.randomUUID(),
-            oppgavetype = Oppgavetype.RAPPORTER_INNTEKT,
-            oppgavetypeData = InntektsrapporteringOppgavetypeDataDTO(
-                fraOgMed = LocalDate.now(),
-                tilOgMed = LocalDate.now(),
-                gjelderDelerAvMåned = true
+        every { ungBrukerdialogApiService.markerOppgaveSomLøst(any(), any()) } returns BrukerdialogOppgaveDto(
+            UUID.randomUUID(),
+            OppgaveType.RAPPORTER_INNTEKT,
+            InntektsrapporteringOppgavetypeDataDto(
+                LocalDate.now(),
+                LocalDate.now(),
+                true
             ),
-            status = OppgaveStatus.ULØST,
-            bekreftelse = null,
-            opprettetDato = ZonedDateTime.now(),
-            åpnetDato = null,
-            lukketDato = null,
-            løstDato = null,
-            frist = null
+            null,
+            no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.ULØST,
+            ZonedDateTime.now(),
+            ZonedDateTime.now(),
+            null
         )
     }
 
