@@ -9,7 +9,7 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Barn" href="#barn"/>
-        <bookmark name="Relasjon til barnet" href="#relasjonTilBarnet"/>
+        {{#if barnRelasjon}}<bookmark name="Relasjon til barnet" href="#relasjonTilBarnet"/>{{/if}}
         <bookmark name="Perioder" href="#perioder"/>
         <bookmark name="Utenlandsopphold" href="#utenlandsopphold"/>
         <bookmark name="Arbeidsgivere" href="#arbeidsgivere"/>
@@ -17,9 +17,9 @@
         <bookmark name="Opptjening i utlandet" href="#opptjeningIUtlandet"/>
         <bookmark name="Utenlandsk næring" href="#utenlandskNæring"/>
         <bookmark name="Omsorgstilbud" href="#omsorgstilbud"/>
-        <bookmark name="Verneplikt" href="#verneplikt"/>
-        <bookmark name="Nattevåk" href="#nattevaak"/>
-        <bookmark name="Beredskap" href="#beredskap"/>
+        {{#if hjelper.harVærtEllerErVernepliktigErSatt}}<bookmark name="Verneplikt" href="#verneplikt"/>{{/if}}
+        {{#if nattevaak}}<bookmark name="Nattevåk" href="#nattevaak"/>{{/if}}
+        {{#if beredskap}}<bookmark name="Beredskap" href="#beredskap"/>{{/if}}
         {{#if stønadGodtgjørelse}}<bookmark name="Omsorgsstønad eller fosterhjemsgodtgjørelse" href="#stønadGodtgjørelse"/>{{/if}}
         {{#if fosterhjemgodtgjørelse}}<bookmark name="Fosterhjemgodtgjørelse" href="#fosterhjemgodtgjørelse"/>{{/if}}
         {{#if omsorgsstønad}}<bookmark name="Omsorgsstønad" href="#omsorgsstønad"/>{{/if}}
@@ -41,8 +41,8 @@
     {{> partial/felles/personPartial id="søker" title="Søker" navn=soker.navn fødselsnummer=soker.fødselsnummer }}
     {{> partial/felles/personPartial id="barn" title="Barn" navn=barn.navn fødselsnummer=barn.norskIdentitetsnummer fødselsdato=barn.fødselsdato årsakManglerIdentitetsnummer=barn.årsakManglerIdentitetsnummer }}
 
-    <section id="relasjonTilBarnet">
-        {{#if barnRelasjon}}
+    {{#if barnRelasjon}}
+        <section id="relasjonTilBarnet">
             <h2>Relasjon til barnet</h2>
             <p class="sporsmalstekst">Hvilken relasjon har du til barnet?</p>
             <p>{{barnRelasjon}}</p>
@@ -50,8 +50,8 @@
                 <p class="sporsmalstekst">Din beskrivelse av relasjon og tilsynsrolle for barnet:</p>
                 <p>{{barnRelasjonBeskrivelse}}</p>
             {{/if}}
-        {{/if}}
-    </section>
+        </section>
+    {{/if}}
 
     <section id="perioder">
         <h2>Perioder du søker om pleiepenger</h2>
@@ -204,8 +204,8 @@
 
 
     <section id="frilans">
+        <h2>Frilans</h2>
         {{# if frilans.harInntektSomFrilanser }}
-            <h2>Frilans</h2>
             <p class="sporsmalstekst">Jobber du som frilanser eller mottar du honorarer?</p>
             <p>{{ jaNeiSvar true }}</p><br/>
 
@@ -286,7 +286,6 @@
                 <br/>{{> partial/arbeid/normalArbeidstidPartial normalarbeidstid=frilans.arbeidsforhold.normalarbeidstid}}
             {{/if}}
         {{else}}
-            <h2>Frilans</h2>
             <p>Er ikke frilanser og får ikke honorar søknadsperioden.</p>
             {{#if frilans.arbeidsforhold}}
                 <br/>{{> partial/arbeid/normalArbeidstidPartial normalarbeidstid=frilans.arbeidsforhold.normalarbeidstid fortid=true}}
@@ -295,8 +294,8 @@
     </section>
 
     <section id="selvstendig">
+        <h2>Selvstendig næringsdrivende</h2>
         {{#if selvstendigNæringsdrivende.harInntektSomSelvstendig}}
-            <h2>Selvstendig næringsdrivende</h2>
 
             {{#if selvstendigNæringsdrivende.virksomhet.næringsinntekt}}
                 <p>Næringsinntekt: {{selvstendigNæringsdrivende.virksomhet.næringsinntekt}},-</p>
@@ -369,7 +368,6 @@
                 </ul>
             {{/if}}
         {{else}}
-            <h2>Selvstendig næringsdrivende</h2>
             <p>Har ikke vært selvstending næringsdrivende i perioden det søkes om.</p>
         {{/if}}
     </section>
@@ -453,13 +451,13 @@
         {{/if}}
     </section>
 
-    <section id="verneplikt">
-        {{# if hjelper.harVærtEllerErVernepliktigErSatt}}
+    {{# if hjelper.harVærtEllerErVernepliktigErSatt}}
+        <section id="verneplikt">
             <h2>Verneplikt</h2>
             <p class="sporsmalstekst">Utøvde du verneplikt på tidspunktet du søker pleiepenger fra?</p>
             <p>{{ jaNeiSvar harVærtEllerErVernepliktig }}</p>
-        {{/if}}
-    </section>
+        </section>
+    {{/if}}
 
     <section id="omsorgstilbud">
         <h2>Omsorgstilbud</h2>
@@ -535,8 +533,8 @@
         {{/if}}
     </section>
 
-    <section id="nattevaak">
-        {{# if nattevaak }}
+    {{# if nattevaak }}
+        <section id="nattevaak">
             <h2>Nattevåk</h2>
             <p class="sporsmalstekst">Må du være våken om natten for å pleie barnet, og derfor må være borte fra jobb
                 dagen etter?</p>
@@ -547,11 +545,11 @@
                     <p class="fritekst_textarea">{{fritekst nattevaak.tilleggsinformasjon}}</p>
                 </div>
             {{/if}}
-        {{/if}}
-    </section>
+        </section>
+    {{/if}}
 
-    <section id="beredskap">
-        {{# if beredskap }}
+    {{# if beredskap }}
+        <section id="beredskap">
             <h2>Beredskap</h2>
             <p class="sporsmalstekst">Må du være i beredskap også når barnet er i et omsorgstilbud?</p>
             <p>{{ jaNeiSvar beredskap.i_beredskap }}</p>
@@ -561,8 +559,8 @@
                     <p class="fritekst_textarea">{{fritekst beredskap.tilleggsinformasjon}}</p>
                 </div>
             {{/if}}
-        {{/if}}
-    </section>
+        </section>
+    {{/if}}
 
     <section id="utenlandsopphold">
         <h2>Perioder med utenlandsopphold og ferie</h2>
