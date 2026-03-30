@@ -33,7 +33,7 @@ repositories {
 
 val tokenSupportVersion = "6.0.4"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "12.9.2"
+val k9FormatVersion = "12.9.3"
 val ungDeltakelseOpplyserVersjon = "2.10.0"
 val ungBrukerdialigApiVersjon = "0.2.1"
 val springMockkVersion = "5.0.1"
@@ -50,7 +50,7 @@ val imageIOVersion = "3.13.1"
 val fpsakTidsserieVersion = "2.7.4"
 val gcpStorageVersion = "2.64.0"
 val auth0Version = "4.5.1"
-val tikaVersion = "3.2.3"
+val tikaVersion = "3.3.0"
 val aivenFakeGCSServerVersion = "0.3.0"
 
 dependencies {
