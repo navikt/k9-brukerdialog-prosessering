@@ -17,7 +17,7 @@ data class AktivitetspengerInntektsrapporteringMottatt(
     val mottatt: ZonedDateTime,
     val k9Format: Søknad,
 ) : MottattMelding {
-    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
+    override fun ytelse(): Ytelse = Ytelse.AKTIVITETSPENGER_INNTEKTSRAPPORTERING
 
     override fun søkerFødselsnummer(): String = søker.fødselsnummer
 
