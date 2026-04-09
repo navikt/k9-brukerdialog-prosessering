@@ -8,7 +8,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.OppgittInntektForPeriode
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.inntektsrapportering.OppgittInntektForPeriode
 import no.nav.k9.søknad.Søknad
 import java.time.ZonedDateTime
 import java.util.*
@@ -34,7 +34,7 @@ data class AktivitetspengerInntektsrapporteringPreprosessert(
         k9Format = aktivitetspengerInntektsrapporteringMottatt.k9Format
     )
 
-    override fun ytelse(): Ytelse = Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING
+    override fun ytelse(): Ytelse = Ytelse.AKTIVITETSPENGER_INNTEKTSRAPPORTERING
 
     override fun mottattDato(): ZonedDateTime = mottatt
 

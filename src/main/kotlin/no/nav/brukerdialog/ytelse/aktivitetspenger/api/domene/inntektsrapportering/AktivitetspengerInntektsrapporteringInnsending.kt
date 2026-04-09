@@ -13,9 +13,7 @@ import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.Aktivitetspenger
-import no.nav.k9.søknad.ytelse.ung.v1.UngSøknadstype
-import no.nav.k9.søknad.ytelse.ung.v1.Ungdomsytelse
-import no.nav.k9.søknad.ytelse.ung.v1.UngdomsytelseSøknadValidator
+import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.AktivitetspengerSøknadValidator
 import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt
 import java.net.URL
 import java.time.ZoneOffset
@@ -72,5 +70,5 @@ data class AktivitetspengerInntektsrapporteringInnsending(
     override fun ytelse(): Ytelse = Ytelse.AKTIVITETSPENGER_INNTEKTSRAPPORTERING
     override fun innsendingId(): String = oppgaveReferanse
     override fun vedlegg(): List<URL> = mutableListOf()
-    override fun søknadValidator(): SøknadValidator<Søknad> = UngdomsytelseSøknadValidator()
+    override fun søknadValidator(): SøknadValidator<Søknad> = AktivitetspengerSøknadValidator()
 }

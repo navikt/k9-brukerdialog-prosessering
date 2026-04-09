@@ -6,7 +6,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.aktivitetspenger.pdf.AktivitetspengerInntektsrapporteringPdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.OppgittInntektForPeriode
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.inntektsrapportering.OppgittInntektForPeriode
 import no.nav.k9.søknad.Søknad
 import java.time.ZonedDateTime
 
