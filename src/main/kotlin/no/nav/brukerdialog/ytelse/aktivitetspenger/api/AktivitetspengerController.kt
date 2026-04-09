@@ -6,7 +6,6 @@ import no.nav.brukerdialog.config.Issuers
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.inntektsrapportering.AktivitetspengerInntektsrapportering
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Aktivitetspengersøknad
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngdomsytelseInntektsrapportering
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
 import org.slf4j.Logger
