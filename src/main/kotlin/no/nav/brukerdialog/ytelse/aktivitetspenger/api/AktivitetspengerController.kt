@@ -4,7 +4,9 @@ import jakarta.validation.Valid
 import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.config.Issuers
 import no.nav.brukerdialog.utils.NavHeaders
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.inntektsrapportering.AktivitetspengerInntektsrapportering
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Aktivitetspengersøknad
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.inntektsrapportering.UngdomsytelseInntektsrapportering
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
 import org.slf4j.Logger
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.*
     ProtectedWithClaims(issuer = Issuers.TOKEN_X, claimMap = ["acr=Level4"])
 )
 class AktivitetspengerController(
-    private val aktivitetspengerService: AktivitetspengerService
+    private val aktivitetspengerService: AktivitetspengerService,
 ) {
     private companion object {
         private val logger: Logger = LoggerFactory.getLogger(AktivitetspengerController::class.java)
@@ -32,5 +34,16 @@ class AktivitetspengerController(
     ) = runBlocking {
         aktivitetspengerService.innsendingAktivitetspengersøknad(søknad, gitSha)
     }
+
+
+    @PostMapping("/inntektsrapportering/innsending")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun inntektrapportering(
+        @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
+        @Valid @RequestBody rapportetInntekt: AktivitetspengerInntektsrapportering,
+    ) = runBlocking {
+        aktivitetspengerService.inntektrapportering(rapportetInntekt, gitSha)
+    }
+
 
 }

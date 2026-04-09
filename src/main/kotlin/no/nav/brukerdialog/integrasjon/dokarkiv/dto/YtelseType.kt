@@ -183,10 +183,17 @@ enum class YtelseType(
     ),
 
     AKTIVITETSPENGER_SØKNAD(
-    brevkode = BrevKode(brevKode = "FIXME_AKTIVITETSPENGER_BREVKODE", dokumentKategori = "SOK"),
-    tittel = "Søknad om ungdomsprogramytelse - NAV Aktivitetspenger",
-    tema = Tema.UNGDOMSYTELSE,
-    innsendingstype = Innsendingstype.SØKNAD
+        brevkode = BrevKode(brevKode = "FIXME_AKTIVITETSPENGER_BREVKODE", dokumentKategori = "SOK"),
+        tittel = "Søknad om aktivitetspenger - NAV Aktivitetspenger",
+        tema = Tema.UNGDOMSYTELSE,
+        innsendingstype = Innsendingstype.SØKNAD
+    ),
+
+    AKTIVITETSPENGER_INNTEKTRAPPORTERING(
+        brevkode = BrevKode(brevKode = "FIXME_AVP_INNTEKT_BREVKODE", dokumentKategori = "SOK"),
+        tittel = "Rapportering av inntekt - NAV Aktivitetspenger",
+        tema = Tema.UNGDOMSYTELSE,
+        innsendingstype = Innsendingstype.SØKNAD
     ),
     ;
 
