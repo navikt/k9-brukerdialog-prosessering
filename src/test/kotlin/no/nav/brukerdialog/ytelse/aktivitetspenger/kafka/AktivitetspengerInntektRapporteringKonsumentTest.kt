@@ -11,10 +11,12 @@ import no.nav.brukerdialog.kafka.types.TopicEntry
 import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
 import no.nav.brukerdialog.utils.NavHeaders
+import no.nav.brukerdialog.utils.SøknadUtils
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
-import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration
-import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.AktivitetspengersøknadUtils
-import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.SøknadUtils
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.inntektsrapportering.AktivitetspengerInntektsrapporteringTopologyConfiguration
+import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.InntektrapporteringUtils
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
@@ -22,16 +24,17 @@ import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
 
-class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
+class AktivitetspengerInntektRapporteringKonsumentTest : AbstractIntegrationTest() {
 
-    override val consumerGroupPrefix = "aktivitetspenger-soknad"
+    override val consumerGroupPrefix = "aktivitetspenger-inntektsrapportering"
     override val consumerGroupTopics = listOf(
-        AktivitetspengersøknadTopologyConfiguration.AKTIVITETSPENGER_SØKNAD_MOTTATT_TOPIC,
-        AktivitetspengersøknadTopologyConfiguration.AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC,
-        AktivitetspengersøknadTopologyConfiguration.AKTIVITETSPENGER_SØKNAD_CLEANUP_TOPIC
+        AktivitetspengerInntektsrapporteringTopologyConfiguration.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_MOTTATT_TOPIC,
+        AktivitetspengerInntektsrapporteringTopologyConfiguration.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC,
+        AktivitetspengerInntektsrapporteringTopologyConfiguration.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_CLEANUP_TOPIC
     )
 
     @Test
@@ -40,20 +43,29 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
         mockBarn()
         mockLagreDokument()
         mockJournalføring()
+        mockHentingAvOppgave(
+            oppgavetype = OppgaveType.RAPPORTER_INNTEKT,
+            oppgavetypeData = InntektsrapporteringOppgavetypeDataDto(
+                LocalDate.parse("2025-01-01"),
+                LocalDate.parse("2025-01-31"),
+                false
+            )
+        )
+        mockMarkerOppgaveSomLøst()
 
-        val søknadId = UUID.randomUUID().toString()
-        val søknad = SøknadUtils.defaultSøknad.copy(søknadId = søknadId)
+        val oppgaveReferanse = UUID.randomUUID().toString()
+        val inntektsrapportering =
+            InntektrapporteringUtils.defaultInntektsrapportering.copy(oppgaveReferanse = oppgaveReferanse)
 
         val token = mockOAuth2Server.hentToken()
-
-        mockMvc.post("/aktivitetspenger/soknad/innsending") {
+        mockMvc.post("/aktivitetspenger/inntektsrapportering/innsending") {
             headers {
                 set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
                 setBearerAuth(token.serialize())
             }
             contentType = MediaType.APPLICATION_JSON
             accept = MediaType.APPLICATION_JSON
-            content = JacksonConfiguration.configureObjectMapper().writeValueAsString(søknad)
+            content = JacksonConfiguration.configureObjectMapper().writeValueAsString(inntektsrapportering)
         }.andExpect {
             status {
                 isAccepted()
@@ -66,13 +78,13 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
         }
 
         k9DittnavVarselConsumer.lesMelding(
-            key = søknadId,
+            key = oppgaveReferanse,
             topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC
         ).value().assertDittnavVarsel(
             K9Beskjed(
-                metadata = no.nav.brukerdialog.utils.SøknadUtils.metadata,
-                grupperingsId = søknadId,
-                tekst = "Søknad om aktivitetspenger er mottatt",
+                metadata = SøknadUtils.metadata,
+                grupperingsId = oppgaveReferanse,
+                tekst = "Rapportert inntekt for aktivitetspenger er mottatt",
                 link = null,
                 dagerSynlig = 7,
                 søkerFødselsnummer = søker.fødselsnummer,
@@ -85,12 +97,17 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
     @Test
     fun `Forvent at melding bli prosessert på 5 forsøk etter 4 feil`() {
         val søknadId = UUID.randomUUID().toString()
+        val deltakelseId = UUID.randomUUID()
         val mottattString = "2020-01-01T10:30:15Z"
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
-        val søknadMottatt = AktivitetspengersøknadUtils.gyldigSøknad(søknadId = søknadId, mottatt = mottatt)
+        val inntektsrapportering =
+            InntektrapporteringUtils.gyldigInntektsrapportering(
+                søknadId = søknadId,
+                mottatt = mottatt
+            )
         val correlationId = UUID.randomUUID().toString()
         val metadata = MetaInfo(version = 1, correlationId = correlationId)
-        val topicEntry = TopicEntry(metadata, søknadMottatt)
+        val topicEntry = TopicEntry(metadata, inntektsrapportering)
         val topicEntryJson = objectMapper.writeValueAsString(topicEntry)
 
         coEvery { dokumentService.lagreDokument(any(), any(), any(), any()) }
@@ -104,17 +121,21 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
         producer.leggPåTopic(
             key = søknadId,
             value = topicEntryJson,
-            topic = AktivitetspengersøknadTopologyConfiguration.AKTIVITETSPENGER_SØKNAD_MOTTATT_TOPIC
+            topic = AktivitetspengerInntektsrapporteringTopologyConfiguration.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_MOTTATT_TOPIC
         )
         val lesMelding =
             consumer.lesMelding(
                 key = søknadId,
-                topic = AktivitetspengersøknadTopologyConfiguration.AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC,
+                topic = AktivitetspengerInntektsrapporteringTopologyConfiguration.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC,
                 maxWaitInSeconds = 120
             ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
-        JSONAssert.assertEquals(preprosessertSøknadSomJson(søknadId, mottattString), preprosessertSøknadJson, true)
+        JSONAssert.assertEquals(
+            preprosessertSøknadSomJson(søknadId, deltakelseId.toString(), mottattString),
+            preprosessertSøknadJson,
+            true
+        )
 
         coVerify(exactly = 1, timeout = 60 * 1000) {
             dokumentService.slettDokumenter(any(), any())
@@ -122,7 +143,7 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
     }
 
     @Language("JSON")
-    private fun preprosessertSøknadSomJson(søknadId: String, mottatt: String) = """
+    private fun preprosessertSøknadSomJson(søknadId: String, deltakelseId: String, mottatt: String) = """
         {
           "oppgaveReferanse": "$søknadId",
           "mottatt": "$mottatt",
@@ -134,27 +155,19 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
             "fornavn": "Ola",
             "fødselsnummer": "02119970078"
           },
-          "startdato": "2022-01-01",
-          "barn": [
-            {
-              "navn": "Ola Nordmann"
-            }
-          ],
-          "barnErRiktig": true,
-          "kontonummerInfo": {
-            "harKontonummer": "JA",
-            "kontonummerFraRegister": "12345678901",
-            "kontonummerErRiktig": true
-          },
-          "språk": "nb",
-          "harForståttRettigheterOgPlikter": true,
+          "oppgittInntektForPeriode": {
+                "arbeidstakerOgFrilansInntekt": 6000,
+                "periodeForInntekt": {
+                    "fraOgMed": "2025-01-01",
+                    "tilOgMed": "2025-01-31"
+                }
+            },
           "dokumentId": [
             [
               "123456789",
               "987654321"
             ]
           ],
-          "harBekreftetOpplysninger": true,
           "k9Format": {
             "språk": "nb",
             "kildesystem": "søknadsdialog",
@@ -165,15 +178,18 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
             },
             "ytelse": {
               "type": "AKTIVITETSPENGER",
-              "søknadsperiode": "2022-01-01/2023-01-01",
-              "forutgåendeBosteder": {
-                "perioder": {
-                  "2023-01-02/2023-01-03": {
-                    "land":"JPN"
+              "søknadsperiode": "2025-01-01/2025-01-31",
+              "forutgåendeBosteder": { "perioder":  {} },
+              "inntekter": {
+                "oppgittePeriodeinntekter": [
+                  {
+                    "arbeidstakerOgFrilansInntekt": "6000",
+                    "næringsinntekt": "0",
+                    "ytelse": "0",
+                    "periode": "2025-01-01/2025-01-31"
                   }
-                }
-              },
-              "inntekter": null
+                ]
+              } 
             },
             "journalposter": [],
             "begrunnelseForInnsending": {
@@ -183,6 +199,7 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
           }
         }
         """.trimIndent()
+
 
     private fun String.assertDittnavVarsel(k9Beskjed: K9Beskjed) {
         val k9BeskjedJson = JSONObject(this)
