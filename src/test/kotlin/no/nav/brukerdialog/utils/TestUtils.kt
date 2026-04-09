@@ -5,6 +5,9 @@ import jakarta.validation.Validation
 import jakarta.validation.Validator
 import no.nav.brukerdialog.K9brukerdialogprosesseringApplication
 import no.nav.brukerdialog.dittnavvarsel.DittnavVarselTopologyConfiguration.Companion.K9_DITTNAV_VARSEL_TOPIC
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.inntektsrapportering.AktivitetspengerInntektsrapporteringTopologyConfiguration.Companion.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.inntektsrapportering.AktivitetspengerInntektsrapporteringTopologyConfiguration.Companion.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.inntektsrapportering.AktivitetspengerInntektsrapporteringTopologyConfiguration.Companion.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration.Companion.AKTIVITETSPENGER_SØKNAD_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration.Companion.AKTIVITETSPENGER_SØKNAD_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration.Companion.AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC
@@ -132,7 +135,12 @@ val ALL_KAFKA_TOPICS = listOf(
     AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC,
     AKTIVITETSPENGER_SØKNAD_CLEANUP_TOPIC,
 
-        // Opplæringspenger
+    // Aktivitetspenger - inntektsrapportering
+    AKTIVITETSPENGER_INNTEKTSRAPPORTERING_MOTTATT_TOPIC,
+    AKTIVITETSPENGER_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC,
+    AKTIVITETSPENGER_INNTEKTSRAPPORTERING_CLEANUP_TOPIC,
+
+    // Opplæringspenger
     OLP_MOTTATT_TOPIC,
     OLP_PREPROSESSERT_TOPIC,
     OLP_CLEANUP_TOPIC,

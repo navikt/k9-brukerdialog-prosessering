@@ -1,5 +1,8 @@
 package no.nav.brukerdialog.common
 
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.inntektsrapportering.AktivitetspengerInntektsrapporteringTopologyConfiguration.Companion.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_CLEANUP_TOPIC
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.inntektsrapportering.AktivitetspengerInntektsrapporteringTopologyConfiguration.Companion.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_MOTTATT_TOPIC
+import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.inntektsrapportering.AktivitetspengerInntektsrapporteringTopologyConfiguration.Companion.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration.Companion.AKTIVITETSPENGER_SØKNAD_CLEANUP_TOPIC
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration.Companion.AKTIVITETSPENGER_SØKNAD_MOTTATT_TOPIC
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration.Companion.AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC
@@ -61,6 +64,7 @@ enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
     UNGDOMSYTELSE_OPPGAVEBEKREFTELSE("Ungdomsprogramytelse: svar på varsel om "),
     UNGDOMSYTELSE_INNTEKTSRAPPORTERING("Inntektsrapportering for ungdomsprogramytelsen"),
     AKTIVITETSPENGER("Søknad om aktivitetspenger"),
+    AKTIVITETSPENGER_INNTEKTSRAPPORTERING("Inntektsrapportering for aktivitetspenger"),
     OPPLÆRINGSPENGER("Søknad om opplæringspenger")
     ;
 
@@ -85,6 +89,7 @@ enum class Ytelse(val tittel: String, val nynorskTittel: String? = null) {
             UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_MOTTATT_TOPIC, UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_PREPROSESSERT_TOPIC, UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_CLEANUP_TOPIC -> UNGDOMSYTELSE_OPPGAVEBEKREFTELSE
             OLP_MOTTATT_TOPIC, OLP_PREPROSESSERT_TOPIC, OLP_CLEANUP_TOPIC -> OPPLÆRINGSPENGER
             AKTIVITETSPENGER_SØKNAD_MOTTATT_TOPIC, AKTIVITETSPENGER_SØKNAD_PREPROSESSERT_TOPIC, AKTIVITETSPENGER_SØKNAD_CLEANUP_TOPIC -> AKTIVITETSPENGER
+            AKTIVITETSPENGER_INNTEKTSRAPPORTERING_MOTTATT_TOPIC, AKTIVITETSPENGER_INNTEKTSRAPPORTERING_PREPROSESSERT_TOPIC, AKTIVITETSPENGER_INNTEKTSRAPPORTERING_CLEANUP_TOPIC -> AKTIVITETSPENGER_INNTEKTSRAPPORTERING
             else -> {
                 throw IllegalArgumentException("Kan ikke finne ytelse for topic: $topic")
             }

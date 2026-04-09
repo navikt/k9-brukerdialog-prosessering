@@ -8,13 +8,19 @@ import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
+import no.nav.brukerdialog.integrasjon.ungbrukerdialogapi.UngBrukerdialogApiService
 import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.*
 import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.SøknadUtils
+import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -28,6 +34,7 @@ import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -63,6 +70,9 @@ class AktivitetspengerControllerTest {
     @MockkBean
     private lateinit var metrikkService: MetrikkService
 
+    @MockkBean
+    private lateinit var ungBrukerdialogApiService: UngBrukerdialogApiService
+
     @BeforeEach
     fun setUp() {
         springTokenValidationContextHolder.mockContext()
@@ -90,6 +100,40 @@ class AktivitetspengerControllerTest {
                 header { exists(NavHeaders.X_CORRELATION_ID) }
             }
     }
+
+    @Test
+    fun `Innsending av inntekt er OK`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
+        coEvery { innsendingService.registrer(any(), any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
+        mockHentingAvOppgave(
+            oppgavetype = OppgaveType.RAPPORTER_INNTEKT,
+            oppgavetypeData = InntektsrapporteringOppgavetypeDataDto(
+                LocalDate.now(),
+                LocalDate.now(),
+                true
+            )
+        )
+
+        mockMarkerOppgaveSomLøst()
+
+        val defaultInntektsrapportering = InntektrapporteringUtils.defaultInntektsrapportering
+
+        mockMvc.post("/aktivitetspenger/inntektsrapportering/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(defaultInntektsrapportering)
+        }
+            .andExpect {
+                status { isAccepted() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+            }
+    }
+
 
     @Test
     fun `Innsending av søknad med feile verdier responderer med bad request`() {
@@ -173,4 +217,35 @@ class AktivitetspengerControllerTest {
                 }
             }
     }
+
+    private fun mockHentingAvOppgave(oppgavetype: OppgaveType, oppgavetypeData: OppgavetypeDataDto) {
+        every { ungBrukerdialogApiService.hentOppgave(any()) } returns BrukerdialogOppgaveDto(
+            UUID.randomUUID(),
+            oppgavetype,
+            oppgavetypeData,
+            null,
+            no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.ULØST,
+            ZonedDateTime.now(),
+            ZonedDateTime.now(),
+            null
+        )
+    }
+
+    private fun mockMarkerOppgaveSomLøst() {
+        every { ungBrukerdialogApiService.markerOppgaveSomLøst(any(), any()) } returns BrukerdialogOppgaveDto(
+            UUID.randomUUID(),
+            OppgaveType.RAPPORTER_INNTEKT,
+            InntektsrapporteringOppgavetypeDataDto(
+                LocalDate.now(),
+                LocalDate.now(),
+                true
+            ),
+            null,
+            no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.ULØST,
+            ZonedDateTime.now(),
+            ZonedDateTime.now(),
+            null
+        )
+    }
+
 }
