@@ -18,7 +18,6 @@ import no.nav.k9.søknad.ytelse.ung.v1.inntekt.OppgittInntekt
 import java.net.URL
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import no.nav.k9.søknad.Søknad as UngSøknad
 
 data class AktivitetspengerInntektsrapporteringInnsending(
     @field:org.hibernate.validator.constraints.UUID(message = "Forventet gyldig UUID, men var '\${validatedValue}'")
@@ -45,18 +44,18 @@ data class AktivitetspengerInntektsrapporteringInnsending(
             mottatt = mottatt,
             søker = søker,
             oppgittInntektForPeriode = oppgittInntektForPeriode,
-            k9Format = k9Format as UngSøknad
+            k9Format = k9Format as Søknad
         )
     }
 
     override fun valider() = mutableListOf<String>()
 
-    override fun somK9Format(søker: Søker, metadata: MetaInfo): UngSøknad {
+    override fun somK9Format(søker: Søker, metadata: MetaInfo): Søknad {
         val ytelse = Aktivitetspenger()
             .medSøknadsperiode(oppgittInntektForPeriode.periodeForInntekt.somUngPeriode())
             .medInntekter(OppgittInntekt(setOf(oppgittInntektForPeriode.somUngOppgittInntektForPeriode())))
 
-        return UngSøknad()
+        return Søknad()
             .medVersjon(K9_SØKNAD_VERSJON)
             .medMottattDato(mottatt)
             .medSpråk(Språk.NORSK_BOKMÅL)
