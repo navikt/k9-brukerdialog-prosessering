@@ -1,0 +1,21 @@
+name: Deploy aktivitetspenger inntektsrapportering topics
+
+env:
+  TOPICS_PATH: 'nais/topics/aktivitetspenger-inntektsrapportering-topics.yml'
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-aktivitetspenger-inntektsrapportering-topics.yml'
+      - '.github/workflows/reusable-topic-workflow.yml'
+      - 'nais/topics/aktivitetspenger-inntektsrapportering-topics.yml'
+
+jobs:
+  deploy-aktivitetspenger-inntektsrapportering-topics:
+    permissions:
+      id-token: write
+    uses: ./.github/workflows/reusable-topic-workflow.yml
+    with:
+      job-name: aktivitetspenger-inntektsrapportering-topics
+      topics-path: 'nais/topics/aktivitetspenger-inntektsrapportering-topics.yml'
+    secrets: inherit
