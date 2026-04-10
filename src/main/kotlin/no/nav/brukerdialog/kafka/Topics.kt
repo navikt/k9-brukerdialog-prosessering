@@ -2,6 +2,7 @@ package no.nav.brukerdialog.kafka
 
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.kafka.Topics.AKTIVITETSPENGER_INNTEKTSRAPPORTERING_TOPIC
+import no.nav.brukerdialog.kafka.Topics.AKTIVITETSPENGER_OPPGAVEBEKREFTELSE_TOPIC
 import no.nav.brukerdialog.kafka.Topics.AKTIVITETSPENGER_SOKNAD_TOPIC
 import no.nav.brukerdialog.kafka.Topics.ETTERSENDING_TOPIC
 import no.nav.brukerdialog.kafka.Topics.MOTTATT_ENDRINGSMELDING_PLEIEPENGER_SYKT_BARN_TOPIC
@@ -36,6 +37,7 @@ object Topics {
     const val UNGDOMSYTELSE_OPPGAVEBEKREFTELSE_TOPIC = "dusseldorf.ungdomsytelse-oppgavebekreftelse-mottatt"
     const val AKTIVITETSPENGER_SOKNAD_TOPIC = "dusseldorf.aktivitetspenger-soknad-mottatt"
     const val AKTIVITETSPENGER_INNTEKTSRAPPORTERING_TOPIC = "dusseldorf.aktivitetspenger-inntektsrapportering-mottatt"
+    const val AKTIVITETSPENGER_OPPGAVEBEKREFTELSE_TOPIC = "dusseldorf.aktivitetspenger-oppgavebekreftelse-mottatt"
     const val OLP_MOTTATT_TOPIC = "dusseldorf.olp-soknad-mottatt"
 }
 
@@ -60,6 +62,7 @@ internal fun hentTopicForYtelse(ytelse: Ytelse) = when (ytelse) {
     OPPLARINGSPENGER -> OLP_MOTTATT_TOPIC
     AKTIVITETSPENGER -> AKTIVITETSPENGER_SOKNAD_TOPIC
     AKTIVITETSPENGER_INNTEKTSRAPPORTERING -> AKTIVITETSPENGER_INNTEKTSRAPPORTERING_TOPIC
+    AKTIVITETSPENGER_OPPGAVEBEKREFTELSE -> AKTIVITETSPENGER_OPPGAVEBEKREFTELSE_TOPIC
     DINE_PLEIEPENGER -> throw IllegalArgumentException("$ytelse er ikke en gyldig ytelse for denne operasjonen")
 }
 

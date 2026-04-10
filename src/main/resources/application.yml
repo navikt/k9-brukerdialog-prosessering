@@ -289,6 +289,16 @@ no.nav:
         application-id-suffix: aktivitetspenger-inntektsrapportering-cleanup-stream
         auto-offset-reset: earliest
 
+      aktivitetspenger-oppgavebekreftelse-preprosessering:
+        application-id-suffix: aktivitetspenger-oppgavebekreftelse-preprosessering
+        auto-offset-reset: earliest
+      aktivitetspenger-oppgavebekreftelse-journalforing:
+        application-id-suffix: aktivitetspenger-oppgavebekreftelse-journalforing
+        auto-offset-reset: earliest
+      aktivitetspenger-oppgavebekreftelse-cleanup:
+        application-id-suffix: aktivitetspenger-oppgavebekreftelse-cleanup-stream
+        auto-offset-reset: earliest
+
 management:
   endpoint:
     health:

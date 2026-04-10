@@ -264,6 +264,7 @@ abstract class PdfData {
             Ytelse.OPPLÆRINGSPENGER -> "opplaeringspenger-soknad$språkSuffix".trimEnd()
             Ytelse.AKTIVITETSPENGER -> "aktivitetspenger-soknad$språkSuffix".trimEnd()
             Ytelse.AKTIVITETSPENGER_INNTEKTSRAPPORTERING -> "aktivitetspenger-rapportering-soknad$språkSuffix".trimEnd()
+            Ytelse.AKTIVITETSPENGER_OPPGAVEBEKREFTELSE -> "aktivitetspenger-oppgave-bekreftelse$språkSuffix".trimEnd()
         }
     }
 }
