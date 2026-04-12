@@ -12,9 +12,6 @@ import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.oppgavebekreftelse.AktivitetspengerOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.AktivitetspengerOppgavebekreftelseUtils
-import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.SøknadUtils as AktivitetspengersøknadSøknadUtils
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.KontrollerRegisterinntektOppgavetypeDataDto
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
