@@ -3,6 +3,7 @@ name: Deploy ungdomsytelse inntektsrapportering topics
 env:
   TOPICS_PATH: 'nais/topics/ungdomsytelse-inntektsrapportering-topics.yml'
 
+
 on:
   push:
     paths:
