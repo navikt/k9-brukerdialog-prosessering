@@ -45,6 +45,7 @@ class AktivitetspengerController(
         aktivitetspengerService.inntektrapportering(rapportetInntekt, gitSha)
     }
 
+
     @PostMapping("/oppgavebekreftelse/innsending")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun oppgavebekreftelse(
