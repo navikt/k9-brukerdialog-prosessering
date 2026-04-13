@@ -10,6 +10,7 @@ on:
       - '.github/workflows/reusable-topic-workflow.yml'
       - 'nais/topics/aktivitetspenger-oppgavebekreftelse-topics.yml'
 
+
 jobs:
   deploy-aktivitetspenger-oppgavebekreftelse-topics:
     permissions:
