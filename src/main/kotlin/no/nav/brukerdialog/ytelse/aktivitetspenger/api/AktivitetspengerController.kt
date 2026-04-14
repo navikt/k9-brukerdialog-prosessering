@@ -5,6 +5,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.config.Issuers
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.inntektsrapportering.AktivitetspengerInntektsrapportering
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Aktivitetspengersøknad
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.api.RequiredIssuers
@@ -42,6 +43,15 @@ class AktivitetspengerController(
         @Valid @RequestBody rapportetInntekt: AktivitetspengerInntektsrapportering,
     ) = runBlocking {
         aktivitetspengerService.inntektrapportering(rapportetInntekt, gitSha)
+    }
+
+    @PostMapping("/oppgavebekreftelse/innsending")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun oppgavebekreftelse(
+        @RequestHeader(NavHeaders.BRUKERDIALOG_GIT_SHA) gitSha: String,
+        @Valid @RequestBody bekreftetOppgave: AktivitetspengerOppgavebekreftelse,
+    ) = runBlocking {
+        aktivitetspengerService.oppgavebekreftelse(bekreftetOppgave, gitSha)
     }
 
 

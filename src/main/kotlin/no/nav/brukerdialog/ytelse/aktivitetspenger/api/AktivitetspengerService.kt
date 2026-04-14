@@ -13,11 +13,14 @@ import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.inntektsrapporteri
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.inntektsrapportering.AktivitetspengerInntektsrapporteringInnsending
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.inntektsrapportering.OppgittInntektForPeriode
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.inntektsrapportering.UngPeriode
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgavebekreftelse
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgavebekreftelseInnsending
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Aktivitetspengersøknad
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.AktivitetspengersøknadInnsending
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Barn
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.LøsOppgaveRequest
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.SvarPåVarselDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.RapportertInntektDto
 import org.slf4j.LoggerFactory
@@ -118,5 +121,36 @@ class AktivitetspengerService(
         return UngPeriode(oppgavetypeData.fraOgMed, oppgavetypeData.tilOgMed)
     }
 
+    suspend fun oppgavebekreftelse(oppgavebekreftelse: AktivitetspengerOppgavebekreftelse, gitSha: String) {
+        val oppgaveDTO = ungBrukerdialogApiService.hentOppgave(
+            UUID.fromString(oppgavebekreftelse.oppgave.oppgaveReferanse)
+        )
 
+        val aktivitetspengerOppgavebekreftelseInnsending = AktivitetspengerOppgavebekreftelseInnsending(
+            komplettOppgavebekreftelse = oppgavebekreftelse.oppgave.somKomplettOppgave(oppgaveDTO)
+        )
+
+        val metadata = MetaInfo(correlationId = MDCUtil.callIdOrNew(), soknadDialogCommitSha = gitSha)
+        val cacheKey =
+            "${springTokenValidationContextHolder.personIdent()}_${aktivitetspengerOppgavebekreftelseInnsending.ytelse()}"
+
+        logger.info(
+            formaterStatuslogging(
+                aktivitetspengerOppgavebekreftelseInnsending.ytelse(),
+                aktivitetspengerOppgavebekreftelseInnsending.innsendingId(),
+                "mottatt."
+            )
+        )
+        duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
+        innsendingService.registrer(aktivitetspengerOppgavebekreftelseInnsending, metadata)
+        metrikkService.registrerMottattInnsending(aktivitetspengerOppgavebekreftelseInnsending.ytelse())
+        ungBrukerdialogApiService.markerOppgaveSomLøst(
+            oppgaveDTO.oppgaveReferanse, LøsOppgaveRequest(
+                SvarPåVarselDto(
+                    oppgavebekreftelse.oppgave.uttalelse.harUttalelse,
+                    oppgavebekreftelse.oppgave.uttalelse.uttalelseFraDeltaker,
+                )
+            )
+        )
+    }
 }

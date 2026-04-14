@@ -33,6 +33,7 @@ object MockMvcUtils {
             Ytelse.OPPLARINGSPENGER -> "/opplaringspenger"
             Ytelse.AKTIVITETSPENGER ->  "/aktivitetspenger/soknad"
             Ytelse.AKTIVITETSPENGER_INNTEKTSRAPPORTERING -> "/aktivitetspenger/inntektsrapportering"
+            Ytelse.AKTIVITETSPENGER_OPPGAVEBEKREFTELSE -> "/aktivitetspenger/oppgavebekreftelse"
         }
 
         post("$ytelseUrl/innsending") {

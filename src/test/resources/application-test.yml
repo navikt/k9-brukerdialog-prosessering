@@ -209,6 +209,13 @@ no.nav:
       aktivitetspenger-inntektsrapportering-cleanup:
         auto-offset-reset: earliest
 
+      aktivitetspenger-oppgavebekreftelse-preprosessering:
+        auto-offset-reset: earliest
+      aktivitetspenger-oppgavebekreftelse-journalforing:
+        auto-offset-reset: earliest
+      aktivitetspenger-oppgavebekreftelse-cleanup:
+        auto-offset-reset: earliest
+
       ungdomsytelse-soknad-preprosessering:
         auto-offset-reset: earliest
       ungdomsytelse-soknad-journalforing:
