@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.multipart.MaxUploadSizeExceededException
+import org.springframework.web.multipart.MultipartException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.net.URI
 import java.net.URLDecoder
@@ -39,6 +40,28 @@ class ExceptionHandler(
             LoggerFactory.getLogger(no.nav.brukerdialog.http.serverside.ExceptionHandler::class.java)
     }
 
+
+    @ExceptionHandler(value = [MultipartException::class])
+    @ResponseStatus(BAD_REQUEST)
+    fun håndtereMultipartException(exception: MultipartException, request: ServletWebRequest): ProblemDetail {
+        val isClientAbort = generateSequence(exception as Throwable) { it.cause }
+            .any { it::class.qualifiedName == "org.apache.catalina.connector.ClientAbortException" || it is java.io.EOFException }
+
+        val problemDetails = request.respondProblemDetails(
+            status = BAD_REQUEST,
+            title = "Feil ved opplasting av vedlegg",
+            type = URI("/problem-details/multipart-feil"),
+            detail = exception.message ?: ""
+        )
+
+        if (isClientAbort) {
+            log.warn("Klient avbrøt multipart-opplasting: {}", problemDetails)
+        } else {
+            log.error("{}", problemDetails, exception)
+        }
+
+        return problemDetails
+    }
 
     @ExceptionHandler(value = [Exception::class])
     @ResponseStatus(INTERNAL_SERVER_ERROR)
