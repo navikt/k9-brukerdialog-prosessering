@@ -47,18 +47,24 @@ class ExceptionHandler(
         val isClientAbort = generateSequence(exception as Throwable) { it.cause }
             .any { it::class.qualifiedName == "org.apache.catalina.connector.ClientAbortException" || it is java.io.EOFException }
 
+        if (isClientAbort) {
+            val problemDetails = request.respondProblemDetails(
+                status = I_AM_A_TEAPOT,
+                title = "Bruker avbrøt opplasting av vedlegg",
+                type = URI("/problem-details/multipart-feil"),
+                detail = exception.message ?: ""
+            )
+            log.warn("Klient avbrøt multipart-opplasting: {}", problemDetails)
+            return problemDetails
+        }
+
         val problemDetails = request.respondProblemDetails(
             status = BAD_REQUEST,
             title = "Feil ved opplasting av vedlegg",
             type = URI("/problem-details/multipart-feil"),
             detail = exception.message ?: ""
         )
-
-        if (isClientAbort) {
-            log.warn("Klient avbrøt multipart-opplasting: {}", problemDetails)
-        } else {
-            log.error("{}", problemDetails, exception)
-        }
+        log.error("{}", problemDetails, exception)
 
         return problemDetails
     }
