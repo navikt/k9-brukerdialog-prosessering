@@ -54,7 +54,7 @@ class ExceptionHandler(
                 type = URI("/problem-details/multipart-feil"),
                 detail = exception.message ?: ""
             )
-            log.warn("Klient avbrøt multipart-opplasting: {}", problemDetails)
+            log.warn("Klient avbrøt multipart-opplasting: {}", problemDetails, exception)
             return problemDetails
         }
 
