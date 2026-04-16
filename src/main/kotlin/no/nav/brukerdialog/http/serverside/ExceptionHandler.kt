@@ -48,6 +48,7 @@ class ExceptionHandler(
             .any { it::class.qualifiedName == "org.apache.catalina.connector.ClientAbortException" || it is java.io.EOFException }
 
         if (isClientAbort) {
+            // kaster feil med statuskode 418 I'm a teapot, slik at vi kan filtrere ut feilen i alarmkanalen
             val problemDetails = request.respondProblemDetails(
                 status = I_AM_A_TEAPOT,
                 title = "Bruker avbrøt opplasting av vedlegg",
