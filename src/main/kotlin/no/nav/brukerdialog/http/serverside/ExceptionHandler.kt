@@ -42,8 +42,7 @@ class ExceptionHandler(
 
 
     @ExceptionHandler(value = [MultipartException::class])
-    @ResponseStatus(BAD_REQUEST)
-    fun håndtereMultipartException(exception: MultipartException, request: ServletWebRequest): ProblemDetail {
+    fun håndtereMultipartException(exception: MultipartException, request: ServletWebRequest): ResponseEntity<ProblemDetail> {
         val isClientAbort = generateSequence(exception as Throwable) { it.cause }
             .any { it::class.qualifiedName == "org.apache.catalina.connector.ClientAbortException" || it is java.io.EOFException }
 
@@ -55,8 +54,8 @@ class ExceptionHandler(
                 type = URI("/problem-details/multipart-feil"),
                 detail = exception.message ?: ""
             )
-            log.warn("Klient avbrøt multipart-opplasting: {}", problemDetails, exception)
-            return problemDetails
+            log.info("Klient avbrøt multipart-opplasting: {}", problemDetails, exception)
+            return ResponseEntity.status(I_AM_A_TEAPOT).body(problemDetails)
         }
 
         val problemDetails = request.respondProblemDetails(
@@ -67,7 +66,7 @@ class ExceptionHandler(
         )
         log.error("{}", problemDetails, exception)
 
-        return problemDetails
+        return ResponseEntity.status(BAD_REQUEST).body(problemDetails)
     }
 
     @ExceptionHandler(value = [Exception::class])
