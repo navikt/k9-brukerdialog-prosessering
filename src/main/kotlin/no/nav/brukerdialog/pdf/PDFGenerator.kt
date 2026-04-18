@@ -263,6 +263,8 @@ abstract class PdfData {
             Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> "ungdomsytelse-oppgave-bekreftelse$språkSuffix".trimEnd()
             Ytelse.OPPLÆRINGSPENGER -> "opplaeringspenger-soknad$språkSuffix".trimEnd()
             Ytelse.AKTIVITETSPENGER -> "aktivitetspenger-soknad$språkSuffix".trimEnd()
+            Ytelse.AKTIVITETSPENGER_INNTEKTSRAPPORTERING -> "aktivitetspenger-rapportering-soknad$språkSuffix".trimEnd()
+            Ytelse.AKTIVITETSPENGER_OPPGAVEBEKREFTELSE -> "aktivitetspenger-oppgave-bekreftelse$språkSuffix".trimEnd()
         }
     }
 }

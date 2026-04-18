@@ -13,6 +13,8 @@ group = "no.nav"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_25
 
+extra["tomcat.version"] = "11.0.21"
+
 configurations {
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
@@ -31,7 +33,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "6.0.4"
+val tokenSupportVersion = "6.0.5"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "13.0.0"
 val ungDeltakelseOpplyserVersjon = "2.10.0"
@@ -48,9 +50,9 @@ val springdocVersion = "3.0.2"
 val pdfBoxVersion = "3.0.7"
 val imageIOVersion = "3.13.1"
 val fpsakTidsserieVersion = "2.7.4"
-val gcpStorageVersion = "2.64.0"
+val gcpStorageVersion = "2.64.1"
 val auth0Version = "4.5.1"
-val tikaVersion = "3.2.3"
+val tikaVersion = "3.3.0"
 val aivenFakeGCSServerVersion = "0.3.0"
 
 dependencies {

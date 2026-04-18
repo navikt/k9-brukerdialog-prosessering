@@ -31,7 +31,9 @@ object MockMvcUtils {
             Ytelse.UNGDOMSYTELSE_INNTEKTSRAPPORTERING -> "/ungdomsytelse/inntektsrapportering"
             Ytelse.UNGDOMSYTELSE_OPPGAVEBEKREFTELSE -> "/ungdomsytelse/oppgavebekreftelse"
             Ytelse.OPPLARINGSPENGER -> "/opplaringspenger"
-            Ytelse.AKTIVITETSPENGER -> TODO()
+            Ytelse.AKTIVITETSPENGER ->  "/aktivitetspenger/soknad"
+            Ytelse.AKTIVITETSPENGER_INNTEKTSRAPPORTERING -> "/aktivitetspenger/inntektsrapportering"
+            Ytelse.AKTIVITETSPENGER_OPPGAVEBEKREFTELSE -> "/aktivitetspenger/oppgavebekreftelse"
         }
 
         post("$ytelseUrl/innsending") {

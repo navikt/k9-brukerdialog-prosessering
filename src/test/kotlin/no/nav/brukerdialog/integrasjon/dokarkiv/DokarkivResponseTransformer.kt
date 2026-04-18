@@ -36,7 +36,9 @@ internal class DokarkivResponseTransformer : ResponseTransformer() {
             YtelseType.OPPLÆRINGSPENGERSØKNAD_ETTERSENDING to "21",
             YtelseType.UNGDOMSYTELSE_VARSEL_UTTALELSE to "22",
             YtelseType.AKTIVITETSPENGER_SØKNAD to "23",
-        )
+            YtelseType.AKTIVITETSPENGER_INNTEKTRAPPORTERING to "24",
+            YtelseType.AKTIVITETSPENGER_VARSEL_UTTALELSE to "25"
+            )
     }
 
     override fun getName(): String {

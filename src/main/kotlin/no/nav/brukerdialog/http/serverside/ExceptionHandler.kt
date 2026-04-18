@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.multipart.MaxUploadSizeExceededException
+import org.springframework.web.multipart.MultipartException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.net.URI
 import java.net.URLDecoder
@@ -39,6 +40,34 @@ class ExceptionHandler(
             LoggerFactory.getLogger(no.nav.brukerdialog.http.serverside.ExceptionHandler::class.java)
     }
 
+
+    @ExceptionHandler(value = [MultipartException::class])
+    fun håndtereMultipartException(exception: MultipartException, request: ServletWebRequest): ResponseEntity<ProblemDetail> {
+        val isClientAbort = generateSequence(exception as Throwable) { it.cause }
+            .any { it::class.qualifiedName == "org.apache.catalina.connector.ClientAbortException" || it is java.io.EOFException }
+
+        if (isClientAbort) {
+            // kaster feil med statuskode 418 I'm a teapot, slik at vi kan filtrere ut feilen i alarmkanalen
+            val problemDetails = request.respondProblemDetails(
+                status = I_AM_A_TEAPOT,
+                title = "Bruker avbrøt opplasting av vedlegg",
+                type = URI("/problem-details/multipart-feil"),
+                detail = exception.message ?: ""
+            )
+            log.info("Klient avbrøt multipart-opplasting: {}", problemDetails, exception)
+            return ResponseEntity.status(I_AM_A_TEAPOT).body(problemDetails)
+        }
+
+        val problemDetails = request.respondProblemDetails(
+            status = BAD_REQUEST,
+            title = "Feil ved opplasting av vedlegg",
+            type = URI("/problem-details/multipart-feil"),
+            detail = exception.message ?: ""
+        )
+        log.error("{}", problemDetails, exception)
+
+        return ResponseEntity.status(BAD_REQUEST).body(problemDetails)
+    }
 
     @ExceptionHandler(value = [Exception::class])
     @ResponseStatus(INTERNAL_SERVER_ERROR)
