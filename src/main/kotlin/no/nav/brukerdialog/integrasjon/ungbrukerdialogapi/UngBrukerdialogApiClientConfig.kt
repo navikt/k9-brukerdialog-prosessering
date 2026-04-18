@@ -40,7 +40,6 @@ class UngBrukerdialogApiClientConfig(
             .readTimeout(Duration.ofSeconds(20))
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .rootUri(ungBrukerdialogApiBaseUrl)
-            .defaultMessageConverters()
             .additionalInterceptors(
                 RestTemplateUtils.exchangeBearerTokenInterceptor(
                     tokenxUngBrukerdialogApiClientProperties,

@@ -33,7 +33,7 @@ repositories {
 
 val tokenSupportVersion = "6.0.4"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "12.9.2"
+val k9FormatVersion = "13.0.0"
 val ungDeltakelseOpplyserVersjon = "2.10.0"
 val ungBrukerdialigApiVersjon = "0.2.1"
 val springMockkVersion = "5.0.1"
@@ -62,6 +62,7 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
 
 	// K9-format
+	implementation("no.nav.k9:soknad-jackson2:$k9FormatVersion")
 	implementation("no.nav.k9:soknad:$k9FormatVersion")
 	implementation("no.nav.k9:ettersendelse:$k9FormatVersion")
 	implementation("no.nav.k9:oppgave-ungdomsytelse:$k9FormatVersion")

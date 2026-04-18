@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import no.nav.brukerdialog.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
-import no.nav.k9.søknad.JsonUtils
+import no.nav.k9.søknad.JsonUtilsJackson2
 import org.springframework.boot.http.converter.autoconfigure.ClientHttpMessageConvertersCustomizer
 import org.springframework.boot.http.converter.autoconfigure.ServerHttpMessageConvertersCustomizer
 import org.springframework.context.annotation.Bean
@@ -42,7 +42,7 @@ class JacksonConfiguration {
         fun configureObjectMapper(
             kotlinModule: KotlinModule = configureKotlinModule(),
             javaTimeModule: JavaTimeModule = configureJavaTimeModule(),
-        ): ObjectMapper = JsonUtils.getObjectMapper()
+        ): ObjectMapper = JsonUtilsJackson2.getObjectMapper().copy()
             .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
             .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)

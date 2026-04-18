@@ -1,6 +1,9 @@
 package no.nav.brukerdialog.integrasjon.k9brukerdialogcache
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
@@ -50,10 +53,16 @@ class K9BrukerdialogCacheServiceTest {
         fun configureProperties(registry: DynamicPropertyRegistry) {
             registry.add("no.nav.integration.k9-brukerdialog-cache-base-url") { "${wireMock.baseUrl()}/k9-brukerdialog-cache-mock" }
         }
-    }
 
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
+        /** ObjectMapper som matcher k9-brukerdialog-cache sin Jackson-konfigurasjon (Jackson2ObjectMapperBuilderCustomizer). */
+        val k9BrukerdialogCacheObjectMapper: ObjectMapper = ObjectMapper().apply {
+            disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS)
+            propertyNamingStrategy = PropertyNamingStrategies.LOWER_CAMEL_CASE
+            findAndRegisterModules()
+        }
+    }
 
     @Autowired
     private lateinit var mockOAuth2Server: MockOAuth2Server
@@ -72,7 +81,7 @@ class K9BrukerdialogCacheServiceTest {
     }
 
     @Test
-    fun `Mellomlagring av tom json gir ikke feil`() {
+    fun `Mellomlagring av tom json gir ikke feil og skal deserialisere`() {
         val cacheRequest = CacheRequest(
             nøkkelPrefiks = "psb_123",
             verdi = "{}",
@@ -84,7 +93,7 @@ class K9BrukerdialogCacheServiceTest {
         wireMock.stubOpprettMellomlagringLenient(
             urlPathMatching = "/k9-brukerdialog-cache-mock/api/cache",
             responseStatus = HttpStatus.CREATED,
-            responseBodyJson = objectMapper.writeValueAsString(
+            responseBodyJson = k9BrukerdialogCacheObjectMapper.writeValueAsString(
                 CacheResponse(
                     nøkkel = "psb_123",
                     verdi = "{}",

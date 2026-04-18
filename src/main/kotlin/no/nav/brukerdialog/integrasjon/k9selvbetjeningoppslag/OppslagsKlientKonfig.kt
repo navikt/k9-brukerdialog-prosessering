@@ -41,7 +41,6 @@ class OppslagsKlientKonfig(
             .readTimeout(Duration.ofSeconds(20))
             .defaultHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .rootUri(oppslagsUrl)
-            .defaultMessageConverters()
             .additionalInterceptors(
                 bearerTokenInterceptor(),
                 RestTemplateUtils.requestLoggerInterceptor(logger),
