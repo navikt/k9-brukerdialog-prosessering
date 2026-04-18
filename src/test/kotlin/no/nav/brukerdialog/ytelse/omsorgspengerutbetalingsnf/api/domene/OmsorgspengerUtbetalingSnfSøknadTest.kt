@@ -1,22 +1,15 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.api.domene
 
-import no.nav.brukerdialog.ytelse.fellesdomene.AktivitetFravær
-import no.nav.brukerdialog.ytelse.fellesdomene.Bekreftelser
-import no.nav.brukerdialog.ytelse.fellesdomene.Bosted
-import no.nav.brukerdialog.ytelse.fellesdomene.FraværÅrsak
-import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
-import no.nav.brukerdialog.ytelse.fellesdomene.Opphold
-import no.nav.brukerdialog.ytelse.fellesdomene.Utbetalingsperiode
-import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
-import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Barn
-import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Frilans
-import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.TypeBarn
-import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.defaultSøknad
 import no.nav.brukerdialog.utils.SøknadUtils
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
+import no.nav.brukerdialog.ytelse.fellesdomene.*
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Barn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.Frilans
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingsnf.api.domene.TypeBarn
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.defaultSøknad
 import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNFom
 import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingsnf.utils.SøknadUtils.nyoppstartetSNTom
 import org.junit.jupiter.api.Test
@@ -133,7 +126,7 @@ class OmsorgspengerUtbetalingSnfSøknadTest {
             {
               "søknadId": "${søknad.søknadId}",
               "versjon": "1.1.0",
-              "mottattDato": "2022-01-02T03:04:05Z",
+              "mottattDato": "2022-01-02T03:04:05.000Z",
               "søker": {
                 "norskIdentitetsnummer": "02119970078"
               },

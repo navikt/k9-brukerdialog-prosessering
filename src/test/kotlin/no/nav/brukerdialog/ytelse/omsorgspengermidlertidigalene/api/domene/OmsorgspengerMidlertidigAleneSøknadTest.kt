@@ -1,14 +1,12 @@
 package no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene
 
-import no.nav.brukerdialog.ytelse.fellesdomene.Barn
-import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.utils.SøknadUtils
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
-import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.AnnenForelder
-import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.api.domene.Situasjon
+import no.nav.brukerdialog.ytelse.fellesdomene.Barn
+import no.nav.brukerdialog.ytelse.omsorgspengermidlertidigalene.utils.SøknadUtils
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -57,7 +55,7 @@ class OmsorgspengerMidlertidigAleneSøknadTest {
             {
               "søknadId": ${søknad.søknadId},
               "versjon": "1.0.0",
-              "mottattDato": "2020-01-02T03:04:05Z",
+              "mottattDato": "2020-01-02T03:04:05.000Z",
               "søker": {
                 "norskIdentitetsnummer": "02119970078"
               },

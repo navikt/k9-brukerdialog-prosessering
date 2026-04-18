@@ -1,15 +1,15 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.api.domene
 
-import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn
-import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.DineBarn
-import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.TypeBarn
-import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.utils.SøknadUtils
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.Barn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.DineBarn
+import no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene.TypeBarn
+import no.nav.brukerdialog.ytelse.omsorgspengerutbetalingat.utils.SøknadUtils
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import java.time.LocalDate
@@ -27,7 +27,7 @@ class OmsorgspengerUtbetalingArbeidstakerSøknadTest {
             {
               "søknadId": "$søknadId",
               "versjon": "1.1.0",
-              "mottattDato": "2022-01-02T03:04:05Z",
+              "mottattDato": "2022-01-02T03:04:05.000Z",
               "søker": {
                 "norskIdentitetsnummer": "02119970078"
               },

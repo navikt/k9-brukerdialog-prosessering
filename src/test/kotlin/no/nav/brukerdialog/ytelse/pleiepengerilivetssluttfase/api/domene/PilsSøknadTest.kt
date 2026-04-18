@@ -1,21 +1,5 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.api.domene
 
-import no.nav.brukerdialog.ytelse.fellesdomene.Land
-import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
-import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
-import no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.utils.SøknadUtils
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.ArbeidIPeriode
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsforhold
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Arbeidsgiver
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.JobberIPeriodeSvar.REDUSERT
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Medlemskap
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.OpptjeningIUtlandet
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.OpptjeningType
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Pleietrengende
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.SelvstendigNæringsdrivende
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.UtenlandskNæring
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.Utenlandsopphold
-import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.UtenlandsoppholdIPerioden
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker
@@ -23,6 +7,12 @@ import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
+import no.nav.brukerdialog.ytelse.fellesdomene.Næringstype
+import no.nav.brukerdialog.ytelse.fellesdomene.Virksomhet
+import no.nav.brukerdialog.ytelse.pleiepengerilivetssluttfase.utils.SøknadUtils
+import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.*
+import no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene.JobberIPeriodeSvar.REDUSERT
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -201,7 +191,7 @@ class PilsSøknadTest {
             {
               "søknadId": "4e62f8de-1ff6-40e9-bdcd-10485c789094",
               "versjon": "1.0.0",
-              "mottattDato": "2022-01-02T03:04:05Z",
+              "mottattDato": "2022-01-02T03:04:05.000Z",
               "søker": {
                 "norskIdentitetsnummer": "02119970078"
               },

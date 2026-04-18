@@ -1,12 +1,12 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
-import no.nav.brukerdialog.ytelse.fellesdomene.Barn
-import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.utils.SøknadUtils.defaultSøknad
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
+import no.nav.brukerdialog.ytelse.fellesdomene.Barn
+import no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.utils.SøknadUtils.defaultSøknad
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -68,7 +68,7 @@ class OmsorgspengerUtvidetRettSøknadTest {
             """
                 {
                   "språk": "nb",
-                  "mottattDato": "2020-01-02T03:04:05Z",
+                  "mottattDato": "2020-01-02T03:04:05.000Z",
                   "søknadId": "${søknad.søknadId}",
                   "søker": {
                     "norskIdentitetsnummer": "02119970078"

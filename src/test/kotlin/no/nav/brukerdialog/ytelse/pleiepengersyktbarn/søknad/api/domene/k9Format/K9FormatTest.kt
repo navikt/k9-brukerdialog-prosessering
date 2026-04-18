@@ -3,14 +3,7 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.k9Form
 import no.nav.brukerdialog.config.JacksonConfiguration.Companion.zonedDateTimeFormatter
 import no.nav.brukerdialog.oppslag.soker.Søker
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Enkeltdag
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Ferieuttak
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.FerieuttakIPerioden
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.Omsorgstilbud
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.OmsorgstilbudSvarFortid
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.OmsorgstilbudSvarFremtid
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.PlanUkedager
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.tilK9Tilsynsordning0Timer
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene.*
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils
 import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.felles.type.Periode
@@ -68,7 +61,7 @@ class K9FormatTest {
             {
               "søknadId": "$søknadId",
               "versjon": "1.0.0",
-              "mottattDato": "2020-01-02T03:04:05Z",
+              "mottattDato": "2020-01-02T03:04:05.000Z",
               "søker": {
                 "norskIdentitetsnummer": "123456789"
               },
