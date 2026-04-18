@@ -170,7 +170,7 @@ class K9FormatTest {
               },
               "barn" : {
                 "fødselsdato" : null,
-                "norskIdentitetsnummer" : "03028104560"
+                "norskIdentitetsnummer" : "01010010003"
               },
               "bosteder" : {
                 "perioder" : {

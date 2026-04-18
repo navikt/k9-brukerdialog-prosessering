@@ -203,12 +203,12 @@ class PilsSøknadTest {
               "versjon": "1.0.0",
               "mottattDato": "2022-01-02T03:04:05Z",
               "søker": {
-                "norskIdentitetsnummer": "02119970078"
+                "norskIdentitetsnummer": "01017000299"
               },
               "ytelse": {
                 "type": "PLEIEPENGER_LIVETS_SLUTTFASE",
                 "pleietrengende": {
-                  "norskIdentitetsnummer": "06098523047",
+                  "norskIdentitetsnummer": "01010010004",
                   "fødselsdato": null
                 },
                 "søknadsperiode": [

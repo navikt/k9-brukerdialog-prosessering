@@ -32,7 +32,7 @@ object SøknadUtils {
         språk = "nb",
         vedleggUrls = listOf(URI.create("http://localhost:8080/vedlegg/1").toURL()),
         opplastetIdVedleggUrls = listOf(URI.create("http://localhost:8080/vedlegg/2").toURL()),
-        pleietrengende = Pleietrengende(norskIdentitetsnummer = "06098523047", navn = "Bjarne"),
+        pleietrengende = Pleietrengende(norskIdentitetsnummer = "01010010004", navn = "Bjarne"),
         fraOgMed = LocalDate.parse("2021-01-01"),
         tilOgMed = LocalDate.parse("2021-01-10"),
         skalJobbeOgPleieSammeDag = true,

@@ -19,13 +19,13 @@ class FosterbarnTest {
             navn = "Barnesen",
             fødselsdato = LocalDate.parse("2022-01-01"),
             type = TypeBarn.FRA_OPPSLAG,
-            identitetsnummer = "26104500284"
+            identitetsnummer = "01010010000"
         ).somK9Barn()
         val forventetK9Barn =
             """
                 {
                     "fødselsdato" :null,
-                    "norskIdentitetsnummer":"26104500284"
+                    "norskIdentitetsnummer":"01010010000"
                 }
             """.trimIndent()
 
@@ -39,30 +39,30 @@ class FosterbarnTest {
                 navn = "Barnesen",
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 type = TypeBarn.FOSTERBARN,
-                identitetsnummer = "26104500284"
+                identitetsnummer = "01010010000"
             ),
             Barn(
                 navn = "Barnesen v2",
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 type = TypeBarn.FOSTERBARN,
-                identitetsnummer = "15121670744"
+                identitetsnummer = "01010010006"
             ),
             Barn(
                 navn = "Barnesen v2",
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 type = TypeBarn.ANNET,
-                identitetsnummer = "18021839511"
+                identitetsnummer = "01010010008"
             )
         )
         val forventetK9Barn =
             """
                 [{
                     "fødselsdato" :null,
-                    "norskIdentitetsnummer":"26104500284"
+                    "norskIdentitetsnummer":"01010010000"
                 },
                 {
                     "fødselsdato" :null,
-                    "norskIdentitetsnummer":"15121670744"
+                    "norskIdentitetsnummer":"01010010006"
                 }]
             """.trimIndent()
 
@@ -77,7 +77,7 @@ class FosterbarnTest {
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = null,
-                identitetsnummer = "26104500284"
+                identitetsnummer = "01010010000"
             )
         )
     }
@@ -103,7 +103,7 @@ class FosterbarnTest {
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = null,
-                identitetsnummer = "26104500284"
+                identitetsnummer = "01010010000"
             ), 1, "Kan ikke være tomt eller blankt"
         )
     }

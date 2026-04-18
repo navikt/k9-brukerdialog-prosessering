@@ -75,7 +75,7 @@ class K9FormatTest {
               "ytelse": {
                 "type": "PLEIEPENGER_SYKT_BARN",
                 "barn": {
-                  "norskIdentitetsnummer": "03028104560",
+                  "norskIdentitetsnummer": "01010010003",
                   "fødselsdato": null
                 },
                 "erSammenMedBarnet": null,

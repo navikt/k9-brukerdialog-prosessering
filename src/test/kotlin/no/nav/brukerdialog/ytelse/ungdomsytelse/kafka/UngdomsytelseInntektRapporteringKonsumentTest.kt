@@ -154,7 +154,7 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
             "aktørId": "123456",
             "fødselsdato": "2000-01-01",
             "fornavn": "Ola",
-            "fødselsnummer": "02119970078"
+            "fødselsnummer": "01017000299"
           },
           "oppgittInntektForPeriode": {
                 "arbeidstakerOgFrilansInntekt": 6000,
@@ -175,7 +175,7 @@ class UngdomsytelseInntektRapporteringKonsumentTest : AbstractIntegrationTest() 
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "02119970078"
+              "norskIdentitetsnummer": "01017000299"
             },
             "ytelse": {
               "type": "UNGDOMSYTELSE",

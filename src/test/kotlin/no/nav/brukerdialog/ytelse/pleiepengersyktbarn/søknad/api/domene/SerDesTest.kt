@@ -66,7 +66,7 @@ internal class SerDesTest {
               "språk": "nb",
               "søkerNorskIdent": null,
               "barn": {
-                "fødselsnummer": "03028104560",
+                "fødselsnummer": "01010010003",
                 "navn": "Barn Barnesen",
                 "fødselsdato": "2018-01-01",
                 "aktørId": null,
@@ -317,14 +317,14 @@ internal class SerDesTest {
           "søknadId": "$søknadsId",
           "søker": {
             "aktørId": "12345",
-            "fødselsnummer": "26104500284",
+            "fødselsnummer": "01010010000",
             "fødselsdato": "1945-10-26",
             "etternavn": "Nordmann",
             "fornavn": "Ola",
             "mellomnavn": null
           },
           "barn": {
-            "fødselsnummer": "03028104560",
+            "fødselsnummer": "01010010003",
             "navn": "Barn Barnesen",
             "aktørId": "12345",
             "fødselsdato": "2018-01-01",
@@ -566,13 +566,13 @@ internal class SerDesTest {
             søknadId = søknadId,
             barn = BarnDetaljer(
                 aktørId = "12345",
-                fødselsnummer = "03028104560",
+                fødselsnummer = "01010010003",
                 fødselsdato = LocalDate.parse("2018-01-01"),
                 navn = "Barn Barnesen"
             ),
             søker = Søker(
                 aktørId = "12345",
-                fødselsnummer = "26104500284",
+                fødselsnummer = "01010010000",
                 fødselsdato = LocalDate.parse("1945-10-26"),
                 etternavn = "Nordmann",
                 fornavn = "Ola"

@@ -30,7 +30,7 @@ class OmsorgspengerMidlertidigAleneSøknadTest {
                 barn = listOf(
                     Barn(
                         navn = "Ole Dole",
-                        norskIdentifikator = "25058118020",
+                        norskIdentifikator = "01010010001",
                         aktørId = null
                     )
                 ),
@@ -59,19 +59,19 @@ class OmsorgspengerMidlertidigAleneSøknadTest {
               "versjon": "1.0.0",
               "mottattDato": "2020-01-02T03:04:05Z",
               "søker": {
-                "norskIdentitetsnummer": "02119970078"
+                "norskIdentitetsnummer": "01017000299"
               },
               "språk": "nb",
               "ytelse": {
                 "type": "OMP_UTV_MA",
                 "barn": [
                   {
-                    "norskIdentitetsnummer": "25058118020",
+                    "norskIdentitetsnummer": "01010010001",
                     "fødselsdato": null
                   }
                 ],
                 "annenForelder": {
-                  "norskIdentitetsnummer": "02119970078",
+                  "norskIdentitetsnummer": "01017000299",
                   "situasjon": "FENGSEL",
                   "situasjonBeskrivelse": "Sitter i fengsel..",
                   "periode": "2020-01-01/2020-10-01"

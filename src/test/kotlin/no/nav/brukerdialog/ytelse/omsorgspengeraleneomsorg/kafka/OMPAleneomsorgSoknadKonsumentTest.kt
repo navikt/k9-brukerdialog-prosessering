@@ -51,7 +51,7 @@ class OMPAleneomsorgSoknadKonsumentTest : AbstractIntegrationTest() {
                         navn = "Barn1",
                         type = TypeBarn.FRA_OPPSLAG,
                         aktørId = "123",
-                        identitetsnummer = "25058118020",
+                        identitetsnummer = "01010010001",
                         tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
                     )
                 )
@@ -125,7 +125,7 @@ class OMPAleneomsorgSoknadKonsumentTest : AbstractIntegrationTest() {
           "mottatt": "$mottatt",
           "språk": "nb",
           "barn": {
-            "identitetsnummer": "29076523302",
+            "identitetsnummer": "01010010002",
             "dato": "2020-08-07",
             "aktørId": "12345",
             "tidspunktForAleneomsorg": "SISTE_2_ÅRENE",
@@ -139,7 +139,7 @@ class OMPAleneomsorgSoknadKonsumentTest : AbstractIntegrationTest() {
             "aktørId": "123456",
             "fødselsdato": "1993-01-04",
             "fornavn": "Ola",
-            "fødselsnummer": "02119970078"
+            "fødselsnummer": "01017000299"
           },
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
@@ -155,12 +155,12 @@ class OMPAleneomsorgSoknadKonsumentTest : AbstractIntegrationTest() {
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "02119970078"
+              "norskIdentitetsnummer": "01017000299"
             },
             "ytelse": {
               "barn": {
                 "fødselsdato": null,
-                "norskIdentitetsnummer": "29076523302"
+                "norskIdentitetsnummer": "01010010002"
               },
               "type": "OMP_UTV_AO",
               "periode": "2020-01-01\/..",

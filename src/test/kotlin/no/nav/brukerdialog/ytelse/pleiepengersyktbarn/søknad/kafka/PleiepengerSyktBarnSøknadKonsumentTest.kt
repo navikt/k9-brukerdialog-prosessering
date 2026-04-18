@@ -89,14 +89,14 @@ class PleiepengerSyktBarnSøknadKonsumentTest : AbstractIntegrationTest() {
              "aktørId": "123456",
              "etternavn": "Nordmann",
              "fornavn": "Ola",
-             "fødselsnummer": "02119970078",
+             "fødselsnummer": "01017000299",
              "fødselsdato": "1999-11-02",
              "mellomnavn": "Mellomnavn"
            },
            "barn": {
              "aktørId": "11111111111",
              "fødselsdato": null,
-             "fødselsnummer": "02119970078",
+             "fødselsnummer": "01017000299",
              "navn": "Ole Dole",
              "årsakManglerIdentitetsnummer": null
            },

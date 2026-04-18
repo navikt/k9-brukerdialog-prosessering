@@ -13,7 +13,7 @@ internal object EndringsmeldingUtils {
     internal fun defaultEndringsmelding(søknadsId: String, mottatt: ZonedDateTime) = PSBEndringsmeldingMottatt(
         søker = Søker(
             aktørId = "123456",
-            fødselsnummer = "02119970078",
+            fødselsnummer = "01017000299",
             etternavn = "Nordmann",
             mellomnavn = "Mellomnavn",
             fornavn = "Ola",

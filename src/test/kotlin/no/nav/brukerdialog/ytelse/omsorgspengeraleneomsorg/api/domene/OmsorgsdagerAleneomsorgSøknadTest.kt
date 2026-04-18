@@ -47,7 +47,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                 mellomnavn = null,
                 etternavn = "Barnesen",
                 aktørId = "123",
-                identitetsnummer = "25058118020"
+                identitetsnummer = "01010010001"
             ),
             BarnOppslag(
                 fødselsdato = LocalDate.now(),
@@ -55,7 +55,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                 mellomnavn = null,
                 etternavn = "Barnesen",
                 aktørId = "1234",
-                identitetsnummer = "02119970078"
+                identitetsnummer = "01017000299"
             )
         )
         søknad.leggTilIdentifikatorPåBarnHvisMangler(barnFraOppslag)
@@ -106,7 +106,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                     navn = "Barn1",
                     type = TypeBarn.FRA_OPPSLAG,
                     aktørId = "123",
-                    identitetsnummer = "25058118020",
+                    identitetsnummer = "01010010001",
                     tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
                 )
             )
@@ -122,12 +122,12 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                   "versjon": "1.0.0",
                   "mottattDato": "2020-01-02T03:04:05Z",
                   "søker": {
-                    "norskIdentitetsnummer": "02119970078"
+                    "norskIdentitetsnummer": "01017000299"
                   },
                   "ytelse": {
                     "type": "OMP_UTV_AO",
                     "barn": {
-                      "norskIdentitetsnummer": "25058118020",
+                      "norskIdentitetsnummer": "01010010001",
                       "fødselsdato": null
                     },
                     "periode": "${fjoråret}-01-01/..",
@@ -182,7 +182,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                         type = TypeBarn.FRA_OPPSLAG,
                         fødselsdato = LocalDate.now().plusDays(1),
                         aktørId = "123",
-                        identitetsnummer = "25058118020",
+                        identitetsnummer = "01010010001",
                         tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE,
                         dato = null
                     )

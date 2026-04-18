@@ -106,7 +106,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
             {
               "aktørId": null,
               "navn": "Ole Dole",
-              "norskIdentifikator": "29076523302"
+              "norskIdentifikator": "01010010002"
             },
             {
               "aktørId": null,
@@ -120,7 +120,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
             "aktørId": "123456",
             "fødselsdato": "2020-08-05",
             "fornavn": "Ola",
-            "fødselsnummer": "02119970078"
+            "fødselsnummer": "01017000299"
           },
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
@@ -134,7 +134,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
             "situasjonBeskrivelse": "Sitter i «fengsel..»",
             "periodeFraOgMed": "2020-01-01",
             "navn": "Berit",
-            "fnr": "02119970078",
+            "fnr": "01017000299",
             "periodeOver6Måneder": false,
             "situasjon": "FENGSEL"
           },
@@ -145,19 +145,19 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "02119970078"
+              "norskIdentitetsnummer": "01017000299"
             },
             "ytelse": {
               "begrunnelse": null,
               "barn": [
                 {
                   "fødselsdato": null,
-                  "norskIdentitetsnummer": "29076523302"
+                  "norskIdentitetsnummer": "01010010002"
                 }
               ],
               "annenForelder": {
                 "situasjonBeskrivelse": "Sitter i «fengsel..»",
-                "norskIdentitetsnummer": "25058118020",
+                "norskIdentitetsnummer": "01010010001",
                 "periode": "2020-01-01\/2030-01-01",
                 "situasjon": "FENGSEL"
               },

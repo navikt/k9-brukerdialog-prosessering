@@ -29,7 +29,7 @@ class OmsorgspengerUtbetalingArbeidstakerSøknadTest {
               "versjon": "1.1.0",
               "mottattDato": "2022-01-02T03:04:05Z",
               "søker": {
-                "norskIdentitetsnummer": "02119970078"
+                "norskIdentitetsnummer": "01017000299"
               },
               "ytelse": {
                 "type": "OMP_UT",
