@@ -15,10 +15,10 @@ class PleietrengendeTest {
 
     @Test
     fun `Mapping til K9Pleietrengende blir som forventet`() {
-        Pleietrengende(navn = "Ole", norskIdentitetsnummer = "06098523047")
+        Pleietrengende(navn = "Ole", norskIdentitetsnummer = "01010010004")
             .somK9Pleietrengende().also {
                 JSONAssert.assertEquals(
-                    """{"norskIdentitetsnummer":"06098523047","fødselsdato":null}""",
+                    """{"norskIdentitetsnummer":"01010010004","fødselsdato":null}""",
                     JsonUtils.toString(it),
                     true
                 )
@@ -36,13 +36,13 @@ class PleietrengendeTest {
 
     @Test
     fun `Gyldig pleietrengende gir ingen valideringsfeil`() {
-        Validator.verifiserIngenValideringsFeil(Pleietrengende(navn = "Ole", norskIdentitetsnummer = "06098523047"))
+        Validator.verifiserIngenValideringsFeil(Pleietrengende(navn = "Ole", norskIdentitetsnummer = "01010010004"))
     }
 
     @Test
     fun `Blankt navn skal gi valideringsfeil`() {
         Validator.verifiserValideringsFeil(
-            Pleietrengende(navn = " ", norskIdentitetsnummer = "06098523047"),
+            Pleietrengende(navn = " ", norskIdentitetsnummer = "01010010004"),
             1,
             "Kan ikke være tomt eller blankt"
         )

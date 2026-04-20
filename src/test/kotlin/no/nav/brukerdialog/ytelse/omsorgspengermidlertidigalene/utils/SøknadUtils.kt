@@ -15,7 +15,7 @@ object SøknadUtils {
         språk = "nb",
         annenForelder = AnnenForelder(
             navn = "Berit",
-            fnr = "02119970078",
+            fnr = "01017000299",
             situasjon = Situasjon.FENGSEL,
             situasjonBeskrivelse = "Sitter i fengsel..",
             periodeOver6Måneder = false,
@@ -25,7 +25,7 @@ object SøknadUtils {
         barn = listOf(
             Barn(
                 navn = "Ole Dole",
-                norskIdentifikator = "25058118020",
+                norskIdentifikator = "01010010001",
                 aktørId = null
             )
         ),

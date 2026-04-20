@@ -117,13 +117,13 @@ class PleiepengerILivetsSluttfaseSøknadKonsumentTest : AbstractIntegrationTest(
             "aktørId": "123456",
             "fødselsdato": "2000-01-01",
             "fornavn": "Ola",
-            "fødselsnummer": "02119970078"
+            "fødselsnummer": "01017000299"
           },
           "pleietrengende": {
             "fødselsdato": null,
             "navn": "Bjarne",
             "årsakManglerIdentitetsnummer": null,
-            "norskIdentitetsnummer": "02119970078"
+            "norskIdentitetsnummer": "01017000299"
           },
           "flereSokere": "JA",
           "selvstendigNæringsdrivende": {
@@ -316,7 +316,7 @@ class PleiepengerILivetsSluttfaseSøknadKonsumentTest : AbstractIntegrationTest(
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "02119970078"
+              "norskIdentitetsnummer": "01017000299"
             },
             "ytelse": {
               "arbeidstid": {
@@ -352,7 +352,7 @@ class PleiepengerILivetsSluttfaseSøknadKonsumentTest : AbstractIntegrationTest(
               },
               "pleietrengende": {
                 "fødselsdato": null,
-                "norskIdentitetsnummer": "02119970078"
+                "norskIdentitetsnummer": "01017000299"
               },
               "opptjeningAktivitet": {
                 "frilanser": {

@@ -63,7 +63,7 @@ class EndringsmeldingControllerTest {
     private lateinit var metrikkService: MetrikkService
 
     private companion object {
-        private val søkerMedBarn = "02119970078"
+        private val søkerMedBarn = "01017000299"
         private val barnIdentitetsnummer = "18909798651"
     }
 

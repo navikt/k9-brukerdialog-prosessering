@@ -19,7 +19,7 @@ class OmsorgspengerUtvidetRettSøknadTest {
             språk = "nb",
             kroniskEllerFunksjonshemming = true,
             barn = Barn(
-                norskIdentifikator = "02119970078",
+                norskIdentifikator = "01017000299",
                 navn = "Barn Barnesen"
             ),
             relasjonTilBarnet = SøkerBarnRelasjon.FAR,
@@ -71,12 +71,12 @@ class OmsorgspengerUtvidetRettSøknadTest {
                   "mottattDato": "2020-01-02T03:04:05Z",
                   "søknadId": "${søknad.søknadId}",
                   "søker": {
-                    "norskIdentitetsnummer": "02119970078"
+                    "norskIdentitetsnummer": "01017000299"
                   },
                   "ytelse": {
                     "barn": {
                       "fødselsdato": null,
-                      "norskIdentitetsnummer": "02119970078"
+                      "norskIdentitetsnummer": "01017000299"
                     },
                     "kroniskEllerFunksjonshemming": true,
                     "type": "OMP_UTV_KS",

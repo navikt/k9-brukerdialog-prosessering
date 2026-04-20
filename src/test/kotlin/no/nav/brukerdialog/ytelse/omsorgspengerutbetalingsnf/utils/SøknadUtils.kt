@@ -77,7 +77,7 @@ object SøknadUtils {
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 type = TypeBarn.FOSTERBARN,
                 aktørId = null,
-                identitetsnummer = "26104500284"
+                identitetsnummer = "01010010000"
             )
         ),
         frilans = Frilans(

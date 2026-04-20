@@ -21,11 +21,11 @@ object OMPKSSøknadUtils {
         fornavn = "Kjell",
         mellomnavn = null,
         etternavn = "Kjeller",
-        fødselsnummer = "26104500284"
+        fødselsnummer = "01010010000"
     )
 
     val barn = Barn(
-        norskIdentifikator = "02119970078",
+        norskIdentifikator = "01017000299",
         navn = "Ole Dole Doffen",
         aktørId = "123456",
         fødselsdato = LocalDate.parse("2020-01-01")
@@ -35,11 +35,11 @@ object OMPKSSøknadUtils {
         Versjon.of("1.0.0"),
         mottatt,
         no.nav.k9.søknad.felles.personopplysninger.Søker(
-            NorskIdentitetsnummer.of("26104500284")
+            NorskIdentitetsnummer.of("01010010000")
         ),
         OmsorgspengerKroniskSyktBarn(
             no.nav.k9.søknad.felles.personopplysninger.Barn()
-                .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("02119970078")),
+                .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("01017000299")),
             true,
             true,
             "Beskrivelse av høyere risiko for fravær"

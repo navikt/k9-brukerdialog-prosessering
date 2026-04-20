@@ -67,7 +67,7 @@ class SøknadUtils {
             aktørId = "12345",
             fødselsdato = LocalDate.parse("2000-01-01"),
             fornavn = "Kjell",
-            fødselsnummer = "25037139184"
+            fødselsnummer = "01010010005"
         )
 
         fun defaultSøknad(søknadId: String = UUID.randomUUID().toString()) = PleiepengerSyktBarnSøknad(
@@ -77,7 +77,7 @@ class SøknadUtils {
             mottatt = ZonedDateTime.of(2021, 1, 10, 3, 4, 5, 6, ZoneId.of("UTC")),
             språk = Språk.nb,
             barn = BarnDetaljer(
-                fødselsnummer = "03028104560",
+                fødselsnummer = "01010010003",
                 fødselsdato = LocalDate.parse("2018-01-01"),
                 navn = "Barn Barnesen",
                 aktørId = null

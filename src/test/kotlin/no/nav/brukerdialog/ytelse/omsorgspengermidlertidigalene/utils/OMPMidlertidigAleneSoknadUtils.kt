@@ -24,7 +24,7 @@ internal object OMPMidlertidigAleneSoknadUtils {
         mottatt = mottatt,
         søker = Søker(
             aktørId = "123456",
-            fødselsnummer = "02119970078",
+            fødselsnummer = "01017000299",
             fødselsdato = LocalDate.parse("2020-08-05"),
             etternavn = "Nordmann",
             mellomnavn = "Mellomnavn",
@@ -32,7 +32,7 @@ internal object OMPMidlertidigAleneSoknadUtils {
         ),
         annenForelder = AnnenForelder(
             navn = "Berit",
-            fnr = "02119970078",
+            fnr = "01017000299",
             situasjon = Situasjon.FENGSEL,
             situasjonBeskrivelse = "Sitter i «fengsel..»",
             periodeOver6Måneder = false,
@@ -42,7 +42,7 @@ internal object OMPMidlertidigAleneSoknadUtils {
         barn = listOf(
             Barn(
                 navn = "Ole Dole",
-                norskIdentifikator = "29076523302",
+                norskIdentifikator = "01010010002",
                 aktørId = null
             ),
             Barn(
@@ -60,13 +60,13 @@ internal object OMPMidlertidigAleneSoknadUtils {
         SøknadId(søknadId),
         Versjon("1.0.0"),
         mottatt,
-        no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of("02119970078")),
+        no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of("01017000299")),
         OmsorgspengerMidlertidigAlene(
             listOf(
-                no.nav.k9.søknad.felles.personopplysninger.Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("29076523302"))
+                no.nav.k9.søknad.felles.personopplysninger.Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("01010010002"))
             ),
             no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder(
-                NorskIdentitetsnummer.of("25058118020"),
+                NorskIdentitetsnummer.of("01010010001"),
                 no.nav.k9.søknad.ytelse.omsorgspenger.utvidetrett.v1.AnnenForelder.SituasjonType.FENGSEL,
                 "Sitter i «fengsel..»",
                 Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2030-01-01"))

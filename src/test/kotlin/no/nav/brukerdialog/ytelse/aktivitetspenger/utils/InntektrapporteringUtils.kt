@@ -28,7 +28,7 @@ object InntektrapporteringUtils {
     )
 
     fun gyldigInntektsrapportering(
-        søkerFødselsnummer: String = "02119970078",
+        søkerFødselsnummer: String = "01017000299",
         søknadId: String = UUID.randomUUID().toString(),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
         oppgittInntektForPeriode: OppgittInntektForPeriode = OppgittInntektForPeriode(
@@ -69,7 +69,7 @@ object InntektrapporteringUtils {
             SøknadId(søknadId),
             Versjon("1.0.0"),
             mottatt,
-            K9Søker(NorskIdentitetsnummer.of("02119970078")),
+            K9Søker(NorskIdentitetsnummer.of("01017000299")),
             ytelse
 
         ).medKildesystem(Kildesystem.SØKNADSDIALOG)

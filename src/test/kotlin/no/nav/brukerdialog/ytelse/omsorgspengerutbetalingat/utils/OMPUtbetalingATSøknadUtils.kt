@@ -31,7 +31,7 @@ internal object OMPUtbetalingATSøknadUtils {
         mottatt = mottatt,
         søker = Søker(
             aktørId = "123456",
-            fødselsnummer = "02119970078",
+            fødselsnummer = "01017000299",
             fødselsdato = LocalDate.parse("1999-11-02"),
             etternavn = "Nordmann",
             mellomnavn = null,
@@ -170,10 +170,10 @@ internal object OMPUtbetalingATSøknadUtils {
             SøknadId(søknadId),
             Versjon("1.0.0"),
             mottatt,
-            K9Søker(NorskIdentitetsnummer.of("02119970078")),
+            K9Søker(NorskIdentitetsnummer.of("01017000299")),
             OmsorgspengerUtbetaling(
                 listOf(
-                    Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("26128027024"))
+                    Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("01010010007"))
                 ),
                 null,
                 listOf(

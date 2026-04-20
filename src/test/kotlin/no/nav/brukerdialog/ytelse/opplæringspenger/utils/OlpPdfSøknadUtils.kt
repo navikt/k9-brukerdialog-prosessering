@@ -29,7 +29,7 @@ object OlpPdfSøknadUtils {
                 fødselsdato = LocalDate.parse("1990-09-29"),
             ),
             barn = Barn(
-                norskIdentifikator = "02119970078",
+                norskIdentifikator = "01017000299",
                 navn = "OLE DOLE",
                 aktørId = "11111111111",
                 relasjonTilBarnet = BarnRelasjon.ANNET,
