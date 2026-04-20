@@ -167,7 +167,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             "aktørId": "123456",
             "fødselsdato": "2000-01-01",
             "fornavn": "Ola",
-            "fødselsnummer": "02119970078"
+            "fødselsnummer": "01017000299"
           },
           "språk": "nb",
           "dokumentId": [
@@ -182,7 +182,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             "språk": "nb",
             "mottattDato": "$mottatt",
             "søker": {
-              "norskIdentitetsnummer": "02119970078"
+              "norskIdentitetsnummer": "01017000299"
             },
             "bekreftelse": {
               "type": "UNG_ENDRET_STARTDATO",

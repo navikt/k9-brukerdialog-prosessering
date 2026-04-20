@@ -17,7 +17,7 @@ import java.time.ZonedDateTime
 internal object OMPAleneomsorgSoknadUtils {
 
     internal fun defaultSøknad(søknadId: String, mottatt: ZonedDateTime): OMPAleneomsorgSoknadMottatt {
-        val søkerFødselsnummer = "02119970078"
+        val søkerFødselsnummer = "01017000299"
         return OMPAleneomsorgSoknadMottatt(
             språk = "nb",
             søknadId = søknadId,
@@ -33,7 +33,7 @@ internal object OMPAleneomsorgSoknadUtils {
             barn = Barn(
                 navn = "Ole Dole",
                 type = TypeBarn.FRA_OPPSLAG,
-                identitetsnummer = "29076523302",
+                identitetsnummer = "01010010002",
                 aktørId = "12345",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.SISTE_2_ÅRENE,
                 dato = LocalDate.parse("2020-08-07")
@@ -45,7 +45,7 @@ internal object OMPAleneomsorgSoknadUtils {
                 no.nav.k9.søknad.felles.personopplysninger.Søker(NorskIdentitetsnummer.of(søkerFødselsnummer)),
                 OmsorgspengerAleneOmsorg(
                     no.nav.k9.søknad.felles.personopplysninger.Barn()
-                        .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("29076523302")),
+                        .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("01010010002")),
                     Periode(mottatt.toLocalDate(), null)
                 )
 

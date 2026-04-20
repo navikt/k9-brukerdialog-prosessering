@@ -48,7 +48,7 @@ import no.nav.k9.søknad.ytelse.pls.v1.Pleietrengende as K9Pleietrengende
 object PilsSøknadUtils {
 
     fun gyldigSøknad(
-        søkerFødselsnummer: String = "02119970078",
+        søkerFødselsnummer: String = "01017000299",
         søknadId: String = UUID.randomUUID().toString(),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC"))
     ) = PilsSøknadMottatt(
@@ -95,7 +95,7 @@ object PilsSøknadUtils {
         ),
         vedleggId = listOf("123", "456"),
         opplastetIdVedleggId = listOf("987"),
-        pleietrengende = Pleietrengende(norskIdentitetsnummer = "02119970078", navn = "Bjarne"),
+        pleietrengende = Pleietrengende(norskIdentitetsnummer = "01017000299", navn = "Bjarne"),
         medlemskap = Medlemskap(
             harBoddIUtlandetSiste12Mnd = true,
             utenlandsoppholdSiste12Mnd = listOf(
@@ -239,9 +239,9 @@ object PilsSøknadUtils {
         SøknadId(søknadId),
         Versjon("1.0.0"),
         mottatt,
-        K9Søker(NorskIdentitetsnummer.of("02119970078")),
+        K9Søker(NorskIdentitetsnummer.of("01017000299")),
         PleipengerLivetsSluttfase()
-            .medPleietrengende(K9Pleietrengende().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("02119970078")))
+            .medPleietrengende(K9Pleietrengende().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("01017000299")))
             .medUtenlandsopphold(
                 K9Utenlandsopphold()
                     .medPerioder(

@@ -22,7 +22,7 @@ class OmsorgsdagerAleneomsorgBarnTest {
                 mellomnavn = null,
                 etternavn = "Barnesen",
                 aktørId = "123",
-                identitetsnummer = "02119970078"
+                identitetsnummer = "01017000299"
             )
         )
         val barn = Barn(
@@ -43,12 +43,12 @@ class OmsorgsdagerAleneomsorgBarnTest {
             navn = "Barn uten identifikator",
             type = TypeBarn.FRA_OPPSLAG,
             aktørId = "123",
-            identitetsnummer = "02119970078",
+            identitetsnummer = "01017000299",
             tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
         )
         val forventetK9Barn = """
             {
-              "norskIdentitetsnummer": "02119970078",
+              "norskIdentitetsnummer": "01017000299",
               "fødselsdato": null
             }
         """.trimIndent()
@@ -63,7 +63,7 @@ class OmsorgsdagerAleneomsorgBarnTest {
                 navn = "Barn uten identifikator",
                 type = TypeBarn.FOSTERBARN,
                 fødselsdato = LocalDate.now().minusMonths(4),
-                identitetsnummer = "02119970078",
+                identitetsnummer = "01017000299",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
             )
         )
@@ -92,7 +92,7 @@ class OmsorgsdagerAleneomsorgBarnTest {
                 navn = " ",
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = "123",
-                identitetsnummer = "02119970078",
+                identitetsnummer = "01017000299",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
             ), 1, "Kan ikke være tomt eller blankt"
         )
@@ -105,7 +105,7 @@ class OmsorgsdagerAleneomsorgBarnTest {
                 navn = "barnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnbarnb",
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = "123",
-                identitetsnummer = "02119970078",
+                identitetsnummer = "01017000299",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
             ), 1, "Kan ikke være mer enn 100 tegn"
         )
@@ -119,7 +119,7 @@ class OmsorgsdagerAleneomsorgBarnTest {
                 type = TypeBarn.FOSTERBARN,
                 fødselsdato = null,
                 aktørId = "123",
-                identitetsnummer = "02119970078",
+                identitetsnummer = "01017000299",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.TIDLIGERE
             ), 1, "Må være satt når 'type' er annet enn 'FRA_OPPSLAG'"
         )
@@ -132,7 +132,7 @@ class OmsorgsdagerAleneomsorgBarnTest {
                 navn = "Barnesen",
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = "123",
-                identitetsnummer = "02119970078",
+                identitetsnummer = "01017000299",
                 tidspunktForAleneomsorg = TidspunktForAleneomsorg.SISTE_2_ÅRENE,
                 dato = null
             ), 1, "Må være satt når 'tidspunktForAleneomsorg' er 'SISTE_2_ÅRENE'"

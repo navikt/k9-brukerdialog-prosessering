@@ -89,7 +89,7 @@ class PSBSøknadPdfGeneratorTest {
                     fødselsdato = LocalDate.parse("1990-09-29"),
                 ),
                 barn = Barn(
-                    fødselsnummer = "02119970078",
+                    fødselsnummer = "01017000299",
                     navn = "OLE DOLE",
                     aktørId = "11111111111"
                 ),

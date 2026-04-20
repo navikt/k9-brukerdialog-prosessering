@@ -47,7 +47,7 @@ internal object PSBSøknadUtils {
         tilOgMed = LocalDate.parse("2021-01-01"),
         søker = Søker(
             aktørId = "123456",
-            fødselsnummer = "02119970078",
+            fødselsnummer = "01017000299",
             etternavn = "Nordmann",
             mellomnavn = "Mellomnavn",
             fornavn = "Ola",
@@ -55,7 +55,7 @@ internal object PSBSøknadUtils {
         ),
         barn = Barn(
             navn = "Ole Dole",
-            fødselsnummer = "02119970078",
+            fødselsnummer = "01017000299",
             aktørId = "11111111111"
         ),
         vedleggId = listOf("123", "456"),

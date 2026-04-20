@@ -11,7 +11,7 @@ import java.time.LocalDate
 class BarnTest {
     private companion object {
         val gyldigBarn = BarnDetaljer(
-            norskIdentifikator = "02119970078",
+            norskIdentifikator = "01017000299",
             fødselsdato = LocalDate.parse("2021-01-01"),
             aktørId = "10000001",
             navn = "Barnesen",

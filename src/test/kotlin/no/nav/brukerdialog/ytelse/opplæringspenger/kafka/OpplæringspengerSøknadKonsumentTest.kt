@@ -498,7 +498,7 @@ class OpplæringspengerSøknadKonsumentTest : AbstractIntegrationTest() {
               "aktørId": "11111111111",
               "fødselsdato": null,
               "navn": "OLE DOLE",
-              "norskIdentifikator": "02119970078",
+              "norskIdentifikator": "01017000299",
               "årsakManglerIdentitetsnummer": null,
               "relasjonTilBarnet": "ANNET",
               "relasjonTilBarnetBeskrivelse": "Blaabla annet"

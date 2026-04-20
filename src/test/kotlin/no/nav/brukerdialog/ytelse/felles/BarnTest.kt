@@ -18,7 +18,7 @@ class BarnTest {
     @Test
     fun `Barn equals test`() {
         val barn = Barn(
-            norskIdentifikator = "02119970078",
+            norskIdentifikator = "01017000299",
             fødselsdato = LocalDate.parse("2022-01-01"),
             aktørId = "12345",
             navn = "Barn Barnesen"
@@ -26,7 +26,7 @@ class BarnTest {
         assertFalse(barn.equals(null))
         assertTrue(
             barn == Barn(
-                norskIdentifikator = "02119970078",
+                norskIdentifikator = "01017000299",
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 aktørId = "12345",
                 navn = "Barn Barnesen"
@@ -43,7 +43,7 @@ class BarnTest {
                 mellomnavn = null,
                 etternavn = "Barnesen",
                 aktørId = "123",
-                identitetsnummer = "02119970078"
+                identitetsnummer = "01017000299"
             )
         )
         val barn = Barn(navn = "Barn uten identifikator", aktørId = "123")
@@ -55,7 +55,7 @@ class BarnTest {
     @Test
     fun `Barn til k9Barn blir som forventet`() {
         val barn = Barn(
-            norskIdentifikator = "02119970078",
+            norskIdentifikator = "01017000299",
             fødselsdato = LocalDate.parse("2022-01-01"),
             aktørId = "12345",
             navn = "Barn Barnesen"
@@ -64,7 +64,7 @@ class BarnTest {
         val forventetK9Barn = JSONObject(
             """
             {
-              "norskIdentitetsnummer": "02119970078",
+              "norskIdentitetsnummer": "01017000299",
               "fødselsdato": null
             }
         """.trimIndent()
@@ -76,7 +76,7 @@ class BarnTest {
     @Test
     fun `Gyldig barn gir ingen valideringsfeil`() {
         Barn(
-            norskIdentifikator = "02119970078",
+            norskIdentifikator = "01017000299",
             navn = "Barnesen"
         ).valider("barn").verifiserIngenValideringsFeil()
     }
@@ -108,7 +108,7 @@ class BarnTest {
     @Test
     fun `Forvent valideringsfeil dersom navn er blank`() {
         Barn(
-            norskIdentifikator = "02119970078",
+            norskIdentifikator = "01017000299",
             navn = " "
         ).valider("barn").verifiserValideringsFeil(1, listOf("barn.navn kan ikke være tomt eller blank."))
     }

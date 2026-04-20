@@ -46,7 +46,7 @@ class OMPAleneomsorgSoknadPdfGeneratorTest {
             ).copy(
                 barn = Barn(
                     navn = "Ole Dole",
-                    identitetsnummer = "29076523302",
+                    identitetsnummer = "01010010002",
                     type = TypeBarn.FOSTERBARN,
                     fødselsdato = LocalDate.now().minusMonths(5),
                     tidspunktForAleneomsorg = TidspunktForAleneomsorg.SISTE_2_ÅRENE,
