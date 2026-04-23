@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.ytelse.ettersendelse.api.domene
 
-import no.nav.k9.ettersendelse.EttersendelseType
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker
@@ -8,6 +7,7 @@ import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
 import no.nav.brukerdialog.ytelse.ettersendelse.utils.EttersendingUtils.defaultEttersendelse
+import no.nav.k9.ettersendelse.EttersendelseType
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 
@@ -20,7 +20,7 @@ class EttersendingSøknadTest {
             {
               "søknadId": "${søknad.søknadId}",
               "versjon": "0.0.1",
-              "mottattDato": "2020-01-02T03:04:05Z",
+              "mottattDato": "2020-01-02T03:04:05.000Z",
               "søker": {
                 "norskIdentitetsnummer": "01017000299"
               },

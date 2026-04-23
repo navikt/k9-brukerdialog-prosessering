@@ -41,7 +41,6 @@ class UngDeltakelseOpplyserClientConfig(
             .readTimeout(Duration.ofSeconds(20))
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .rootUri(ungDeltakelseOpplyserBaseUrl)
-            .defaultMessageConverters()
             .additionalInterceptors(
                 RestTemplateUtils.exchangeBearerTokenInterceptor(tokenxUngDeltakelseOpplyserClientProperties, oAuth2AccessTokenService),
                 RestTemplateUtils.requestLoggerInterceptor(logger),

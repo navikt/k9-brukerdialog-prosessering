@@ -40,7 +40,6 @@ class K9SakInnsynApiClientConfig(
             .readTimeout(Duration.ofSeconds(20))
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .rootUri(k9SakInnsynApiBaseUrl)
-            .defaultMessageConverters()
             .additionalInterceptors(
                 RestTemplateUtils.exchangeBearerTokenInterceptor(tokenxK9SakInnsynApiClientProperties, oAuth2AccessTokenService),
                 RestTemplateUtils.requestLoggerInterceptor(logger),

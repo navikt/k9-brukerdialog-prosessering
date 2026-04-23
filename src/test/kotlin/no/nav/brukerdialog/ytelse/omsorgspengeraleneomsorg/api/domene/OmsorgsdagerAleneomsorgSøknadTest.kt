@@ -1,13 +1,13 @@
 package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene
 
-import no.nav.k9.søknad.JsonUtils
-import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.utils.SøknadUtils
 import no.nav.brukerdialog.oppslag.barn.BarnOppslag
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.metadata
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.somJson
 import no.nav.brukerdialog.utils.SøknadUtils.Companion.søker
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
+import no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.utils.SøknadUtils
+import no.nav.k9.søknad.JsonUtils
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -120,7 +120,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                 {
                   "søknadId": ${søknad.søknadId},
                   "versjon": "1.0.0",
-                  "mottattDato": "2020-01-02T03:04:05Z",
+                  "mottattDato": "2020-01-02T03:04:05.000Z",
                   "søker": {
                     "norskIdentitetsnummer": "01017000299"
                   },

@@ -1,9 +1,16 @@
 package no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag
 
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension
 import com.ninjasquad.springmockk.MockkBean
 import no.nav.brukerdialog.GcsStorageTestConfiguration
+import no.nav.brukerdialog.oppslag.soker.SøkerOppslagRespons
 import no.nav.brukerdialog.utils.Constants
 import no.nav.brukerdialog.utils.MDCUtil
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
@@ -22,6 +29,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.LocalDate
 
 @EnableMockOAuth2Server
 @ExtendWith(SpringExtension::class)
@@ -40,6 +48,15 @@ class SøkerOppslagsServiceTest {
         @DynamicPropertySource
         fun configureProperties(registry: DynamicPropertyRegistry) {
             registry.add("no.nav.integration.k9-selvbetjening-oppslag-base-url") { wireMock.baseUrl() }
+        }
+
+        /** ObjectMapper som matcher k9-selvbetjening-oppslag sin Jackson-konfigurasjon (dusseldorfConfigured). */
+        val k9SelvbetjeningOppslagObjectMapper: ObjectMapper = jacksonObjectMapper().apply {
+            configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+            configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false)
+            propertyNamingStrategy = PropertyNamingStrategies.LOWER_CAMEL_CASE
+            registerModule(JavaTimeModule())
         }
     }
 
@@ -73,6 +90,28 @@ class SøkerOppslagsServiceTest {
 
         val søker = søkerenOppslagsService.hentSøker()
         assertThat(søker).isNotNull
+    }
+
+    @Test
+    fun `klient skal deserialisere SøkerOppslagRespons serialisert med config fra k9-selvbetjening-oppslag`() {
+        val søkerRespons = SøkerOppslagRespons(
+            aktørId = "1234567890123",
+            fornavn = "Ola",
+            mellomnavn = "Nordmann",
+            etternavn = "Nordmann",
+            fødselsdato = LocalDate.parse("1990-01-01")
+        )
+
+        mockHentSøker(
+            statusKode = HttpStatus.OK.value(),
+            body = k9SelvbetjeningOppslagObjectMapper.writeValueAsString(søkerRespons)
+        )
+
+        val søker = søkerenOppslagsService.hentSøker()
+        assertThat(søker).isNotNull
+        assertThat(søker.aktørId).isEqualTo("1234567890123")
+        assertThat(søker.fornavn).isEqualTo("Ola")
+        assertThat(søker.fødselsdato).isEqualTo(LocalDate.parse("1990-01-01"))
     }
 
     private fun mockHentSøker(statusKode: Int, body: String?) {

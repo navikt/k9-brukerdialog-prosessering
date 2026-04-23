@@ -44,7 +44,7 @@ class K9FormatTest {
             //language=json
             """
             {
-            "mottattDato" : "2020-01-02T03:04:05Z",
+            "mottattDato" : "2020-01-02T03:04:05.000Z",
             "språk" : "nb",
             "søker" : {
               "norskIdentitetsnummer" : "123456789"
