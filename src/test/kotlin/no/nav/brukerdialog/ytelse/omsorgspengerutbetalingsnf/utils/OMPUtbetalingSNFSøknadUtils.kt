@@ -45,7 +45,7 @@ internal object OMPUtbetalingSNFSøknadUtils {
         mottatt = mottatt,
         søker = Søker(
             aktørId = "123456",
-            fødselsnummer = "01017000299",
+            fødselsnummer = "23500180528",
             fødselsdato = LocalDate.parse("2020-08-02"),
             etternavn = "Nordmann",
             mellomnavn = "Mellomnavn",

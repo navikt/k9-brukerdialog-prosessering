@@ -12,7 +12,7 @@ internal object SøknadUtils {
         språk = "nb",
         mottatt = ZonedDateTime.parse("2020-01-02T03:04:05.000Z", JacksonConfiguration.zonedDateTimeFormatter),
         barn = Barn(
-            norskIdentifikator = "01017000299",
+            norskIdentifikator = "23500180528",
             fødselsdato = null,
             aktørId = null,
             navn = "Barn Barnsen"

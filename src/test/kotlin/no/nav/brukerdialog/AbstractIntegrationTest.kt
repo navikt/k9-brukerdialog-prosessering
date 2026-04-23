@@ -161,7 +161,7 @@ abstract class AbstractIntegrationTest {
         )
     }
 
-    protected fun mockSøker(aktørId: String = "1234", fnr: String = "01017000299"): Søker {
+    protected fun mockSøker(aktørId: String = "1234", fnr: String = "23500180528"): Søker {
         val søker = Søker(
             aktørId = aktørId,
             fødselsdato = LocalDate.parse("1999-11-02"),

@@ -15,7 +15,7 @@ object SøknadUtils {
         språk = "nb",
         annenForelder = AnnenForelder(
             navn = "Berit",
-            fnr = "01017000299",
+            fnr = "23500180528",
             situasjon = Situasjon.FENGSEL,
             situasjonBeskrivelse = "Sitter i fengsel..",
             periodeOver6Måneder = false,

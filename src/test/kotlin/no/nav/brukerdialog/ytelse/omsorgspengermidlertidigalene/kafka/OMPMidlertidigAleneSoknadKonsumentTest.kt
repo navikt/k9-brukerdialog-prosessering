@@ -120,7 +120,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
             "aktørId": "123456",
             "fødselsdato": "2020-08-05",
             "fornavn": "Ola",
-            "fødselsnummer": "01017000299"
+            "fødselsnummer": "23500180528"
           },
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
@@ -134,7 +134,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
             "situasjonBeskrivelse": "Sitter i «fengsel..»",
             "periodeFraOgMed": "2020-01-01",
             "navn": "Berit",
-            "fnr": "01017000299",
+            "fnr": "23500180528",
             "periodeOver6Måneder": false,
             "situasjon": "FENGSEL"
           },
@@ -145,7 +145,7 @@ class OMPMidlertidigAleneSoknadKonsumentTest : AbstractIntegrationTest() {
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "01017000299"
+              "norskIdentitetsnummer": "23500180528"
             },
             "ytelse": {
               "begrunnelse": null,

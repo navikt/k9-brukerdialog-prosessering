@@ -29,7 +29,7 @@ object InntektrapporteringUtils {
     )
 
     fun gyldigInntektsrapportering(
-        søkerFødselsnummer: String = "01017000299",
+        søkerFødselsnummer: String = "23500180528",
         søknadId: String = UUID.randomUUID().toString(),
         deltakelseId: UUID = UUID.randomUUID(),
         mottatt: ZonedDateTime = ZonedDateTime.of(2018, 1, 2, 3, 4, 5, 6, ZoneId.of("UTC")),
@@ -73,7 +73,7 @@ object InntektrapporteringUtils {
             SøknadId(søknadId),
             Versjon("1.0.0"),
             mottatt,
-            K9Søker(NorskIdentitetsnummer.of("01017000299")),
+            K9Søker(NorskIdentitetsnummer.of("23500180528")),
             ytelse
 
         ).medKildesystem(Kildesystem.SØKNADSDIALOG)

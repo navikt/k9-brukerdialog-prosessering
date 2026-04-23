@@ -10,7 +10,7 @@ class BarnValidationTest {
     private companion object {
         val felt = "barn"
         val gyldigBarn = BarnDetaljer(
-            fødselsnummer = "01017000299",
+            fødselsnummer = "23500180528",
             fødselsdato = LocalDate.parse("2021-01-01"),
             aktørId = "10000001",
             navn = "Barnesen",

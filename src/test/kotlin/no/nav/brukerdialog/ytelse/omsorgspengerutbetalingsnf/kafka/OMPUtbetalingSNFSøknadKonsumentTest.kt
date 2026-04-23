@@ -109,7 +109,7 @@ class OMPUtbetalingSNFSøknadKonsumentTest : AbstractIntegrationTest() {
             "aktørId": "123456",
             "fødselsdato": "2020-08-02",
             "fornavn": "Ola",
-            "fødselsnummer": "01017000299"
+            "fødselsnummer": "23500180528"
           },
           "harDekketTiFørsteDagerSelv": true,
           "harSyktBarn": true,

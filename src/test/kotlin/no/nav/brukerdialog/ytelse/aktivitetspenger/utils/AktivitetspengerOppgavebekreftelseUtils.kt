@@ -47,7 +47,7 @@ object AktivitetspengerOppgavebekreftelseUtils {
     )
 
     fun oppgavebekreftelseMottatt(
-        søkerFødselsnummer: String = "01017000299",
+        søkerFødselsnummer: String = "23500180528",
         oppgaveReferanse: String = UUID.randomUUID().toString(),
         oppgave: KomplettAktivitetspengerOppgaveDTO = defaultKomplettOppgave.copy(
             oppgaveReferanse = oppgaveReferanse
@@ -79,7 +79,7 @@ object AktivitetspengerOppgavebekreftelseUtils {
             .medSøknadId(søknadId)
             .medVersjon("1.0.0")
             .medMottattDato(mottatt)
-            .medSøker(K9Søker(NorskIdentitetsnummer.of("01017000299")))
+            .medSøker(K9Søker(NorskIdentitetsnummer.of("23500180528")))
             .medBekreftelse(bekreftelse)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
     }

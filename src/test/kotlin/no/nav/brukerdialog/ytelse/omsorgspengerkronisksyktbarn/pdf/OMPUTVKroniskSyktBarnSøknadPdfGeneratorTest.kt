@@ -47,7 +47,7 @@ class OMPUTVKroniskSyktBarnSøknadPdfGeneratorTest {
                 fødselsdato = LocalDate.now().minusYears(20)
             ),
             barn = Barn(
-                norskIdentifikator = "01017000299",
+                norskIdentifikator = "23500180528",
                 fødselsdato = LocalDate.now(),
                 aktørId = "123456",
                 navn = "Ole Dole"

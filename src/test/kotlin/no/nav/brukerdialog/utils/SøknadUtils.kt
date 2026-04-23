@@ -21,7 +21,7 @@ class SøknadUtils {
             fødselsdato = LocalDate.parse("1999-11-02"),
             fornavn = "MOR",
             etternavn = "MORSEN",
-            fødselsnummer = "01017000299"
+            fødselsnummer = "23500180528"
         )
 
         val metadata = MetaInfo(

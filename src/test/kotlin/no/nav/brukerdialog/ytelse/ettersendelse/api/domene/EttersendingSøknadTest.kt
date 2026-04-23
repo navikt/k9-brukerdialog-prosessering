@@ -22,11 +22,11 @@ class EttersendingSøknadTest {
               "versjon": "0.0.1",
               "mottattDato": "2020-01-02T03:04:05.000Z",
               "søker": {
-                "norskIdentitetsnummer": "01017000299"
+                "norskIdentitetsnummer": "23500180528"
               },
               "type": "LEGEERKLÆRING",
               "pleietrengende": {
-                "norskIdentitetsnummer": "01017000299"
+                "norskIdentitetsnummer": "23500180528"
               },
               "ytelse": "PLEIEPENGER_LIVETS_SLUTTFASE"
             }

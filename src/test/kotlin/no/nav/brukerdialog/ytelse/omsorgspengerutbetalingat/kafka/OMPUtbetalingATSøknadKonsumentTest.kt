@@ -116,7 +116,7 @@ class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
             "aktørId": "123456",
             "fødselsdato": "1999-11-02",
             "fornavn": "Ola",
-            "fødselsnummer": "01017000299"
+            "fødselsnummer": "23500180528"
           },
           "fosterbarn": [
             {
@@ -271,7 +271,7 @@ class OMPUtbetalingATSøknadKonsumentTest : AbstractIntegrationTest() {
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "01017000299"
+              "norskIdentitetsnummer": "23500180528"
             },
             "ytelse": {
               "utenlandsopphold": {

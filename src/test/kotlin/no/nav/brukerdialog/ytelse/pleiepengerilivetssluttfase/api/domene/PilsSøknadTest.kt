@@ -193,7 +193,7 @@ class PilsSøknadTest {
               "versjon": "1.0.0",
               "mottattDato": "2022-01-02T03:04:05.000Z",
               "søker": {
-                "norskIdentitetsnummer": "01017000299"
+                "norskIdentitetsnummer": "23500180528"
               },
               "ytelse": {
                 "type": "PLEIEPENGER_LIVETS_SLUTTFASE",

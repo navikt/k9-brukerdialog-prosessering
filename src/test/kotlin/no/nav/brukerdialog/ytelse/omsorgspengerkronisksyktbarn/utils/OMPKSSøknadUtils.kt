@@ -25,7 +25,7 @@ object OMPKSSøknadUtils {
     )
 
     val barn = Barn(
-        norskIdentifikator = "01017000299",
+        norskIdentifikator = "23500180528",
         navn = "Ole Dole Doffen",
         aktørId = "123456",
         fødselsdato = LocalDate.parse("2020-01-01")
@@ -39,7 +39,7 @@ object OMPKSSøknadUtils {
         ),
         OmsorgspengerKroniskSyktBarn(
             no.nav.k9.søknad.felles.personopplysninger.Barn()
-                .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("01017000299")),
+                .medNorskIdentitetsnummer(NorskIdentitetsnummer.of("23500180528")),
             true,
             true,
             "Beskrivelse av høyere risiko for fravær"

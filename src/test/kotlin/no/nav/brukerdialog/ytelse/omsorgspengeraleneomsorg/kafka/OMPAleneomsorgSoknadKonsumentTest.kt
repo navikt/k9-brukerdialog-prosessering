@@ -139,7 +139,7 @@ class OMPAleneomsorgSoknadKonsumentTest : AbstractIntegrationTest() {
             "aktørId": "123456",
             "fødselsdato": "1993-01-04",
             "fornavn": "Ola",
-            "fødselsnummer": "01017000299"
+            "fødselsnummer": "23500180528"
           },
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
@@ -155,7 +155,7 @@ class OMPAleneomsorgSoknadKonsumentTest : AbstractIntegrationTest() {
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "01017000299"
+              "norskIdentitetsnummer": "23500180528"
             },
             "ytelse": {
               "barn": {
