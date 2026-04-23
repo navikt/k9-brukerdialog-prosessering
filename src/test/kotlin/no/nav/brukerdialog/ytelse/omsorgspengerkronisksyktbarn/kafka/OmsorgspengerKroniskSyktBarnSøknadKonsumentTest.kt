@@ -113,7 +113,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
             "aktørId": "123456",
             "fødselsdato": "2020-01-01",
             "navn": "Ole Dole Doffen",
-            "norskIdentifikator": "01017000299"
+            "norskIdentifikator": "23500180528"
           },
           "kroniskEllerFunksjonshemming": false,
           "søker": {
@@ -153,7 +153,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
             "ytelse": {
               "barn": {
                 "fødselsdato": null,
-                "norskIdentitetsnummer": "01017000299"
+                "norskIdentitetsnummer": "23500180528"
               },
               "kroniskEllerFunksjonshemming": true,
               "høyereRisikoForFravær": true,

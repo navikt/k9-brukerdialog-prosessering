@@ -23,7 +23,7 @@ internal object EttersendingUtils {
         søknadstype = no.nav.brukerdialog.ytelse.ettersendelse.api.domene.Søknadstype.PLEIEPENGER_LIVETS_SLUTTFASE,
         beskrivelse = "Pleiepenger .....",
         ettersendelsesType = EttersendelseType.LEGEERKLÆRING,
-        pleietrengende = no.nav.brukerdialog.ytelse.ettersendelse.api.domene.Pleietrengende(norskIdentitetsnummer = "01017000299"),
+        pleietrengende = no.nav.brukerdialog.ytelse.ettersendelse.api.domene.Pleietrengende(norskIdentitetsnummer = "23500180528"),
         harBekreftetOpplysninger = true,
         harForståttRettigheterOgPlikter = true
     )

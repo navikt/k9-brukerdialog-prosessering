@@ -18,7 +18,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Søker as K9Søker
 object UngdomsytelseOppgavebekreftelseUtils {
 
     fun oppgavebekreftelseMottatt(
-        søkerFødselsnummer: String = "01017000299",
+        søkerFødselsnummer: String = "23500180528",
         oppgaveReferanse: String = UUID.randomUUID().toString(),
         oppgave: KomplettUngdomsytelseOppgaveDTO = KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
@@ -55,7 +55,7 @@ object UngdomsytelseOppgavebekreftelseUtils {
             .medSøknadId(søknadId)
             .medVersjon("1.0.0")
             .medMottattDato(mottatt)
-            .medSøker(K9Søker(NorskIdentitetsnummer.of("01017000299")))
+            .medSøker(K9Søker(NorskIdentitetsnummer.of("23500180528")))
             .medBekreftelse(bekreftelse)
             .medKildesystem(Kildesystem.SØKNADSDIALOG)
     }

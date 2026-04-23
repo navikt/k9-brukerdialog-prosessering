@@ -84,7 +84,7 @@ class SoknadValidationTest {
         språk = Språk.nb,
         barn = BarnDetaljer(
             aktørId = null,
-            fødselsnummer = "01017000299",
+            fødselsnummer = "23500180528",
             fødselsdato = LocalDate.now(),
             navn = "Barn"
         ),

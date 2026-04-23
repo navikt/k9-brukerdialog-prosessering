@@ -153,7 +153,7 @@ class AktivitetspengerInntektRapporteringKonsumentTest : AbstractIntegrationTest
             "aktørId": "123456",
             "fødselsdato": "2000-01-01",
             "fornavn": "Ola",
-            "fødselsnummer": "01017000299"
+            "fødselsnummer": "23500180528"
           },
           "oppgittInntektForPeriode": {
                 "arbeidstakerOgFrilansInntekt": 6000,
@@ -174,7 +174,7 @@ class AktivitetspengerInntektRapporteringKonsumentTest : AbstractIntegrationTest
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "01017000299"
+              "norskIdentitetsnummer": "23500180528"
             },
             "ytelse": {
               "type": "AKTIVITETSPENGER",

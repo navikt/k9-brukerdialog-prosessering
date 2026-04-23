@@ -17,7 +17,7 @@ import java.time.ZonedDateTime
 internal object OMPAleneomsorgSoknadUtils {
 
     internal fun defaultSøknad(søknadId: String, mottatt: ZonedDateTime): OMPAleneomsorgSoknadMottatt {
-        val søkerFødselsnummer = "01017000299"
+        val søkerFødselsnummer = "23500180528"
         return OMPAleneomsorgSoknadMottatt(
             språk = "nb",
             søknadId = søknadId,

@@ -59,7 +59,7 @@ class OmsorgspengerMidlertidigAleneSøknadTest {
               "versjon": "1.0.0",
               "mottattDato": "2020-01-02T03:04:05Z",
               "søker": {
-                "norskIdentitetsnummer": "01017000299"
+                "norskIdentitetsnummer": "23500180528"
               },
               "språk": "nb",
               "ytelse": {
@@ -71,7 +71,7 @@ class OmsorgspengerMidlertidigAleneSøknadTest {
                   }
                 ],
                 "annenForelder": {
-                  "norskIdentitetsnummer": "01017000299",
+                  "norskIdentitetsnummer": "23500180528",
                   "situasjon": "FENGSEL",
                   "situasjonBeskrivelse": "Sitter i fengsel..",
                   "periode": "2020-01-01/2020-10-01"

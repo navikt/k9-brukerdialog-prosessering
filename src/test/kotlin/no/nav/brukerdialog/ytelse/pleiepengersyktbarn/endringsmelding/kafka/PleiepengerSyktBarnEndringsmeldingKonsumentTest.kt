@@ -91,7 +91,7 @@ class PleiepengerSyktBarnEndringsmeldingKonsumentTest : AbstractIntegrationTest(
          {
             "søker": {
                "aktørId": "123456",
-               "fødselsnummer": "01017000299",
+               "fødselsnummer": "23500180528",
                "fødselsdato": "1999-11-02",
                "fornavn": "Ola",
                "mellomnavn": "Mellomnavn",

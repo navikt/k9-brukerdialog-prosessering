@@ -18,7 +18,7 @@ class BarnTest {
     @Test
     fun `Gyldig barn er gyldig`() {
         val gyldigBarn = Barn(
-            identitetsnummer = "01017000299",
+            identitetsnummer = "23500180528",
             fødselsdato = LocalDate.parse("2024-01-01"),
             aktørId = "12345",
             navn = "Barn Barnesen",
@@ -30,7 +30,7 @@ class BarnTest {
     @Test
     fun `Navnløse barn er ikke gyldig`() {
         val noname = Barn(
-            identitetsnummer = "01017000299",
+            identitetsnummer = "23500180528",
             fødselsdato = LocalDate.parse("2024-01-01"),
             aktørId = "12345",
             navn = "",
@@ -42,7 +42,7 @@ class BarnTest {
     @Test
     fun `Ufødte barn er ikke gyldig`() {
         val fremtidsbarn = Barn(
-            identitetsnummer = "01017000299",
+            identitetsnummer = "23500180528",
             fødselsdato = LocalDate.parse("2999-01-01"),
             aktørId = "12345",
             navn = "Barn Barnesen",
@@ -54,7 +54,7 @@ class BarnTest {
     @Test
     fun `Personer over 18 år er ikke gyldige barn`() {
         val voksen = Barn(
-            identitetsnummer = "01017000299",
+            identitetsnummer = "23500180528",
             fødselsdato = LocalDate.parse("1987-01-01"),
             aktørId = "12345",
             navn = "Indre Barnesen",
@@ -67,13 +67,13 @@ class BarnTest {
     fun `Det går an å kjøre valideringer på lister av barn`() {
         val flereBarn = listOf(
             Barn(
-                identitetsnummer = "01017000299",
+                identitetsnummer = "23500180528",
                 fødselsdato = LocalDate.parse("2999-01-01"),
                 aktørId = "12345",
                 navn = "Barn Barnesen",
                 type = TypeBarn.FRA_OPPSLAG
             ), Barn(
-                identitetsnummer = "01017000299",
+                identitetsnummer = "23500180528",
                 fødselsdato = LocalDate.parse("1987-01-01"),
                 aktørId = "12345",
                 navn = "Indre Barnesen",

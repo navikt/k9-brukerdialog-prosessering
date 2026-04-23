@@ -55,7 +55,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                 mellomnavn = null,
                 etternavn = "Barnesen",
                 aktørId = "1234",
-                identitetsnummer = "01017000299"
+                identitetsnummer = "23500180528"
             )
         )
         søknad.leggTilIdentifikatorPåBarnHvisMangler(barnFraOppslag)
@@ -122,7 +122,7 @@ class OmsorgsdagerAleneomsorgSøknadTest {
                   "versjon": "1.0.0",
                   "mottattDato": "2020-01-02T03:04:05Z",
                   "søker": {
-                    "norskIdentitetsnummer": "01017000299"
+                    "norskIdentitetsnummer": "23500180528"
                   },
                   "ytelse": {
                     "type": "OMP_UTV_AO",
