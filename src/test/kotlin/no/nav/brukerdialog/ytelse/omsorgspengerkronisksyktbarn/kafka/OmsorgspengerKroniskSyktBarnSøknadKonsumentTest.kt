@@ -122,7 +122,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
             "aktørId": "12345",
             "fødselsdato": "2000-01-01",
             "fornavn": "Kjell",
-            "fødselsnummer": "01010010000"
+            "fødselsnummer": "17420373147"
           },
           "harForståttRettigheterOgPlikter": true,
           "dokumentId": [
@@ -148,7 +148,7 @@ class OmsorgspengerKroniskSyktBarnSøknadKonsumentTest : AbstractIntegrationTest
             "mottattDato": "$mottatt",
             "søknadId": "$søknadId",
             "søker": {
-              "norskIdentitetsnummer": "01010010000"
+              "norskIdentitetsnummer": "17420373147"
             },
             "ytelse": {
               "barn": {

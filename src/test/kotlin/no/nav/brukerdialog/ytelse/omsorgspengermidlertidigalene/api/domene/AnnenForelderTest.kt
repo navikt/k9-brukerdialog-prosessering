@@ -18,7 +18,7 @@ class AnnenForelderTest {
     fun `AnnenForelder equals test`() {
         val annenForelder = AnnenForelder(
             navn = "Navnesen",
-            fnr = "01010010000",
+            fnr = "17420373147",
             situasjon = Situasjon.FENGSEL,
             periodeFraOgMed = LocalDate.parse("2021-01-01"),
             periodeTilOgMed = LocalDate.parse("2021-08-01")
@@ -27,7 +27,7 @@ class AnnenForelderTest {
             annenForelder.equals(
                 AnnenForelder(
                     navn = "Navnesen",
-                    fnr = "01010010000",
+                    fnr = "17420373147",
                     situasjon = Situasjon.FENGSEL,
                     periodeFraOgMed = LocalDate.parse("2021-01-01"),
                     periodeTilOgMed = LocalDate.parse("2021-08-01")
@@ -41,7 +41,7 @@ class AnnenForelderTest {
     fun `AnnenForelder blir mappet til forventet K9Format`() {
         val faktisk = AnnenForelder(
             navn = "Navnesen",
-            fnr = "01010010000",
+            fnr = "17420373147",
             situasjon = Situasjon.FENGSEL,
             periodeFraOgMed = LocalDate.parse("2021-01-01"),
             periodeTilOgMed = LocalDate.parse("2021-08-01")
@@ -49,7 +49,7 @@ class AnnenForelderTest {
 
         val forventet = """
             {
-              "norskIdentitetsnummer": "01010010000",
+              "norskIdentitetsnummer": "17420373147",
               "situasjon": "FENGSEL",
               "situasjonBeskrivelse": null,
               "periode": "2021-01-01/2021-08-01"
@@ -63,7 +63,7 @@ class AnnenForelderTest {
         Validator.verifiserValideringsFeil(
             AnnenForelder(
                 navn = " ",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.FENGSEL,
                 periodeFraOgMed = LocalDate.parse("2021-01-01"),
                 periodeTilOgMed = LocalDate.parse("2021-08-01")
@@ -92,7 +92,7 @@ class AnnenForelderTest {
         Validator.verifiserValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.FENGSEL,
                 periodeOver6Måneder = true,
                 periodeFraOgMed = LocalDate.parse("2021-01-02"),
@@ -108,7 +108,7 @@ class AnnenForelderTest {
         Validator.verifiserIngenValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.INNLAGT_I_HELSEINSTITUSJON,
                 periodeOver6Måneder = true,
                 periodeFraOgMed = LocalDate.parse("2021-01-01")
@@ -121,7 +121,7 @@ class AnnenForelderTest {
         Validator.verifiserIngenValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.INNLAGT_I_HELSEINSTITUSJON,
                 periodeFraOgMed = LocalDate.parse("2020-01-01"),
                 periodeTilOgMed = LocalDate.parse("2020-07-01")
@@ -134,7 +134,7 @@ class AnnenForelderTest {
         Validator.verifiserValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.INNLAGT_I_HELSEINSTITUSJON,
                 periodeFraOgMed = LocalDate.parse("2020-01-01"),
                 periodeTilOgMed = null,
@@ -150,7 +150,7 @@ class AnnenForelderTest {
         Validator.verifiserIngenValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.FENGSEL,
                 periodeFraOgMed = LocalDate.parse("2020-01-01"),
                 periodeTilOgMed = LocalDate.parse("2021-08-01")
@@ -163,7 +163,7 @@ class AnnenForelderTest {
         Validator.verifiserValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.FENGSEL,
                 periodeFraOgMed = LocalDate.parse("2021-01-01"),
                 periodeTilOgMed = null
@@ -178,7 +178,7 @@ class AnnenForelderTest {
         Validator.verifiserIngenValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.UTØVER_VERNEPLIKT,
                 periodeFraOgMed = LocalDate.parse("2020-01-01"),
                 periodeTilOgMed = LocalDate.parse("2021-08-01")
@@ -191,7 +191,7 @@ class AnnenForelderTest {
         Validator.verifiserValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.UTØVER_VERNEPLIKT,
                 periodeFraOgMed = LocalDate.parse("2021-01-01"),
                 periodeTilOgMed = null
@@ -206,7 +206,7 @@ class AnnenForelderTest {
         Validator.verifiserIngenValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.ANNET,
                 situasjonBeskrivelse = "Blabla noe skjedde",
                 periodeFraOgMed = LocalDate.parse("2021-01-01"),
@@ -220,7 +220,7 @@ class AnnenForelderTest {
         Validator.verifiserValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.ANNET,
                 situasjonBeskrivelse = "",
                 periodeOver6Måneder = true,
@@ -236,7 +236,7 @@ class AnnenForelderTest {
         Validator.verifiserValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.ANNET,
                 situasjonBeskrivelse = "COVID-19",
                 periodeFraOgMed = LocalDate.parse("2021-01-01"),
@@ -253,7 +253,7 @@ class AnnenForelderTest {
         Validator.verifiserIngenValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.SYKDOM,
                 situasjonBeskrivelse = "Blabla noe skjedde",
                 periodeFraOgMed = LocalDate.parse("2021-01-01"),
@@ -267,7 +267,7 @@ class AnnenForelderTest {
         Validator.verifiserValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.SYKDOM,
                 situasjonBeskrivelse = "",
                 periodeOver6Måneder = true,
@@ -283,7 +283,7 @@ class AnnenForelderTest {
         Validator.verifiserValideringsFeil(
             AnnenForelder(
                 navn = "Navnesen",
-                fnr = "01010010000",
+                fnr = "17420373147",
                 situasjon = Situasjon.SYKDOM,
                 situasjonBeskrivelse = "COVID-19",
                 periodeFraOgMed = LocalDate.parse("2021-01-01")

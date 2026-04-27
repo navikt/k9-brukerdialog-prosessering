@@ -21,7 +21,7 @@ object OMPKSSøknadUtils {
         fornavn = "Kjell",
         mellomnavn = null,
         etternavn = "Kjeller",
-        fødselsnummer = "01010010000"
+        fødselsnummer = "17420373147"
     )
 
     val barn = Barn(
@@ -35,7 +35,7 @@ object OMPKSSøknadUtils {
         Versjon.of("1.0.0"),
         mottatt,
         no.nav.k9.søknad.felles.personopplysninger.Søker(
-            NorskIdentitetsnummer.of("01010010000")
+            NorskIdentitetsnummer.of("17420373147")
         ),
         OmsorgspengerKroniskSyktBarn(
             no.nav.k9.søknad.felles.personopplysninger.Barn()
