@@ -37,7 +37,7 @@ val tokenSupportVersion = "6.0.6"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "13.0.1"
 val ungDeltakelseOpplyserVersjon = "2.10.0"
-val ungBrukerdialigApiVersjon = "0.2.1"
+val ungBrukerdialigApiVersjon = "1.0.1"
 val springMockkVersion = "5.0.1"
 val logstashLogbackEncoderVersion = "9.0"
 val openhtmltopdfVersion = "1.1.4"
@@ -90,7 +90,7 @@ dependencies {
 	// kafka
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.apache.kafka:kafka-streams")
-	testImplementation("org.testcontainers:testcontainers-kafka:2.0.4")
+	testImplementation("org.testcontainers:testcontainers-kafka:2.0.5")
 
 	// PDF
 	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion") {
