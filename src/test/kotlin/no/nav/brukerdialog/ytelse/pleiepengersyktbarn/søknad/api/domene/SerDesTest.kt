@@ -317,7 +317,7 @@ internal class SerDesTest {
           "søknadId": "$søknadsId",
           "søker": {
             "aktørId": "12345",
-            "fødselsnummer": "01010010000",
+            "fødselsnummer": "17420373147",
             "fødselsdato": "1945-10-26",
             "etternavn": "Nordmann",
             "fornavn": "Ola",
@@ -572,7 +572,7 @@ internal class SerDesTest {
             ),
             søker = Søker(
                 aktørId = "12345",
-                fødselsnummer = "01010010000",
+                fødselsnummer = "17420373147",
                 fødselsdato = LocalDate.parse("1945-10-26"),
                 etternavn = "Nordmann",
                 fornavn = "Ola"

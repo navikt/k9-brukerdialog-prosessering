@@ -19,13 +19,13 @@ class FosterbarnTest {
             navn = "Barnesen",
             fødselsdato = LocalDate.parse("2022-01-01"),
             type = TypeBarn.FRA_OPPSLAG,
-            identitetsnummer = "01010010000"
+            identitetsnummer = "17420373147"
         ).somK9Barn()
         val forventetK9Barn =
             """
                 {
                     "fødselsdato" :null,
-                    "norskIdentitetsnummer":"01010010000"
+                    "norskIdentitetsnummer":"17420373147"
                 }
             """.trimIndent()
 
@@ -39,7 +39,7 @@ class FosterbarnTest {
                 navn = "Barnesen",
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 type = TypeBarn.FOSTERBARN,
-                identitetsnummer = "01010010000"
+                identitetsnummer = "17420373147"
             ),
             Barn(
                 navn = "Barnesen v2",
@@ -58,7 +58,7 @@ class FosterbarnTest {
             """
                 [{
                     "fødselsdato" :null,
-                    "norskIdentitetsnummer":"01010010000"
+                    "norskIdentitetsnummer":"17420373147"
                 },
                 {
                     "fødselsdato" :null,
@@ -77,7 +77,7 @@ class FosterbarnTest {
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = null,
-                identitetsnummer = "01010010000"
+                identitetsnummer = "17420373147"
             )
         )
     }
@@ -103,7 +103,7 @@ class FosterbarnTest {
                 fødselsdato = LocalDate.parse("2022-01-01"),
                 type = TypeBarn.FRA_OPPSLAG,
                 aktørId = null,
-                identitetsnummer = "01010010000"
+                identitetsnummer = "17420373147"
             ), 1, "Kan ikke være tomt eller blankt"
         )
     }

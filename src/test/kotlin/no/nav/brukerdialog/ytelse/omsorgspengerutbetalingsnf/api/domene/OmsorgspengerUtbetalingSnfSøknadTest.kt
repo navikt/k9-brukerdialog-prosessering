@@ -134,7 +134,7 @@ class OmsorgspengerUtbetalingSnfSøknadTest {
                 "type": "OMP_UT",
                 "fosterbarn": [
                   {
-                    "norskIdentitetsnummer": "01010010000",
+                    "norskIdentitetsnummer": "17420373147",
                     "fødselsdato": null
                   }
                 ],
