@@ -13,7 +13,7 @@ group = "no.nav"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_25
 
-extra["tomcat.version"] = "11.0.21"
+extra["tomcat.version"] = "11.0.21" // TODO: Fjern denne når vi er over på  > spring boot 4.0.3
 
 configurations {
 	compileOnly {
@@ -37,7 +37,7 @@ val tokenSupportVersion = "6.0.6"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "13.0.1"
 val ungDeltakelseOpplyserVersjon = "2.10.0"
-val ungBrukerdialigApiVersjon = "1.0.1"
+val ungBrukerdialigApiVersjon = "0.2.1"
 val springMockkVersion = "5.0.1"
 val logstashLogbackEncoderVersion = "9.0"
 val openhtmltopdfVersion = "1.1.4"
