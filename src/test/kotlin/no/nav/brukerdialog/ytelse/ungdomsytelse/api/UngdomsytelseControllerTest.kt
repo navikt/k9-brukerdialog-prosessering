@@ -30,7 +30,6 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.Innt
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.søkytelse.SøkYtelseOppgavetypeDataDto
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseKomposittDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -343,18 +342,15 @@ class UngdomsytelseControllerTest {
     }
 
     private fun mockMarkerDeltakelseSomSøkt() {
-        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseKomposittDTO(
-            deltakelse = DeltakelseDTO(
+        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseDTO(
+            id = UUID.randomUUID(),
+            deltaker = DeltakerDTO(
                 id = UUID.randomUUID(),
-                deltaker = DeltakerDTO(
-                    id = UUID.randomUUID(),
-                    deltakerIdent = "12345678901",
-                ),
-                fraOgMed = LocalDate.now(),
-                tilOgMed = null,
-                søktTidspunkt = ZonedDateTime.now(),
+                deltakerIdent = "12345678901",
             ),
-            oppgaver = emptyList(),
+            fraOgMed = LocalDate.now(),
+            tilOgMed = null,
+            søktTidspunkt = ZonedDateTime.now(),
         )
     }
 }
