@@ -173,6 +173,7 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
                   }
                 }
               },
+              "erBosattITrondheim": true,
               "inntekter": null
             },
             "journalposter": [],

@@ -23,6 +23,7 @@ import no.nav.k9.søknad.Søknad as AktivitetspengerSøknad
 data class AktivitetspengersøknadInnsending(
     val søknadId: String = UUID.randomUUID().toString(),
     val forutgåendeBosteder: ForutgåendeBosteder,
+    val erBosattITrondheim: Boolean,
     val språk: String,
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val startdato: LocalDate,
@@ -47,6 +48,7 @@ data class AktivitetspengersøknadInnsending(
         return AktivitetspengerKomplettSøknad(
             søknadId = søknadId,
             forutgåendeBosteder = forutgåendeBosteder,
+            erBosattITrondheim = erBosattITrondheim,
             mottatt = mottatt,
             søker = søker,
             språk = språk,
@@ -66,6 +68,7 @@ data class AktivitetspengersøknadInnsending(
         val ytelse = Aktivitetspenger()
             .medSøknadsperiode(Periode(startdato, startdato.plusMonths(12))) //TODO endre til startdato eller fjerne dato
             .medForutgåendeBosteder(forutgåendeBosteder.tilK9Bosteder())
+            .medErBosattITrondheim(erBosattITrondheim)
 
         return AktivitetspengerSøknad()
             .medVersjon(K9_SØKNAD_VERSJON)

@@ -64,6 +64,16 @@ class AktivitetspengersøknadPdfGeneratorTest {
                     .pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+
+            id = "5-søknad-ikke-bosatt-i-trondheim"
+            pdf = generator.genererPDF(
+                AktivitetspengersøknadUtils.gyldigSøknad(søknadId = id)
+                    .copy(erBosattITrondheim = false)
+                    .pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
         }
     }
 }

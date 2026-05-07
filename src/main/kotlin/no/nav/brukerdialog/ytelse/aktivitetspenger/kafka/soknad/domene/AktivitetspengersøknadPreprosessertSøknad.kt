@@ -7,6 +7,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Barn
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.ForutgåendeBosteder
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.KontonummerInfo
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker

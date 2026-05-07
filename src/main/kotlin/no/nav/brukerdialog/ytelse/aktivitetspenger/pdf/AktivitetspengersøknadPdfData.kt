@@ -33,6 +33,9 @@ class AktivitetspengersøknadPdfData(private val søknad: Aktivitetspengersøkna
                 søknad.barn.map { it.somMap() }
             } else null,
         ),
+        "bosted" to mapOf(
+            "erBosattITrondheim" to søknad.erBosattITrondheim
+        ),
         "kontonummerInfo" to søknad.kontonummerInfo.somMap(),
         "samtykke" to mapOf(
             "harForståttRettigheterOgPlikter" to søknad.harForståttRettigheterOgPlikter,

@@ -13,6 +13,7 @@ data class Aktivitetspengersøknad(
     val søknadId: String = UUID.randomUUID().toString(),
     @field:Valid
     val forutgåendeBosteder: ForutgåendeBosteder,
+    val erBosattITrondheim: Boolean,
     val språk: String,
     @field:Schema(hidden = true)
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
