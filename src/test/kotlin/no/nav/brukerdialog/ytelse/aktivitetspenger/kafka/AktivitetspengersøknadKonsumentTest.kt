@@ -166,7 +166,6 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
             "ytelse": {
               "type": "AKTIVITETSPENGER",
               "søknadsperiode": "2022-01-01/2023-01-01",
-              "erBosattITrondheim": true,
               "forutgåendeBosteder": {
                 "perioder": {
                   "2023-01-02/2023-01-03": {
@@ -174,6 +173,7 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
                   }
                 }
               },
+              "erBosattITrondheim": true,
               "inntekter": null
             },
             "journalposter": [],

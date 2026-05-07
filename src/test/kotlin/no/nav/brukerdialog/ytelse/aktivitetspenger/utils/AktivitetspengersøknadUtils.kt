@@ -37,11 +37,12 @@ object AktivitetspengersøknadUtils {
                 )
             )
         )
+        val erBosattITrondheim = true
         return AktivitetspengersøknadMottatt(
             språk = "nb",
             søknadId = søknadId,
             forutgåendeBosteder = forutgåendeBosteder,
-            erBosattITrondheim = true,
+            erBosattITrondheim = erBosattITrondheim,
             mottatt = mottatt,
             søker = Søker(
                 aktørId = "123456",
@@ -63,7 +64,7 @@ object AktivitetspengersøknadUtils {
                 kontonummerFraRegister = "12345678901",
                 kontonummerErRiktig = true,
             ),
-            k9Format = gyldigK9Format(søknadId, mottatt, startdato, forutgåendeBosteder.tilK9Bosteder()),
+            k9Format = gyldigK9Format(søknadId, mottatt, startdato, forutgåendeBosteder.tilK9Bosteder(), erBosattITrondheim),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
         )
@@ -74,10 +75,12 @@ object AktivitetspengersøknadUtils {
         mottatt: ZonedDateTime,
         fraOgMed: LocalDate,
         bosteder: Bosteder,
+        erBosattITrondheim: Boolean,
     ): k9FormatSøknad {
         val ytelse = Aktivitetspenger()
             .medSøknadsperiode(Periode(fraOgMed, fraOgMed.plusMonths(12)))
             .medForutgåendeBosteder(bosteder)
+            .medErBosattITrondheim(erBosattITrondheim)
         val søknad = k9FormatSøknad(
             SøknadId(søknadId),
             Versjon("1.0.0"),
