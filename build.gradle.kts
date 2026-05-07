@@ -5,8 +5,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "4.0.6"
 	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("jvm") version "2.3.20"
-	kotlin("plugin.spring") version "2.3.20"
+	kotlin("jvm") version "2.3.21"
+	kotlin("plugin.spring") version "2.3.21"
 }
 
 group = "no.nav"
@@ -31,11 +31,11 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "6.0.6"
+val tokenSupportVersion = "6.0.7"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "13.1.0"
-val ungDeltakelseOpplyserVersjon = "2.10.0"
-val ungBrukerdialigApiVersjon = "0.2.1"
+val ungDeltakelseOpplyserVersjon = "2.11.0"
+val ungBrukerdialigApiVersjon = "1.0.1"
 val springMockkVersion = "5.0.1"
 val logstashLogbackEncoderVersion = "9.0"
 val openhtmltopdfVersion = "1.1.4"
@@ -49,7 +49,7 @@ val pdfBoxVersion = "3.0.7"
 val imageIOVersion = "3.13.1"
 val fpsakTidsserieVersion = "2.7.4"
 val gcpStorageVersion = "2.67.0"
-val auth0Version = "4.5.1"
+val auth0Version = "4.5.2"
 val tikaVersion = "3.3.0"
 val aivenFakeGCSServerVersion = "0.3.0"
 
@@ -88,7 +88,7 @@ dependencies {
 	// kafka
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("org.apache.kafka:kafka-streams")
-	testImplementation("org.testcontainers:testcontainers-kafka:2.0.4")
+	testImplementation("org.testcontainers:testcontainers-kafka:2.0.5")
 
 	// PDF
 	implementation("at.datenwort.openhtmltopdf:openhtmltopdf-pdfbox:$openhtmltopdfVersion") {
