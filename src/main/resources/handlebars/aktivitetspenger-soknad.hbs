@@ -12,6 +12,7 @@
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Startdato" href="#startdato"/>
         <bookmark name="Medlemskap" href="#medlemskap"/>
+        <bookmark name="Bosted" href="#bosted"/>
         <bookmark name="Kontonummer" href="#kontonummer"/>
         <bookmark name="Barn" href="#barn"/>
         <bookmark name="Samtykke" href="#samtykke"/>
@@ -34,6 +35,12 @@
         <p><strong>Fra og med:</strong> {{startdato}}</p>
     </section>
 
+    <section id="bosted">
+        <h2>Nåværende bosted</h2>
+            <p class="sporsmalstekst">Bor du i Trondheim?</p>
+            <p>{{ jaNeiSvar bosted.erBosattITrondheim }}</p>
+    </section>
+
     <section id="medlemskap">
         <h2>Forutgående bosteder</h2>
         <p class="sporsmalstekst">Har du bodd i utlandet de siste 5 årene?</p>
@@ -48,9 +55,7 @@
             </ul>
         {{else}}
             <p>Nei</p>{{/if}}
-        <hr/>
     </section>
-
 
     <section id="kontonummer">
         <h2>Kontonummer for utbetaling</h2>

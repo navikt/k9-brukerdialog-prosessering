@@ -16,6 +16,7 @@ import java.time.ZonedDateTime
 data class AktivitetspengersøknadMottatt(
     val søknadId: String,
     val forutgåendeBosteder: ForutgåendeBosteder,
+    val erBosattITrondheim: Boolean,
     val mottatt: ZonedDateTime,
     val språk: String? = "nb",
     val søker: Søker,

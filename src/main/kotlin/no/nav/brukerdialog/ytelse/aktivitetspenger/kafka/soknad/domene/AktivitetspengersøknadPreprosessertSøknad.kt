@@ -7,6 +7,7 @@ import no.nav.brukerdialog.domenetjenester.mottak.JournalføringsService
 import no.nav.brukerdialog.domenetjenester.mottak.Preprosessert
 import no.nav.brukerdialog.integrasjon.dokarkiv.dto.YtelseType
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Barn
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.ForutgåendeBosteder
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.KontonummerInfo
 import no.nav.brukerdialog.ytelse.fellesdomene.Navn
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
@@ -22,6 +23,8 @@ data class AktivitetspengersøknadPreprosessertSøknad(
     val språk: String?,
     val søker: Søker,
     val startdato: LocalDate? = null,
+    val forutgåendeBosteder: ForutgåendeBosteder,
+    val erBosattITrondheim: Boolean,
     val barn: List<Barn>,
     val barnErRiktig: Boolean,
     val kontonummerInfo: KontonummerInfo,
@@ -39,6 +42,8 @@ data class AktivitetspengersøknadPreprosessertSøknad(
         mottatt = aktivitetspengerSøknadMottatt.mottatt,
         søker = aktivitetspengerSøknadMottatt.søker,
         startdato = aktivitetspengerSøknadMottatt.startdato,
+        forutgåendeBosteder = aktivitetspengerSøknadMottatt.forutgåendeBosteder,
+        erBosattITrondheim = aktivitetspengerSøknadMottatt.erBosattITrondheim,
         barn = aktivitetspengerSøknadMottatt.barn,
         barnErRiktig = aktivitetspengerSøknadMottatt.barnErRiktig,
         kontonummerInfo = aktivitetspengerSøknadMottatt.kontonummerInfo,

@@ -31,5 +31,6 @@ object SøknadUtils {
                 )
             )
         ),
+        erBosattITrondheim = true,
     )
 }

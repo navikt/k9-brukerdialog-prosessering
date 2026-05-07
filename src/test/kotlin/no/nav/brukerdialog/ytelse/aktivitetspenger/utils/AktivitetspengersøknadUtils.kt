@@ -41,6 +41,7 @@ object AktivitetspengersøknadUtils {
             språk = "nb",
             søknadId = søknadId,
             forutgåendeBosteder = forutgåendeBosteder,
+            erBosattITrondheim = true,
             mottatt = mottatt,
             søker = Søker(
                 aktørId = "123456",
