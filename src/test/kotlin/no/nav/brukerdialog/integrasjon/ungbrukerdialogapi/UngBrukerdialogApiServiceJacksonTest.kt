@@ -18,6 +18,7 @@ import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveYtelsetype
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -94,6 +95,7 @@ class UngBrukerdialogApiServiceJacksonTest {
         oppgaveReferanse,
         OppgaveType.BEKREFT_ENDRET_STARTDATO,
         null,
+        OppgaveYtelsetype.UNGDOMSYTELSE,
         null,
         OppgaveStatus.ULØST,
         ZonedDateTime.parse("2025-01-15T10:30:00Z"),
