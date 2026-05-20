@@ -116,7 +116,7 @@ class UngDeltakelseOpplyserServiceJacksonTest {
 
     private fun stubMarkerDeltakelse(body: String) {
         wireMock.stubFor(
-            WireMock.put(WireMock.urlPathMatching("/deltakelse/register/.*/marker-har-sokt"))
+            WireMock.put(WireMock.urlPathMatching("/deltakelse/register/.*/marker-har-sokt/v2"))
                 .willReturn(
                     WireMock.aResponse()
                         .withStatus(200)
