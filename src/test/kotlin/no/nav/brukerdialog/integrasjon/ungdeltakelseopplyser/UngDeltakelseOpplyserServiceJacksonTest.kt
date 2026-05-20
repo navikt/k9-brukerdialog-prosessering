@@ -2,7 +2,11 @@ package no.nav.brukerdialog.integrasjon.ungdeltakelseopplyser
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.*
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
+import com.fasterxml.jackson.databind.JsonSerializer
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
@@ -17,7 +21,6 @@ import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseKomposittDTO
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -91,27 +94,24 @@ class UngDeltakelseOpplyserServiceJacksonTest {
     }
 
     @Test
-    fun `klient skal deserialisere DeltakelseKomposittDTO serialisert med config fra ung-deltakelse-opplyser`() {
+    fun `klient skal deserialisere DeltakelseDTO serialisert med config fra ung-deltakelse-opplyser`() {
         stubMarkerDeltakelse(ungDeltakelseOpplyserObjectMapper.writeValueAsString(defaultDeltakelse()))
 
-        val result = ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(deltakelseId)
-        assertThat(result.deltakelse).isNotNull
-        assertThat(result.deltakelse.deltaker.deltakerIdent).isEqualTo("12345678910")
-        assertThat(result.deltakelse.søktTidspunkt).isNotNull
+        val deltakelse = ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(deltakelseId)
+        assertThat(deltakelse.deltaker.deltakerIdent).isEqualTo("12345678910")
+        assertThat(deltakelse.søktTidspunkt).isNotNull
     }
 
-    private fun defaultDeltakelse() = DeltakelseKomposittDTO(
-        deltakelse = DeltakelseDTO(
+    private fun defaultDeltakelse() = DeltakelseDTO(
+        id = UUID.randomUUID(),
+        deltaker = DeltakerDTO(
             id = UUID.randomUUID(),
-            deltaker = DeltakerDTO(
-                id = UUID.randomUUID(),
-                deltakerIdent = "12345678910",
-            ),
-            fraOgMed = LocalDate.parse("2025-01-01"),
-            tilOgMed = LocalDate.parse("2025-06-30"),
-            søktTidspunkt = ZonedDateTime.parse("2025-01-15T10:30:00Z"),
+            deltakerIdent = "12345678910",
         ),
-        oppgaver = emptyList(),
+        fraOgMed = LocalDate.parse("2025-01-01"),
+        tilOgMed = LocalDate.parse("2025-06-30"),
+        søktTidspunkt = ZonedDateTime.parse("2025-01-15T10:30:00Z"),
+        periodeMaksDato = LocalDate.parse("2025-01-01").plusDays(260)
     )
 
     private fun stubMarkerDeltakelse(body: String) {

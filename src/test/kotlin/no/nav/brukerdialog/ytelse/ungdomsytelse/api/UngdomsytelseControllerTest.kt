@@ -24,13 +24,13 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveYtelsetype
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretstartdato.EndretStartdatoDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.søkytelse.SøkYtelseOppgavetypeDataDto
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
-import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseKomposittDTO
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -317,6 +317,7 @@ class UngdomsytelseControllerTest {
             UUID.randomUUID(),
             oppgavetype,
             oppgavetypeData,
+            OppgaveYtelsetype.UNGDOMSYTELSE,
             null,
             no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.ULØST,
             ZonedDateTime.now(),
@@ -334,6 +335,7 @@ class UngdomsytelseControllerTest {
                 LocalDate.now(),
                 true
             ),
+            OppgaveYtelsetype.UNGDOMSYTELSE,
             null,
             no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.ULØST,
             ZonedDateTime.now(),
@@ -343,18 +345,16 @@ class UngdomsytelseControllerTest {
     }
 
     private fun mockMarkerDeltakelseSomSøkt() {
-        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseKomposittDTO(
-            deltakelse = DeltakelseDTO(
+        every { ungDeltakelseOpplyserService.markerDeltakelseSomSøkt(any()) } returns DeltakelseDTO(
+            id = UUID.randomUUID(),
+            deltaker = DeltakerDTO(
                 id = UUID.randomUUID(),
-                deltaker = DeltakerDTO(
-                    id = UUID.randomUUID(),
-                    deltakerIdent = "12345678901",
-                ),
-                fraOgMed = LocalDate.now(),
-                tilOgMed = null,
-                søktTidspunkt = ZonedDateTime.now(),
+                deltakerIdent = "12345678901",
             ),
-            oppgaver = emptyList(),
+            fraOgMed = LocalDate.now(),
+            tilOgMed = null,
+            søktTidspunkt = ZonedDateTime.now(),
+            periodeMaksDato = LocalDate.now().plusDays(260)
         )
     }
 }

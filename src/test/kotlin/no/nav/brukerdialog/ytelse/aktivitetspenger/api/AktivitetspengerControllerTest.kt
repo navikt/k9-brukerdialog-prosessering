@@ -19,6 +19,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveYtelsetype
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
 import org.junit.jupiter.api.BeforeEach
@@ -223,6 +224,7 @@ class AktivitetspengerControllerTest {
             UUID.randomUUID(),
             oppgavetype,
             oppgavetypeData,
+            OppgaveYtelsetype.AKTIVITETSPENGER,
             null,
             no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.ULØST,
             ZonedDateTime.now(),
@@ -240,6 +242,7 @@ class AktivitetspengerControllerTest {
                 LocalDate.now(),
                 true
             ),
+            OppgaveYtelsetype.AKTIVITETSPENGER,
             null,
             no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus.ULØST,
             ZonedDateTime.now(),
@@ -247,5 +250,4 @@ class AktivitetspengerControllerTest {
             null
         )
     }
-
 }
