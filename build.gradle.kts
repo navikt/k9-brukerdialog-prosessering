@@ -31,11 +31,11 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "6.0.7"
+val tokenSupportVersion = "6.0.8"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "13.2.0"
+val k9FormatVersion = "13.2.2"
 val ungDeltakelseOpplyserVersjon = "2.11.2"
-val ungBrukerdialigApiVersjon = "1.0.3"
+val ungBrukerdialigApiVersjon = "1.0.4"
 val springMockkVersion = "5.0.1"
 val logstashLogbackEncoderVersion = "9.0"
 val openhtmltopdfVersion = "1.1.4"
@@ -50,7 +50,7 @@ val imageIOVersion = "3.13.1"
 val fpsakTidsserieVersion = "2.7.4"
 val gcpStorageVersion = "2.68.0"
 val auth0Version = "4.5.2"
-val tikaVersion = "3.3.0"
+val tikaVersion = "3.3.1"
 val aivenFakeGCSServerVersion = "0.3.0"
 
 dependencies {
