@@ -286,7 +286,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 uttalelseFraDeltaker = "Jeg mener opphørsdatoen er satt for tidlig"
                             ),
                             sluttdato = LocalDate.parse("2025-12-31"),
-                            maxDato = LocalDate.parse("2026-01-15")
+                            maksdato = LocalDate.parse("2026-01-15")
                         )
                     ).pdfData()
             )

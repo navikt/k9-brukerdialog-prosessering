@@ -117,7 +117,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
                     uttalelseFraDeltaker = null
                 ),
                 sluttdato = LocalDate.parse("2025-12-01"),
-                maxDato = LocalDate.parse("2025-12-01")
+                maksdato = LocalDate.parse("2025-12-01")
             ),
             mottatt = mottatt
         )
@@ -169,7 +169,7 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
                 "uttalelseFraDeltaker": null
             },
             "sluttdato": "2025-12-01",
-            "maxDato": "2025-12-01"
+            "maksdato": "2025-12-01"
           },
           "mottatt": "$mottatt",
           "søker": {

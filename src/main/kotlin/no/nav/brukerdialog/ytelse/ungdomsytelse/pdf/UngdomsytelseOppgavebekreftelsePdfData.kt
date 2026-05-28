@@ -76,11 +76,11 @@ class UngdomsytelseOppgavebekreftelsePdfData(private val oppgavebekreftelseMotta
             else -> null
         },
 
-        "opphorVedMaksdatoOppgave" to when (this) {
+        "opphørVedMaksdatoOppgave" to when (this) {
             is KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO -> mapOf(
                 "sluttdato" to DATE_FORMATTER.format(sluttdato),
-                "maxDato" to DATE_FORMATTER.format(maxDato),
-                "spørsmål" to "Har du tilbakemelding på at ungdomsprogrammet opphører ved maksdato ${DATE_FORMATTER.format(maxDato)}?"
+                "maksdato" to DATE_FORMATTER.format(maksdato),
+                "spørsmål" to "Mener du at sluttdatoen eller maksdatoen er feil?"
             )
 
             else -> null

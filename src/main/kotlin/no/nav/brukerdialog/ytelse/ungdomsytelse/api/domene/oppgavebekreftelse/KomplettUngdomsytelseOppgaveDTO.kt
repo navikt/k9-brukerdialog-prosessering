@@ -167,7 +167,7 @@ data class KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
     override val oppgaveReferanse: String,
     override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val sluttdato: LocalDate,
-    val maxDato: LocalDate,
+    val maksdato: LocalDate,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
 
     override fun somK9Format(): Bekreftelse {
@@ -177,10 +177,10 @@ data class KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
             uttalelse.harUttalelse
         )
 
-        return if (!uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
-            bekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
-        } else {
+        return if (uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
             bekreftelse
+        } else {
+            bekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
         }
     }
 
@@ -190,7 +190,7 @@ data class KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
         return KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
             sluttdato = sluttdato,
-            maxDato = maxDato,
+            maksdato = maksdato,
             uttalelse = uttalelse
         )
     }

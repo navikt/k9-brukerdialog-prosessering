@@ -58,7 +58,7 @@ data class UngdomsytelseOppgaveDTO(
                 KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
                     sluttdato = oppgavetypeData.sluttdato,
-                    maxDato = oppgavetypeData.maxDato,
+                    maksdato = oppgavetypeData.maxDato,
                     uttalelse = uttalelse
                 )
             }
