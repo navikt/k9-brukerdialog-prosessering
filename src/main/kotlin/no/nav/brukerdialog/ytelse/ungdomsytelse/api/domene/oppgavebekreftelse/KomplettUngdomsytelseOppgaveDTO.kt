@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.inntekt.InntektBekreftelse
+import no.nav.k9.oppgave.bekreftelse.ung.opphor.OpphørVedMaksdatoBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretPeriodeBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretSluttdatoBekreftelse
 import no.nav.k9.oppgave.bekreftelse.ung.periodeendring.EndretStartdatoBekreftelse
@@ -24,6 +25,7 @@ import java.util.*
     JsonSubTypes.Type(value = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_ENDRET_SLUTTDATO),
     JsonSubTypes.Type(value = KomplettEndretPeriodeUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_ENDRET_PERIODE),
     JsonSubTypes.Type(value = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO::class, name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
+    JsonSubTypes.Type(value = KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_OPPHOR_VED_MAKSDATO),
 )
 sealed class KomplettUngdomsytelseOppgaveDTO(
     open val oppgaveReferanse: String,
@@ -160,3 +162,37 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
         )
     }
 }
+
+data class KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
+    override val oppgaveReferanse: String,
+    override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
+    val sluttdato: LocalDate,
+    val maxDato: LocalDate,
+) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
+
+    override fun somK9Format(): Bekreftelse {
+        val bekreftelse = OpphørVedMaksdatoBekreftelse(
+            UUID.fromString(oppgaveReferanse),
+            sluttdato,
+            uttalelse.harUttalelse
+        )
+
+        return if (!uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
+            bekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
+        } else {
+            bekreftelse
+        }
+    }
+
+    override fun dokumentTittelSuffix(): String = "opphor ved maksdato"
+
+    override fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettUngdomsytelseOppgaveDTO {
+        return KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
+            oppgaveReferanse = oppgaveReferanse,
+            sluttdato = sluttdato,
+            maxDato = maxDato,
+            uttalelse = uttalelse
+        )
+    }
+}
+

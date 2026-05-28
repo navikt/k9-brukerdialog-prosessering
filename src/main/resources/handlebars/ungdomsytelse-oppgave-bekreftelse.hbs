@@ -14,6 +14,7 @@
         <bookmark name="Godkjenne endret sluttdato" href="#endretSluttdato"/>
         <bookmark name="Godkjenne endret periode" href="#endretPeriode"/>
         <bookmark name="Kontrollere inntekt fra register" href="#kontrollerRegisterInntektOppgave"/>
+        <bookmark name="Opphør ved maksdato" href="#opphorVedMaksdato"/>
     </bookmarks>
     {{#block 'style-common' }}
     {{/block}}
@@ -116,6 +117,21 @@
                     spørsmålstekstUttalelse=oppgave.kontrollerRegisterInntektOppgave.spørsmål
             }}
 
+        </section>
+    {{/if}}
+
+    {{#if oppgave.opphorVedMaksdatoOppgave}}
+        <section id="opphorVedMaksdato">
+            <h2>Opphør ved maksdato i ungdomsprogrammet</h2>
+
+            <p>Opphør av ungdomsprogrammet er satt til {{oppgave.opphorVedMaksdatoOppgave.sluttdato}}.</p>
+            <p>Maksdato for deltakelsen er {{oppgave.opphorVedMaksdatoOppgave.maxDato}}.</p>
+
+            <br/>
+            {{> partial/ung/uttalelsePartial
+                    uttalelse=oppgave.uttalelse
+                    spørsmålstekstUttalelse=oppgave.opphorVedMaksdatoOppgave.spørsmål
+            }}
         </section>
     {{/if}}
 </div>

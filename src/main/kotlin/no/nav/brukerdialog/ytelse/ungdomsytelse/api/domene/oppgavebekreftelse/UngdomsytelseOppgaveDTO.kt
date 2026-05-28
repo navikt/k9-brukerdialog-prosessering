@@ -8,6 +8,7 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretperiode.EndretPerio
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretsluttdato.EndretSluttdatoDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretstartdato.EndretStartdatoDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.KontrollerRegisterinntektOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.opphorvedmaksdato.BekreftOpphorVedMaksdatoOppgavetypeDataDto
 import org.hibernate.validator.constraints.UUID
 
 
@@ -49,6 +50,15 @@ data class UngdomsytelseOppgaveDTO(
                     fraOgMed = oppgavetypeData.fraOgMed,
                     tilOgMed = oppgavetypeData.tilOgMed,
                     registerinntekt = oppgavetypeData.registerinntekt,
+                    uttalelse = uttalelse
+                )
+            }
+
+            is BekreftOpphorVedMaksdatoOppgavetypeDataDto -> {
+                KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
+                    oppgaveReferanse = oppgaveReferanse,
+                    sluttdato = oppgavetypeData.sluttdato,
+                    maxDato = oppgavetypeData.maxDato,
                     uttalelse = uttalelse
                 )
             }

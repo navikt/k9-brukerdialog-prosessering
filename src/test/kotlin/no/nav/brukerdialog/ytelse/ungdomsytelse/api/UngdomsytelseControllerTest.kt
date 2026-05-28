@@ -26,8 +26,8 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveYtelsetype
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretstartdato.EndretStartdatoDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.opphorvedmaksdato.BekreftOpphorVedMaksdatoOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.søkytelse.SøkYtelseOppgavetypeDataDto
 import no.nav.ung.deltakelseopplyser.kontrakt.deltaker.DeltakerDTO
 import no.nav.ung.deltakelseopplyser.kontrakt.register.DeltakelseDTO
@@ -229,10 +229,10 @@ class UngdomsytelseControllerTest {
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
         mockHentingAvOppgave(
-            oppgavetype = OppgaveType.BEKREFT_ENDRET_STARTDATO,
-            oppgavetypeData = EndretStartdatoDataDto(
-                LocalDate.now(),
-                LocalDate.now().minusDays(30)
+            oppgavetype = OppgaveType.BEKREFT_OPPHOR_VED_MAKSDATO,
+            oppgavetypeData = BekreftOpphorVedMaksdatoOppgavetypeDataDto(
+                LocalDate.now().minusDays(1),
+                LocalDate.now()
             )
         )
 
