@@ -184,7 +184,7 @@ data class KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
         }
     }
 
-    override fun dokumentTittelSuffix(): String = "opphor ved maksdato"
+    override fun dokumentTittelSuffix(): String = "opphør ved maksdato"
 
     override fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettUngdomsytelseOppgaveDTO {
         return KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
