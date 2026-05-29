@@ -6,6 +6,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretperiode.PeriodeDTO
@@ -269,6 +270,23 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
                                 LocalDate.parse("2025-01-01"),
                                 null
                             )
+                        )
+                    ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "13-opphor-ved-maksdato"
+            pdf = generator.genererPDF(
+                UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
+                    .copy(
+                        oppgave = KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO(
+                            oppgaveReferanse = UUID.randomUUID().toString(),
+                            uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                                harUttalelse = true,
+                                uttalelseFraDeltaker = "Jeg mener opphørsdatoen er satt for tidlig"
+                            ),
+                            sluttdato = LocalDate.parse("2025-12-31"),
+                            maksdato = LocalDate.parse("2026-01-15")
                         )
                     ).pdfData()
             )

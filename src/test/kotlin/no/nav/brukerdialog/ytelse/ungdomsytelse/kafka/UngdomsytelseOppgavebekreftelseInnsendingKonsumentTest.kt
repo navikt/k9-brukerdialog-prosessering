@@ -14,11 +14,12 @@ import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
-import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretstartdato.EndretStartdatoDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.opphorvedmaksdato.BekreftOpphorVedMaksdatoOppgavetypeDataDto
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
@@ -47,10 +48,10 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
         mockLagreDokument()
         mockJournalføring()
         mockHentingAvOppgave(
-            oppgavetype = OppgaveType.BEKREFT_ENDRET_STARTDATO,
-            oppgavetypeData = EndretStartdatoDataDto(
+            oppgavetype = OppgaveType.BEKREFT_OPPHOR_VED_MAKSDATO,
+            oppgavetypeData = BekreftOpphorVedMaksdatoOppgavetypeDataDto(
                 LocalDate.now(),
-                LocalDate.now().minusMonths(1)
+                LocalDate.now().plusDays(1)
             )
         )
         mockMarkerOppgaveSomLøst()
@@ -109,6 +110,15 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
         val mottatt = ZonedDateTime.parse(mottattString, JacksonConfiguration.zonedDateTimeFormatter)
         val oppgavebekreftelseMottatt = UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
             oppgaveReferanse = oppgaveReferanse,
+            oppgave = KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO(
+                oppgaveReferanse = oppgaveReferanse,
+                uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                    harUttalelse = false,
+                    uttalelseFraDeltaker = null
+                ),
+                sluttdato = LocalDate.parse("2025-12-01"),
+                maksdato = LocalDate.parse("2025-12-01")
+            ),
             mottatt = mottatt
         )
         val correlationId = UUID.randomUUID().toString()
@@ -152,13 +162,14 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
     private fun preprosessertSøknadSomJson(oppgaveReferanse: String, mottatt: String) = """
         {
           "oppgave": {
-            "type": "UNG_ENDRET_STARTDATO",
+            "type": "UNG_OPPHOR_VED_MAKSDATO",
             "oppgaveReferanse": "$oppgaveReferanse",
             "uttalelse": {
                 "harUttalelse": false,
                 "uttalelseFraDeltaker": null
             },
-            "nyStartdato": "2025-12-01"
+            "sluttdato": "2025-12-01",
+            "maksdato": "2025-12-01"
           },
           "mottatt": "$mottatt",
           "søker": {
@@ -185,8 +196,8 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
               "norskIdentitetsnummer": "23500180528"
             },
             "bekreftelse": {
-              "type": "UNG_ENDRET_STARTDATO",
-              "nyStartdato": "2025-12-01",
+              "type": "UNG_OPPHOR_VED_MAKSDATO",
+              "sluttdato": "2025-12-01",
               "oppgaveReferanse": "$oppgaveReferanse",
               "uttalelseFraBruker": null,
               "harUttalelse": false,
