@@ -6,7 +6,7 @@ import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.Ko
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretSluttdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterInntektOppgaveTypeDataDTO
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretperiode.PeriodeDTO
@@ -279,7 +279,7 @@ class UngdomsyteleOppgavebekreftelsePdfGeneratorTest {
             pdf = generator.genererPDF(
                 UngdomsytelseOppgavebekreftelseUtils.oppgavebekreftelseMottatt()
                     .copy(
-                        oppgave = KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
+                        oppgave = KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO(
                             oppgaveReferanse = UUID.randomUUID().toString(),
                             uttalelse = UngdomsytelseOppgaveUttalelseDTO(
                                 harUttalelse = true,

@@ -55,7 +55,7 @@ data class UngdomsytelseOppgaveDTO(
             }
 
             is BekreftOpphorVedMaksdatoOppgavetypeDataDto -> {
-                KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
+                KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO(
                     oppgaveReferanse = oppgaveReferanse,
                     sluttdato = oppgavetypeData.sluttdato,
                     maksdato = oppgavetypeData.maxDato,

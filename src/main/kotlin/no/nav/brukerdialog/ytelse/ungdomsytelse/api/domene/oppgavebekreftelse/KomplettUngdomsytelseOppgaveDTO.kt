@@ -25,7 +25,7 @@ import java.util.*
     JsonSubTypes.Type(value = KomplettEndretSluttdatoUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_ENDRET_SLUTTDATO),
     JsonSubTypes.Type(value = KomplettEndretPeriodeUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_ENDRET_PERIODE),
     JsonSubTypes.Type(value = KomplettKontrollerRegisterInntektOppgaveTypeDataDTO::class, name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
-    JsonSubTypes.Type(value = KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_OPPHOR_VED_MAKSDATO),
+    JsonSubTypes.Type(value = KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO::class, name = Bekreftelse.UNG_OPPHOR_VED_MAKSDATO),
 )
 sealed class KomplettUngdomsytelseOppgaveDTO(
     open val oppgaveReferanse: String,
@@ -163,7 +163,7 @@ data class KomplettKontrollerRegisterInntektOppgaveTypeDataDTO(
     }
 }
 
-data class KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
+data class KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO(
     override val oppgaveReferanse: String,
     override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val sluttdato: LocalDate,
@@ -187,7 +187,7 @@ data class KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
     override fun dokumentTittelSuffix(): String = "opphør ved maksdato"
 
     override fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettUngdomsytelseOppgaveDTO {
-        return KomplettOpphorVedMaksdatoUngdomsytelseOppgaveDTO(
+        return KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO(
             oppgaveReferanse = oppgaveReferanse,
             sluttdato = sluttdato,
             maksdato = maksdato,
