@@ -32,7 +32,7 @@
             {{#each inntektForPeriode as |inntekt|}}
                <li class="li-style-none"> I perioden <strong>{{inntekt.periode.fraOgMed}} til {{inntekt.periode.tilOgMed}}</strong> har du oppgitt følgende
                    lønn:</li>
-                <br/>
+                <li class="li-style-none"><br/></li>
                 {{#if inntekt.arbeidstakerOgFrilansInntekt}}
                     <li class="li-style-none"><strong>Lønn (før skatt):</strong> {{inntekt.arbeidstakerOgFrilansInntekt}}</li>
                 {{/if}}
