@@ -22,7 +22,7 @@ class AktivitetspengerInntektsrapporteringPdfGeneratorTest {
     }
 
     private companion object {
-        const val PDF_PREFIX = "ung"
+        const val PDF_PREFIX = "aktivitetspenger-inntekt"
         val generator = PDFGenerator()
 
         fun genererOppsummeringsPdfer(writeBytes: Boolean) {
