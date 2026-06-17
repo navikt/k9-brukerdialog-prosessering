@@ -41,20 +41,14 @@ data class KomplettEndretStartdatoUngdomsytelseOppgaveDTO(
     override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val nyStartdato: LocalDate,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
-    override fun somK9Format(): Bekreftelse {
-        val endretFomDatoBekreftelse =
-            EndretStartdatoBekreftelse(
-                UUID.fromString(oppgaveReferanse),
-                nyStartdato,
-                uttalelse.harUttalelse
-            )
-
-        if (!uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
-            endretFomDatoBekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
-        }
-
-        return endretFomDatoBekreftelse
-    }
+    override fun somK9Format(): Bekreftelse =
+        EndretStartdatoBekreftelse(
+            UUID.fromString(oppgaveReferanse),
+            nyStartdato,
+            uttalelse.harUttalelse,
+            if (uttalelse.uttalelseFraDeltaker.isNullOrBlank()) null else uttalelse.uttalelseFraDeltaker,
+            null
+        )
 
     override fun dokumentTittelSuffix(): String = "endret startdato"
 
@@ -72,20 +66,14 @@ data class KomplettEndretSluttdatoUngdomsytelseOppgaveDTO(
     override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val nySluttdato: LocalDate,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
-    override fun somK9Format(): Bekreftelse {
-        val endretFomDatoBekreftelse =
-            EndretSluttdatoBekreftelse(
-                UUID.fromString(oppgaveReferanse),
-                nySluttdato,
-                uttalelse.harUttalelse
-            )
-
-        if (!uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
-            endretFomDatoBekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
-        }
-
-        return endretFomDatoBekreftelse
-    }
+    override fun somK9Format(): Bekreftelse =
+        EndretSluttdatoBekreftelse(
+            UUID.fromString(oppgaveReferanse),
+            nySluttdato,
+            uttalelse.harUttalelse,
+            if (uttalelse.uttalelseFraDeltaker.isNullOrBlank()) null else uttalelse.uttalelseFraDeltaker,
+            null
+        )
 
     override fun dokumentTittelSuffix(): String = "endret sluttdato"
 
@@ -103,20 +91,15 @@ data class KomplettEndretPeriodeUngdomsytelseOppgaveDTO(
     override val uttalelse: UngdomsytelseOppgaveUttalelseDTO,
     val nyPeriode: PeriodeDTO?,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
-    override fun somK9Format(): Bekreftelse {
-        val endretPeriodeBekreftelse =
-            EndretPeriodeBekreftelse(
-                UUID.fromString(oppgaveReferanse),
-                nyPeriode?.let { Periode(nyPeriode.fomDato, nyPeriode.tomDato) },
-                uttalelse.harUttalelse
-            )
+    override fun somK9Format(): Bekreftelse =
+        EndretPeriodeBekreftelse(
+            UUID.fromString(oppgaveReferanse),
+            nyPeriode?.let { Periode(nyPeriode.fomDato, nyPeriode.tomDato) },
+            uttalelse.harUttalelse,
+            if (uttalelse.uttalelseFraDeltaker.isNullOrBlank()) null else uttalelse.uttalelseFraDeltaker,
+            null
+        )
 
-        if (!uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
-            endretPeriodeBekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
-        }
-
-        return endretPeriodeBekreftelse
-    }
 
     override fun dokumentTittelSuffix(): String = "endret periode"
 
@@ -170,19 +153,14 @@ data class KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO(
     val maksdato: LocalDate,
 ) : KomplettUngdomsytelseOppgaveDTO(oppgaveReferanse, uttalelse) {
 
-    override fun somK9Format(): Bekreftelse {
-        val bekreftelse = OpphørVedMaksdatoBekreftelse(
+    override fun somK9Format(): Bekreftelse =
+        OpphørVedMaksdatoBekreftelse(
             UUID.fromString(oppgaveReferanse),
             sluttdato,
-            uttalelse.harUttalelse
+            uttalelse.harUttalelse,
+            if (uttalelse.uttalelseFraDeltaker.isNullOrBlank()) null else uttalelse.uttalelseFraDeltaker,
+            null
         )
-
-        return if (uttalelse.uttalelseFraDeltaker.isNullOrBlank()) {
-            bekreftelse
-        } else {
-            bekreftelse.medUttalelseFraBruker(uttalelse.uttalelseFraDeltaker)
-        }
-    }
 
     override fun dokumentTittelSuffix(): String = "opphør ved maksdato"
 
