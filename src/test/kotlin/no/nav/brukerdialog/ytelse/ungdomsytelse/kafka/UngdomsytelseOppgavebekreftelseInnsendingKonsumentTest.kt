@@ -12,9 +12,9 @@ import no.nav.brukerdialog.utils.KafkaUtils.leggPåTopic
 import no.nav.brukerdialog.utils.KafkaUtils.lesMelding
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
+import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.UngdomsytelseOppgaveUttalelseDTO
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO
 import no.nav.brukerdialog.ytelse.ungdomsytelse.kafka.oppgavebekreftelse.UngdomsytelseOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.SøknadUtils
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.UngdomsytelseOppgavebekreftelseUtils
@@ -113,8 +113,8 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             oppgave = KomplettOpphørVedMaksdatoUngdomsytelseOppgaveDTO(
                 oppgaveReferanse = oppgaveReferanse,
                 uttalelse = UngdomsytelseOppgaveUttalelseDTO(
-                    harUttalelse = false,
-                    uttalelseFraDeltaker = null
+                    harUttalelse = true,
+                    uttalelseFraDeltaker = "uttalelse fra bruker"
                 ),
                 sluttdato = LocalDate.parse("2025-12-01"),
                 maksdato = LocalDate.parse("2025-12-01")
@@ -147,8 +147,9 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             ).value()
 
         val preprosessertSøknadJson = JSONObject(lesMelding).getJSONObject("data").toString()
+        val expectedStr = preprosessertSøknadSomJson(oppgaveReferanse, mottattString)
         JSONAssert.assertEquals(
-            preprosessertSøknadSomJson(oppgaveReferanse, mottattString),
+            expectedStr,
             preprosessertSøknadJson,
             true
         )
@@ -165,8 +166,8 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
             "type": "UNG_OPPHOR_VED_MAKSDATO",
             "oppgaveReferanse": "$oppgaveReferanse",
             "uttalelse": {
-                "harUttalelse": false,
-                "uttalelseFraDeltaker": null
+                "harUttalelse": true,
+                "uttalelseFraDeltaker": "uttalelse fra bruker"
             },
             "sluttdato": "2025-12-01",
             "maksdato": "2025-12-01"
@@ -199,8 +200,8 @@ class UngdomsytelseOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrati
               "type": "UNG_OPPHOR_VED_MAKSDATO",
               "sluttdato": "2025-12-01",
               "oppgaveReferanse": "$oppgaveReferanse",
-              "uttalelseFraBruker": null,
-              "harUttalelse": false,
+              "uttalelseFraBruker": "uttalelse fra bruker",
+              "harUttalelse": true,
               "dataBruktTilUtledning": null
             },
             "kildesystem": "søknadsdialog"
