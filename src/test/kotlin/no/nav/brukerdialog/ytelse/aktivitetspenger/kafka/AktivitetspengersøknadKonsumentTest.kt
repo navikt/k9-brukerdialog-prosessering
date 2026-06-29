@@ -166,6 +166,7 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
             "ytelse": {
               "type": "AKTIVITETSPENGER",
               "søknadsperiode": "2022-01-01/2023-01-01",
+              "søknadsperiodeFom": "2022-01-01",
               "forutgåendeBosteder": {
                 "perioder": {
                   "2023-01-02/2023-01-03": {

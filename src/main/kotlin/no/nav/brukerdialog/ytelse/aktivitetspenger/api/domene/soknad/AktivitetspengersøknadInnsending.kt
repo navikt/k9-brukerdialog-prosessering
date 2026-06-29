@@ -66,6 +66,7 @@ data class AktivitetspengersøknadInnsending(
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): AktivitetspengerSøknad {
         val ytelse = Aktivitetspenger()
+            .medSøknadsperiodeFom(startdato)
             .medSøknadsperiode(Periode(startdato, startdato.plusMonths(12))) //TODO endre til startdato eller fjerne dato
             .medForutgåendeBosteder(forutgåendeBosteder.tilK9Bosteder())
             .medErBosattITrondheim(erBosattITrondheim)
