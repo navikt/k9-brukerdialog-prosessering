@@ -52,6 +52,7 @@ data class AktivitetspengerInntektsrapporteringInnsending(
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): Søknad {
         val ytelse = Aktivitetspenger()
+            .medSøknadsperiodeFom(oppgittInntektForPeriode.periodeForInntekt.fraOgMed)
             .medSøknadsperiode(oppgittInntektForPeriode.periodeForInntekt.somUngPeriode())
             .medInntekter(OppgittInntekt(setOf(oppgittInntektForPeriode.somUngOppgittInntektForPeriode())))
 
