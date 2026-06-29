@@ -62,6 +62,7 @@ object InntektrapporteringUtils {
         oppgittInntektForPeriode: OppgittInntektForPeriode,
     ): k9FormatSøknad {
         val ytelse = Aktivitetspenger()
+            .medSøknadsperiodeFom(oppgittInntektForPeriode.periodeForInntekt.fraOgMed)
             .medSøknadsperiode(oppgittInntektForPeriode.periodeForInntekt.somUngPeriode())
             .medInntekter(UngOppgittInntekt(setOf(oppgittInntektForPeriode.somUngOppgittInntektForPeriode())))
 
