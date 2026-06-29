@@ -78,6 +78,7 @@ object AktivitetspengersøknadUtils {
         erBosattITrondheim: Boolean,
     ): k9FormatSøknad {
         val ytelse = Aktivitetspenger()
+            .medSøknadsperiodeFom(fraOgMed)
             .medSøknadsperiode(Periode(fraOgMed, fraOgMed.plusMonths(12)))
             .medForutgåendeBosteder(bosteder)
             .medErBosattITrondheim(erBosattITrondheim)
