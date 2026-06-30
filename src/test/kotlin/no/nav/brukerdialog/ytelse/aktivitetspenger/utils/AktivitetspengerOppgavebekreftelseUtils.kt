@@ -4,6 +4,7 @@ import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettAktivitetspengerOppgaveDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterinntektOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.oppgavebekreftelse.domene.AktivitetspengerOppgavebekreftelseMottatt
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.oppgave.OppgaveBekreftelse
@@ -31,7 +32,7 @@ object AktivitetspengerOppgavebekreftelseUtils {
         ),
     )
 
-    val defaultKomplettOppgave = KomplettAktivitetspengerOppgaveDTO(
+    val defaultKomplettOppgave = KomplettKontrollerRegisterinntektOppgaveDTO(
         oppgaveReferanse = UUID.randomUUID().toString(),
         uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
         fraOgMed = LocalDate.parse("2025-06-01"),
