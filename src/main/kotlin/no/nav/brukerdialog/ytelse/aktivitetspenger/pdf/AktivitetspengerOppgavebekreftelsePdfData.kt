@@ -14,7 +14,6 @@ import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftBostedOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterinntektOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.oppgavebekreftelse.domene.AktivitetspengerOppgavebekreftelseMottatt
-import no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse.KomplettEndretStartdatoUngdomsytelseOppgaveDTO
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.RegisterinntektDTO
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.YtelseType
@@ -44,6 +43,7 @@ class AktivitetspengerOppgavebekreftelsePdfData(
     private fun KomplettAktivitetspengerOppgaveDTO.somMap() = mapOf(
         "oppgaveReferanse" to oppgaveReferanse,
         "uttalelse" to uttalelse.somMap(),
+        "bekreftBosted" to if (this is KomplettBekreftBostedOppgaveDTO) true else null,
         "kontrollerRegisterInntektOppgave" to if (this is KomplettKontrollerRegisterinntektOppgaveDTO) mapOf(
             "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
             "månedÅr" to "${fraOgMed.month.somNorskMåned()} ${fraOgMed.year}",
