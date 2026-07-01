@@ -61,6 +61,31 @@ class AktivitetspengerOppgavebekreftelsePdfGeneratorTest {
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "3-bekrefter-bosted-uten-uttalelse"
+            pdf = generator.genererPDF(
+                AktivitetspengerOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
+                    oppgave = AktivitetspengerOppgavebekreftelseUtils.defaultBekreftBostedOppgave.copy(
+                        oppgaveReferanse = UUID.randomUUID().toString(),
+                        uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "4-bekrefter-bosted-med-uttalelse"
+            pdf = generator.genererPDF(
+                AktivitetspengerOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
+                    oppgave = AktivitetspengerOppgavebekreftelseUtils.defaultBekreftBostedOppgave.copy(
+                        oppgaveReferanse = UUID.randomUUID().toString(),
+                        uttalelse = AktivitetspengerOppgaveUttalelseDTO(
+                            harUttalelse = true,
+                            uttalelseFraDeltaker = "Jeg er ikke lenger bosatt i Trondheim, og ønsker å gi en tilbakemelding på dette.",
+                        ),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }
