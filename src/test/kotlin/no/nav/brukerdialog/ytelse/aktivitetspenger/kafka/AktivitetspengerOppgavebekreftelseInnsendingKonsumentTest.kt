@@ -13,6 +13,7 @@ import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.oppgavebekreftelse.AktivitetspengerOppgavebekreftelseTopologyConfiguration
 import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.AktivitetspengerOppgavebekreftelseUtils
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bosted.BekreftBostedOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.KontrollerRegisterinntektOppgavetypeDataDto
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -52,6 +53,70 @@ class AktivitetspengerOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegr
             oppgave = AktivitetspengerOppgaveDTO(
                 oppgaveReferanse = oppgaveReferanse.toString(),
                 uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
+            )
+        )
+
+        val token = mockOAuth2Server.hentToken()
+        mockMvc.post("/aktivitetspenger/oppgavebekreftelse/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+                setBearerAuth(token.serialize())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = JacksonConfiguration.configureObjectMapper().writeValueAsString(oppgavebekreftelse)
+        }.andExpect {
+            status {
+                isAccepted()
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+            }
+        }
+
+        coVerify(exactly = 1, timeout = 60 * 1000) {
+            dokumentService.slettDokumenter(any(), any())
+        }
+
+        k9DittnavVarselConsumer.lesMelding(
+            key = oppgaveReferanse.toString(),
+            topic = DittnavVarselTopologyConfiguration.K9_DITTNAV_VARSEL_TOPIC
+        ).value().assertDittnavVarsel(
+            K9Beskjed(
+                metadata = no.nav.brukerdialog.utils.SøknadUtils.metadata,
+                grupperingsId = oppgaveReferanse.toString(),
+                tekst = "Bekreftelse om aktivitetspengeropplysninger er mottatt",
+                link = null,
+                dagerSynlig = 7,
+                søkerFødselsnummer = søker.fødselsnummer,
+                eventId = "testes ikke",
+                ytelse = "AKTIVITETSPENGER",
+            )
+        )
+    }
+
+    @Test
+    fun `forvent at bekreftelse av bosted konsumeres riktig og dokumenter blir slettet`() {
+        val søker = mockSøker()
+        mockBarn()
+        mockLagreDokument()
+        mockJournalføring()
+        mockHentingAvOppgave(
+            oppgavetype = OppgaveType.BEKREFT_BOSTED,
+            oppgavetypeData = BekreftBostedOppgavetypeDataDto(
+                LocalDate.parse("2025-06-01"),
+                LocalDate.parse("2025-06-30"),
+                false,
+            )
+        )
+        mockMarkerOppgaveSomLøst()
+
+        val oppgaveReferanse = UUID.randomUUID()
+        val oppgavebekreftelse = AktivitetspengerOppgavebekreftelseUtils.defaultOppgavebekreftelse.copy(
+            oppgave = AktivitetspengerOppgaveDTO(
+                oppgaveReferanse = oppgaveReferanse.toString(),
+                uttalelse = AktivitetspengerOppgaveUttalelseDTO(
+                    harUttalelse = true,
+                    uttalelseFraDeltaker = "Jeg er ikke lenger bosatt i Trondheim, uttalelsen skal ikke gå tapt",
+                ),
             )
         )
 

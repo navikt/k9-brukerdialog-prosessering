@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bosted.BekreftBostedOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.KontrollerRegisterinntektOppgavetypeDataDto
 import org.hibernate.validator.constraints.UUID
 
@@ -14,12 +15,16 @@ data class AktivitetspengerOppgaveDTO(
 ) {
     fun somKomplettOppgave(oppgaveDTO: BrukerdialogOppgaveDto): KomplettAktivitetspengerOppgaveDTO {
         return when (val oppgavetypeData = oppgaveDTO.oppgavetypeData) {
-            is KontrollerRegisterinntektOppgavetypeDataDto -> KomplettAktivitetspengerOppgaveDTO(
+            is KontrollerRegisterinntektOppgavetypeDataDto -> KomplettKontrollerRegisterinntektOppgaveDTO(
                 oppgaveReferanse = oppgaveReferanse,
                 fraOgMed = oppgavetypeData.fraOgMed,
                 tilOgMed = oppgavetypeData.tilOgMed,
                 registerinntekt = oppgavetypeData.registerinntekt,
                 uttalelse = uttalelse,
+            )
+            is BekreftBostedOppgavetypeDataDto -> KomplettBekreftBostedOppgaveDTO(
+                oppgaveReferanse = oppgaveReferanse,
+                uttalelse = uttalelse
             )
             else -> throw IllegalArgumentException("Ugyldig oppgavetypeData for aktivitetspenger: ${oppgaveDTO.oppgavetypeData}")
         }

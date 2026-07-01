@@ -10,6 +10,9 @@ import no.nav.brukerdialog.utils.DateUtils.somNorskMåned
 import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgaveUttalelseDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettAktivitetspengerOppgaveDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftBostedOppgaveDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterinntektOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.oppgavebekreftelse.domene.AktivitetspengerOppgavebekreftelseMottatt
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.RegisterinntektDTO
@@ -27,17 +30,7 @@ class AktivitetspengerOppgavebekreftelsePdfData(
         val k9Format = oppgavebekreftelseMottatt.k9Format
         return mapOf(
             "tittel" to ytelse().utledTittel(språk()) + oppgavebekreftelseMottatt.oppgave.dokumentTittelSuffix(),
-            "oppgave" to mapOf(
-                "oppgaveReferanse" to oppgavebekreftelseMottatt.oppgave.oppgaveReferanse,
-                "uttalelse" to oppgavebekreftelseMottatt.oppgave.uttalelse.somMap(),
-                "kontrollerRegisterInntektOppgave" to mapOf(
-                    "fraOgMed" to DATE_FORMATTER.format(oppgavebekreftelseMottatt.oppgave.fraOgMed),
-                    "månedÅr" to "${oppgavebekreftelseMottatt.oppgave.fraOgMed.month.somNorskMåned()} ${oppgavebekreftelseMottatt.oppgave.fraOgMed.year}",
-                    "tilOgMed" to DATE_FORMATTER.format(oppgavebekreftelseMottatt.oppgave.tilOgMed),
-                    "registerinntekt" to oppgavebekreftelseMottatt.oppgave.registerinntekt.somMap(),
-                    "spørsmål" to "Har du tilbakemelding på lønnen?",
-                ),
-            ),
+            "oppgave" to oppgavebekreftelseMottatt.oppgave.somMap(),
             "søknadMottattDag" to oppgavebekreftelseMottatt.mottatt.withZoneSameInstant(OSLO_ZONE_ID).somNorskDag(),
             "søknadMottatt" to DATE_TIME_FORMATTER.format(oppgavebekreftelseMottatt.mottatt),
             "søker" to oppgavebekreftelseMottatt.søker.somMap(),
@@ -46,6 +39,20 @@ class AktivitetspengerOppgavebekreftelsePdfData(
             ),
         )
     }
+
+    private fun KomplettAktivitetspengerOppgaveDTO.somMap() = mapOf(
+        "oppgaveReferanse" to oppgaveReferanse,
+        "uttalelse" to uttalelse.somMap(),
+        "bekreftBosted" to if (this is KomplettBekreftBostedOppgaveDTO) true else null,
+        "kontrollerRegisterInntektOppgave" to if (this is KomplettKontrollerRegisterinntektOppgaveDTO) mapOf(
+            "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
+            "månedÅr" to "${fraOgMed.month.somNorskMåned()} ${fraOgMed.year}",
+            "tilOgMed" to DATE_FORMATTER.format(tilOgMed),
+            "registerinntekt" to registerinntekt.somMap(),
+            "spørsmål" to "Har du tilbakemelding på lønnen?"
+        ) else null,
+    )
+
 
     private fun RegisterinntektDTO.somMap() = mapOf(
         "arbeidOgFrilansInntekter" to this.arbeidOgFrilansInntekter.map {
