@@ -21,9 +21,8 @@ class Arbeidsgiver(
 
     private val utbetalingsårsak: Utbetalingsårsak,
 
-    @field:Valid
     @field:NotEmpty(message = "Kan ikke være tom")
-    private val perioder: List<Utbetalingsperiode>,
+    private val perioder: List<@Valid Utbetalingsperiode>,
 
     private val konfliktForklaring: String? = null,
     @get:JsonProperty("årsakNyoppstartet")

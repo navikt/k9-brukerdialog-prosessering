@@ -45,14 +45,13 @@ data class OmsorgspengerutbetalingArbeidstakerSøknad(
     val vedlegg: List<URL>,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
 
-    @field:Valid val bosteder: List<Bosted>,
-    @field:Valid val opphold: List<Opphold>,
+    val bosteder: List<@Valid Bosted>,
+    val opphold: List<@Valid Opphold>,
 
     @field:Valid private val bekreftelser: Bekreftelser,
 
     @field:NotEmpty(message = "Må ha minst en arbeidsgiver satt")
-    @field:Valid
-    private val arbeidsgivere: List<Arbeidsgiver>,
+    private val arbeidsgivere: List<@Valid Arbeidsgiver>,
 
     @field:Valid private val dineBarn: DineBarn,
     private val hjemmePgaSmittevernhensyn: Boolean,

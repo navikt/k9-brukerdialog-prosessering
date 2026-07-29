@@ -37,9 +37,8 @@ data class OmsorgspengerMidlertidigAleneSøknad(
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val annenForelder: AnnenForelder,
 
-    @field:Valid
     @field:NotEmpty
-    val barn: List<Barn> = listOf(),
+    val barn: List<@Valid Barn> = listOf(),
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
     val harBekreftetOpplysninger: Boolean,

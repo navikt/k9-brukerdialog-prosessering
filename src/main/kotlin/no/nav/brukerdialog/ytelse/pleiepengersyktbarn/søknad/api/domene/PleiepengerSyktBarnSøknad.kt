@@ -61,7 +61,7 @@ data class PleiepengerSyktBarnSøknad(
     val språk: Språk,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
     @field:Valid val barn: BarnDetaljer,
-    @field:Valid val arbeidsgivere: List<Arbeidsgiver>,
+    val arbeidsgivere: List<@Valid Arbeidsgiver>,
     val vedlegg: List<URL> = listOf(), // TODO: Fjern listof() når krav om legeerklæring er påkrevd igjen.
     val fødselsattestVedleggUrls: List<URL>? = listOf(),
     @JsonFormat(pattern = "yyyy-MM-dd")

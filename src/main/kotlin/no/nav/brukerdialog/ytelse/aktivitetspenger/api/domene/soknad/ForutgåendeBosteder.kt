@@ -13,8 +13,7 @@ import no.nav.k9.søknad.felles.type.Periode as K9Periode
 
 data class ForutgåendeBosteder(
     val harBoddIUtlandetSiste5År: Boolean,
-    @field:Valid
-    val utenlandsoppholdSiste5År: List<Bosted> = listOf(),
+    val utenlandsoppholdSiste5År: List<@Valid Bosted> = listOf(),
 ) {
     fun tilK9Bosteder(): Bosteder {
         if (!harBoddIUtlandetSiste5År || utenlandsoppholdSiste5År.isEmpty()) {

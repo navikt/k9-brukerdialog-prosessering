@@ -17,8 +17,8 @@ import no.nav.k9.søknad.ytelse.olp.v1.kurs.Reise as K9Reise
 data class Kurs(
     @field:Valid val kursholder: Kursholder,
     val enkeltdagEllerPeriode: KursVarighetType,
-    @field:Valid val kursperioder: List<Periode>? = null,
-    @field:Valid val kursdager: List<KursDag>? = null,
+    val kursperioder: List<@Valid Periode>? = null,
+    val kursdager: List<@Valid KursDag>? = null,
     @field:Valid val reise: Reise? = null,
 ) {
     fun tilK9Format(): K9Kurs {
