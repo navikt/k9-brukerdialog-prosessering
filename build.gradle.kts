@@ -145,7 +145,7 @@ dependencies {
 tasks {
 	withType<KotlinCompile> {
 		compilerOptions {
-			freeCompilerArgs.set(listOf("-Xjsr305=strict"))
+			freeCompilerArgs.set(listOf("-Xjsr305=strict", "-Xemit-jvm-type-annotations"))
             jvmTarget.set(JvmTarget.JVM_25)
 		}
 	}

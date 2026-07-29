@@ -8,7 +8,7 @@ import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold as K9Utenlan
 
 data class UtenlandsoppholdIPerioden(
     @field:NotNull val skalOppholdeSegIUtlandetIPerioden: Boolean,
-    @field:Valid val opphold: List<Utenlandsopphold> = listOf(),
+    val opphold: List<@Valid Utenlandsopphold> = listOf(),
 ) {
     internal fun tilK9Utenlandsopphold() = K9Utenlandsopphold().medPerioder(
         mutableMapOf<Periode, UtenlandsoppholdPeriodeInfo>().apply {

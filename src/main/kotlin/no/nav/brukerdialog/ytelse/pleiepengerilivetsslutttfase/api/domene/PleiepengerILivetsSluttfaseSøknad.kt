@@ -56,7 +56,7 @@ data class PleiepengerILivetsSluttfaseSøknad(
     @field:Valid val pleietrengende: Pleietrengende,
     val medlemskap: Medlemskap,
     val utenlandsoppholdIPerioden: UtenlandsoppholdIPerioden,
-    @field:Valid val arbeidsgivere: List<Arbeidsgiver>,
+    val arbeidsgivere: List<@Valid Arbeidsgiver>,
     @field:Valid val frilans: Frilans? = null,
     @field:Valid val selvstendigNæringsdrivende: SelvstendigNæringsdrivende? = null,
     val opptjeningIUtlandet: List<OpptjeningIUtlandet>,

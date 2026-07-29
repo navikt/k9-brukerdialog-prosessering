@@ -13,8 +13,8 @@ enum class JobberIPeriodeSvar { SOM_VANLIG, REDUSERT, HELT_FRAVÆR }
 
 data class ArbeidIPeriode @JsonCreator constructor(
     @JsonProperty("jobberIPerioden") private val jobberIPerioden: JobberIPeriodeSvar,
-    @JsonProperty("enkeltdager") @field:Valid private val enkeltdager: List<Enkeltdag> = emptyList(),
-    @JsonProperty("enkeltdagerFravær") @field:Valid private val enkeltdagerFravær: List<Enkeltdag> = emptyList(),
+    @JsonProperty("enkeltdager") private val enkeltdager: List<@Valid Enkeltdag> = emptyList(),
+    @JsonProperty("enkeltdagerFravær") private val enkeltdagerFravær: List<@Valid Enkeltdag> = emptyList(),
 ) {
     init {
         require(enkeltdager.isNotEmpty() || enkeltdagerFravær.isNotEmpty()) {

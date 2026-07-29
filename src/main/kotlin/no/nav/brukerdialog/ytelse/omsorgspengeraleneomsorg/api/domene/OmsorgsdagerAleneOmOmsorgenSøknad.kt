@@ -35,9 +35,8 @@ data class OmsorgsdagerAleneOmOmsorgenSøknad(
     val språk: String,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
 
-    @field:Valid
     @field:NotEmpty(message = "Kan ikke være en tom liste")
-    val barn: List<Barn> = listOf(),
+    val barn: List<@Valid Barn> = listOf(),
 
     @field:AssertTrue(message = "Opplysningene må bekreftes for å sende inn søknad")
     val harBekreftetOpplysninger: Boolean,

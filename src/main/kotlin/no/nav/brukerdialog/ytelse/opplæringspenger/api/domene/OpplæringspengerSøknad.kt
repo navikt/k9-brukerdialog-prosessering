@@ -64,8 +64,7 @@ data class OpplæringspengerSøknad(
     @field:Valid
     val barn: BarnDetaljer,
 
-    @field:Valid
-    val arbeidsgivere: List<ArbeidsgiverOLP>,
+    val arbeidsgivere: List<@Valid ArbeidsgiverOLP>,
     val vedlegg: List<URL> = listOf(), // TODO: Fjern listof() når krav om legeerklæring er påkrevd igjen.
 
     @JsonFormat(pattern = "yyyy-MM-dd")
