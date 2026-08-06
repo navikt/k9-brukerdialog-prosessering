@@ -5,6 +5,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bosted.BekreftBostedOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bosted.BekreftBostedOpphørOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.KontrollerRegisterinntektOppgavetypeDataDto
 import org.hibernate.validator.constraints.UUID
 
@@ -22,7 +23,8 @@ data class AktivitetspengerOppgaveDTO(
                 registerinntekt = oppgavetypeData.registerinntekt,
                 uttalelse = uttalelse,
             )
-            is BekreftBostedOppgavetypeDataDto -> KomplettBekreftBostedOppgaveDTO(
+            is BekreftBostedOppgavetypeDataDto,
+            is BekreftBostedOpphørOppgavetypeDataDto -> KomplettBekreftBostedOppgaveDTO(
                 oppgaveReferanse = oppgaveReferanse,
                 uttalelse = uttalelse
             )
