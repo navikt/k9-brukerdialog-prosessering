@@ -255,6 +255,49 @@ class UngdomsytelseControllerTest {
     }
 
     @Test
+    fun `Innsending av oppgavebekreftelse med gyldig uttalelse inkludert mellomrom er OK`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
+        coEvery { innsendingService.registrer(any(), any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
+        mockHentingAvOppgave(
+            oppgavetype = OppgaveType.BEKREFT_OPPHOR_VED_MAKSDATO,
+            oppgavetypeData = BekreftOpphorVedMaksdatoOppgavetypeDataDto(
+                LocalDate.now().minusDays(1),
+                LocalDate.now()
+            )
+        )
+
+        mockMarkerOppgaveSomLøst()
+
+        val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
+        val gyldigUttalelseMedMellomrom = "Dette er en gyldig uttalelse, med flere ord og mellomrom."
+
+        val oppgavebekreftelseMedUttalelse = defaultOppgavebekreftelse.copy(
+            oppgave = UngdomsytelseOppgaveDTO(
+                oppgaveReferanse = defaultOppgavebekreftelse.oppgave.oppgaveReferanse,
+                uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                    harUttalelse = true,
+                    uttalelseFraDeltaker = gyldigUttalelseMedMellomrom,
+                ),
+            )
+        )
+
+        mockMvc.post("/ungdomsytelse/oppgavebekreftelse/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(oppgavebekreftelseMedUttalelse)
+        }
+            .andExpect {
+                status { isAccepted() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+            }
+    }
+
+    @Test
     fun `Innsending av oppgavebekreftelse med feile verdier responderer med bad request`() {
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
 
