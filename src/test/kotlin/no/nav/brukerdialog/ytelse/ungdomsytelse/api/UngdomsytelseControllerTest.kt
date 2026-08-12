@@ -312,6 +312,59 @@ class UngdomsytelseControllerTest {
             }
     }
 
+    @Test
+    fun `Innsending av oppgavebekreftelse med ugyldige tegn i uttalelseFraDeltaker responderer med bad request`() {
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
+
+        val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
+        val ugyldigUttalelse = "Привіт, це недозволені символи"
+
+        val jsonPayload = objectMapper.writeValueAsString(
+            defaultOppgavebekreftelse.copy(
+                oppgave = UngdomsytelseOppgaveDTO(
+                    oppgaveReferanse = defaultOppgavebekreftelse.oppgave.oppgaveReferanse,
+                    uttalelse = UngdomsytelseOppgaveUttalelseDTO(
+                        harUttalelse = true,
+                        uttalelseFraDeltaker = ugyldigUttalelse,
+                    ),
+                )
+            )
+        )
+        mockMvc.post("/ungdomsytelse/oppgavebekreftelse/innsending") {
+            headers {
+                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
+            }
+            contentType = MediaType.APPLICATION_JSON
+            content = jsonPayload.trimIndent()
+        }
+            .andExpect {
+                status { isBadRequest() }
+                header { exists(NavHeaders.X_CORRELATION_ID) }
+                content {
+                    json(
+                        """
+                        {
+                          "detail": "Forespørselen inneholder valideringsfeil",
+                          "instance": "http://localhost/ungdomsytelse/oppgavebekreftelse/innsending",
+                          "status": 400,
+                          "title": "invalid-request-parameters",
+                          "type": "/problem-details/invalid-request-parameters",
+                          "violations": [
+                            {
+                              "invalidValue": "$ugyldigUttalelse",
+                              "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.uttalelse.uttalelseFraDeltaker",
+                              "parameterType": "ENTITY",
+                              "reason": "'uttalelseFraDeltaker' inneholder ikke-tillatte tegn"
+                            }
+                          ]
+                        }
+                        """.trimIndent(),
+                        JsonCompareMode.LENIENT,
+                    )
+                }
+            }
+    }
+
     private fun mockHentingAvOppgave(oppgavetype: OppgaveType, oppgavetypeData: OppgavetypeDataDto) {
         every { ungBrukerdialogApiService.hentOppgave(any()) } returns BrukerdialogOppgaveDto(
             UUID.randomUUID(),
