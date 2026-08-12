@@ -271,7 +271,7 @@ class UngdomsytelseControllerTest {
         mockMarkerOppgaveSomLøst()
 
         val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
-        val gyldigUttalelseMedMellomrom = "Dette er en gyldig uttalelse, med flere ord og mellomrom."
+        val gyldigUttalelseMedMellomrom = """Dette er en gyldig uttalelse, med flere ord og mellomrom."""
 
         val oppgavebekreftelseMedUttalelse = defaultOppgavebekreftelse.copy(
             oppgave = UngdomsytelseOppgaveDTO(
@@ -360,7 +360,8 @@ class UngdomsytelseControllerTest {
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
 
         val defaultOppgavebekreftelse = SøknadUtils.defaultOppgavebekreftelse
-        val ugyldigUttalelse = "Привіт, це недозволені символи"
+        // Kontrolltegn (Cc) er ikke en del av \p{L}\p{M}\p{N}\p{P}\p{S}\p{Space} og er derfor ugyldig.
+        val ugyldigUttalelse = "Uttalelse med kontrolltegn: \u0007"
 
         val jsonPayload = objectMapper.writeValueAsString(
             defaultOppgavebekreftelse.copy(
@@ -394,7 +395,6 @@ class UngdomsytelseControllerTest {
                           "type": "/problem-details/invalid-request-parameters",
                           "violations": [
                             {
-                              "invalidValue": "$ugyldigUttalelse",
                               "parameterName": "ungdomsytelseOppgavebekreftelse.oppgave.uttalelse.uttalelseFraDeltaker",
                               "parameterType": "ENTITY",
                               "reason": "'uttalelseFraDeltaker' inneholder ikke-tillatte tegn"

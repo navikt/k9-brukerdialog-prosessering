@@ -74,7 +74,7 @@ data class UngdomsytelseOppgaveDTO(
 data class UngdomsytelseOppgaveUttalelseDTO(
     val harUttalelse: Boolean,
     @field:Pattern(
-        regexp = "^[[\\p{IsLatin}&&[\\p{Lu}\\p{Ll}]]\\p{Nd}\\p{No}\\p{M}\\p{P}\\p{S}\\p{Zs}]*$",
+        regexp = "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Space}]*$",
         message = "'uttalelseFraDeltaker' inneholder ikke-tillatte tegn"
     )
     val uttalelseFraDeltaker: String? = null,
