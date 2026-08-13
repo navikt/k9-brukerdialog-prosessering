@@ -3,6 +3,7 @@ package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.oppgavebekreftelse
 import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.Pattern
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretperiode.EndretPeriodeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.endretsluttdato.EndretSluttdatoDataDto
@@ -72,6 +73,10 @@ data class UngdomsytelseOppgaveDTO(
 
 data class UngdomsytelseOppgaveUttalelseDTO(
     val harUttalelse: Boolean,
+    @field:Pattern(
+        regexp = "^[\\p{L}\\p{M}\\p{N}\\p{P}\\p{S}\\p{Space}]*$",
+        message = "'uttalelseFraDeltaker' inneholder ikke-tillatte tegn"
+    )
     val uttalelseFraDeltaker: String? = null,
 ) {
     @Hidden
