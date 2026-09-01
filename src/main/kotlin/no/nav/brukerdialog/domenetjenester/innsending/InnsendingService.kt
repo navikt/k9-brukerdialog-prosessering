@@ -165,7 +165,7 @@ class InnsendingService(
             is Ettersendelse -> innsending.ettersendelseValidator()?.valider(k9Format)
             else -> null
         }?.map {
-            logger.error("${it.felt} feilet pga. ${it.feilkode}")
+            logger.error("${it.felt} feilet pga. ${it.feilkode}. ${it.feilmelding}")
             Violation(
                 parameterName = it.felt,
                 parameterType = ParameterType.ENTITY,
