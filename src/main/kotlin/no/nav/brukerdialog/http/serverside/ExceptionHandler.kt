@@ -3,6 +3,7 @@ package no.nav.brukerdialog.http.serverside
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import jakarta.validation.ConstraintViolationException
 import no.nav.brukerdialog.validation.ParameterType
+import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetails
 import no.nav.brukerdialog.validation.Violation
 import no.nav.security.token.support.core.exceptions.JwtTokenMissingException
@@ -158,6 +159,19 @@ class ExceptionHandler(
         )
 
         log.error("Validerigsfeil: {}", problemDetails)
+        return problemDetails
+    }
+
+    @ExceptionHandler(value = [ValidationErrorResponseException::class])
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun håndtereValidationErrorResponseException(
+        exception: ValidationErrorResponseException,
+        request: ServletWebRequest,
+    ): ProblemDetail {
+        val problemDetails = exception.validationProblemDetails
+        problemDetails.instance = URI(URLDecoder.decode(request.request.requestURL.toString(), Charset.defaultCharset()))
+
+        log.error("Valideringsfeil: {}", problemDetails)
         return problemDetails
     }
 
