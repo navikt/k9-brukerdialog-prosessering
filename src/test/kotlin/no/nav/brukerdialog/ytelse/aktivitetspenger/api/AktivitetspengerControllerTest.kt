@@ -3,7 +3,9 @@ package no.nav.brukerdialog.ytelse.aktivitetspenger.api
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.verify
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
@@ -22,6 +24,8 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveYtelsetype
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadDto
+import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -29,11 +33,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import org.springframework.web.client.HttpClientErrorException
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
@@ -85,21 +92,62 @@ class AktivitetspengerControllerTest {
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
         coEvery { innsendingService.registrer(any(), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
+        mockTilgjengeligSøknad(TilgjengeligSøknadType.FØRSTEGANGSSØKNAD)
+        mockRegistrerSøknadHendelse()
 
-        val defaultSøknad = SøknadUtils.defaultSøknad
-
-        mockMvc.post("/aktivitetspenger/soknad/innsending") {
-            headers {
-                set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString())
-            }
-            contentType = MediaType.APPLICATION_JSON
-            accept = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(defaultSøknad)
-        }
+        sendInnSøknad(SøknadUtils.defaultSøknad)
             .andExpect {
                 status { isAccepted() }
                 header { exists(NavHeaders.X_CORRELATION_ID) }
             }
+
+        verify(exactly = 1) { ungBrukerdialogApiService.registrerSøknadHendelse(any()) }
+    }
+
+    @Test
+    fun `Søknad som ikke er tilgjengelig avvises uten at den publiseres`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
+        mockTilgjengeligSøknad(TilgjengeligSøknadType.INGEN)
+
+        sendInnSøknad(SøknadUtils.defaultSøknad)
+            .andExpect { status { isConflict() } }
+
+        // Deltakeren skal få avslaget før noe er sendt, ikke en feilmelding for en søknad som faktisk gikk gjennom.
+        coVerify(exactly = 0) { innsendingService.registrer(any(), any()) }
+        verify(exactly = 0) { ungBrukerdialogApiService.registrerSøknadHendelse(any()) }
+    }
+
+    @Test
+    fun `Søknadshendelse registreres først etter at søknaden er publisert`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
+        mockTilgjengeligSøknad(TilgjengeligSøknadType.FØRSTEGANGSSØKNAD)
+        mockRegistrerSøknadHendelse()
+        coEvery { innsendingService.registrer(any(), any()) } throws IllegalStateException("Kafka nede")
+
+        sendInnSøknad(SøknadUtils.defaultSøknad)
+
+        // Uten dette ville deltakeren vært permanent sperret ute fra en søknad som aldri ble sendt.
+        verify(exactly = 0) { ungBrukerdialogApiService.registrerSøknadHendelse(any()) }
+    }
+
+    @Test
+    fun `Innsendingen går gjennom selv om registrering av søknadshendelse gir konflikt`() {
+        coEvery { barnService.hentBarn() } returns emptyList()
+        every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
+        coEvery { innsendingService.registrer(any(), any()) } returns Unit
+        every { metrikkService.registrerMottattInnsending(any()) } returns Unit
+        mockTilgjengeligSøknad(TilgjengeligSøknadType.FØRSTEGANGSSØKNAD)
+        every { ungBrukerdialogApiService.registrerSøknadHendelse(any()) } throws
+            HttpClientErrorException.create(
+                HttpStatus.CONFLICT, "Conflict", HttpHeaders.EMPTY, ByteArray(0), null
+            )
+
+        // Søknaden er allerede publisert, så deltakeren skal ikke få feilmelding.
+        sendInnSøknad(SøknadUtils.defaultSøknad)
+            .andExpect { status { isAccepted() } }
     }
 
     @Test
@@ -217,6 +265,23 @@ class AktivitetspengerControllerTest {
                     )
                 }
             }
+    }
+
+    private fun sendInnSøknad(søknad: Aktivitetspengersøknad) =
+        mockMvc.post("/aktivitetspenger/soknad/innsending") {
+            headers { set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString()) }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = objectMapper.writeValueAsString(søknad)
+        }
+
+    private fun mockRegistrerSøknadHendelse() {
+        every { ungBrukerdialogApiService.registrerSøknadHendelse(any()) } returns Unit
+    }
+
+    private fun mockTilgjengeligSøknad(type: TilgjengeligSøknadType) {
+        every { ungBrukerdialogApiService.hentTilgjengeligSøknad() } returns
+            TilgjengeligSøknadDto(type, false, false)
     }
 
     private fun mockHentingAvOppgave(oppgavetype: OppgaveType, oppgavetypeData: OppgavetypeDataDto) {

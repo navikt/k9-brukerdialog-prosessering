@@ -23,9 +23,13 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.LøsOppgaveRequest
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.SvarPåVarselDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.RapportertInntektDto
+import no.nav.ung.brukerdialog.kontrakt.soknad.OpprettSøknadHendelseRequest
+import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadType
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpClientErrorException
 import java.math.BigDecimal
+import java.time.ZoneOffset
 import java.util.*
 
 @Service
@@ -72,9 +76,36 @@ class AktivitetspengerService(
         )
         duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(cacheKey)
 
+        forsikreSøknadErTilgjengelig()
+
         innsendingService.registrer(aktivitetspengersøknadInnsending, metadata)
 
+        //Registerer etter at søknad er sendt. Det er bedre at det sendes 2 søknader,
+        // enn at bruker blir blokkert fra å søke på nytt hvis innsending til JOARK feiler
+        registrerSøknadHendelse(søknad)
+
         metrikkService.registrerMottattInnsending(aktivitetspengersøknadInnsending.ytelse())
+    }
+
+    private fun forsikreSøknadErTilgjengelig() {
+        val tilgjengeligSøknad = ungBrukerdialogApiService.hentTilgjengeligSøknad()
+        if (tilgjengeligSøknad.type() == TilgjengeligSøknadType.INGEN) {
+            logger.info("Deltakeren kan ikke sende søknad nå. Avviser innsending før publisering.")
+            throw SøknadIkkeTilgjengeligProblem()
+        }
+    }
+
+    private fun registrerSøknadHendelse(søknad: Aktivitetspengersøknad) {
+        try {
+            ungBrukerdialogApiService.registrerSøknadHendelse(
+                OpprettSøknadHendelseRequest(
+                    UUID.fromString(søknad.søknadId),
+                    søknad.mottatt.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime()
+                )
+            )
+        } catch (e: HttpClientErrorException.Conflict) {
+            logger.warn("Kunne ikke registrere søknadshendelse - deltakeren har allerede en registrert søknad.", e)
+        }
     }
 
 

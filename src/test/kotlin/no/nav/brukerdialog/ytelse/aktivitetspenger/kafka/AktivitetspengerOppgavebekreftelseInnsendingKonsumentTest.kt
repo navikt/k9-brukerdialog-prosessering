@@ -14,6 +14,7 @@ import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.oppgavebekreftelse.Akti
 import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.AktivitetspengerOppgavebekreftelseUtils
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bosted.BekreftBostedOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bosted.BostedsavklaringKildeType
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bosted.BostedsvilkårIkkeOppfyltÅrsak
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.KontrollerRegisterinntektOppgavetypeDataDto
 import org.junit.jupiter.api.Assertions
@@ -21,7 +22,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.post
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 class AktivitetspengerOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegrationTest() {
 
@@ -107,7 +108,9 @@ class AktivitetspengerOppgavebekreftelseInnsendingKonsumentTest : AbstractIntegr
                 LocalDate.parse("2025-06-30"),
                 false,
                 "fordi",
-                BostedsvilkårIkkeOppfyltÅrsak.IKKE_BOSTEDSADRESSE_OG_IKKE_FOLKEREGISTRERT_I_TRONDHEIM
+                BostedsvilkårIkkeOppfyltÅrsak.IKKE_BOSTEDSADRESSE_OG_IKKE_FOLKEREGISTRERT_I_TRONDHEIM,
+                BostedsavklaringKildeType.FOLKEREGISTER,
+                null
             )
         )
         mockMarkerOppgaveSomLøst()

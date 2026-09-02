@@ -3,6 +3,8 @@ package no.nav.brukerdialog.integrasjon.ungbrukerdialogapi
 
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.LøsOppgaveRequest
+import no.nav.ung.brukerdialog.kontrakt.soknad.OpprettSøknadHendelseRequest
+import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadDto
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -13,10 +15,7 @@ import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.Recover
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
-import org.springframework.web.client.HttpClientErrorException
-import org.springframework.web.client.HttpServerErrorException
-import org.springframework.web.client.ResourceAccessException
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.*
 import org.springframework.web.util.UriComponentsBuilder
 import java.util.*
 
@@ -25,6 +24,7 @@ import java.util.*
     exclude = [
         HttpClientErrorException.Unauthorized::class,
         HttpClientErrorException.Forbidden::class,
+        HttpClientErrorException.Conflict::class,
         ResourceAccessException::class
     ],
     backoff = Backoff(
@@ -51,8 +51,20 @@ class UngBrukerdialogApiService(
             .build()
             .toUriString()
 
+        private val registrerSøknadHendelseUrl = UriComponentsBuilder
+            .fromUriString("/ung/brukerdialog/ekstern/api/aktivitetspenger/soknad/registrer")
+            .build()
+            .toUriString()
+
+        private val tilgjengeligSøknadUrl = UriComponentsBuilder
+            .fromUriString("/ung/brukerdialog/ekstern/api/aktivitetspenger/soknad/tilgjengelig")
+            .build()
+            .toUriString()
+
         private val oppgaveDataFeil = IllegalStateException("Feilet med henting av oppgave.")
         private val markerOppgaveSomLøstFeil = IllegalStateException("Feilet med å markere oppgave som løst.")
+        private val registrerSøknadHendelseFeil = IllegalStateException("Feilet med å registrere søknadshendelse.")
+        private val tilgjengeligSøknadFeil = IllegalStateException("Feilet med å hente tilgjengelig søknad.")
     }
 
     fun hentOppgave(oppgaveReferanse: UUID): BrukerdialogOppgaveDto {
@@ -133,5 +145,70 @@ class UngBrukerdialogApiService(
     private fun recoverMarkerOppgaveSomLøst(error: ResourceAccessException): BrukerdialogOppgaveDto {
         logger.error("{}", error.message)
         throw markerOppgaveSomLøstFeil
+    }
+
+    fun registrerSøknadHendelse(request: OpprettSøknadHendelseRequest) {
+        logger.info("Registrerer søknadshendelse for søknadId={}.", request.søknadId())
+        val response = ungBrukerdialogApiClient.exchange(
+            registrerSøknadHendelseUrl,
+            HttpMethod.POST,
+            HttpEntity(request),
+            Void::class.java
+        )
+
+        if (!response.statusCode.is2xxSuccessful) {
+            logger.error(
+                "Feilet med å registrere søknadshendelse: {}, respons: {}",
+                response.statusCode,
+                response.body
+            )
+            throw registrerSøknadHendelseFeil
+        }
+    }
+
+    fun hentTilgjengeligSøknad(): TilgjengeligSøknadDto {
+        val response = ungBrukerdialogApiClient.exchange(
+            tilgjengeligSøknadUrl,
+            HttpMethod.GET,
+            null,
+            object : ParameterizedTypeReference<TilgjengeligSøknadDto>() {}
+        )
+
+        return if (response.statusCode.is2xxSuccessful) {
+            response.body!!
+        } else {
+            logger.error(
+                "Henting av tilgjengelig søknad feilet med status: {}, respons: {}",
+                response.statusCode,
+                response.body
+            )
+            throw tilgjengeligSøknadFeil
+        }
+    }
+
+    @Recover
+    private fun recoverHentTilgjengeligSøknad(error: Exception): TilgjengeligSøknadDto {
+        when (error) {
+            is RestClientResponseException -> logger.error(
+                "Error response = '{}' fra '{}'", error.responseBodyAsString, tilgjengeligSøknadUrl
+            )
+
+            else -> logger.error("{}", error.message)
+        }
+        throw tilgjengeligSøknadFeil
+    }
+
+    @Recover
+    private fun recoverRegistrerSøknadHendelse(error: Exception) {
+        if (error is HttpClientErrorException.Conflict) throw error
+
+        when (error) {
+            is RestClientResponseException -> logger.error(
+                "Error response = '{}' fra '{}'", error.responseBodyAsString, registrerSøknadHendelseUrl
+            )
+
+            else -> logger.error("{}", error.message)
+        }
+        throw registrerSøknadHendelseFeil
     }
 }
