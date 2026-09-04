@@ -12,7 +12,7 @@ class SøknadIkkeTilgjengeligProblem(body: ProblemDetail = defaultProblemDetail(
             val problemDetail = ProblemDetail.forStatus(HttpStatus.CONFLICT)
             problemDetail.type = URI("/problem-details/soknad-ikke-tilgjengelig")
             problemDetail.title = "Søknad ikke tilgjengelig"
-            problemDetail.detail = "Deltakeren kan ikke sende søknad nå."
+            problemDetail.detail = "Bruker kan ikke sende søknad nå."
             problemDetail.instance = URI("")
             problemDetail.status = HttpStatus.CONFLICT.value()
             return problemDetail

@@ -90,7 +90,7 @@ class AktivitetspengerService(
     private fun forsikreSøknadErTilgjengelig() {
         val tilgjengeligSøknad = ungBrukerdialogApiService.hentTilgjengeligSøknad()
         if (tilgjengeligSøknad.type() == TilgjengeligSøknadType.INGEN) {
-            logger.info("Deltakeren kan ikke sende søknad nå. Avviser innsending før publisering.")
+            logger.info("Bruker kan ikke sende søknad nå. Avviser innsending før publisering.")
             throw SøknadIkkeTilgjengeligProblem()
         }
     }
@@ -104,7 +104,7 @@ class AktivitetspengerService(
                 )
             )
         } catch (e: HttpClientErrorException.Conflict) {
-            logger.warn("Kunne ikke registrere søknadshendelse - deltakeren har allerede en registrert søknad.", e)
+            logger.warn("Kunne ikke registrere søknadshendelse - bruker har allerede en registrert søknad.", e)
         }
     }
 
