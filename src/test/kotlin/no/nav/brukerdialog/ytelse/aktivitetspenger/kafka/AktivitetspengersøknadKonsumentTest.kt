@@ -2,6 +2,7 @@ package no.nav.brukerdialog.ytelse.aktivitetspenger.kafka
 
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import no.nav.brukerdialog.AbstractIntegrationTest
 import no.nav.brukerdialog.common.MetaInfo
 import no.nav.brukerdialog.config.JacksonConfiguration
@@ -15,6 +16,8 @@ import no.nav.brukerdialog.utils.TokenTestUtils.hentToken
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.AktivitetspengersøknadTopologyConfiguration
 import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.AktivitetspengersøknadUtils
 import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.SøknadUtils
+import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadResponse
+import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadType
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.jupiter.api.Assertions
@@ -40,6 +43,8 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
         mockBarn()
         mockLagreDokument()
         mockJournalføring()
+        mockRegistrerSøknadHendelse()
+        mockTilgjengeligSøknad()
 
         val søknadId = UUID.randomUUID().toString()
         val søknad = SøknadUtils.defaultSøknad.copy(søknadId = søknadId)
@@ -192,5 +197,14 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
         Assertions.assertEquals(k9Beskjed.tekst, k9BeskjedJson.getString("tekst"))
         Assertions.assertEquals(k9Beskjed.ytelse, k9BeskjedJson.getString("ytelse"))
         Assertions.assertEquals(k9Beskjed.dagerSynlig, k9BeskjedJson.getLong("dagerSynlig"))
+    }
+
+    private fun mockRegistrerSøknadHendelse() {
+        every { ungBrukerdialogApiService.registrerSøknadHendelse(any()) } returns Unit
+    }
+
+    private fun mockTilgjengeligSøknad() {
+        every { ungBrukerdialogApiService.hentTilgjengeligSøknad() } returns
+                TilgjengeligSøknadResponse(TilgjengeligSøknadType.FØRSTEGANGSSØKNAD, false, false)
     }
 }

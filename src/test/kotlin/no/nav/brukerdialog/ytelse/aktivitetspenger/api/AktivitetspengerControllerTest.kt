@@ -24,7 +24,7 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveType
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveYtelsetype
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
-import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadDto
+import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadResponse
 import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -281,7 +281,7 @@ class AktivitetspengerControllerTest {
 
     private fun mockTilgjengeligSøknad(type: TilgjengeligSøknadType) {
         every { ungBrukerdialogApiService.hentTilgjengeligSøknad() } returns
-            TilgjengeligSøknadDto(type, false, false)
+                TilgjengeligSøknadResponse(type, false, false)
     }
 
     private fun mockHentingAvOppgave(oppgavetype: OppgaveType, oppgavetypeData: OppgavetypeDataDto) {
