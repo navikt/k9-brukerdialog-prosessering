@@ -4,7 +4,7 @@ package no.nav.brukerdialog.integrasjon.ungbrukerdialogapi
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.LøsOppgaveRequest
 import no.nav.ung.brukerdialog.kontrakt.soknad.OpprettSøknadHendelseRequest
-import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadDto
+import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadResponse
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -166,12 +166,12 @@ class UngBrukerdialogApiService(
         }
     }
 
-    fun hentTilgjengeligSøknad(): TilgjengeligSøknadDto {
+    fun hentTilgjengeligSøknad(): TilgjengeligSøknadResponse {
         val response = ungBrukerdialogApiClient.exchange(
             tilgjengeligSøknadUrl,
             HttpMethod.GET,
             null,
-            object : ParameterizedTypeReference<TilgjengeligSøknadDto>() {}
+            object : ParameterizedTypeReference<TilgjengeligSøknadResponse>() {}
         )
 
         return if (response.statusCode.is2xxSuccessful) {
@@ -187,7 +187,7 @@ class UngBrukerdialogApiService(
     }
 
     @Recover
-    private fun recoverHentTilgjengeligSøknad(error: Exception): TilgjengeligSøknadDto {
+    private fun recoverHentTilgjengeligSøknad(error: Exception): TilgjengeligSøknadResponse {
         when (error) {
             is RestClientResponseException -> logger.error(
                 "Error response = '{}' fra '{}'", error.responseBodyAsString, tilgjengeligSøknadUrl
