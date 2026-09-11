@@ -28,6 +28,7 @@ object AktivitetspengersøknadUtils {
         val medlemskap = MedlemskapAktivitetspenger(
             harBoddINorge = false,
             harJobbetINorge = true,
+            harJobbetUtenforNorge = true,
             utenlandsopphold = listOf(
                 UtenlandsoppholdAktivitetspenger(
                     fraOgMed = LocalDate.of(2023, 1, 2),

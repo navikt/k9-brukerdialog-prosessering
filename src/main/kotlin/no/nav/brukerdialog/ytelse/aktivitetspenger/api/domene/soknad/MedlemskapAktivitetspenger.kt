@@ -17,6 +17,7 @@ import no.nav.k9.søknad.felles.type.Periode as K9Periode
 data class MedlemskapAktivitetspenger(
     val harBoddINorge: Boolean,
     val harJobbetINorge: Boolean?,
+    val harJobbetUtenforNorge: Boolean?,
     val utenlandsopphold: List<@Valid UtenlandsoppholdAktivitetspenger> = listOf(),
 ) {
     fun tilK9Medlemskap(): Medlemskap = Medlemskap(

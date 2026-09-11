@@ -43,17 +43,21 @@
 
     <section id="medlemskap">
         <h2>Medlemskap i folketrygden</h2>
-        <p class="sporsmalstekst">Har du bodd i Norge de siste 5 årene?</p>
+        <p class="sporsmalstekst">Har du bodd sammenhengende i Norge de fem siste årene?</p>
         <p>{{ jaNeiSvar medlemskap.harBoddINorge }}</p>
 
         {{#isNotNull medlemskap.harJobbetINorge}}
-            <p class="sporsmalstekst">Har du jobbet i Norge de siste 5 årene?</p>
+            <p class="sporsmalstekst">Har du jobbet sammenhengende i Norge de siste fem årene?</p>
             <p>{{ jaNeiSvar medlemskap.harJobbetINorge }}</p>
         {{/isNotNull}}
 
-        <p class="sporsmalstekst">Har du bodd eller jobbet i utlandet de siste 5 årene?</p>
+        {{#isNotNull medlemskap.harJobbetUtenforNorge}}
+            <p class="sporsmalstekst">Har du jobbet utenfor Norge de fem siste årene?</p>
+            <p>{{ jaNeiSvar medlemskap.harJobbetUtenforNorge }}</p>
+        {{/isNotNull}}
+
         {{#if medlemskap.utenlandsopphold}}
-            <p>Ja</p>
+            <h3>Utenlandsopphold eller jobb utenfor Norge</h3>
             <ul>
                 {{# each medlemskap.utenlandsopphold as |opphold|~}}
                     <li>
@@ -67,8 +71,7 @@
                     </li>
                 {{/each}}
             </ul>
-        {{else}}
-            <p>Nei</p>{{/if}}
+        {{/if}}
     </section>
 
     <section id="kontonummer">

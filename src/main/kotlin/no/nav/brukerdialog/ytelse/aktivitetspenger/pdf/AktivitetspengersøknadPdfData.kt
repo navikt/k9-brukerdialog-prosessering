@@ -59,6 +59,7 @@ class AktivitetspengersøknadPdfData(private val søknad: Aktivitetspengersøkna
     private fun MedlemskapAktivitetspenger.somMap() = mapOf(
         "harBoddINorge" to harBoddINorge,
         "harJobbetINorge" to harJobbetINorge,
+        "harJobbetUtenforNorge" to harJobbetUtenforNorge,
         "utenlandsopphold" to utenlandsopphold.map { it.somMap() },
     )
 
