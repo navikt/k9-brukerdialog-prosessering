@@ -24,7 +24,7 @@ data class MedlemskapAktivitetspenger(
             K9Periode(opphold.fraOgMed, opphold.tilOgMed) to UtenlandsoppholdPeriodeInfo(
                 Landkode.of(opphold.landkode),
                 opphold.jobbetIPerioden,
-                opphold.identitetsnummer
+                opphold.utenlandskNasjonalId
             )
         })
     )
@@ -53,7 +53,7 @@ data class UtenlandsoppholdAktivitetspenger(
     val jobbetIPerioden: Boolean,
 
     @field:Size(max = 50)
-    val identitetsnummer: String? = null,
+    val utenlandskNasjonalId: String? = null,
 ) {
     override fun toString(): String {
         return "UtenlandsoppholdAktivitetspenger(fraOgMed=$fraOgMed, tilOgMed=$tilOgMed, landkode='$landkode', landnavn='$landnavn', jobbetIPerioden=$jobbetIPerioden)"

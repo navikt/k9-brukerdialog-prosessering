@@ -67,6 +67,6 @@ class AktivitetspengersøknadPdfData(private val søknad: Aktivitetspengersøkna
         "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
         "tilOgMed" to DATE_FORMATTER.format(tilOgMed),
         "jobbetIPerioden" to jobbetIPerioden,
-        "identitetsnummer" to identitetsnummer,
+        "utenlandskNasjonalId" to utenlandskNasjonalId,
     )
 }

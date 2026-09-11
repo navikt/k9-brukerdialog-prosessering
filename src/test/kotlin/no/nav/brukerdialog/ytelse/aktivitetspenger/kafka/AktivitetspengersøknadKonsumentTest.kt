@@ -177,12 +177,12 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
                     "2023-01-02/2023-01-03": {
                       "land": "JPN",
                       "jobbetIPerioden": false,
-                      "identitetsnummer": null
+                      "utenlandskNasjonalId": null
                     },
                     "2023-02-01/2023-03-31": {
                       "land": "SWE",
                       "jobbetIPerioden": true,
-                      "identitetsnummer": "19850101-1234"
+                      "utenlandskNasjonalId": "19850101-1234"
                     }
                   }
                 }

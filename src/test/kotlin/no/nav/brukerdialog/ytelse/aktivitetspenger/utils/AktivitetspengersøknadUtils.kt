@@ -42,7 +42,7 @@ object AktivitetspengersøknadUtils {
                     landkode = "SWE",
                     landnavn = "Sverige",
                     jobbetIPerioden = true,
-                    identitetsnummer = "19850101-1234"
+                    utenlandskNasjonalId = "19850101-1234"
                 )
             )
         )
