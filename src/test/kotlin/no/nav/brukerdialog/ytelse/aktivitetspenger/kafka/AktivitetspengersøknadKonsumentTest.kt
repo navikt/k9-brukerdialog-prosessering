@@ -171,10 +171,19 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
             "ytelse": {
               "type": "AKTIVITETSPENGER",
               "søknadsperiodeFom": "2022-01-01",
-              "forutgåendeBosteder": {
-                "perioder": {
-                  "2023-01-02/2023-01-03": {
-                    "land":"JPN"
+              "medlemskap": {
+                "utenlandsopphold": {
+                  "perioder": {
+                    "2023-01-02/2023-01-03": {
+                      "land": "JPN",
+                      "jobbetIPerioden": false,
+                      "identitetsnummer": null
+                    },
+                    "2023-02-01/2023-03-31": {
+                      "land": "SWE",
+                      "jobbetIPerioden": true,
+                      "identitetsnummer": "19850101-1234"
+                    }
                   }
                 }
               },

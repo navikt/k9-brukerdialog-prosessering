@@ -197,13 +197,17 @@ class AktivitetspengerControllerTest {
                 ),
                 harForståttRettigheterOgPlikter = false,
                 harBekreftetOpplysninger = false,
-                forutgåendeBosteder = ForutgåendeBosteder(
-                    true,
-                    listOf(Bosted(
-                        LocalDate.now(),
-                        LocalDate.now(),
-                        landkode = "ÆÆÆ",
-                        landnavn = "Finnes ikke")
+                medlemskap = MedlemskapAktivitetspenger(
+                    harBoddINorge = false,
+                    harJobbetINorge = true,
+                    utenlandsopphold = listOf(
+                        UtenlandsoppholdAktivitetspenger(
+                            fraOgMed = LocalDate.now(),
+                            tilOgMed = LocalDate.now(),
+                            landkode = "ÆÆÆ",
+                            landnavn = "Finnes ikke",
+                            jobbetIPerioden = false
+                        )
                     )
                 )
             )
@@ -230,7 +234,7 @@ class AktivitetspengerControllerTest {
                           "violations": [
                             {
                               "invalidValue": "ÆÆÆ",
-                              "parameterName": "aktivitetspengersøknad.forutgåendeBosteder.utenlandsoppholdSiste5År[0].landkode",
+                              "parameterName": "aktivitetspengersøknad.medlemskap.utenlandsopphold[0].landkode",
                               "parameterType": "ENTITY",
                               "reason": "ÆÆÆ er ikke en gyldig ISO 3166-1 alpha-3 kode"
                             },

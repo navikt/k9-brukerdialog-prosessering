@@ -42,14 +42,28 @@
     </section>
 
     <section id="medlemskap">
-        <h2>Forutgående bosteder</h2>
-        <p class="sporsmalstekst">Har du bodd i utlandet de siste 5 årene?</p>
-        {{# if forutgåendeBosteder.har_bodd_i_utlandet_siste_5_år }}
+        <h2>Medlemskap i folketrygden</h2>
+        <p class="sporsmalstekst">Har du bodd i Norge de siste 5 årene?</p>
+        <p>{{ jaNeiSvar medlemskap.harBoddINorge }}</p>
+
+        {{#isNotNull medlemskap.harJobbetINorge}}
+            <p class="sporsmalstekst">Har du jobbet i Norge de siste 5 årene?</p>
+            <p>{{ jaNeiSvar medlemskap.harJobbetINorge }}</p>
+        {{/isNotNull}}
+
+        <p class="sporsmalstekst">Har du bodd eller jobbet i utlandet de siste 5 årene?</p>
+        {{#if medlemskap.utenlandsopphold}}
             <p>Ja</p>
             <ul>
-                {{# each forutgåendeBosteder.utenlandsopphold_siste_5_år as |opphold|~}}
+                {{# each medlemskap.utenlandsopphold as |opphold|~}}
                     <li>
                         {{opphold.landnavn}} ({{opphold.fraOgMed}} - {{opphold.tilOgMed}})
+                        <ul>
+                            <li>Jobbet i perioden: {{ jaNeiSvar opphold.jobbetIPerioden }}</li>
+                            {{#if opphold.identitetsnummer}}
+                                <li>Identitetsnummer: {{opphold.identitetsnummer}}</li>
+                            {{/if}}
+                        </ul>
                     </li>
                 {{/each}}
             </ul>

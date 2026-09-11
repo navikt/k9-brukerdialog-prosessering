@@ -21,13 +21,16 @@ object SøknadUtils {
         ),
         harForståttRettigheterOgPlikter = true,
         harBekreftetOpplysninger = true,
-        forutgåendeBosteder = ForutgåendeBosteder(true,
-            listOf(
-                Bosted(
+        medlemskap = MedlemskapAktivitetspenger(
+            harBoddINorge = false,
+            harJobbetINorge = true,
+            utenlandsopphold = listOf(
+                UtenlandsoppholdAktivitetspenger(
                     fraOgMed = LocalDate.of(2023, 1, 2),
                     tilOgMed = LocalDate.of(2023, 1, 3),
                     landkode = "JPN",
-                    landnavn = "Japan"
+                    landnavn = "Japan",
+                    jobbetIPerioden = false
                 )
             )
         ),

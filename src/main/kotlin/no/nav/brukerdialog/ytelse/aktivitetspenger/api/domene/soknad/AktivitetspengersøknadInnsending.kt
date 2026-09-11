@@ -8,7 +8,6 @@ import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.SøknadValidator
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
-import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.Språk
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.Aktivitetspenger
@@ -22,7 +21,7 @@ import no.nav.k9.søknad.Søknad as AktivitetspengerSøknad
 
 data class AktivitetspengersøknadInnsending(
     val søknadId: String = UUID.randomUUID().toString(),
-    val forutgåendeBosteder: ForutgåendeBosteder,
+    val medlemskap: MedlemskapAktivitetspenger,
     val erBosattITrondheim: Boolean,
     val språk: String,
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
@@ -47,7 +46,7 @@ data class AktivitetspengersøknadInnsending(
         requireNotNull(k9Format)
         return AktivitetspengerKomplettSøknad(
             søknadId = søknadId,
-            forutgåendeBosteder = forutgåendeBosteder,
+            medlemskap = medlemskap,
             erBosattITrondheim = erBosattITrondheim,
             mottatt = mottatt,
             søker = søker,
@@ -62,12 +61,12 @@ data class AktivitetspengersøknadInnsending(
         )
     }
 
-    override fun valider() = mutableListOf<String>()
+    override fun valider() = medlemskap.valider("medlemskap")
 
     override fun somK9Format(søker: Søker, metadata: MetaInfo): AktivitetspengerSøknad {
         val ytelse = Aktivitetspenger()
             .medSøknadsperiodeFom(startdato)
-            .medForutgåendeBosteder(forutgåendeBosteder.tilK9Bosteder())
+            .medMedlemskap(medlemskap.tilK9Medlemskap())
             .medErBosattITrondheim(erBosattITrondheim)
 
         return AktivitetspengerSøknad()

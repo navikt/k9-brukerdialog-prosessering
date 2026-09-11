@@ -5,8 +5,8 @@ import no.nav.brukerdialog.domenetjenester.mottak.MottattMelding
 import no.nav.brukerdialog.domenetjenester.mottak.PreprosesseringsData
 import no.nav.brukerdialog.pdf.PdfData
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.Barn
-import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.ForutgåendeBosteder
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.KontonummerInfo
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.MedlemskapAktivitetspenger
 import no.nav.brukerdialog.ytelse.aktivitetspenger.pdf.AktivitetspengersøknadPdfData
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.søknad.Søknad
@@ -15,7 +15,7 @@ import java.time.ZonedDateTime
 
 data class AktivitetspengersøknadMottatt(
     val søknadId: String,
-    val forutgåendeBosteder: ForutgåendeBosteder,
+    val medlemskap: MedlemskapAktivitetspenger,
     val erBosattITrondheim: Boolean,
     val mottatt: ZonedDateTime,
     val språk: String? = "nb",
