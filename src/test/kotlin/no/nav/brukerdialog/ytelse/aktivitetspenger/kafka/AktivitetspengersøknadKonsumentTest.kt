@@ -172,6 +172,9 @@ class AktivitetspengersøknadKonsumentTest : AbstractIntegrationTest() {
               "type": "AKTIVITETSPENGER",
               "søknadsperiodeFom": "2022-01-01",
               "medlemskap": {
+                "harBoddINorge": false,
+                "harJobbetINorge": true,
+                "harJobbetUtenforNorge": true,
                 "utenlandsopphold": {
                   "perioder": {
                     "2023-01-02/2023-01-03": {

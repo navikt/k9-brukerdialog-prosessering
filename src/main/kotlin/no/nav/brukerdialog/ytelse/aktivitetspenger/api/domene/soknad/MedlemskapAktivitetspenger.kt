@@ -21,6 +21,9 @@ data class MedlemskapAktivitetspenger(
     val utenlandsopphold: List<@Valid UtenlandsoppholdAktivitetspenger> = listOf(),
 ) {
     fun tilK9Medlemskap(): Medlemskap = Medlemskap(
+        harBoddINorge,
+        harJobbetINorge,
+        harJobbetUtenforNorge,
         Utenlandsopphold(utenlandsopphold.associate { opphold ->
             K9Periode(opphold.fraOgMed, opphold.tilOgMed) to UtenlandsoppholdPeriodeInfo(
                 Landkode.of(opphold.landkode),
