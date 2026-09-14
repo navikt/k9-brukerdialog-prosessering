@@ -66,7 +66,7 @@ data class AktivitetspengersøknadInnsending(
     override fun somK9Format(søker: Søker, metadata: MetaInfo): AktivitetspengerSøknad {
         val ytelse = Aktivitetspenger()
             .medSøknadsperiodeFom(startdato)
-            .medMedlemskap(medlemskap.tilK9Medlemskap())
+            .medMedlemskap(medlemskap.tilK9FormatMedlemskap())
             .medErBosattITrondheim(erBosattITrondheim)
 
         return AktivitetspengerSøknad()

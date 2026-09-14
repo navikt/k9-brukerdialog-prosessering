@@ -74,7 +74,7 @@ object AktivitetspengersøknadUtils {
                 kontonummerFraRegister = "12345678901",
                 kontonummerErRiktig = true,
             ),
-            k9Format = gyldigK9Format(søknadId, mottatt, startdato, medlemskap.tilK9Medlemskap(), erBosattITrondheim),
+            k9Format = gyldigK9Format(søknadId, mottatt, startdato, medlemskap.tilK9FormatMedlemskap(), erBosattITrondheim),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
         )

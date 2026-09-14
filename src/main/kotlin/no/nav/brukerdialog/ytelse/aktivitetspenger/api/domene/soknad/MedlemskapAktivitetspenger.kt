@@ -1,6 +1,5 @@
 package no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad
 
-import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
@@ -22,7 +21,7 @@ data class MedlemskapAktivitetspenger(
     val harJobbetUtenforNorge: Boolean?,
     val utenlandsopphold: List<@Valid UtenlandsoppholdAktivitetspenger> = listOf(),
 ) {
-    fun tilK9Medlemskap(): Medlemskap = Medlemskap(
+    fun tilK9FormatMedlemskap(): Medlemskap = Medlemskap(
         harBoddINorge,
         harJobbetINorge,
         harJobbetUtenforNorge,
@@ -50,9 +49,7 @@ data class MedlemskapAktivitetspenger(
 }
 
 data class UtenlandsoppholdAktivitetspenger(
-    @field:JsonFormat(pattern = "yyyy-MM-dd")
     val fraOgMed: LocalDate,
-    @field:JsonFormat(pattern = "yyyy-MM-dd")
     val tilOgMed: LocalDate,
 
     @field:NotBlank
