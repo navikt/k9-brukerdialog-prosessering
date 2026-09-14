@@ -84,6 +84,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 	testImplementation("org.springframework.boot:spring-boot-resttestclient")
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+
 
 	// kafka
 	implementation("org.springframework.kafka:spring-kafka")
