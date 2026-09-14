@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import no.nav.brukerdialog.utils.erFørEllerLik
 import no.nav.brukerdialog.utils.krever
+import no.nav.brukerdialog.validation.ValidationErrorResponseException
+import no.nav.brukerdialog.validation.ValidationProblemDetailsString
 import no.nav.brukerdialog.validation.landkode.ValidLandkode
 import no.nav.k9.søknad.felles.type.Landkode
 import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap.Medlemskap
@@ -41,6 +43,9 @@ data class MedlemskapAktivitetspenger(
             utenlandsopphold.map { it.fraOgMed to it.tilOgMed }.distinct().size == utenlandsopphold.size,
             "$felt.utenlandsopphold kan ikke inneholde flere opphold med samme periode"
         )
+
+        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
+
     }
 }
 
