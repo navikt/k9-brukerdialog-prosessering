@@ -1,9 +1,11 @@
 package no.nav.brukerdialog.ytelse.fellesdomene
 
 import jakarta.validation.constraints.NotBlank
-import no.nav.k9.søknad.felles.type.Landkode
-import no.nav.brukerdialog.validation.landkode.ValidLandkode
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import no.nav.brukerdialog.utils.krever
+import no.nav.brukerdialog.validation.landkode.ValidLandkode
+import no.nav.k9.søknad.felles.type.Landkode
 import java.util.*
 
 data class Land(
@@ -11,7 +13,10 @@ data class Land(
     @field:ValidLandkode
     val landkode: String,
 
-    @field:NotBlank(message = "Kan ikke være tomt eller blankt") val landnavn: String,
+    @field:NotBlank(message = "Kan ikke være tomt eller blankt")
+    @field:Size(max = 100)
+    @field:Pattern(regexp = "^[\\p{L}][\\p{L} '\\-]*$", message = "Landnavn er ikke riktig formatert")
+    val landnavn: String,
 ) {
     companion object {
         // ISO 3166 alpha-3 landkode - https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
