@@ -64,7 +64,7 @@ class AktivitetspengersøknadPdfData(private val søknad: Aktivitetspengersøkna
     )
 
     private fun UtenlandsoppholdAktivitetspenger.somMap() = mapOf(
-        "landnavn" to landnavn,
+        "landnavn" to land.landnavn,
         "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
         "tilOgMed" to DATE_FORMATTER.format(tilOgMed),
         "jobbetIPerioden" to jobbetIPerioden,

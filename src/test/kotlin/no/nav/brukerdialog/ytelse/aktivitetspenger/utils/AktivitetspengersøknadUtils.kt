@@ -2,6 +2,7 @@ package no.nav.brukerdialog.ytelse.aktivitetspenger.utils
 
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.*
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.domene.AktivitetspengersøknadMottatt
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
@@ -33,15 +34,13 @@ object AktivitetspengersøknadUtils {
                 UtenlandsoppholdAktivitetspenger(
                     fraOgMed = LocalDate.of(2023, 1, 2),
                     tilOgMed = LocalDate.of(2023, 1, 3),
-                    landkode = "JPN",
-                    landnavn = "Japan",
+                    land = Land(landkode = "JPN", landnavn = "Japan"),
                     jobbetIPerioden = false
                 ),
                 UtenlandsoppholdAktivitetspenger(
                     fraOgMed = LocalDate.of(2023, 2, 1),
                     tilOgMed = LocalDate.of(2023, 3, 31),
-                    landkode = "SWE",
-                    landnavn = "Sverige",
+                    land = Land(landkode = "SWE", landnavn = "Sverige"),
                     jobbetIPerioden = true,
                     utenlandskNasjonalId = "19850101-1234"
                 )

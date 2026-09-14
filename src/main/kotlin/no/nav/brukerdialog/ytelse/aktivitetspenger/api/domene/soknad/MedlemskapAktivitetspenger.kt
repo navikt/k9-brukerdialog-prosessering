@@ -1,14 +1,12 @@
 package no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad
 
 import jakarta.validation.Valid
-import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import no.nav.brukerdialog.utils.erFørEllerLik
 import no.nav.brukerdialog.utils.krever
 import no.nav.brukerdialog.validation.ValidationErrorResponseException
 import no.nav.brukerdialog.validation.ValidationProblemDetailsString
-import no.nav.brukerdialog.validation.landkode.ValidLandkode
-import no.nav.k9.søknad.felles.type.Landkode
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
 import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap.Medlemskap
 import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap.Utenlandsopphold
 import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap.Utenlandsopphold.UtenlandsoppholdPeriodeInfo
@@ -27,7 +25,7 @@ data class MedlemskapAktivitetspenger(
         harJobbetUtenforNorge,
         Utenlandsopphold(utenlandsopphold.associate { opphold ->
             K9Periode(opphold.fraOgMed, opphold.tilOgMed) to UtenlandsoppholdPeriodeInfo(
-                Landkode.of(opphold.landkode),
+                opphold.land.somK9Landkode(),
                 opphold.jobbetIPerioden,
                 opphold.utenlandskNasjonalId
             )
@@ -52,22 +50,19 @@ data class UtenlandsoppholdAktivitetspenger(
     val fraOgMed: LocalDate,
     val tilOgMed: LocalDate,
 
-    @field:NotBlank
-    @field:ValidLandkode
-    val landkode: String,
-    val landnavn: String,
+    @field:Valid
+    val land: Land,
     val jobbetIPerioden: Boolean,
 
     @field:Size(max = 50)
     val utenlandskNasjonalId: String? = null,
 ) {
     override fun toString(): String {
-        return "UtenlandsoppholdAktivitetspenger(fraOgMed=$fraOgMed, tilOgMed=$tilOgMed, landkode='$landkode', landnavn='$landnavn', jobbetIPerioden=$jobbetIPerioden)"
+        return "UtenlandsoppholdAktivitetspenger(fraOgMed=$fraOgMed, tilOgMed=$tilOgMed, land=$land, jobbetIPerioden=$jobbetIPerioden)"
     }
 
     fun valider(felt: String) = mutableListOf<String>().apply {
         krever(fraOgMed.erFørEllerLik(tilOgMed), "$felt.fraOgMed må være før $felt.tilOgMed")
-        krever(landkode.isNotEmpty(), "$felt.landkode kan ikke være tomt")
-        krever(landnavn.isNotEmpty(), "$felt.landnavn kan ikke være tomt")
+        addAll(land.valider("$felt.land"))
     }
 }
