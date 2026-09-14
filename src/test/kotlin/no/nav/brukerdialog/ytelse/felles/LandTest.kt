@@ -1,9 +1,9 @@
 package no.nav.brukerdialog.ytelse.felles
 
-import no.nav.brukerdialog.ytelse.fellesdomene.Land
 import no.nav.brukerdialog.utils.TestUtils.Validator
 import no.nav.brukerdialog.utils.TestUtils.verifiserIngenValideringsFeil
 import no.nav.brukerdialog.utils.TestUtils.verifiserValideringsFeil
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -24,9 +24,15 @@ class LandTest {
     }
 
     @Test
-    fun `Land med ugydlig landnavn gir valideringsfeil`() {
-        Validator.verifiserValideringsFeil(Land(landkode = "NLD", landnavn = " "), 1, "Kan ikke være tomt eller blankt")
+    fun `Land med blank landnavn gir valideringsfeil`() {
+        Validator.verifiserValideringsFeil(Land(landkode = "NLD", landnavn = " "), 1, "Landnavn er ikke riktig formatert")
     }
+
+    @Test
+    fun `Landnavn med ugydlige tegn gir valideringsfeil`() {
+        Validator.verifiserValideringsFeil(Land(landkode = "NOR", landnavn = "-Norge-"), 1, "Landnavn er ikke riktig formatert")
+    }
+
 
     @Test
     fun `Land med ugydlig landkode gir valideringsfeil`() {

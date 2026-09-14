@@ -13,7 +13,6 @@ data class Land(
     @field:ValidLandkode
     val landkode: String,
 
-    @field:NotBlank(message = "Kan ikke være tomt eller blankt")
     @field:Size(max = 100)
     @field:Pattern(regexp = "^[\\p{L}][\\p{L} '\\-]*$", message = "Landnavn er ikke riktig formatert")
     val landnavn: String,
