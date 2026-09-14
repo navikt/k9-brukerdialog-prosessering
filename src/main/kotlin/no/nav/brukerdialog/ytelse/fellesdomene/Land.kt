@@ -14,7 +14,7 @@ data class Land(
     val landkode: String,
 
     @field:Size(max = 100)
-    @field:Pattern(regexp = "^[\\p{L}][\\p{L} '\\-]*$", message = "Landnavn er ikke riktig formatert")
+    @field:Pattern(regexp = "^[\\p{L}][\\p{L}\\p{Punct} ]*$", message = "Landnavn er ikke riktig formatert")
     val landnavn: String,
 ) {
     companion object {

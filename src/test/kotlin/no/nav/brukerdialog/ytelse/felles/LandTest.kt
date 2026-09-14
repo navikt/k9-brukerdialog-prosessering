@@ -23,6 +23,25 @@ class LandTest {
         Validator.verifiserIngenValideringsFeil(Land(landkode = landkode, landnavn = "Uviktig"))
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = [
+        "Norge",                                   // enkelt ord
+        "Antigua og Barbuda",                      // flere ord
+        "Bosnia-Hercegovina",                      // bindestrek mellom ord
+        "Saint-Barthélemy",                        // bindestrek + aksent (é)
+        "Curaçao",                                 // spesialtegn (ç)
+        "Réunion",                                 // spesialtegn (é)
+        "Jomfrøyene (Britisk)",                    // parentes
+        "St. Helena",                              // punktum
+        "USA, mindre, utenforliggende øyer",       // komma
+        "Sør-Georgia og de søre Sandwichøyene",    // bindestrek + flere ord + norske bokstaver
+        "São Tomé og Príncipe",                    // flere spesialtegn i samme streng
+        "Åland"                                    // stor forbokstav med norsk/svensk tegn
+    ])
+    fun `Gyldig Landnavn gir ingen valideringsfeil`(landnavn: String) {
+        Validator.verifiserIngenValideringsFeil(Land(landkode = "NOR", landnavn = landnavn))
+    }
+
     @Test
     fun `Land med blank landnavn gir valideringsfeil`() {
         Validator.verifiserValideringsFeil(Land(landkode = "NLD", landnavn = " "), 1, "Landnavn er ikke riktig formatert")
