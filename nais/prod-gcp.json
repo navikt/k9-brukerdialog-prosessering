@@ -9,7 +9,9 @@
   "externalHosts": [
     "dokarkiv.prod-fss-pub.nais.io"
   ],
-  "ingresses": [],
+  "ingresses": [
+    "https://k9-brukerdialog-prosessering.intern.nav.no/v3/api-docs"
+  ],
   "inboundRules": [],
   "observabilityEnabled": "true",
   "bucket": {
@@ -45,6 +47,7 @@
     "CLAM_AV_BASE_URL": "http://clamav.nais-system",
 
     "KAFKA_CONSUMER_GROUP_ID": "k9-brukerdialog-prosessering",
+    "SWAGGER_ENABLED": "true",
 
     "GCP_STORAGE_BUCKET_NAVN": "k9-mellomlagring-prod"
   },
