@@ -50,7 +50,7 @@ class AktivitetspengerService(
 
         val aktivitetspengersøknadInnsending = AktivitetspengersøknadInnsending(
             søknadId = søknad.søknadId,
-            forutgåendeBosteder = søknad.forutgåendeBosteder,
+            medlemskap = søknad.medlemskap,
             erBosattITrondheim = søknad.erBosattITrondheim,
             språk = søknad.språk,
             mottatt = søknad.mottatt,

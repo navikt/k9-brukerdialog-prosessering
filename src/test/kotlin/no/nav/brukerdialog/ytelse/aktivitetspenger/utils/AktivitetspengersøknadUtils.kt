@@ -2,14 +2,14 @@ package no.nav.brukerdialog.ytelse.aktivitetspenger.utils
 
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.*
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.soknad.domene.AktivitetspengersøknadMottatt
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
 import no.nav.brukerdialog.ytelse.fellesdomene.Søker
 import no.nav.k9.søknad.felles.Kildesystem
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.felles.type.SøknadId
 import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.Aktivitetspenger
-import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.Bosteder
+import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap.Medlemskap
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -26,14 +26,23 @@ object AktivitetspengersøknadUtils {
     ): AktivitetspengersøknadMottatt {
         val startdato = LocalDate.parse("2022-01-01")
 
-        val forutgåendeBosteder = ForutgåendeBosteder(
-            true,
-            listOf(
-                Bosted(
+        val medlemskap = MedlemskapAktivitetspenger(
+            harBoddINorge = false,
+            harJobbetINorge = true,
+            harJobbetUtenforNorge = true,
+            utenlandsopphold = listOf(
+                UtenlandsoppholdAktivitetspenger(
                     fraOgMed = LocalDate.of(2023, 1, 2),
                     tilOgMed = LocalDate.of(2023, 1, 3),
-                    landkode = "JPN",
-                    landnavn = "Japan"
+                    land = Land(landkode = "JPN", landnavn = "Japan"),
+                    jobbetIPerioden = false
+                ),
+                UtenlandsoppholdAktivitetspenger(
+                    fraOgMed = LocalDate.of(2023, 2, 1),
+                    tilOgMed = LocalDate.of(2023, 3, 31),
+                    land = Land(landkode = "SWE", landnavn = "Sverige"),
+                    jobbetIPerioden = true,
+                    utenlandskNasjonalId = "19850101-1234"
                 )
             )
         )
@@ -41,7 +50,7 @@ object AktivitetspengersøknadUtils {
         return AktivitetspengersøknadMottatt(
             språk = "nb",
             søknadId = søknadId,
-            forutgåendeBosteder = forutgåendeBosteder,
+            medlemskap = medlemskap,
             erBosattITrondheim = erBosattITrondheim,
             mottatt = mottatt,
             søker = Søker(
@@ -64,7 +73,7 @@ object AktivitetspengersøknadUtils {
                 kontonummerFraRegister = "12345678901",
                 kontonummerErRiktig = true,
             ),
-            k9Format = gyldigK9Format(søknadId, mottatt, startdato, forutgåendeBosteder.tilK9Bosteder(), erBosattITrondheim),
+            k9Format = gyldigK9Format(søknadId, mottatt, startdato, medlemskap.tilK9FormatMedlemskap(), erBosattITrondheim),
             harBekreftetOpplysninger = true,
             harForståttRettigheterOgPlikter = true
         )
@@ -74,12 +83,12 @@ object AktivitetspengersøknadUtils {
         søknadId: String = UUID.randomUUID().toString(),
         mottatt: ZonedDateTime,
         fraOgMed: LocalDate,
-        bosteder: Bosteder,
+        medlemskap: Medlemskap,
         erBosattITrondheim: Boolean,
     ): k9FormatSøknad {
         val ytelse = Aktivitetspenger()
             .medSøknadsperiodeFom(fraOgMed)
-            .medForutgåendeBosteder(bosteder)
+            .medMedlemskap(medlemskap)
             .medErBosattITrondheim(erBosattITrondheim)
         val søknad = k9FormatSøknad(
             SøknadId(søknadId),

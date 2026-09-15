@@ -17,6 +17,7 @@ import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.*
 import no.nav.brukerdialog.ytelse.aktivitetspenger.utils.SøknadUtils
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
 import no.nav.brukerdialog.ytelse.ungdomsytelse.utils.InntektrapporteringUtils
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
@@ -197,13 +198,17 @@ class AktivitetspengerControllerTest {
                 ),
                 harForståttRettigheterOgPlikter = false,
                 harBekreftetOpplysninger = false,
-                forutgåendeBosteder = ForutgåendeBosteder(
-                    true,
-                    listOf(Bosted(
-                        LocalDate.now(),
-                        LocalDate.now(),
-                        landkode = "ÆÆÆ",
-                        landnavn = "Finnes ikke")
+                medlemskap = MedlemskapAktivitetspenger(
+                    harBoddINorge = false,
+                    harJobbetINorge = true,
+                    harJobbetUtenforNorge = true,
+                    utenlandsopphold = listOf(
+                        UtenlandsoppholdAktivitetspenger(
+                            fraOgMed = LocalDate.now(),
+                            tilOgMed = LocalDate.now(),
+                            land = Land(landkode = "ÆÆÆ", landnavn = "Finnes ikke"),
+                            jobbetIPerioden = false
+                        )
                     )
                 )
             )
@@ -230,7 +235,7 @@ class AktivitetspengerControllerTest {
                           "violations": [
                             {
                               "invalidValue": "ÆÆÆ",
-                              "parameterName": "aktivitetspengersøknad.forutgåendeBosteder.utenlandsoppholdSiste5År[0].landkode",
+                              "parameterName": "aktivitetspengersøknad.medlemskap.utenlandsopphold[0].land.landkode",
                               "parameterType": "ENTITY",
                               "reason": "ÆÆÆ er ikke en gyldig ISO 3166-1 alpha-3 kode"
                             },

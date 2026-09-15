@@ -2,6 +2,7 @@ package no.nav.brukerdialog.ytelse.aktivitetspenger.utils
 
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad.*
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
@@ -21,13 +22,16 @@ object SøknadUtils {
         ),
         harForståttRettigheterOgPlikter = true,
         harBekreftetOpplysninger = true,
-        forutgåendeBosteder = ForutgåendeBosteder(true,
-            listOf(
-                Bosted(
+        medlemskap = MedlemskapAktivitetspenger(
+            harBoddINorge = false,
+            harJobbetINorge = true,
+            harJobbetUtenforNorge = true,
+            utenlandsopphold = listOf(
+                UtenlandsoppholdAktivitetspenger(
                     fraOgMed = LocalDate.of(2023, 1, 2),
                     tilOgMed = LocalDate.of(2023, 1, 3),
-                    landkode = "JPN",
-                    landnavn = "Japan"
+                    land = Land(landkode = "JPN", landnavn = "Japan"),
+                    jobbetIPerioden = false
                 )
             )
         ),

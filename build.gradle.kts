@@ -33,7 +33,7 @@ repositories {
 
 val tokenSupportVersion = "6.0.12"
 val jsonassertVersion = "1.5.3"
-val k9FormatVersion = "14.0.0"
+val k9FormatVersion = "14.1.0"
 val ungDeltakelseOpplyserVersjon = "2.12.0"
 val ungBrukerdialigApiVersjon = "1.2.3"
 val springMockkVersion = "5.0.1"
@@ -84,6 +84,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 	testImplementation("org.springframework.boot:spring-boot-resttestclient")
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+
 
 	// kafka
 	implementation("org.springframework.kafka:spring-kafka")
