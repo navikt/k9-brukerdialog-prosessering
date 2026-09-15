@@ -1,0 +1,68 @@
+package no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad
+
+import jakarta.validation.Valid
+import jakarta.validation.constraints.Size
+import no.nav.brukerdialog.utils.erFørEllerLik
+import no.nav.brukerdialog.utils.krever
+import no.nav.brukerdialog.validation.ValidationErrorResponseException
+import no.nav.brukerdialog.validation.ValidationProblemDetailsString
+import no.nav.brukerdialog.ytelse.fellesdomene.Land
+import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap.Medlemskap
+import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap.Utenlandsopphold
+import no.nav.k9.søknad.ytelse.aktivitetspenger.v1.medlemskap.Utenlandsopphold.UtenlandsoppholdPeriodeInfo
+import java.time.LocalDate
+import no.nav.k9.søknad.felles.type.Periode as K9Periode
+
+data class MedlemskapAktivitetspenger(
+    val harBoddINorge: Boolean,
+    val harJobbetINorge: Boolean?,
+    val harJobbetUtenforNorge: Boolean?,
+    val utenlandsopphold: List<@Valid UtenlandsoppholdAktivitetspenger> = listOf(),
+) {
+    fun tilK9FormatMedlemskap(): Medlemskap = Medlemskap(
+        harBoddINorge,
+        harJobbetINorge,
+        harJobbetUtenforNorge,
+        Utenlandsopphold(utenlandsopphold.associate { opphold ->
+            K9Periode(opphold.fraOgMed, opphold.tilOgMed) to UtenlandsoppholdPeriodeInfo(
+                opphold.land.somK9Landkode(),
+                opphold.jobbetIPerioden,
+                opphold.utenlandskNasjonalId
+            )
+        })
+    )
+
+    fun valider(felt: String) = mutableListOf<String>().apply {
+        utenlandsopphold.forEachIndexed { index, opphold ->
+            addAll(opphold.valider("$felt.utenlandsopphold[$index]"))
+        }
+        krever(
+            utenlandsopphold.map { it.fraOgMed to it.tilOgMed }.distinct().size == utenlandsopphold.size,
+            "$felt.utenlandsopphold kan ikke inneholde flere opphold med samme periode"
+        )
+
+        if (isNotEmpty()) throw ValidationErrorResponseException(ValidationProblemDetailsString(this))
+
+    }
+}
+
+data class UtenlandsoppholdAktivitetspenger(
+    val fraOgMed: LocalDate,
+    val tilOgMed: LocalDate,
+
+    @field:Valid
+    val land: Land,
+    val jobbetIPerioden: Boolean,
+
+    @field:Size(max = 50)
+    val utenlandskNasjonalId: String? = null,
+) {
+    override fun toString(): String {
+        return "UtenlandsoppholdAktivitetspenger(fraOgMed=$fraOgMed, tilOgMed=$tilOgMed, land=$land, jobbetIPerioden=$jobbetIPerioden)"
+    }
+
+    fun valider(felt: String) = mutableListOf<String>().apply {
+        krever(fraOgMed.erFørEllerLik(tilOgMed), "$felt.fraOgMed må være før $felt.tilOgMed")
+        addAll(land.valider("$felt.land"))
+    }
+}

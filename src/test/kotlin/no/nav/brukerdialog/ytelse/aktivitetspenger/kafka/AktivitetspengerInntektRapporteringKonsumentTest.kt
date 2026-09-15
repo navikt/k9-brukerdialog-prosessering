@@ -179,7 +179,7 @@ class AktivitetspengerInntektRapporteringKonsumentTest : AbstractIntegrationTest
             "ytelse": {
               "type": "AKTIVITETSPENGER",
               "søknadsperiodeFom": "2025-01-01",
-              "forutgåendeBosteder": { "perioder":  {} },
+              "medlemskap": null,
               "erBosattITrondheim": null,
               "inntekter": {
                 "oppgittePeriodeinntekter": [

@@ -12,7 +12,7 @@ data class Aktivitetspengersøknad(
     @field:Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
     @field:Valid
-    val forutgåendeBosteder: ForutgåendeBosteder,
+    val medlemskap: MedlemskapAktivitetspenger,
     val erBosattITrondheim: Boolean,
     val språk: String,
     @field:Schema(hidden = true)
