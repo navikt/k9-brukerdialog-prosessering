@@ -5,8 +5,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "4.1.1"
 	id("io.spring.dependency-management") version "1.1.7"
-	kotlin("jvm") version "2.4.10"
-	kotlin("plugin.spring") version "2.4.10"
+	kotlin("jvm") version "2.4.20"
+	kotlin("plugin.spring") version "2.4.20"
 }
 
 group = "no.nav"
@@ -44,12 +44,12 @@ val retryVersion = "2.0.13"
 val awailitilityKotlinVersion = "4.3.0"
 val wiremockVersion = "3.13.2"
 val orgJsonVersion = "20260814"
-val springdocVersion = "3.1.0"
+val springdocVersion = "3.1.1"
 val pdfBoxVersion = "3.0.8"
-val imageIOVersion = "3.14.0"
+val imageIOVersion = "3.15.0"
 val fpsakTidsserieVersion = "2.8.0"
-val gcpStorageVersion = "2.72.0"
-val auth0Version = "4.6.0"
+val gcpStorageVersion = "2.73.0"
+val auth0Version = "4.6.1"
 val tikaVersion = "4.0.0"
 val aivenFakeGCSServerVersion = "0.3.0"
 
