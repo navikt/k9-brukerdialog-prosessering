@@ -60,7 +60,7 @@ class DokarkivServiceTest {
         @JvmField
         @RegisterExtension
         val wireMock: WireMockExtension = WireMockExtension.newInstance()
-            .options(WireMockConfiguration.wireMockConfig().extensions(DokarkivResponseTransformer()))
+            .options(WireMockConfiguration.wireMockConfig().dynamicPort().extensions(DokarkivResponseTransformer()))
             .build()
 
         @JvmStatic
