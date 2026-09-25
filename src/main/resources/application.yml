@@ -312,6 +312,7 @@ management:
         prometheus: /metrics
 
 springdoc:
+  use-fqn: true
   api-docs:
     enabled: ${SWAGGER_ENABLED:false}
   swagger-ui:
