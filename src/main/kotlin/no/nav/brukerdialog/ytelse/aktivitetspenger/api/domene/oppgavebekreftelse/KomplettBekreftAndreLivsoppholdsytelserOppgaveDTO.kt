@@ -1,10 +1,10 @@
 package no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse
 
 import no.nav.k9.oppgave.bekreftelse.Bekreftelse
-import no.nav.k9.oppgave.bekreftelse.ung.bosatt.BostedAvklaringBekreftelse
+import no.nav.k9.oppgave.bekreftelse.ung.livsopphold.AndreLivsoppholdsytelserAvklaringBekreftelse
 import java.util.*
 
-data class KomplettBekreftBostedOppgaveDTO(
+data class KomplettBekreftAndreLivsoppholdsytelserOppgaveDTO(
     override val oppgaveReferanse: String,
     override val uttalelse: AktivitetspengerOppgaveUttalelseDTO,
 ) : KomplettAktivitetspengerOppgaveDTO(oppgaveReferanse, uttalelse) {
@@ -14,12 +14,12 @@ data class KomplettBekreftBostedOppgaveDTO(
             uttalelse.uttalelseFraDeltaker
         } else null
 
-        return BostedAvklaringBekreftelse(
+        return AndreLivsoppholdsytelserAvklaringBekreftelse(
             UUID.fromString(oppgaveReferanse),
             uttalelse.harUttalelse,
             uttalelseFraBruker
         )
     }
 
-    override fun dokumentTittelSuffix(): String = "bosted"
+    override fun dokumentTittelSuffix(): String = "andre ytelser til livsopphold"
 }

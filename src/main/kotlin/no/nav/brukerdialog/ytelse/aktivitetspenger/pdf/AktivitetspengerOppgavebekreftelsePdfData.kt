@@ -11,6 +11,9 @@ import no.nav.brukerdialog.utils.NumberUtils.formaterSomValuta
 import no.nav.brukerdialog.utils.StringUtils.språkTilTekst
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettAktivitetspengerOppgaveDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftAktivitetOppgaveDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftAndreLivsoppholdsytelserOppgaveDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftBistandOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftBostedOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterinntektOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.oppgavebekreftelse.domene.AktivitetspengerOppgavebekreftelseMottatt
@@ -43,7 +46,13 @@ class AktivitetspengerOppgavebekreftelsePdfData(
     private fun KomplettAktivitetspengerOppgaveDTO.somMap() = mapOf(
         "oppgaveReferanse" to oppgaveReferanse,
         "uttalelse" to uttalelse.somMap(),
-        "bekreftBosted" to if (this is KomplettBekreftBostedOppgaveDTO) true else null,
+        "vilkårsavklaring" to when (this) {
+            is KomplettBekreftBostedOppgaveDTO -> vilkårsavklaring("Tilbakemelding på bosted")
+            is KomplettBekreftBistandOppgaveDTO -> vilkårsavklaring("Tilbakemelding på behov for bistand")
+            is KomplettBekreftAndreLivsoppholdsytelserOppgaveDTO -> vilkårsavklaring("Tilbakemelding på andre ytelser til livsopphold")
+            is KomplettBekreftAktivitetOppgaveDTO -> vilkårsavklaring("Tilbakemelding på aktivitet")
+            else -> null
+        },
         "kontrollerRegisterInntektOppgave" to if (this is KomplettKontrollerRegisterinntektOppgaveDTO) mapOf(
             "fraOgMed" to DATE_FORMATTER.format(fraOgMed),
             "månedÅr" to "${fraOgMed.month.somNorskMåned()} ${fraOgMed.year}",
@@ -53,6 +62,10 @@ class AktivitetspengerOppgavebekreftelsePdfData(
         ) else null,
     )
 
+    private fun vilkårsavklaring(overskrift: String) = mapOf(
+        "overskrift" to overskrift,
+        "spørsmål" to "Har du tilbakemelding på varselet?",
+    )
 
     private fun RegisterinntektDTO.somMap() = mapOf(
         "arbeidOgFrilansInntekter" to this.arbeidOgFrilansInntekter.map {

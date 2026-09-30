@@ -86,6 +86,81 @@ class AktivitetspengerOppgavebekreftelsePdfGeneratorTest {
                 ).pdfData()
             )
             if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "5-bekrefter-bistand-uten-uttalelse"
+            pdf = generator.genererPDF(
+                AktivitetspengerOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
+                    oppgave = AktivitetspengerOppgavebekreftelseUtils.defaultBekreftBistandOppgave.copy(
+                        oppgaveReferanse = UUID.randomUUID().toString(),
+                        uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "6-bekrefter-bistand-med-uttalelse"
+            pdf = generator.genererPDF(
+                AktivitetspengerOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
+                    oppgave = AktivitetspengerOppgavebekreftelseUtils.defaultBekreftBistandOppgave.copy(
+                        oppgaveReferanse = UUID.randomUUID().toString(),
+                        uttalelse = AktivitetspengerOppgaveUttalelseDTO(
+                            harUttalelse = true,
+                            uttalelseFraDeltaker = "Jeg har fortsatt behov for bistand, og ønsker å gi en tilbakemelding på dette.",
+                        ),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "7-bekrefter-andre-livsoppholdsytelser-uten-uttalelse"
+            pdf = generator.genererPDF(
+                AktivitetspengerOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
+                    oppgave = AktivitetspengerOppgavebekreftelseUtils.defaultBekreftAndreLivsoppholdsytelserOppgave.copy(
+                        oppgaveReferanse = UUID.randomUUID().toString(),
+                        uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "8-bekrefter-andre-livsoppholdsytelser-med-uttalelse"
+            pdf = generator.genererPDF(
+                AktivitetspengerOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
+                    oppgave = AktivitetspengerOppgavebekreftelseUtils.defaultBekreftAndreLivsoppholdsytelserOppgave.copy(
+                        oppgaveReferanse = UUID.randomUUID().toString(),
+                        uttalelse = AktivitetspengerOppgaveUttalelseDTO(
+                            harUttalelse = true,
+                            uttalelseFraDeltaker = "Jeg mottar ikke lenger andre ytelser til livsopphold, og ønsker å gi en tilbakemelding på dette.",
+                        ),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "9-bekrefter-aktivitet-uten-uttalelse"
+            pdf = generator.genererPDF(
+                AktivitetspengerOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
+                    oppgave = AktivitetspengerOppgavebekreftelseUtils.defaultBekreftAktivitetOppgave.copy(
+                        oppgaveReferanse = UUID.randomUUID().toString(),
+                        uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
+
+            id = "10-bekrefter-aktivitet-med-uttalelse"
+            pdf = generator.genererPDF(
+                AktivitetspengerOppgavebekreftelseUtils.oppgavebekreftelseMottatt(
+                    oppgave = AktivitetspengerOppgavebekreftelseUtils.defaultBekreftAktivitetOppgave.copy(
+                        oppgaveReferanse = UUID.randomUUID().toString(),
+                        uttalelse = AktivitetspengerOppgaveUttalelseDTO(
+                            harUttalelse = true,
+                            uttalelseFraDeltaker = "Jeg oppfyller fortsatt kravet til aktivitet, og ønsker å gi en tilbakemelding på dette.",
+                        ),
+                    )
+                ).pdfData()
+            )
+            if (writeBytes) File(pdfPath(soknadId = id, prefix = PDF_PREFIX)).writeBytes(pdf)
         }
     }
 }

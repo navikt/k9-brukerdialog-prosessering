@@ -11,7 +11,7 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker"/>
         <bookmark name="Kontrollere inntekt fra register" href="#kontrollerRegisterInntektOppgave"/>
-        <bookmark name="Tilbakemelding på bosted" href="#bekreftBosted"/>
+        <bookmark name="Tilbakemelding på varsel" href="#vilkårsavklaring"/>
     </bookmarks>
     {{#block 'style-common' }}
     {{/block}}
@@ -77,14 +77,14 @@
         </section>
     {{/if}}
 
-    {{#if oppgave.bekreftBosted}}
-        <section id="bekreftBosted">
-            <h2>Tilbakemelding på bosted</h2>
+    {{#if oppgave.vilkårsavklaring}}
+        <section id="vilkårsavklaring">
+            <h2>{{oppgave.vilkårsavklaring.overskrift}}</h2>
 
             <br/>
             {{> partial/ung/uttalelsePartial
                     uttalelse=oppgave.uttalelse
-                    spørsmålstekstUttalelse=oppgave.opphørVedMaksdatoOppgave.spørsmål
+                    spørsmålstekstUttalelse=oppgave.vilkårsavklaring.spørsmål
             }}
         </section>
     {{/if}}

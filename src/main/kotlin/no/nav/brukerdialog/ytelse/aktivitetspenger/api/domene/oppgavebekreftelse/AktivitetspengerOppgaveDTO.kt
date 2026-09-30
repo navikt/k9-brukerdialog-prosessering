@@ -4,9 +4,15 @@ import io.swagger.v3.oas.annotations.Hidden
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.aktivitet.BekreftAktivitetOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.aktivitet.BekreftAktivitetOpphørOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bistand.BekreftBistandOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bistand.BekreftBistandOpphørOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bosted.BekreftBostedOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.bosted.BekreftBostedOpphørOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.kontrollerregisterinntekt.KontrollerRegisterinntektOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.livsopphold.BekreftAndreLivsoppholdsytelserOppgavetypeDataDto
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.livsopphold.BekreftAndreLivsoppholdsytelserOpphørOppgavetypeDataDto
 import org.hibernate.validator.constraints.UUID
 
 data class AktivitetspengerOppgaveDTO(
@@ -25,6 +31,21 @@ data class AktivitetspengerOppgaveDTO(
             )
             is BekreftBostedOppgavetypeDataDto,
             is BekreftBostedOpphørOppgavetypeDataDto -> KomplettBekreftBostedOppgaveDTO(
+                oppgaveReferanse = oppgaveReferanse,
+                uttalelse = uttalelse
+            )
+            is BekreftBistandOppgavetypeDataDto,
+            is BekreftBistandOpphørOppgavetypeDataDto -> KomplettBekreftBistandOppgaveDTO(
+                oppgaveReferanse = oppgaveReferanse,
+                uttalelse = uttalelse
+            )
+            is BekreftAndreLivsoppholdsytelserOppgavetypeDataDto,
+            is BekreftAndreLivsoppholdsytelserOpphørOppgavetypeDataDto -> KomplettBekreftAndreLivsoppholdsytelserOppgaveDTO(
+                oppgaveReferanse = oppgaveReferanse,
+                uttalelse = uttalelse
+            )
+            is BekreftAktivitetOppgavetypeDataDto,
+            is BekreftAktivitetOpphørOppgavetypeDataDto -> KomplettBekreftAktivitetOppgaveDTO(
                 oppgaveReferanse = oppgaveReferanse,
                 uttalelse = uttalelse
             )
