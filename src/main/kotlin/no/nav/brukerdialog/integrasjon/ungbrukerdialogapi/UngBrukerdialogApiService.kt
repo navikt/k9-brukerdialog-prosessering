@@ -3,6 +3,7 @@ package no.nav.brukerdialog.integrasjon.ungbrukerdialogapi
 
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.BrukerdialogOppgaveDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.LøsOppgaveRequest
+import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgaveStatus
 import no.nav.ung.brukerdialog.kontrakt.soknad.OpprettSøknadHendelseRequest
 import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadResponse
 import org.slf4j.Logger
@@ -109,13 +110,17 @@ class UngBrukerdialogApiService(
 
     fun markerOppgaveSomLøst(oppgaveReferanse: UUID, løsOppgaveRequest: LøsOppgaveRequest): BrukerdialogOppgaveDto {
         logger.info("Markerer oppgave med id=$oppgaveReferanse som løst.")
-        val response = ungBrukerdialogApiClient.exchange(
-            markerOppgaveSomLøstUrl,
-            HttpMethod.POST,
-            HttpEntity(løsOppgaveRequest),
-            object : ParameterizedTypeReference<BrukerdialogOppgaveDto>() {},
-            oppgaveReferanse
-        )
+        val response = try {
+            ungBrukerdialogApiClient.exchange(
+                markerOppgaveSomLøstUrl,
+                HttpMethod.POST,
+                HttpEntity(løsOppgaveRequest),
+                object : ParameterizedTypeReference<BrukerdialogOppgaveDto>() {},
+                oppgaveReferanse
+            )
+        } catch (e: HttpClientErrorException.Conflict) {
+            return håndterKonfliktVedLøsing(oppgaveReferanse, e)
+        }
 
         return if (response.statusCode.is2xxSuccessful) {
             response.body!!
@@ -127,6 +132,25 @@ class UngBrukerdialogApiService(
             )
             throw markerOppgaveSomLøstFeil
         }
+    }
+
+    /**
+     * 409 betyr at oppgaven ikke lenger kan løses. Er den allerede LØST (f.eks. ved gjentatt innsending) er
+     * ønsket sluttilstand nådd, og kallet regnes som vellykket. Andre statuser (AVBRUTT, UTLØPT) er fortsatt feil.
+     */
+    private fun håndterKonfliktVedLøsing(oppgaveReferanse: UUID, error: HttpClientErrorException.Conflict): BrukerdialogOppgaveDto {
+        val oppgave = try {
+            hentOppgave(oppgaveReferanse)
+        } catch (e: Exception) {
+            logger.warn("Kunne ikke hente oppgave med id=$oppgaveReferanse etter 409 ved løsing: ${e.message}")
+            throw error
+        }
+        if (oppgave.status() == OppgaveStatus.LØST) {
+            logger.warn("Oppgave med id=$oppgaveReferanse er allerede løst, fortsetter.")
+            return oppgave
+        }
+        logger.warn("Oppgave med id=$oppgaveReferanse kan ikke løses, status=${oppgave.status()}.")
+        throw error
     }
 
     @Recover
