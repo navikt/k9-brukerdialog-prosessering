@@ -11,7 +11,10 @@ import no.nav.k9.oppgave.bekreftelse.Bekreftelse
 )
 @JsonSubTypes(
     JsonSubTypes.Type(value = KomplettKontrollerRegisterinntektOppgaveDTO::class, name = Bekreftelse.UNG_AVVIK_REGISTERINNTEKT),
-    JsonSubTypes.Type(value = KomplettBekreftBostedOppgaveDTO::class, name = Bekreftelse.AVP_BOSTED_AVKLARING)
+    JsonSubTypes.Type(value = KomplettBekreftBostedOppgaveDTO::class, name = Bekreftelse.AVP_BOSTED_AVKLARING),
+    JsonSubTypes.Type(value = KomplettBekreftBistandOppgaveDTO::class, name = Bekreftelse.AVP_BISTANDSBEHOV_AVKLARING),
+    JsonSubTypes.Type(value = KomplettBekreftAndreLivsoppholdsytelserOppgaveDTO::class, name = Bekreftelse.AVP_ANDRE_LIVSOPPHOLDSYTELSER_AVKLARING),
+    JsonSubTypes.Type(value = KomplettBekreftAktivitetOppgaveDTO::class, name = Bekreftelse.AVP_AKTIVITET_AVKLARING)
 )
 sealed class KomplettAktivitetspengerOppgaveDTO(
     open val oppgaveReferanse: String,

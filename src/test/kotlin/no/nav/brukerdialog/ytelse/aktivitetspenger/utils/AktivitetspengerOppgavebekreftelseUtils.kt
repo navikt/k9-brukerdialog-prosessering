@@ -4,6 +4,9 @@ import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgavebekreftelse
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.AktivitetspengerOppgaveUttalelseDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettAktivitetspengerOppgaveDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftAktivitetOppgaveDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftAndreLivsoppholdsytelserOppgaveDTO
+import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftBistandOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettBekreftBostedOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.oppgavebekreftelse.KomplettKontrollerRegisterinntektOppgaveDTO
 import no.nav.brukerdialog.ytelse.aktivitetspenger.kafka.oppgavebekreftelse.domene.AktivitetspengerOppgavebekreftelseMottatt
@@ -42,6 +45,21 @@ object AktivitetspengerOppgavebekreftelseUtils {
     )
 
     val defaultBekreftBostedOppgave = KomplettBekreftBostedOppgaveDTO(
+        oppgaveReferanse = UUID.randomUUID().toString(),
+        uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
+    )
+
+    val defaultBekreftBistandOppgave = KomplettBekreftBistandOppgaveDTO(
+        oppgaveReferanse = UUID.randomUUID().toString(),
+        uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
+    )
+
+    val defaultBekreftAndreLivsoppholdsytelserOppgave = KomplettBekreftAndreLivsoppholdsytelserOppgaveDTO(
+        oppgaveReferanse = UUID.randomUUID().toString(),
+        uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
+    )
+
+    val defaultBekreftAktivitetOppgave = KomplettBekreftAktivitetOppgaveDTO(
         oppgaveReferanse = UUID.randomUUID().toString(),
         uttalelse = AktivitetspengerOppgaveUttalelseDTO(harUttalelse = false),
     )
