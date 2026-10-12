@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.ettersendelse.api.domene
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
@@ -27,7 +28,7 @@ data class Ettersendelse(
     val søknadId: String = UUID.randomUUID().toString(),
     val språk: String,
 
-    @Schema(hidden = true)
+    @JsonIgnore
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
     @field:NotEmpty(message = "Kan ikke være tom") val vedlegg: List<URL>,

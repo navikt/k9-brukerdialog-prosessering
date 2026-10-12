@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.aktivitetspenger.api.domene.soknad
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
@@ -15,7 +16,7 @@ data class Aktivitetspengersøknad(
     val medlemskap: MedlemskapAktivitetspenger,
     val erBosattITrondheim: Boolean,
     val språk: String,
-    @field:Schema(hidden = true)
+    @JsonIgnore
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     @field:Schema(description = "Kun tillatt i dev.")
     val startdato: LocalDate? = null,

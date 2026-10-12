@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengeraleneomsorg.api.domene
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
@@ -30,7 +31,7 @@ data class OmsorgsdagerAleneOmOmsorgenSøknad(
     @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
 
-    @Schema(hidden = true)
+    @JsonIgnore
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: String,
     val søkerNorskIdent: String? = null, // TODO: Fjern nullable når vi har lansert og mellomlagring inneholder dette feltet.
