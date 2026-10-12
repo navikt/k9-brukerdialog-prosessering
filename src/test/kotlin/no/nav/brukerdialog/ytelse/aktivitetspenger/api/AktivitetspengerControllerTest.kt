@@ -1,13 +1,16 @@
 package no.nav.brukerdialog.ytelse.aktivitetspenger.api
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.slot
 import io.mockk.verify
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
+import no.nav.brukerdialog.domenetjenester.innsending.Innsending
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.BarnService
 import no.nav.brukerdialog.integrasjon.ungbrukerdialogapi.UngBrukerdialogApiService
@@ -27,6 +30,7 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.OppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.InntektsrapporteringOppgavetypeDataDto
 import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadResponse
 import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadType
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -88,21 +92,32 @@ class AktivitetspengerControllerTest {
     }
 
     @Test
-    fun `Innsending av søknad er OK`() {
+    fun `Innsending av søknad er OK og mottatt kan ikke overstyres av klient`() {
         coEvery { barnService.hentBarn() } returns emptyList()
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
-        coEvery { innsendingService.registrer(any(), any()) } returns Unit
+        val innsending = slot<Innsending>()
+        coEvery { innsendingService.registrer(capture(innsending), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
         mockTilgjengeligSøknad(TilgjengeligSøknadType.FØRSTEGANGSSØKNAD)
         mockRegistrerSøknadHendelse()
 
-        sendInnSøknad(SøknadUtils.defaultSøknad)
+        val klientMottatt = ZonedDateTime.parse("2000-01-01T00:00:00.000Z")
+        val søknadMedMottatt = objectMapper.valueToTree<ObjectNode>(SøknadUtils.defaultSøknad)
+            .put("mottatt", klientMottatt.toString())
+
+        mockMvc.post("/aktivitetspenger/soknad/innsending") {
+            headers { set(NavHeaders.BRUKERDIALOG_GIT_SHA, UUID.randomUUID().toString()) }
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = søknadMedMottatt.toString()
+        }
             .andExpect {
                 status { isAccepted() }
                 header { exists(NavHeaders.X_CORRELATION_ID) }
             }
 
         verify(exactly = 1) { ungBrukerdialogApiService.registrerSøknadHendelse(any()) }
+        assertNotEquals(klientMottatt, (innsending.captured as AktivitetspengersøknadInnsending).mottatt)
     }
 
     @Test
