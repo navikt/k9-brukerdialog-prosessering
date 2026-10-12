@@ -110,6 +110,9 @@ no.nav:
     familie-pdf-base-url: ${FAMILIE_PDF_BASE_URL}
     clam-av-base-url: ${CLAM_AV_BASE_URL}
 
+  features:
+    aktivitetspenger-tillat-startdato: ${AKTIVITETSPENGER_TILLAT_STARTDATO:false}
+
   cache:
     barn:
       max-size: ${BARN_CACHE_MAX_SIZE:500}
