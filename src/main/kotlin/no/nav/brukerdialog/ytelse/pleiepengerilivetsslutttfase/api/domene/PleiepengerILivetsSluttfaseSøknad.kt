@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengerilivetsslutttfase.api.domene
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
@@ -48,7 +49,7 @@ data class PleiepengerILivetsSluttfaseSøknad(
     val skalJobbeOgPleieSammeDag: Boolean,
     val dagerMedPleie: List<LocalDate>,
 
-    @Schema(hidden = true)
+    @JsonIgnore
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
     val vedleggUrls: List<URL> = listOf(),
