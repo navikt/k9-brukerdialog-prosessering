@@ -152,6 +152,17 @@ class AktivitetspengerControllerTest {
     }
 
     @Test
+    fun `Søknad med startdato avvises når det ikke er tillatt`() {
+        sendInnSøknad(SøknadUtils.defaultSøknad.copy(startdato = LocalDate.parse("2021-01-01")))
+            .andExpect {
+                status { isBadRequest() }
+                jsonPath("$.violations[0].parameterName") { value("aktivitetspengersøknad.startdato") }
+            }
+
+        coVerify(exactly = 0) { innsendingService.registrer(any(), any()) }
+    }
+
+    @Test
     fun `Innsending av inntekt er OK`() {
         coEvery { barnService.hentBarn() } returns emptyList()
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit

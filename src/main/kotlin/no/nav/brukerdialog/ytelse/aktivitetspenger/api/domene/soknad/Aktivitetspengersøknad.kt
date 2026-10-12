@@ -18,7 +18,8 @@ data class Aktivitetspengersøknad(
     val språk: String,
     @JsonIgnore
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
-    val startdato: LocalDate,
+    @field:Schema(description = "Kun tillatt i dev.")
+    val startdato: LocalDate? = null,
     val søkerNorskIdent: String,
     val barnErRiktig: Boolean,
     @field:Valid val kontonummerInfo: KontonummerInfo,
