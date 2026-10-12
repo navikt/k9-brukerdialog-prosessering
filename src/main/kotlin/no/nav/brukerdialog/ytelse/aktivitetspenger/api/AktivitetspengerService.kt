@@ -99,7 +99,7 @@ class AktivitetspengerService(
 
     private fun utledStartdato(søknad: Aktivitetspengersøknad): LocalDate {
         if (søknad.startdato == null) {
-            return søknad.mottatt.withZoneSameInstant(OSLO).toLocalDate()
+            return LocalDate.now(OSLO)
         }
         if (!tillatStartdato) {
             throw ValidationErrorResponseException(
