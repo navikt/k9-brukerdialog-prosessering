@@ -13,7 +13,6 @@ object SøknadUtils {
         mottatt = ZonedDateTime.parse("2022-01-02T03:04:05Z", JacksonConfiguration.zonedDateTimeFormatter),
         språk = "nb",
         søkerNorskIdent = "12345678910",
-        startdato = LocalDate.parse("2021-01-01"),
         barnErRiktig = true,
         kontonummerInfo = KontonummerInfo(
             harKontonummer = HarKontonummer.JA,

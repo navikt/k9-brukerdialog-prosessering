@@ -25,10 +25,17 @@ import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.Innt
 import no.nav.ung.brukerdialog.kontrakt.oppgaver.typer.inntektsrapportering.RapportertInntektDto
 import no.nav.ung.brukerdialog.kontrakt.soknad.OpprettSøknadHendelseRequest
 import no.nav.ung.brukerdialog.kontrakt.soknad.TilgjengeligSøknadType
+import no.nav.brukerdialog.validation.ParameterType
+import no.nav.brukerdialog.validation.ValidationErrorResponseException
+import no.nav.brukerdialog.validation.ValidationProblemDetails
+import no.nav.brukerdialog.validation.Violation
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.*
 
@@ -40,12 +47,15 @@ class AktivitetspengerService(
     private val metrikkService: MetrikkService,
     private val barnService: BarnService,
     private val ungBrukerdialogApiService: UngBrukerdialogApiService,
+    @Value("\${no.nav.features.aktivitetspenger-tillat-startdato:false}") private val tillatStartdato: Boolean,
 ) {
     private companion object {
         private val logger = LoggerFactory.getLogger(AktivitetspengerService::class.java)
+        private val OSLO = ZoneId.of("Europe/Oslo")
     }
 
     suspend fun innsendingAktivitetspengersøknad(søknad: Aktivitetspengersøknad, gitSha: String) {
+        val startdato = utledStartdato(søknad)
         val barn = barnService.hentBarn().map { Barn(navn = it.navn()) }
 
         val aktivitetspengersøknadInnsending = AktivitetspengersøknadInnsending(
@@ -54,7 +64,7 @@ class AktivitetspengerService(
             erBosattITrondheim = søknad.erBosattITrondheim,
             språk = søknad.språk,
             mottatt = søknad.mottatt,
-            startdato = søknad.startdato,
+            startdato = startdato,
             søkerNorskIdent = søknad.søkerNorskIdent,
             barn = barn,
             barnErRiktig = søknad.barnErRiktig,
@@ -85,6 +95,27 @@ class AktivitetspengerService(
         registrerSøknadHendelse(søknad)
 
         metrikkService.registrerMottattInnsending(aktivitetspengersøknadInnsending.ytelse())
+    }
+
+    private fun utledStartdato(søknad: Aktivitetspengersøknad): LocalDate {
+        if (søknad.startdato == null) {
+            return søknad.mottatt.withZoneSameInstant(OSLO).toLocalDate()
+        }
+        if (!tillatStartdato) {
+            throw ValidationErrorResponseException(
+                ValidationProblemDetails(
+                    setOf(
+                        Violation(
+                            parameterName = "aktivitetspengersøknad.startdato",
+                            parameterType = ParameterType.ENTITY,
+                            reason = "startdato kan ikke settes",
+                            invalidValue = søknad.startdato,
+                        )
+                    )
+                )
+            )
+        }
+        return søknad.startdato
     }
 
     private fun forsikreSøknadErTilgjengelig() {
