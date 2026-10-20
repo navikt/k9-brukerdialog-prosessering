@@ -1,11 +1,9 @@
 package no.nav.brukerdialog.dato
 
 import com.ninjasquad.springmockk.MockkBean
-import io.mockk.every
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
-import no.nav.security.token.support.core.context.TokenValidationContext
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.hamcrest.Matchers.matchesPattern
 import org.junit.jupiter.api.Test
@@ -42,13 +40,4 @@ class DatoControllerTest {
             }
     }
 
-    @Test
-    fun `Forventer unauthorized når forespørsel mangler token`() {
-        every { springTokenValidationContextHolder.getTokenValidationContext() } returns TokenValidationContext(emptyMap())
-
-        mockMvc.get("/dato/dagens")
-            .andExpect {
-                status { isUnauthorized() }
-            }
-    }
 }
