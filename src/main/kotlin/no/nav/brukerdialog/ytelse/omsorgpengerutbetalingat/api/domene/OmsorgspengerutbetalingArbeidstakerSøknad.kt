@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgpengerutbetalingat.api.domene
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
@@ -39,7 +40,7 @@ data class OmsorgspengerutbetalingArbeidstakerSøknad(
     @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
 
-    @Schema(hidden = true)
+    @JsonIgnore
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
     val språk: String,
     val vedlegg: List<URL>,

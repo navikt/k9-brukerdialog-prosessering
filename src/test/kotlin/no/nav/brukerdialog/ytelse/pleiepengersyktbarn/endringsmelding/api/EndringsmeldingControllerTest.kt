@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.slot
 import no.nav.brukerdialog.config.JacksonConfiguration
 import no.nav.brukerdialog.domenetjenester.innsending.DuplikatInnsendingSjekker
 import no.nav.brukerdialog.domenetjenester.innsending.InnsendingService
@@ -13,9 +14,11 @@ import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.NavHeaders
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api.domene.Endringsmelding
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9FormatPSB
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9SakInnsynSøknad
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -73,7 +76,7 @@ class EndringsmeldingControllerTest {
     }
 
     @Test
-    fun `Endringsmelding med endringer innenfor eksisterende perioder er OK`() {
+    fun `Endringsmelding med endringer innenfor eksisterende perioder er OK og mottattDato fra klient ignoreres`() {
         coEvery { innsynService.hentSøknadsopplysningerForBarn(any()) } returns defaultK9SakInnsynSøknad(
             barn = Barn(
                 fødselsdato = LocalDate.parse("2000-08-27"),
@@ -86,7 +89,8 @@ class EndringsmeldingControllerTest {
             søknad = defaultK9FormatPSB()
         )
         every { duplikatInnsendingSjekker.forsikreIkkeDuplikatInnsending(any()) } returns Unit
-        coEvery { innsendingService.registrer(any(), any()) } returns Unit
+        val innsending = slot<Endringsmelding>()
+        coEvery { innsendingService.registrer(capture(innsending), any()) } returns Unit
         every { metrikkService.registrerMottattInnsending(any()) } returns Unit
 
         val søknadId = UUID.randomUUID().toString()
@@ -151,6 +155,8 @@ class EndringsmeldingControllerTest {
                 status { isAccepted() }
                 header { exists(NavHeaders.X_CORRELATION_ID) }
             }
+
+        assertNotEquals(mottattDato, innsending.captured.mottattDato)
     }
 
     @Test

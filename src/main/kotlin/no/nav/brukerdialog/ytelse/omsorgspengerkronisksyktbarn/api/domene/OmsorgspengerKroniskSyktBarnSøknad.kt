@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.omsorgspengerkronisksyktbarn.api.domene
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
@@ -34,7 +35,7 @@ data class OmsorgspengerKroniskSyktBarnSøknad(
     @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
 
-    @Schema(hidden = true)
+    @JsonIgnore
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
     val språk: String,
