@@ -17,7 +17,8 @@ class SwaggerConfiguration {
     private companion object {
         private val FELLES_PAKKER = arrayOf(
             "no.nav.brukerdialog.oppslag",
-            "no.nav.brukerdialog.mellomlagring"
+            "no.nav.brukerdialog.mellomlagring",
+            "no.nav.brukerdialog.dato"
         )
     }
 
