@@ -276,6 +276,16 @@ class VedleggControllerTest {
     }
 
     @Test
+    fun `Sjekk av vedlegg med blank id gir valideringsfeil`() {
+        mockMvc.post("/vedlegg/eksisterer") {
+            contentType = MediaType.APPLICATION_JSON
+            content = """{ "vedleggIder": ["1", " "] }"""
+        }.andExpect {
+            status { isBadRequest() }
+        }
+    }
+
+    @Test
     fun `Sjekk av flere enn 20 vedlegg gir valideringsfeil`() {
         val vedleggIder = (1..21).joinToString(",") { "\"$it\"" }
 

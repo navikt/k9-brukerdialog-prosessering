@@ -43,8 +43,7 @@ class GcpStorageService(
      * Feil mot GCP kastes videre, slik at de ikke tolkes som at objektet mangler.
      */
     fun finnes(key: StorageKey): Boolean {
-        val blob = storage.get(BlobId.of(bucket, key.value), GcpStorage.BlobGetOption.fields(GcpStorage.BlobField.NAME))
-        return blob != null
+        return storage.get(BlobId.of(bucket, key.value), GcpStorage.BlobGetOption.fields(GcpStorage.BlobField.NAME)) != null
     }
 
     fun slett(storageKey: StorageKey): Boolean {

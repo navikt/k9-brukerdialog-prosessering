@@ -76,7 +76,6 @@ data class DokumentService(
         return gcpStorageService.finnes(genererLagringsnøkkel(dokumentId = dokumentId, eier = dokumentEier))
     }
 
-    // Returnerer om hvert dokument finnes, i samme rekkefølge som dokumentIder.
     suspend fun finnesDokumenter(dokumentIder: List<String>, dokumentEier: DokumentEier): Map<String, Boolean> {
         return coroutineScope {
             dokumentIder.map { dokumentId ->

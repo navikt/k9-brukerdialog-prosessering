@@ -96,7 +96,6 @@ class VedleggController(
 
     @PostMapping("/eksisterer", consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun finnesVedlegg(@Valid @RequestBody request: VedleggEksistensRequest): List<VedleggEksistens> = runBlocking {
-        // Eier hentes fra token, slik at bruker kun kan sjekke egne vedlegg
         val personIdent = tokenValidationContextHolder.personIdent()
         vedleggService.finnesVedlegg(request.vedleggIder, personIdent)
     }
