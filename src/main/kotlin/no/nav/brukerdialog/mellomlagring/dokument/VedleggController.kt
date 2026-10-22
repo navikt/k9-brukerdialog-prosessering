@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.mellomlagring.dokument
 
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import kotlinx.coroutines.runBlocking
 import no.nav.brukerdialog.config.Issuers
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -90,6 +92,12 @@ class VedleggController(
                 )
             }
         )
+    }
+
+    @PostMapping("/eksisterer", consumes = [MediaType.APPLICATION_JSON_VALUE])
+    fun finnesVedlegg(@Valid @RequestBody request: VedleggEksistensRequest): List<VedleggEksistens> = runBlocking {
+        val personIdent = tokenValidationContextHolder.personIdent()
+        vedleggService.finnesVedlegg(request.vedleggIder, personIdent)
     }
 
     @DeleteMapping("/{vedleggId}")

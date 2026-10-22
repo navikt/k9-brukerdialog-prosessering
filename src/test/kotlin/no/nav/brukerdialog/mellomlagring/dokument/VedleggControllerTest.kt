@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.multipart
+import org.springframework.test.web.servlet.post
 import org.springframework.web.client.HttpClientErrorException
 import java.nio.file.Files
 
@@ -236,6 +237,64 @@ class VedleggControllerTest {
                     )
                 }
             }
+    }
+
+    @Test
+    fun `Sjekk av vedlegg returnerer om hvert vedlegg finnes`() {
+        coEvery { vedleggService.finnesVedlegg(listOf("1", "2"), any()) } returns listOf(
+            VedleggEksistens(vedleggId = "1", finnes = true),
+            VedleggEksistens(vedleggId = "2", finnes = false)
+        )
+
+        mockMvc.post("/vedlegg/eksisterer") {
+            contentType = MediaType.APPLICATION_JSON
+            content = """{ "vedleggIder": ["1", "2"] }"""
+        }.andExpect {
+            status { isOk() }
+            header { exists(NavHeaders.X_CORRELATION_ID) }
+            content {
+                json(
+                    """
+                    [
+                      { "vedleggId": "1", "finnes": true },
+                      { "vedleggId": "2", "finnes": false }
+                    ]
+                    """.trimIndent(), JsonCompareMode.STRICT
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `Sjekk av vedlegg med tom liste gir valideringsfeil`() {
+        mockMvc.post("/vedlegg/eksisterer") {
+            contentType = MediaType.APPLICATION_JSON
+            content = """{ "vedleggIder": [] }"""
+        }.andExpect {
+            status { isBadRequest() }
+        }
+    }
+
+    @Test
+    fun `Sjekk av vedlegg med blank id gir valideringsfeil`() {
+        mockMvc.post("/vedlegg/eksisterer") {
+            contentType = MediaType.APPLICATION_JSON
+            content = """{ "vedleggIder": ["1", " "] }"""
+        }.andExpect {
+            status { isBadRequest() }
+        }
+    }
+
+    @Test
+    fun `Sjekk av flere enn 20 vedlegg gir valideringsfeil`() {
+        val vedleggIder = (1..21).joinToString(",") { "\"$it\"" }
+
+        mockMvc.post("/vedlegg/eksisterer") {
+            contentType = MediaType.APPLICATION_JSON
+            content = """{ "vedleggIder": [$vedleggIder] }"""
+        }.andExpect {
+            status { isBadRequest() }
+        }
     }
 
     @ParameterizedTest

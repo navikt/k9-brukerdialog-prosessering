@@ -8,6 +8,7 @@ import no.nav.brukerdialog.utils.FødselsnummerGenerator
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.apache.commons.lang3.stream.Streams
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -167,6 +168,36 @@ class DokumentServiceTest {
 
             // Så skal det returnere true
             assertThat(result).isTrue()
+        }
+    }
+
+    @Test
+    fun `Sjekk av om dokumenter finnes tar hensyn til eier`() {
+        // Gitt et dokument lagret av én eier
+        val dokumentEier = DokumentEier(FødselsnummerGenerator.neste())
+        val annenEier = DokumentEier(FødselsnummerGenerator.neste())
+        val fil = hentFil("test.pdf")
+        val dokument = Dokument(
+            title = fil.name,
+            content = fil.readBytes(),
+            contentType = Files.probeContentType(fil.toPath()),
+            eier = dokumentEier
+        )
+
+        runBlocking {
+            val dokumentId = dokumentService.lagreDokument(
+                dokument = dokument,
+                dokumentEier = dokumentEier,
+                skannForVirus = false,
+            )
+
+            // Så finnes det for eieren, men ikke en ukjent id
+            assertThat(dokumentService.finnesDokumenter(listOf(dokumentId, "ukjent-id"), dokumentEier))
+                .containsExactly(entry(dokumentId, true), entry("ukjent-id", false))
+
+            // Og det finnes ikke for en annen eier
+            assertThat(dokumentService.finnesDokumenter(listOf(dokumentId), annenEier))
+                .containsExactly(entry(dokumentId, false))
         }
     }
 }

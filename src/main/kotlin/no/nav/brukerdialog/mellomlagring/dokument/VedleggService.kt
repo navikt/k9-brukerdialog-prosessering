@@ -37,6 +37,12 @@ class VedleggService(
         dokumentService.slettDokument(vedleggId, DokumentEier(personIdent))
     }
 
+    // Vedlegg som eies av en annen person enn personIdent, regnes som ikke funnet.
+    suspend fun finnesVedlegg(vedleggIder: List<String>, personIdent: String): List<VedleggEksistens> {
+        return dokumentService.finnesDokumenter(vedleggIder, DokumentEier(personIdent))
+            .map { (vedleggId, finnes) -> VedleggEksistens(vedleggId = vedleggId, finnes = finnes) }
+    }
+
     private fun Vedlegg.somDokument(personIdent: String) = Dokument(
         eier = DokumentEier(personIdent),
         content = content,
