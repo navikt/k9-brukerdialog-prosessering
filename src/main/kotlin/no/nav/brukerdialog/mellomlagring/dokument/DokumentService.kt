@@ -2,6 +2,7 @@ package no.nav.brukerdialog.mellomlagring.dokument
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -79,7 +80,7 @@ data class DokumentService(
     suspend fun finnesDokumenter(dokumentIder: List<String>, dokumentEier: DokumentEier): Map<String, Boolean> {
         return coroutineScope {
             dokumentIder.map { dokumentId ->
-                async { dokumentId to finnesDokument(dokumentId, dokumentEier) }
+                async(Dispatchers.IO) { dokumentId to finnesDokument(dokumentId, dokumentEier) }
             }.awaitAll().toMap()
         }
     }
