@@ -38,6 +38,15 @@ class GcpStorageService(
         }
     }
 
+    /**
+     * Sjekker om objektet finnes uten å laste ned innholdet.
+     * Feil mot GCP kastes videre, slik at de ikke tolkes som at objektet mangler.
+     */
+    fun finnes(key: StorageKey): Boolean {
+        val blob = storage.get(BlobId.of(bucket, key.value), GcpStorage.BlobGetOption.fields(GcpStorage.BlobField.NAME))
+        return blob != null
+    }
+
     fun slett(storageKey: StorageKey): Boolean {
 
         if (harHold(storageKey)) toggleHold(storageKey, false)

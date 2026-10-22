@@ -68,6 +68,23 @@ data class DokumentService(
         }
     }
 
+    fun finnesDokument(
+        dokumentId: String,
+        dokumentEier: DokumentEier,
+    ): Boolean {
+        logger.trace("Sjekker om dokument {} finnes.", dokumentId)
+        return gcpStorageService.finnes(genererLagringsnøkkel(dokumentId = dokumentId, eier = dokumentEier))
+    }
+
+    // Returnerer om hvert dokument finnes, i samme rekkefølge som dokumentIder.
+    suspend fun finnesDokumenter(dokumentIder: List<String>, dokumentEier: DokumentEier): Map<String, Boolean> {
+        return coroutineScope {
+            dokumentIder.map { dokumentId ->
+                async { dokumentId to finnesDokument(dokumentId, dokumentEier) }
+            }.awaitAll().toMap()
+        }
+    }
+
     fun slettDokument(
         dokumentId: String,
         dokumentEier: DokumentEier,

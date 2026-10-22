@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.multipart
+import org.springframework.test.web.servlet.post
 import org.springframework.util.ResourceUtils
 import org.springframework.util.unit.DataSize
 
@@ -57,6 +58,16 @@ class VedleggControllerIntegrationTest {
             header("Authorization", "Bearer ${mockOAuth2Server.hentToken().serialize()}")
         }.andExpect {
             status { isCreated() }
+        }
+    }
+
+    @Test
+    fun `Sjekk av vedlegg uten token gir 401`() {
+        mockMvc.post("/vedlegg/eksisterer") {
+            contentType = MediaType.APPLICATION_JSON
+            content = """{ "vedleggIder": ["1"] }"""
+        }.andExpect {
+            status { isUnauthorized() }
         }
     }
 }

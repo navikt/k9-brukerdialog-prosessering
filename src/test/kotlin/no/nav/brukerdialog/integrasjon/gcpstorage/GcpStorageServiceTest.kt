@@ -83,6 +83,17 @@ class GcpStorageServiceTest {
     }
 
     @Test
+    fun `finnes returnerer true når blob finnes`() {
+        gcpStorageService.lagre(TEST_KEY, TEST_VALUE, hold = false)
+        assertThat(gcpStorageService.finnes(TEST_KEY)).isTrue()
+    }
+
+    @Test
+    fun `finnes returnerer false når blob ikke finnes`() {
+        assertThat(gcpStorageService.finnes(TEST_KEY)).isFalse()
+    }
+
+    @Test
     fun `slett returnerer false når hent returnerer null`() {
         assertThat(gcpStorageService.slett(TEST_KEY)).isFalse()
     }
