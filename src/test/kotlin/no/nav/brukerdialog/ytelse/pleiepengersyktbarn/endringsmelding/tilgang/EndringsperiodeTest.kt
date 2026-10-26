@@ -16,8 +16,11 @@ class EndringsperiodeTest {
         // Første og siste dag i måneden.
         "2024-03-01, 2023-12-01/2025-03-31",
         "2024-03-31, 2023-12-01/2025-03-31",
-        // Skuddår: februar 2024 har 29 dager.
-        "2023-02-10, 2022-11-01/2024-02-29",
+        // Skuddår: som i frontend tas månedsslutt før +12 måneder, så 2023-02-28 gir 2024-02-28.
+        "2023-02-10, 2022-11-01/2024-02-28",
+        "2027-02-15, 2026-11-01/2028-02-28",
+        // Fra skuddår: 2024-02-29 + 12 måneder gir 2025-02-28.
+        "2024-02-10, 2023-11-01/2025-02-28",
     )
     fun `tillatt endringsperiode`(iDag: String, forventet: String) {
         assertEquals(periode(forventet), tillattEndringsperiode(LocalDate.parse(iDag)))
