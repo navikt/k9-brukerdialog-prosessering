@@ -18,7 +18,7 @@ data class SakForTilgang(
      * norskIdentitetsnummer) er utelatt, og kan dermed aldri matche en arbeidsgiver fra AA-reg.
      */
     val arbeidsgiverOrgnr: Set<String>,
-    /** True når SN har minst én periode, uansett antall timer (også 0). */
+    /** True når saken har minst én periode som selvstendig næringsdrivende, uansett timetall. */
     val harSelvstendigNæringsdrivendePerioder: Boolean,
 )
 
@@ -34,8 +34,8 @@ fun K9SakInnsynSøknad.tilSakForTilgang(): SakForTilgang {
 
     return SakForTilgang(
         søknadsperioder = ytelse.søknadsperiodeList.orEmpty().map {
-            // Søknadsperioder i en PSB-sak er alltid lukket. Er de ikke det, er saken ugyldig, og vi feiler
-            // hele oppslaget med 5xx, slik som ved andre feil i sakene. Fast melding uten data fra saken.
+            // Søknadsperioder i en PSB-sak er alltid lukket. Mangler fom eller tom, er saken ugyldig og
+            // oppslaget feiler med 5xx.
             Datoperiode(
                 fom = requireNotNull(it.fraOgMed) { "Søknadsperiode mangler fraOgMed." },
                 tom = requireNotNull(it.tilOgMed) { "Søknadsperiode mangler tilOgMed." },

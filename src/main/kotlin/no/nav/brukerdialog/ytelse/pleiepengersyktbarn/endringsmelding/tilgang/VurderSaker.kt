@@ -7,16 +7,15 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.In
 
 sealed interface SakVurdering {
     /**
-     * @param oppslagsperiode snittet av samlet søknadsperiode og endringsperioden. Brukes til
-     * arbeidsgiveroppslaget, og skal ikke regnes ut på nytt et annet sted.
+     * @param oppslagsperiode snittet av samlet søknadsperiode og endringsperioden. Arbeidsgiverne hentes
+     * for denne perioden.
      */
     data class Tilgang(val sak: SakForTilgang, val oppslagsperiode: Datoperiode) : SakVurdering
     data class IngenTilgang(val årsak: IngenTilgangÅrsak) : SakVurdering
 }
 
 /**
- * Vurderer sakene, før arbeidsgiveroppslaget. Portert fra `tilgang/vurderSaker.ts` i frontend.
- * Oversikt over alle reglene: [EndringsmeldingTilgangService].
+ * Vurderer sakene, før arbeidsgiveroppslaget. Oversikt over alle reglene: [EndringsmeldingTilgangService].
  *
  * Reglene evalueres i rekkefølge og stopper ved første treff, så avslag gir alltid én årsak.
  */
@@ -35,8 +34,7 @@ fun vurderSaker(saker: List<SakForTilgang>, endringsperiode: Datoperiode): SakVu
     val samletSøknadsperiode = sak.samletSøknadsperiode()
         ?: return SakVurdering.IngenTilgang(HAR_INGEN_PERIODER)
 
-    // Saker som slutter før endringsperioden er allerede skilt ut som eldre. Et tomt snitt betyr derfor
-    // at saken starter etter endringsperioden.
+    // Saken er ikke eldre, så et tomt snitt betyr at den starter etter endringsperioden.
     val oppslagsperiode = samletSøknadsperiode.snitt(endringsperiode)
         ?: return SakVurdering.IngenTilgang(SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE)
 
@@ -52,7 +50,6 @@ private fun SakForTilgang.erEldreEnn(endringsperiode: Datoperiode): Boolean =
 
 /**
  * Fra tidligste fom til seneste tom over alle søknadsperiodene i saken. Null når saken ikke har perioder.
- * Portert fra `getSamletDateRangeForK9Saker` i `utils/k9SakUtils.ts`.
  */
 private fun SakForTilgang.samletSøknadsperiode(): Datoperiode? {
     if (søknadsperioder.isEmpty()) return null

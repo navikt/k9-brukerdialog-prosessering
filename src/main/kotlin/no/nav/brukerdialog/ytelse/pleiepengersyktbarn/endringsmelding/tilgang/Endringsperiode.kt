@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 
 /**
- * Tillatt endringsperiode, portert fra `utils/endringsperiode.ts` i frontend.
+ * Perioden bruker kan endre i.
  *
  * - Fra: den 1. i måneden, tre måneder før inneværende måned. Følger søknadsfristvilkåret
  *   (krav kan settes fram for inntil tre måneder før måneden kravet settes fram).

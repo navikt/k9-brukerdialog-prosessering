@@ -17,8 +17,8 @@ class MetrikkService(private val meterRegistry: MeterRegistry) {
     fun registrerMottattInnsending(ytelse: Ytelse) = antallMottatteSøknaderPerYtelseCounter.increment()
 
     /**
-     * Teller én gang per vurdering, med første årsak (den frontend viser) eller "tilgang".
-     * Taggen er kontraktsverdien til årsaken uten æ, ø og å, slik at den er enkel å bruke i spørringer.
+     * Teller én gang per vurdering, tagget med første årsak eller "tilgang".
+     * Taggen er årsakskoden uten æ, ø og å, slik at den er enkel å bruke i spørringer.
      * Verdiene er faste, så antallet er begrenset og ingenting kan knyttes til en bruker.
      */
     fun registrerEndringsmeldingTilgangVurdering(førsteÅrsak: IngenTilgangÅrsak?) =

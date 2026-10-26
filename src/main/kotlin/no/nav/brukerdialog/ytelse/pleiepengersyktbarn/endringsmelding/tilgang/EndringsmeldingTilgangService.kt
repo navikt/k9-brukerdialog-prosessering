@@ -11,44 +11,33 @@ import java.time.LocalDate
 
 /**
  * Tilgangskontroll for endringsmelding pleiepenger. Avgjør om innlogget bruker kan bruke endringsmeldingen,
- * og gir årsakene når svaret er nei. Reglene er portert fra `tilgang/` i
- * frontend-appen `endringsmelding-pleiepenger`, og skal gi samme svar.
+ * og gir årsakene når svaret er nei.
  *
- * ## Flyt
- *
- * hent saker → vurder saker → hent arbeidsgivere for oppslagsperioden → vurder arbeidsforhold
- *
+ * Flyt: hent saker → vurder saker → hent arbeidsgivere for oppslagsperioden → vurder arbeidsforhold.
  * Reglene er rene funksjoner. All I/O skjer her.
- *
- * ## Regler
  *
  * Saker der alle søknadsperiodene slutter før tillatt endringsperiode, regnes som *eldre*. De blokkerer ikke,
  * og telles ikke med når vi ser etter flere saker. Se [tillattEndringsperiode].
  *
- * **Vurder saker** ([vurderSaker]): stopper ved første treff og gir én årsak.
- *
- * | Regel | Årsak |
- * |---|---|
- * | Ingen saker | [IngenTilgangÅrsak.HAR_INGEN_SAK] |
- * | Bare eldre saker | [IngenTilgangÅrsak.SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE] |
- * | Mer enn én sak som ikke er eldre | [IngenTilgangÅrsak.HAR_MER_ENN_EN_SAK] |
- * | Saken har ingen søknadsperioder | [IngenTilgangÅrsak.HAR_INGEN_PERIODER] |
- * | Saken ligger etter tillatt endringsperiode | [IngenTilgangÅrsak.SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE] |
+ * **Vurder saker** ([vurderSaker]) stopper ved første treff og gir én årsak:
+ * - Ingen saker: [IngenTilgangÅrsak.HAR_INGEN_SAK]
+ * - Bare eldre saker: [IngenTilgangÅrsak.SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE]
+ * - Mer enn én sak som ikke er eldre: [IngenTilgangÅrsak.HAR_MER_ENN_EN_SAK]
+ * - Saken har ingen søknadsperioder: [IngenTilgangÅrsak.HAR_INGEN_PERIODER]
+ * - Saken ligger etter tillatt endringsperiode: [IngenTilgangÅrsak.SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE]
  *
  * Ved tilgang gir den saken og oppslagsperioden som arbeidsgiverne hentes for.
  *
- * **Vurder arbeidsforhold** ([vurderArbeidsforhold]): alle reglene evalueres, og årsakene samles i denne
- * rekkefølgen. Frontend viser melding for første årsak.
+ * **Vurder arbeidsforhold** ([vurderArbeidsforhold]) evaluerer alle reglene og samler årsakene i denne
+ * rekkefølgen. Første årsak regnes som hovedårsak og registreres i metrikken.
+ * - Saken har perioder som selvstendig næringsdrivende:
+ *   [IngenTilgangÅrsak.HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE]
+ * - Arbeidsgiver i saken har to ansettelser i samme uke med opphold:
+ *   [IngenTilgangÅrsak.EN_ARBEIDSGIVER_TO_ANSETTELSER_SAMME_UKE_MED_OPPHOLD]
+ * - Arbeidsgiver som ikke er i saken har flere ansettelser i søknadsperiodene:
+ *   [IngenTilgangÅrsak.HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER]
  *
- * | Regel | Årsak |
- * |---|---|
- * | Saken har perioder som selvstendig næringsdrivende | [IngenTilgangÅrsak.HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE] |
- * | Arbeidsgiver i saken har to ansettelser i samme uke med opphold | [IngenTilgangÅrsak.EN_ARBEIDSGIVER_TO_ANSETTELSER_SAMME_UKE_MED_OPPHOLD] |
- * | Arbeidsgiver som ikke er i saken har flere ansettelser i søknadsperiodene | [IngenTilgangÅrsak.HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER] |
- *
- * ## Feil
- *
- * Feil fra innsyn eller AA-reg går videre og gir 5xx. Vi bruker derfor ArbeidsgivereOppslagsService direkte
+ * **Feil** fra innsyn eller AA-reg går videre og gir 5xx. Vi bruker derfor ArbeidsgivereOppslagsService direkte
  * og ikke ArbeidsgiverService, som gjør feil om til en tom liste. En tom liste ville gitt tilgang på feil
  * grunnlag, fordi reglene om arbeidsgivere da aldri slår til.
  */

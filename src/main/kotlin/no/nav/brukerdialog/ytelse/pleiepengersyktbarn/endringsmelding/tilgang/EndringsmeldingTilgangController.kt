@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * Vurderer om innlogget bruker kan bruke endringsmeldingen for pleiepenger. Kalles av frontend ved oppstart.
+ * Vurderer om innlogget bruker kan bruke endringsmeldingen for pleiepenger.
  *
  * Tar ingen parametere. Saker og arbeidsgivere hentes på vegne av brukeren via TokenX, så bruker kan bare
  * få vurdert egne data.

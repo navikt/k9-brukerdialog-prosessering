@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 /**
- * Portert fra `vurderArbeidsforhold.test.ts` i frontend. Endringsperiode 2024-01-01/2024-12-31 (2024-01-01 er en mandag),
+ * Endringsperiode 2024-01-01/2024-12-31 (2024-01-01 er en mandag),
  * kjent orgnr 111, ukjent orgnr 999. Datoer uten år i testnavnene gjelder 2024.
  */
 class VurderArbeidsforholdTest {
@@ -22,7 +22,6 @@ class VurderArbeidsforholdTest {
 
     @Test
     fun `SN med perioder gir avslag uansett timetall`() {
-        // Timetallet finnes ikke i SakForTilgang. Både 7,5 t og 0 t gir harSelvstendigNæringsdrivendePerioder = true.
         assertEquals(
             listOf(HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE),
             vurderArbeidsforhold(standardSak(harSN = true), emptyList(), ENDRINGSPERIODE)

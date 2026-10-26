@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 /**
- * Portert fra `vurderSaker.test.ts` i frontend. Tilfellene med ugyldig format er utelatt,
- * fordi backend feiler hele oppslaget (5xx) når en sak ikke kan deserialiseres.
+ * Saker med ugyldig format testes ikke her, fordi hele oppslaget feiler (5xx) når en sak ikke kan
+ * deserialiseres.
  */
 class VurderSakerTest {
 

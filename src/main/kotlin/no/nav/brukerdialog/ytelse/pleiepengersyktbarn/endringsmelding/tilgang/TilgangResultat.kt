@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue
 /**
  * Respons fra GET /pleiepenger-sykt-barn/endringsmelding/tilgang.
  *
- * [årsaker] er tom når [kanBruke] er true. Rekkefølgen på årsakene er en del av kontrakten:
- * frontend viser melding for første årsak.
+ * [årsaker] er tom når [kanBruke] er true. Første årsak er hovedårsaken, så rekkefølgen er en del av
+ * kontrakten.
  */
 data class TilgangResultat(
     val kanBruke: Boolean,
@@ -22,8 +22,7 @@ data class TilgangResultat(
 }
 
 /**
- * [kode] er verdien i JSON-kontrakten og må være identisk med `IngenTilgangÅrsak` i frontend, som har egen
- * melding per verdi. Konstantnavnene følger Kotlin-konvensjonen og er ikke en del av kontrakten.
+ * [kode] er verdien i JSON-responsen og en del av kontrakten. Konstantnavnene er ikke det.
  */
 enum class IngenTilgangÅrsak(@get:JsonValue val kode: String) {
     HAR_INGEN_SAK("harIngenSak"),

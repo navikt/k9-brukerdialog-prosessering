@@ -6,11 +6,10 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.In
 import java.time.temporal.ChronoUnit
 
 /**
- * Vurderer arbeidsforholdene, etter arbeidsgiveroppslaget. Portert fra `tilgang/vurderArbeidsforhold.ts`
- * i frontend. Oversikt over alle reglene: [EndringsmeldingTilgangService].
+ * Vurderer arbeidsforholdene, etter arbeidsgiveroppslaget. Oversikt over alle reglene:
+ * [EndringsmeldingTilgangService].
  *
- * Alle reglene evalueres, og årsakene samles. Rekkefølgen er en del av kontrakten, fordi frontend viser
- * første årsak.
+ * Alle reglene evalueres, og årsakene samles i fast rekkefølge. Første årsak er hovedårsaken.
  *
  * Returnerer tom liste når bruker har tilgang.
  */
@@ -20,11 +19,9 @@ fun vurderArbeidsforhold(
     endringsperiode: Datoperiode,
 ): List<IngenTilgangÅrsak> {
     // En arbeidsgiver er kjent når orgnr finnes blant arbeidstakerne i saken. Kun orgnr sammenlignes.
-    // Portert fra `finnesArbeidsgiverIK9Sak` i `utils/k9SakUtils.ts`.
     val (kjente, ukjente) = arbeidsgivere.partition { it.organisasjonsnummer in sak.arbeidsgiverOrgnr }
 
     return buildList {
-        // Frilans blokkerer ikke, bare SN.
         if (sak.harSelvstendigNæringsdrivendePerioder) {
             add(HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE)
         }
@@ -53,15 +50,11 @@ private fun ArbeidsgiverForTilgang.harToAnsettelserSammeUkeMedOpphold(endringspe
 }
 
 /**
- * Portert fra `perioderSlutterOgStarterSammeUkeMedOpphold` i frontend.
- *
  * Gir true når det finnes et opphold på minst én dag mellom to perioder, og oppholdet starter og slutter
  * i samme isouke. Eksempel: ansatt man–tir, ikke ansatt ons, ansatt tor–fre.
  *
  * Perioder kan overlappe, og et opphold kan være dekket av en tidligere, lengre periode. Derfor
  * sammenlignes hver periode med `dekketTilOgMed` (seneste tom så langt), ikke med forrige periode.
- *
- * Sorterer selv, og endrer ikke lista den får inn.
  */
 fun perioderSlutterOgStarterSammeUkeMedOpphold(perioder: List<Datoperiode>): Boolean {
     val sortert = perioder.sortedBy { it.fom }

@@ -5,8 +5,7 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.Sa
 import java.time.LocalDate
 
 /**
- * Felles testdata for tilgangsreglene. Samme oppsett som testene i frontend:
- * endringsperiode 2024-01-01/2024-12-31 (2024-01-01 er en mandag) og standardsak med søknadsperiode januar 2024.
+ * Felles testdata for tilgangsreglene: endringsperiode 2024-01-01/2024-12-31 (2024-01-01 er en mandag) og standardsak med søknadsperiode januar 2024.
  */
 internal object TilgangTestUtils {
     internal val ENDRINGSPERIODE = periode("2024-01-01/2024-12-31")

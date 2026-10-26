@@ -6,10 +6,18 @@ import java.time.temporal.WeekFields
 /**
  * Lukket datoperiode der både [fom] og [tom] er inkludert.
  * Alle sammenligninger i tilgangskontrollen gjøres på dagsnivå, derfor LocalDate.
+ *
+ * Brukes for endringsperioden, søknadsperiodene i saken, oppslagsperioden mot AA-reg og ansettelser
+ * klippet til endringsperioden. Siden perioden alltid er gyldig og lukket, kan reglene sammenligne
+ * perioder uten null-sjekker.
+ *
+ * Egen type i stedet for k9-formatets Periode, som kan ha åpne ender, og for å holde reglene uavhengige
+ * av k9-format. Åpne perioder fra AA-reg modelleres som [Ansettelsesperiode] og gjøres om med
+ * [Ansettelsesperiode.fyllÅpneEnder] før de sammenlignes.
  */
 data class Datoperiode(val fom: LocalDate, val tom: LocalDate) {
     init {
-        // Fast melding uten datoer: meldinger fra exceptions havner i responsen via ExceptionHandler.
+        // Meldingen kan havne i feilresponsen via ExceptionHandler, så den inneholder ikke datoene.
         require(!tom.isBefore(fom)) { "Ugyldig datoperiode: tom er før fom." }
     }
 

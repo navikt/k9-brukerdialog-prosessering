@@ -83,19 +83,13 @@ class K9SakInnsynApiService(
     }
 
     /**
-     * Fanger feil når svaret ikke kan tolkes, for eksempel en sak som ikke kan deserialiseres til k9-format.
+     * Fanger feil når svaret ikke kan tolkes, for eksempel en sak som ikke kan deserialiseres til k9-format,
+     * og kaster samme feil som de andre @Recover-metodene.
      *
-     * NB: Gjelder også innsending av endringsmelding, som bruker denne klienten via InnsynService.
-     * For innsending feiler oppslaget fortsatt og gir 5xx, men nå med samme IllegalStateException og faste
-     * melding som de andre feilene her, i stedet for ExhaustedRetryException med årsakskjede.
+     * Logger bare unntakstypen. Jacksons feilmelding kan inneholde verdien som feilet, for eksempel et fnr.
      *
-     * Før denne fantes, fant ikke Spring Retry noen @Recover for feiltypen og kastet ExhaustedRetryException,
-     * som ble logget med hele årsakskjeden. Jacksons feilmelding kan inneholde verdien som feilet, for eksempel
-     * et fnr fra saken. Derfor logger vi bare unntakstypen, aldri meldingen eller årsakskjeden.
-     *
-     * Mer spesifikke typer (HttpServerErrorException, HttpClientErrorException, ResourceAccessException) arver
-     * fra RestClientException, men håndteres fortsatt av egne @Recover-metoder over. Spring Retry velger
-     * den mest spesifikke.
+     * Mer spesifikke undertyper av RestClientException håndteres av @Recover-metodene over, fordi Spring Retry
+     * velger den mest spesifikke.
      */
     @Recover
     private fun recover(error: RestClientException): List<K9SakInnsynSøknad> {
