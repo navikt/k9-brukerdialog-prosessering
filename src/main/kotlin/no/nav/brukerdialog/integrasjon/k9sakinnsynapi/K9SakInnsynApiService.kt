@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.ResourceAccessException
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.time.LocalDate
@@ -78,6 +79,30 @@ class K9SakInnsynApiService(
     @Recover
     private fun recover(error: ResourceAccessException): List<K9SakInnsynSøknad> {
         logger.error("{}", error.message)
+        throw søknadOpplysningerOppslafFeil
+    }
+
+    /**
+     * Fanger feil når svaret ikke kan tolkes, for eksempel en sak som ikke kan deserialiseres til k9-format.
+     *
+     * NB: Gjelder også innsending av endringsmelding, som bruker denne klienten via InnsynService.
+     * For innsending feiler oppslaget fortsatt og gir 5xx, men nå med samme IllegalStateException og faste
+     * melding som de andre feilene her, i stedet for ExhaustedRetryException med årsakskjede.
+     *
+     * Før denne fantes, fant ikke Spring Retry noen @Recover for feiltypen og kastet ExhaustedRetryException,
+     * som ble logget med hele årsakskjeden. Jacksons feilmelding kan inneholde verdien som feilet, for eksempel
+     * et fnr fra saken. Derfor logger vi bare unntakstypen, aldri meldingen eller årsakskjeden.
+     *
+     * Mer spesifikke typer (HttpServerErrorException, HttpClientErrorException, ResourceAccessException) arver
+     * fra RestClientException, men håndteres fortsatt av egne @Recover-metoder over. Spring Retry velger
+     * den mest spesifikke.
+     */
+    @Recover
+    private fun recover(error: RestClientException): List<K9SakInnsynSøknad> {
+        logger.error(
+            "Kunne ikke tolke svar fra k9-sak-innsyn-api ({}). Detaljer utelatt for å unngå personopplysninger i loggen.",
+            error::class.simpleName
+        )
         throw søknadOpplysningerOppslafFeil
     }
 }
