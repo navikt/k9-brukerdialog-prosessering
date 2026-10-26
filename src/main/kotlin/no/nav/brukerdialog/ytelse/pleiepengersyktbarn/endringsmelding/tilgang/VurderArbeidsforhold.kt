@@ -18,7 +18,8 @@ fun vurderArbeidsforhold(
     arbeidsgivere: List<ArbeidsgiverForTilgang>,
     endringsperiode: Datoperiode,
 ): List<IngenTilgangÅrsak> {
-    // En arbeidsgiver er kjent når orgnr finnes blant arbeidstakerne i saken. Kun orgnr sammenlignes.
+    // En arbeidsgiver er kjent når den er arbeidstaker i saken med minst én periode over 0 normaltimer.
+    // Andre regnes som ukjente, som i søknadsflyten. Se SakForTilgang.arbeidsgiverOrgnr.
     val (kjente, ukjente) = arbeidsgivere.partition { it.organisasjonsnummer in sak.arbeidsgiverOrgnr }
 
     return buildList {
