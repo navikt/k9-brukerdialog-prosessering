@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.ungdomsytelse.api.domene.soknad
 
-import io.swagger.v3.oas.annotations.media.Schema
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.validation.Valid
 import jakarta.validation.constraints.AssertTrue
 import org.hibernate.validator.constraints.UUID
@@ -17,7 +17,7 @@ data class Ungdomsytelsesøknad(
 
     val språk: String,
 
-    @Schema(hidden = true)
+    @JsonIgnore
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
     val startdato: LocalDate,

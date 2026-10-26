@@ -1,6 +1,7 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.søknad.api.domene
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnore
 import io.swagger.v3.oas.annotations.Hidden
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.Valid
@@ -54,8 +55,7 @@ data class PleiepengerSyktBarnSøknad(
     @Schema(hidden = true)
     val søknadId: String = UUID.randomUUID().toString(),
 
-    @Schema(hidden = true)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    @JsonIgnore
     val mottatt: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC),
 
     val språk: Språk,
