@@ -101,6 +101,15 @@ class SakForTilgangTest {
     }
 
     @Test
+    fun `SN uten perioder gir ikke SN-arbeidstid, som i frontend`() {
+        val arbeidstid = Arbeidstid().medSelvstendigNæringsdrivendeArbeidstidInfo(ArbeidstidInfo())
+
+        val sak = innsynSøknad(defaultK9FormatPSB(arbeidstid = arbeidstid)).tilSakForTilgang()
+
+        assertFalse(sak.harArbeidstidSomSelvstendigNæringsdrivende)
+    }
+
+    @Test
     fun `frilans gir ikke SN-arbeidstid`() {
         val arbeidstid = Arbeidstid().medFrilanserArbeidstid(arbeidstidInfo(Duration.ofMinutes(450)))
 
