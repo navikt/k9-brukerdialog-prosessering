@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.ResourceAccessException
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.time.LocalDate
@@ -78,6 +79,24 @@ class K9SakInnsynApiService(
     @Recover
     private fun recover(error: ResourceAccessException): List<K9SakInnsynSøknad> {
         logger.error("{}", error.message)
+        throw søknadOpplysningerOppslafFeil
+    }
+
+    /**
+     * Fanger feil når svaret ikke kan tolkes, for eksempel en sak som ikke kan deserialiseres til k9-format,
+     * og kaster samme feil som de andre @Recover-metodene.
+     *
+     * Logger bare unntakstypen. Jacksons feilmelding kan inneholde verdien som feilet, for eksempel et fnr.
+     *
+     * Mer spesifikke undertyper av RestClientException håndteres av @Recover-metodene over, fordi Spring Retry
+     * velger den mest spesifikke.
+     */
+    @Recover
+    private fun recover(error: RestClientException): List<K9SakInnsynSøknad> {
+        logger.error(
+            "Kunne ikke tolke svar fra k9-sak-innsyn-api ({}). Detaljer utelatt for å unngå personopplysninger i loggen.",
+            error::class.simpleName
+        )
         throw søknadOpplysningerOppslafFeil
     }
 }

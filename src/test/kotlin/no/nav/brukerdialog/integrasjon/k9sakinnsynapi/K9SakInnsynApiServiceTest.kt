@@ -18,11 +18,15 @@ import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenRespons
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenService
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.system.CapturedOutput
+import org.springframework.boot.test.system.OutputCaptureExtension
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
@@ -37,6 +41,7 @@ import java.time.LocalDate
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @Import(GcsStorageTestConfiguration::class)
+@ExtendWith(OutputCaptureExtension::class)
 class K9SakInnsynApiServiceTest {
 
     val k9SakInnsynApiObjectMapper = ObjectMapper().apply {
@@ -101,6 +106,26 @@ class K9SakInnsynApiServiceTest {
         val psbYtelse = result[0].søknad.getYtelse<PleiepengerSyktBarn>()
         assertThat(psbYtelse.søknadsperiodeList).hasSize(1)
         assertThat(psbYtelse.barn.personIdent.verdi).isEqualTo("02119970079")
+    }
+
+    @Test
+    fun `svar som ikke kan tolkes gir fast feilmelding uten verdien som feilet i loggen`(output: CapturedOutput) {
+        // Ugyldig verdi i et typet felt. Jacksons feilmelding ville ellers inneholdt verdien.
+        val ugyldigVerdi = "ugyldig-dato-${System.nanoTime()}"
+        wireMock.stubFor(
+            WireMock.get(WireMock.urlEqualTo("/soknad"))
+                .willReturn(
+                    WireMock.aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""[{"barn": {"fødselsdato": "$ugyldigVerdi"}, "søknad": {}}]""")
+                )
+        )
+
+        assertThatThrownBy { k9SakInnsynApiService.hentSøknadsopplysninger() }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage("Feilet med henting av k9 søknadsdata.")
+        assertThat(output.all).doesNotContain(ugyldigVerdi)
     }
 
     private fun defaultSøknad(): K9SakInnsynSøknad {
