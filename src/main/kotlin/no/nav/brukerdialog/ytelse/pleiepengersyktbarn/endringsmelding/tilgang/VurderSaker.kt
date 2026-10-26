@@ -30,6 +30,10 @@ fun vurderSaker(saker: List<SakForTilgang>, endringsperiode: Datoperiode): SakVu
 
     val sak = aktuelle.single()
 
+    // Saken kan ikke sendes inn uten barnets identitetsnummer. Det er en feil i dataene, ikke et avslag.
+    // Meldingen havner i svaret og loggen, og skal derfor ikke inneholde personopplysninger.
+    check(sak.barnHarIdentitetsnummer) { "Barnet i saken mangler identitetsnummer." }
+
     // En sak uten søknadsperioder er aldri eldre, se erEldreEnn. Derfor havner den her.
     val samletSøknadsperiode = sak.samletSøknadsperiode()
         ?: return SakVurdering.IngenTilgang(HAR_INGEN_PERIODER)

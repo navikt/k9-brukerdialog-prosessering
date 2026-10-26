@@ -3,6 +3,8 @@ package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang
 import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynSøknad
 import no.nav.brukerdialog.oppslag.arbeidsgiver.OrganisasjonOppslagDto
 import no.nav.k9.søknad.ytelse.psb.v1.PleiepengerSyktBarn
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
+import java.time.Duration
 
 /**
  * Det tilgangsreglene trenger fra en sak, og ikke noe mer.
@@ -16,10 +18,13 @@ data class SakForTilgang(
     /**
      * Orgnr for arbeidstakerne i saken. Arbeidstakere uten orgnr (privat arbeidsgiver, bare
      * norskIdentitetsnummer) er utelatt, og kan dermed aldri matche en arbeidsgiver fra AA-reg.
+     * Arbeidstakere uten normalarbeidstid over null er også utelatt, som i frontend.
      */
     val arbeidsgiverOrgnr: Set<String>,
     /** True når saken har minst én periode som selvstendig næringsdrivende, uansett timetall. */
     val harSelvstendigNæringsdrivendePerioder: Boolean,
+    /** Innsendingen finner saken via barnets identitetsnummer. Uten det kan ikke endringen sendes inn. */
+    val barnHarIdentitetsnummer: Boolean,
 )
 
 /** En arbeidsgiver fra AA-reg med alle ansettelsesperiodene for samme orgnr samlet. */
@@ -42,6 +47,7 @@ fun K9SakInnsynSøknad.tilSakForTilgang(): SakForTilgang {
             )
         },
         arbeidsgiverOrgnr = arbeidstid?.arbeidstakerList.orEmpty()
+            .filter { it.arbeidstidInfo.harNormalarbeidstid() }
             .mapNotNull { it.organisasjonsnummer?.verdi }
             .toSet(),
         harSelvstendigNæringsdrivendePerioder = arbeidstid?.selvstendigNæringsdrivendeArbeidstidInfo
@@ -49,8 +55,16 @@ fun K9SakInnsynSøknad.tilSakForTilgang(): SakForTilgang {
             ?.perioder
             .orEmpty()
             .isNotEmpty(),
+        barnHarIdentitetsnummer = !barn.identitetsnummer.isNullOrBlank(),
     )
 }
+
+/**
+ * Samme kriterium som harNormalarbeidstidIK9SakArbeidstidInfo i frontend: minst én periode med
+ * normalarbeidstid over null. Frontend fjerner andre arbeidstakere før tilgangen vurderes.
+ */
+private fun ArbeidstidInfo?.harNormalarbeidstid(): Boolean =
+    this?.perioder.orEmpty().values.any { (it.jobberNormaltTimerPerDag ?: Duration.ZERO) > Duration.ZERO }
 
 /**
  * AA-reg returnerer én rad per ansettelsesforhold når inkluderAlleAnsettelsesperioder = true.

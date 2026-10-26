@@ -16,7 +16,9 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.In
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.IngenTilgangÅrsak.HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.IngenTilgangÅrsak.HAR_INGEN_SAK
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9FormatPSB
+import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.felles.type.Periode
+import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
@@ -95,15 +97,42 @@ class EndringsmeldingTilgangServiceTest {
     }
 
     @Test
+    fun `arbeidstaker uten normalarbeidstid regnes som ukjent arbeidsgiver, som i frontend`() {
+        val arbeidstid = Arbeidstid().medArbeidstaker(
+            listOf(
+                Arbeidstaker()
+                    .medOrganisasjonsnummer(Organisasjonsnummer.of("999"))
+                    .medArbeidstidInfo(arbeidstidInfo(Duration.ZERO))
+            )
+        )
+        every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns
+            listOf(innsynSøknad("2024-01-01/2024-01-31", arbeidstid))
+        every { arbeidsgivereOppslagsService.hentArbeidsgivere(any(), any(), any(), any(), any()) } returns
+            arbeidsgivere(
+                OrganisasjonOppslagDto("999", null, LocalDate.parse("2024-01-01"), LocalDate.parse("2024-01-10")),
+                OrganisasjonOppslagDto("999", null, LocalDate.parse("2024-01-15"), LocalDate.parse("2024-01-20")),
+            )
+
+        assertEquals(
+            TilgangResultat.ingenTilgang(listOf(HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER)),
+            service.vurderTilgang()
+        )
+    }
+
+    @Test
+    fun `barn uten identitetsnummer i aktuell sak gir exception før arbeidsgivere hentes`() {
+        every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns
+            listOf(innsynSøknad("2024-01-01/2024-01-31", identitetsnummer = null))
+
+        assertThrows<IllegalStateException> { service.vurderTilgang() }
+        verify(exactly = 0) { arbeidsgivereOppslagsService.hentArbeidsgivere(any(), any(), any(), any(), any()) }
+        verify(exactly = 0) { metrikkService.registrerEndringsmeldingTilgangVurdering(any()) }
+    }
+
+    @Test
     fun `selvstendig næringsdrivende får ikke tilgang`() {
         val arbeidstid = Arbeidstid().medSelvstendigNæringsdrivendeArbeidstidInfo(
-            ArbeidstidInfo().medPerioder(
-                mapOf(
-                    Periode("2024-01-01/2024-01-31") to ArbeidstidPeriodeInfo()
-                        .medJobberNormaltTimerPerDag(Duration.ofMinutes(450))
-                        .medFaktiskArbeidTimerPerDag(Duration.ZERO)
-                )
-            )
+            arbeidstidInfo(Duration.ofMinutes(450))
         )
         every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns
             listOf(innsynSøknad("2024-01-01/2024-01-31", arbeidstid))
@@ -126,14 +155,27 @@ class EndringsmeldingTilgangServiceTest {
         verify(exactly = 0) { metrikkService.registrerEndringsmeldingTilgangVurdering(any()) }
     }
 
-    private fun innsynSøknad(søknadsperiode: String, arbeidstid: Arbeidstid = Arbeidstid()) = K9SakInnsynSøknad(
+    private fun innsynSøknad(
+        søknadsperiode: String,
+        arbeidstid: Arbeidstid = Arbeidstid(),
+        identitetsnummer: String? = "02119970079",
+    ) = K9SakInnsynSøknad(
         barn = Barn(
             fødselsdato = LocalDate.parse("2020-01-01"),
             fornavn = "BARN",
             etternavn = "BARNESEN",
             aktørId = "1000000000001",
+            identitetsnummer = identitetsnummer,
         ),
         søknad = defaultK9FormatPSB(søknadsPeriode = listOf(Periode(søknadsperiode)), arbeidstid = arbeidstid),
+    )
+
+    private fun arbeidstidInfo(jobberNormaltTimerPerDag: Duration) = ArbeidstidInfo().medPerioder(
+        mapOf(
+            Periode("2024-01-01/2024-01-31") to ArbeidstidPeriodeInfo()
+                .medJobberNormaltTimerPerDag(jobberNormaltTimerPerDag)
+                .medFaktiskArbeidTimerPerDag(Duration.ZERO)
+        )
     )
 
     private fun arbeidsgivere(vararg organisasjoner: OrganisasjonOppslagDto) = ArbeidsgivereOppslagResponsDto(

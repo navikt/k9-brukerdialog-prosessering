@@ -26,7 +26,8 @@ import java.time.LocalDate
  * - Saken har ingen søknadsperioder: [IngenTilgangÅrsak.HAR_INGEN_PERIODER]
  * - Saken ligger etter tillatt endringsperiode: [IngenTilgangÅrsak.SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE]
  *
- * Ved tilgang gir den saken og oppslagsperioden som arbeidsgiverne hentes for.
+ * Ved tilgang gir den saken og oppslagsperioden som arbeidsgiverne hentes for. Mangler barnets
+ * identitetsnummer i den aktuelle saken, kastes en feil (5xx), fordi saken da ikke kan sendes inn.
  *
  * **Vurder arbeidsforhold** ([vurderArbeidsforhold]) evaluerer alle reglene og samler årsakene i denne
  * rekkefølgen. Første årsak regnes som hovedårsak og registreres i metrikken.

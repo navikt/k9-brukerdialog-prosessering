@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.NullAndEmptySource
 import org.junit.jupiter.params.provider.ValueSource
 import java.time.Duration
 import java.time.LocalDate
@@ -31,6 +32,7 @@ class SakForTilgangTest {
                 søknadsperioder = listOf(Datoperiode(LocalDate.parse("2021-01-01"), LocalDate.parse("2021-01-01"))),
                 arbeidsgiverOrgnr = setOf("926032925"),
                 harSelvstendigNæringsdrivendePerioder = false,
+                barnHarIdentitetsnummer = true,
             ),
             sak
         )
@@ -49,6 +51,33 @@ class SakForTilgangTest {
         val sak = innsynSøknad(defaultK9FormatPSB(arbeidstid = arbeidstid)).tilSakForTilgang()
 
         assertEquals(emptySet<String>(), sak.arbeidsgiverOrgnr)
+    }
+
+    @Test
+    fun `arbeidstaker uten normalarbeidstid over null utelates`() {
+        val arbeidstid = Arbeidstid().medArbeidstaker(
+            listOf(
+                Arbeidstaker()
+                    .medOrganisasjonsnummer(Organisasjonsnummer.of("111111111"))
+                    .medArbeidstidInfo(arbeidstidInfo(Duration.ZERO)),
+                Arbeidstaker()
+                    .medOrganisasjonsnummer(Organisasjonsnummer.of("222222222"))
+                    .medArbeidstidInfo(arbeidstidInfo(Duration.ofHours(8))),
+            )
+        )
+
+        val sak = innsynSøknad(defaultK9FormatPSB(arbeidstid = arbeidstid)).tilSakForTilgang()
+
+        assertEquals(setOf("222222222"), sak.arbeidsgiverOrgnr)
+    }
+
+    @ParameterizedTest(name = "identitetsnummer=[{0}]")
+    @NullAndEmptySource
+    @ValueSource(strings = [" "])
+    fun `barn uten identitetsnummer mappes til barnHarIdentitetsnummer false`(identitetsnummer: String?) {
+        val sak = innsynSøknad(defaultK9FormatPSB(), identitetsnummer = identitetsnummer).tilSakForTilgang()
+
+        assertFalse(sak.barnHarIdentitetsnummer)
     }
 
     @ParameterizedTest(name = "{0}")
@@ -95,12 +124,16 @@ class SakForTilgangTest {
         )
     }
 
-    private fun innsynSøknad(søknad: no.nav.k9.søknad.Søknad) = K9SakInnsynSøknad(
+    private fun innsynSøknad(
+        søknad: no.nav.k9.søknad.Søknad,
+        identitetsnummer: String? = "02119970079",
+    ) = K9SakInnsynSøknad(
         barn = Barn(
             fødselsdato = LocalDate.parse("2020-01-01"),
             fornavn = "BARN",
             etternavn = "BARNESEN",
             aktørId = "1000000000001",
+            identitetsnummer = identitetsnummer,
         ),
         søknad = søknad,
     )

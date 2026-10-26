@@ -20,10 +20,12 @@ internal object TilgangTestUtils {
         vararg søknadsperioder: String,
         orgnr: Set<String> = emptySet(),
         harSN: Boolean = false,
+        barnHarIdentitetsnummer: Boolean = true,
     ) = SakForTilgang(
         søknadsperioder = søknadsperioder.map { periode(it) },
         arbeidsgiverOrgnr = orgnr,
         harSelvstendigNæringsdrivendePerioder = harSN,
+        barnHarIdentitetsnummer = barnHarIdentitetsnummer,
     )
 
     internal fun standardSak(orgnr: Set<String> = emptySet(), harSN: Boolean = false) =

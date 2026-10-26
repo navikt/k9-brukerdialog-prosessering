@@ -10,6 +10,7 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.utils.Tilg
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.utils.TilgangTestUtils.standardSak
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 /**
  * Saker med ugyldig format testes ikke her, fordi hele oppslaget feiler (5xx) når en sak ikke kan
@@ -115,6 +116,38 @@ class VurderSakerTest {
         assertEquals(
             SakVurdering.Tilgang(sak, periode("2024-01-01/2024-01-31")),
             vurderSaker(listOf(sak), ENDRINGSPERIODE)
+        )
+    }
+
+    @Test
+    fun `aktuell sak uten barnets identitetsnummer gir feil uten personopplysninger`() {
+        val sak = sak("2024-01-01/2024-01-31", barnHarIdentitetsnummer = false)
+
+        val feil = assertThrows<IllegalStateException> { vurderSaker(listOf(sak), ENDRINGSPERIODE) }
+
+        assertEquals("Barnet i saken mangler identitetsnummer.", feil.message)
+    }
+
+    @Test
+    fun `eldre sak uten barnets identitetsnummer påvirker ikke vurderingen`() {
+        val aktuell = standardSak()
+        assertEquals(
+            SakVurdering.Tilgang(aktuell, periode("2024-01-01/2024-01-31")),
+            vurderSaker(
+                listOf(aktuell, sak("2020-01-01/2020-01-31", barnHarIdentitetsnummer = false)),
+                ENDRINGSPERIODE
+            )
+        )
+    }
+
+    @Test
+    fun `flere aktuelle saker gir harMerEnnEnSak selv om en mangler barnets identitetsnummer`() {
+        assertEquals(
+            SakVurdering.IngenTilgang(HAR_MER_ENN_EN_SAK),
+            vurderSaker(
+                listOf(standardSak(), sak("2024-01-01/2024-01-31", barnHarIdentitetsnummer = false)),
+                ENDRINGSPERIODE
+            )
         )
     }
 }
