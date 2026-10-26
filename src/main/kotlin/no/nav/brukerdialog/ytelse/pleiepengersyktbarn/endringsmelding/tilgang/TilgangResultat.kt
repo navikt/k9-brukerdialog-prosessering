@@ -1,5 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonValue
 
 /**
@@ -10,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonValue
  */
 data class TilgangResultat(
     val kanBruke: Boolean,
+    // Uten eksplisitt navn utleder springdoc «getårsaker» fra getteren getÅrsaker().
+    @get:JsonProperty("årsaker")
     val årsaker: List<IngenTilgangÅrsak>,
 ) {
     companion object {

@@ -108,7 +108,11 @@ class SwaggerConfiguration {
         return GroupedOpenApi.builder()
             .group("pleiepenger-sykt-barn-endringsmelding")
             .displayName("Pleiepenger Sykt Barn Endringsmelding API")
-            .packagesToScan("no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api", *FELLES_PAKKER)
+            .packagesToScan(
+                "no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.api",
+                "no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang",
+                *FELLES_PAKKER
+            )
             .build()
     }
 
