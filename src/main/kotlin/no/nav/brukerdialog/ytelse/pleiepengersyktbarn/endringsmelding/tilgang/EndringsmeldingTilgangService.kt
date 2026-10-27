@@ -1,6 +1,6 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang
 
-import net.logstash.logback.argument.StructuredArguments.kv
+import net.logstash.logback.argument.StructuredArguments.entries
 import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynApiService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.ArbeidsgivereOppslagsService
 import org.slf4j.Logger
@@ -65,13 +65,13 @@ class EndringsmeldingTilgangService(
             }
         }
 
-        // Feltene blir egne JSON-felt i loggen, slik at vurderingene kan telles per årsak i Kibana.
-        logger.info(
-            "Vurderte tilgang til endringsmelding. {}, {}, {}",
-            kv("hendelse", "endringsmelding_tilgang_vurdert"),
-            kv("kan_bruke", resultat.kanBruke),
-            kv("forste_aarsak", resultat.årsaker.firstOrNull()?.kode ?: "tilgang"),
-        )
+        // Feltene blir egne JSON-felt i loggen, slik at vurderingene kan telles per årsak i Grafana og Kibana.
+        val felter = buildMap<String, Any> {
+            put("hendelse", "endringsmelding_tilgang_vurdert")
+            put("kan_bruke", resultat.kanBruke)
+            resultat.årsaker.firstOrNull()?.let { put("forste_aarsak", it.kode) }
+        }
+        logger.info("Vurderte tilgang til endringsmelding. {}", entries(felter))
         return resultat
     }
 
