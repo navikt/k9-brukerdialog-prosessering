@@ -8,7 +8,6 @@ import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.Barn
 import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynApiService
 import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynSøknad
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.ArbeidsgivereOppslagsService
-import no.nav.brukerdialog.metrikk.MetrikkService
 import no.nav.brukerdialog.oppslag.arbeidsgiver.ArbeidsgivereOppslagDto
 import no.nav.brukerdialog.oppslag.arbeidsgiver.ArbeidsgivereOppslagResponsDto
 import no.nav.brukerdialog.oppslag.arbeidsgiver.OrganisasjonOppslagDto
@@ -35,7 +34,6 @@ class EndringsmeldingTilgangServiceTest {
 
     private val k9SakInnsynApiService = mockk<K9SakInnsynApiService>()
     private val arbeidsgivereOppslagsService = mockk<ArbeidsgivereOppslagsService>()
-    private val metrikkService = mockk<MetrikkService>(relaxed = true)
 
     // I dag = 2024-03-15 gir endringsperiode 2023-12-01/2025-03-31.
     private val clock = Clock.fixed(
@@ -44,7 +42,7 @@ class EndringsmeldingTilgangServiceTest {
     )
 
     private val service = EndringsmeldingTilgangService(
-        k9SakInnsynApiService, arbeidsgivereOppslagsService, metrikkService, clock
+        k9SakInnsynApiService, arbeidsgivereOppslagsService, clock
     )
 
     @BeforeEach
@@ -59,7 +57,6 @@ class EndringsmeldingTilgangServiceTest {
 
         assertEquals(TilgangResultat.ingenTilgang(listOf(HAR_INGEN_SAK)), service.vurderTilgang())
         verify(exactly = 0) { arbeidsgivereOppslagsService.hentArbeidsgivere(any(), any(), any(), any(), any()) }
-        verify { metrikkService.registrerEndringsmeldingTilgangVurdering(HAR_INGEN_SAK) }
     }
 
     @Test
@@ -77,7 +74,6 @@ class EndringsmeldingTilgangServiceTest {
                 skalHenteFrilansoppdrag = false,
             )
         }
-        verify { metrikkService.registrerEndringsmeldingTilgangVurdering(null) }
     }
 
     @Test
@@ -126,7 +122,6 @@ class EndringsmeldingTilgangServiceTest {
 
         assertThrows<IllegalStateException> { service.vurderTilgang() }
         verify(exactly = 0) { arbeidsgivereOppslagsService.hentArbeidsgivere(any(), any(), any(), any(), any()) }
-        verify(exactly = 0) { metrikkService.registrerEndringsmeldingTilgangVurdering(any()) }
     }
 
     @Test
@@ -141,7 +136,6 @@ class EndringsmeldingTilgangServiceTest {
             TilgangResultat.ingenTilgang(listOf(HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE)),
             service.vurderTilgang()
         )
-        verify { metrikkService.registrerEndringsmeldingTilgangVurdering(HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE) }
     }
 
     @Test
@@ -151,7 +145,6 @@ class EndringsmeldingTilgangServiceTest {
             listOf(innsynSøknad("2024-01-01/2024-01-31", arbeidstid))
 
         assertEquals(TilgangResultat.tilgang(), service.vurderTilgang())
-        verify { metrikkService.registrerEndringsmeldingTilgangVurdering(null) }
     }
 
     @Test
@@ -162,7 +155,6 @@ class EndringsmeldingTilgangServiceTest {
             IllegalStateException("Feil ved henting av arbeidsgivere")
 
         assertThrows<IllegalStateException> { service.vurderTilgang() }
-        verify(exactly = 0) { metrikkService.registrerEndringsmeldingTilgangVurdering(any()) }
     }
 
     private fun innsynSøknad(

@@ -1,8 +1,8 @@
 package no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang
 
+import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.brukerdialog.integrasjon.k9sakinnsynapi.K9SakInnsynApiService
 import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.ArbeidsgivereOppslagsService
-import no.nav.brukerdialog.metrikk.MetrikkService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -30,7 +30,7 @@ import java.time.LocalDate
  * identitetsnummer i den aktuelle saken, kastes en feil (5xx), fordi saken da ikke kan sendes inn.
  *
  * **Vurder arbeidsforhold** ([vurderArbeidsforhold]) evaluerer alle reglene og samler årsakene i denne
- * rekkefølgen. Første årsak regnes som hovedårsak og registreres i metrikken.
+ * rekkefølgen. Første årsak regnes som hovedårsak og logges i eget felt.
  * - Saken har perioder som selvstendig næringsdrivende med normalarbeidstid over null:
  *   [IngenTilgangÅrsak.HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE]
  * - Arbeidsgiver i saken har to ansettelser i samme uke med opphold:
@@ -46,7 +46,6 @@ import java.time.LocalDate
 class EndringsmeldingTilgangService(
     private val k9SakInnsynApiService: K9SakInnsynApiService,
     private val arbeidsgivereOppslagsService: ArbeidsgivereOppslagsService,
-    private val metrikkService: MetrikkService,
     private val clock: Clock,
 ) {
     private companion object {
@@ -66,12 +65,14 @@ class EndringsmeldingTilgangService(
             }
         }
 
+        // Feltene blir egne JSON-felt i loggen, slik at vurderingene kan telles per årsak i Kibana.
         logger.info(
-            "Vurderte tilgang til endringsmelding. kanBruke={}, årsaker={}",
-            resultat.kanBruke,
-            resultat.årsaker.map { it.kode }
+            "Vurderte tilgang til endringsmelding. {}, {}, {}, {}",
+            kv("hendelse", "endringsmelding_tilgang_vurdert"),
+            kv("kan_bruke", resultat.kanBruke),
+            kv("forste_aarsak", resultat.årsaker.firstOrNull()?.kode ?: "tilgang"),
+            kv("aarsaker", resultat.årsaker.map { it.kode }),
         )
-        metrikkService.registrerEndringsmeldingTilgangVurdering(resultat.årsaker.firstOrNull())
         return resultat
     }
 
