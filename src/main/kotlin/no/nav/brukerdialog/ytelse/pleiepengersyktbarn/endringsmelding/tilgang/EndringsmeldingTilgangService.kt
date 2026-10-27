@@ -67,11 +67,10 @@ class EndringsmeldingTilgangService(
 
         // Feltene blir egne JSON-felt i loggen, slik at vurderingene kan telles per årsak i Kibana.
         logger.info(
-            "Vurderte tilgang til endringsmelding. {}, {}, {}, {}",
+            "Vurderte tilgang til endringsmelding. {}, {}, {}",
             kv("hendelse", "endringsmelding_tilgang_vurdert"),
             kv("kan_bruke", resultat.kanBruke),
             kv("forste_aarsak", resultat.årsaker.firstOrNull()?.kode ?: "tilgang"),
-            kv("aarsaker", resultat.årsaker.map { it.kode }),
         )
         return resultat
     }
