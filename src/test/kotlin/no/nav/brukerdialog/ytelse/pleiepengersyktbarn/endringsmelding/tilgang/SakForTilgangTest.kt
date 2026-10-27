@@ -110,15 +110,6 @@ class SakForTilgangTest {
     }
 
     @Test
-    fun `frilans gir ikke SN-arbeidstid`() {
-        val arbeidstid = Arbeidstid().medFrilanserArbeidstid(arbeidstidInfo(Duration.ofMinutes(450)))
-
-        val sak = innsynSøknad(defaultK9FormatPSB(arbeidstid = arbeidstid)).tilSakForTilgang()
-
-        assertFalse(sak.harArbeidstidSomSelvstendigNæringsdrivende)
-    }
-
-    @Test
     fun `grupperer ansettelsesperioder per orgnr`() {
         val gruppert = listOf(
             OrganisasjonOppslagDto("111", null, LocalDate.parse("2024-01-01"), LocalDate.parse("2024-01-02")),

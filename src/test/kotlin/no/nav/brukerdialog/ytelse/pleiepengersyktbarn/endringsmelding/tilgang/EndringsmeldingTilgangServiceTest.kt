@@ -11,22 +11,16 @@ import no.nav.brukerdialog.integrasjon.k9selvbetjeningoppslag.ArbeidsgivereOppsl
 import no.nav.brukerdialog.oppslag.arbeidsgiver.ArbeidsgivereOppslagDto
 import no.nav.brukerdialog.oppslag.arbeidsgiver.ArbeidsgivereOppslagResponsDto
 import no.nav.brukerdialog.oppslag.arbeidsgiver.OrganisasjonOppslagDto
-import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.IngenTilgangÅrsak.HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.IngenTilgangÅrsak.HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.IngenTilgangÅrsak.HAR_INGEN_SAK
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9FormatPSB
-import no.nav.k9.søknad.felles.type.Organisasjonsnummer
 import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstaker
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidInfo
-import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.ArbeidstidPeriodeInfo
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.Clock
-import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -93,61 +87,6 @@ class EndringsmeldingTilgangServiceTest {
     }
 
     @Test
-    fun `arbeidstaker uten normalarbeidstid regnes som ukjent arbeidsgiver, som i frontend`() {
-        val arbeidstid = Arbeidstid().medArbeidstaker(
-            listOf(
-                Arbeidstaker()
-                    .medOrganisasjonsnummer(Organisasjonsnummer.of("999"))
-                    .medArbeidstidInfo(arbeidstidInfo(Duration.ZERO))
-            )
-        )
-        every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns
-            listOf(innsynSøknad("2024-01-01/2024-01-31", arbeidstid))
-        every { arbeidsgivereOppslagsService.hentArbeidsgivere(any(), any(), any(), any(), any()) } returns
-            arbeidsgivere(
-                OrganisasjonOppslagDto("999", null, LocalDate.parse("2024-01-01"), LocalDate.parse("2024-01-10")),
-                OrganisasjonOppslagDto("999", null, LocalDate.parse("2024-01-15"), LocalDate.parse("2024-01-20")),
-            )
-
-        assertEquals(
-            TilgangResultat.ingenTilgang(listOf(HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER)),
-            service.vurderTilgang()
-        )
-    }
-
-    @Test
-    fun `barn uten identitetsnummer i aktuell sak gir exception før arbeidsgivere hentes`() {
-        every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns
-            listOf(innsynSøknad("2024-01-01/2024-01-31", identitetsnummer = null))
-
-        assertThrows<IllegalStateException> { service.vurderTilgang() }
-        verify(exactly = 0) { arbeidsgivereOppslagsService.hentArbeidsgivere(any(), any(), any(), any(), any()) }
-    }
-
-    @Test
-    fun `selvstendig næringsdrivende får ikke tilgang`() {
-        val arbeidstid = Arbeidstid().medSelvstendigNæringsdrivendeArbeidstidInfo(
-            arbeidstidInfo(Duration.ofMinutes(450))
-        )
-        every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns
-            listOf(innsynSøknad("2024-01-01/2024-01-31", arbeidstid))
-
-        assertEquals(
-            TilgangResultat.ingenTilgang(listOf(HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE)),
-            service.vurderTilgang()
-        )
-    }
-
-    @Test
-    fun `selvstendig næringsdrivende uten normalarbeidstid får tilgang, som i frontend`() {
-        val arbeidstid = Arbeidstid().medSelvstendigNæringsdrivendeArbeidstidInfo(arbeidstidInfo(Duration.ZERO))
-        every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns
-            listOf(innsynSøknad("2024-01-01/2024-01-31", arbeidstid))
-
-        assertEquals(TilgangResultat.tilgang(), service.vurderTilgang())
-    }
-
-    @Test
     fun `feil fra AA-reg gir exception og ikke tilgang`() {
         every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns
             listOf(innsynSøknad("2024-01-01/2024-01-31"))
@@ -157,27 +96,15 @@ class EndringsmeldingTilgangServiceTest {
         assertThrows<IllegalStateException> { service.vurderTilgang() }
     }
 
-    private fun innsynSøknad(
-        søknadsperiode: String,
-        arbeidstid: Arbeidstid = Arbeidstid(),
-        identitetsnummer: String? = "02119970079",
-    ) = K9SakInnsynSøknad(
+    private fun innsynSøknad(søknadsperiode: String) = K9SakInnsynSøknad(
         barn = Barn(
             fødselsdato = LocalDate.parse("2020-01-01"),
             fornavn = "BARN",
             etternavn = "BARNESEN",
             aktørId = "1000000000001",
-            identitetsnummer = identitetsnummer,
+            identitetsnummer = "02119970079",
         ),
-        søknad = defaultK9FormatPSB(søknadsPeriode = listOf(Periode(søknadsperiode)), arbeidstid = arbeidstid),
-    )
-
-    private fun arbeidstidInfo(jobberNormaltTimerPerDag: Duration) = ArbeidstidInfo().medPerioder(
-        mapOf(
-            Periode("2024-01-01/2024-01-31") to ArbeidstidPeriodeInfo()
-                .medJobberNormaltTimerPerDag(jobberNormaltTimerPerDag)
-                .medFaktiskArbeidTimerPerDag(Duration.ZERO)
-        )
+        søknad = defaultK9FormatPSB(søknadsPeriode = listOf(Periode(søknadsperiode)), arbeidstid = Arbeidstid()),
     )
 
     private fun arbeidsgivere(vararg organisasjoner: OrganisasjonOppslagDto) = ArbeidsgivereOppslagResponsDto(

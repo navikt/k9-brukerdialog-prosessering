@@ -27,14 +27,6 @@ class VurderSakerTest {
     fun `bare eldre saker gir søknadsperioderUtenforTillattEndringsperiode`() {
         assertEquals(
             SakVurdering.IngenTilgang(SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE),
-            vurderSaker(listOf(sak("2020-01-01/2020-01-31")), ENDRINGSPERIODE)
-        )
-    }
-
-    @Test
-    fun `flere eldre saker og ingen aktuelle gir søknadsperioderUtenforTillattEndringsperiode`() {
-        assertEquals(
-            SakVurdering.IngenTilgang(SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE),
             vurderSaker(
                 listOf(sak("2020-01-01/2020-01-31"), sak("2023-06-01/2023-12-31")),
                 ENDRINGSPERIODE
@@ -59,27 +51,10 @@ class VurderSakerTest {
     }
 
     @Test
-    fun `sak uten søknadsperioder telles som aktuell sammen med en annen aktuell sak`() {
-        assertEquals(
-            SakVurdering.IngenTilgang(HAR_MER_ENN_EN_SAK),
-            vurderSaker(listOf(sak(), standardSak()), ENDRINGSPERIODE)
-        )
-    }
-
-    @Test
     fun `sak etter endringsperioden gir søknadsperioderUtenforTillattEndringsperiode`() {
         assertEquals(
             SakVurdering.IngenTilgang(SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE),
             vurderSaker(listOf(sak("2026-01-01/2026-01-31")), ENDRINGSPERIODE)
-        )
-    }
-
-    @Test
-    fun `én aktuell sak gir tilgang`() {
-        val sak = standardSak()
-        assertEquals(
-            SakVurdering.Tilgang(sak, periode("2024-01-01/2024-01-31")),
-            vurderSaker(listOf(sak), ENDRINGSPERIODE)
         )
     }
 

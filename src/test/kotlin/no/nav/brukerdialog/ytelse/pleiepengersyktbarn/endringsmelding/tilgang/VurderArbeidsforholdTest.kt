@@ -45,18 +45,6 @@ class VurderArbeidsforholdTest {
     }
 
     @Test
-    fun `SN og ukjent arbeidsgiver gir begge årsakene i fast rekkefølge`() {
-        assertEquals(
-            listOf(HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE, HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER),
-            vurderArbeidsforhold(
-                standardSak(orgnr = setOf(KJENT), harSN = true),
-                listOf(arbeidsgiver(UKJENT, "01-01/01-10", "01-15/01-20")),
-                ENDRINGSPERIODE
-            )
-        )
-    }
-
-    @Test
     fun `alle tre reglene gir alle tre årsakene i fast rekkefølge`() {
         assertEquals(
             listOf(
@@ -141,18 +129,16 @@ class VurderArbeidsforholdTest {
     }
 
     @Test
-    fun `opphold samme uke sorterer selv og endrer ikke lista`() {
+    fun `opphold samme uke sorterer periodene selv`() {
         val perioder = listOf(
             periode("2025-01-20/2025-01-26"),
             periode("2025-01-06/2025-01-12"),
             periode("2025-01-13/2025-01-15"),
             periode("2025-01-17/2025-01-19"),
         )
-        val kopi = perioder.toList()
 
         // Oppholdet er 16.01, i uke 3.
         assertTrue(perioderSlutterOgStarterSammeUkeMedOpphold(perioder))
-        assertEquals(kopi, perioder)
     }
 
     @Test

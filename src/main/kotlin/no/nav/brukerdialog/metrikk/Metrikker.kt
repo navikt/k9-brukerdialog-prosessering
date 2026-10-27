@@ -6,7 +6,7 @@ import no.nav.brukerdialog.ytelse.Ytelse
 import org.springframework.stereotype.Service
 
 @Service
-class MetrikkService(private val meterRegistry: MeterRegistry) {
+class MetrikkService(meterRegistry: MeterRegistry) {
 
     private val antallMottatteSøknaderPerYtelseCounter = Counter.builder("antall_mottatte_soknader_per_ytelse_counter")
         .description("Teller antall mottatte innsendinger per ytelse")
