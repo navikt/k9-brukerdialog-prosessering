@@ -31,7 +31,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "6.0.14"
+val tokenSupportVersion = "7.0.1"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "14.1.2"
 val ungDeltakelseOpplyserVersjon = "2.12.0"
