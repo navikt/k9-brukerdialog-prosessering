@@ -31,7 +31,7 @@ fun vurderArbeidsforhold(
             add(EN_ARBEIDSGIVER_TO_ANSETTELSER_SAMME_UKE_MED_OPPHOLD)
         }
 
-        val søknadsperioderIEndringsperioden = sak.søknadsperioder.mapNotNull { it.snitt(endringsperiode) }
+        val søknadsperioderIEndringsperioden = sak.søknadsperioder.mapNotNull { it.fellesPeriode(endringsperiode) }
         if (ukjente.any { it.harFlereAnsettelserIPerioder(søknadsperioderIEndringsperioden) }) {
             add(HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER)
         }
@@ -45,7 +45,7 @@ private fun ArbeidsgiverForTilgang.harToAnsettelserSammeUkeMedOpphold(endringspe
     val perioderIEndringsperioden = ansettelsesperioder
         .mapNotNull { it.fyllÅpneEnder(endringsperiode) }
         // Behold bare perioder som overlapper endringsperioden, og klipp dem til den.
-        .mapNotNull { it.snitt(endringsperiode) }
+        .mapNotNull { it.fellesPeriode(endringsperiode) }
 
     return perioderSlutterOgStarterSammeUkeMedOpphold(perioderIEndringsperioden)
 }

@@ -7,7 +7,7 @@ import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.In
 
 sealed interface SakVurdering {
     /**
-     * @param oppslagsperiode snittet av samlet søknadsperiode og endringsperioden. Arbeidsgiverne hentes
+     * @param oppslagsperiode overlappet mellom samlet søknadsperiode og endringsperioden. Arbeidsgiverne hentes
      * for denne perioden.
      */
     data class Tilgang(val sak: SakForTilgang, val oppslagsperiode: Datoperiode) : SakVurdering
@@ -38,8 +38,8 @@ fun vurderSaker(saker: List<SakForTilgang>, endringsperiode: Datoperiode): SakVu
     val samletSøknadsperiode = sak.samletSøknadsperiode()
         ?: return SakVurdering.IngenTilgang(HAR_INGEN_PERIODER)
 
-    // Saken er ikke eldre, så et tomt snitt betyr at den starter etter endringsperioden.
-    val oppslagsperiode = samletSøknadsperiode.snitt(endringsperiode)
+    // Saken er ikke eldre, så manglende overlapp betyr at den starter etter endringsperioden.
+    val oppslagsperiode = samletSøknadsperiode.fellesPeriode(endringsperiode)
         ?: return SakVurdering.IngenTilgang(SØKNADSPERIODER_UTENFOR_TILLATT_ENDRINGSPERIODE)
 
     return SakVurdering.Tilgang(sak = sak, oppslagsperiode = oppslagsperiode)
