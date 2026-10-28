@@ -33,12 +33,12 @@ internal class SerDesTest {
     @Test
     fun `Test reserialisering av request`() {
         val søknadId = UUID.randomUUID().toString()
-        val mottatt = ZonedDateTime.parse("2021-01-10T03:04:05.000Z", zonedDateTimeFormatter)
-        val søknad = SøknadUtils.defaultSøknad(søknadId).copy(mottatt = mottatt)
-        val søknadJson = søknadJson(søknadId, mottatt.toString())
+        val søknad = SøknadUtils.defaultSøknad(søknadId)
+        val søknadJson = søknadJson(søknadId)
         val serialisertJson = søknad.somJson()
         JSONAssert.assertEquals(søknadJson, serialisertJson, true)
-        assertEquals(søknad, objectMapper.readValue<PleiepengerSyktBarnSøknad>(søknadJson))
+        val deserialisert = objectMapper.readValue<PleiepengerSyktBarnSøknad>(søknadJson)
+        assertEquals(søknad, deserialisert.copy(mottatt = søknad.mottatt))
     }
 
     @Test
@@ -55,14 +55,13 @@ internal class SerDesTest {
     private companion object {
         fun PleiepengerSyktBarnSøknad.somJson(): String = objectMapper.writeValueAsString(this)
         fun KomplettPleiepengerSyktBarnSøknad.somJson(): String = objectMapper.writeValueAsString(this)
-        fun søknadJson(søknadsId: String, mottatt: String) =
+        fun søknadJson(søknadsId: String) =
             //language=json
             """
             {
               "newVersion": null,
               "apiDataVersjon": "1.0.0",
               "søknadId": "$søknadsId",
-              "mottatt": "$mottatt",
               "språk": "nb",
               "søkerNorskIdent": null,
               "barn": {

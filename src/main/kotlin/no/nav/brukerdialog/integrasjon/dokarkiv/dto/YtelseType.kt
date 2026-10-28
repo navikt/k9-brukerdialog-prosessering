@@ -185,22 +185,21 @@ enum class YtelseType(
     AKTIVITETSPENGER_VARSEL_UTTALELSE(
         brevkode = BrevKode(brevKode = "FIXME_AVP_VARSEL_BREVKODE", dokumentKategori = "SOK"),
         tittel = "Uttalelse på forhåndsvarsel - NAV Aktivitetspenger",
-        tema = Tema.UNGDOMSYTELSE,
+        tema = Tema.AKTIVITETSPENGER,
         innsendingstype = Innsendingstype.ENDRING
     ),
-
 
     AKTIVITETSPENGER_SØKNAD(
         brevkode = BrevKode(brevKode = "NAV 25-13.01", dokumentKategori = "SOK"),
         tittel = "Søknad om aktivitetspenger - NAV 25-13.01",
-        tema = Tema.UNGDOMSYTELSE,
+        tema = Tema.AKTIVITETSPENGER,
         innsendingstype = Innsendingstype.SØKNAD
     ),
 
     AKTIVITETSPENGER_INNTEKTRAPPORTERING(
         brevkode = BrevKode(brevKode = "FIXME_AVP_INNTEKT_BREVKODE", dokumentKategori = "SOK"),
         tittel = "Rapportering av inntekt - NAV Aktivitetspenger",
-        tema = Tema.UNGDOMSYTELSE,
+        tema = Tema.AKTIVITETSPENGER,
         innsendingstype = Innsendingstype.SØKNAD
     ),
     ;
