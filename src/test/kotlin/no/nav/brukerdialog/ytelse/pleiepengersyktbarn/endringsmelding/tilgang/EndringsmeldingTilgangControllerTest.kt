@@ -7,6 +7,7 @@ import no.nav.brukerdialog.utils.CallIdGenerator
 import no.nav.brukerdialog.utils.TokenTestUtils.mockContext
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.IngenTilgangÅrsak.EN_ARBEIDSGIVER_TO_ANSETTELSER_SAMME_UKE_MED_OPPHOLD
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.IngenTilgangÅrsak.HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.utils.TilgangTestUtils.periode
 import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -36,6 +37,8 @@ class EndringsmeldingTilgangControllerTest {
     @MockkBean
     private lateinit var springTokenValidationContextHolder: SpringTokenValidationContextHolder
 
+    private val endringsperiode = periode("2024-01-01/2024-12-31")
+
     @BeforeEach
     fun setUp() {
         springTokenValidationContextHolder.mockContext()
@@ -43,7 +46,7 @@ class EndringsmeldingTilgangControllerTest {
 
     @Test
     fun `tilgang gir kanBruke true, tom liste og no-store`() {
-        every { endringsmeldingTilgangService.vurderTilgang() } returns TilgangResultat.tilgang()
+        every { endringsmeldingTilgangService.vurderTilgang() } returns TilgangResultat.tilgang(endringsperiode)
 
         mockMvc.get("/pleiepenger-sykt-barn/endringsmelding/tilgang")
             .andExpect {
@@ -51,7 +54,7 @@ class EndringsmeldingTilgangControllerTest {
                 header { string("Cache-Control", "no-store") }
                 content {
                     //language=json
-                    json("""{ "kanBruke": true, "årsaker": [] }""", JsonCompareMode.STRICT)
+                    json("""{ "kanBruke": true, "årsaker": [], "tillattEndringsperiode": { "fom": "2024-01-01", "tom": "2024-12-31" } }""", JsonCompareMode.STRICT)
                 }
             }
     }
@@ -59,7 +62,8 @@ class EndringsmeldingTilgangControllerTest {
     @Test
     fun `avslag gir 200 med årsakskodene i samme rekkefølge`() {
         every { endringsmeldingTilgangService.vurderTilgang() } returns TilgangResultat.ingenTilgang(
-            listOf(HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE, EN_ARBEIDSGIVER_TO_ANSETTELSER_SAMME_UKE_MED_OPPHOLD)
+            listOf(HAR_ARBEIDSTID_SOM_SELVSTENDIG_NÆRINGSDRIVENDE, EN_ARBEIDSGIVER_TO_ANSETTELSER_SAMME_UKE_MED_OPPHOLD),
+            endringsperiode
         )
 
         mockMvc.get("/pleiepenger-sykt-barn/endringsmelding/tilgang")
@@ -74,7 +78,11 @@ class EndringsmeldingTilgangControllerTest {
                           "årsaker": [
                             "harArbeidstidSomSelvstendigNæringsdrivende",
                             "enArbeidsgiverToAnsettelserSammeUkeMedOpphold"
-                          ]
+                          ],
+                          "tillattEndringsperiode": {
+                            "fom": "2024-01-01",
+                            "tom": "2024-12-31"
+                          }
                         }
                         """.trimIndent(),
                         JsonCompareMode.STRICT

@@ -8,18 +8,31 @@ import com.fasterxml.jackson.annotation.JsonValue
  *
  * [årsaker] er tom når [kanBruke] er true. Første årsak er hovedårsaken, så rekkefølgen er en del av
  * kontrakten.
+ * [tillattEndringsperiode] er tidsrommet som bruker kan gjøre endringer innenfor. Denne er uavhengig av perioder bruker har søkt for.
  */
 data class TilgangResultat(
     val kanBruke: Boolean,
     // Uten eksplisitt navn utleder springdoc «getårsaker» fra getteren getÅrsaker().
     @get:JsonProperty("årsaker")
     val årsaker: List<IngenTilgangÅrsak>,
+    val tillattEndringsperiode: Datoperiode,
 ) {
     companion object {
-        fun tilgang() = TilgangResultat(kanBruke = true, årsaker = emptyList())
-        fun ingenTilgang(årsaker: List<IngenTilgangÅrsak>): TilgangResultat {
+        fun tilgang(tillattEndringsperiode: Datoperiode) = TilgangResultat(
+            kanBruke = true,
+            årsaker = emptyList(),
+            tillattEndringsperiode = tillattEndringsperiode
+        )
+        fun ingenTilgang(
+            årsaker: List<IngenTilgangÅrsak>,
+            tillattEndringsperiode: Datoperiode
+        ): TilgangResultat {
             require(årsaker.isNotEmpty()) { "Avslag uten årsak." }
-            return TilgangResultat(kanBruke = false, årsaker = årsaker)
+            return TilgangResultat(
+                kanBruke = false,
+                årsaker = årsaker,
+                tillattEndringsperiode = tillattEndringsperiode
+            )
         }
     }
 }

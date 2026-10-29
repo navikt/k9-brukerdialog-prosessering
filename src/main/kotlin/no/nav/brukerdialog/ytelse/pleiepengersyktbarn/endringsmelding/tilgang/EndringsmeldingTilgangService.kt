@@ -57,11 +57,11 @@ class EndringsmeldingTilgangService(
         val saker = k9SakInnsynApiService.hentSøknadsopplysninger().map { it.tilSakForTilgang() }
 
         val resultat = when (val sakVurdering = vurderSaker(saker, endringsperiode)) {
-            is SakVurdering.IngenTilgang -> TilgangResultat.ingenTilgang(listOf(sakVurdering.årsak))
+            is SakVurdering.IngenTilgang -> TilgangResultat.ingenTilgang(listOf(sakVurdering.årsak), endringsperiode)
             is SakVurdering.Tilgang -> {
                 val arbeidsgivere = hentArbeidsgivere(sakVurdering.oppslagsperiode)
                 val årsaker = vurderArbeidsforhold(sakVurdering.sak, arbeidsgivere, endringsperiode)
-                if (årsaker.isEmpty()) TilgangResultat.tilgang() else TilgangResultat.ingenTilgang(årsaker)
+                if (årsaker.isEmpty()) TilgangResultat.tilgang(endringsperiode) else TilgangResultat.ingenTilgang(årsaker, endringsperiode)
             }
         }
 

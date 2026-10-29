@@ -13,6 +13,7 @@ import no.nav.brukerdialog.oppslag.arbeidsgiver.ArbeidsgivereOppslagResponsDto
 import no.nav.brukerdialog.oppslag.arbeidsgiver.OrganisasjonOppslagDto
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.IngenTilgangÅrsak.HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.tilgang.IngenTilgangÅrsak.HAR_INGEN_SAK
+import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.endringsmelding.utils.TilgangTestUtils.periode
 import no.nav.brukerdialog.ytelse.pleiepengersyktbarn.utils.SøknadUtils.Companion.defaultK9FormatPSB
 import no.nav.k9.søknad.felles.type.Periode
 import no.nav.k9.søknad.ytelse.psb.v1.arbeidstid.Arbeidstid
@@ -34,6 +35,7 @@ class EndringsmeldingTilgangServiceTest {
         ZonedDateTime.of(2024, 3, 15, 12, 0, 0, 0, OSLO_ZONE_ID).toInstant(),
         OSLO_ZONE_ID
     )
+    private val endringsperiode = periode("2023-12-01/2025-03-31")
 
     private val service = EndringsmeldingTilgangService(
         k9SakInnsynApiService, arbeidsgivereOppslagsService, clock
@@ -49,7 +51,7 @@ class EndringsmeldingTilgangServiceTest {
     fun `avslag på sakene henter ikke arbeidsgivere`() {
         every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns emptyList()
 
-        assertEquals(TilgangResultat.ingenTilgang(listOf(HAR_INGEN_SAK)), service.vurderTilgang())
+        assertEquals(TilgangResultat.ingenTilgang(listOf(HAR_INGEN_SAK), endringsperiode), service.vurderTilgang())
         verify(exactly = 0) { arbeidsgivereOppslagsService.hentArbeidsgivere(any(), any(), any(), any(), any()) }
     }
 
@@ -58,7 +60,7 @@ class EndringsmeldingTilgangServiceTest {
         every { k9SakInnsynApiService.hentSøknadsopplysninger() } returns
             listOf(innsynSøknad("2023-06-01/2024-01-31"))
 
-        assertEquals(TilgangResultat.tilgang(), service.vurderTilgang())
+        assertEquals(TilgangResultat.tilgang(endringsperiode), service.vurderTilgang())
         verify {
             arbeidsgivereOppslagsService.hentArbeidsgivere(
                 fraOgMed = LocalDate.parse("2023-12-01"),
@@ -81,7 +83,7 @@ class EndringsmeldingTilgangServiceTest {
             )
 
         assertEquals(
-            TilgangResultat.ingenTilgang(listOf(HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER)),
+            TilgangResultat.ingenTilgang(listOf(HAR_FLERE_ANSETTELSESFORHOLD_HOS_UKJENT_ARBEIDSGIVER), endringsperiode),
             service.vurderTilgang()
         )
     }
