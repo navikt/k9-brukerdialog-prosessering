@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "4.1.1"
+	id("org.springframework.boot") version "4.1.2"
 	id("io.spring.dependency-management") version "1.1.7"
 	kotlin("jvm") version "2.4.21"
 	kotlin("plugin.spring") version "2.4.21"
@@ -31,7 +31,7 @@ repositories {
 	}
 }
 
-val tokenSupportVersion = "6.0.14"
+val tokenSupportVersion = "7.0.1"
 val jsonassertVersion = "1.5.3"
 val k9FormatVersion = "14.1.2"
 val ungDeltakelseOpplyserVersjon = "2.12.0"
